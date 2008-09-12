@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://xml.itools.org/namespaces/stl">
+
+  <h2>Votre panier</h2>
+
+  <stl:block stl:if="not products">
+    Veuillez ajouter des produits dans votre panier avant.
+  </stl:block>
+
+  <stl:block stl:if="products">
+
+  <form name="new_order" action=";new_resource" method="post">
+  <table class="cart">
+    <tr>
+      <th>Reference</th>
+      <th>Produit</th>
+      <th>Quantité</th>
+      <th>Prix unitaire avant TVA</th>
+      <th>Prix unitaire après TVA</th>
+      <th>Prix total</th>
+    </tr>
+    <tr stl:repeat="p products">
+      <td>${p/name}</td>
+      <td><a href="${p/uri}">${p/title}</a></td>
+      <td>${p/quantity}</td>
+      <td>${p/price_before_vat}</td>
+      <td>${p/price_after_vat}</td>
+      <td>${p/price_total}</td>
+    </tr>
+    <tr>
+      <td colspan="4" rowspan="2"></td>
+      <td><b>Transport XXX</b></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td><b>Total</b></td>
+      <td>${total}</td>
+    </tr>
+  </table>
+
+  <h2>Votre compte</h2>
+
+    <b>Prénom :</b> ${firstname}<br></br>  <b>Nom :</b> ${lastname}<br></br>  <b>E-mail :</b> ${email}<br></br>
+
+  <h2>Adresse de facturation</h2>
+
+    <dl>
+      <dt class="${address1/class}">
+        <label for="address1" class="${address1/class}">Adresse</label>
+      </dt>
+      <dd>
+        <input id="address1" type="text" name="address1" size="40" value="${address1/value}"></input>
+        <br></br>
+        <input id="address2" type="text" name="address2" size="40" value="${address2/value}"></input>
+      </dd>
+      <dt class="${zip/class}">
+        <label for="zip" class="${zip/class}">Zip</label>
+      </dt>
+      <dd>
+        <input id="zip" type="text" name="zip" size="40" value="${zip/value}"></input>
+      </dd>
+      <dt class="${city/class}">
+        <label for="city" class="${city/class}">Ville</label>
+      </dt>
+      <dd>
+        <input id="city" type="text" name="city" size="40" value="${city/value}"></input>
+      </dd>
+      <dt class="${bp/class}">
+        <label for="bp" class="${bp/class}">BP</label>
+        </dt>
+      <dd>
+        <input id="bp" type="text" name="bp" size="40" value="${bp/value}"></input>
+      </dd>
+    </dl>
+
+    <p>
+      <input value="${class_id}" name="class_id" type="hidden"></input>
+      <input value="Ordre" id="order" class="button_ok" type="submit"></input>
+    </p>
+  </form>
+
+  </stl:block>
+</stl:block>
