@@ -29,7 +29,7 @@ from itools.web import FormError, MSG_MISSING_OR_INVALID
 from ikaaro.file import File
 from ikaaro.folder import Folder
 from ikaaro.messages import *
-from ikaaro.registry import register_object_class
+from ikaaro.registry import register_resource_class
 
 # Import from Here
 from cart import Cart
@@ -184,5 +184,5 @@ class Book(Product):
         return schema
 
 
-register_object_class(Product)
-register_object_class(Book)
+register_resource_class(Product)
+register_resource_class(Book)

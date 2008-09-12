@@ -33,7 +33,7 @@ from itools.xml import XMLParser
 # Import from ikaaro
 from ikaaro.file import PDF
 from ikaaro.folder import Folder
-from ikaaro.registry import register_object_class
+from ikaaro.registry import register_resource_class
 from ikaaro.workflow import WFTransition, WorkflowAware
 from ikaaro.messages import *
 
@@ -401,5 +401,5 @@ class Order(Folder, WorkflowAware):
 
         return stl(handler, namespace)
 
-register_object_class(Orders)
-register_object_class(Order)
+register_resource_class(Orders)
+register_resource_class(Order)

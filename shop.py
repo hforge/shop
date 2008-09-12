@@ -24,7 +24,7 @@ from itools.stl import stl
 
 # Import from ikaaro
 from ikaaro.folder import Folder
-from ikaaro.registry import register_object_class
+from ikaaro.registry import register_resource_class
 
 # Import from Here
 from products import Product, Book
@@ -142,4 +142,4 @@ class Shop(Folder):
         return context.come_back(None)
 
 
-register_object_class(Shop)
+register_resource_class(Shop)
