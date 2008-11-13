@@ -27,7 +27,7 @@ from itools.i18n import format_datetime
 from itools.pdf import PDFFile
 from itools.stl import stl
 from itools.web import FormError, MSG_MISSING_OR_INVALID
-from itools.xapian import KeywordField, EqQuery
+from itools.xapian import KeywordField, PhraseQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -77,7 +77,7 @@ class Orders(Folder):
         # Table content
         customer_id = context.user.name
         catalog = context.server.catalog
-        results = catalog.search(EqQuery('customer_id', customer_id))
+        results = catalog.search(PhraseQuery('customer_id', customer_id))
         namespace['nb_orders'] = results.get_n_documents()
         my_orders = results.get_documents(sort_by='name')
         orders = []
