@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2007 Taverne Sylvain <taverne.sylvain@gmail.com>
+# Copyright (C) 2008 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,17 +14,3 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from itools
-from itools import get_abspath, get_version
-
-# Import from package
-from root import Root
-
-
-# Make the product version available to Python code
-__version__ = get_version()
-
-
-# Skin
-#path = get_abspath('ui/recettes')
-#register_skin('recettes', Skin(path))
