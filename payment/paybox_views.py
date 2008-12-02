@@ -20,19 +20,20 @@ import re
 
 # Import from itools
 from itools.handlers import ConfigFile
-from itools.datatypes import PathDataType, Unicode, String
+from itools.datatypes import Decimal, Email, PathDataType, Unicode, String, Boolean
 from itools.gettext import MSG
-from itools.web import BaseView, STLForm, INFO, ERROR
+from itools.web import BaseView, INFO, ERROR
 from itools.i18n import format_datetime
+from itools.html import HTMLFile
 
 # Import from ikaaro
 from ikaaro.table_views import Table_View
-from ikaaro.forms import AutoForm, TextWidget, SelectWidget
+from ikaaro.forms import STLForm, BooleanCheckBox, SelectWidget, TextWidget
 from ikaaro.resource_views import DBResource_Edit
 
 
 # Import from package
-from enumerates import Devises
+from enumerates import Devises, ModeAutorisation, PayboxAccount
 
 
 class Paybox_View(Table_View):
@@ -70,18 +71,29 @@ class Paybox_Configure(DBResource_Edit):
     title = MSG(u'Configure Paybox payment')
     access = 'is_admin'
 
-    schema = {'PBX_cgi_path': PathDataType,
+    schema = {
+              #'account': PayboxAccount,
+              'PBX_cgi_path': PathDataType,
               'PBX_SITE': String,
               'PBX_RANG': String,
               'PBX_IDENTIFIANT': String,
-              'devises': Devises}
+              #'PBX_AUTOSEULE': ModeAutorisation,
+              'PBX_DIFF': String,
+              'devise': Devises}
+              #'is_open': Boolean
 
     widgets = [
+        #SelectWidget('account', title=MSG(u'Paybox account')),
         TextWidget('PBX_cgi_path', title=MSG(u'CGI Path')),
         TextWidget('PBX_SITE', title=MSG(u'Paybox Site')),
         TextWidget('PBX_RANG', title=MSG(u'Paybox Rang')),
         TextWidget('PBX_IDENTIFIANT', title=MSG(u'Paybox Identifiant')),
-        SelectWidget('devises', title=MSG(u'Devises'))]
+        TextWidget('PBX_DIFF',
+                   title=MSG(u'Nombre de jour de différé (sur deux chiffres ex: 04)'),
+                   size=2),
+        #SelectWidget('PBX_AUTOSEULE', title=MSG(u"Autorisation Mode")),
+        SelectWidget('devise', title=MSG(u'Devise'))]
+        #BooleanCheckBox('is_open', title=MSG(u'Paybox is open'))]
 
     submit_value = MSG(u'Edit configuration')
 
@@ -96,8 +108,12 @@ class Paybox_Configure(DBResource_Edit):
 
 class Paybox_Pay(STLForm):
 
+    schema = {'PBX_CMD': String(mandatory=True),
+              'PBX_TOTAL': Decimal(mandatory=True),
+              'PBX_PORTEUR': Email(mandatory=True)}
 
-    def POST(self, resource, context):
+
+    def action(self, resource, context, form):
         # We get the paybox CGI path on serveur
         cgi_path = resource.get_property('PBX_cgi_path')
         # Get configuration
@@ -105,11 +121,15 @@ class Paybox_Pay(STLForm):
         configuration = ConfigFile(configuration_uri)
         # Build attributes
         kw = {}
+        kw.update(form)
         for key in configuration.values.keys():
             kw[key] = configuration.get_value(key)
         for key in ['PBX_EFFECTUE', 'PBX_ERREUR',
-                    'PBX_REFUSE', 'PBX_ANNULE', 'PBX_DEVISE']:
+                    'PBX_REFUSE', 'PBX_ANNULE',
+                    'PBX_SITE', 'PBX_IDENTIFIANT',
+                    'PBX_RANG', 'PBX_DIFF', 'PBX_AUTOSEULE']:
             kw[key] = resource.get_property(key)
+        kw['PBX_DEVISE'] = resource.get_property('devise')
         attributes = ['%s=%s' % (x[0], x[1]) for x in kw.items()]
         # Build cmd
         cmd = '%s %s' % (cgi_path, ' '.join(attributes))
@@ -120,20 +140,17 @@ class Paybox_Pay(STLForm):
         result = file.read()
         html = re.match ('.*?<HEAD>(.*?)</HTML>', result, re.DOTALL)
         if html is None:
-            msg = u'Erreur lors du chargement du module de payment en ligne'
-            print msg
-            context.message = ERROR(msg)
-            return
+            raise ValueError, u"Error, payment module can't be load"
         # We return the payment widget
         html = html.group(1)
         return HTMLFile(string=html).events
 
 
-    def get_access(self, resource):
-        print resource
-        if resource.get_property('is_open') is True:
-            return True
-        return 'is_allowed_to_view'
+    # XXX Futur patch ikaaro
+    #def get_access(self, resource):
+    #    if resource.get_property('is_open') is True:
+    #        return True
+    #    return 'is_allowed_to_view'
 
 
 

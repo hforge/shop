@@ -16,6 +16,41 @@
 
 # Import from itools
 from itools.datatypes import Enumerate
+from itools.gettext import MSG
+
+
+class PayboxAccount(Enumerate):
+    """ """
+
+    options = [
+      {'name': 'paybox_system', 'value': u'PAYBOX SYSTEM'},
+      {'name': 'paybox_direct', 'value': u'PAYBOX DIRECT'},
+      ]
+
+
+class TypePayment(Enumerate):
+
+    options = [
+      {'name': 'carte', 'value': u'Carte'},
+      ]
+
+
+class TypeCate(Enumerate):
+
+    options = [
+      {'name': 'CB', 'value': u'CB'},
+      {'name': 'VISA', 'value': u'VISA'},
+      {'name': 'EUROCARD_MASTERCARD', 'value': u'EUROCARD_MASTERCARD'},
+      {'name': 'E_CARD', 'value': u'E_CARD'},
+      {'name': 'AMEX', 'value': u'AMEX'},
+      {'name': 'DINERS', 'value': u'DINERS'},
+      {'name': 'JCB', 'value': u'JCB'},
+      {'name': 'COFINOGA', 'value': u'COFINOGA'},
+      {'name': 'SOFINCO', 'value': u'SOFINCO'},
+      {'name': 'AURORE', 'value': u'AURORE'},
+      {'name': 'CDGP', 'value': u'CDGP'},
+      {'name': '24h00', 'value': u'24H00'},
+      ]
 
 
 class Devises(Enumerate):
@@ -26,3 +61,10 @@ class Devises(Enumerate):
       {'name': '840', 'value': u'Dollar', 'code': 'USD', 'symbol': '$'},
       ]
 
+
+class ModeAutorisation(Enumerate):
+
+    options = [
+      {'name': 'N', 'value': MSG(u'Mode autorisation + télécollecte.')},
+      {'name': 'O', 'value': MSG(u'Mode autorisation uniquement.')},
+      ]

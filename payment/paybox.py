@@ -18,7 +18,7 @@
 from itools import get_abspath
 from itools.csv import Table as BaseTable
 from itools.datatypes import String, Unicode, Boolean, PathDataType, URI
-from itools.datatypes import Email, Decimal
+from itools.datatypes import Email, Decimal, String
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -30,7 +30,7 @@ from ikaaro.utils import generate_password
 # Import from package
 from paybox_views import Paybox_Pay, Paybox_ConfirmPayment, Paybox_View
 from paybox_views import Paybox_Configure
-from enumerates import Devises
+from enumerates import Devises, ModeAutorisation, PayboxAccount
 
 info = {}
 info['00000'] = MSG(u"Paiement Ok")
@@ -81,6 +81,7 @@ class PayboxPayments(BaseTable):
         'autorisation': String,
         'status': Boolean,
         'amount': Decimal,
+        'description': Unicode,
         'devise': Devises,
         }
 
@@ -98,6 +99,7 @@ class Payments(Table):
         BooleanCheckBox('status', title=MSG(u'Payment ok')),
         TextWidget('transaction', title=MSG(u'Id transaction')),
         TextWidget('autorisation', title=MSG(u'Id Autorisation')),
+        TextWidget('description', title=MSG(u'Description')),
         TextWidget('amount', title=MSG(u'Amount')),
         SelectWidget('devise', title=MSG(u'Devise')),
         ]
@@ -125,23 +127,19 @@ class Payments(Table):
         schema['PBX_EFFECTUE'] = URI
         schema['PBX_ERREUR'] = URI
         schema['PBX_ANNULE'] = URI
-        # Open to public or private
-        schema['is_open'] = Boolean
+        # Paybox configuration
+        schema['PBX_DIFF'] = String
         # Devises
         schema['devise'] = Devises
+        # TODO Futur sylvain
+        #schema['PBX_AUTOSEULE'] = ModeAutorisation
+        #schema['is_open'] = Boolean
+        #schema['account'] = PayboxAccount
         return schema
 
 
     def get_configuration_uri(self):
         return get_abspath(self.configuration)
 
-
-    def get_new_ref(self, context):
-        root = context.root
-        is_used = True
-        while is_used:
-            ref = generate_password()
-            is_used = len(list(root.search(ref=ref).get_documents())) > 0
-        return ref
 
 register_resource_class(Payments)
