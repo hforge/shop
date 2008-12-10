@@ -1,3 +1,4 @@
 Makefile
 MANIFEST
 build/*
+*.swp

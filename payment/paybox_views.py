@@ -20,7 +20,7 @@ import re
 
 # Import from itools
 from itools.handlers import ConfigFile
-from itools.datatypes import Decimal, Email, PathDataType, Unicode, String, Boolean
+from itools.datatypes import Decimal, Email, URI, Unicode, String, Boolean
 from itools.gettext import MSG
 from itools.web import BaseView, INFO, ERROR
 from itools.i18n import format_datetime
@@ -73,7 +73,7 @@ class Paybox_Configure(DBResource_Edit):
 
     schema = {
               #'account': PayboxAccount,
-              'PBX_cgi_path': PathDataType,
+              'PBX_cgi_path': URI,
               'PBX_SITE': String,
               'PBX_RANG': String,
               'PBX_IDENTIFIANT': String,
@@ -108,20 +108,18 @@ class Paybox_Configure(DBResource_Edit):
 
 class Paybox_Pay(STLForm):
 
-    schema = {'PBX_CMD': String(mandatory=True),
-              'PBX_TOTAL': Decimal(mandatory=True),
-              'PBX_PORTEUR': Email(mandatory=True)}
 
-
-    def action(self, resource, context, form):
+    def GET(self, resource, context, conf):
         # We get the paybox CGI path on serveur
         cgi_path = resource.get_property('PBX_cgi_path')
         # Get configuration
         configuration_uri = resource.get_configuration_uri()
         configuration = ConfigFile(configuration_uri)
-        # Build attributes
+        # Configuration
         kw = {}
-        kw.update(form)
+        kw['PBX_CMD'] = conf['cmd']
+        kw['PBX_TOTAL'] = int(conf['price'] * 100)
+        #kw.update(form)
         for key in configuration.values.keys():
             kw[key] = configuration.get_value(key)
         for key in ['PBX_EFFECTUE', 'PBX_ERREUR',
@@ -130,6 +128,10 @@ class Paybox_Pay(STLForm):
                     'PBX_RANG', 'PBX_DIFF', 'PBX_AUTOSEULE']:
             kw[key] = resource.get_property(key)
         kw['PBX_DEVISE'] = resource.get_property('devise')
+        # PBX_PORTEUR
+        user = context.user
+        kw['PBX_PORTEUR'] = user.get_property('email')
+        # Attributes
         attributes = ['%s=%s' % (x[0], x[1]) for x in kw.items()]
         # Build cmd
         cmd = '%s %s' % (cgi_path, ' '.join(attributes))
@@ -145,12 +147,6 @@ class Paybox_Pay(STLForm):
         html = html.group(1)
         return HTMLFile(string=html).events
 
-
-    # XXX Futur patch ikaaro
-    #def get_access(self, resource):
-    #    if resource.get_property('is_open') is True:
-    #        return True
-    #    return 'is_allowed_to_view'
 
 
 
@@ -188,5 +184,3 @@ class Paybox_ConfirmPayment(BaseView):
         response = context.response
         response.set_header('Content-Type', 'text/plain')
         return
-
-

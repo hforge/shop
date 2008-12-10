@@ -17,7 +17,7 @@
 # Import from itools
 from itools import get_abspath
 from itools.csv import Table as BaseTable
-from itools.datatypes import String, Unicode, Boolean, PathDataType, URI
+from itools.datatypes import String, Unicode, Boolean, URI
 from itools.datatypes import Email, Decimal, String
 from itools.gettext import MSG
 
@@ -89,7 +89,7 @@ class PayboxPayments(BaseTable):
 class Payments(Table):
 
     class_id = 'payments'
-    class_title = MSG(u'Transactions de paiement')
+    class_title = MSG(u'Payment history')
     class_handler = PayboxPayments
 
     configuration = 'paybox.cfg'
@@ -118,7 +118,8 @@ class Payments(Table):
     def get_metadata_schema(cls):
         schema = Table.get_metadata_schema()
         # Paybox CGI path
-        schema['PBX_cgi_path'] = PathDataType
+        # XXX It's should be PathDataType (cf bug hforge)
+        schema['PBX_cgi_path'] = URI
         # Paybox account configuration
         schema['PBX_SITE'] = String
         schema['PBX_RANG'] = String
@@ -131,10 +132,6 @@ class Payments(Table):
         schema['PBX_DIFF'] = String
         # Devises
         schema['devise'] = Devises
-        # TODO Futur sylvain
-        #schema['PBX_AUTOSEULE'] = ModeAutorisation
-        #schema['is_open'] = Boolean
-        #schema['account'] = PayboxAccount
         return schema
 
 

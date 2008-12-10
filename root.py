@@ -26,6 +26,7 @@ from itools.datatypes import Unicode
 
 # Import from project
 from payment.paybox import Payments
+from orders.orders import Orders
 
 
 class View(AutoForm):
@@ -47,7 +48,7 @@ class Root(BaseRoot):
     class_title = MSG(u'root')
 
     def get_document_types(self):
-        return [Payments]
+        return [Payments, Orders]
 
 
     view = View()
