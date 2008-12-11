@@ -78,12 +78,15 @@ class Paybox_Configure(DBResource_Edit):
               'PBX_RANG': String,
               'PBX_IDENTIFIANT': String,
               #'PBX_AUTOSEULE': ModeAutorisation,
+              'PBX_EFFECTUE': URI,
+              'PBX_REFUSE': URI,
+              'PBX_ERREUR': URI,
+              'PBX_ANNULE': URI,
               'PBX_DIFF': String,
               'devise': Devises}
               #'is_open': Boolean
 
     widgets = [
-        #SelectWidget('account', title=MSG(u'Paybox account')),
         TextWidget('PBX_cgi_path', title=MSG(u'CGI Path')),
         TextWidget('PBX_SITE', title=MSG(u'Paybox Site')),
         TextWidget('PBX_RANG', title=MSG(u'Paybox Rang')),
@@ -91,8 +94,14 @@ class Paybox_Configure(DBResource_Edit):
         TextWidget('PBX_DIFF',
                    title=MSG(u'Nombre de jour de différé (sur deux chiffres ex: 04)'),
                    size=2),
-        #SelectWidget('PBX_AUTOSEULE', title=MSG(u"Autorisation Mode")),
+        TextWidget('PBX_EFFECTUE', title=MSG(u'PBX_EFFECTUE')),
+        TextWidget('PBX_REFUSE', title=MSG(u'PBX_REFUSE')),
+        TextWidget('PBX_ERREUR', title=MSG(u'PBX_ERREUR')),
+        TextWidget('PBX_ANNULE', title=MSG(u'PBX_ANNULE')),
         SelectWidget('devise', title=MSG(u'Devise'))]
+        # XXX Futur ?
+        #SelectWidget('PBX_AUTOSEULE', title=MSG(u"Autorisation Mode")),
+        #SelectWidget('account', title=MSG(u'Paybox account')),
         #BooleanCheckBox('is_open', title=MSG(u'Paybox is open'))]
 
     submit_value = MSG(u'Edit configuration')
@@ -123,8 +132,9 @@ class Paybox_Pay(STLForm):
         for key in configuration.values.keys():
             kw[key] = configuration.get_value(key)
         for key in ['PBX_EFFECTUE', 'PBX_ERREUR',
-                    'PBX_REFUSE', 'PBX_ANNULE',
-                    'PBX_SITE', 'PBX_IDENTIFIANT',
+                    'PBX_REFUSE', 'PBX_ANNULE']:
+            kw[key] = '"%s"' % resource.get_property(key)
+        for key in ['PBX_SITE', 'PBX_IDENTIFIANT',
                     'PBX_RANG', 'PBX_DIFF', 'PBX_AUTOSEULE']:
             kw[key] = resource.get_property(key)
         kw['PBX_DEVISE'] = resource.get_property('devise')
@@ -135,7 +145,6 @@ class Paybox_Pay(STLForm):
         attributes = ['%s=%s' % (x[0], x[1]) for x in kw.items()]
         # Build cmd
         cmd = '%s %s' % (cgi_path, ' '.join(attributes))
-        print cmd
         # Call the CGI
         file = os.popen(cmd)
         # Check if all is ok

@@ -127,6 +127,7 @@ class Payments(Table):
         # Paybox redirection uri
         schema['PBX_EFFECTUE'] = URI
         schema['PBX_ERREUR'] = URI
+        schema['PBX_REFUSE'] = URI
         schema['PBX_ANNULE'] = URI
         # Paybox configuration
         schema['PBX_DIFF'] = String
