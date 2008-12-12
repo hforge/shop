@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
+import decimal
 import os
 import re
 
@@ -22,7 +23,7 @@ import re
 from itools.handlers import ConfigFile
 from itools.datatypes import Decimal, Email, URI, Unicode, String, Boolean
 from itools.gettext import MSG
-from itools.web import BaseView, INFO, ERROR
+from itools.web import BaseForm, INFO, ERROR
 from itools.i18n import format_datetime
 from itools.html import HTMLFile
 
@@ -33,7 +34,7 @@ from ikaaro.resource_views import DBResource_Edit
 
 
 # Import from package
-from enumerates import Devises, ModeAutorisation, PayboxAccount
+from enumerates import Devises, ModeAutorisation, PayboxAccount, PayboxStatus
 
 
 class Paybox_View(Table_View):
@@ -145,6 +146,7 @@ class Paybox_Pay(STLForm):
         attributes = ['%s=%s' % (x[0], x[1]) for x in kw.items()]
         # Build cmd
         cmd = '%s %s' % (cgi_path, ' '.join(attributes))
+        print cmd
         # Call the CGI
         file = os.popen(cmd)
         # Check if all is ok
@@ -159,36 +161,48 @@ class Paybox_Pay(STLForm):
 
 
 
-class Paybox_ConfirmPayment(BaseView):
+class Paybox_ConfirmPayment(BaseForm):
     """The paybox server send a POST request to say if the payment was done
     """
     access = True
 
     authorized_ip = ['195.101.99.76', '194.2.122.158']
 
+    schema = {'ref': String,
+              'transaction': Unicode,
+              'autorisation': Unicode,
+              'amount': Decimal,
+              'status': String}
+
+
     def POST(self, resource, context):
+        # (1) Find out which button has been pressed, if more than one
+        self._get_action(resource, context)
+
+        # (2) Automatically validate and get the form input (from the schema).
+        try:
+            form = self._get_form(resource, context)
+        except FormError, error:
+            context.form_error = error
+            return self.on_form_error(resource, context)
+        return self.action(resource, context, form)
+
+
+    def action(self, resource, context, form):
         # Ensure that remote ip address belongs to Paybox
         remote_ip = context.request.get_remote_ip()
         if remote_ip not in self.authorized_ip:
             msg = 'IP %s invalide (Ref commande = %s)'
-            raise ValueError, msg % (remote_ip, ref)
+            raise ValueError, msg % (remote_ip, form['ref'])
         # Get form values
-        transaction = context.get_form_value('transaction', type=Unicode)
-        autorisation = context.get_form_value('autorisation', type=Unicode)
-        signature = context.get_form_value('signature', type=String)
-        amount = context.get_form_value('montant', type=Decimal) or decimal.Decimal('0')
-        amount = amount / decimal.Decimal('100')
-        devise = resource.get_property('devise')
+        amount = form['amount'] / decimal.Decimal('100')
         # Check signature XXX todo
-        # Payment ok ?
-        is_ok = autorisation is not None
         # Create a new command
-        kw = {'ref': context.get_form_value('ref'),
-              'transaction': transaction,
-              'autorisation': autorisation,
-              'status': is_ok,
-              'devise': devise}
-        record = resource.add_record(kw)
+        kw = {'payment_ok': form['autorisation'] is not None,
+              'devise': resource.get_property('devise')}
+        for key in ['ref', 'transaction', 'autorisation', 'amount', 'status']:
+            kw[key] = form[key]
+        record = resource.handler.add_record(kw)
         # Do traitement
         self.do_treatment(resource, context, record)
         # Return a blank page
