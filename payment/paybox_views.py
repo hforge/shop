@@ -188,8 +188,14 @@ class Paybox_ConfirmPayment(BaseView):
               'autorisation': autorisation,
               'status': is_ok,
               'devise': devise}
-        resource.add_record(kw)
+        record = resource.add_record(kw)
+        # Do traitement
+        self.do_treatment(resource, context, record)
         # Return a blank page
         response = context.response
         response.set_header('Content-Type', 'text/plain')
         return
+
+
+    def do_treatment(self, resource, context, record):
+        pass
