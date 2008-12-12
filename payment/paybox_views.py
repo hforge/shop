@@ -198,7 +198,7 @@ class Paybox_ConfirmPayment(BaseForm):
         amount = form['amount'] / decimal.Decimal('100')
         # Check signature XXX todo
         # Create a new command
-        kw = {'payment_ok': form['autorisation'] is not None,
+        kw = {'payment_ok': bool(form['autorisation']),
               'devise': resource.get_property('devise')}
         for key in ['ref', 'transaction', 'autorisation', 'amount', 'status']:
             kw[key] = form[key]
