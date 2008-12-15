@@ -200,8 +200,9 @@ class Paybox_ConfirmPayment(BaseForm):
         # Create a new command
         kw = {'payment_ok': bool(form['autorisation']),
               'devise': resource.get_property('devise')}
-        for key in ['ref', 'transaction', 'autorisation', 'amount', 'status']:
+        for key in ['ref', 'transaction', 'autorisation', 'status']:
             kw[key] = form[key]
+        kw['amount'] = amount
         record = resource.handler.add_record(kw)
         # Do traitement
         self.do_treatment(resource, context, record)
