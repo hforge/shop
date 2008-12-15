@@ -147,7 +147,6 @@ class Paybox_Pay(STLForm):
         attributes = ['%s=%s' % (x[0], x[1]) for x in kw.items()]
         # Build cmd
         cmd = '%s %s' % (cgi_path, ' '.join(attributes))
-        print cmd
         # Call the CGI
         file = os.popen(cmd)
         # Check if all is ok
