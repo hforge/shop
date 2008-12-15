@@ -39,6 +39,7 @@ from enumerates import Devises, ModeAutorisation, PayboxAccount, PayboxStatus
 
 class Paybox_View(Table_View):
 
+    access = 'is_admin'
 
     def get_table_columns(self, resource, context):
         columns = [
