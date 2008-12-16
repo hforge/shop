@@ -60,7 +60,7 @@ class Payments(Table):
         BooleanCheckBox('payment_ok', title=MSG(u'Payment ok')),
         TextWidget('transaction', title=MSG(u'Id transaction')),
         TextWidget('autorisation', title=MSG(u'Id Autorisation')),
-        TextWidget('status', title=MSG(u'Status')),
+        SelectWidget('status', title=MSG(u'Status')),
         TextWidget('amount', title=MSG(u'Amount')),
         SelectWidget('devise', title=MSG(u'Devise')),
         ]
