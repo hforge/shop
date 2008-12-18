@@ -78,9 +78,6 @@ class Payments(Table):
     @classmethod
     def get_metadata_schema(cls):
         schema = Table.get_metadata_schema()
-        # Paybox CGI path
-        # XXX It's should be PathDataType (cf bug hforge)
-        schema['PBX_cgi_path'] = URI
         # Paybox account configuration
         schema['PBX_SITE'] = String
         schema['PBX_RANG'] = String

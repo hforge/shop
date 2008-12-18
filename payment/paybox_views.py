@@ -20,6 +20,7 @@ import os
 import re
 
 # Import from itools
+from itools import get_abspath
 from itools.handlers import ConfigFile
 from itools.datatypes import Decimal, Email, URI, Unicode, String, Boolean
 from itools.gettext import MSG
@@ -75,7 +76,6 @@ class Paybox_Configure(DBResource_Edit):
 
     schema = {
               #'account': PayboxAccount,
-              'PBX_cgi_path': URI,
               'PBX_SITE': String,
               'PBX_RANG': String,
               'PBX_IDENTIFIANT': String,
@@ -89,7 +89,6 @@ class Paybox_Configure(DBResource_Edit):
               #'is_open': Boolean
 
     widgets = [
-        TextWidget('PBX_cgi_path', title=MSG(u'CGI Path')),
         TextWidget('PBX_SITE', title=MSG(u'Paybox Site')),
         TextWidget('PBX_RANG', title=MSG(u'Paybox Rang')),
         TextWidget('PBX_IDENTIFIANT', title=MSG(u'Paybox Identifiant')),
@@ -122,7 +121,9 @@ class Paybox_Pay(STLForm):
 
     def GET(self, resource, context, conf):
         # We get the paybox CGI path on serveur
-        cgi_path = resource.get_property('PBX_cgi_path')
+        cgi_path = get_abspath('cgi/paybox.cgi')
+        print cgi_path
+        print '========='
         # Get configuration
         configuration_uri = resource.get_configuration_uri()
         configuration = ConfigFile(configuration_uri)
