@@ -17,20 +17,18 @@
 # Import from itools
 from itools import get_abspath
 from itools.csv import Table as BaseTable
-from itools.datatypes import String, Unicode, Boolean, URI
-from itools.datatypes import Email, Decimal, String
+from itools.datatypes import String, Boolean, Decimal
 from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 from ikaaro.forms import TextWidget, BooleanCheckBox, SelectWidget
-from ikaaro.utils import generate_password
 
 # Import from package
 from paybox_views import Paybox_Pay, Paybox_ConfirmPayment, Paybox_View
 from paybox_views import Paybox_Configure, Paybox_PaymentEnd
-from enumerates import Devises, ModeAutorisation, PayboxAccount, PayboxStatus
+from enumerates import Devises, PayboxStatus
 
 
 

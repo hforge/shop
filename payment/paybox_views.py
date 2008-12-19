@@ -22,21 +22,20 @@ import re
 # Import from itools
 from itools import get_abspath
 from itools.handlers import ConfigFile
-from itools.datatypes import Decimal, Email, URI, Unicode, String, Boolean
+from itools.datatypes import Decimal, Unicode, String
 from itools.datatypes import Integer
 from itools.gettext import MSG
-from itools.web import BaseForm, STLView, INFO, ERROR
+from itools.web import BaseForm, STLView, FormError
 from itools.i18n import format_datetime
 from itools.html import HTMLFile
 
 # Import from ikaaro
 from ikaaro.table_views import Table_View
-from ikaaro.forms import STLForm, BooleanCheckBox, SelectWidget, TextWidget
+from ikaaro.forms import STLForm, SelectWidget, TextWidget
 from ikaaro.resource_views import DBResource_Edit
 
 # Import from package
-from enumerates import Devises, ModeAutorisation, PayboxAccount, PayboxStatus
-from enumerates import PBXState
+from enumerates import Devises, PBXState
 
 
 class Paybox_View(Table_View):
@@ -223,11 +222,11 @@ class Paybox_ConfirmPayment(BaseForm):
         # Create the mail
         to_addr = 'sylvain@itaapy.com' # XXX
         subject = MSG(u'Etat de votre commande.').gettext()
-        if record.get_value('payment_ok'):
-            body = mail_ok.gettext(ref=payment_record.get_value('ref'),
-                                   price=commande.get_property('amount'))
+        if payment_record.get_value('payment_ok'):
+            body = self.mail_ok.gettext(ref=payment_record.get_value('ref'),
+                                        price=payment_record.get_property('amount'))
         else:
-            body = mail_erreur.gettext()
+            body = self.mail_erreur.gettext()
         # We send the mail
         root.send_email(to_addr, subject, text=body)
 

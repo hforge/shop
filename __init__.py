@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools import get_abspath, get_version
+from itools import get_version
 
 # Import from package
 from root import Root
@@ -23,8 +23,3 @@ from root import Root
 
 # Make the product version available to Python code
 __version__ = get_version()
-
-
-# Skin
-#path = get_abspath('ui/recettes')
-#register_skin('recettes', Skin(path))
