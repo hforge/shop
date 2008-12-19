@@ -29,7 +29,7 @@ from ikaaro.utils import generate_password
 
 # Import from package
 from paybox_views import Paybox_Pay, Paybox_ConfirmPayment, Paybox_View
-from paybox_views import Paybox_Configure
+from paybox_views import Paybox_Configure, Paybox_PaymentEnd
 from enumerates import Devises, ModeAutorisation, PayboxAccount, PayboxStatus
 
 
@@ -73,6 +73,7 @@ class Payments(Table):
     configure = Paybox_Configure()
     pay = Paybox_Pay()
     confirm_payment = Paybox_ConfirmPayment()
+    payment_end = Paybox_PaymentEnd()
 
 
     @classmethod
@@ -82,11 +83,6 @@ class Payments(Table):
         schema['PBX_SITE'] = String
         schema['PBX_RANG'] = String
         schema['PBX_IDENTIFIANT'] = String
-        # Paybox redirection uri
-        schema['PBX_EFFECTUE'] = URI
-        schema['PBX_ERREUR'] = URI
-        schema['PBX_REFUSE'] = URI
-        schema['PBX_ANNULE'] = URI
         # Paybox configuration
         schema['PBX_DIFF'] = String
         # Devises

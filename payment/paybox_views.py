@@ -23,8 +23,9 @@ import re
 from itools import get_abspath
 from itools.handlers import ConfigFile
 from itools.datatypes import Decimal, Email, URI, Unicode, String, Boolean
+from itools.datatypes import Integer
 from itools.gettext import MSG
-from itools.web import BaseForm, INFO, ERROR
+from itools.web import BaseForm, STLView, INFO, ERROR
 from itools.i18n import format_datetime
 from itools.html import HTMLFile
 
@@ -33,9 +34,9 @@ from ikaaro.table_views import Table_View
 from ikaaro.forms import STLForm, BooleanCheckBox, SelectWidget, TextWidget
 from ikaaro.resource_views import DBResource_Edit
 
-
 # Import from package
 from enumerates import Devises, ModeAutorisation, PayboxAccount, PayboxStatus
+from enumerates import PBXState
 
 
 class Paybox_View(Table_View):
@@ -80,10 +81,6 @@ class Paybox_Configure(DBResource_Edit):
               'PBX_RANG': String,
               'PBX_IDENTIFIANT': String,
               #'PBX_AUTOSEULE': ModeAutorisation,
-              'PBX_EFFECTUE': URI,
-              'PBX_REFUSE': URI,
-              'PBX_ERREUR': URI,
-              'PBX_ANNULE': URI,
               'PBX_DIFF': String,
               'devise': Devises}
               #'is_open': Boolean
@@ -95,10 +92,6 @@ class Paybox_Configure(DBResource_Edit):
         TextWidget('PBX_DIFF',
                    title=MSG(u'Nombre de jour de différé (sur deux chiffres ex: 04)'),
                    size=2),
-        TextWidget('PBX_EFFECTUE', title=MSG(u'PBX_EFFECTUE')),
-        TextWidget('PBX_REFUSE', title=MSG(u'PBX_REFUSE')),
-        TextWidget('PBX_ERREUR', title=MSG(u'PBX_ERREUR')),
-        TextWidget('PBX_ANNULE', title=MSG(u'PBX_ANNULE')),
         SelectWidget('devise', title=MSG(u'Devise'))]
         # XXX Futur ?
         #SelectWidget('PBX_AUTOSEULE', title=MSG(u"Autorisation Mode")),
@@ -122,8 +115,6 @@ class Paybox_Pay(STLForm):
     def GET(self, resource, context, conf):
         # We get the paybox CGI path on serveur
         cgi_path = get_abspath('cgi/paybox.cgi')
-        print cgi_path
-        print '========='
         # Get configuration
         configuration_uri = resource.get_configuration_uri()
         configuration = ConfigFile(configuration_uri)
@@ -131,12 +122,17 @@ class Paybox_Pay(STLForm):
         kw = {}
         kw['PBX_CMD'] = conf['cmd']
         kw['PBX_TOTAL'] = int(conf['price'] * 100)
-        #kw.update(form)
+        # Basic configuration
         for key in configuration.values.keys():
             kw[key] = configuration.get_value(key)
-        for key in ['PBX_EFFECTUE', 'PBX_ERREUR',
-                    'PBX_REFUSE', 'PBX_ANNULE']:
-            kw[key] = '"%s"' % resource.get_property(key)
+        # PBX Retour uri
+        for option in PBXState.get_options():
+            key = option['pbx']
+            state = option['name']
+            base_uri = context.uri.resolve(context.get_link(resource))
+            uri = '%s/;payment_end?state=%s' % (base_uri, state)
+            kw[key] = '"%s"' % uri
+        # Configuration
         for key in ['PBX_SITE', 'PBX_IDENTIFIANT',
                     'PBX_RANG', 'PBX_DIFF', 'PBX_AUTOSEULE']:
             kw[key] = resource.get_property(key)
@@ -215,3 +211,19 @@ class Paybox_ConfirmPayment(BaseForm):
 
     def do_treatment(self, resource, context, record):
         pass
+
+
+
+class Paybox_PaymentEnd(STLView):
+
+    access = True
+
+    template = '/ui/paybox/Paybox_PaymentEnd.xml'
+
+    query_schema = {'state': Integer,
+                    'ref': String}
+
+    def get_namespace(self, resource, context):
+        state = context.query['state']
+        return {'state': PBXState.get_value(state),
+                'ref': context.query['ref']}

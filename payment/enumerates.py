@@ -20,6 +20,15 @@ from itools.gettext import MSG
 from itools.datatypes.primitive import enumerate_get_value, enumerate_is_valid
 
 
+class PBXState(Enumerate):
+
+    options = [
+      {'name': 1, 'value': MSG(u'Paiement effectué'), 'pbx': 'PBX_EFFECTUE'},
+      {'name': 2, 'value': MSG(u'Paiement refusé'), 'pbx': 'PBX_REFUSE'},
+      {'name': 3, 'value': MSG(u'Erreur de paiement'), 'pbx': 'PBX_ERREUR'},
+      {'name': 4, 'value': MSG(u'Paiement annulé'), 'pbx': 'PBX_ANNULE'}]
+
+
 class PayboxAccount(Enumerate):
     """ """
 
