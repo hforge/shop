@@ -40,6 +40,7 @@ from enumerates import PBXState
 
 
 class Paybox_View(Table_View):
+    """ View that list history of paybox payments """
 
     access = 'is_admin'
 
@@ -62,28 +63,24 @@ class Paybox_View(Table_View):
             accept = context.accept_language
             value = handler.get_record_value(item, column)
             return format_datetime(value,  accept)
-        elif column=='amount':
-            devise = handler.get_record_value(item, 'devise')
-            symbol = Devises.get_value(devise, 'symbol')
-            return '%s %s' % (value, symbol)
         return value
 
 
 
 class Paybox_Configure(DBResource_Edit):
+    """ View that allow to configure paybox :
+          - User account
+          - ...
+    """
 
-    title = MSG(u'Configure Paybox payment')
+    title = MSG(u'Configure Paybox')
     access = 'is_admin'
 
-    schema = {
-              #'account': PayboxAccount,
-              'PBX_SITE': String,
+    schema = {'PBX_SITE': String,
               'PBX_RANG': String,
               'PBX_IDENTIFIANT': String,
-              #'PBX_AUTOSEULE': ModeAutorisation,
               'PBX_DIFF': String,
               'devise': Devises}
-              #'is_open': Boolean
 
     widgets = [
         TextWidget('PBX_SITE', title=MSG(u'Paybox Site')),
@@ -93,13 +90,8 @@ class Paybox_Configure(DBResource_Edit):
                    title=MSG(u'Nombre de jour de différé (sur deux chiffres ex: 04)'),
                    size=2),
         SelectWidget('devise', title=MSG(u'Devise'))]
-        # XXX Futur ?
-        #SelectWidget('PBX_AUTOSEULE', title=MSG(u"Autorisation Mode")),
-        #SelectWidget('account', title=MSG(u'Paybox account')),
-        #BooleanCheckBox('is_open', title=MSG(u'Paybox is open'))]
 
     submit_value = MSG(u'Edit configuration')
-
 
     def action(self, resource, context, form):
         for key in self.schema.keys():
@@ -110,7 +102,8 @@ class Paybox_Configure(DBResource_Edit):
 
 
 class Paybox_Pay(STLForm):
-
+    """This view load the paybox cgi. That script redirect on paybox serveur
+       to show the payment form"""
 
     def GET(self, resource, context, conf):
         # We get the paybox CGI path on serveur
@@ -171,6 +164,20 @@ class Paybox_ConfirmPayment(BaseForm):
               'amount': Decimal,
               'status': String}
 
+    mail_ok = MSG(u"""
+    Bonjour, voici les détails de votre paiement sur la boutique FirstLuxe.
+    Status: Votre paiement a été accepté. \n\n
+    ------------------------
+    Référence commande: $ref
+    Montant commande: $price €
+    ------------------------
+    \n\n
+    """)
+
+    mail_erreur = MSG(u"""
+    Votre paiement a été refusé\n\n
+    """)
+
 
     def POST(self, resource, context):
         # (1) Find out which button has been pressed, if more than one
@@ -193,20 +200,36 @@ class Paybox_ConfirmPayment(BaseForm):
             raise ValueError, msg % (remote_ip, form['ref'])
         # Get form values
         amount = form['amount'] / decimal.Decimal('100')
-        # Check signature XXX todo
-        # Create a new command
+        # TODO Check signature
+        # Add a line into payments history
         kw = {'payment_ok': bool(form['autorisation']),
               'devise': resource.get_property('devise')}
         for key in ['ref', 'transaction', 'autorisation', 'status']:
             kw[key] = form[key]
         kw['amount'] = amount
-        record = resource.handler.add_record(kw)
-        # Do traitement
-        self.do_treatment(resource, context, record)
-        # Return a blank page
+        payment_record = resource.handler.add_record(kw)
+        # Maybe we have to do a specific traitement ?
+        self.do_treatment(resource, context, payment_record)
+        # Send an email of confirmation
+        self.send_mail_confirmation(context, payment_record)
+        # Return a blank page to payment
         response = context.response
         response.set_header('Content-Type', 'text/plain')
         return
+
+
+    def send_mail_confirmation(self, context, payment_record):
+        root = context.root
+        # Create the mail
+        to_addr = 'sylvain@itaapy.com' # XXX
+        subject = MSG(u'Etat de votre commande.').gettext()
+        if record.get_value('payment_ok'):
+            body = mail_ok.gettext(ref=payment_record.get_value('ref'),
+                                   price=commande.get_property('amount'))
+        else:
+            body = mail_erreur.gettext()
+        # We send the mail
+        root.send_email(to_addr, subject, text=body)
 
 
     def do_treatment(self, resource, context, record):
@@ -215,6 +238,8 @@ class Paybox_ConfirmPayment(BaseForm):
 
 
 class Paybox_PaymentEnd(STLView):
+    """The customer is redirect on this page by paybox after payment
+       (even if payment isn't successfull"""
 
     access = True
 
@@ -227,3 +252,5 @@ class Paybox_PaymentEnd(STLView):
         state = context.query['state']
         return {'state': PBXState.get_value(state),
                 'ref': context.query['ref']}
+
+
