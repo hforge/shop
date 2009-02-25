@@ -102,9 +102,11 @@ class Paybox_Configure(DBResource_Edit):
 
 class Paybox_Pay(STLForm):
     """This view load the paybox cgi. That script redirect on paybox serveur
-       to show the payment form"""
+       to show the payment form.
+       It must be call via the method show_payment_form() of payment resource.
+    """
 
-    def GET(self, resource, context, conf):
+    def GET(self, resource, context, payment):
         # We get the paybox CGI path on serveur
         cgi_path = get_abspath('cgi/paybox.cgi')
         # Get configuration
@@ -164,7 +166,7 @@ class Paybox_ConfirmPayment(BaseForm):
               'status': String}
 
     mail_ok = MSG(u"""
-    Bonjour, voici les détails de votre paiement sur la boutique FirstLuxe.
+    Bonjour, voici les détails de votre paiement sur la boutique XXX.
     Status: Votre paiement a été accepté. \n\n
     ------------------------
     Référence commande: $ref
@@ -253,3 +255,6 @@ class Paybox_PaymentEnd(STLView):
                 'ref': context.query['ref']}
 
 
+    configuration = 'paybox.cfg'
+    def get_configuration_uri(self):
+        return get_abspath(self.configuration)

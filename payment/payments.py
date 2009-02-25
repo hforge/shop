@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools import get_abspath
 from itools.csv import Table as BaseTable
 from itools.datatypes import String, Boolean, Decimal
 from itools.gettext import MSG
@@ -26,13 +25,14 @@ from ikaaro.table import Table
 from ikaaro.forms import TextWidget, BooleanCheckBox, SelectWidget
 
 # Import from package
-from paybox_views import Paybox_Pay, Paybox_ConfirmPayment, Paybox_View
-from paybox_views import Paybox_Configure, Paybox_PaymentEnd
-from enumerates import Devises, PayboxStatus
+from payments_views import Payments_View
+
+#from paybox_views import Paybox_Pay, Paybox_ConfirmPayment, Paybox_View
+#from paybox_views import Paybox_Configure, Paybox_PaymentEnd
+#from enumerates import Devises, PayboxStatus
 
 
-
-class PayboxPayments(BaseTable):
+class PaymentsTable(BaseTable):
 
     record_schema = {
         'ref': String(Unique=True, index='keyword'),
@@ -46,12 +46,14 @@ class PayboxPayments(BaseTable):
 
 
 class Payments(Table):
+    """
+    This table contains the history of attempted or successful payments.
+    They can be done by several ways (Paybox, paypal ...)
+    """
 
     class_id = 'payments'
     class_title = MSG(u'Payment history')
-    class_handler = PayboxPayments
-
-    configuration = 'paybox.cfg'
+    class_handler = PaymentsTable
 
     form = [
         TextWidget('ref', title=MSG(u'Facture number')),
@@ -63,15 +65,15 @@ class Payments(Table):
         SelectWidget('devise', title=MSG(u'Devise')),
         ]
 
-
     # Views
     class_views = ['view', 'configure']
 
-    view = Paybox_View()
-    configure = Paybox_Configure()
-    pay = Paybox_Pay()
-    confirm_payment = Paybox_ConfirmPayment()
-    payment_end = Paybox_PaymentEnd()
+    # List of views
+    view = Payments_View()
+    #configure = Paybox_Configure()
+    #pay = Paybox_Pay()
+    #confirm_payment = Paybox_ConfirmPayment()
+    #payment_end = Paybox_PaymentEnd()
 
 
     @classmethod
@@ -88,8 +90,24 @@ class Payments(Table):
         return schema
 
 
-    def get_configuration_uri(self):
-        return get_abspath(self.configuration)
+    ######################
+    # Public API
+    ######################
+
+    def show_payment_form(self, context, payment):
+        """
+           payment must be a dictionnary with order's identifiant
+           and order price.
+           For example:
+           payment = {'id': 'A250',
+                      'price': 250}
+        """
+        # We check that payment dictionnary is correctly fill.
+        if 'id' not in payment or 'price' not in payment:
+            raise ValueError, u"Order's id or price is not configure"
+        # We show the payment form
+        return Paybox_Pay().GET(self, context, payment)
+
 
 
 register_resource_class(Payments)
