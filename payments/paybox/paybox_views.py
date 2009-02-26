@@ -25,6 +25,7 @@ from itools.handlers import ConfigFile
 from itools.datatypes import Decimal, Unicode, String
 from itools.datatypes import Integer
 from itools.gettext import MSG
+from itools.uri import get_reference
 from itools.web import BaseForm, BaseView, STLView, FormError
 from itools.html import HTMLFile
 
@@ -256,8 +257,8 @@ class Paybox_End(BaseView):
             root.send_email(from_addr, subject, from_addr, body)
             # Come back
             msg = u'Online payment is unavalaible, please try later !'
-            print body
             return context.come_back(MSG(msg), goto='/')
-        state = context.query['state']
-        return context.come_back(None, goto='../;end', keep=['ref'])
-
+        state = PBXState.get_value(context.query['state']).gettext()
+        goto = get_reference('../;end')
+        goto.query['state'] = state.encode('utf-8')
+        return context.come_back(None, goto, keep=['ref'])

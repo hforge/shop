@@ -4,19 +4,10 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <div id="state" stl:if="not ref">
-    Invalid number
-  </div>
-
-  <div id="state" stl:if="ref">
-    Payment state:<br/><br/>
+  <div id="payment_state">
+    Payment state
     <b stl:if="state">${state}</b>
     <b stl:if="not state">Unknow state</b><br/><br/>
-    <a id="red" href="/orders/${ref}/">
-    See details about order.
-    </a>
-    <br/><br/>
-    you will receive order
   </div>
 
 </stl:block>

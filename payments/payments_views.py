@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean, Integer, String
+from itools.datatypes import Boolean, Integer, Unicode, String
 from itools.gettext import MSG
 from itools.web import STLView
 
@@ -150,6 +150,9 @@ class Payments_End(STLView):
 
     template = '/ui/payments/payments_end.xml'
 
+    query_schema = {'state': Unicode,
+                    'ref': String}
+
+
     def get_namespace(self, resource, context):
-        # XXX TO refactor
-        return {'state': 'end', 'ref': 0}
+        return context.query
