@@ -2,3 +2,4 @@ Makefile
 MANIFEST
 build/*
 *.swp
+version.txt
