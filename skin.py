@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2007 Taverne Sylvain <taverne.sylvain@gmail.com>
+# Copyright (C) 2008 Hervé Cauwelier <herve@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,12 +15,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools import get_version
+from itools import get_abspath
 
-# Import from package
-from root import Root
-import skin
+# Import from ikaaro
+from ikaaro.skins import Skin, register_skin
 
 
-# Make the product version available to Python code
-__version__ = get_version()
+class ShopSkin(Skin):
+
+
+    def get_styles(self, context):
+        styles = Skin.get_styles(self, context)
+        #styles.append('/ui/shop/style.css')
+        base_styles = ['/ui/aruni/style.css', '/ui/bo.css']
+        styles.extend(base_styles)
+        return styles
+
+
+
+###########################################################################
+# Register
+###########################################################################
+path = get_abspath('ui/shop/')
+register_skin('shop', ShopSkin(path))

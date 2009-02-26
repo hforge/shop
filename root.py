@@ -41,8 +41,10 @@ class View(STLView):
 class Root(BaseRoot):
 
     class_id = 'root'
+    class_skin = 'ui/shop'
     class_title = MSG(u'root')
     class_views = BaseRoot.class_views + ['test']
+
 
     test = View()
 
