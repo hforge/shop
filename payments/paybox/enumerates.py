@@ -29,6 +29,32 @@ class PBXState(Enumerate):
       {'name': 4, 'value': MSG(u'Paiement annulé'), 'pbx': 'PBX_ANNULE'}]
 
 
+class PayboxCGIErrors(Enumerate):
+
+    codes = {}
+    codes['-1'] = u'Error in reading the parameters via stdin'
+    codes['-2'] = u'Error in memory allocation'
+    codes['-3'] = u'Error in the parameters (Http Error)'
+    codes['-4'] = u'One of the PBX_RETOUR variable is too long'
+    codes['-5'] = u'Error in opening the file'
+    codes['-6'] = u'Error in file format'
+    codes['-7'] = u'A mandatory variable is missing.'
+    codes['-8'] = u'Numerical variables contains a non-numerical character'
+    codes['-9'] = u'PBX_SITE value is invalid.'
+    codes['-10'] = u'PBX_RANG value is invalid'
+    codes['-11'] = u'PBX_TOTAL value is invalid'
+    codes['-12'] = u'PBX_LANGUE or PBX_DEVISE is invalid'
+    codes['-13'] = u'PBX_CMD is empty or invalid'
+    codes['-14'] = u'Unknow error'
+    codes['-15'] = u'Unknow error'
+    codes['-16'] = u'PBX_PORTEUR is invalid'
+    codes['-17'] = u'Error of coherence'
+
+    @classmethod
+    def get_options(cls):
+        return [{'name': x, 'value': y} for x, y in cls.codes.items()]
+
+
 class PayboxAccount(Enumerate):
     """ """
 

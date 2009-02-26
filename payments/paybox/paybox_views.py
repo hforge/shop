@@ -35,7 +35,7 @@ from ikaaro.forms import STLForm, TextWidget
 from ikaaro.resource_views import DBResource_Edit
 
 # Import from package
-from enumerates import PBXState
+from enumerates import PBXState, PayboxCGIErrors
 
 
 class Paybox_ViewPayment(STLView):
@@ -230,10 +230,24 @@ class Paybox_End(BaseView):
     access = True
 
     query_schema = {'state': Integer,
-                    'ref': String}
+                    'ref': String,
+                    'NUMERR': String}
 
     def GET(self, resource, context):
-        # XXX We send an email with error ?
-        print context.query['state']
+        # Root
+        root = context.root
+        server = context.server
+        from_addr = server.smtp_from
+        # Check if no CGI problem
+        erreur = context.query['NUMERR']
+        if erreur:
+            # Send mail
+            subject = u'Paybox problem'
+            body = 'Paybox error: %s' % PayboxCGIErrors.get_value(erreur)
+            root.send_email(from_addr, subject, from_addr, body)
+            # Come back
+            msg = u'Online payment is unavalaible, please try later !'
+            return context.come_back(MSG(msg), goto='/')
+        state = context.query['state']
         return context.come_back(None, goto='../;end', keep=['ref'])
 
