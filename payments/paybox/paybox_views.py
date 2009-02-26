@@ -120,6 +120,11 @@ class Paybox_Pay(STLForm):
        It must be call via the method show_payment_form() of payment resource.
     """
 
+    test_configuration = {'PBX_SITE': 1999888,
+                          'PBX_RANG': 99,
+                          'PBX_IDENTIFIANT': 2}
+
+
     def GET(self, resource, context, conf):
         # We get the paybox CGI path on serveur
         # XXX chmod + x paybox.cgi
@@ -145,10 +150,14 @@ class Paybox_Pay(STLForm):
         for key in ['PBX_SITE', 'PBX_IDENTIFIANT',
                     'PBX_RANG', 'PBX_DIFF', 'PBX_AUTOSEULE']:
             kw[key] = resource.get_property(key)
-        kw['PBX_DEVISE'] = resource.get_property('devise')
+        # XXX Euro par défaut
+        kw['PBX_DEVISE'] = '978'
         # PBX_PORTEUR
-        user = context.user
-        kw['PBX_PORTEUR'] = user.get_property('email')
+        kw['PBX_PORTEUR'] = conf['email']
+        # En mode test:
+        payments = resource.parent
+        if payments.is_in_test_mode():
+            kw.update(self.test_configuration)
         # Attributes
         attributes = ['%s=%s' % (x[0], x[1]) for x in kw.items()]
         # Build cmd
@@ -247,6 +256,7 @@ class Paybox_End(BaseView):
             root.send_email(from_addr, subject, from_addr, body)
             # Come back
             msg = u'Online payment is unavalaible, please try later !'
+            print body
             return context.come_back(MSG(msg), goto='/')
         state = context.query['state']
         return context.come_back(None, goto='../;end', keep=['ref'])

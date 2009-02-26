@@ -95,7 +95,7 @@ class Payments(Folder):
         self.send_confirmation_mail()
 
 
-    def in_test_mode(self):
+    def is_in_test_mode(self):
         return not self.get_property('enabled')
 
     ######################
@@ -109,12 +109,13 @@ class Payments(Folder):
            For example:
            payment = {'id': 'A250',
                       'price': 250,
+                      'email': 'toto@example.fr',
                       'mode': 'paybox'}
         """
         # We check that payment dictionnary is correctly fill.
-        for key in ['id', 'price', 'mode']:
+        for key in ['id', 'price', 'email', 'mode']:
             if key not in payment:
-                raise ValueError, u"Please fill %s."
+                raise ValueError, u"Please fill %s." % key
         # We check mode is valid and actif
         payments_modes = self.get_property('payments_modes')
         if payment['mode'] not in payments_modes:

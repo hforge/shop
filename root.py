@@ -34,6 +34,7 @@ class View(STLView):
         payments = resource.get_resource('payments')
         payment = {'id': 'A250',
                   'price': 250.3,
+                  'email': 'sylvain@itaapy.com',
                   'mode': 'paybox'}
         return payments.show_payment_form(context, payment)
 
