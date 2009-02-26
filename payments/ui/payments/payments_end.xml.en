@@ -5,19 +5,18 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <div id="state" stl:if="not ref">
-    Identifiant de commande incorrect.
+    Invalid number
   </div>
 
   <div id="state" stl:if="ref">
-    Voici le status de votre paiement en ligne:<br/><br/>
+    Payment state:<br/><br/>
     <b stl:if="state">${state}</b>
-    <b stl:if="not state">Erreur, état inconnu.</b><br/><br/>
+    <b stl:if="not state">Unknow state</b><br/><br/>
     <a id="red" href="/orders/${ref}/">
-    Cliquez ici pour voir les détails de votre commande et suivre son avancement.
+    See details about order.
     </a>
     <br/><br/>
-    Vous allez recevoir un mail récapitulatif dans la journée.<br/>
-    Merci pour votre confiance.<br/>
+    you will receive order
   </div>
 
 </stl:block>

@@ -45,7 +45,7 @@ class TypePayment(Enumerate):
       ]
 
 
-class TypeCate(Enumerate):
+class TypeCarte(Enumerate):
 
     options = [
       {'name': 'CB', 'value': u'CB'},
@@ -63,15 +63,6 @@ class TypeCate(Enumerate):
       ]
 
 
-class Devises(Enumerate):
-    """ ISO 4217 """
-
-    options = [
-      {'name': '978', 'value': u'Euro', 'code': 'EUR', 'symbol': '€'},
-      {'name': '840', 'value': u'Dollar', 'code': 'USD', 'symbol': '$'},
-      ]
-
-
 class ModeAutorisation(Enumerate):
 
     options = [
@@ -82,6 +73,8 @@ class ModeAutorisation(Enumerate):
 
 class PayboxStatus(Enumerate):
 
+
+    # XXX Must be in french !
     info = {}
     info['00000'] = MSG(u"Paiement Ok")
     info['00001'] = MSG(u"La connection au centre d'autorisation a échoué.")

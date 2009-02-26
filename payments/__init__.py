@@ -20,7 +20,10 @@ from itools import get_abspath
 # Import from ikaaro
 from ikaaro.skins import register_skin
 
+# Import from shop
+import paybox
+from payments import Payments
 
 # Register skin
-path = get_abspath('ui')
-register_skin('paybox', path)
+path = get_abspath('ui/payments/')
+register_skin('payments', path)

@@ -16,65 +16,62 @@
 
 # Import from itools
 from itools.csv import Table as BaseTable
-from itools.datatypes import String, Boolean, Decimal
+from itools.datatypes import String, Boolean, Decimal, Integer
 from itools.gettext import MSG
+from itools.i18n import format_datetime
 
 # Import from ikaaro
+from ikaaro.forms import TextWidget, BooleanCheckBox, SelectWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
-from ikaaro.forms import TextWidget, BooleanCheckBox, SelectWidget
 
-# Import from package
-from payments_views import Payments_View
+# Import from shop
+from enumerates import PayboxStatus
+from paybox_views import Paybox_Configure, Paybox_Pay, Paybox_View
+from paybox_views import Paybox_ViewPayment, Paybox_End, Paybox_ConfirmPayment
+from shop.payments.payments import PaymentWay
+from shop.payments.enumerates import PaymentSuccessState
 
-#from paybox_views import Paybox_Pay, Paybox_ConfirmPayment, Paybox_View
-#from paybox_views import Paybox_Configure, Paybox_PaymentEnd
-#from enumerates import Devises, PayboxStatus
 
-
-class PaymentsTable(BaseTable):
+class PayboxTable(BaseTable):
 
     record_schema = {
         'ref': String(Unique=True, index='keyword'),
+        'id_payment': Integer,
+        'success': PaymentSuccessState,
         'transaction': String,
         'autorisation': String,
-        'payment_ok': Boolean,
-        'amount': Decimal,
         'status': PayboxStatus,
-        'devise': Devises,
+        'amount': Decimal,
         }
 
 
-class Payments(Table):
-    """
-    This table contains the history of attempted or successful payments.
-    They can be done by several ways (Paybox, paypal ...)
-    """
 
-    class_id = 'payments'
-    class_title = MSG(u'Payment history')
-    class_handler = PaymentsTable
 
-    form = [
-        TextWidget('ref', title=MSG(u'Facture number')),
-        BooleanCheckBox('payment_ok', title=MSG(u'Payment ok')),
-        TextWidget('transaction', title=MSG(u'Id transaction')),
-        TextWidget('autorisation', title=MSG(u'Id Autorisation')),
-        SelectWidget('status', title=MSG(u'Status')),
-        TextWidget('amount', title=MSG(u'Amount')),
-        SelectWidget('devise', title=MSG(u'Devise')),
-        ]
+class Paybox(PaymentWay, Table):
+
+    class_id = 'paybox'
+    class_title = MSG(u'Paybox payment Module')
+    class_handler = PayboxTable
 
     # Views
     class_views = ['view', 'configure']
 
-    # List of views
-    view = Payments_View()
-    #configure = Paybox_Configure()
-    #pay = Paybox_Pay()
-    #confirm_payment = Paybox_ConfirmPayment()
-    #payment_end = Paybox_PaymentEnd()
+    view = Paybox_View()
+    view_payment = Paybox_ViewPayment()
+    configure = Paybox_Configure()
+    confirm_payment = Paybox_ConfirmPayment()
+    end = Paybox_End()
 
+
+    form = [
+        TextWidget('ref', title=MSG(u'Facture number')),
+        SelectWidget('success', title=MSG(u'Payment ok')),
+        TextWidget('transaction', title=MSG(u'Id transaction')),
+        TextWidget('autorisation', title=MSG(u'Id Autorisation')),
+        SelectWidget('status', title=MSG(u'Status')),
+        TextWidget('amount', title=MSG(u'Amount')),
+        ]
 
     @classmethod
     def get_metadata_schema(cls):
@@ -85,29 +82,26 @@ class Payments(Table):
         schema['PBX_IDENTIFIANT'] = String
         # Paybox configuration
         schema['PBX_DIFF'] = String
-        # Devises
-        schema['devise'] = Devises
         return schema
 
 
-    ######################
-    # Public API
-    ######################
+    def get_record_namespace(self, context, record):
+        ns = {}
+        ns['id'] = record.id
+        # Base namespace
+        for key in self.handler.record_schema.keys():
+            ns[key] = self.handler.get_record_value(record, key)
+        # Ns success
+        ns['success'] = PaymentSuccessState.get_value(ns['success'])
+        # Timestamp
+        accept = context.accept_language
+        value = self.handler.get_record_value(record, 'ts')
+        ns['ts'] = format_datetime(value,  accept)
+        return ns
 
-    def show_payment_form(self, context, payment):
-        """
-           payment must be a dictionnary with order's identifiant
-           and order price.
-           For example:
-           payment = {'id': 'A250',
-                      'price': 250}
-        """
-        # We check that payment dictionnary is correctly fill.
-        if 'id' not in payment or 'price' not in payment:
-            raise ValueError, u"Order's id or price is not configure"
-        # We show the payment form
+
+    def _show_payment_form(self, context, payment):
         return Paybox_Pay().GET(self, context, payment)
 
 
-
-register_resource_class(Payments)
+register_resource_class(Paybox)

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <stl:block stl:if="not payments_modes">
+    <h3>Welcome in the payment module</h3>
+    To activate the module, you have to configure it <a href=";configure">Here</a> !!
+  </stl:block>
+
+  <stl:block stl:if="payments_modes">
+    <h3>Payments Module <a href=";configure">[Configure]</a></h3>
+
+      <b>Actif payments mode:</b>
+
+      <ul stl:repeat="payment_mode payments_modes">
+        <li>
+          <a href="${payment_mode/name}" stl:if="payment_mode/selected">
+            ${payment_mode/value}
+          </a>
+        </li>
+      </ul>
+  </stl:block>
+
+  <h3>Last payments</h3>
+
+</stl:block>

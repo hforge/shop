@@ -25,17 +25,32 @@ from itools.handlers import ConfigFile
 from itools.datatypes import Decimal, Unicode, String
 from itools.datatypes import Integer
 from itools.gettext import MSG
-from itools.web import BaseForm, STLView, FormError
-from itools.i18n import format_datetime
+from itools.web import BaseForm, BaseView, STLView, FormError
 from itools.html import HTMLFile
 
 # Import from ikaaro
+from ikaaro import messages
 from ikaaro.table_views import Table_View
-from ikaaro.forms import STLForm, SelectWidget, TextWidget
+from ikaaro.forms import STLForm, TextWidget
 from ikaaro.resource_views import DBResource_Edit
 
 # Import from package
-from enumerates import Devises, PBXState
+from enumerates import PBXState
+
+
+class Paybox_ViewPayment(STLView):
+
+    access = 'is_admin'
+
+    template = '/ui/paybox/view_payment.xml'
+
+    query_schema = {'id': Integer}
+
+    def get_namespace(self, resource, context):
+        id = context.query['id']
+        record = resource.handler.get_record(id)
+        return resource.get_record_namespace(context, record)
+
 
 
 class Paybox_View(Table_View):
@@ -43,10 +58,11 @@ class Paybox_View(Table_View):
 
     access = 'is_admin'
 
+    search_template = None
+    table_actions = []
+
     def get_table_columns(self, resource, context):
         columns = [
-            ('checkbox', None),
-            ('id', MSG(u'id')),
             ('ts', MSG(u'Date'))]
         # From the schema
         for widget in self.get_widgets(resource, context):
@@ -55,14 +71,16 @@ class Paybox_View(Table_View):
         return columns
 
 
+    def get_items(self, resource, context):
+        items = []
+        for item in Table_View.get_items(self, resource, context):
+            ns = resource.get_record_namespace(context, item)
+            items.append(ns)
+        return items
+
+
     def get_item_value(self, resource, context, item, column):
-        handler = resource.handler
-        value = Table_View.get_item_value(self, resource, context, item, column)
-        if column=='ts':
-            accept = context.accept_language
-            value = handler.get_record_value(item, column)
-            return format_datetime(value,  accept)
-        return value
+        return item[column]
 
 
 
@@ -78,25 +96,21 @@ class Paybox_Configure(DBResource_Edit):
     schema = {'PBX_SITE': String,
               'PBX_RANG': String,
               'PBX_IDENTIFIANT': String,
-              'PBX_DIFF': String,
-              'devise': Devises}
+              'PBX_DIFF': String}
 
     widgets = [
         TextWidget('PBX_SITE', title=MSG(u'Paybox Site')),
         TextWidget('PBX_RANG', title=MSG(u'Paybox Rang')),
         TextWidget('PBX_IDENTIFIANT', title=MSG(u'Paybox Identifiant')),
-        TextWidget('PBX_DIFF',
-                   title=MSG(u'Nombre de jour de différé (sur deux chiffres ex: 04)'),
-                   size=2),
-        SelectWidget('devise', title=MSG(u'Devise'))]
+        TextWidget('PBX_DIFF', title=MSG(u'Diff days (On two digits ex: 04)'),
+                   size=2)]
 
     submit_value = MSG(u'Edit configuration')
 
     def action(self, resource, context, form):
         for key in self.schema.keys():
             resource.set_property(key, form[key])
-        context.message = MSG(u'Modification ok')
-        return
+        context.message = messages.MSG_CHANGES_SAVED
 
 
 
@@ -106,15 +120,16 @@ class Paybox_Pay(STLForm):
        It must be call via the method show_payment_form() of payment resource.
     """
 
-    def GET(self, resource, context, payment):
+    def GET(self, resource, context, conf):
         # We get the paybox CGI path on serveur
-        cgi_path = get_abspath('cgi/paybox.cgi')
+        # XXX chmod + x paybox.cgi
+        cgi_path = get_abspath('paybox.cgi')
         # Get configuration
-        configuration_uri = resource.get_configuration_uri()
+        configuration_uri = get_abspath('paybox.cfg')
         configuration = ConfigFile(configuration_uri)
         # Configuration
         kw = {}
-        kw['PBX_CMD'] = conf['cmd']
+        kw['PBX_CMD'] = conf['id']
         kw['PBX_TOTAL'] = int(conf['price'] * 100)
         # Basic configuration
         for key in configuration.values.keys():
@@ -124,7 +139,7 @@ class Paybox_Pay(STLForm):
             key = option['pbx']
             state = option['name']
             base_uri = context.uri.resolve(context.get_link(resource))
-            uri = '%s/;payment_end?state=%s' % (base_uri, state)
+            uri = '%s/;end?state=%s' % (base_uri, state)
             kw[key] = '"%s"' % uri
         # Configuration
         for key in ['PBX_SITE', 'PBX_IDENTIFIANT',
@@ -165,21 +180,7 @@ class Paybox_ConfirmPayment(BaseForm):
               'amount': Decimal,
               'status': String}
 
-    mail_ok = MSG(u"""
-    Bonjour, voici les détails de votre paiement sur la boutique XXX.
-    Status: Votre paiement a été accepté. \n\n
-    ------------------------
-    Référence commande: $ref
-    Montant commande: $price €
-    ------------------------
-    \n\n
-    """)
-
-    mail_erreur = MSG(u"""
-    Votre paiement a été refusé\n\n
-    """)
-
-
+    # XXX Why that ?
     def POST(self, resource, context):
         # (1) Find out which button has been pressed, if more than one
         self._get_action(resource, context)
@@ -195,6 +196,8 @@ class Paybox_ConfirmPayment(BaseForm):
 
     def action(self, resource, context, form):
         # Ensure that remote ip address belongs to Paybox
+        # return get_abspath('paybox.cfg')
+
         remote_ip = context.request.get_remote_ip()
         if remote_ip not in self.authorized_ip:
             msg = 'IP %s invalide (Ref commande = %s)'
@@ -203,7 +206,7 @@ class Paybox_ConfirmPayment(BaseForm):
         amount = form['amount'] / decimal.Decimal('100')
         # TODO Check signature
         # Add a line into payments history
-        kw = {'payment_ok': bool(form['autorisation']),
+        kw = {'success': bool(form['autorisation']),
               'devise': resource.get_property('devise')}
         for key in ['ref', 'transaction', 'autorisation', 'status']:
             kw[key] = form[key]
@@ -216,45 +219,21 @@ class Paybox_ConfirmPayment(BaseForm):
         # Return a blank page to payment
         response = context.response
         response.set_header('Content-Type', 'text/plain')
-        return
-
-
-    def send_mail_confirmation(self, context, payment_record):
-        root = context.root
-        # Create the mail
-        to_addr = 'sylvain@itaapy.com' # XXX
-        subject = MSG(u'Etat de votre commande.').gettext()
-        if payment_record.get_value('payment_ok'):
-            body = self.mail_ok.gettext(ref=payment_record.get_value('ref'),
-                                        price=payment_record.get_property('amount'))
-        else:
-            body = self.mail_erreur.gettext()
-        # We send the mail
-        root.send_email(to_addr, subject, text=body)
-
-
-    def do_treatment(self, resource, context, record):
-        pass
+        # XXX confirm_payment
+        resource.parent.update_payment_state(form)
 
 
 
-class Paybox_PaymentEnd(STLView):
-    """The customer is redirect on this page by paybox after payment
-       (even if payment isn't successfull"""
+class Paybox_End(BaseView):
+    """The customer is redirect on this page after payment"""
 
     access = True
-
-    template = '/ui/paybox/Paybox_PaymentEnd.xml'
 
     query_schema = {'state': Integer,
                     'ref': String}
 
-    def get_namespace(self, resource, context):
-        state = context.query['state']
-        return {'state': PBXState.get_value(state),
-                'ref': context.query['ref']}
+    def GET(self, resource, context):
+        # XXX We send an email with error ?
+        print context.query['state']
+        return context.come_back(None, goto='../;end', keep=['ref'])
 
-
-    configuration = 'paybox.cfg'
-    def get_configuration_uri(self):
-        return get_abspath(self.configuration)

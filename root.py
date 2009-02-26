@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2008 Nicolas Deram <nicolas@itaapy.com>
 # Copyright (C) 2008 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -18,40 +17,38 @@
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
 from ikaaro.root import Root as BaseRoot
-from ikaaro.forms import AutoForm, TextWidget
 
 # Import from itools
 from itools.gettext import MSG
-from itools.datatypes import Unicode
+from itools.web import STLView
 
 # Import from project
-from payment.paybox import Payments
-from orders.orders import Orders
+from payments import Payments
 
-
-class View(AutoForm):
+class View(STLView):
 
     access = True
+    title = MSG(u'Test payment module')
 
-    schema = {'title': Unicode(),
-              'description' : Unicode()}
-
-    widgets = [
-        TextWidget('title', title=MSG(u'Titre')),
-        TextWidget('description', title=MSG(u'Description'))]
-
+    def GET(self, resource, context):
+        payments = resource.get_resource('payments')
+        payment = {'id': 'A250',
+                  'price': 250.3,
+                  'mode': 'paybox'}
+        return payments.show_payment_form(context, payment)
 
 
 class Root(BaseRoot):
 
     class_id = 'root'
     class_title = MSG(u'root')
+    class_views = BaseRoot.class_views + ['test']
+
+    test = View()
 
     def get_document_types(self):
-        return [Payments, Orders]
+        return [Payments]
 
-
-    view = View()
 
 ###########################################################################
 # Register
