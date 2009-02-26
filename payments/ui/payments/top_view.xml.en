@@ -4,23 +4,27 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <div id="paymentdisable" stl:if="not enabled">
+    Module is currently in test mode, no payments will be done.
+  </div>
+
+  <h3>Payments Module <a href=";configure">[Configure]</a></h3>
+
   <stl:block stl:if="not payments_modes">
-    <h3>Welcome in the payment module</h3>
+    Welcome in the payment module<br/>
     To activate the module, you have to configure it <a href=";configure">Here</a> !!
   </stl:block>
 
   <stl:block stl:if="payments_modes">
-    <h3>Payments Module <a href=";configure">[Configure]</a></h3>
+    <b>Actif payments mode:</b>
 
-      <b>Actif payments mode:</b>
-
-      <ul stl:repeat="payment_mode payments_modes">
-        <li>
-          <a href="${payment_mode/name}" stl:if="payment_mode/selected">
-            ${payment_mode/value}
-          </a>
-        </li>
-      </ul>
+    <ul stl:repeat="payment_mode payments_modes">
+      <li>
+        <a href="${payment_mode/name}" stl:if="payment_mode/selected">
+          ${payment_mode/value}
+        </a>
+      </li>
+    </ul>
   </stl:block>
 
   <h3>Last payments</h3>

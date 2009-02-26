@@ -15,13 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Integer, String
+from itools.datatypes import Boolean, Integer, String
 from itools.gettext import MSG
 from itools.web import STLView
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import AutoForm, SelectWidget
+from ikaaro.forms import AutoForm, BooleanRadio, SelectWidget
 from ikaaro.views import BrowseForm, CompositeForm
 
 # Import from shop
@@ -36,12 +36,17 @@ class Payments_Top_View(STLView):
 
     def get_namespace(self, resource, context):
         ns = {}
+        # Payments modes
         payments_modes = resource.get_property('payments_modes')
-        if not payments_modes:
-            ns['payments_modes'] = None
-        else:
+        ns['payments_modes'] = None
+        if payments_modes:
             ns['payments_modes'] = PaymentWayList.get_namespace(payments_modes)
+        # Other informations
+        for key in ['enabled']:
+            ns[key] = resource.get_property(key)
+        print ns
         return ns
+
 
 
 class Payments_History_View(BrowseForm):
@@ -113,11 +118,13 @@ class Payments_Configure(AutoForm):
     title = MSG(u'Configure')
 
     widgets = [
-        SelectWidget('payments_modes', title=MSG(u'Enable payments mode')),
+        BooleanRadio('enabled', title=MSG(u'Payments in real mode')),
+        SelectWidget('payments_modes', title=MSG(u'Authorized payments mode')),
         ]
 
     schema = {
         'payments_modes': PaymentWayList(multiple=True, mandatory=True),
+        'enabled': Boolean(mandatory=True),
     }
 
 
@@ -127,7 +134,7 @@ class Payments_Configure(AutoForm):
 
     def action(self, resource, context, form):
         # Save configuration
-        for key in ['payments_modes']:
+        for key in ['payments_modes', 'enabled']:
             resource.set_property(key, form[key])
         # We activate new payments mode
         resource.activate_payments_modes(form['payments_modes'])

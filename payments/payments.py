@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.datatypes import Boolean
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -54,6 +55,7 @@ class Payments(Folder):
     def get_metadata_schema(cls):
         schema = Folder.get_metadata_schema()
         schema['payments_modes'] = PaymentWayList(multiple=True)
+        schema['enabled'] = Boolean
         return schema
 
 
@@ -91,6 +93,10 @@ class Payments(Folder):
 
     def update_payment_state(self, id_payment):
         self.send_confirmation_mail()
+
+
+    def in_test_mode(self):
+        return not self.get_property('enabled')
 
     ######################
     # Public API
