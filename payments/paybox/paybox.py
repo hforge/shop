@@ -91,6 +91,8 @@ class Paybox(PaymentWay, Table):
         # Base namespace
         for key in self.handler.record_schema.keys():
             ns[key] = self.handler.get_record_value(record, key)
+        # Amount
+        ns['amount'] = '%s €' % ns['amount']
         # Ns success
         ns['success'] = PaymentSuccessState.get_value(ns['success'])
         # Timestamp
