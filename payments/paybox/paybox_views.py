@@ -65,6 +65,7 @@ class Paybox_View(Table_View):
 
     def get_table_columns(self, resource, context):
         columns = [
+            ('complete_id', MSG(u'Id')),
             ('ts', MSG(u'Date'))]
         # From the schema
         for widget in self.get_widgets(resource, context):

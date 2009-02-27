@@ -91,7 +91,13 @@ class Paybox(PaymentWay, Table):
 
     def get_record_namespace(self, context, record):
         ns = {}
+        # Id
         ns['id'] = record.id
+        # Complete id
+        resource = context.resource
+        complete_id = 'paybox-%s' % record.id
+        uri = '%s/;view_payment?id=%s' % (resource.get_pathto(self), record.id)
+        ns['complete_id'] = (complete_id, uri)
         # Base namespace
         for key in self.handler.record_schema.keys():
             ns[key] = self.handler.get_record_value(record, key)

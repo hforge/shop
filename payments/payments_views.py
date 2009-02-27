@@ -44,7 +44,6 @@ class Payments_Top_View(STLView):
         # Other informations
         for key in ['enabled']:
             ns[key] = resource.get_property(key)
-        print ns
         return ns
 
 
@@ -62,7 +61,7 @@ class Payments_History_View(BrowseForm):
 
 
     table_columns = [
-        ('id', MSG(u'Id')),
+        ('complete_id', MSG(u'Id')),
         ('ts', MSG(u'Date')),
         ('payment_mode', MSG(u'Payment mode')),
         ('success', MSG(u'Success')),
@@ -79,9 +78,6 @@ class Payments_History_View(BrowseForm):
             for record in payment_way.handler.get_records():
                 kw = payment_way.get_record_namespace(context, record)
                 kw['payment_mode'] = payment_mode_title
-                uri = './%s/;view_payment?id=%s' % (payment_mode, kw['id'])
-                kw['ts'] = (kw['ts'], uri)
-                kw['id'] = ('%s-%s' % (kw['id'], payment_mode), uri)
                 items.append(kw)
         return items
 
