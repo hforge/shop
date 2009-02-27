@@ -29,6 +29,7 @@ from ikaaro.table import Table
 from enumerates import PayboxStatus
 from paybox_views import Paybox_Configure, Paybox_Pay, Paybox_View
 from paybox_views import Paybox_ViewPayment, Paybox_End, Paybox_ConfirmPayment
+from shop.datatypes import StringFixSize
 from shop.payments.payments import PaymentWay
 from shop.payments.enumerates import PaymentSuccessState
 
@@ -73,15 +74,18 @@ class Paybox(PaymentWay, Table):
         TextWidget('amount', title=MSG(u'Amount')),
         ]
 
+
+    base_schema = {'PBX_SITE': StringFixSize(size=7),
+                   'PBX_RANG': StringFixSize(size=2),
+                   'PBX_IDENTIFIANT': String,
+                   'PBX_DIFF': StringFixSize(size=2)}
+
+
     @classmethod
     def get_metadata_schema(cls):
         schema = Table.get_metadata_schema()
         # Paybox account configuration
-        schema['PBX_SITE'] = String
-        schema['PBX_RANG'] = String
-        schema['PBX_IDENTIFIANT'] = String
-        # Paybox configuration
-        schema['PBX_DIFF'] = String
+        schema.update(cls.base_schema)
         return schema
 
 

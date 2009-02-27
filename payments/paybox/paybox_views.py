@@ -35,7 +35,8 @@ from ikaaro.table_views import Table_View
 from ikaaro.forms import STLForm, TextWidget
 from ikaaro.resource_views import DBResource_Edit
 
-# Import from package
+# Import from shop
+from shop.datatypes import StringFixSize
 from enumerates import PBXState, PayboxCGIErrors
 
 
@@ -94,10 +95,10 @@ class Paybox_Configure(DBResource_Edit):
     title = MSG(u'Configure Paybox')
     access = 'is_admin'
 
-    schema = {'PBX_SITE': String,
-              'PBX_RANG': String,
+    schema = {'PBX_SITE': StringFixSize(size=7),
+              'PBX_RANG': StringFixSize(size=2),
               'PBX_IDENTIFIANT': String,
-              'PBX_DIFF': String}
+              'PBX_DIFF': StringFixSize(size=2)}
 
     widgets = [
         TextWidget('PBX_SITE', title=MSG(u'Paybox Site')),
@@ -111,7 +112,7 @@ class Paybox_Configure(DBResource_Edit):
     def action(self, resource, context, form):
         for key in self.schema.keys():
             resource.set_property(key, form[key])
-        context.message = messages.MSG_CHANGES_SAVED
+        return context.come_back(messages.MSG_CHANGES_SAVED, goto='../')
 
 
 
