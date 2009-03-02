@@ -24,10 +24,12 @@ from itools.web import STLView
 
 # Import from project
 from payments import Payments
+from products import Product
+
 
 class View(STLView):
 
-    access = True
+    access = 'is_admin'
     title = MSG(u'Test payment module')
 
     def GET(self, resource, context):
@@ -50,7 +52,7 @@ class Root(BaseRoot):
     test = View()
 
     def get_document_types(self):
-        return [Payments]
+        return [Payments, Product]
 
 
 ###########################################################################
