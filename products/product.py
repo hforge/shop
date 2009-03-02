@@ -55,6 +55,12 @@ class Product(Folder):
 
 
 
+    def get_product_type(self, context):
+        product_type = self.get_property('product_type')
+        return context.root.get_resource('types/%s' % product_type)
+
+
+
     def get_namespace(self, context):
         ns = {}
         # Basic informations
@@ -63,13 +69,17 @@ class Product(Folder):
         # Specific product informations
         product_type = self.get_product_type(context)
         ns.update(product_type.get_producttype_ns(self))
+        # Images
+        ns.update(self.get_images_ns())
         return ns
 
 
-    def get_product_type(self, context):
-        product_type = self.get_property('product_type')
-        return context.root.get_resource('types/%s' % product_type)
-
+    def get_images_ns(self):
+        ns = {'images': []}
+        folder_images = self.get_resource('images')
+        for image in folder_images.get_resources():
+            ns['images'].append({'href': image.abspath()})
+        return ns
 
 
 class Products(Folder):

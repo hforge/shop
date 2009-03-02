@@ -4,9 +4,19 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  ${title}
-  ${description}
-  ${price}
+  <h1>Référencement</h1>
+  ${title}<br/>
+  ${description}<br/>
+  ${subject}<br/>
+
+  <h1>Price / weight</h1>
+
+  ${price}<br/>
+  ${weight}<br/>
+
+  <h1>Images</h1>
+
+  <img stl:repeat="img images" href="${img/href}"/>
 
   <h1>Description générale</h1>
 
@@ -17,6 +27,13 @@
   <stl:block stl:repeat="property specific_list">
     <b>${property/title}</b>: ${property/value}<br/>
   </stl:block>
+
+  <h1>Actions</h1>
+
+  <a href="">Print</a><br/>
+  <a href="">View PDF</a><br/>
+  <a href="">Send by mail</a><br/>
+
 
   <h1>Produits complémentaires</h1>
 
