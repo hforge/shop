@@ -24,7 +24,7 @@ from itools.web import STLView
 
 # Import from project
 from payments import Payments
-from products import Products, Product, ProductTypes
+from products import Products, Product, ProductAttributes, ProductTypes
 
 
 class View(STLView):
@@ -49,7 +49,7 @@ class Root(BaseRoot):
     class_views = BaseRoot.class_views + ['test']
 
     __fixed_handlers__ = BaseRoot.__fixed_handlers__ + ['payments', 'products',
-                          'types']
+                          'types', 'attributes']
 
     # Views
     test = View()
@@ -63,15 +63,14 @@ class Root(BaseRoot):
         # Products
         Products._make_resource(Products, folder, 'products',
                                 title={'en': u'Products'})
+        # Product Attributes
+        ProductAttributes._make_resource(ProductAttributes, folder, 'attributes',
+                                         title={'en': u'Product attributes'})
         # Available Product Types
         ProductTypes._make_resource(ProductTypes, folder, 'types',
                                     title={'en': u'Product Types'})
         return root
 
-
-
-    def get_document_types(self):
-        return [Payments, Product]
 
 
 ###########################################################################

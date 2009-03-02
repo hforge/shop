@@ -4,6 +4,21 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-    ${title}
-    ${description}
+  ${title}
+  ${description}
+  ${price}
+
+  <h1>Description générale</h1>
+
+  ${html_description}
+
+  <h1>Caractéristiques détaillées</h1>
+
+  <stl:block stl:repeat="property specific_list">
+    <b>${property/title}</b>: ${property/value}<br/>
+  </stl:block>
+
+  <h1>Produits complémentaires</h1>
+
+  XXX
 </stl:block>

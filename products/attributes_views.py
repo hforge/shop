@@ -14,17 +14,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from itools
-from itools import get_abspath
-
 # Import from ikaaro
-from ikaaro.skins import register_skin
+from ikaaro.table_views import Table_AddRecord
 
-# Import from shop
-from product import Product, Products
-from product_types import ProductTypes
-from attributes import ProductAttributes
+# Import from itools
+from itools.gettext import MSG
+from itools.handlers import checkid
 
-# Register skin
-path = get_abspath('ui/')
-register_skin('product', path)
+
+class ProductEnumAttribute_AddRecord(Table_AddRecord):
+
+    title = MSG(u'Add Record')
+    submit_value = MSG(u'Add')
+
+
+    def action_add_or_edit(self, resource, context, record):
+        record['name'] = checkid(record['title'])
+        resource.handler.add_record(record)
+

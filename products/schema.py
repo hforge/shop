@@ -14,22 +14,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from itools
+from itools.datatypes import Boolean, Decimal, Enumerate, String, Unicode
+from itools.web import get_context
+
 # Import from ikaaro
 from ikaaro.forms import HTMLBody
-
-# Import from itools
-from itools.datatypes import Boolean, Decimal, String, Tokens, Unicode
 
 
 #############################################
 # Product schema
 #############################################
 
+
+class ProductTypes(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        root = context.root
+        attributes = root.get_resource('types')
+        return [{'name': res.name,
+                 'value': res.get_property('title')}
+                for res in attributes.get_resources()]
+
+
+
 product_schema = {# General informations
                   'reference': Unicode,
                   'title': Unicode,
                   'description': Unicode,
                   'subject': Unicode,
+                  'product_type': ProductTypes,
                   # Categories
                   #'categories': Tokens,
                   # Price

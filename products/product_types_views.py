@@ -16,7 +16,7 @@
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget, ImageSelectorWidget
+from ikaaro.forms import AutoForm, RTEWidget, TextWidget, ImageSelectorWidget
 from ikaaro.views import CompositeForm
 from ikaaro.folder_views import Folder_BrowseContent
 
@@ -39,7 +39,7 @@ class Product_View(STLView):
 
 
     def get_namespace(self, resource, context):
-        return resource.get_namespace(context)
+        return resource.get_namespace()
 
 
 
@@ -100,32 +100,6 @@ class Product_Images(CompositeForm):
     ]
 
 
-class Product_EditSpecific(AutoForm):
-
-    access = 'is_allowed_to_edit'
-    title = MSG(u'Edit Specific')
-
-    def get_widgets(self, resource, context):
-        product_type = resource.get_product_type(context)
-        return product_type.get_producttype_widgets()
-
-
-    def get_schema(self, resource, context):
-        product_type = resource.get_product_type(context)
-        return product_type.get_producttype_schema()
-
-
-    def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name)
-
-
-    def action(self, resource, context, form):
-        product_type = resource.get_product_type(context)
-        for key in product_type.get_producttype_schema():
-            resource.set_property(key, form[key])
-        return context.come_back(messages.MSG_CHANGES_SAVED)
-
-
 
 class Product_Edit(AutoForm):
 
@@ -137,7 +111,6 @@ class Product_Edit(AutoForm):
     widgets = [
         # General informations
         TextWidget('reference', title=MSG(u'Reference')),
-        SelectWidget('product_type', title=MSG(u'Product type')),
         TextWidget('title', title=MSG(u'Title')),
         TextWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Subject')),

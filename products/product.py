@@ -19,22 +19,24 @@ from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
 
 # Import from itools
-from itools.datatypes import Boolean, Decimal, String, Tokens, Unicode
+from itools.datatypes import Boolean, Decimal, Enumerate, String, Tokens, Unicode
 from itools.gettext import MSG
 
 # Import from shop
-from product_views import Product_View, Product_Edit, Product_Images
+from product_views import Product_View, Product_Edit, Product_EditSpecific, Product_Images
 from schema import product_schema
+
 
 
 class Product(Folder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
-    class_views = ['view', 'edit', 'images']
+    class_views = ['view', 'edit', 'edit_specific', 'images']
 
     view = Product_View()
     edit = Product_Edit()
+    edit_specific = Product_EditSpecific()
     images = Product_Images()
 
 
@@ -53,11 +55,20 @@ class Product(Folder):
 
 
 
-    def get_namespace(self):
+    def get_namespace(self, context):
         ns = {}
+        # Basic informations
         for key in product_schema.keys():
             ns[key] = self.get_property(key)
+        # Specific product informations
+        product_type = self.get_product_type(context)
+        ns.update(product_type.get_producttype_ns(self))
         return ns
+
+
+    def get_product_type(self, context):
+        product_type = self.get_property('product_type')
+        return context.root.get_resource('types/%s' % product_type)
 
 
 
