@@ -105,6 +105,13 @@ class Product_EditSpecific(AutoForm):
     access = 'is_allowed_to_edit'
     title = MSG(u'Edit Specific')
 
+    def GET(self, resource, context):
+        if not resource.get_property('product_type'):
+            msg = MSG(u'No product type is selected')
+            return context.come_back(msg)
+        return AutoForm.GET(self, resource, context)
+
+
     def get_widgets(self, resource, context):
         product_type = resource.get_product_type(context)
         return product_type.get_producttype_widgets()
