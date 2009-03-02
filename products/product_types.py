@@ -27,10 +27,10 @@ from product_views import Product_View, Product_Edit, Product_Images
 from schema import product_schema
 
 
-class Product(Folder):
+class ProductType(Folder):
 
-    class_id = 'product'
-    class_title = MSG(u'Product')
+    class_id = 'product-types'
+    class_title = MSG(u'Product type')
     class_views = ['view', 'edit', 'images']
 
     view = Product_View()
@@ -61,15 +61,16 @@ class Product(Folder):
 
 
 
-class Products(Folder):
+class ProductTypes(Folder):
 
-    class_id = 'products'
-    class_title = MSG(u'Products')
+    class_id = 'product-types'
+    class_title = MSG(u'Product types')
 
 
     def get_document_types(self):
-        return [Product]
+        return [ProductType]
 
 
-register_resource_class(Product)
-register_resource_class(Products)
+
+register_resource_class(ProductType)
+register_resource_class(ProductTypes)
