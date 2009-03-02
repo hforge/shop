@@ -25,6 +25,7 @@ from itools.web import STLView
 # Import from project
 from payments import Payments
 from products import Products, Product, ProductAttributes, ProductTypes
+from cart.cart_views import Cart_View
 
 
 class View(STLView):
@@ -53,6 +54,7 @@ class Root(BaseRoot):
 
     # Views
     test = View()
+    view_cart = Cart_View()
 
     @staticmethod
     def _make_resource(cls, folder, email, password):

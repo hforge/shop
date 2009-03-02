@@ -23,11 +23,22 @@ from ikaaro.folder_views import Folder_BrowseContent
 # Import from itools
 from itools.datatypes import Boolean, Decimal, String, Tokens, Unicode
 from itools.gettext import MSG
-from itools.web import STLView
+from itools.web import BaseView, STLView
 
 # Import from shop
 from schema import product_schema
+from shop.cart import ProductCart
 
+
+class Product_AddToCart(BaseView):
+
+    access = True
+
+    def GET(self, resource, context):
+        cart = ProductCart()
+        cart.add_product(resource.name, 1)
+        msg = MSG(u'Product added to cart !')
+        return context.come_back(msg)
 
 
 class Product_View(STLView):

@@ -14,5 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from itools
+from itools import get_abspath
+
+# Import from ikaaro
+from ikaaro.skins import register_skin
+
 # Import from shop
 from cart import BaseCart, ProductCart
+
+# Register skin
+path = get_abspath('ui/')
+register_skin('cart', path)

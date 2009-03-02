@@ -26,12 +26,10 @@ class BaseCart(object):
     def __init__(self):
         context = get_context()
         if not context.has_cookie('cart'):
-            context.set_cookie('cart', 1)
-            self.clear()
+            context.set_cookie('cart', [])
 
 
-
-    def get_cart(self):
+    def get_elements(self):
         """
         Transform an cookie value (str) as:
           name:product1|quantity:2@name:product2|quantity:3
@@ -47,7 +45,8 @@ class BaseCart(object):
         l = []
         for elt in cart.split('@'):
             kw = {}
-            for key, value in elt.split('|'):
+            for info in elt.split('|'):
+                key, value = info.split(':')
                 kw[key] = value
             l.append(kw)
         return l
@@ -70,7 +69,7 @@ class BaseCart(object):
 
 
     def clear(self):
-        self.set_list_products([])
+        self.set_cart([])
 
 
 
@@ -79,9 +78,10 @@ class ProductCart(BaseCart):
     def manage_product(self, name, quantity=0):
         context = get_context()
         # Check if product already in cart
-        products = self.get_cart()
+        products = self.get_elements()
         for i, product in enumerate(products):
             if(product['name']==name):
+                product['quantity'] = int(product['quantity'])
                 new_quantity = product['quantity'] + quantity
                 if new_quantity == 0:
                     # Remove the product
@@ -110,7 +110,7 @@ class ProductCart(BaseCart):
 
     def delete_product(self, name):
         context = get_context()
-        products = self.get_cart()
+        products = self.get_elements()
         # Check if product already in cart
         for i, product in enumerate(products):
             if(product['name']==name):

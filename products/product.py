@@ -24,6 +24,7 @@ from itools.gettext import MSG
 
 # Import from shop
 from product_views import Product_View, Product_Edit, Product_EditSpecific, Product_Images
+from product_views import Product_AddToCart
 from schema import product_schema
 
 
@@ -37,6 +38,7 @@ class Product(Folder):
     view = Product_View()
     edit = Product_Edit()
     edit_specific = Product_EditSpecific()
+    add_to_cart = Product_AddToCart()
     images = Product_Images()
 
 
