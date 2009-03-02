@@ -16,7 +16,8 @@
 
   <h1>Images</h1>
 
-  <img stl:repeat="img images" href="${img/href}"/>
+  <img stl:repeat="img images" src="${img/href}/;thumb?width=200&amp;height=200"
+      title="${img/title}"/>
 
   <h1>Description générale</h1>
 

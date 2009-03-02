@@ -78,7 +78,8 @@ class Product(Folder):
         ns = {'images': []}
         folder_images = self.get_resource('images')
         for image in folder_images.get_resources():
-            ns['images'].append({'href': image.abspath()})
+            ns['images'].append({'href': image.abspath,
+                                 'title': image.get_property('title')})
         return ns
 
 
