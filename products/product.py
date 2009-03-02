@@ -58,6 +58,8 @@ class Product(Folder):
 
     def get_product_type(self, context):
         product_type = self.get_property('product_type')
+        if not product_type:
+            return None
         return context.root.get_resource('types/%s' % product_type)
 
 
@@ -69,7 +71,11 @@ class Product(Folder):
             ns[key] = self.get_property(key)
         # Specific product informations
         product_type = self.get_product_type(context)
-        ns.update(product_type.get_producttype_ns(self))
+        if product_type:
+            ns.update(product_type.get_producttype_ns(self))
+        else:
+            ns['specific_dic'] = {}
+            ns['specific_list'] = []
         # Images
         ns.update(self.get_images_ns())
         return ns
