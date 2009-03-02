@@ -46,6 +46,7 @@ product_schema = {# General informations
                   'description': Unicode,
                   'subject': Unicode,
                   'product_type': ProductTypes,
+                  'document_path': String,
                   # Categories
                   #'categories': Tokens,
                   # Price

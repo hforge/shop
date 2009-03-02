@@ -47,7 +47,7 @@ class Root(BaseRoot):
     class_id = 'root'
     class_skin = 'ui/shop'
     class_title = MSG(u'root')
-    class_views = BaseRoot.class_views + ['test']
+    class_views = BaseRoot.class_views + ['test', 'view_cart']
 
     __fixed_handlers__ = BaseRoot.__fixed_handlers__ + ['payments', 'products',
                           'types', 'attributes']

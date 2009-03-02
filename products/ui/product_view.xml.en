@@ -32,7 +32,7 @@
   <h1>Actions</h1>
 
   <a href="">Print</a><br/>
-  <a href="">View PDF</a><br/>
+  <a href="${document_path}/;download" stl:if="document_path">View PDF</a><br/>
   <a href="">Send by mail</a><br/>
   <a href=";add_to_cart">Add to the cart</a><br/>
 

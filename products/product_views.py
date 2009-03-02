@@ -17,6 +17,7 @@
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget, ImageSelectorWidget
+from ikaaro.forms import PathSelectorWidget
 from ikaaro.views import CompositeForm
 from ikaaro.folder_views import Folder_BrowseContent
 
@@ -159,6 +160,7 @@ class Product_Edit(AutoForm):
         TextWidget('title', title=MSG(u'Title')),
         TextWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Subject')),
+        PathSelectorWidget('document_path', title=MSG(u'Add a document')),
         # Transport
         TextWidget('weight', title=MSG(u'Weight')),
         # Price

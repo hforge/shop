@@ -26,7 +26,7 @@ from cart import ProductCart
 class Cart_View(STLView):
 
     access = True
-    title = MSG(u'View')
+    title = MSG(u'View Cart')
 
     template = '/ui/cart/cart_view.xml'
 
