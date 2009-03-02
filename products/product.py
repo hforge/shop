@@ -19,7 +19,6 @@ from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
 
 # Import from itools
-from itools.datatypes import Boolean, Decimal, Enumerate, String, Tokens, Unicode
 from itools.gettext import MSG
 
 # Import from shop

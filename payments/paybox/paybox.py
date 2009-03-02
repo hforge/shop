@@ -16,12 +16,12 @@
 
 # Import from itools
 from itools.csv import Table as BaseTable
-from itools.datatypes import String, Boolean, Decimal, Integer
+from itools.datatypes import String, Decimal, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 
 # Import from ikaaro
-from ikaaro.forms import TextWidget, BooleanCheckBox, SelectWidget
+from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 

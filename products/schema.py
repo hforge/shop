@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean, Decimal, Enumerate, String, Unicode
+from itools.datatypes import Decimal, Enumerate, String, Unicode
 from itools.web import get_context
 
 # Import from ikaaro

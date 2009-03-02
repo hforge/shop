@@ -21,7 +21,6 @@ from ikaaro.views import CompositeForm
 from ikaaro.folder_views import Folder_BrowseContent
 
 # Import from itools
-from itools.datatypes import Boolean, Decimal, String, Tokens, Unicode
 from itools.gettext import MSG
 from itools.web import STLView
 

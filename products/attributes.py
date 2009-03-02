@@ -17,7 +17,7 @@
 
 # Import from itools
 from itools.csv import Table as BaseTable
-from itools.datatypes import Boolean, Decimal, String, Tokens, Unicode
+from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 
 # Import from ikaaro

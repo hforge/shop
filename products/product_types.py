@@ -16,8 +16,7 @@
 
 
 # Import from itools
-from itools.csv import Table as BaseTable
-from itools.datatypes import Boolean, Decimal, Enumerate, String, Tokens, Unicode
+from itools.datatypes import Enumerate, String, Unicode
 from itools.gettext import MSG
 from itools.web import get_context
 
@@ -25,12 +24,8 @@ from itools.web import get_context
 from ikaaro.folder import Folder
 from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
-from ikaaro.table import Table
 from ikaaro.table import OrderedTable, OrderedTableFile
 
-# Import from shop
-from product_views import Product_View, Product_Edit, Product_Images
-from schema import product_schema
 
 
 class AllAttributes(Enumerate):
