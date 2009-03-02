@@ -48,6 +48,9 @@ class Root(BaseRoot):
     class_title = MSG(u'root')
     class_views = BaseRoot.class_views + ['test']
 
+    __fixed_handlers__ = BaseRoot.__fixed_handlers__ + ['payments', 'products',
+                          'types']
+
     # Views
     test = View()
 
