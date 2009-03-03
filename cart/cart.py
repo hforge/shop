@@ -26,7 +26,7 @@ class BaseCart(object):
     def __init__(self):
         context = get_context()
         if not context.has_cookie('cart'):
-            context.set_cookie('cart', [])
+            context.set_cookie('cart', '')
 
 
     def get_elements(self):
