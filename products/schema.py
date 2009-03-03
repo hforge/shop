@@ -31,7 +31,6 @@ product_schema = {# General informations
                   'title': Unicode,
                   'description': Unicode,
                   'subject': Unicode,
-                  'product_model': String,
                   'document_path': String,
                   # Categories
                   #'categories': Tokens,

@@ -46,6 +46,7 @@ class Product_NewInstance(DBResource_NewInstance):
         TextWidget('name', title=MSG(u'Name'), default=''),
         SelectWidget('product_model', title=MSG(u'Product model'))]
 
+
     def action(self, resource, context, form):
         name = form['name']
         title = form['title']

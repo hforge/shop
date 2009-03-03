@@ -18,6 +18,7 @@
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.web import STLView
+from itools.xapian import OrQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro import messages
@@ -47,7 +48,17 @@ class ProductModels_View(Folder_BrowseContent):
         ('title', MSG(u'Title'))
         ]
 
-    # XXX We can't delete model if it is used
+    def action_remove(self, resource, context, form):
+        """We can't delete model if it is used by a product"""
+        root = context.root
+        query = OrQuery(*[PhraseQuery('product_model', x)
+                                    for x in form['ids']])
+        results = root.search(query)
+        if results.get_n_documents()!=0:
+            msg = MSG(u'Impossible: this model is used by a product')
+            return context.come_back(msg)
+        return Folder_BrowseContent.action_remove(self, resource, context,
+                                                  form)
 
 
 

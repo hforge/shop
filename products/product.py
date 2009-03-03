@@ -14,12 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from itools
+from itools.datatypes import String
+from itools.gettext import MSG
+from itools.handlers import merge_dicts
+from itools.xapian import KeywordField
+
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
-
-# Import from itools
-from itools.gettext import MSG
 
 # Import from shop
 from product_views import Product_View, Product_Edit, Product_EditModel, Product_Images
@@ -44,9 +47,8 @@ class Product(Folder):
 
     @classmethod
     def get_metadata_schema(cls):
-        schema = Folder.get_metadata_schema()
-        schema.update(product_schema)
-        return schema
+        return merge_dicts(Folder.get_metadata_schema(), product_schema,
+                           product_model=String)
 
 
     @staticmethod
@@ -54,6 +56,18 @@ class Product(Folder):
         Folder._make_resource(cls, folder, name, *args, **kw)
         Folder._make_resource(Folder, folder, '%s/images' % name,
                              body='', title={'en': 'Images'})
+
+
+
+    def get_catalog_fields(self):
+        return (Folder.get_catalog_fields(self)
+                + [KeywordField('product_model')])
+
+
+    def get_catalog_values(self):
+        values = Folder.get_catalog_values(self)
+        values['product_model'] = self.get_property('product_model')
+        return values
 
 
 
