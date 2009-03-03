@@ -29,7 +29,8 @@ from ikaaro.registry import get_resource_class
 from ikaaro.resource_views import DBResource_NewInstance
 
 # Import from shop
-from schema import product_schema, ProductTypes
+from enumerate import ProductModelsEnumerate
+from schema import product_schema
 from shop.cart import ProductCart
 
 
@@ -38,12 +39,12 @@ class Product_NewInstance(DBResource_NewInstance):
     schema = {
         'name': String,
         'title': Unicode,
-        'product_type': ProductTypes}
+        'product_model': ProductModelsEnumerate}
 
     widgets = [
         title_widget,
         TextWidget('name', title=MSG(u'Name'), default=''),
-        SelectWidget('product_type', title=MSG(u'Product type'))]
+        SelectWidget('product_model', title=MSG(u'Product model'))]
 
     def action(self, resource, context, form):
         name = form['name']
@@ -57,7 +58,7 @@ class Product_NewInstance(DBResource_NewInstance):
         metadata = child.metadata
         language = resource.get_content_language(context)
         metadata.set_property('title', title, language=language)
-        metadata.set_property('product_type', form['product_type'])
+        metadata.set_property('product_model', form['product_model'])
 
         goto = './%s/' % name
         return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
@@ -75,13 +76,13 @@ class Product_AddToCart(BaseView):
         return context.come_back(msg)
 
 
+
 class Product_View(STLView):
 
     access = True
     title = MSG(u'View')
 
     template = '/ui/product/product_view.xml'
-
 
     def get_namespace(self, resource, context):
         return resource.get_namespace(context)
@@ -145,26 +146,27 @@ class Product_Images(CompositeForm):
     ]
 
 
-class Product_EditSpecific(AutoForm):
+
+class Product_EditModel(AutoForm):
 
     access = 'is_allowed_to_edit'
-    title = MSG(u'Edit Specific')
+    title = MSG(u'Edit Model')
 
     def GET(self, resource, context):
-        if not resource.get_property('product_type'):
+        if not resource.get_property('product_model'):
             msg = MSG(u'No product type is selected')
             return context.come_back(msg)
         return AutoForm.GET(self, resource, context)
 
 
     def get_widgets(self, resource, context):
-        product_type = resource.get_product_type(context)
-        return product_type.get_producttype_widgets()
+        product_type = resource.get_product_model(context)
+        return product_type.get_model_widgets()
 
 
     def get_schema(self, resource, context):
-        product_type = resource.get_product_type(context)
-        return product_type.get_producttype_schema()
+        product_type = resource.get_product_model(context)
+        return product_type.get_model_schema()
 
 
     def get_value(self, resource, context, name, datatype):
@@ -172,8 +174,8 @@ class Product_EditSpecific(AutoForm):
 
 
     def action(self, resource, context, form):
-        product_type = resource.get_product_type(context)
-        for key in product_type.get_producttype_schema():
+        product_type = resource.get_product_model(context)
+        for key in product_type.get_model_schema():
             resource.set_property(key, form[key])
         return context.come_back(messages.MSG_CHANGES_SAVED)
 

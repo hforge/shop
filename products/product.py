@@ -22,7 +22,7 @@ from ikaaro.registry import register_resource_class
 from itools.gettext import MSG
 
 # Import from shop
-from product_views import Product_View, Product_Edit, Product_EditSpecific, Product_Images
+from product_views import Product_View, Product_Edit, Product_EditModel, Product_Images
 from product_views import Product_NewInstance, Product_AddToCart
 from schema import product_schema
 
@@ -32,12 +32,12 @@ class Product(Folder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
-    class_views = ['view', 'edit', 'edit_specific', 'images']
+    class_views = ['view', 'edit', 'edit_model', 'images']
 
     new_instance = Product_NewInstance()
     view = Product_View()
     edit = Product_Edit()
-    edit_specific = Product_EditSpecific()
+    edit_model = Product_EditModel()
     add_to_cart = Product_AddToCart()
     images = Product_Images()
 
@@ -57,13 +57,12 @@ class Product(Folder):
 
 
 
-    def get_product_type(self, context):
-        product_type = self.get_property('product_type')
-        if not product_type:
+    def get_product_model(self, context):
+        product_model = self.get_property('product_model')
+        if not product_model:
             return None
-        products = self.parent
-        shop = products.parent
-        return shop.get_resource('types/%s' % product_type)
+        shop = self.parent.parent
+        return shop.get_resource('products-models/%s' % product_model)
 
 
 
@@ -73,9 +72,9 @@ class Product(Folder):
         for key in product_schema.keys():
             ns[key] = self.get_property(key)
         # Specific product informations
-        product_type = self.get_product_type(context)
-        if product_type:
-            ns.update(product_type.get_producttype_ns(self))
+        product_model = self.get_product_model(context)
+        if product_model:
+            ns.update(product_model.get_model_ns(self))
         else:
             ns['specific_dic'] = {}
             ns['specific_list'] = []

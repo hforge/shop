@@ -14,21 +14,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from ikaaro
-from ikaaro.table_views import Table_AddRecord
-
-# Import from itools
-from itools.gettext import MSG
-from itools.handlers import checkid
+# Import from itools
+from itools.datatypes import Enumerate
+from itools.web import get_context
 
 
-class ProductEnumAttribute_AddRecord(Table_AddRecord):
+class ProductModelsEnumerate(Enumerate):
 
-    title = MSG(u'Add Record')
-    submit_value = MSG(u'Add')
-
-
-    def action_add_or_edit(self, resource, context, record):
-        record['name'] = checkid(record['title'])
-        resource.handler.add_record(record)
-
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        shop = context.resource.parent
+        models = shop.get_resource('products-models')
+        return [{'name': res.name,
+                 'value': res.get_property('title')}
+                for res in models.get_resources()]

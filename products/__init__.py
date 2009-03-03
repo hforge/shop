@@ -22,8 +22,8 @@ from ikaaro.skins import register_skin
 
 # Import from shop
 from product import Product, Products
-from product_types import ProductTypes
-from attributes import ProductAttributes
+from models import ProductModels
+
 
 # Register skin
 path = get_abspath('ui/')

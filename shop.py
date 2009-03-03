@@ -24,7 +24,7 @@ from itools.web import STLView
 
 # Import from project
 from payments import Payments
-from products import Products, ProductAttributes, ProductTypes
+from products import Products, ProductModels
 from cart.cart_views import Cart_View
 
 
@@ -50,7 +50,7 @@ class Shop(Folder):
     class_views = Folder.class_views + ['test', 'view_cart']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['payments', 'products',
-                          'types', 'attributes']
+                          'products-models']
 
     # Views
     test = View()
@@ -65,12 +65,9 @@ class Shop(Folder):
         # Products
         Products._make_resource(Products, folder, '%s/products' % name,
                                 title={'en': u'Products'})
-        # Product Attributes
-        ProductAttributes._make_resource(ProductAttributes, folder, '%s/attributes' % name,
-                                         title={'en': u'Product attributes'})
-        # Available Product Types
-        ProductTypes._make_resource(ProductTypes, folder, '%s/types' % name,
-                                    title={'en': u'Product Types'})
+        # Available Product Models
+        ProductModels._make_resource(ProductModels, folder, '%s/products-models' % name,
+                                    title={'en': u'Product Models'})
 
 
     def get_document_types(self):

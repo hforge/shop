@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Decimal, Enumerate, String, Unicode
-from itools.web import get_context
+from itools.datatypes import Decimal, String, Unicode
 
 # Import from ikaaro
 from ikaaro.forms import HTMLBody
@@ -27,25 +26,12 @@ from ikaaro.forms import HTMLBody
 #############################################
 
 
-class ProductTypes(Enumerate):
-
-    @classmethod
-    def get_options(cls):
-        context = get_context()
-        shop = context.resource.parent
-        attributes = shop.get_resource('types')
-        return [{'name': res.name,
-                 'value': res.get_property('title')}
-                for res in attributes.get_resources()]
-
-
-
 product_schema = {# General informations
                   'reference': Unicode,
                   'title': Unicode,
                   'description': Unicode,
                   'subject': Unicode,
-                  'product_type': String,
+                  'product_model': String,
                   'document_path': String,
                   # Categories
                   #'categories': Tokens,
@@ -60,7 +46,4 @@ product_schema = {# General informations
                   # Description
                   'html_description': HTMLBody,
                   # Référencement
-                  'tags': Unicode
-                  }
-
-
+                  'tags': Unicode}
