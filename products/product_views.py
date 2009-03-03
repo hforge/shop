@@ -14,21 +14,54 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from ikaaro
-from ikaaro import messages
-from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget, ImageSelectorWidget
-from ikaaro.forms import PathSelectorWidget
-from ikaaro.views import CompositeForm
-from ikaaro.folder_views import Folder_BrowseContent
-
 # Import from itools
-from itools.datatypes import String
+from itools.datatypes import Unicode, String
 from itools.gettext import MSG
 from itools.web import BaseView, STLView
 
+# Import from ikaaro
+from ikaaro import messages
+from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget, ImageSelectorWidget
+from ikaaro.forms import PathSelectorWidget, title_widget
+from ikaaro.views import CompositeForm
+from ikaaro.folder_views import Folder_BrowseContent
+from ikaaro.registry import get_resource_class
+from ikaaro.resource_views import DBResource_NewInstance
+
 # Import from shop
-from schema import product_schema
+from schema import product_schema, ProductTypes
 from shop.cart import ProductCart
+
+
+class Product_NewInstance(DBResource_NewInstance):
+
+    schema = {
+        'name': String,
+        'title': Unicode,
+        'product_type': ProductTypes}
+
+    widgets = [
+        title_widget,
+        TextWidget('name', title=MSG(u'Name'), default=''),
+        SelectWidget('product_type', title=MSG(u'Product type'))]
+
+    def action(self, resource, context, form):
+        name = form['name']
+        title = form['title']
+
+        # Create the resource
+        class_id = context.query['type']
+        cls = get_resource_class(class_id)
+        child = cls.make_resource(cls, resource, name)
+        # The metadata
+        metadata = child.metadata
+        language = resource.get_content_language(context)
+        metadata.set_property('title', title, language=language)
+        metadata.set_property('product_type', form['product_type'])
+
+        goto = './%s/' % name
+        return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
+
 
 
 class Product_AddToCart(BaseView):
@@ -156,7 +189,6 @@ class Product_Edit(AutoForm):
     widgets = [
         # General informations
         TextWidget('reference', title=MSG(u'Reference')),
-        SelectWidget('product_type', title=MSG(u'Product type')),
         TextWidget('title', title=MSG(u'Title')),
         TextWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Subject')),

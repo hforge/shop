@@ -32,7 +32,7 @@ class ProductTypes(Enumerate):
     @classmethod
     def get_options(cls):
         context = get_context()
-        shop = context.resource.parent.parent
+        shop = context.resource.parent
         attributes = shop.get_resource('types')
         return [{'name': res.name,
                  'value': res.get_property('title')}
@@ -45,7 +45,7 @@ product_schema = {# General informations
                   'title': Unicode,
                   'description': Unicode,
                   'subject': Unicode,
-                  'product_type': ProductTypes,
+                  'product_type': String,
                   'document_path': String,
                   # Categories
                   #'categories': Tokens,
