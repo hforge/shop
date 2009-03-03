@@ -32,8 +32,8 @@ class ProductTypes(Enumerate):
     @classmethod
     def get_options(cls):
         context = get_context()
-        root = context.root
-        attributes = root.get_resource('types')
+        shop = context.resource.parent.parent
+        attributes = shop.get_resource('types')
         return [{'name': res.name,
                  'value': res.get_property('title')}
                 for res in attributes.get_resources()]

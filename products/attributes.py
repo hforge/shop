@@ -30,13 +30,6 @@ from ikaaro.table import Table
 from attributes_views import ProductEnumAttribute_AddRecord
 
 
-class ProductAttribute(Folder):
-
-    class_id = 'product-attribute'
-    class_title = MSG(u'Product Attribute')
-
-
-
 class ProductEnumAttributeTable(BaseTable):
 
     record_schema = {
@@ -67,10 +60,9 @@ class ProductAttributes(Folder):
 
 
     def get_document_types(self):
-        return [ProductAttribute, ProductEnumAttribute]
+        return [ProductEnumAttribute]
 
 
 
 register_resource_class(ProductAttributes)
 register_resource_class(ProductEnumAttribute)
-register_resource_class(ProductAttribute)

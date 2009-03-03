@@ -40,7 +40,7 @@ class Cart_View(STLView):
             cart.clear()
         elif action in ['add', 'remove', 'delete']:
             product = context.get_form_value('product')
-            product = context.root.get_resource('products/%s' % product)
+            product = resource.get_resource('products/%s' % product)
             if(action=='add'):
                 cart.add_product(product.name)
             elif(action=='remove'):
@@ -51,12 +51,11 @@ class Cart_View(STLView):
 
 
     def get_namespace(self, resource, context):
-        root = context.root
         namespace = {'products': []}
         # Get cart
         cart = ProductCart()
         # Get products
-        products = root.get_resource('products')
+        products = resource.get_resource('products')
         # Get products informations
         total = 0
         for product in cart.get_elements():

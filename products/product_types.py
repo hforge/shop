@@ -33,8 +33,8 @@ class AllAttributes(Enumerate):
     @classmethod
     def get_options(cls):
         context = get_context()
-        root = context.root
-        attributes = root.get_resource('attributes')
+        shop = context.resource.parent.parent
+        attributes = shop.get_resource('attributes')
         return [{'name': res.name,
                  'value': res.get_property('title')}
                 for res in attributes.get_resources()]
@@ -46,8 +46,8 @@ class TableEnumerate(Enumerate):
     @classmethod
     def get_options(cls):
         context = get_context()
-        root = context.root
-        table = root.get_resource('attributes/%s' % cls.name).handler
+        shop = context.resource.parent.parent
+        table = shop.get_resource('attributes/%s' % cls.name).handler
         return [{'name': str(table.get_record_value(record, 'name')),
                  'value': table.get_record_value(record, 'title')}
                 for record in table.get_records()]

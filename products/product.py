@@ -60,7 +60,9 @@ class Product(Folder):
         product_type = self.get_property('product_type')
         if not product_type:
             return None
-        return context.root.get_resource('types/%s' % product_type)
+        products = self.parent
+        shop = products.parent
+        return shop.get_resource('types/%s' % product_type)
 
 
 
