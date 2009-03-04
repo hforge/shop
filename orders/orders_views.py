@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2008 Sylvain Taverne <sylvain@itaapy.com>
+# Copyright (C) 2009 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,31 +14,108 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from standard library
-
 # Import from itools
+from itools.handlers import merge_dicts
+from itools.datatypes import Boolean, Email, MultiLinesTokens, String
 from itools.gettext import MSG
-from itools.i18n import format_datetime
+from itools.i18n import format_datetime, format_date
 from itools.web import STLView
+from itools.xapian import PhraseQuery
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
-
-# Import from package
-
-
-class OrderPay(STLView):
-
-    access = 'is_allowed_to_view'
-
-    template = '/ui/orders/OrderPay.xml'
+from ikaaro.forms import MultilineWidget
+from ikaaro.messages import MSG_CHANGES_SAVED
+from ikaaro.resource_views import DBResource_Edit
+from ikaaro.table_views import Table_View
 
 
-class OrdersProductsView(STLView):
+class OrdersProductsView(Table_View):
 
-    access = 'is_allowed_to_view'
 
-    template = '/ui/orders/OrdersProductsView.xml'
+    def get_item_value(self, resource, context, item, column):
+        value = Table_View.get_item_value(self, resource, context, item, column)
+        if column=='ref':
+            root = context.root
+            ref = item.get_value('ref')
+            if not root.has_resource(ref):
+                title = item.get_value('title')
+                return title
+            produit = root.get_resource(ref)
+            return (produit.name, resource.get_pathto(produit))
+        if column=='unit_price':
+            return u'%s €' % value
+        return value
+
+
+class OrderView(STLView):
+
+    access = 'is_admin'
+
+    title = MSG(u'Commande')
+
+    template = '/ui/orders/OrderView.xml'
+
+    def get_namespace(self, resource, context, query=None):
+        root = context.root
+        accept = context.accept_language
+        # CSS
+        context.styles.append('/ui/firstluxe/orders/style.css')
+        # Date cmd
+        creation_datetime = resource.get_property('creation_datetime')
+        # Historique des payments associés à la commande
+        ns_payments = resource.get_order_payments_namespace(context)
+        # Produits commandes
+        ns_products = resource.get_order_products_namespace(context)
+        # State
+        state = resource.get_state()
+        # Acl
+        ac = resource.get_access_control()
+        is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
+        total_price = resource.get_property('total_price')
+        # Return namespace
+        namespace = {'payments': ns_payments,
+                     'products': ns_products,
+                     'state': state['title'],
+                     'creation_datetime': format_datetime(creation_datetime,
+                                                          accept=accept),
+                     'addresses': None,
+                     'frais_de_port': 0,
+                     'total_price': total_price,
+                     'is_allowed_to_edit': is_allowed_to_edit}
+        for key in ['email_client', 'id_client']:
+            namespace[key] = resource.get_property(key)
+        return namespace
+
+
+class OrderFacture(STLView):
+
+    access = 'is_admin'
+
+    title = MSG(u'Facture')
+
+    template = '/ui/orders/OrderFacture.xml'
+
+
+    def get_namespace(self, resource, context, query=None):
+        # Return a blank page
+        response = context.response
+        response.set_header('Content-Type', 'text/html')
+        #
+        accept = context.accept_language
+        # Build namespace
+        creation_date = resource.get_property('creation_datetime')
+        creation_date = format_date(creation_date, accept=accept)
+        # Total price
+        total_price = resource.get_property('total_price')
+        # return namespace
+        return {'num_cmd': resource.name,
+                'facturation': None,
+                'livraison': None,
+                'products': resource.get_order_products_namespace(context),
+                'frais_de_port': 0,
+                'total_price': total_price,
+                'creation_date': creation_date}
 
 
 
@@ -53,21 +130,68 @@ class OrdersView(Folder_BrowseContent):
 
     table_columns = [
         ('checkbox', None),
-        ('name', MSG(u'Name')),
-        ('total_price', MSG(u'Total Price')),
-        ('creation_datetime', MSG(u'Order datetime'))]
+        ('numero', MSG(u'Order id')),
+        ('state', MSG(u'State')),
+        ('total_price', MSG(u'Total price')),
+        ('creation_datetime', MSG(u'Date and Time'))]
 
+    query_schema = merge_dicts(Folder_BrowseContent.query_schema,
+                               sort_by=String(),
+                               reverse=Boolean(default=True))
+
+
+    batch_msg1 = MSG(u"Il y a une commande.")
+    batch_msg2 = MSG(u"Il y a ${n} commandes.")
 
     def get_item_value(self, resource, context, item, column):
         value = Folder_BrowseContent.get_item_value(self, resource, context,
                     item, column)
-        if column in ['total_price']:
-            return item.get_property(column)
-        if column == 'creation_datetime':
+        if column=='numero':
+            return (item.name, item.name)
+        if column=='total_price':
+            return '%s € ' % item.get_property(column)
+        if column=='creation_datetime':
             value = item.get_property(column)
-            # XXX to delete
-            if not value:
-                return '-'
             accept = context.accept_language
             return format_datetime(value, accept=accept)
+        if column=='state':
+            state = item.get_state()
+            return state['title']
         return value
+
+
+
+class MyOrdersView(OrdersView):
+
+    access = 'is_authenticated'
+    title = MSG(u'Order history')
+
+
+    def get_items(self, resource, context, *args):
+        args = PhraseQuery('id_client', str(context.user.name))
+        return Folder_BrowseContent.get_items(self, resource, context, args)
+
+
+
+class Orders_Configure(DBResource_Edit):
+
+    access = 'is_admin'
+    title = MSG(u'Configure orders')
+
+    schema = {'order_notification_mails': MultiLinesTokens()}
+
+    widgets = [
+        MultilineWidget('order_notification_mails',
+            title=MSG(u'Notification emails (1 per lige)'),
+            rows=8, cols=50),
+        ]
+
+    submit_value = MSG(u'Edit configuration')
+
+    def action(self, resource, context, form):
+        values = []
+        for value in form['order_notification_mails']:
+            values.append(value.strip())
+        resource.set_property('order_notification_mails', values)
+        context.message = MSG_CHANGES_SAVED
+        return

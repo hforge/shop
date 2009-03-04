@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h1 class="order">Compte client</h1>
+
+    <table cellpadding="0" id="facture" cellspacing="0">
+      <tr>
+        <th>Identifiant</th>
+        <th>E-Mail</th>
+      </tr>
+      <tr>
+        <td>${id_client}</td>
+        <td>${email_client}</td>
+      </tr>
+    </table>
+
+  <h1 class="order">Informations générales</h1>
+
+    <table cellpadding="0" id="facture" cellspacing="0">
+      <tr>
+        <th>Date de la commande</th>
+        <th>Status de la commande</th>
+        <th>Facture</th>
+      </tr>
+      <tr>
+        <td>${creation_datetime}</td>
+        <td>
+          <a href=";edit_state" stl:if="is_allowed_to_edit">${state}</a>  <span stl:if="not is_allowed_to_edit">${state}</span>
+        </td>
+        <td>
+          <a onclick="return popup('./;facture', 880, 800);" href="#">
+            Cliquez ici pour voir votre facture.
+          </a>
+        </td>
+      </tr>
+    </table>
+
+  <h1 class="order">Récapitulatif de la commande</h1>
+
+  <table cellpadding="0" id="facture" cellspacing="0">
+    <tr>
+      <th>Référence</th>
+      <th>Marque</th>
+      <th>Produit</th>
+      <th>Quantité</th>
+      <th>Prix total</th>
+    </tr>
+    <tr stl:repeat="product products">
+      <td>
+        <a href="${product/href}" stl:if="product/href">${product/ref}</a>  <span stl:if="not product/href">${product/ref}</span>
+      </td>
+      <td>${product/marque}</td>
+      <td>${product/title}</td>
+      <td>${product/quantity}</td>
+      <td>${product/unit_price} €</td>
+    </tr>
+  </table>
+
+  <h1 class="order">Informations de livraison/Facturation</h1>
+
+  ${addresses}
+
+  <h1 class="order">Communications</h1>
+
+  <h1 class="order">Payments history</h1>
+
+  <p stl:if="not payments">
+    No payment done.
+  </p>
+
+  <p stl:if="payments">
+    <table cellpadding="0" id="facture" cellspacing="0">
+      <tr>
+        <th>Date et Heure</th>
+        <th>Paiement validé/refusé ?</th>
+        <th>Montant</th>
+        <th stl:if="is_allowed_to_edit">Numéro de transaction paiement</th>
+        <th stl:if="is_allowed_to_edit">Numéro d'autorisation</th>
+        <th>Status du paiement (Fournie par la banque)</th>
+      </tr>
+      <tr stl:repeat="payment payments">
+        <td>${payment/ts}</td>
+        <td>
+          <stl:block stl:if="payment/payment_ok">
+            Validé
+          </stl:block>
+          <stl:block stl:if="not payment/payment_ok">
+            Refusé
+          </stl:block>
+        </td>
+        <td>${payment/amount} €</td>
+        <td stl:if="is_allowed_to_edit">${payment/transaction}</td>
+        <td stl:if="is_allowed_to_edit">${payment/autorisation}</td>
+        <td>${payment/status}</td>
+      </tr>
+    </table>
+  </p>
+  <br></br><br></br><br></br>
+
+</stl:block>

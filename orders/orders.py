@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2008 Sylvain Taverne <sylvain@itaapy.com>
+# Copyright (C) 2009 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,24 +20,72 @@ from datetime import datetime
 # Import from itools
 from itools.csv import Table as BaseTable
 from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
+from itools.datatypes import Email
 from itools.gettext import MSG
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
+from ikaaro.workflow import WorkflowAware
 
 # Import from project
-from orders_views import OrderPay, OrdersView, OrdersProductsView
+from orders_views import OrderView, OrderFacture, Orders_Configure
+from orders_views import OrdersView, MyOrdersView, OrdersProductsView
+from workflow import order_workflow
+
+
+
+#############################################
+# Email de confirmation de commande client  #
+#############################################
+# XXX Translate
+
+mail_confirmation_title = MSG(
+  u'Confirmation de votre commande sur la boutique en ligne XXX')
+
+mail_confirmation_body = MSG(u"""Bonjour,
+Votre commande sur la boutique en ligne XXX a bien été enregistrée.
+Retrouvez les informations sur votre commande à l'url suivante:\n
+http://www.XXX.com/orders/$order_name/\n
+Un E-mail récapitulatif vous sera envoyé aprés validation de votre paiement.\n
+------------------------
+Référence commande: $order_name
+------------------------\n\n
+-- 
+L'équipe XXX
+""")
+
+#############################################
+# Email de confirmation de commande client  #
+#############################################
+
+mail_notification_title = MSG(u'Nouvelle commande sur votre boutique en ligne')
+
+mail_notification_body = MSG(u"""
+Bonjour,
+Une nouvelle commande a été réalisée sur votre boutique en ligne.
+Retrouvez les informations sur la commande à l'url suivante:\n
+http://www.XXX.com/orders/$order_name/\n
+------------------------
+Référence commande: $order_name
+------------------------\n\n
+""")
+
+###################################################################
+###################################################################
+
+
 
 
 class BaseOrdersProducts(BaseTable):
 
     record_schema = {
       'ref': String(mandatory=True),
+      'marque': Unicode,
       'title': Unicode,
-      'categorie': Unicode,
       'unit_price': Decimal(mandatory=True),
       'quantity': Integer,
       }
@@ -50,67 +98,109 @@ class OrdersProducts(Table):
     class_title = MSG(u'Products')
     class_handler = BaseOrdersProducts
 
-    class_views = ['view_order']
+    class_views = ['view']
 
-    view_order = OrdersProductsView()
+    view = OrdersProductsView()
 
     form = [
         TextWidget('ref', title=MSG(u'Ref')),
+        TextWidget('marque', title=MSG(u'Marque')),
         TextWidget('title', title=MSG(u'Title')),
-        TextWidget('categorie', title=MSG(u'Categorie')),
         TextWidget('unit_price', title=MSG(u'Price')),
         TextWidget('quantity', title=MSG(u'Quantity'))]
 
 
-class Order(Folder):
+    def get_namespace(self, context):
+        return {}
+
+
+class Order(WorkflowAware, Folder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
-    class_views = ['pay']
+    class_views = ['view', 'administrate', 'edit_state']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['products']
 
-    # Class views
-    pay = OrderPay()
+    workflow = order_workflow
 
+    # Views
+    view = OrderView()
+    administrate = OrderView()
+    facture = OrderFacture()
 
     @classmethod
     def get_metadata_schema(cls):
         schema = Folder.get_metadata_schema()
+        schema.update(WorkflowAware.get_metadata_schema())
         schema['total_price'] = Decimal
         schema['creation_datetime'] = ISODateTime
+        schema['id_client'] = String
+        schema['email_client'] = Email
         return schema
 
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        # Create order
-        metadata = {'total_price': 200.0,
-                    'creation_datetime': datetime.now()}
+        metadata = {'creation_datetime': datetime.now(),
+                    'total_price': '3',#kw['total_price'],
+                    'id_client': '3', #kw['id_client'],
+                    'email_client': 'toto@free.fr', #kw['email_client'],
+                    'title': {'fr': u'Commande n°%s' % name}}
         Folder._make_resource(cls, folder, name, *args, **metadata)
-        # Add list of products
-        if not kw.has_key('products'):
-            # XXX
-            #raise ValueError, 'Please give a list of products'
-            kw['products'] = [{'ref': '1',
-                               'title': u'Renault clio',
-                               'categorie': u'Voiture',
-                               'unit_price': 200.0,
-                               'quantity': 1}]
+        # Add list of products to the order
         handler = BaseOrdersProducts()
         for product in kw['products']:
-            handler.add_record(product)
+            handler.add_record({})# XXX
         metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
         folder.set_handler('%s/products.metadata' % name, metadata)
         folder.set_handler('%s/products' % name, handler)
+        # XXX TODO Add address de livraison et de facturation
+        #context = get_context()
+        #user = context.user
+        #addresses = user.get_resource('shop_addresses')
+        #handler = addresses.handler.clone()
+        #metadata = Address.build_metadata(title={'en': u'Products'})
+        #folder.set_handler('%s/shop_addresses.metadata' % name, metadata)
+        #folder.set_handler('%s/shop_addresses' % name, handler)
+        # Send mail of confirmation / notification
+        cls.send_email_confirmation(folder, name, kw)
 
 
+    ########################################
+    # E-Mail confirmation / notification
+    ########################################
 
-    def get_payments(self, context):
+    @classmethod
+    def send_email_confirmation(cls, folder, order_name, kw):
+        """ """
+        context = get_context()
         root = context.root
-        payments = root.get_object('toto')
-        results = payments.search(ref=self.name)
-        print results
+        here = context.resource
+        orders = here.get_resource('orders')
+        from_addr = context.server.smtp_from
+        # Send confirmation to the shop
+        subject = mail_notification_title.gettext()
+        body = mail_notification_body.gettext(order_name=order_name)
+        for to_addr in orders.get_property('order_notification_mails'):
+            root.send_email(to_addr, subject, from_addr, body)
+        # Send confirmation to client
+        subject = mail_confirmation_title.gettext()
+        body = mail_confirmation_body.gettext(order_name=order_name)
+        #root.send_email(kw['email_client'], subject, from_addr, body)
+
+    ######################################
+    ## Usefull API for order
+    ######################################
+    def get_order_products_namespace(self, context):
+        products = self.get_resource('products')
+        return products.get_namespace(context)
+
+
+    def get_order_payments_namespace(self, context):
+        shop = context.resource.parent.parent
+        payments = shop.get_resource('payments')
+        return payments.get_payments_namespace(ref=self.name, context=context)
 
 
 
@@ -118,14 +208,23 @@ class Orders(Folder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')
-    class_views = ['view']
+    class_views = ['view', 'configure']
 
     # Views
     view = OrdersView()
+    my_orders = MyOrdersView()
+    configure = Orders_Configure()
+
+    @classmethod
+    def get_metadata_schema(cls):
+        schema = Folder.get_metadata_schema()
+        schema['order_notification_mails'] = Email(multiple=True)
+        return schema
 
 
     def get_document_types(self):
         return [Order]
+
 
 
 register_resource_class(Order)

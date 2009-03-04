@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Bill</title>
+
+  </head>
+  <body>
+
+    <input type="button" onclick="javascript:window.print()" value="Imprimer"/>
+
+    <div id="htmlFacture">
+    <img src="http://XXX/images/logo_fr/;download" alt="First Luxe" title="First Luxe"/>
+
+    <h1>Bill</h1>
+
+    <!--
+    <table id="addresses" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>
+          <br/><br/><br/><br/>
+          <b>Adresse de livraison</b><br/>
+          ${livraison/lastname} ${livraison/firstname}<br/>
+          ${livraison/address}<br/>
+          ${livraison/cp} ${livraison/town}<br/>
+          ${livraison/country}
+        </td>
+        <td></td>
+        <td>
+          <b>Adresse de facturation</b><br/>
+          ${facturation/lastname} ${facturation/firstname}<br/>
+          ${facturation/address}<br/>
+          ${facturation/cp} ${facturation/town}<br/>
+          ${facturation/country}
+        </td>
+      </tr>
+    </table>
+    -->
+
+    <table id="infos" cellpadding="0" cellspacing="0">
+      <tr>
+        <th>Order number</th>
+        <td>${num_cmd}</td>
+      </tr>
+      <tr>
+        <th>Date</th>
+        <td>${creation_date}</td>
+      </tr>
+    </table>
+
+    <table id="articles" cellpadding="0" cellspacing="0">
+      <tr>
+        <th>Designation</th>
+        <th>Price</th>
+      </tr>
+      <tr stl:repeat="product products">
+        <td>
+          ${product/title}
+        </td>
+        <td>
+          ${product/unit_price}&nbsp;€
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align:right">
+          <b>Transport: </b>
+        </td>
+        <td>
+          ${frais_de_port}&nbsp;€
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align:right">
+          <b>Total: </b>
+        </td>
+        <td>
+          ${total_price}&nbsp;€
+        </td>
+      </tr>
+    </table>
+
+    <br/><br/>
+    <p>
+      <i>
+      XXX<br/>
+      XXX<br/>
+      XXX<br/>
+      </i>
+    </p>
+    </div>
+
+ </body>
+</html>

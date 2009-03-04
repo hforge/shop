@@ -125,6 +125,28 @@ class Payments(Folder):
         return payment_module._show_payment_form(context, payment)
 
 
+    def get_payments_namespace(self, ref, context):
+        # TODO
+        accept = context.accept_language
+        #for result in payments.search(ref=self.name):
+        #    kw = {}
+        #    for i in payments.record_schema.keys():
+        #        kw[i] = result.get_value(i)
+        #    kw['status'] = ''#PayboxStatus.get_value(kw['status'])
+        #    kw['ts'] = format_datetime(result.get_value('ts'), accept=accept)
+        #    payments_ns.append(kw)
+        return {}
+
+
+
+
+
+
+
+
+
+
+
 # XXX We have to put more things in PaymentWay
 class PaymentWay(DBResource):
 
