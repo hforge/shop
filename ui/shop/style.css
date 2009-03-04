@@ -24,3 +24,83 @@ table.cart td{
   text-align:center;
   border:1px solid black;
 }
+
+/* Facture */
+
+#facture{
+  margin: 20px;
+}
+#facture th {
+  background-color: #666666;
+  color: #FFF;
+  padding: 10px;
+}
+#facture td {
+  padding: 20px;
+  border: 1px solid black;
+}
+#facture a {
+  color: #EC77D6;
+}
+
+#buttonPay {
+  padding: 10px;
+  background-color: #666;
+  color: #FFF;
+  border: 1px solid black;
+  margin: 10px;
+}
+
+.order{
+  margin: 10px 0;
+}
+
+/*
+ Facture html
+ */
+
+#htmlFacture{
+  width: 21cm;
+  text-align:center;
+}
+
+#htmlFacture #articles{
+  width: 18cm;
+  margin: auto;
+}
+
+#htmlFacture #addresses{
+  width: 18cm;
+  margin: auto;
+}
+
+#htmlFacture #addresses td{
+  width: 6cm;
+}
+
+#htmlFacture #infos{
+  margin: 1cm 1cm 1cm 1cm;
+}
+
+#htmlFacture #infos td{
+  border: 1px solid black;
+  padding: 5px;
+}
+
+#htmlFacture #articles table{
+  border-collapse: collapse;
+}
+
+#htmlFacture th{
+  background-color: #D2D2D2;
+  border: 1px solid black;
+}
+
+#htmlFacture #articles tr{
+  border: 1px solid black;
+}
+
+#htmlFacture #articles td{
+  border: 1px solid black;
+  padding: 5px;
+}

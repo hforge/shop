@@ -47,7 +47,6 @@ class View(STLView):
 class Shop(Folder):
 
     class_id = 'shop'
-    class_skin = 'ui/shop'
     class_title = MSG(u'Shop')
     class_views = Folder.class_views + ['test', 'view_cart']
 

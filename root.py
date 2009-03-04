@@ -29,6 +29,7 @@ class Root(BaseRoot):
 
     class_id = 'root'
     class_title = MSG(u'root')
+    class_skin = 'ui/shop'
 
 
     def get_document_types(self):

@@ -41,7 +41,6 @@
   <table cellpadding="0" id="facture" cellspacing="0">
     <tr>
       <th>Référence</th>
-      <th>Marque</th>
       <th>Produit</th>
       <th>Quantité</th>
       <th>Prix total</th>
@@ -50,7 +49,6 @@
       <td>
         <a href="${product/href}" stl:if="product/href">${product/ref}</a>  <span stl:if="not product/href">${product/ref}</span>
       </td>
-      <td>${product/marque}</td>
       <td>${product/title}</td>
       <td>${product/quantity}</td>
       <td>${product/unit_price} €</td>
