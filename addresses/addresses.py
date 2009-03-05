@@ -16,14 +16,42 @@
 
 # Import from itools
 from itools.csv import Table as BaseTable
+from itools.datatypes import Unicode, String
+from itools.gettext import MSG
+
+# Import from ikaaro
+from ikaaro.forms import TextWidget, MultilineWidget
+from ikaaro.registry import register_resource_class
+from ikaaro.table import Table
 
 
-class BaseAddress(BaseTable):
+class BaseAddresses(BaseTable):
 
     record_schema = {
+      'user': String,
       'address_1': Unicode(mandatory=True),
       'address_2': Unicode(),
       'zipcode': String(mandatory=True),
       'town': Unicode(mandatory=True),
       'country': Unicode(mandatory=True),
       }
+
+
+
+class Addresses(Table):
+
+    class_id = 'addresses'
+    class_title = MSG(u'Adresse')
+    class_handler = BaseAddresses
+
+    form = [
+        TextWidget('user', title=MSG(u'User')),
+        TextWidget('address_1', title=MSG(u'Address')),
+        TextWidget('address_2', title=MSG(u'Address (next)')),
+        TextWidget('zipcode', title=MSG(u'Zip Code')),
+        TextWidget('town', title=MSG(u'Town')),
+        TextWidget('country', title=MSG(u'Country')),
+        ]
+
+
+register_resource_class(Addresses)

@@ -23,6 +23,7 @@ from itools.gettext import MSG
 from itools.web import STLView
 
 # Import from project
+from addresses import Addresses
 from cart.cart_views import Cart_View #XXX
 from orders import Orders
 from payments import Payments
@@ -51,8 +52,8 @@ class Shop(Folder):
     class_title = MSG(u'Shop')
     class_views = Folder.class_views + ['test', 'view_cart']
 
-    __fixed_handlers__ = Folder.__fixed_handlers__ + ['orders', 'payments', 'products',
-                          'products-models']
+    __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses', 'orders',
+                          'payments', 'products', 'products-models']
 
     # Views
     test = View()
@@ -75,6 +76,9 @@ class Shop(Folder):
         # Orders
         Orders._make_resource(Orders, folder, '%s/orders' % name,
                               title={'en': u'Orders'})
+        # Addresses
+        Addresses._make_resource(Addresses, folder, '%s/addresses' % name,
+                                 title={'en': u'Addresses'})
 
 
 

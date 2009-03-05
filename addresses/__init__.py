@@ -21,9 +21,9 @@ from itools import get_abspath
 from ikaaro.skins import register_skin
 
 # Import form shop
-from orders import Orders, Order
+from addresses import Addresses
 
 # Register skin
 path = get_abspath('ui')
-register_skin('orders', path)
+register_skin('addresses', path)
 
