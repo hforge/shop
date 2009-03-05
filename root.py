@@ -23,6 +23,7 @@ from itools.gettext import MSG
 
 # Import from shop
 from shop import Shop
+from shop_views import Shop_Login
 
 
 class Root(BaseRoot):
@@ -31,6 +32,11 @@ class Root(BaseRoot):
     class_title = MSG(u'root')
     class_skin = 'ui/shop'
 
+    __roles__ = [{'name': 'guests', 'title': MSG(u"Client")},
+                  {'name': 'admins', 'title': MSG(u'Administrateur')}]
+
+
+    unauthorized = Shop_Login()
 
     def get_document_types(self):
         return [Shop]

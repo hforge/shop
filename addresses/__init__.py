@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2009 Sylvain Taverne <sylvain@itaapy.com>
+# Copyright (C) 2008 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,24 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from itools
-from itools.datatypes import Enumerate, String
-from itools.gettext import MSG
+# Import from itools
+from itools import get_abspath
 
+# Import from ikaaro
+from ikaaro.skins import register_skin
 
-class StringFixSize(String):
+# Import form shop
+from orders import Orders, Order
 
-    @classmethod
-    def is_valid(cls, value):
-        if not value:
-            return True
-        return len(value) == cls.size
-
-
-class Civilite(Enumerate):
-
-    options = [
-        {'name': 'mister', 'value': MSG(u"M.")},
-        {'name': 'madam', 'value': MSG(u"Mme")},
-        {'name': 'miss', 'value': MSG(u"Mlle")}]
+# Register skin
+path = get_abspath('ui')
+register_skin('orders', path)
 

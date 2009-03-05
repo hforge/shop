@@ -27,7 +27,8 @@ from cart.cart_views import Cart_View #XXX
 from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
-from shop_views import Shop_Buy
+from shop_views import Shop_Buy, Shop_Register
+from user import ShopUser
 
 
 class View(STLView):
@@ -56,6 +57,7 @@ class Shop(Folder):
     # Views
     test = View()
     buy = Shop_Buy()
+    register = Shop_Register()
     view_cart = Cart_View()
 
     @staticmethod

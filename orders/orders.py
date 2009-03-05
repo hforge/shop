@@ -143,10 +143,10 @@ class Order(WorkflowAware, Folder):
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         metadata = {'creation_datetime': datetime.now(),
-                    'total_price': '3',#kw['total_price'],
-                    'id_client': '3', #kw['id_client'],
-                    'email_client': 'toto@free.fr', #kw['email_client'],
-                    'title': {'fr': u'Commande n°%s' % name}}
+                    'total_price': '3', #XXX #kw['total_price'],
+                    'id_client': '3',
+                    'email_client': 'toto@free.fr',
+                    'title': {'fr': u'Order %s' % name}}
         Folder._make_resource(cls, folder, name, *args, **metadata)
         # Add list of products to the order
         handler = BaseOrdersProducts()
@@ -156,13 +156,6 @@ class Order(WorkflowAware, Folder):
         folder.set_handler('%s/products.metadata' % name, metadata)
         folder.set_handler('%s/products' % name, handler)
         # XXX TODO Add address de livraison et de facturation
-        #context = get_context()
-        #user = context.user
-        #addresses = user.get_resource('shop_addresses')
-        #handler = addresses.handler.clone()
-        #metadata = Address.build_metadata(title={'en': u'Products'})
-        #folder.set_handler('%s/shop_addresses.metadata' % name, metadata)
-        #folder.set_handler('%s/shop_addresses' % name, handler)
         # Send mail of confirmation / notification
         cls.send_email_confirmation(folder, name, kw)
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h2>I'm a new customer</h2>
+
+    <form method="GET" action=";register">
+      E-Mail <input type="text" name="email"/>
+      <input type="submit" name="submit" id="continue" value="Continue"
+        class="button_ok"/>
+    </form>
+
+  <h2>I'm already a customer</h2>
+
+</stl:block>

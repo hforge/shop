@@ -14,24 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from itools
-from itools.datatypes import Enumerate, String
-from itools.gettext import MSG
+# Import from itools
+from itools.csv import Table as BaseTable
 
 
-class StringFixSize(String):
+class BaseAddress(BaseTable):
 
-    @classmethod
-    def is_valid(cls, value):
-        if not value:
-            return True
-        return len(value) == cls.size
-
-
-class Civilite(Enumerate):
-
-    options = [
-        {'name': 'mister', 'value': MSG(u"M.")},
-        {'name': 'madam', 'value': MSG(u"Mme")},
-        {'name': 'miss', 'value': MSG(u"Mlle")}]
-
+    record_schema = {
+      'address_1': Unicode(mandatory=True),
+      'address_2': Unicode(),
+      'zipcode': String(mandatory=True),
+      'town': Unicode(mandatory=True),
+      'country': Unicode(mandatory=True),
+      }
