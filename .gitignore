@@ -3,3 +3,4 @@ MANIFEST
 build/*
 *.swp
 version.txt
+*.~
