@@ -22,7 +22,7 @@ from itools.datatypes import Email, String, Unicode
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.uri import get_reference
-from itools.web import BaseView, FormError, STLView
+from itools.web import BaseView, STLView
 
 # Import from ikaaro
 from ikaaro.forms import ReadOnlyWidget, SelectRadio, TextWidget, PasswordWidget

@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.handlers import merge_dicts
-from itools.datatypes import Boolean, Email, MultiLinesTokens, String
+from itools.datatypes import Boolean, MultiLinesTokens, String
 from itools.gettext import MSG
 from itools.i18n import format_datetime, format_date
 from itools.web import STLView

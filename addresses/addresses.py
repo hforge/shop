@@ -20,7 +20,7 @@ from itools.datatypes import Unicode, String
 from itools.gettext import MSG
 
 # Import from ikaaro
-from ikaaro.forms import TextWidget, MultilineWidget
+from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 

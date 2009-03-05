@@ -17,19 +17,12 @@
 # Import from itools
 from itools.gettext import MSG
 from itools.handlers import checkid
-from itools.web import STLView
 from itools.xapian import OrQuery, PhraseQuery
 
 # Import from ikaaro
-from ikaaro import messages
 from ikaaro.buttons import RemoveButton
-from ikaaro.forms import AutoForm, RTEWidget, TextWidget, ImageSelectorWidget
-from ikaaro.views import CompositeForm
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.table_views import Table_AddRecord
-
-# Import from shop
-from schema import product_schema
 
 
 class ProductModels_View(Folder_BrowseContent):
