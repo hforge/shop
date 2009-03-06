@@ -85,7 +85,7 @@ class Shop_Register(RegisterForm):
                          address_2=Unicode,
                          zipcode=String(mandatory=True),
                          town=Unicode(mandatory=True),
-                         country=String(mandatory=True))
+                         country=Unicode(mandatory=True))
 
 
     widgets = [TextWidget('email', title=MSG(u"Email")),
@@ -140,7 +140,11 @@ class Shop_Register(RegisterForm):
         user.save_form(self.schema, form)
 
         # Save address
-        # TODO
+        kw = {'user': user.name}
+        addresses = resource.get_resource('addresses')
+        for key in ['address_1', 'address_2', 'zipcode', 'town', 'country']:
+            kw[key] = form[key]
+        addresses.handler.add_record(kw)
 
         # Set the role
         root.set_user_role(user.name, 'guests')
