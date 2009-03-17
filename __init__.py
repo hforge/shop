@@ -19,6 +19,7 @@ from itools import get_version
 
 # Import from package
 from root import Root
+from shop import Shop
 import skin
 
 
