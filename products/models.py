@@ -109,6 +109,7 @@ class ProductModel(Folder):
 
     class_id = 'product-model'
     class_title = MSG(u'Product Model')
+    class_views = ['browse_content', 'new_resource']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['schema']
 
@@ -179,8 +180,9 @@ class ProductModels(Folder):
 
     class_id = 'product-models'
     class_title = MSG(u'Product Models')
-    class_views = ['view']
+    class_views = ['view', 'new_resource']
 
+    # Views
     view = ProductModels_View()
 
     def get_document_types(self):

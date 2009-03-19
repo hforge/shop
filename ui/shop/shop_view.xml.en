@@ -19,7 +19,12 @@
     </li>
     <li>
       <a href="./payments/">
-        Payments history
+        Manage and configure payments
+      </a>
+    </li>
+    <li>
+      <a href="./products-models/">
+        Manage products models
       </a>
     </li>
   </ul>
