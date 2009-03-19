@@ -22,10 +22,10 @@ from itools.datatypes import Email, String, Unicode
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.uri import get_reference
-from itools.web import BaseView, STLView
+from itools.web import BaseView, STLView, ERROR
 
 # Import from ikaaro
-from ikaaro.forms import ReadOnlyWidget, SelectRadio, TextWidget, PasswordWidget
+from ikaaro.forms import SelectRadio, TextWidget, PasswordWidget
 from ikaaro.resource_views import LoginView
 from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
@@ -36,6 +36,11 @@ from orders import Order
 from datatypes import Civilite
 
 
+class Shop_View(STLView):
+
+    access = True
+    title = MSG(u'Shop control panel')
+    template = '/ui/shop/shop_view.xml'
 
 
 class Shop_Buy(BaseView):
@@ -183,5 +188,6 @@ class Shop_LoginMixin(STLView):
 class Shop_Login(CompositeForm):
 
     access = True
+    title = MSG(u'Login')
 
     subviews = [Shop_LoginMixin(), LoginView()]

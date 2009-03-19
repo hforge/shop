@@ -28,38 +28,25 @@ from cart.cart_views import Cart_View #XXX
 from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
-from shop_views import Shop_Buy, Shop_Register
+from shop_views import Shop_Buy, Shop_Register, Shop_View
 from user import ShopUser
-
-
-class View(STLView):
-
-    access = 'is_admin'
-    title = MSG(u'Test payment module')
-
-    def GET(self, resource, context):
-        payments = resource.get_resource('payments')
-        payment = {'id': 'A250',
-                  'price': 250.3,
-                  'email': 'sylvain@itaapy.com',
-                  'mode': 'paybox'}
-        return payments.show_payment_form(context, payment)
 
 
 class Shop(Folder):
 
     class_id = 'shop'
     class_title = MSG(u'Shop')
-    class_views = Folder.class_views + ['test', 'view_cart']
+    class_views = ['view']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses', 'orders',
                           'payments', 'products', 'products-models']
 
     # Views
-    test = View()
+    view = Shop_View()
     buy = Shop_Buy()
     register = Shop_Register()
     view_cart = Cart_View()
+
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
