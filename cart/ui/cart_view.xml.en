@@ -4,50 +4,121 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <style type="text/css">
+    #cart{
+     width: 100%;
+     border-collapse:collapse;
+    }
+    #cart th{
+      background-color: #B0B0B0;
+      color: #FFF;
+      border: 1px solid #B0B0B0;
+      border-right: 1px solid white;
+      padding: 4px;
+      text-align:center;
+    }
+    #cart #last{
+      border: 1px solid #B0B0B0;
+    }
+
+    #cart td{
+      border: 1px solid #B0B0B0;
+      padding: 5px;
+      text-align:center;
+    }
+
+    #totalprice{
+      float: right;
+      border: 1px solid #D7D7D7;
+      width: 200px;
+      height: 100px;
+      margin: 5px;
+      background: url(/ui/cart/buy_bg.png) repeat-x;
+    }
+
+    #totalprice legend {
+      color: #334048;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+
+    #totalprice .price{
+      padding: 5px;
+      font-size: 16px;
+    }
+
+    #button-order{
+      background-color: #FF8A00;
+      border: 1px solid #006;
+      color: #FFF;
+    }
+
+    #empty-cart{
+      width: 100%;
+      text-align: center;
+      padding: 50px 0;
+    }
+  </style>
+
   <stl:block stl:if="not products">
-    <b>Your cart is empty !</b>
+    <div id="empty-cart">
+      Your cart is empty !
+    </div>
   </stl:block>
 
   <stl:block stl:if="products">
   <h1>Your cart</h1>
-  <table class="cart">
+
+  <table id="cart">
     <tr>
-      <th>Reference</th>
-      <th>Product</th>
-      <th>Quantity</th>
-      <th>Unit Price Before VAT</th>
-      <th>Unit Price After VAT</th>
-      <th>Total Price</th>
       <th></th>
+      <th>Product</th>
+      <th>Unit Price</th>
+      <th>Quantity</th>
+      <th>Total Price</th>
+      <th id="last">Remove</th>
     </tr>
     <tr stl:repeat="p products">
-      <td>${p/name}</td>
-      <td><a href="${p/uri}">${p/title}</a></td>
+      <td valign="top">
+          <img src="${p/img/href}/;thumb?width=100&amp;height=100"
+               title="${p/img/title}"/>
+      </td>
+      <td>
+        <a href="${p/uri}">
+          ${p/title}
+        </a>
+        </td>
+      <td>${p/price} €</td>
       <td>
         <a href="?action=remove&amp;product=${p/name}">-</a>
         ${p/quantity}
         <a href="?action=add&amp;product=${p/name}">+</a>
       </td>
-      <td>${p/price_before_vat}</td>
-      <td>${p/price_after_vat}</td>
-      <td>${p/price_total}</td>
+      <td>${p/price_total} €</td>
       <td>
-        <a href="$?action=delete&amp;product=${p/name}">X</a>
+        <a href="$?action=delete&amp;product=${p/name}">
+          <img src="/ui/icons/16x16/delete.png"/>
+        </a>
       </td>
-    </tr>
-    <tr>
-      <td colspan="4"/>
-      <td><b>Total Price</b></td>
-      <td>${total}</td>
-      <td></td>
     </tr>
   </table>
 
+  <fieldset id="totalprice">
+    <legend>Total price</legend>
+    <p>
+      <span class="price">${total} €</span>
+      <form name="order" action=";order" method="POST">
+        <input type="submit" id="button-order" value="Order" name="order"/>
+      </form>
+    </p>
+  </fieldset>
+
+  <div class="clear"/>
   <p>
-    <a href="?action=clear">Clear the cart</a>|
-    <form name="buy" action=";buy" method="POST">
-      <input type="submit" value="Buy" name="buy"/>
-    </form>
+    <a href="?action=clear">
+      <img src="/ui/icons/16x16/delete.png"/> Clear the cart
+    </a>
   </p>
   </stl:block>
 

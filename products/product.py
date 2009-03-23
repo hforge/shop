@@ -106,6 +106,12 @@ class Product(Folder):
         return ns
 
 
+    def get_price(self):
+        # XXX Add VAT
+        return self.get_property('price')
+
+
+
 class Products(Folder):
 
     class_id = 'products'

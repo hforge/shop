@@ -62,19 +62,22 @@ class Cart_View(STLView):
             quantity = product['quantity']
             product = products.get_resource(product['name'])
             # Price
-            price = 2#product.get_property('price')
-            vat = 10#product.get_property('vat')
-            price_after_vat = price + (price * vat/100)
-            price_total = price_after_vat * int(quantity)
+            price = product.get_price()
+            price_total = price * int(quantity)
+            # Img XXX API to get cover
+            images = product.get_images_ns()
+            if images['images']:
+                img = images['images'][0]
+            else:
+                img = None
             # All
             product = ({'name': product.name,
+                        'img': img,
                         'title': product.get_title(),
                         'uri': resource.get_pathto(product),
                         'quantity': quantity,
-                        'price_before_vat': price,
-                        'price_after_vat': price_after_vat,
-                        'price_total': price_total,
-                        })
+                        'price': price,
+                        'price_total': price_total})
             total = total + price_total
             namespace['products'].append(product)
         namespace['total'] = total
