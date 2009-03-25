@@ -19,6 +19,7 @@ from itools.datatypes import String
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.xapian import KeywordField
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -109,6 +110,52 @@ class Product(Folder):
     def get_price(self):
         # XXX Add VAT
         return self.get_property('price')
+
+
+    #######################################
+    ## XXX Hack dynamic properties
+    ## To FIX in 0.60
+    #######################################
+    def get_property_and_language(self, name, language=None):
+        # Default property
+        if name in Product.get_metadata_schema():
+            return Folder.get_property_and_language(self, name, language)
+        # Dynamic property
+        context = get_context()
+        product_model = self.get_product_model(context)
+        product_model_schema = product_model.get_model_schema()
+        properties = self.metadata.properties
+
+        # Check the property exists
+        datatype = product_model_schema[name]
+        if name not in properties:
+            default = datatype.get_default()
+            return default, None
+        # Get the value
+        value = properties[name]
+
+        # Monolingual property
+        if not isinstance(value, dict):
+            return value, None
+
+        # Language negotiation
+        if language is None:
+            context = get_context()
+            if context is None:
+                language = None
+            else:
+                languages = [
+                    k for k, v in value.items() if not datatype.is_empty(v) ]
+                accept = context.accept_language
+                language = accept.select_language(languages)
+            # Default (FIXME pick one at random)
+            if language is None:
+                language = value.keys()[0]
+            return value[language], language
+
+        if language in value:
+            return value[language], language
+        return datatype.get_default(), None
 
 
 
