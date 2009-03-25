@@ -24,6 +24,7 @@ from itools.web import STLView
 
 # Import from project
 from addresses import Addresses
+from categories import Categories
 from cart.cart_views import Cart_View #XXX
 from orders import Orders
 from payments import Payments
@@ -39,8 +40,9 @@ class Shop(Folder):
     class_title = MSG(u'Shop')
     class_views = ['view']
 
-    __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses', 'orders',
-                          'payments', 'products', 'products-models']
+    __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
+                          'categories', 'orders', 'payments',
+                          'products', 'products-models']
 
     # Views
     view = Shop_View()
@@ -57,6 +59,9 @@ class Shop(Folder):
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         root = Folder._make_resource(cls, folder, name, **kw)
+        # Categories
+        Categories._make_resource(Categories, folder, '%s/categories' % name,
+                                title={'en': u'Categories'})
         # Payments module
         Payments._make_resource(Payments, folder, '%s/payments' % name,
                                 title={'en': u'Payment module'})

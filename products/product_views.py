@@ -29,7 +29,7 @@ from ikaaro.registry import get_resource_class
 from ikaaro.resource_views import DBResource_NewInstance
 
 # Import from shop
-from enumerate import ProductModelsEnumerate
+from enumerate import ProductModelsEnumerate, CategoriesEnumerate
 from schema import product_schema
 from shop.cart import ProductCart
 
@@ -198,6 +198,8 @@ class Product_Edit(AutoForm):
         PathSelectorWidget('document_path', title=MSG(u'Add a document')),
         # Transport
         TextWidget('weight', title=MSG(u'Weight')),
+        # Categorie
+        SelectWidget('categories', title=MSG(u'Categories')),
         # Price
         TextWidget('cost', title=MSG(u'Purchase price HT')),
         TextWidget('price', title=MSG(u'Selling price')),

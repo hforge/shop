@@ -15,10 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Decimal, String, Unicode
+from itools.datatypes import Decimal, String, PathDataType, Unicode
 
 # Import from ikaaro
 from ikaaro.forms import HTMLBody
+
+# Import from shop
+from enumerate import CategoriesEnumerate
+
 
 
 #############################################
@@ -33,7 +37,7 @@ product_schema = {# General informations
                   'subject': Unicode,
                   'document_path': String,
                   # Categories
-                  #'categories': Tokens,
+                  'categories': CategoriesEnumerate(multiple=True),
                   # Price
                   'cost': Decimal,
                   'vat': String,

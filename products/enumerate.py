@@ -23,9 +23,32 @@ class ProductModelsEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
+        # XXX
         context = get_context()
         shop = context.resource.parent
         models = shop.get_resource('products-models')
         return [{'name': res.name,
                  'value': res.get_property('title')}
                 for res in models.get_resources()]
+
+
+
+class CategoriesEnumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        # XXX
+        context = get_context()
+        categories = context.resource.parent.parent.get_resource('categories')
+        # Build options
+        options = []
+        for categorie in categories.traverse_resources():
+            name = str(categories.get_pathto(categorie))
+            if name == '.':
+                continue
+            value = '---'* (len(name.split('/')) - 1)
+            value = value + categorie.get_property('title')
+            options.append({'name': name, 'value': value})
+        return options
+
+
