@@ -24,7 +24,7 @@ from ikaaro import messages
 from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget, ImageSelectorWidget
 from ikaaro.forms import PathSelectorWidget, title_widget
 from ikaaro.views import CompositeForm
-from ikaaro.folder_views import Folder_BrowseContent
+from ikaaro.folder_views import Folder_PreviewContent
 from ikaaro.registry import get_resource_class
 from ikaaro.resource_views import DBResource_NewInstance
 
@@ -112,7 +112,7 @@ class Product_AddImage(AutoForm):
 
 
 
-class Product_ViewImages(Folder_BrowseContent):
+class Product_ViewImages(Folder_PreviewContent):
 
     title = MSG(u"Product's Images")
     access = 'is_allowed_to_edit'
@@ -132,7 +132,7 @@ class Product_ViewImages(Folder_BrowseContent):
 
     def get_items(self, resource, context, *args):
         images = resource.get_resource('images')
-        return  Folder_BrowseContent.get_items(self, images, context)
+        return  Folder_PreviewContent.get_items(self, images, context)
 
 
 
