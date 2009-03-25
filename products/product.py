@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from random import shuffle
+
 # Import from itools
 from itools.datatypes import String
 from itools.gettext import MSG
@@ -79,6 +82,14 @@ class Product(Folder):
         shop = self.parent.parent
         return shop.get_resource('products-models/%s' % product_model)
 
+    ##################################################
+    ## Namespace
+    ##################################################
+    def get_small_namespace(self, context):
+        namespace = {'name': self.name}
+        for key in ['title', 'description']:
+            namespace[key] = self.get_property(key)
+        return namespace
 
 
     def get_namespace(self, context):
@@ -93,9 +104,23 @@ class Product(Folder):
         else:
             ns['specific_dic'] = {}
             ns['specific_list'] = []
+        # Complementaty Product
+        ns['complementary_products'] = self.get_ns_other_products(context)
         # Images
         ns.update(self.get_images_ns())
         return ns
+
+
+    def get_ns_other_products(self, context):
+        products = self.parent
+        selected_products = []
+        selection = list(products.get_resources())
+        shuffle(selection)
+        for product in selection[0:5]:
+            ns = product.get_small_namespace(context)
+            selected_products.append(ns)
+        return selected_products
+
 
 
     def get_images_ns(self):
@@ -106,6 +131,10 @@ class Product(Folder):
                                  'title': image.get_property('title')})
         return ns
 
+
+    #####################
+    ## API
+    #####################
 
     def get_price(self):
         # XXX Add VAT
