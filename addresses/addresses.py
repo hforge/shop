@@ -20,17 +20,24 @@ from itools.datatypes import Unicode, String
 from itools.gettext import MSG
 
 # Import from ikaaro
-from ikaaro.forms import TextWidget
+from ikaaro.forms import SelectRadio, TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
+
+# Import from shop
+from shop.datatypes import Civilite
 
 
 class BaseAddresses(BaseTable):
 
     record_schema = {
-      'user': String,
+      'title': Unicode(index='keyword'),
+      'gender': Civilite,
+      'firstname': Unicode,
+      'lastname': Unicode,
+      'user': String(index='keyword'),
       'address_1': Unicode(mandatory=True),
-      'address_2': Unicode(),
+      'address_2': Unicode,
       'zipcode': String(mandatory=True),
       'town': Unicode(mandatory=True),
       'country': Unicode(mandatory=True),
@@ -45,7 +52,11 @@ class Addresses(Table):
     class_handler = BaseAddresses
 
     form = [
+        TextWidget('title', title=MSG(u'Title')),
         TextWidget('user', title=MSG(u'User')),
+        SelectRadio('gender', title=MSG(u'Genre')),
+        TextWidget('firstname', title=MSG(u'Firstname')),
+        TextWidget('lastname', title=MSG(u'Lastname')),
         TextWidget('address_1', title=MSG(u'Address')),
         TextWidget('address_2', title=MSG(u'Address (next)')),
         TextWidget('zipcode', title=MSG(u'Zip Code')),

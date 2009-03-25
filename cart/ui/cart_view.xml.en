@@ -4,63 +4,6 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <style type="text/css">
-    #cart{
-     width: 100%;
-     border-collapse:collapse;
-    }
-    #cart th{
-      background-color: #B0B0B0;
-      color: #FFF;
-      border: 1px solid #B0B0B0;
-      border-right: 1px solid white;
-      padding: 4px;
-      text-align:center;
-    }
-    #cart #last{
-      border: 1px solid #B0B0B0;
-    }
-
-    #cart td{
-      border: 1px solid #B0B0B0;
-      padding: 5px;
-      text-align:center;
-    }
-
-    #totalprice{
-      float: right;
-      border: 1px solid #D7D7D7;
-      width: 200px;
-      height: 100px;
-      margin: 5px;
-      background: url(/ui/cart/buy_bg.png) repeat-x;
-    }
-
-    #totalprice legend {
-      color: #334048;
-      font-size: 14px;
-      font-weight: bold;
-      margin: 5px 0;
-    }
-
-    #totalprice .price{
-      padding: 5px;
-      font-size: 16px;
-    }
-
-    #button-order{
-      background-color: #FF8A00;
-      border: 1px solid #006;
-      color: #FFF;
-    }
-
-    #empty-cart{
-      width: 100%;
-      text-align: center;
-      padding: 50px 0;
-    }
-  </style>
-
   <stl:block stl:if="not products">
     <div id="empty-cart">
       Your cart is empty !
@@ -107,10 +50,11 @@
   <fieldset id="totalprice">
     <legend>Total price</legend>
     <p>
-      <span class="price">${total} €</span>
-      <form name="order" action=";order" method="POST">
-        <input type="submit" id="button-order" value="Order" name="order"/>
-      </form>
+      <span class="price">${total} €</span><br/>
+      <br/>
+      <a id="button-order" href=";delivery">
+        Order
+      </a>
     </p>
   </fieldset>
 

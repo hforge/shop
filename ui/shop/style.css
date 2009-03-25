@@ -104,3 +104,69 @@ table.cart td{
   border: 1px solid black;
   padding: 5px;
 }
+
+/*************
+ * Cart
+ **************/
+
+
+#cart{
+ width: 100%;
+ border-collapse:collapse;
+}
+#cart th{
+  background-color: #B0B0B0;
+  color: #FFF;
+  border: 1px solid #B0B0B0;
+  border-right: 1px solid white;
+  padding: 4px;
+  text-align:center;
+}
+#cart #last{
+  border: 1px solid #B0B0B0;
+}
+
+#cart td{
+  border: 1px solid #B0B0B0;
+  padding: 5px;
+  text-align:center;
+}
+
+#totalprice{
+  float: right;
+  border: 1px solid #D7D7D7;
+  width: 200px;
+  height: 100px;
+  margin: 5px;
+  background: url(/ui/cart/buy_bg.png) repeat-x;
+}
+
+#totalprice legend {
+  color: #334048;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+#totalprice .price{
+  padding: 5px;
+  font-size: 16px;
+}
+
+#button-order{
+  background-color: #FF8A00;
+  border: 1px solid #006;
+  padding: 5px;
+  margin: 10px;
+  color: #FFF;
+}
+
+#empty-cart{
+  width: 100%;
+  text-align: center;
+  padding: 50px 0;
+}
+
+.address-edit{
+  color: #FF8A00;
+}

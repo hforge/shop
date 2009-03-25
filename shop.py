@@ -28,7 +28,8 @@ from cart.cart_views import Cart_View #XXX
 from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
-from shop_views import Shop_Buy, Shop_Register, Shop_View
+from shop_views import Shop_Buy, Shop_Delivery, Shop_Register
+from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressForm
 from user import ShopUser
 
 
@@ -43,9 +44,14 @@ class Shop(Folder):
 
     # Views
     view = Shop_View()
-    buy = Shop_Buy()
-    register = Shop_Register()
     view_cart = Cart_View()
+
+    register = Shop_Register()
+    edit_address = Shop_EditAddressForm()
+
+    delivery = Shop_Delivery()
+    show_recapitulatif = Shop_ShowRecapitulatif()
+    buy = Shop_Buy()
 
 
     @staticmethod
@@ -71,6 +77,18 @@ class Shop(Folder):
 
     def get_document_types(self):
         return []
+
+
+    def get_addresses_user(self, user_name):
+        ns_addresses = []
+        addresses = self.get_resource('addresses').handler
+        for record in addresses.search(user=str(user_name)):
+            kw = {}
+            for key in ['address_1', 'address_2', 'zipcode',
+                        'town', 'country']:
+                kw[key] = addresses.get_record_value(record, key)
+            ns_addresses.append(kw)
+        return ns_addresses
 
 
 register_resource_class(Shop)

@@ -51,4 +51,5 @@ class ShopUser(User):
             self.set_property(key, value)
 
 
+
 register_resource_class(ShopUser)

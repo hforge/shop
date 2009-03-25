@@ -18,22 +18,25 @@
 from datetime import datetime
 
 # Import from itools
-from itools.datatypes import Email, String, Unicode
+from itools.datatypes import Integer, Email, Enumerate, String, Unicode
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.uri import get_reference
-from itools.web import BaseView, STLView, ERROR
+from itools.web import BaseView, BaseForm, STLForm, STLView, ERROR
+from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
-from ikaaro.forms import SelectRadio, TextWidget, PasswordWidget
+from ikaaro.forms import AutoForm, SelectRadio, SelectWidget
+from ikaaro.forms import TextWidget, PasswordWidget
 from ikaaro.resource_views import LoginView
 from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
 
 # Import from shop
+from cart.cart_views import Cart_View
 from cart import ProductCart
 from orders import Order
-from datatypes import Civilite
+from datatypes import Civilite, UserAddresses
 
 
 class Shop_View(STLView):
@@ -41,6 +44,95 @@ class Shop_View(STLView):
     access = True
     title = MSG(u'Shop control panel')
     template = '/ui/shop/shop_view.xml'
+
+
+class Shop_Delivery(STLForm):
+
+    access = 'is_authenticated'
+    title = MSG(u'Shop control panel')
+    template = '/ui/shop/shop_delivery.xml'
+
+    schema = {'shipping': String}
+
+
+    def get_namespace(self, resource, context):
+        ns = {}
+        # Addresses
+        user_addresses = resource.get_addresses_user(context.user.name)
+        # Delivery
+        ns['delivery_address'] = user_addresses[0]
+        ns['bill_address'] = None
+        # Shipping XXX Fake
+        total_price = 45 #XXX
+        shipping_price = 6
+        ns['shipping'] = [{'name': 'collisimo',
+                           'img': '/ui/shop/images/colissimo.png',
+                           'title': u'Collisimo',
+                           'delivery_time': u'48 heures',
+                           'price': shipping_price,
+                           'total_price': shipping_price + total_price}]
+        return ns
+
+
+    def action(self, resource, context, form):
+        # We create an order !
+        order_ref = datetime.now().strftime('%y%m%d%M%S')
+        client_mail = context.user.get_property('email')
+        client_mail = 'sylvain@itaapy.com'
+        # Step 1: Get products in the cart
+        cart = ProductCart()
+        products = []
+        # Step 2: We create an order
+        Order.make_resource(Order, resource, 'orders/%s' % order_ref,
+                            title={'en': u'Order %s' % order_ref},
+                            products=products)
+        return context.uri.resolve(';show_recapitulatif')
+
+
+
+class Shop_ShowRecapitulatif(STLView):
+
+    access = 'is_authenticated'
+    title = MSG(u'Order summary')
+    template = '/ui/shop/shop_recapitulatif.xml'
+
+    def get_namespace(self, resource, context):
+        namespace = {'products': []}
+        # Get cart
+        cart = ProductCart()
+        # Get products
+        products = resource.get_resource('products')
+        # Get products informations
+        total = 0
+        for product in cart.get_elements():
+            quantity = product['quantity']
+            product = products.get_resource(product['name'])
+            # Price
+            price = product.get_price()
+            price_total = price * int(quantity)
+            # Img XXX API to get cover
+            images = product.get_images_ns()
+            if images['images']:
+                img = images['images'][0]
+            else:
+                img = None
+            # All
+            product = ({'name': product.name,
+                        'img': img,
+                        'title': product.get_title(),
+                        'uri': resource.get_pathto(product),
+                        'quantity': quantity,
+                        'price': price,
+                        'price_total': price_total})
+            total = total + price_total
+            namespace['products'].append(product)
+        namespace['total'] = total
+        return namespace
+
+
+    def action(self, form):
+        print 'creation commande'
+
 
 
 class Shop_Buy(BaseView):
@@ -71,6 +163,96 @@ class Shop_Buy(BaseView):
                    'mode': 'paybox'}
         payments = resource.get_resource('payments')
         return payments.show_payment_form(context, payment)
+
+
+
+class Shop_ChooseAddress(STLView):
+
+    access = 'is_authenticated'
+    title = MSG(u'Order summary')
+    template = '/ui/shop/shop_chooseaddress.xml'
+
+    schema = {'calendar_address': Integer}
+
+    def get_namespace(self, resource, context):
+        ns = {}
+        user_name = context.user.name
+        datatype = UserAddresses(shop=resource, user_name=user_name)
+        widget = SelectWidget('calendar_address').to_html(datatype, None)
+        ns['widget'] = widget
+        return ns
+
+
+    def action(self, resource, context, form):
+        # Come back
+        msg = MSG(u'Address modify')
+        return context.come_back(msg, goto=';delivery')
+
+
+class Shop_EditAddress(AutoForm):
+
+    access = 'is_authenticated'
+
+    title = MSG(u'Fill a new address')
+
+    address_title = MSG(u"""
+      Donnez un nom à cette adresse pour que vous puissiez la retrouver
+      """)
+
+    schema = {
+        'gender': Civilite(mandatory=True),
+        'firstname': Unicode,
+        'lastname': Unicode,
+        'title': Unicode,
+        'address_1': Unicode(mandatory=True),
+        'address_2': Unicode,
+        'zipcode': String(mandatory=True),
+        'town': Unicode(mandatory=True),
+        'country': Unicode(mandatory=True),
+        }
+
+    widgets = [
+        SelectRadio('gender', title=MSG(u'Genre')),
+        TextWidget('firstname', title=MSG(u'Firstname')),
+        TextWidget('lastname', title=MSG(u'Lastname')),
+        TextWidget('address_1', title=MSG(u'Address')),
+        TextWidget('address_2', title=MSG(u'Address (next)')),
+        TextWidget('zipcode', title=MSG(u'Zip Code')),
+        TextWidget('town', title=MSG(u'Town')),
+        TextWidget('country', title=MSG(u'Country')),
+        TextWidget('title', title=address_title),
+        ]
+
+
+    def action(self, resource, context, form):
+        addresses = resource.get_resource('addresses').handler
+        # We search if addresses already exist in addresses table
+        query = []
+        query.append(PhraseQuery('title', form['title']))
+        query.append(PhraseQuery('user', context.user.name))
+        record = addresses.search(AndQuery(*query))
+        # Add informations to form
+        form['user'] = context.user.name
+        # Add or save informations
+        if record:
+            addresses.update_record(record[0].id, **form)
+        else:
+            addresses.add_record(form)
+        # Come back
+        msg = MSG(u'Address modify')
+        return context.come_back(msg, goto=';delivery')
+
+
+
+class Shop_EditAddressForm(CompositeForm):
+
+    access = True
+    title = MSG(u'Choose address')
+
+    subviews = [Shop_ChooseAddress(),
+                Shop_EditAddress()]
+
+
 
 
 
@@ -152,7 +334,8 @@ class Shop_Register(RegisterForm):
         addresses.handler.add_record(kw)
 
         # Set the role
-        root.set_user_role(user.name, 'guests')
+        # XXX
+        #root.set_user_role(user.name, 'guests')
 
         # Send confirmation email
         # TODO
@@ -171,7 +354,7 @@ class Shop_Register(RegisterForm):
         context.user = user
 
         # Redirect
-        return Shop_Buy().POST(resource, context)
+        return context.come_back(MSG(u'View cart'), goto = './;view_cart')
 
 
 

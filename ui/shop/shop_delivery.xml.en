@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+
+  <h2>Bill and delivery addresses</h2>
+
+  <table id="cart" style="width: 400px;" cellpadding="5px" cellspacing="0">
+    <tr>
+      <th>
+       Delivery address
+      </th>
+      <th>
+       Bill address
+      </th>
+    </tr>
+    <tr>
+      <td>
+        ${delivery_address/address_1}<br/>
+        <stl:block stl:if="delivery_address/address_2">
+          ${delivery_address/address_2}<br/>
+        </stl:block>
+        ${delivery_address/zipcode} ${delivery_address/town}<br/>
+        ${delivery_address/country}<br/>
+        <a href=";edit_address?type=delivery" class="address-edit">(Edit *)</a>
+      </td>
+      <td>
+        <span stl:if="not bill_address">
+          Same that delivery address.<br/>
+        </span>
+        <a href=";edit_address?type=bill" class="address-edit">(Edit *)</a>
+      </td>
+    </tr>
+  </table>
+
+  <h2>Choose delivery XXX</h2>
+
+  <table id="cart">
+    <tr>
+      <th>Delivery way</th>
+      <th></th>
+      <th>Delivery time</th>
+      <th>Delivery price (VAT included)</th>
+      <th>Total price (VAT included)</th>
+    </tr>
+    <tr stl:repeat="ship shipping">
+      <td>
+        <input type="radio" name="shipping" value="${ship/name}"/>${ship/title}
+      </td>
+      <td>
+        <img src="${ship/img}"/>
+      </td>
+      <td>
+        ${ship/delivery_time}
+      </td>
+      <td>
+        ${ship/price} €
+      </td>
+      <td>
+        ${ship/total_price} €
+      </td>
+    </tr>
+  </table>
+
+  <br/><br/>
+  <form name="order" method="POST">
+    <input type="submit" id="button-order" value="Continue" name="continue"/>
+  </form>
+
+</stl:block>
