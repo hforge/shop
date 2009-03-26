@@ -86,7 +86,8 @@ class Product(Folder):
     ## Namespace
     ##################################################
     def get_small_namespace(self, context):
-        namespace = {'name': self.name}
+        namespace = {'name': self.name,
+                     'href': context.get_link(self)}
         for key in ['title', 'description']:
             namespace[key] = self.get_property(key)
         return namespace
@@ -97,6 +98,7 @@ class Product(Folder):
         # Basic informations
         for key in product_schema.keys():
             ns[key] = self.get_property(key)
+        ns['href'] = context.get_link(self)
         # Specific product informations
         product_model = self.get_product_model(context)
         if product_model:
