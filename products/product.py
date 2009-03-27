@@ -65,12 +65,14 @@ class Product(Folder):
 
     def get_catalog_fields(self):
         return (Folder.get_catalog_fields(self)
-                + [KeywordField('product_model')])
+                + [KeywordField('product_model'),
+                   KeywordField('categories')])
 
 
     def get_catalog_values(self):
         values = Folder.get_catalog_values(self)
-        values['product_model'] = self.get_property('product_model')
+        for key in ['product_model', 'categories']:
+            values[key] = self.get_property(key)
         return values
 
 
