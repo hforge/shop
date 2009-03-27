@@ -26,27 +26,41 @@ from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
+from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from product_views import Product_View, Product_Edit, Product_EditModel, Product_Images
+from images import PhotoOrderedTable
+from product_views import Product_View, Product_Edit, Product_EditModel#, Product_Images
 from product_views import Product_NewInstance, Product_AddToCart
 from schema import product_schema
 
+
+def get_namespace_image(image):
+    namespace = {'href': image.abspath,
+                 'title': image.get_property('title')}
+    return namespace
 
 
 class Product(Folder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
-    class_views = ['view', 'edit', 'edit_model', 'images']
+    class_views = ['view', 'edit', 'edit_model', 'images', 'order']
+    class_version = '20090327'
 
+    __fixed_handlers__ = Folder.__fixed_handlers__ + ['images',
+                                                      'order-photos']
+
+    # Views
     new_instance = Product_NewInstance()
     view = Product_View()
     edit = Product_Edit()
     edit_model = Product_EditModel()
     add_to_cart = Product_AddToCart()
-    images = Product_Images()
+    #images = Product_Images()
+    order = GoToSpecificDocument(specific_document='order-photos',
+                                 title=MSG(u'Order photos'))
 
 
     @classmethod
@@ -58,8 +72,13 @@ class Product(Folder):
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         Folder._make_resource(cls, folder, name, *args, **kw)
+        # Images folder
         Folder._make_resource(Folder, folder, '%s/images' % name,
                              body='', title={'en': 'Images'})
+        # Order images table
+        PhotoOrderedTable._make_resource(PhotoOrderedTable, folder, name,
+                           title={'en': u'Order photos'})
+
 
 
 
@@ -92,6 +111,7 @@ class Product(Folder):
                      'href': context.get_link(self)}
         for key in ['title', 'description']:
             namespace[key] = self.get_property(key)
+        namespace['cover'] = self.get_cover_namespace(context)
         return namespace
 
 
@@ -110,8 +130,10 @@ class Product(Folder):
             ns['specific_list'] = []
         # Complementaty Product
         ns['complementary_products'] = self.get_ns_other_products(context)
+        # Cover
+        ns['cover'] = self.get_cover_namespace(context)
         # Images
-        ns.update(self.get_images_ns())
+        ns['images'] = self.get_images_namespace(context)
         return ns
 
 
@@ -125,16 +147,45 @@ class Product(Folder):
             selected_products.append(ns)
         return selected_products
 
+    #####################
+    # Images
+    #####################
+    def get_cover_namespace(self, context):
+        cover = self.get_ordered_photos(context, quantity=1)
+        if not cover:
+            return None
+        return get_namespace_image(cover[0])
 
 
-    def get_images_ns(self):
-        ns = {'images': []}
-        folder_images = self.get_resource('images')
-        for image in folder_images.get_resources():
-            ns['images'].append({'href': image.abspath,
-                                 'title': image.get_property('title')})
-        return ns
+    def get_images_namespace(self, context):
+        ns_images = []
+        for i, image in enumerate(self.get_ordered_photos(context)):
+            # Ignore cover
+            if i==0:
+                continue
+            ns_image = get_namespace_image(image)
+            ns_images.append(ns_image)
+        return ns_images
 
+
+    def get_ordered_photos(self, context, quantity=None):
+        # Search photos
+        order = self.get_resource('order-photos')
+        ordered_names = list(order.get_ordered_names())
+        # If no photos, return
+        if not ordered_names:
+            return []
+        # Get photos 
+        images = []
+        ac = self.get_access_control()
+        user = context.user
+        if quantity is None:
+            quantity = len(ordered_names)
+        for name in ordered_names[0:quantity]:
+            image = order.get_resource(name)
+            if ac.is_allowed_to_view(user, image):
+                images.append(image)
+        return images
 
     #####################
     ## API
@@ -189,6 +240,15 @@ class Product(Folder):
         if language in value:
             return value[language], language
         return datatype.get_default(), None
+
+
+    #######################
+    ## Updates methods
+    #######################
+    def update_20090327(self):
+        from images import PhotoOrderedTable
+        PhotoOrderedTable._make_resource(PhotoOrderedTable, self.handler, 'order-photos',
+                           title={'en': u"Order photos"})
 
 
 

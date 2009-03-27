@@ -29,6 +29,7 @@ from ikaaro.registry import get_resource_class
 from ikaaro.resource_views import DBResource_NewInstance
 
 # Import from shop
+from images_views import PhotoOrderedTable_View
 from enumerate import ProductModelsEnumerate, CategoriesEnumerate
 from schema import product_schema
 from shop.cart import ProductCart
@@ -88,63 +89,6 @@ class Product_View(STLView):
     def get_namespace(self, resource, context):
         return resource.get_namespace(context)
 
-
-
-class Product_AddImage(AutoForm):
-
-    access = 'is_allowed_to_edit'
-    title = MSG(u'Add an image')
-
-    schema = {'path': String}
-
-    widgets = [
-        ImageSelectorWidget('path', title=MSG(u'Add an image'))
-        ]
-
-    # TODO
-    # Possibilité d'ajouter un title à une image
-    # Action d'Upload d'image (Utiliser File.action ?)
-    # + Limiter le ImageSelectorWidget au dossier image du produit courant
-    # Publication automatique
-
-    def action(self, resource, context, form):
-        pass
-
-
-
-class Product_ViewImages(Folder_PreviewContent):
-
-    title = MSG(u"Product's Images")
-    access = 'is_allowed_to_edit'
-
-    batch_msg1 = MSG(u"There is 1 image")
-    batch_msg2 = MSG(u"There are ${n} images")
-
-    search_template = None
-
-    # TODO Tableau:
-    # - Preview images
-    # - Choisir une image de couverture
-    # - Ordonner / Trier les images
-    # - Supprimer Image
-    # - Publier / dépublier
-
-
-    def get_items(self, resource, context, *args):
-        images = resource.get_resource('images')
-        return  Folder_PreviewContent.get_items(self, images, context)
-
-
-
-class Product_Images(CompositeForm):
-
-    access = 'is_allowed_to_edit'
-    title = MSG(u'Images')
-
-    subviews = [
-        Product_AddImage(),
-        Product_ViewImages(),
-    ]
 
 
 
