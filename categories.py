@@ -27,7 +27,7 @@ class Categorie(Folder):
 
     class_id = 'categorie'
     class_title = MSG(u'Categorie')
-    class_views = ['browse_content', 'new_resource?type=categorie']
+    class_views = ['browse_content', 'new_resource?type=categorie', 'edit']
 
     def get_document_types(self):
         return [Categorie]
