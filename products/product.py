@@ -85,7 +85,7 @@ class Product(Folder):
     def get_catalog_fields(self):
         return (Folder.get_catalog_fields(self)
                 + [KeywordField('product_model'),
-                   KeywordField('categories')])
+                   KeywordField('categories', is_stored=True)])
 
 
     def get_catalog_values(self):
