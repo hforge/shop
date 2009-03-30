@@ -58,27 +58,25 @@ class Cart_View(STLView):
         products = resource.get_resource('products')
         # Get products informations
         total = 0
-        for product in cart.get_elements():
-            quantity = product['quantity']
-            product = products.get_resource(product['name'])
-            # Price
+        for product_cart in cart.get_elements():
+            # Get product
+            product = products.get_resource(product_cart['name'])
+            # Check product is buyable
+            if not product.is_buyable():
+                continue
+            # Calcul price
+            quantity = product_cart['quantity']
             price = product.get_price()
             price_total = price * int(quantity)
-            # Img XXX API to get cover
-            images = product.get_images_ns()
-            if images['images']:
-                img = images['images'][0]
-            else:
-                img = None
             # All
-            product = ({'name': product.name,
-                        'img': img,
-                        'title': product.get_title(),
-                        'uri': resource.get_pathto(product),
-                        'quantity': quantity,
-                        'price': price,
-                        'price_total': price_total})
+            ns = ({'name': product.name,
+                   'img': product.get_cover_namespace(context),
+                   'title': product.get_title(),
+                   'uri': resource.get_pathto(product),
+                   'quantity': quantity,
+                   'price': price,
+                   'price_total': price_total})
             total = total + price_total
-            namespace['products'].append(product)
+            namespace['products'].append(ns)
         namespace['total'] = total
         return namespace

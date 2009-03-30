@@ -38,7 +38,7 @@ product_schema = {# General informations
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),
                   # Price
-                  'price': Decimal,
+                  'price': Decimal(default=0.0),
                   # Description
                   'html_description': HTMLBody,
                   # Référencement

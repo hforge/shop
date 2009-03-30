@@ -76,7 +76,8 @@ class Product(Folder):
         Folder._make_resource(Folder, folder, '%s/images' % name,
                              body='', title={'en': 'Images'})
         # Order images table
-        PhotoOrderedTable._make_resource(PhotoOrderedTable, folder, name,
+        PhotoOrderedTable._make_resource(PhotoOrderedTable, folder,
+                           '%s/order-photos' % name,
                            title={'en': u'Order photos'})
 
 
@@ -193,6 +194,10 @@ class Product(Folder):
     #####################
     ## API
     #####################
+    def is_buyable(self):
+        price = self.get_price()
+        return price != 0.0
+
 
     def get_price(self):
         # XXX Add VAT
