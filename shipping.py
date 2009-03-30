@@ -152,16 +152,16 @@ class Shippings(Folder):
         return [Shipping]
 
 
-    def get_shipping_way(self):
-        # XXX Only actifs and valid
-        return self.search_resources(cls=Shipping)
-
-
     def get_ns_shipping_way(self, price, weight):
         l = []
-        for elt in self.get_shipping_way():
+        for elt in self.search_resources(cls=Shipping):
             l.append(elt.get_namespace(price, weight))
         return l
+
+
+    def get_shipping_namespace(self, shipping, price, weight):
+        shipping = self.get_resource(shipping)
+        return shipping.get_namespace(price, weight)
 
 
 register_resource_class(Shippings)

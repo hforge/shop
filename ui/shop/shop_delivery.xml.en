@@ -19,6 +19,7 @@
     <tr>
       <td>
         <p stl:if="delivery_address">
+          ${delivery_address/firstname} ${delivery_address/lastname}<br/>
           ${delivery_address/address_1}<br/>
           <stl:block stl:if="delivery_address/address_2">
             ${delivery_address/address_2}<br/>
@@ -32,45 +33,53 @@
         <span stl:if="not bill_address">
           Same that delivery address.<br/>
         </span>
+        <p stl:if="bill_address">
+          ${bill_address/firstname} ${bill_address/lastname}<br/>
+          ${bill_address/address_1}<br/>
+          <stl:block stl:if="bill_address/address_2">
+            ${bill_address/address_2}<br/>
+          </stl:block>
+          ${bill_address/zipcode} ${bill_address/town}<br/>
+          ${bill_address/country}<br/>
+        </p>
         <a href=";edit_address?type=bill" class="address-edit">(Edit *)</a>
       </td>
     </tr>
   </table>
 
-  <h2>Choose delivery XXX</h2>
+  <h2>Choose delivery</h2>
 
-  <table id="cart">
-    <tr>
-      <th>Delivery way</th>
-      <th></th>
-      <th>Delivery time</th>
-      <th>Description</th>
-      <th>Delivery price</th>
-    </tr>
-    <tr stl:repeat="ship shipping">
-      <td>
-        <input type="radio" name="shipping" value="${ship/name}"/>${ship/title}
-      </td>
-      <td>
-        <img src="${ship/img}"/>
-      </td>
-      <td>
-        ${ship/delivery_time}
-      </td>
-      <td>
-        ${ship/description}
-      </td>
-      <td>
-        <span stl:if="ship/price">
-        ${ship/price} €
-        </span>
-        <span stl:if="not ship/price">Free</span>
-      </td>
-    </tr>
-  </table>
-
-  <br/><br/>
   <form name="order" method="POST">
+
+    <table id="cart">
+      <tr>
+        <th>Delivery way</th>
+        <th></th>
+        <th>Delivery time</th>
+        <th>Description</th>
+        <th>Delivery price</th>
+      </tr>
+      <tr stl:repeat="ship shipping">
+        <td>
+          <input type="radio" name="shipping" value="${ship/name}"/>${ship/title}
+        </td>
+        <td>
+          <img src="${ship/img}"/>
+        </td>
+        <td>
+          ${ship/delivery_time}
+        </td>
+        <td>
+          ${ship/description}
+        </td>
+        <td>
+          <span stl:if="ship/price">${ship/price} €</span>
+          <span stl:if="not ship/price">Free</span>
+        </td>
+      </tr>
+    </table>
+
+    <br/><br/>
     <input type="submit" id="button-order" value="Continue" name="continue"/>
   </form>
 

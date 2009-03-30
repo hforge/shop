@@ -11,8 +11,9 @@
     Please choose the address at witch you want to be deliver.<br/>
     </p>
 
-    <form method="GET">
+    <form method="POST">
       ${widget}
+      <input type="hidden" name="type" value="${type}"/>
       <input id="button-order" name=";select_address"
         type="submit" value="Choose this address"/>
     </form>

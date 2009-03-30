@@ -14,7 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from standard library
+# Import from standard library]
+from copy import deepcopy
 from datetime import datetime
 
 # Import from itools
@@ -27,7 +28,7 @@ from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
 from ikaaro.forms import AutoForm, SelectRadio, SelectWidget
-from ikaaro.forms import TextWidget, PasswordWidget
+from ikaaro.forms import HiddenWidget, TextWidget, PasswordWidget
 from ikaaro.resource_views import LoginView
 from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
@@ -52,42 +53,47 @@ class Shop_Delivery(STLForm):
     title = MSG(u'Shop control panel')
     template = '/ui/shop/shop_delivery.xml'
 
-    schema = {'shipping': String}
+    schema = {'shipping': String(mandatory=True)}
+
+    def GET(self, resource, context):
+        # If user has no addresses, redirect to edit_address view
+        if not resource.get_user_main_address(context.user.name):
+            return context.uri.resolve(';edit_address')
+        # Normal
+        return STLView.GET(self, resource, context)
 
 
     def get_namespace(self, resource, context):
         ns = {}
-        # Addresses
+        # Get cart
+        cart = ProductCart()
+        # Delivery address
         ns['delivery_address'] = None
+        delivery_address = cart.get_delivery_address()
+        if not delivery_address:
+            delivery_address = resource.get_user_main_address(context.user.name)
+            cart.set_delivery_address(delivery_address.id)
+        delivery_address = cart.get_delivery_address()
+        ns['delivery_address']  = resource.get_user_address(delivery_address)
+        # Bill
         ns['bill_address'] = None
-        # Delivery
-        user_addresses = resource.get_addresses_user(context.user.name)
-        if user_addresses:
-            ns['delivery_address'] = user_addresses[0]
+        bill_address = cart.get_bill_address()
+        if bill_address:
+            ns['bill_address'] = resource.get_user_address(bill_address)
         # Total price
         products = resource.get_resource('products')
-        cart = ProductCart()
         total_price = cart.get_total_price(products)
         total_weight = 0
         # Shipping
         shippings = resource.get_resource('shippings')
         ns['shipping'] = shippings.get_ns_shipping_way(total_price, total_weight)
-        print ns['shipping']
         return ns
 
 
     def action(self, resource, context, form):
-        # We create an order !
-        order_ref = datetime.now().strftime('%y%m%d%M%S')
-        client_mail = context.user.get_property('email')
-        client_mail = 'sylvain@itaapy.com'
-        # Step 1: Get products in the cart
+        # We save shipping mode choose by user
         cart = ProductCart()
-        products = []
-        # Step 2: We create an order
-        Order.make_resource(Order, resource, 'orders/%s' % order_ref,
-                            title={'en': u'Order %s' % order_ref},
-                            products=products)
+        cart.set_shipping(form['shipping'])
         return context.uri.resolve(';show_recapitulatif')
 
 
@@ -98,10 +104,29 @@ class Shop_ShowRecapitulatif(STLView):
     title = MSG(u'Order summary')
     template = '/ui/shop/shop_recapitulatif.xml'
 
+
+    def GET(self, resource, context):
+        # Check if cart is valid
+        cart = ProductCart()
+        if not cart.is_valid():
+            msg = MSG(u'Invalid cart')
+            return context.come_back(msg, goto='/')
+        # Normal
+        return STLView.GET(self, resource, context)
+
+
     def get_namespace(self, resource, context):
         namespace = {'products': []}
         # Get cart
         cart = ProductCart()
+        # Delivery address
+        delivery_address = cart.get_delivery_address()
+        namespace['delivery_address']  = resource.get_user_address(delivery_address)
+        # Bill
+        namespace['bill_address'] = None
+        bill_address = cart.get_bill_address()
+        if bill_address:
+            namespace['bill_address'] = resource.get_user_address(bill_address)
         # Get products
         products = resource.get_resource('products')
         # Get products informations
@@ -122,6 +147,12 @@ class Shop_ShowRecapitulatif(STLView):
                         'price_total': price_total})
             total = total + price_total
             namespace['products'].append(product)
+        # Delivery
+        shipping_mode = cart.get_shipping()
+        shippings = resource.get_resource('shippings')
+        namespace['ship'] = shippings.get_shipping_namespace(shipping_mode,
+                                                             0.0, 0.0)
+        # Total price
         namespace['total'] = total
         return namespace
 
@@ -140,6 +171,12 @@ class Shop_Buy(BaseView):
 
 
     def POST(self, resource, context):
+        # Check if cart is valid
+        cart = ProductCart()
+        if not cart.is_valid():
+            msg = MSG(u'Invalid cart')
+            return context.come_back(msg, goto='/')
+        # Get informations
         order_ref = datetime.now().strftime('%y%m%d%M%S')
         client_mail = context.user.get_property('email')
         client_mail = 'sylvain@itaapy.com'
@@ -161,6 +198,9 @@ class Shop_Buy(BaseView):
         return payments.show_payment_form(context, payment)
 
 
+#########################################
+## Edit Addresses views
+#########################################
 
 class Shop_ChooseAddress(STLView):
 
@@ -168,21 +208,29 @@ class Shop_ChooseAddress(STLView):
     title = MSG(u'Order summary')
     template = '/ui/shop/shop_chooseaddress.xml'
 
-    schema = {'calendar_address': Integer}
+    schema = {'calendar_address': Integer(mandatory=True),
+              'type': String(mandatory=True)}
 
     def get_namespace(self, resource, context):
         ns = {}
         user_name = context.user.name
         datatype = UserAddresses(shop=resource, user_name=user_name)
-        widget = SelectWidget('calendar_address').to_html(datatype, None)
-        ns['widget'] = widget
+        widget = SelectWidget('calendar_address', has_empty_option=False)
+        ns['widget'] = widget.to_html(datatype, None)
+        ns['type'] = context.get_form_value('type')
         return ns
 
 
-    def action(self, resource, context, form):
+    def action_select_address(self, resource, context, form):
+        cart = ProductCart()
+        if form['type'] == 'delivery':
+            cart.set_delivery_address(form['calendar_address'])
+        else:
+            cart.set_bill_address(form['calendar_address'])
         # Come back
-        msg = MSG(u'Address modify')
+        msg = MSG(u'Modification ok')
         return context.come_back(msg, goto=';delivery')
+
 
 
 class Shop_EditAddress(AutoForm):
@@ -196,6 +244,7 @@ class Shop_EditAddress(AutoForm):
       """)
 
     schema = {
+        'type': String,
         'gender': Civilite(mandatory=True),
         'firstname': Unicode,
         'lastname': Unicode,
@@ -208,6 +257,7 @@ class Shop_EditAddress(AutoForm):
         }
 
     widgets = [
+        HiddenWidget('type'),
         SelectRadio('gender', title=MSG(u'Genre')),
         TextWidget('firstname', title=MSG(u'Firstname')),
         TextWidget('lastname', title=MSG(u'Lastname')),
@@ -220,20 +270,35 @@ class Shop_EditAddress(AutoForm):
         ]
 
 
+    def get_value(self, resource, context, name, datatype):
+        if name=='type':
+            return context.get_form_value('type')
+        cart = ProductCart()
+        delivery_address = cart.get_delivery_address()
+        return resource.get_user_address(delivery_address)[name]
+
+
     def action(self, resource, context, form):
         addresses = resource.get_resource('addresses').handler
         # We search if addresses already exist in addresses table
         query = []
         query.append(PhraseQuery('title', form['title']))
         query.append(PhraseQuery('user', context.user.name))
-        record = addresses.search(AndQuery(*query))
+        records = addresses.search(AndQuery(*query))
         # Add informations to form
         form['user'] = context.user.name
         # Add or save informations
-        if record:
-            addresses.update_record(record[0].id, **form)
+        if records:
+            record = records[0]
+            addresses.update_record(record.id, **form)
         else:
-            addresses.add_record(form)
+            record = addresses.add_record(form)
+        # We save address in cart
+        cart = ProductCart()
+        if form['type'] == 'delivery':
+            cart.set_delivery_address(record.id)
+        else:
+            cart.set_bill_address(record.id)
         # Come back
         msg = MSG(u'Address modify')
         return context.come_back(msg, goto=';delivery')
@@ -249,7 +314,19 @@ class Shop_EditAddressForm(CompositeForm):
                 Shop_EditAddress()]
 
 
+    def get_namespace(self, resource, context):
+        # If user has no addresses show Shop_ChooseAddress()
+        subviews = deepcopy(self.subviews)
+        if not resource.get_user_main_address(context.user.name):
+            subviews = subviews[1:]
+        # Build namespace
+        views = [ view.GET(resource, context) for view in subviews]
+        return {'views': views}
 
+
+#########################################
+## User login/register views
+#########################################
 
 
 class Shop_Register(RegisterForm):

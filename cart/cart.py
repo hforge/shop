@@ -20,13 +20,22 @@
 from itools.web import get_context
 
 
-class BaseCart(object):
+class ProductCart(object):
+    """
+    A cart contains 3 informations
+      -> Products name / quantity
+      -> Delivery mode name
+      -> Addresses id
+    """
+
 
 
     def __init__(self):
         context = get_context()
         if not context.has_cookie('cart'):
             context.set_cookie('cart', '')
+        if not context.has_cookie('shipping'):
+            context.set_cookie('shipping', '')
 
 
     def get_elements(self):
@@ -71,9 +80,9 @@ class BaseCart(object):
     def clear(self):
         self.set_cart([])
 
-
-
-class ProductCart(BaseCart):
+    ######################
+    # Products
+    ######################
 
     def manage_product(self, name, quantity=0):
         context = get_context()
@@ -130,3 +139,62 @@ class ProductCart(BaseCart):
             quantity = product_cart['quantity']
             price = product.get_price() * int(quantity)
         return price
+
+    ######################
+    # Shipping
+    ######################
+
+    def set_shipping(self, mode):
+        context = get_context()
+        context.set_cookie('shipping', mode)
+
+
+    def get_shipping(self):
+        context = get_context()
+        return context.get_cookie('shipping')
+
+    ######################
+    # Set addresses
+    ######################
+
+    def set_delivery_address(self, id):
+        context = get_context()
+        context.set_cookie('delivery_address', id)
+
+
+    def get_delivery_address(self):
+        context = get_context()
+        address = context.get_cookie('delivery_address')
+        if address:
+            return int(address)
+        return address
+
+
+    def set_bill_address(self, id):
+        context = get_context()
+        id_delivery = context.get_cookie('delivery_address')
+        if str(id_delivery)==str(id):
+            context.set_cookie('bill_address', '')
+        else:
+            context.set_cookie('bill_address', id)
+
+
+    def get_bill_address(self):
+        context = get_context()
+        address = context.get_cookie('bill_address')
+        if address:
+            return int(address)
+        return address
+
+    ######################
+    # Check validity
+    ######################
+
+    def is_valid(self):
+        """
+        To be valid a cart must contains:
+          - shipping id, addresses id, products
+        """
+        return (bool(self.get_shipping()) and
+                bool(self.get_elements()) and
+                bool(self.get_delivery_address()))

@@ -6,33 +6,43 @@
 
   <h1>Summary and Payment</h1>
 
-  <table id="cart" style="width: 400px;">
+  <table id="cart" style="width: 400px;" cellpadding="5px" cellspacing="0">
     <tr>
       <th>
-        Delivery address
+       Delivery address
       </th>
       <th>
-        Billing address
+       Bill address
       </th>
     </tr>
     <tr>
       <td>
-        XXX <br/>
-        XXX <br/>
-        XXX <br/>
+        <p stl:if="delivery_address">
+          ${delivery_address/firstname} ${delivery_address/lastname}<br/>
+          ${delivery_address/address_1}<br/>
+          <stl:block stl:if="delivery_address/address_2">
+            ${delivery_address/address_2}<br/>
+          </stl:block>
+          ${delivery_address/zipcode} ${delivery_address/town}<br/>
+          ${delivery_address/country}<br/>
+        </p>
       </td>
       <td>
-        <stl:block>
-        </stl:block>
-        <stl:block>
-        XXX <br/>
-        XXX <br/>
-        XXX <br/>
-        </stl:block>
+        <span stl:if="not bill_address">
+          Same that delivery address.<br/>
+        </span>
+        <p stl:if="bill_address">
+          ${bill_address/firstname} ${bill_address/lastname}<br/>
+          ${bill_address/address_1}<br/>
+          <stl:block stl:if="bill_address/address_2">
+            ${bill_address/address_2}<br/>
+          </stl:block>
+          ${bill_address/zipcode} ${bill_address/town}<br/>
+          ${bill_address/country}<br/>
+        </p>
       </td>
     </tr>
   </table>
-
   <br/><br/>
 
   <table id="cart">
@@ -62,10 +72,12 @@
     </tr>
     <tr>
       <td colspan="4" style="text-align:right">
-        Delivery way:<br/>
+        Delivery (${ship/title}):<br/>
         Total:<br/>
       </td>
       <td>
+        <span stl:if="ship/price">${ship/price} €</span>
+        <span stl:if="not ship/price">Free</span>
         <br/>
         ${total} €
       </td>

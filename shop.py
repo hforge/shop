@@ -89,16 +89,22 @@ class Shop(Folder):
         return []
 
 
-    def get_addresses_user(self, user_name):
+    def get_user_main_address(self, user_name):
         ns_addresses = []
         addresses = self.get_resource('addresses').handler
         for record in addresses.search(user=str(user_name)):
-            kw = {}
-            for key in ['address_1', 'address_2', 'zipcode',
-                        'town', 'country']:
-                kw[key] = addresses.get_record_value(record, key)
-            ns_addresses.append(kw)
-        return ns_addresses
+            return record
+        return None
+
+
+    def get_user_address(self, id):
+        addresses = self.get_resource('addresses').handler
+        record = addresses.get_record(id)
+        ns = {}
+        for key in ['firstname', 'lastname', 'address_1', 'address_2',
+                    'zipcode', 'town', 'country', 'title', 'gender']:
+            ns[key] = addresses.get_record_value(record, key)
+        return ns
 
 
 register_resource_class(Shop)
