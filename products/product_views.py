@@ -139,17 +139,10 @@ class Product_Edit(AutoForm):
         TextWidget('title', title=MSG(u'Title')),
         TextWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Subject')),
-        PathSelectorWidget('document_path', title=MSG(u'Add a document')),
-        # Transport
-        TextWidget('weight', title=MSG(u'Weight')),
         # Categorie
         SelectWidget('categories', title=MSG(u'Categories')),
         # Price
-        TextWidget('cost', title=MSG(u'Purchase price HT')),
-        TextWidget('price', title=MSG(u'Selling price')),
-        TextWidget('vat', title=MSG(u'VAT')),
-        TextWidget('ecoparticipation', title=MSG(u'Eco-participation')),
-        TextWidget('reduction', title=MSG(u'Reduction')),
+        TextWidget('price', title=MSG(u'Price')),
         # HTML Description
         RTEWidget('html_description', title=MSG(u'Product presentation'))
         ]

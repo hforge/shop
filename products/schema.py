@@ -35,17 +35,10 @@ product_schema = {# General informations
                   'title': Unicode,
                   'description': Unicode,
                   'subject': Unicode,
-                  'document_path': String,
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),
                   # Price
-                  'cost': Decimal,
-                  'vat': String,
                   'price': Decimal,
-                  'ecoparticipation': Decimal,
-                  'reduction': Decimal,
-                  # Transport ...
-                  'weight': Decimal,
                   # Description
                   'html_description': HTMLBody,
                   # Référencement
