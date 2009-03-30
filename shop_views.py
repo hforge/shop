@@ -41,7 +41,7 @@ from datatypes import Civilite, UserAddresses
 
 class Shop_View(STLView):
 
-    access = True
+    access = 'is_admin'
     title = MSG(u'Shop control panel')
     template = '/ui/shop/shop_view.xml'
 
