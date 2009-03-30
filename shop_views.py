@@ -19,11 +19,11 @@ from copy import deepcopy
 from datetime import datetime
 
 # Import from itools
-from itools.datatypes import Integer, Email, Enumerate, String, Unicode
+from itools.datatypes import Integer, Email, String, Unicode
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.uri import get_reference
-from itools.web import BaseView, BaseForm, STLForm, STLView, ERROR
+from itools.web import BaseView, STLForm, STLView, ERROR
 from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
@@ -34,7 +34,6 @@ from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
 
 # Import from shop
-from cart.cart_views import Cart_View
 from cart import ProductCart
 from orders import Order
 from datatypes import Civilite, UserAddresses

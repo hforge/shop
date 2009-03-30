@@ -17,7 +17,7 @@
 # Import from itools
 from itools import vfs, get_abspath
 from itools.csv import Table as BaseTable
-from itools.datatypes import Boolean, Unicode, Decimal
+from itools.datatypes import Decimal
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 

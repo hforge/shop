@@ -15,22 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Unicode, String
+from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.web import BaseView, STLView
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget, ImageSelectorWidget
-from ikaaro.forms import PathSelectorWidget, MultilineWidget, title_widget
-from ikaaro.views import CompositeForm
-from ikaaro.folder_views import Folder_PreviewContent
+from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget
+from ikaaro.forms import MultilineWidget, title_widget
 from ikaaro.registry import get_resource_class
 from ikaaro.resource_views import DBResource_NewInstance
 
 # Import from shop
-from images_views import PhotoOrderedTable_View
-from enumerate import ProductModelsEnumerate, CategoriesEnumerate
+from enumerate import ProductModelsEnumerate
 from schema import product_schema
 from shop.cart import ProductCart
 

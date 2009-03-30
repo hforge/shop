@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Decimal, String, PathDataType, Unicode
+from itools.datatypes import Decimal, Unicode
 
 # Import from ikaaro
 from ikaaro.forms import HTMLBody

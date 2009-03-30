@@ -20,7 +20,6 @@ from ikaaro.folder import Folder
 
 # Import from itools
 from itools.gettext import MSG
-from itools.web import STLView
 
 # Import from project
 from addresses import Addresses
@@ -32,7 +31,6 @@ from products import Products, ProductModels
 from shipping import Shippings
 from shop_views import Shop_Buy, Shop_Delivery, Shop_Register
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressForm
-from user import ShopUser
 
 
 class Shop(Folder):
