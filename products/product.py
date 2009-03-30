@@ -91,8 +91,14 @@ class Product(Folder):
 
     def get_catalog_values(self):
         values = Folder.get_catalog_values(self)
-        for key in ['product_model', 'categories']:
-            values[key] = self.get_property(key)
+        values['product_model'] = self.get_property('product_model')
+        # categories
+        categories = []
+        for category in self.get_property('categories'):
+            segments = category.split('/')
+            for i in range(len(segments)):
+                categories.append('/'.join(segments[:i+1]))
+        values['categories'] = categories
         return values
 
 
