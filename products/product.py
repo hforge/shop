@@ -60,7 +60,8 @@ class Product(Folder):
     add_to_cart = Product_AddToCart()
     #images = Product_Images()
     order = GoToSpecificDocument(specific_document='order-photos',
-                                 title=MSG(u'Order photos'))
+                                 title=MSG(u'Order photos'),
+                                 access='is_admin')
 
 
     @classmethod
@@ -270,7 +271,7 @@ class Products(Folder):
 
     class_id = 'products'
     class_title = MSG(u'Products')
-
+    class_views = ['browse_content']
 
     def get_document_types(self):
         return [Product]
