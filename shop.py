@@ -29,6 +29,7 @@ from cart.cart_views import Cart_View #XXX
 from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
+from shipping import Shippings
 from shop_views import Shop_Buy, Shop_Delivery, Shop_Register
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressForm
 from user import ShopUser
@@ -42,7 +43,8 @@ class Shop(Folder):
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
-                          'products', 'products-models']
+                          'products', 'products-models',
+                          'shippings']
 
     # Views
     view = Shop_View()
@@ -77,6 +79,9 @@ class Shop(Folder):
         # Addresses
         Addresses._make_resource(Addresses, folder, '%s/addresses' % name,
                                  title={'en': u'Addresses'})
+        # Shipping
+        Shippings._make_resource(Shippings, folder, '%s/shippings' % name,
+                                 title={'en': u'Shipping'})
 
 
 

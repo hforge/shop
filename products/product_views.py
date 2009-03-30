@@ -22,7 +22,7 @@ from itools.web import BaseView, STLView
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget, ImageSelectorWidget
-from ikaaro.forms import PathSelectorWidget, title_widget
+from ikaaro.forms import PathSelectorWidget, MultilineWidget, title_widget
 from ikaaro.views import CompositeForm
 from ikaaro.folder_views import Folder_PreviewContent
 from ikaaro.registry import get_resource_class
@@ -137,7 +137,7 @@ class Product_Edit(AutoForm):
         # General informations
         TextWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
-        TextWidget('description', title=MSG(u'Description')),
+        MultilineWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Subject')),
         # Categorie
         SelectWidget('categories', title=MSG(u'Categories')),

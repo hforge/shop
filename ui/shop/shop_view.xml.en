@@ -8,29 +8,22 @@
 
   <ul>
     <li>
-      <a href="./products/">
-        Manage products
-      </a>
+      <a href="./products/">Manage products</a>
     </li>
     <li>
-      <a href="./orders/">
-        Manage orders
-      </a>
+      <a href="./orders/">Manage orders</a>
     </li>
     <li>
-      <a href="./payments/">
-        Manage and configure payments
-      </a>
+      <a href="./payments/">Manage and configure payments</a>
     </li>
     <li>
-      <a href="./products-models/">
-        Manage products models
-      </a>
+      <a href="./products-models/">Manage products models</a>
     </li>
     <li>
-      <a href="./categories/">
-        Manage categories
-      </a>
+      <a href="./categories/">Manage categories</a>
+    </li>
+    <li>
+      <a href="./shippings/">Manage shippings way</a>
     </li>
   </ul>
 </stl:block>

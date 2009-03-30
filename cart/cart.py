@@ -117,3 +117,16 @@ class ProductCart(BaseCart):
                 products.remove(products[i])
                 break
         self.set_list_products(products)
+
+
+    def get_total_price(self, products):
+        price = 0.0
+        for product_cart in self.get_elements():
+            product = products.get_resource(product_cart['name'])
+            # Check product is buyable
+            if not product.is_buyable():
+                continue
+            # Calcul price
+            quantity = product_cart['quantity']
+            price = product.get_price() * int(quantity)
+        return price

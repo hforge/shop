@@ -18,13 +18,15 @@
     </tr>
     <tr>
       <td>
-        ${delivery_address/address_1}<br/>
-        <stl:block stl:if="delivery_address/address_2">
-          ${delivery_address/address_2}<br/>
-        </stl:block>
-        ${delivery_address/zipcode} ${delivery_address/town}<br/>
-        ${delivery_address/country}<br/>
-        <a href=";edit_address?type=delivery" class="address-edit">(Edit *)</a>
+        <p stl:if="delivery_address">
+          ${delivery_address/address_1}<br/>
+          <stl:block stl:if="delivery_address/address_2">
+            ${delivery_address/address_2}<br/>
+          </stl:block>
+          ${delivery_address/zipcode} ${delivery_address/town}<br/>
+          ${delivery_address/country}<br/>
+          <a href=";edit_address?type=delivery" class="address-edit">(Edit *)</a>
+        </p>
       </td>
       <td>
         <span stl:if="not bill_address">
@@ -42,8 +44,8 @@
       <th>Delivery way</th>
       <th></th>
       <th>Delivery time</th>
-      <th>Delivery price (VAT included)</th>
-      <th>Total price (VAT included)</th>
+      <th>Description</th>
+      <th>Delivery price</th>
     </tr>
     <tr stl:repeat="ship shipping">
       <td>
@@ -56,10 +58,13 @@
         ${ship/delivery_time}
       </td>
       <td>
-        ${ship/price} €
+        ${ship/description}
       </td>
       <td>
-        ${ship/total_price} €
+        <span stl:if="ship/price">
+        ${ship/price} €
+        </span>
+        <span stl:if="not ship/price">Free</span>
       </td>
     </tr>
   </table>

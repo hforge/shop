@@ -38,15 +38,16 @@
   <table id="cart">
     <tr>
       <th></th>
-      <th>Product</th>
+      <th width="400px">Product</th>
       <th>Unit Price</th>
       <th>Quantity</th>
       <th>Total Price</th>
     </tr>
     <tr stl:repeat="p products">
       <td valign="top">
-          <img src="${p/img/href}/;thumb?width=100&amp;height=100"
-               title="${p/img/title}"/>
+        <img src="${p/img/href}/;thumb?width=100&amp;height=100"
+             title="${p/img/title}" stl:if="p/img"/>
+        <img src="/ui/icons/48x48/text.png" stl:if="not p/img"/>
       </td>
       <td>
         <a href="${p/uri}">

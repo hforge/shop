@@ -58,19 +58,21 @@ class Shop_Delivery(STLForm):
     def get_namespace(self, resource, context):
         ns = {}
         # Addresses
-        user_addresses = resource.get_addresses_user(context.user.name)
-        # Delivery
-        ns['delivery_address'] = user_addresses[0]
+        ns['delivery_address'] = None
         ns['bill_address'] = None
-        # Shipping XXX Fake
-        total_price = 45 #XXX
-        shipping_price = 6
-        ns['shipping'] = [{'name': 'collisimo',
-                           'img': '/ui/shop/images/colissimo.png',
-                           'title': u'Collisimo',
-                           'delivery_time': u'48 heures',
-                           'price': shipping_price,
-                           'total_price': shipping_price + total_price}]
+        # Delivery
+        user_addresses = resource.get_addresses_user(context.user.name)
+        if user_addresses:
+            ns['delivery_address'] = user_addresses[0]
+        # Total price
+        products = resource.get_resource('products')
+        cart = ProductCart()
+        total_price = cart.get_total_price(products)
+        total_weight = 0
+        # Shipping
+        shippings = resource.get_resource('shippings')
+        ns['shipping'] = shippings.get_ns_shipping_way(total_price, total_weight)
+        print ns['shipping']
         return ns
 
 
@@ -103,22 +105,16 @@ class Shop_ShowRecapitulatif(STLView):
         # Get products
         products = resource.get_resource('products')
         # Get products informations
-        total = 0
+        total = 0.0
         for product in cart.get_elements():
             quantity = product['quantity']
             product = products.get_resource(product['name'])
             # Price
-            price = product.get_price()
+            price = float(product.get_price())
             price_total = price * int(quantity)
-            # Img XXX API to get cover
-            images = product.get_images_ns()
-            if images['images']:
-                img = images['images'][0]
-            else:
-                img = None
             # All
             product = ({'name': product.name,
-                        'img': img,
+                        'img': product.get_cover_namespace(context),
                         'title': product.get_title(),
                         'uri': resource.get_pathto(product),
                         'quantity': quantity,
