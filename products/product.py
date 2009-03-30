@@ -134,6 +134,9 @@ class Product(Folder):
         ns['cover'] = self.get_cover_namespace(context)
         # Images
         ns['images'] = self.get_images_namespace(context)
+        # Authentificated ?
+        ac = self.get_access_control()
+        ns['is_authenticated'] = ac.is_authenticated(context.user, self)
         return ns
 
 
