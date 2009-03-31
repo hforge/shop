@@ -36,8 +36,8 @@ from product_views import Product_NewInstance, Product_AddToCart
 from schema import product_schema
 
 
-def get_namespace_image(image):
-    namespace = {'href': image.abspath,
+def get_namespace_image(image, context):
+    namespace = {'href': context.get_link(image),
                  'title': image.get_property('title')}
     return namespace
 
@@ -165,7 +165,7 @@ class Product(Folder):
         cover = self.get_ordered_photos(context, quantity=1)
         if not cover:
             return None
-        return get_namespace_image(cover[0])
+        return get_namespace_image(cover[0], context)
 
 
     def get_images_namespace(self, context):
@@ -174,7 +174,7 @@ class Product(Folder):
             # Ignore cover
             if i==0:
                 continue
-            ns_image = get_namespace_image(image)
+            ns_image = get_namespace_image(image, context)
             ns_images.append(ns_image)
         return ns_images
 
