@@ -165,7 +165,9 @@ class ProductCart(object):
     def get_delivery_address(self):
         context = get_context()
         address = context.get_cookie('delivery_address')
-        return int(address) if address else None
+        if address is None:
+            return None
+        return int(address)
 
 
     def set_bill_address(self, id):
@@ -180,7 +182,9 @@ class ProductCart(object):
     def get_bill_address(self):
         context = get_context()
         address = context.get_cookie('bill_address')
-        return int(address) if address else None
+        if address is None:
+            return None
+        return int(address)
 
     ######################
     # Check validity

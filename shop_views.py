@@ -56,8 +56,14 @@ class Shop_Delivery(STLForm):
 
     def GET(self, resource, context):
         # If user has no addresses, redirect to edit_address view
-        if not resource.get_user_main_address(context.user.name):
-            return context.uri.resolve(';edit_address')
+        cart = ProductCart()
+        delivery_address = cart.get_delivery_address()
+        if not delivery_address:
+            delivery_address = resource.get_user_main_address(context.user.name)
+            if not delivery_address:
+                return context.uri.resolve(';edit_address')
+            else:
+                cart.set_delivery_address(delivery_address.id)
         # Normal
         return STLView.GET(self, resource, context)
 
@@ -67,11 +73,6 @@ class Shop_Delivery(STLForm):
         # Get cart
         cart = ProductCart()
         # Delivery address
-        ns['delivery_address'] = None
-        delivery_address = cart.get_delivery_address()
-        if not delivery_address:
-            delivery_address = resource.get_user_main_address(context.user.name)
-            cart.set_delivery_address(delivery_address.id)
         delivery_address = cart.get_delivery_address()
         ns['delivery_address']  = resource.get_user_address(delivery_address)
         # Bill
