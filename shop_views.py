@@ -211,7 +211,7 @@ class Shop_ChooseAddress(STLView):
     template = '/ui/shop/shop_chooseaddress.xml'
 
     schema = {'calendar_address': Integer(mandatory=True),
-              'type': String(mandatory=True)}
+              'type': String(mandatory=True, default='delivery')}
 
     def get_namespace(self, resource, context):
         ns = {}
@@ -246,7 +246,7 @@ class Shop_EditAddress(AutoForm):
       """)
 
     schema = {
-        'type': String,
+        'type': String(default='delivery'),
         'gender': Civilite(mandatory=True),
         'firstname': Unicode,
         'lastname': Unicode,
@@ -274,9 +274,11 @@ class Shop_EditAddress(AutoForm):
 
     def get_value(self, resource, context, name, datatype):
         if name=='type':
-            return context.get_form_value('type')
+            return context.get_form_value('type', datatype)
         cart = ProductCart()
         delivery_address = cart.get_delivery_address()
+        if not delivery_address:
+            return datatype.get_default()
         return resource.get_user_address(delivery_address)[name]
 
 
@@ -297,7 +299,7 @@ class Shop_EditAddress(AutoForm):
             record = addresses.add_record(form)
         # We save address in cart
         cart = ProductCart()
-        if form['type'] == 'delivery':
+        if form['type']=='delivery':
             cart.set_delivery_address(record.id)
         else:
             cart.set_bill_address(record.id)
