@@ -382,6 +382,12 @@ class Shop_Register(RegisterForm):
         return context.come_back(msg)
 
 
+    def get_value(self, resource, context, name, datatype):
+        if name=='email':
+            return context.query['email']
+        return RegisterForm.get_value(self, resource, context, name, datatype)
+
+
     def action(self, resource, context, form):
         root = context.root
         language = resource.get_content_language(context)
