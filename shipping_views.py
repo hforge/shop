@@ -56,7 +56,7 @@ class ShippingsView(Folder_BrowseContent):
         value = Folder_BrowseContent.get_item_value(self, resource,
                     context, item, column)
         if column=='logo':
-            logo = '<img src="%s"/>' % item.get_logo()
+            logo = '<img src="%s"/>' % item.get_logo(context)
             return XMLParser(logo)
         elif column=='enabled':
             value = item.get_property(column)
