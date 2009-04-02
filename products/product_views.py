@@ -69,6 +69,11 @@ class Product_AddToCart(BaseView):
     access = True
 
     def GET(self, resource, context):
+        # Check if we can add to cart
+        if not resource.is_buyable():
+            msg = MSG(u"This product isn't buyable")
+            return context.come_back(msg)
+        # Add to cart
         cart = ProductCart()
         cart.add_product(resource.name, 1)
         msg = MSG(u'Product added to cart !')

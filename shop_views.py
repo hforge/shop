@@ -133,6 +133,9 @@ class Shop_ShowRecapitulatif(STLView):
         for product in cart.get_elements():
             quantity = product['quantity']
             product = products.get_resource(product['name'])
+            # Check product is buyable
+            if not product.is_buyable():
+                continue
             # Price
             price = float(product.get_price())
             price_total = price * int(quantity)
