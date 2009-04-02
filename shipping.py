@@ -89,18 +89,18 @@ class Shipping(Folder):
         return 10.0
 
 
-    def get_logo(self):
+    def get_logo(self, context):
         if self.has_resource('logo.png'):
             logo = self.get_resource('logo.png')
-            uri = logo.abspath
+            uri = context.get_link(logo)
         else:
             uri = '/ui/icons/48x48/text.png'
         return '%s/;download' % uri
 
 
-    def get_namespace(self, price, weight):
+    def get_namespace(self, context, price, weight):
         ns = {'name': self.name,
-              'img': self.get_logo(),
+              'img': self.get_logo(context),
               'title': self.get_title(),
               'price': self.get_price(price, weight)}
         for key in ['description', 'delivery_time']:
@@ -141,10 +141,10 @@ class Shippings(Folder):
             Shipping._make_resource(Shipping, folder,
                 '%s/%s' % (name, ship['name']), **kw)
             # Image
-            kw = {'state': 'public'}
+            kw['state'] = 'public'
             body = vfs.open(get_abspath(ship['img'])).read()
-            Image._make_resource(Image, folder,
-                '%s/%s/logo.png' % (name, ship['name']), body=body, **kw)
+            img = Image._make_resource(Image, folder,
+                    '%s/%s/logo.png' % (name, ship['name']), body=body, **kw)
 
 
 
@@ -152,16 +152,16 @@ class Shippings(Folder):
         return [Shipping]
 
 
-    def get_ns_shipping_way(self, price, weight):
+    def get_ns_shipping_way(self, context, price, weight):
         l = []
         for elt in self.search_resources(cls=Shipping):
-            l.append(elt.get_namespace(price, weight))
+            l.append(elt.get_namespace(context, price, weight))
         return l
 
 
-    def get_shipping_namespace(self, shipping, price, weight):
+    def get_shipping_namespace(self, context, shipping, price, weight):
         shipping = self.get_resource(shipping)
-        return shipping.get_namespace(price, weight)
+        return shipping.get_namespace(context, price, weight)
 
 
 register_resource_class(Shippings)

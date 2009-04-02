@@ -85,7 +85,8 @@ class Shop_Delivery(STLForm):
         total_weight = 0
         # Shipping
         shippings = resource.get_resource('shippings')
-        ns['shipping'] = shippings.get_ns_shipping_way(total_price, total_weight)
+        ns['shipping'] = shippings.get_ns_shipping_way(context, total_price,
+                                                       total_weight)
         return ns
 
 
@@ -152,8 +153,8 @@ class Shop_ShowRecapitulatif(STLView):
         # Delivery
         shipping_mode = cart.get_shipping()
         shippings = resource.get_resource('shippings')
-        namespace['ship'] = shippings.get_shipping_namespace(shipping_mode,
-                                                             0.0, 0.0)
+        namespace['ship'] = shippings.get_shipping_namespace(context,
+                              shipping_mode, 0.0, 0.0)
         # Total price
         namespace['total'] = total
         return namespace
