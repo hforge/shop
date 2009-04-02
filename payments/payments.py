@@ -24,8 +24,10 @@ from ikaaro.registry import register_resource_class, get_resource_class
 from ikaaro.resource_ import DBResource
 
 # Import from package
-from enumerates import PaymentWayList
-from payments_views import Payments_View, Payments_Configure, Payments_End
+from payments_views import Payments_View, Payments_Configure
+from payments_views import Payments_History_View, Payments_End
+from payment_way import PaymentWay
+from paybox import Paybox
 
 
 class Payments(Folder):
@@ -38,7 +40,7 @@ class Payments(Folder):
     class_title = MSG(u'Payment Module')
 
     # Views
-    class_views = ['view', 'configure']
+    class_views = ['view', 'history', 'configure']
 
     # XXX We have to secure
     # Fixed handlers
@@ -47,27 +49,24 @@ class Payments(Folder):
 
     # List of views
     view = Payments_View()
+    history = Payments_History_View()
     configure = Payments_Configure()
     end = Payments_End()
+
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args, **kw):
+        Folder._make_resource(cls, folder, name, *args, **kw)
+        # Add paybox Payment
+        Paybox._make_resource(Paybox, folder, '%s/paybox' % name)
 
 
     @classmethod
     def get_metadata_schema(cls):
         schema = Folder.get_metadata_schema()
-        schema['payments_modes'] = PaymentWayList(multiple=True)
         schema['enabled'] = Boolean
         return schema
 
-
-    def activate_payments_modes(self, modes):
-        """
-        Activate payments mode
-        """
-        for mode in modes:
-            if self.has_resource(mode):
-                continue
-            cls = get_resource_class(mode)
-            cls.make_resource(cls, self, mode)
 
     ######################
     # Confirmation
@@ -117,41 +116,22 @@ class Payments(Folder):
             if key not in payment:
                 raise ValueError, u"Please fill %s." % key
         # We check mode is valid and actif
-        payments_modes = self.get_property('payments_modes')
-        if payment['mode'] not in payments_modes:
+        payment_module = self.get_resource(payment['mode'])
+        # XXX Check if enabled
+        if 1==0:
             raise ValueError, u'Invalid payment mode'
         # All is ok: We show the payment form
-        payment_module = self.get_resource(payment['mode'])
         return payment_module._show_payment_form(context, payment)
 
 
-    def get_payments_namespace(self, ref, context):
-        # TODO
-        accept = context.accept_language
-        #for result in payments.search(ref=self.name):
-        #    kw = {}
-        #    for i in payments.record_schema.keys():
-        #        kw[i] = result.get_value(i)
-        #    kw['status'] = ''#PayboxStatus.get_value(kw['status'])
-        #    kw['ts'] = format_datetime(result.get_value('ts'), accept=accept)
-        #    payments_ns.append(kw)
-        return {}
+    def get_payments_namespace(self, context):
+        ns = []
+        for mode in self.search_resources(cls=PaymentWay):
+            ns.append(mode.get_namespace(context))
+        return ns
 
 
 
-
-
-
-
-
-
-
-
-# XXX We have to put more things in PaymentWay
-class PaymentWay(DBResource):
-
-    class_id = 'payment_way'
 
 
 register_resource_class(Payments)
-register_resource_class(PaymentWay)

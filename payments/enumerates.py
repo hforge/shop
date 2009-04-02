@@ -34,11 +34,3 @@ class PaymentSuccessState(Enumerate):
       {'name': '1',  'value': MSG(u'Payment successfull')},
       {'name': '0', 'value': MSG(u'Payment error')},
       ]
-
-
-class PaymentWayList(Enumerate):
-
-    options = [
-      #{'name': 'paypal', 'value': u'Paypal'},
-      {'name': 'paybox', 'value': u'Paybox'},
-      ]

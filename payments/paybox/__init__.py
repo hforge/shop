@@ -24,5 +24,5 @@ from ikaaro.skins import register_skin
 from paybox import Paybox
 
 # Register skin
-path = get_abspath('ui/paybox/')
+path = get_abspath('ui/')
 register_skin('paybox', path)

@@ -18,6 +18,7 @@
 from itools.datatypes import Boolean, Unicode, String
 from itools.gettext import MSG
 from itools.web import STLView
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
@@ -25,7 +26,7 @@ from ikaaro.forms import AutoForm, BooleanRadio, SelectWidget
 from ikaaro.views import BrowseForm, CompositeForm
 
 # Import from shop
-from enumerates import PaymentWayList
+from payment_way import PaymentWay
 
 
 class Payments_Top_View(STLView):
@@ -35,17 +36,16 @@ class Payments_Top_View(STLView):
     access = 'is_admin'
 
     def get_namespace(self, resource, context):
-        ns = {}
-        # Payments modes
-        payments_modes = resource.get_property('payments_modes')
-        ns['payments_modes'] = None
-        if payments_modes:
-            ns['payments_modes'] = PaymentWayList.get_namespace(payments_modes)
-        # Other informations
-        for key in ['enabled']:
-            ns[key] = resource.get_property(key)
+        ns = {'enabled': resource.get_property('enabled')}
         return ns
 
+    #    # Payments modes
+    #    payments_modes = resource.get_property('payments_modes')
+    #    ns['payments_modes'] = None
+    #    if payments_modes:
+    #        ns['payments_modes'] = PaymentWayList.get_namespace(payments_modes)
+    #    # Other informations
+    #    for key in ['enabled']:
 
 
 class Payments_History_View(BrowseForm):
@@ -53,7 +53,7 @@ class Payments_History_View(BrowseForm):
     View that list history payments.
     """
 
-    title = MSG(u'View')
+    title = MSG(u'Payments history')
     access = 'is_admin'
 
     batch_msg1 = MSG(u"There is 1 payment.")
@@ -70,15 +70,11 @@ class Payments_History_View(BrowseForm):
 
     def get_items(self, resource, context):
         """ Here we concatanate payments off all payment's mode """
-        from payments import PaymentWay
         items = []
         for payment_way in resource.search_resources(cls=PaymentWay):
-            payment_mode = payment_way.name
-            payment_mode_title = PaymentWayList.get_value(payment_mode)
-            for record in payment_way.handler.get_records():
-                kw = payment_way.get_record_namespace(context, record)
-                kw['payment_mode'] = payment_mode_title
-                items.append(kw)
+            ns = payment_way.get_ns_payments()
+            if ns:
+                items.append(ns)
         return items
 
 
@@ -93,6 +89,52 @@ class Payments_History_View(BrowseForm):
         return item[column]
 
 
+class Payments_List_View(BrowseForm):
+
+    title = MSG(u'View')
+    access = 'is_admin'
+
+    batch_msg1 = MSG(u"There is 1 payment.")
+    batch_msg2 = MSG(u"There are ${n} payments.")
+
+
+    table_columns = [
+        ('logo1', None),
+        ('name', MSG(u'Name')),
+        ('title', MSG(u'Title')),
+        ('description', MSG(u'Description')),
+        ('enabled', MSG(u'Enabled ?')),
+        ('logo2', MSG(u'Payment public image')),
+        ]
+
+    def get_items(self, resource, context):
+        """ Here we concatanate payments off all payment's mode """
+        items = []
+        for payment_way in resource.search_resources(cls=PaymentWay):
+            name = payment_way.name
+            base_logo = '<img src="%s"/>'
+            logo1 = base_logo % payment_way.get_private_logo(context)
+            logo2 = base_logo % payment_way.get_public_logo(context)
+            kw = {'name': (name, name),
+                  'title': (payment_way.get_title(), name),
+                  'description': payment_way.get_property('description'),
+                  'logo1': XMLParser(logo1),
+                  'logo2': XMLParser(logo2),
+                  'enabled': True}
+            items.append(kw)
+        return items
+
+
+    def sort_and_batch(self, resource, context, items):
+        # Batch
+        start = context.query['batch_start']
+        size = context.query['batch_size']
+        return items[start:start+size]
+
+
+    def get_item_value(self, resource, context, item, column):
+        return item[column]
+
 
 class Payments_View(CompositeForm):
 
@@ -102,7 +144,7 @@ class Payments_View(CompositeForm):
 
     subviews = [
         Payments_Top_View(),
-        Payments_History_View(),
+        Payments_List_View(),
     ]
 
 
@@ -115,11 +157,9 @@ class Payments_Configure(AutoForm):
 
     widgets = [
         BooleanRadio('enabled', title=MSG(u'Payments in real mode')),
-        SelectWidget('payments_modes', title=MSG(u'Authorized payments mode')),
         ]
 
     schema = {
-        'payments_modes': PaymentWayList(multiple=True, mandatory=True),
         'enabled': Boolean(mandatory=True),
     }
 
@@ -130,10 +170,8 @@ class Payments_Configure(AutoForm):
 
     def action(self, resource, context, form):
         # Save configuration
-        for key in ['payments_modes', 'enabled']:
+        for key in ['enabled']:
             resource.set_property(key, form[key])
-        # We activate new payments mode
-        resource.activate_payments_modes(form['payments_modes'])
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
 

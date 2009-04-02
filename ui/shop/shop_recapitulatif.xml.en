@@ -88,26 +88,15 @@
 
   <form name="order" action=";buy" method="POST">
     <table cellpadding="5px" cellspacing="0">
-      <tr>
+      <tr stl:repeat="payment payments">
         <td>
-          <input type="radio" name="payment_mode" value="paybox"/>
+          <input type="radio" name="payment_mode" value="${payment/name}"/>
         </td>
         <td>
-          Payment by CB
+          ${payment/title}
         </td>
         <td>
-          <img src="/ui/shop/images/CB.gif"/><br/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <input type="radio" name="payment_mode" value="paypal"/>
-        </td>
-        <td>
-          Paypal
-        </td>
-        <td>
-          <img src="/ui/shop/images/paypal.gif"/><br/>
+          <img src="${payment/logo}"/><br/>
         </td>
       </tr>
     </table>

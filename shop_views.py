@@ -151,13 +151,16 @@ class Shop_ShowRecapitulatif(STLView):
                         'price_total': price_total})
             total = total + price_total
             namespace['products'].append(product)
+        # Total price
+        namespace['total'] = total
         # Delivery
         shipping_mode = cart.get_shipping()
         shippings = resource.get_resource('shippings')
         namespace['ship'] = shippings.get_shipping_namespace(context,
                               shipping_mode, 0.0, 0.0)
-        # Total price
-        namespace['total'] = total
+        # Payments mode
+        payments = resource.get_resource('payments')
+        namespace['payments'] = payments.get_payments_namespace(context)
         return namespace
 
 
@@ -192,7 +195,7 @@ class Shop_Buy(BaseView):
                             title={'en': u'Order %s' % order_ref},
                             products=products)
         # Step 3: We clear the cart
-        cart .clear()
+        #cart .clear()
         # Step 4: We show the payment form
         payment = {'id': order_ref,
                    'price': 250,

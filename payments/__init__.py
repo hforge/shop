@@ -21,7 +21,6 @@ from itools import get_abspath
 from ikaaro.skins import register_skin
 
 # Import from shop
-import paybox
 from payments import Payments
 
 # Register skin

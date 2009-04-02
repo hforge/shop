@@ -21,6 +21,7 @@ from itools.gettext import MSG
 from itools.i18n import format_datetime
 
 # Import from ikaaro
+from ikaaro.folder import Folder
 from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
@@ -30,11 +31,11 @@ from enumerates import PayboxStatus
 from paybox_views import Paybox_Configure, Paybox_Pay, Paybox_View
 from paybox_views import Paybox_ViewPayment, Paybox_End, Paybox_ConfirmPayment
 from shop.datatypes import StringFixSize
-from shop.payments.payments import PaymentWay
+from shop.payments.payment_way import PaymentWay
 from shop.payments.enumerates import PaymentSuccessState
 
 
-class PayboxTable(BaseTable):
+class PayboxBaseTable(BaseTable):
 
     record_schema = {
         'ref': String(Unique=True, index='keyword'),
@@ -48,21 +49,14 @@ class PayboxTable(BaseTable):
 
 
 
+class PayboxTable(Table):
 
-class Paybox(PaymentWay, Table):
-
-    class_id = 'paybox'
+    class_id = 'paybox-payments'
     class_title = MSG(u'Paybox payment Module')
-    class_handler = PayboxTable
-
-    # Views
-    class_views = ['view', 'configure']
+    class_handler = PayboxBaseTable
 
     view = Paybox_View()
     view_payment = Paybox_ViewPayment()
-    configure = Paybox_Configure()
-    confirm_payment = Paybox_ConfirmPayment()
-    end = Paybox_End()
 
 
     form = [
@@ -73,20 +67,6 @@ class Paybox(PaymentWay, Table):
         SelectWidget('status', title=MSG(u'Status')),
         TextWidget('amount', title=MSG(u'Amount')),
         ]
-
-
-    base_schema = {'PBX_SITE': StringFixSize(size=7),
-                   'PBX_RANG': StringFixSize(size=2),
-                   'PBX_IDENTIFIANT': String,
-                   'PBX_DIFF': StringFixSize(size=2)}
-
-
-    @classmethod
-    def get_metadata_schema(cls):
-        schema = Table.get_metadata_schema()
-        # Paybox account configuration
-        schema.update(cls.base_schema)
-        return schema
 
 
     def get_record_namespace(self, context, record):
@@ -112,8 +92,55 @@ class Paybox(PaymentWay, Table):
         return ns
 
 
+
+class Paybox(PaymentWay):
+
+    class_id = 'paybox'
+    class_title = MSG(u'Paybox payment Module')
+    class_description = MSG(u'Secured payment paybox')
+
+    # Views
+    class_views = ['view', 'configure']
+
+    # Views
+    configure = Paybox_Configure()
+    confirm_payment = Paybox_ConfirmPayment()
+    end = Paybox_End()
+
+    # Schema
+    base_schema = {'PBX_SITE': StringFixSize(size=7),
+                   'PBX_RANG': StringFixSize(size=2),
+                   'PBX_IDENTIFIANT': String,
+                   'PBX_DIFF': StringFixSize(size=2)}
+
+    @classmethod
+    def get_metadata_schema(cls):
+        schema = Table.get_metadata_schema()
+        # Paybox account configuration
+        schema.update(cls.base_schema)
+        return schema
+
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args, **kw):
+        PaymentWay._make_resource(cls, folder, name, *args, **kw)
+        # Add paybox table
+        PayboxTable._make_resource(PayboxTable, folder, '%s/payments' % name)
+
+
+    def get_ns_payments(self):
+        ns = {}
+        for record in self.get_resource('payments').handler.get_records():
+            kw = payment_way.get_record_namespace(context, record)
+            kw['payment_mode'] = self.get_title()
+            ns.append(kw)
+        return ns
+
+
     def _show_payment_form(self, context, payment):
         return Paybox_Pay().GET(self, context, payment)
 
 
+
 register_resource_class(Paybox)
+register_resource_class(PayboxTable)
