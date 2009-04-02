@@ -18,6 +18,7 @@
 import decimal
 import os
 import re
+import sys
 
 # Import from itools
 from itools import get_abspath
@@ -25,7 +26,7 @@ from itools.handlers import ConfigFile
 from itools.datatypes import Decimal, Unicode, String
 from itools.datatypes import Integer
 from itools.gettext import MSG
-from itools.uri import get_reference
+from itools.uri import get_reference, Path
 from itools.web import BaseForm, BaseView, STLView, FormError
 from itools.html import HTMLFile
 
@@ -130,8 +131,7 @@ class Paybox_Pay(STLForm):
 
     def GET(self, resource, context, conf):
         # We get the paybox CGI path on serveur
-        # XXX chmod + x paybox.cgi
-        cgi_path = get_abspath('paybox.cgi')
+        cgi_path = Path(sys.executable).resolve('paybox.cgi')
         # Get configuration
         configuration_uri = get_abspath('paybox.cfg')
         configuration = ConfigFile(configuration_uri)
