@@ -142,6 +142,8 @@ class Product(Folder):
         ns['cover'] = self.get_cover_namespace(context)
         # Images
         ns['images'] = self.get_images_namespace(context)
+        # Product is buyable
+        ns['is_buyable'] = self.is_buyable()
         # Authentificated ?
         ac = self.get_access_control()
         ns['is_authenticated'] = ac.is_authenticated(context.user, self)
@@ -203,7 +205,7 @@ class Product(Folder):
     #####################
     def is_buyable(self):
         price = self.get_price()
-        return price != 0.0
+        return float(price) != 0.0
 
 
     def get_price(self):
