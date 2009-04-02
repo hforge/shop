@@ -138,7 +138,7 @@ class Paybox_Pay(STLForm):
         # Configuration
         kw = {}
         kw['PBX_CMD'] = conf['id']
-        kw['PBX_TOTAL'] = int(conf['price'] * 100)
+        kw['PBX_TOTAL'] = int(conf['total_price'] * 100)
         # Basic configuration
         for key in configuration.values.keys():
             kw[key] = configuration.get_value(key)

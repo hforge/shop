@@ -105,7 +105,6 @@ class Shop_ShowRecapitulatif(STLView):
     title = MSG(u'Order summary')
     template = '/ui/shop/shop_recapitulatif.xml'
 
-
     def GET(self, resource, context):
         # Check if cart is valid
         cart = ProductCart()
@@ -173,6 +172,7 @@ class Shop_Buy(BaseView):
 
     access = 'is_authenticated'
 
+
     def GET(self, resource, context):
         return get_reference(';view_cart')
 
@@ -189,18 +189,24 @@ class Shop_Buy(BaseView):
         client_mail = 'sylvain@itaapy.com'
         # Step 1: Get products in the cart
         cart = ProductCart()
-        products = []
+        # Get Total price
+        products = resource.get_resource('products')
+        total_price = cart.get_total_price(products)
+        # Build informations
+        products = [] # XXX
+        payment = {'id': order_ref,
+                   'id_client': context.user.name,
+                   'total_price': total_price,
+                   'email': client_mail,
+                   'mode': context.get_form_value('payment_mode'),
+                   'products': products}
         # Step 2: We create an order
         Order.make_resource(Order, resource, 'orders/%s' % order_ref,
                             title={'en': u'Order %s' % order_ref},
-                            products=products)
+                            **payment)
         # Step 3: We clear the cart
         #cart .clear()
         # Step 4: We show the payment form
-        payment = {'id': order_ref,
-                   'price': 250,
-                   'email': client_mail,
-                   'mode': 'paybox'}
         payments = resource.get_resource('payments')
         return payments.show_payment_form(context, payment)
 

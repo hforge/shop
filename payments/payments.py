@@ -107,14 +107,14 @@ class Payments(Folder):
            and order price.
            For example:
            payment = {'id': 'A250',
-                      'price': 250,
+                      'total_price': 250,
                       'email': 'toto@example.fr',
                       'mode': 'paybox'}
         """
         # We check that payment dictionnary is correctly fill.
-        for key in ['id', 'price', 'email', 'mode']:
+        for key in ['id', 'total_price', 'email', 'mode']:
             if key not in payment:
-                raise ValueError, u"Please fill %s." % key
+                raise ValueError, u'Invalid order'
         # We check mode is valid and actif
         payment_module = self.get_resource(payment['mode'])
         # XXX Check if enabled

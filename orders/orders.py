@@ -142,13 +142,14 @@ class Order(WorkflowAware, Folder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        metadata = {'creation_datetime': datetime.now(),
-                    'total_price': '3', #XXX #kw['total_price'],
-                    'id_client': '3',
-                    'email_client': 'toto@free.fr',
-                    'title': {'fr': u'Order %s' % name}}
+        metadata = {}
+        metadata['id_client'] = kw['id_client']
+        metadata['email_client'] = kw['email']
+        metadata['total_price'] = kw['total_price']
+        metadata['creation_datetime'] = datetime.now()
+        metadata['title'] = {'en': u'Order %s' % name}
         Folder._make_resource(cls, folder, name, *args, **metadata)
-        # Add list of products to the order
+        # XXX Add list of products to the order
         handler = BaseOrdersProducts()
         for product in kw['products']:
             handler.add_record({})# XXX
@@ -193,7 +194,9 @@ class Order(WorkflowAware, Folder):
     def get_order_payments_namespace(self, context):
         shop = context.resource.parent.parent
         payments = shop.get_resource('payments')
-        return payments.get_payments_namespace(ref=self.name, context=context)
+        return []
+        # XXX To fix
+        #payments.get_payments_namespace(ref=self.name, context=context)
 
 
 
