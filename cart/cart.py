@@ -195,6 +195,6 @@ class ProductCart(object):
         To be valid a cart must contains:
           - shipping id, addresses id, products
         """
-        return (bool(self.get_shipping()) and
-                bool(self.get_elements()) and
-                bool(self.get_delivery_address()))
+        return (self.get_shipping() is not None and
+                len(self.get_elements()) > 0 and
+                self.get_delivery_address() is not None)
