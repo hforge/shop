@@ -33,8 +33,8 @@ from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
 class ProductEnumAttributeTable(OrderedTableFile):
 
     record_schema = {
-        'name': String(Unique=True, index='keyword'),
-        'title': Unicode,
+        'name': String(Unique=True, mandatory=True, index='keyword'),
+        'title': Unicode(mandatory=True),
         }
 
 
@@ -81,8 +81,8 @@ class TableEnumerate(Enumerate):
 class ProductTypeTable(OrderedTableFile):
 
     record_schema = {
-        'name': String(Unique=True, index='keyword'),
-        'title': Unicode,
+        'name': String(Unique=True, mandatory=True, index='keyword'),
+        'title': Unicode(mandatory=True),
         'mandatory': Boolean,
         'enumerate': AllAttributes(),
         }
