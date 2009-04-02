@@ -21,6 +21,7 @@ from itools import get_version
 from root import Root
 from shop import Shop
 import skin
+import user
 
 
 # Make the product version available to Python code
