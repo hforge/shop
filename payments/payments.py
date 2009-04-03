@@ -25,7 +25,7 @@ from ikaaro.resource_ import DBResource
 
 # Import from package
 from payments_views import Payments_View, Payments_Configure
-from payments_views import Payments_History_View, Payments_End
+from payments_views import Payments_History_View
 from payment_way import PaymentWay
 from paybox import Paybox
 
@@ -51,7 +51,6 @@ class Payments(Folder):
     view = Payments_View()
     history = Payments_History_View()
     configure = Payments_Configure()
-    end = Payments_End()
 
 
     @staticmethod

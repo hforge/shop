@@ -264,6 +264,6 @@ class Paybox_End(BaseView):
             msg = u'Online payment is unavalaible, please try later !'
             return context.come_back(MSG(msg), goto='/')
         state = PBXState.get_value(context.query['state']).gettext()
-        goto = get_reference('../;end')
+        goto = get_reference('../../;end')
         goto.query['state'] = state.encode('utf-8')
         return context.come_back(None, goto, keep=['ref'])

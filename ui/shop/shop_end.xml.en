@@ -4,12 +4,24 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h1 class="payment-process">The end of your order ...</h1>
+
+  ${progress}
+
+  <p>
+    It's already the end of your purchase ...
+  </p>
+
   <div id="payment_state">
+    Payment state:
     <b stl:if="state">${state}</b>
     <b stl:if="not state">Unknow state</b><br/><br/>
   </div>
-  <div>
-    <a href="../orders/${ref}">See order details here.</a>
-  </div>
+
+  <p>
+    <a href="./orders/${ref}">
+      Your can see order details here.
+    </a>
+  </p>
 
 </stl:block>

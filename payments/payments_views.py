@@ -168,19 +168,3 @@ class Payments_Configure(AutoForm):
             resource.set_property(key, form[key])
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
-
-
-
-class Payments_End(STLView):
-    """The customer is redirect on this page after payment"""
-
-    access = True
-
-    template = '/ui/payments/payments_end.xml'
-
-    query_schema = {'state': Unicode,
-                    'ref': String}
-
-
-    def get_namespace(self, resource, context):
-        return context.query

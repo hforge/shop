@@ -53,7 +53,7 @@ class Shop_Progress(STLView):
 
     def get_namespace(self, resource, context):
         ns = {'progress': {}}
-        for i in range(0, 6):
+        for i in range(0, 7):
             css = 'actif' if self.index==i else None
             ns['progress'][str(i)] = css
         return ns
@@ -529,3 +529,20 @@ class Shop_Login(CompositeForm):
 
     subviews = [Shop_LoginMixin(),
                 LoginView()]
+
+
+class Shop_End(STLView):
+    """Purchase end"""
+
+    access = "is_authenticated"
+
+    template = '/ui/shop/shop_end.xml'
+
+    query_schema = {'state': Unicode,
+                    'ref': String}
+
+
+    def get_namespace(self, resource, context):
+        ns = context.query
+        ns['progress'] = Shop_Progress(index=6).GET(resource, context)
+        return ns
