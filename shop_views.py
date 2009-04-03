@@ -195,10 +195,6 @@ class Shop_ShowRecapitulatif(STLView):
         return namespace
 
 
-    def action(self, form):
-        print 'creation commande'
-
-
 
 class Shop_Buy(BaseView):
 
@@ -210,6 +206,10 @@ class Shop_Buy(BaseView):
 
 
     def POST(self, resource, context):
+        # XXX We should use schema ?
+        if not context.get_form_value('payment_mode'):
+            msg = MSG(u'Please choose a payment mode')
+            return context.come_back(msg)
         # Check if cart is valid
         cart = ProductCart()
         if not cart.is_valid():
