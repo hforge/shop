@@ -83,7 +83,6 @@ class Shipping_Configure(AutoForm):
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
         BooleanCheckBox('enabled', title=MSG(u'Enabled ?')),
-        TextWidget('delivery_time', title=MSG(u'Delivery time')),
         TextWidget('base_price', title=MSG(u'Base price')),
         TextWidget('min_weight', title=MSG(u'Min weight (Kg)')),
         TextWidget('max_weight', title=MSG(u'Max weight (Kg)')),

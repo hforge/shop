@@ -79,7 +79,7 @@
 
     <table cellpadding="0" id="facture" cellspacing="0">
       <tr>
-        <th colspan="3">Shipping informations</th>
+        <th colspan="4">Shipping informations</th>
       </tr>
       <tr>
         <td>
@@ -90,6 +90,9 @@
         </td>
         <td>
           ${shipping/description}
+        </td>
+        <td>
+          Shipping option ${shipping_option}
         </td>
       </tr>
     </table>

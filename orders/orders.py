@@ -145,6 +145,7 @@ class Order(WorkflowAware, Folder):
         schema['email_client'] = Email
         schema['payment_mode'] = String
         schema['shipping'] = String
+        schema['shipping_option'] = String
         schema['bill_address'] = Integer
         schema['delivery_address'] = Integer
         return schema
@@ -153,7 +154,7 @@ class Order(WorkflowAware, Folder):
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         metadata = {}
-        # XXX
+        # XXX Improve that + do APi
         metadata['id_client'] = kw['id_client']
         metadata['email_client'] = kw['email']
         metadata['total_price'] = kw['total_price']
@@ -162,6 +163,7 @@ class Order(WorkflowAware, Folder):
         metadata['delivery_address'] = kw['delivery_address']
         metadata['bill_address'] = kw['bill_address']
         metadata['shipping'] = kw['shipping']
+        metadata['shipping_option'] = kw['shipping_option']
         metadata['title'] = {'en': u'Order %s' % name}
         Folder._make_resource(cls, folder, name, *args, **metadata)
         # We save list of products in order.

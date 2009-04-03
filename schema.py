@@ -22,6 +22,5 @@ delivery_schema = {'title': Unicode,
                    'description': Unicode,
                    'enabled': Boolean,
                    'base_price': Decimal,
-                   'delivery_time': Unicode,
                    'min_weight': Decimal(default=0.0),
                    'max_weight': Decimal}

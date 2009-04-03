@@ -12,38 +12,28 @@
   Please choose your delivery preferences.
   </p>
 
-  <form name="order" method="POST">
+  <table id="cart" stl:if="shipping">
+    <tr>
+      <th></th>
+      <th>Mode</th>
+      <th>Description</th>
+      <th>Selection</th>
+    </tr>
+    <tr stl:repeat="ship shipping">
+      <td>
+        <img src="${ship/img}"/>
+      </td>
+      <td>
+        ${ship/title}
+      </td>
+      <td>
+        ${ship/description}
+      </td>
+      <td>
+        ${ship/html_form}
+      </td>
+    </tr>
+  </table>
 
-    <table id="cart" stl:if="shipping">
-      <tr>
-        <th>Delivery way</th>
-        <th></th>
-        <th>Delivery time</th>
-        <th>Description</th>
-        <th>Delivery price</th>
-      </tr>
-      <tr stl:repeat="ship shipping">
-        <td>
-          <input type="radio" name="shipping" value="${ship/name}"/>${ship/title}
-        </td>
-        <td>
-          <img src="${ship/img}"/>
-        </td>
-        <td>
-          ${ship/delivery_time}
-        </td>
-        <td>
-          ${ship/description}
-        </td>
-        <td>
-          <span stl:if="ship/price">${ship/price} €</span>
-          <span stl:if="not ship/price">Free</span>
-        </td>
-      </tr>
-    </table>
-
-    <br/><br/>
-    <input type="submit" id="button-order" value="Continue" name="continue"/>
-  </form>
 
 </stl:block>

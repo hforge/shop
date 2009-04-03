@@ -19,9 +19,10 @@ from itools import get_version
 
 # Import from package
 from shop import Shop
+
 import skin
 import user
-
+import shipping_modes
 
 # Make the product version available to Python code
 __version__ = get_version()

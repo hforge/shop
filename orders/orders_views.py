@@ -100,6 +100,7 @@ class OrderView(STLView):
                                                           accept=accept),
                      'delivery_address': delivery_address,
                      'shipping': shipping,
+                     'shipping_option': resource.get_property('shipping_option'),
                      'bill_address': bill_address,
                      'frais_de_port': 0,
                      'total_price': total_price,

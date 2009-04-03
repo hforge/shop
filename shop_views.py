@@ -121,9 +121,15 @@ class Shop_Delivery(STLForm):
 
 
     def action(self, resource, context, form):
-        # We save shipping mode choose by user
+        # We get shipping
+        shippings = resource.get_resource('shippings')
+        shipping = shippings.get_resource(form['shipping'])
+        # We save option, if user choose it
+        option = shipping.get_shipping_option(context)
+        # We save shipping mode/option choosen by user
         cart = ProductCart()
-        cart.set_shipping(form['shipping'])
+        cart.set_shipping(form['shipping'], option)
+        # Goto recapitulatif
         return context.uri.resolve(';show_recapitulatif')
 
 
@@ -241,6 +247,7 @@ class Shop_Buy(BaseView):
                    'delivery_address': cart.get_delivery_address(),
                    'bill_address': cart.get_bill_address(),
                    'shipping': cart.get_shipping(),
+                   'shipping_option': cart.get_shipping_option(),
                    'products': products_ns}
         # Step 2: We create an order
         Order.make_resource(Order, resource, 'orders/%s' % order_ref,

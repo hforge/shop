@@ -144,14 +144,20 @@ class ProductCart(object):
     # Shipping
     ######################
 
-    def set_shipping(self, mode):
+    def set_shipping(self, mode, option):
         context = get_context()
         context.set_cookie('shipping', mode)
+        context.set_cookie('shipping_option', option)
 
 
     def get_shipping(self):
         context = get_context()
         return context.get_cookie('shipping')
+
+
+    def get_shipping_option(self):
+        context = get_context()
+        return context.get_cookie('shipping_option')
 
     ######################
     # Set addresses

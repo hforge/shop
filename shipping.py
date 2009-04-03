@@ -20,11 +20,13 @@ from itools.csv import Table as BaseTable
 from itools.datatypes import Decimal
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
+from itools.stl import stl
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.file import Image
 from ikaaro.folder import Folder
-from ikaaro.forms import TextWidget
+from ikaaro.forms import TextWidget, stl_namespaces
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
@@ -69,7 +71,16 @@ class Shipping(Folder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
+        #kw['title'] = cls.class_title.gettext()
+        #kw['description'] = cls.class_description.gettext()
         Folder._make_resource(cls, folder, name, *args, **kw)
+        # Image
+        kw = {}
+        kw['state'] = 'public'
+        body = vfs.open(get_abspath(cls.img)).read()
+        img = Image._make_resource(Image, folder,
+                                   '%s/logo.png' % name, body=body, **kw)
+
         # Prices
         ShippingPrices._make_resource(ShippingPrices, folder,
                                       '%s/prices' % name)
@@ -102,10 +113,30 @@ class Shipping(Folder):
         ns = {'name': self.name,
               'img': self.get_logo(context),
               'title': self.get_title(),
-              'price': self.get_price(price, weight)}
-        for key in ['description', 'delivery_time', 'enabled']:
+              'price': self.get_price(price, weight),
+              'html_form': self.get_html_form()}
+        for key in ['description', 'enabled']:
             ns[key] = self.get_property(key)
         return ns
+
+
+    html_form = list(XMLParser("""
+        <form method="POST">
+          <input type="hidden" name="shipping" value="${name}"/>
+          Free
+          <input type="submit" id="button-order" value="Ok"/>
+        </form>
+        """,
+        stl_namespaces))
+
+
+    def get_html_form(self):
+        ns = {'name': self.name}
+        return stl(events=self.html_form, namespace=ns)
+
+
+    def get_shipping_option(self, context):
+        return None
 
 
 
@@ -115,6 +146,7 @@ class Shippings(Folder):
     class_title = MSG(u'Shipping')
     class_views = ['view', 'new_resource?type=shipping']
 
+
     # Views
     view = ShippingsView()
 
@@ -122,29 +154,11 @@ class Shippings(Folder):
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         Folder._make_resource(cls, folder, name, *args, **kw)
+        # XXX
+        from shipping_modes import Collisimo, ShippShop
         # Init with some shippings mode
-        ships = [{'name': 'collisimo',
-                  'img': 'ui/shop/images/colissimo.png',
-                  'title': u'Collisimo Suivi',
-                  'description': u"""La livraison de votre commande est assurée en Colissimo.
-                                     A compter de la prise en charge par La Poste,
-                                     vous êtes livré à domicile en 48 h(1)
-                                      sous réserve des heures limites de dépôt""",
-                  'delivery_time': u'48 heures'},
-                  {'name': 'no_shipping',
-                   'img': 'ui/shop/images/noship.png',
-                   'title': u'Retrait au magasin',
-                   'delivery_time': u'-'}]
-        for ship in ships:
-            kw = {'title': {'en': ship['title']},
-                  'delivery_time': ship['delivery_time']}
-            Shipping._make_resource(Shipping, folder,
-                '%s/%s' % (name, ship['name']), **kw)
-            # Image
-            kw['state'] = 'public'
-            body = vfs.open(get_abspath(ship['img'])).read()
-            img = Image._make_resource(Image, folder,
-                    '%s/%s/logo.png' % (name, ship['name']), body=body, **kw)
+        for c in [Collisimo, ShippShop]:
+            c._make_resource(c, folder, '%s/%s' % (name, c.class_id))
 
 
 
