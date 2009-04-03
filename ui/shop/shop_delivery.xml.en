@@ -4,8 +4,9 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-
   <h2>Bill and delivery addresses</h2>
+
+  ${progress}
 
   <table id="cart" style="width: 400px;" cellpadding="5px" cellspacing="0">
     <tr>

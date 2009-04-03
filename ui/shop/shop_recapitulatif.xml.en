@@ -6,6 +6,8 @@
 
   <h1>Summary and Payment</h1>
 
+  ${progress}
+
   <table id="cart" style="width: 400px;" cellpadding="5px" cellspacing="0">
     <tr>
       <th>

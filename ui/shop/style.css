@@ -171,3 +171,30 @@ table.cart td{
 #payment_state{
   color:red;
 }
+
+/* Barre d'avancement */
+
+#number-table td{
+  padding-right: 30px;
+  padding-bottom: 30px;
+}
+.number{
+  background: url('/ui/shop/images/payment_number.png') no-repeat;
+  height: 24px;
+  color: white;
+  padding-left: 8px;
+  padding-top: 2px;
+  font-family: arial, helvetica, sans-serif ;
+  font-size: 18px;
+}
+.number .title{
+  color: gray;
+  padding-left: 20px;
+  font-size: 16px;
+}
+.number.actif{
+  background: url('/ui/shop/images/payment_number_actif.png') no-repeat;
+}
+.number.actif .title{
+  color: #ff7500;
+}

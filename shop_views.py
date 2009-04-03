@@ -46,6 +46,19 @@ class Shop_View(STLView):
     template = '/ui/shop/shop_view.xml'
 
 
+class Shop_Progress(STLView):
+
+    access = True
+    template = '/ui/shop/shop_progress.xml'
+
+    def get_namespace(self, resource, context):
+        ns = {'progress': {}}
+        for i in range(0, 6):
+            css = 'actif' if self.index==i else None
+            ns['progress'][str(i)] = css
+        return ns
+
+
 class Shop_Delivery(STLForm):
 
     access = 'is_authenticated'
@@ -70,6 +83,8 @@ class Shop_Delivery(STLForm):
 
     def get_namespace(self, resource, context):
         ns = {}
+        # Progress bar
+        ns['progress'] = Shop_Progress(index=4).GET(resource, context)
         # Get cart
         cart = ProductCart()
         # Delivery address
@@ -117,6 +132,8 @@ class Shop_ShowRecapitulatif(STLView):
 
     def get_namespace(self, resource, context):
         namespace = {'products': []}
+        # Progress bar
+        namespace['progress'] = Shop_Progress(index=5).GET(resource, context)
         # Get cart
         cart = ProductCart()
         # Delivery address
@@ -242,6 +259,8 @@ class Shop_ChooseAddress(STLView):
         widget = SelectWidget('calendar_address', has_empty_option=False)
         ns['widget'] = widget.to_html(datatype, None)
         ns['type'] = context.get_form_value('type')
+        # Progress bar
+        ns['progress'] = Shop_Progress().GET(resource, context)
         return ns
 
 

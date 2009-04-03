@@ -4,6 +4,10 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h1>Your order</h1>
+
+  ${progress}
+
   <stl:block stl:if="not products">
     <div id="empty-cart">
       Your cart is empty !
@@ -11,7 +15,6 @@
   </stl:block>
 
   <stl:block stl:if="products">
-  <h1>Your cart</h1>
 
   <table id="cart">
     <tr>

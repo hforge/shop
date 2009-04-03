@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <table id="number-table">
+    <tr>
+      <td>
+        <div class="number ${progress/1}">1<span class="title">Cart</span></div>
+      </td>
+      <td>
+        <div class="number ${progress/2}">2<span class="title">Identification</span></div>
+      </td>
+      <td>
+        <div class="number ${progress/3}">3<span class="title">Addresses</span></div>
+      </td>
+      <td>
+        <div class="number ${progress/4}">4<span class="title">Shipping</span></div>
+      </td>
+      <td>
+        <div class="number ${progress/5}">5<span class="title">Payment</span></div>
+      </td>
+    </tr>
+  </table>
+
+</stl:block>

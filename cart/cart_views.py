@@ -20,6 +20,7 @@ from itools.gettext import MSG
 from itools.web import STLView
 
 # Import from shop
+from shop.shop_views import Shop_Progress
 from cart import ProductCart
 
 
@@ -79,4 +80,6 @@ class Cart_View(STLView):
             total = total + price_total
             namespace['products'].append(ns)
         namespace['total'] = total
+        # Progress bar
+        namespace['progress'] = Shop_Progress(index=1).GET(resource, context)
         return namespace
