@@ -5,9 +5,11 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <div id="payment_state">
-    Payment state
     <b stl:if="state">${state}</b>
     <b stl:if="not state">Unknow state</b><br/><br/>
+  </div>
+  <div>
+    <a href="../orders/${ref}">See order details here.</a>
   </div>
 
 </stl:block>

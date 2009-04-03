@@ -2,98 +2,144 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1 class="order">Compte client</h1>
+  <h1 class="order">General informations</h1>
 
     <table cellpadding="0" id="facture" cellspacing="0">
       <tr>
-        <th>Identifiant</th>
-        <th>E-Mail</th>
+        <th>Customer id</th>
+        <td>${id_client}</td>
       </tr>
       <tr>
-        <td>${id_client}</td>
+        <th>E-Mail</th>
         <td>${email_client}</td>
       </tr>
-    </table>
-
-  <h1 class="order">Informations générales</h1>
-
-    <table cellpadding="0" id="facture" cellspacing="0">
       <tr>
         <th>Date de la commande</th>
-        <th>Status de la commande</th>
-        <th>Facture</th>
+        <td>${creation_datetime}</td>
       </tr>
       <tr>
-        <td>${creation_datetime}</td>
+        <th>Delivery address</th>
         <td>
-          <a href=";edit_state" stl:if="is_allowed_to_edit">${state}</a>  <span stl:if="not is_allowed_to_edit">${state}</span>
+          ${delivery_address/firstname} ${delivery_address/lastname}<br/>
+          ${delivery_address/address_1}<br/>
+          <stl:block stl:if="delivery_address/address_2">
+            ${delivery_address/address_2}<br/>
+          </stl:block>
+          ${delivery_address/zipcode} ${delivery_address/town}<br/>
+          ${delivery_address/country}<br/>
         </td>
+      </tr>
+      <tr>
+        <th>Bill address</th>
+        <td>
+          <span stl:if="bill_address">${bill_address}</span>
+          <span stl:if="not bill_address">
+            Same that delivery address
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th>Bill</th>
         <td>
           <a onclick="return popup('./;facture', 880, 800);" href="#">
-            Cliquez ici pour voir votre facture.
+            <img src="/ui/icons/16x16/pdf.png"/> Download bill
           </a>
         </td>
       </tr>
     </table>
 
-  <h1 class="order">Récapitulatif de la commande</h1>
+  <h1 class="order">Order state</h1>
+
+    <p stl:if="not payments">Payment: No payment done.</p>
+  <!--
+  <a href=";edit_state" stl:if="is_allowed_to_edit">${state}</a>  <span stl:if="not is_allowed_to_edit">${state}</span>
+  -->
+  <h1 class="order">Products</h1>
 
   <table cellpadding="0" id="facture" cellspacing="0">
     <tr>
-      <th>Référence</th>
-      <th>Produit</th>
-      <th>Quantité</th>
-      <th>Prix total</th>
+      <th>Name</th>
+      <th>Title</th>
+      <th>Quantity</th>
+      <th>Total price</th>
     </tr>
     <tr stl:repeat="product products">
       <td>
-        <a href="${product/href}" stl:if="product/href">${product/ref}</a>  <span stl:if="not product/href">${product/ref}</span>
+        ${product/name}
       </td>
       <td>${product/title}</td>
       <td>${product/quantity}</td>
-      <td>${product/unit_price} €</td>
+      <td>${product/price} €</td>
     </tr>
   </table>
 
-  <h1 class="order">Informations de livraison/Facturation</h1>
 
-  ${addresses}
+  <!-- Shipping informations -->
+  <h1 class="order">Shipping informations</h1>
 
-  <h1 class="order">Communications</h1>
-
-  <h1 class="order">Payments history</h1>
-
-  <p stl:if="not payments">
-    No payment done.
-  </p>
-
-  <p stl:if="payments">
     <table cellpadding="0" id="facture" cellspacing="0">
       <tr>
-        <th>Date et Heure</th>
-        <th>Paiement validé/refusé ?</th>
-        <th>Montant</th>
-        <th stl:if="is_allowed_to_edit">Numéro de transaction paiement</th>
-        <th stl:if="is_allowed_to_edit">Numéro d'autorisation</th>
-        <th>Status du paiement (Fournie par la banque)</th>
+        <th colspan="3">Shipping informations</th>
       </tr>
-      <tr stl:repeat="payment payments">
-        <td>${payment/ts}</td>
+      <tr>
         <td>
-          <stl:block stl:if="payment/payment_ok">
-            Validé
-          </stl:block>
-          <stl:block stl:if="not payment/payment_ok">
-            Refusé
-          </stl:block>
+          <img src="${shipping/img}" title="${shipping/title}"/>
         </td>
-        <td>${payment/amount} €</td>
-        <td stl:if="is_allowed_to_edit">${payment/transaction}</td>
-        <td stl:if="is_allowed_to_edit">${payment/autorisation}</td>
-        <td>${payment/status}</td>
+        <td>
+          ${shipping/title}
+        </td>
+        <td>
+          ${shipping/description}
+        </td>
       </tr>
     </table>
-  </p>
-  <br></br><br></br><br></br>
+
+  <h1 class="order">Payment informations</h1>
+
+    <!-- Payment Mode -->
+
+    <table cellpadding="0" id="facture" cellspacing="0">
+      <tr>
+        <th colspan="2">Payment mode</th>
+      </tr>
+      <tr>
+        <td>
+          <img src="${payment_mode/logo}" title="${payment_mode/title}"/>
+        </td>
+        <td>
+          ${payment_mode/title}
+        </td>
+      </tr>
+    </table>
+
+    <!-- Payment history -->
+
+    <p stl:if="payments">
+      <table cellpadding="0" id="facture" cellspacing="0">
+        <tr>
+          <th>Date et Heure</th>
+          <th>Paiement validé/refusé ?</th>
+          <th>Montant</th>
+          <th stl:if="is_allowed_to_edit">Numéro de transaction paiement</th>
+          <th stl:if="is_allowed_to_edit">Numéro d'autorisation</th>
+          <th>Status du paiement (Fournie par la banque)</th>
+        </tr>
+        <tr stl:repeat="payment payments">
+          <td>${payment/ts}</td>
+          <td>
+            <stl:block stl:if="payment/payment_ok">
+              Validé
+            </stl:block>
+            <stl:block stl:if="not payment/payment_ok">
+              Refusé
+            </stl:block>
+          </td>
+          <td>${payment/amount} €</td>
+          <td stl:if="is_allowed_to_edit">${payment/transaction}</td>
+          <td stl:if="is_allowed_to_edit">${payment/autorisation}</td>
+          <td>${payment/status}</td>
+        </tr>
+      </table>
+    </p>
 
 </stl:block>

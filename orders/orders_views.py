@@ -59,6 +59,7 @@ class OrderView(STLView):
     def get_namespace(self, resource, context, query=None):
         root = context.root
         accept = context.accept_language
+        shop = resource.parent.parent
         # CSS
         context.styles.append('/ui/firstluxe/orders/style.css')
         # Date cmd
@@ -67,19 +68,39 @@ class OrderView(STLView):
         ns_payments = resource.get_order_payments_namespace(context)
         # Produits commandes
         ns_products = resource.get_order_products_namespace(context)
+        # Payment mode
+        payment_mode = resource.get_property('payment_mode')
+        payments = shop.get_resource('payments')
+        ns_payment_mode = payments.get_payment_namespace(payment_mode, context)
         # State
         state = resource.get_state()
         # Acl
         ac = resource.get_access_control()
         is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
+        # Shipping
+        shipping = resource.get_property('shipping')
+        shippings = shop.get_resource('shippings')
+        shipping = shippings.get_shipping_namespace(context,
+                                      shipping, 0.0, 0.0)
+        # Delivery address
+        delivery_address = resource.get_property('delivery_address')
+        delivery_address = shop.get_user_address(delivery_address)
+        # Bill address
+        bill_address = resource.get_property('bill_address')
+        if bill_address:
+            bill_address = shop.get_user_address(bill_address)
+        # XXX
         total_price = resource.get_property('total_price')
         # Return namespace
         namespace = {'payments': ns_payments,
                      'products': ns_products,
+                     'payment_mode': ns_payment_mode,
                      'state': state['title'],
                      'creation_datetime': format_datetime(creation_datetime,
                                                           accept=accept),
-                     'addresses': None,
+                     'delivery_address': delivery_address,
+                     'shipping': shipping,
+                     'bill_address': bill_address,
                      'frais_de_port': 0,
                      'total_price': total_price,
                      'is_allowed_to_edit': is_allowed_to_edit}

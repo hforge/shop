@@ -27,16 +27,13 @@ table.cart td{
 
 /* Facture */
 
-#facture{
-  margin: 20px;
-}
 #facture th {
   background-color: #666666;
   color: #FFF;
-  padding: 10px;
+  padding: 5px;
 }
 #facture td {
-  padding: 20px;
+  padding: 5px;
   border: 1px solid black;
 }
 #facture a {
@@ -169,4 +166,8 @@ table.cart td{
 
 .address-edit{
   color: #FF8A00;
+}
+
+#payment_state{
+  color:red;
 }

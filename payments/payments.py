@@ -131,6 +131,9 @@ class Payments(Folder):
         return ns
 
 
+    def get_payment_namespace(self, payment_mode, context):
+        payment_mode = self.get_resource(payment_mode)
+        return payment_mode.get_namespace(context)
 
 
 

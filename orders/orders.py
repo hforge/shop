@@ -83,10 +83,9 @@ Référence commande: $order_name
 class BaseOrdersProducts(BaseTable):
 
     record_schema = {
-      'ref': String(mandatory=True),
-      'marque': Unicode,
+      'name': String(mandatory=True),
       'title': Unicode,
-      'unit_price': Decimal(mandatory=True),
+      'price': Decimal(mandatory=True),
       'quantity': Integer,
       }
 
@@ -103,15 +102,21 @@ class OrdersProducts(Table):
     view = OrdersProductsView()
 
     form = [
-        TextWidget('ref', title=MSG(u'Ref')),
-        TextWidget('marque', title=MSG(u'Marque')),
+        TextWidget('name', title=MSG(u'Product name')),
         TextWidget('title', title=MSG(u'Title')),
-        TextWidget('unit_price', title=MSG(u'Price')),
+        TextWidget('price', title=MSG(u'Price')),
         TextWidget('quantity', title=MSG(u'Quantity'))]
 
 
     def get_namespace(self, context):
-        return {}
+        ns = []
+        handler = self.handler
+        for record in handler.get_records():
+            kw = {}
+            for key in BaseOrdersProducts.record_schema.keys():
+                kw[key] = handler.get_record_value(record, key)
+            ns.append(kw)
+        return ns
 
 
 class Order(WorkflowAware, Folder):
@@ -137,22 +142,31 @@ class Order(WorkflowAware, Folder):
         schema['creation_datetime'] = ISODateTime
         schema['id_client'] = String
         schema['email_client'] = Email
+        schema['payment_mode'] = String
+        schema['shipping'] = String
+        schema['bill_address'] = Integer
+        schema['delivery_address'] = Integer
         return schema
 
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         metadata = {}
+        # XXX
         metadata['id_client'] = kw['id_client']
         metadata['email_client'] = kw['email']
         metadata['total_price'] = kw['total_price']
+        metadata['payment_mode'] = kw['payment_mode']
         metadata['creation_datetime'] = datetime.now()
+        metadata['delivery_address'] = kw['delivery_address']
+        metadata['bill_address'] = kw['bill_address']
+        metadata['shipping'] = kw['shipping']
         metadata['title'] = {'en': u'Order %s' % name}
         Folder._make_resource(cls, folder, name, *args, **metadata)
-        # XXX Add list of products to the order
+        # We save list of products in order.
         handler = BaseOrdersProducts()
         for product in kw['products']:
-            handler.add_record({})# XXX
+            handler.add_record(product)
         metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
         folder.set_handler('%s/products.metadata' % name, metadata)
         folder.set_handler('%s/products' % name, handler)

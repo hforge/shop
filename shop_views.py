@@ -193,13 +193,23 @@ class Shop_Buy(BaseView):
         products = resource.get_resource('products')
         total_price = cart.get_total_price(products)
         # Build informations
-        products = [] # XXX
+        products_ns = []
+        for cart_element in cart.get_elements():
+            product = products.get_resource(cart_element['name'])
+            products_ns.append({'name': product.name,
+                                'title': product.get_title(),
+                                'quantity': cart_element['quantity'],
+                                'price': product.get_price()})
         payment = {'id': order_ref,
                    'id_client': context.user.name,
                    'total_price': total_price,
                    'email': client_mail,
                    'mode': context.get_form_value('payment_mode'),
-                   'products': products}
+                   'payment_mode': context.get_form_value('payment_mode'),# XXX
+                   'delivery_address': cart.get_delivery_address(),
+                   'bill_address': cart.get_bill_address(),
+                   'shipping': cart.get_shipping(),
+                   'products': products_ns}
         # Step 2: We create an order
         Order.make_resource(Order, resource, 'orders/%s' % order_ref,
                             title={'en': u'Order %s' % order_ref},
