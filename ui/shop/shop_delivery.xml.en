@@ -51,7 +51,7 @@
 
   <form name="order" method="POST">
 
-    <table id="cart">
+    <table id="cart" stl:if="shipping">
       <tr>
         <th>Delivery way</th>
         <th></th>

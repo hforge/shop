@@ -159,7 +159,8 @@ class Shop_ShowRecapitulatif(STLView):
                               shipping_mode, 0.0, 0.0)
         # Payments mode
         payments = resource.get_resource('payments')
-        namespace['payments'] = payments.get_payments_namespace(context)
+        namespace['payments'] = payments.get_payments_namespace(context,
+                                                        only_actif=True)
         return namespace
 
 

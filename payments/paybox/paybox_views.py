@@ -24,7 +24,7 @@ import sys
 from itools import get_abspath
 from itools.handlers import ConfigFile
 from itools.datatypes import Decimal, Unicode, String
-from itools.datatypes import Integer
+from itools.datatypes import Boolean, Integer
 from itools.gettext import MSG
 from itools.uri import get_reference, Path
 from itools.web import BaseForm, BaseView, STLView, FormError
@@ -33,7 +33,7 @@ from itools.html import HTMLFile
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.table_views import Table_View
-from ikaaro.forms import STLForm, TextWidget
+from ikaaro.forms import STLForm, TextWidget, BooleanCheckBox
 from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
@@ -100,9 +100,11 @@ class Paybox_Configure(DBResource_Edit):
     schema = {'PBX_SITE': StringFixSize(size=7),
               'PBX_RANG': StringFixSize(size=2),
               'PBX_IDENTIFIANT': String,
-              'PBX_DIFF': StringFixSize(size=2)}
+              'PBX_DIFF': StringFixSize(size=2),
+              'enabled': Boolean}
 
     widgets = [
+        BooleanCheckBox('enabled', title=MSG(u'Actif ?')),
         TextWidget('PBX_SITE', title=MSG(u'Paybox Site')),
         TextWidget('PBX_RANG', title=MSG(u'Paybox Rang')),
         TextWidget('PBX_IDENTIFIANT', title=MSG(u'Paybox Identifiant')),
@@ -111,10 +113,11 @@ class Paybox_Configure(DBResource_Edit):
 
     submit_value = MSG(u'Edit configuration')
 
+
     def action(self, resource, context, form):
         for key in self.schema.keys():
             resource.set_property(key, form[key])
-        return context.come_back(messages.MSG_CHANGES_SAVED, goto='../')
+        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
 
 
 

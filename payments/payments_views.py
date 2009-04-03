@@ -39,13 +39,6 @@ class Payments_Top_View(STLView):
         ns = {'enabled': resource.get_property('enabled')}
         return ns
 
-    #    # Payments modes
-    #    payments_modes = resource.get_property('payments_modes')
-    #    ns['payments_modes'] = None
-    #    if payments_modes:
-    #        ns['payments_modes'] = PaymentWayList.get_namespace(payments_modes)
-    #    # Other informations
-    #    for key in ['enabled']:
 
 
 class Payments_History_View(BrowseForm):
@@ -115,12 +108,13 @@ class Payments_List_View(BrowseForm):
             base_logo = '<img src="%s"/>'
             logo1 = base_logo % payment_way.get_private_logo(context)
             logo2 = base_logo % payment_way.get_public_logo(context)
+            enabled = payment_way.get_property('enabled')
             kw = {'name': (name, name),
                   'title': (payment_way.get_title(), name),
                   'description': payment_way.get_property('description'),
                   'logo1': XMLParser(logo1),
                   'logo2': XMLParser(logo2),
-                  'enabled': True}
+                  'enabled': enabled}
             items.append(kw)
         return items
 

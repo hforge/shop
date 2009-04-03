@@ -124,11 +124,15 @@ class Payments(Folder):
         return payment_module._show_payment_form(context, payment)
 
 
-    def get_payments_namespace(self, context):
-        ns = []
+    def get_payments_namespace(self, context, only_actif=None):
+        l = []
         for mode in self.search_resources(cls=PaymentWay):
-            ns.append(mode.get_namespace(context))
-        return ns
+            ns = mode.get_namespace(context)
+            print bool(ns['enabled'])
+            if only_actif is True and bool(ns['enabled']) is False:
+                continue
+            l.append(ns)
+        return l
 
 
     def get_payment_namespace(self, payment_mode, context):

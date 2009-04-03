@@ -115,7 +115,7 @@ class Paybox(PaymentWay):
 
     @classmethod
     def get_metadata_schema(cls):
-        schema = Table.get_metadata_schema()
+        schema = PaymentWay.get_metadata_schema()
         # Paybox account configuration
         schema.update(cls.base_schema)
         return schema

@@ -16,6 +16,7 @@
 
 # Import from itools
 from itools import vfs
+from itools.datatypes import Boolean
 from itools.utils import get_abspath
 
 # Import from ikaaro
@@ -27,6 +28,12 @@ from ikaaro.registry import register_resource_class
 class PaymentWay(Folder):
 
     class_id = 'payment_way'
+
+    @classmethod
+    def get_metadata_schema(cls):
+        schema = Folder.get_metadata_schema()
+        schema['enabled'] = Boolean(default=True)
+        return schema
 
 
     @staticmethod
@@ -53,6 +60,7 @@ class PaymentWay(Folder):
         return '%s/;download' % uri
 
 
+    # XXX improve
     def get_public_logo(self, context):
         if self.has_resource('logo2.png'):
             logo = self.get_resource('logo2.png')
@@ -65,7 +73,8 @@ class PaymentWay(Folder):
     def get_namespace(self, context):
         ns = {'name': self.name,
               'title': self.get_title(),
-              'logo': self.get_public_logo(context)}
+              'logo': self.get_public_logo(context),
+              'enabled': self.get_property('enabled')}
         return ns
 
 

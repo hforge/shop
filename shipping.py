@@ -103,7 +103,7 @@ class Shipping(Folder):
               'img': self.get_logo(context),
               'title': self.get_title(),
               'price': self.get_price(price, weight)}
-        for key in ['description', 'delivery_time']:
+        for key in ['description', 'delivery_time', 'enabled']:
             ns[key] = self.get_property(key)
         return ns
 
@@ -155,7 +155,10 @@ class Shippings(Folder):
     def get_ns_shipping_way(self, context, price, weight):
         l = []
         for elt in self.search_resources(cls=Shipping):
-            l.append(elt.get_namespace(context, price, weight))
+            ns = elt.get_namespace(context, price, weight)
+            if bool(ns['enabled']) is False:
+                continue
+            l.append(ns)
         return l
 
 

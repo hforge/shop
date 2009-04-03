@@ -20,7 +20,7 @@ from itools.datatypes import Boolean, Decimal, Unicode
 
 delivery_schema = {'title': Unicode,
                    'description': Unicode,
-                   'enabled': Boolean(default=True),
+                   'enabled': Boolean,
                    'base_price': Decimal,
                    'delivery_time': Unicode,
                    'min_weight': Decimal(default=0.0),
