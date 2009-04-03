@@ -23,6 +23,7 @@ from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
 from itools.datatypes import Email
 from itools.gettext import MSG
 from itools.web import get_context
+from itools.xapian import PhraseQuery, KeywordField
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -174,6 +175,16 @@ class Order(WorkflowAware, Folder):
         # Send mail of confirmation / notification
         cls.send_email_confirmation(folder, name, kw)
 
+
+    def get_catalog_fields(self):
+        return (Folder.get_catalog_fields(self)
+                + [KeywordField('id_client')])
+
+
+    def get_catalog_values(self):
+        values = Folder.get_catalog_values(self)
+        values['id_client'] = self.get_property('id_client')
+        return values
 
     ########################################
     # E-Mail confirmation / notification
