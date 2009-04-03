@@ -127,7 +127,6 @@ class Payments(Folder):
         l = []
         for mode in self.search_resources(cls=PaymentWay):
             ns = mode.get_namespace(context)
-            print bool(ns['enabled'])
             if only_actif is True and bool(ns['enabled']) is False:
                 continue
             l.append(ns)
