@@ -373,7 +373,6 @@ class Shop_EditAddressForm(CompositeForm):
 ## User login/register views
 #########################################
 
-
 class Shop_Register(RegisterForm):
 
     access = True
@@ -478,7 +477,20 @@ class Shop_Register(RegisterForm):
         context.user = user
 
         # Redirect
-        return context.come_back(MSG(u'View cart'), goto = './;view_cart')
+        msg = MSG(u'Inscription ok')
+        return context.come_back(msg, goto = './;delivery')
+
+
+class Shop_RegisterProgress(CompositeForm):
+    """
+    Register form with progress bar
+    """
+
+    access = True
+    title = MSG(u'Register')
+
+    subviews = [Shop_Progress(index=2),
+                Shop_Register()]
 
 
 
@@ -488,7 +500,11 @@ class Shop_LoginMixin(STLView):
 
 
     def get_namespace(self, resource, context):
-        return {'goto': str(context.uri.path)}
+        progress = None
+        if context.resource.class_id == 'shop':
+            progress = Shop_Progress(index=2).GET(resource, context)
+        return {'goto': str(context.uri.path),
+                'progress': progress}
 
 
 
@@ -497,4 +513,5 @@ class Shop_Login(CompositeForm):
     access = True
     title = MSG(u'Login')
 
-    subviews = [Shop_LoginMixin(), LoginView()]
+    subviews = [Shop_LoginMixin(),
+                LoginView()]

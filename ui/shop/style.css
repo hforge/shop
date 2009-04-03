@@ -187,6 +187,10 @@ table.cart td{
   font-family: arial, helvetica, sans-serif ;
   font-size: 18px;
 }
+.number a{
+  color: white;
+}
+
 .number .title{
   color: gray;
   padding-left: 20px;

@@ -4,6 +4,10 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h1>Identification</h1>
+
+  ${progress}
+
   <h2>I'm a new customer</h2>
 
     <form method="GET" action=";register">

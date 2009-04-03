@@ -7,7 +7,11 @@
   <table id="number-table">
     <tr>
       <td>
-        <div class="number ${progress/1}">1<span class="title">Cart</span></div>
+        <div class="number ${progress/1}">
+          <a href=";view_cart">
+            1<span class="title">Cart</span>
+          </a>
+        </div>
       </td>
       <td>
         <div class="number ${progress/2}">2<span class="title">Identification</span></div>
