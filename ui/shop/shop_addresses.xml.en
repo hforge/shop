@@ -9,7 +9,7 @@
   ${progress}
 
   <p>
-    Here you can select your delivery and bill address.
+    Here you can select your delivery and bill addresses.
   </p>
 
   <table id="cart" style="width: 400px;" cellpadding="5px" cellspacing="0">
