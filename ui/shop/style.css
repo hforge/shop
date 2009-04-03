@@ -172,7 +172,17 @@ table.cart td{
   color:red;
 }
 
-/* Barre d'avancement */
+/* Payment process */
+
+.payment-process{
+  color: gray;
+  font-family: arial, helvetica, sans-serif ;
+  font-size: 22px;
+  border-bottom: 1px solid gray;
+  margin-bottom: 25px;
+}
+
+/* Payment process :Barre d'avancement */
 
 #number-table td{
   padding-right: 30px;

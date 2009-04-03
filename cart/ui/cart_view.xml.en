@@ -4,7 +4,7 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Your order</h1>
+  <h1 class="payment-process">Your order</h1>
 
   ${progress}
 
@@ -56,7 +56,7 @@
     <p>
       <span class="price">${total} €</span><br/>
       <br/>
-      <a id="button-order" href=";delivery">
+      <a id="button-order" href=";addresses">
         Order
       </a>
     </p>

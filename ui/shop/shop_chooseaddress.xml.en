@@ -4,6 +4,9 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h1 class="payment-process">Choose delivery address</h1>
+  ${progress}
+
   <fieldset>
     <legend>Your address book</legend>
 

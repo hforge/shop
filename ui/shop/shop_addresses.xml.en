@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h1 class="payment-process">Bill and delivery addresses</h1>
+
+  ${progress}
+
+  <p>
+    Here you can select your delivery and bill address.
+  </p>
+
+  <table id="cart" style="width: 400px;" cellpadding="5px" cellspacing="0">
+    <tr>
+      <th>
+       Delivery address
+      </th>
+      <th>
+       Bill address
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <p stl:if="delivery_address">
+          ${delivery_address/firstname} ${delivery_address/lastname}<br/>
+          ${delivery_address/address_1}<br/>
+          <stl:block stl:if="delivery_address/address_2">
+            ${delivery_address/address_2}<br/>
+          </stl:block>
+          ${delivery_address/zipcode} ${delivery_address/town}<br/>
+          ${delivery_address/country}<br/>
+          <a href=";edit_address?type=delivery" class="address-edit">(Edit *)</a>
+        </p>
+      </td>
+      <td>
+        <span stl:if="not bill_address">
+          Same that delivery address.<br/>
+        </span>
+        <p stl:if="bill_address">
+          ${bill_address/firstname} ${bill_address/lastname}<br/>
+          ${bill_address/address_1}<br/>
+          <stl:block stl:if="bill_address/address_2">
+            ${bill_address/address_2}<br/>
+          </stl:block>
+          ${bill_address/zipcode} ${bill_address/town}<br/>
+          ${bill_address/country}<br/>
+        </p>
+        <a href=";edit_address?type=bill" class="address-edit">(Edit *)</a>
+      </td>
+    </tr>
+  </table>
+
+  <br/><br/>
+
+  <a id="button-order" href=";delivery">
+    Continue
+  </a>
+
+
+</stl:block>

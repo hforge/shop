@@ -59,13 +59,11 @@ class Shop_Progress(STLView):
         return ns
 
 
-class Shop_Delivery(STLForm):
+class Shop_Addresses(STLForm):
 
     access = 'is_authenticated'
-    title = MSG(u'Shop control panel')
-    template = '/ui/shop/shop_delivery.xml'
+    template = '/ui/shop/shop_addresses.xml'
 
-    schema = {'shipping': String(mandatory=True)}
 
     def GET(self, resource, context):
         # If user has no addresses, redirect to edit_address view
@@ -84,7 +82,7 @@ class Shop_Delivery(STLForm):
     def get_namespace(self, resource, context):
         ns = {}
         # Progress bar
-        ns['progress'] = Shop_Progress(index=4).GET(resource, context)
+        ns['progress'] = Shop_Progress(index=3).GET(resource, context)
         # Get cart
         cart = ProductCart()
         # Delivery address
@@ -95,9 +93,25 @@ class Shop_Delivery(STLForm):
         bill_address = cart.get_bill_address()
         if bill_address:
             ns['bill_address'] = resource.get_user_address(bill_address)
+        return ns
+
+
+
+class Shop_Delivery(STLForm):
+
+    access = 'is_authenticated'
+    template = '/ui/shop/shop_delivery.xml'
+
+    schema = {'shipping': String(mandatory=True)}
+
+
+    def get_namespace(self, resource, context):
+        ns = {}
+        # Progress
+        ns['progress'] = Shop_Progress(index=4).GET(resource, context)
         # Total price
-        products = resource.get_resource('products')
-        total_price = cart.get_total_price(products)
+        # XXX
+        total_price = 0#cart.get_total_price(products)
         total_weight = 0
         # Shipping
         shippings = resource.get_resource('shippings')
@@ -260,7 +274,7 @@ class Shop_ChooseAddress(STLView):
         ns['widget'] = widget.to_html(datatype, None)
         ns['type'] = context.get_form_value('type')
         # Progress bar
-        ns['progress'] = Shop_Progress().GET(resource, context)
+        ns['progress'] = Shop_Progress(index=3).GET(resource, context)
         return ns
 
 
@@ -272,7 +286,7 @@ class Shop_ChooseAddress(STLView):
             cart.set_bill_address(form['calendar_address'])
         # Come back
         msg = MSG(u'Modification ok')
-        return context.come_back(msg, goto=';delivery')
+        return context.come_back(msg, goto=';addresses')
 
 
 
@@ -346,7 +360,7 @@ class Shop_EditAddress(AutoForm):
             cart.set_bill_address(record.id)
         # Come back
         msg = MSG(u'Address modify')
-        return context.come_back(msg, goto=';delivery')
+        return context.come_back(msg, goto=';addresses')
 
 
 
@@ -478,7 +492,7 @@ class Shop_Register(RegisterForm):
 
         # Redirect
         msg = MSG(u'Inscription ok')
-        return context.come_back(msg, goto = './;delivery')
+        return context.come_back(msg, goto = './;addresses')
 
 
 class Shop_RegisterProgress(CompositeForm):

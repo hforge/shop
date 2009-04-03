@@ -31,6 +31,7 @@ from products import Products, ProductModels
 from shipping import Shippings
 from shop_views import Shop_Buy, Shop_Delivery, Shop_RegisterProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressForm
+from shop_views import Shop_Addresses
 
 
 class Shop(Folder):
@@ -46,11 +47,18 @@ class Shop(Folder):
 
     # Views
     view = Shop_View()
+
+
+    # Views for payment processus
+    # 1) View cart
+    # 2) Login/Register
+    # 3) Choose addreses
+    # 4) Choose delivery
+    # 5) Recapitulatif / payment
     view_cart = Cart_View()
-
     register = Shop_RegisterProgress()
+    addresses = Shop_Addresses()
     edit_address = Shop_EditAddressForm()
-
     delivery = Shop_Delivery()
     show_recapitulatif = Shop_ShowRecapitulatif()
     buy = Shop_Buy()

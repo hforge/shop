@@ -4,7 +4,7 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Summary and Payment</h1>
+  <h1 class="payment-process">Summary</h1>
 
   ${progress}
 
@@ -86,7 +86,7 @@
     </tr>
   </table>
 
-  <h2>Please choose a payment mode</h2>
+  <h1 class="payment-process">Payment</h1>
 
   <form name="order" action=";buy" method="POST">
     <table cellpadding="5px" cellspacing="0">
