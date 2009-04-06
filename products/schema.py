@@ -18,7 +18,7 @@
 from itools.datatypes import Decimal, Unicode
 
 # Import from ikaaro
-from ikaaro.forms import HTMLBody
+from ikaaro.forms import XHTMLBody
 
 # Import from shop
 from enumerate import CategoriesEnumerate
@@ -40,6 +40,6 @@ product_schema = {# General informations
                   # Price
                   'price': Decimal(default=0.0),
                   # Description
-                  'html_description': HTMLBody,
+                  'html_description': XHTMLBody,
                   # Référencement
                   'tags': Unicode}
