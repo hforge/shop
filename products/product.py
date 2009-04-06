@@ -82,8 +82,6 @@ class Product(Folder):
                            title={'en': u'Order photos'})
 
 
-
-
     def get_catalog_fields(self):
         return (Folder.get_catalog_fields(self)
                 + [KeywordField('product_model'),
@@ -108,7 +106,7 @@ class Product(Folder):
         product_model = self.get_property('product_model')
         if not product_model:
             return None
-        shop = self.parent.parent
+        shop = self.get_real_resource().parent.parent
         return shop.get_resource('products-models/%s' % product_model)
 
     ##################################################
@@ -151,7 +149,7 @@ class Product(Folder):
 
 
     def get_ns_other_products(self, context):
-        products = self.parent
+        products = self.get_real_resource().parent
         selected_products = []
         selection = list(products.get_resources())
         shuffle(selection)
