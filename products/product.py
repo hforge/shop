@@ -87,7 +87,7 @@ class Product(Folder):
         return (Folder.get_catalog_fields(self)
                 + [KeywordField('product_model'),
                    KeywordField('categories', is_stored=True),
-                   TextField('html_description')])
+                   TextField('html_description'), TextField('description')])
 
 
     def get_catalog_values(self):
@@ -104,6 +104,8 @@ class Product(Folder):
         doc = XHTMLFile()
         doc.events = self.get_property('html_description')
         values['html_description'] = doc.to_text()
+        # description
+        values['description'] = self.get_property('description')
         return values
 
 
