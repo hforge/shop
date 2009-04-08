@@ -40,6 +40,6 @@ product_schema = {# General informations
                   # Price
                   'price': Decimal(default=0.0),
                   # Description
-                  'html_description': XHTMLBody,
+                  'html_description': XHTMLBody(default=''),
                   # Référencement
                   'tags': Unicode}
