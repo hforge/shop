@@ -35,7 +35,7 @@ class ProductEnumAttributeTable(OrderedTableFile):
 
     record_schema = {
         'name': String(Unique=True, mandatory=True, index='keyword'),
-        'title': Unicode(mandatory=True),
+        'title': Unicode(mandatory=True, multiple=True),
         }
 
 
@@ -44,6 +44,7 @@ class ProductEnumAttribute(OrderedTable):
 
     class_id = 'product-enum-attribute'
     class_title = MSG(u'Product Enumerate Attribute')
+    class_version = '20090408'
     class_handler = ProductEnumAttributeTable
 
     add_record = ProductEnumAttribute_AddRecord()
@@ -52,6 +53,11 @@ class ProductEnumAttribute(OrderedTable):
         TextWidget('name', title=MSG(u'Name')),
         TextWidget('title', title=MSG(u'Title')),
         ]
+
+    def update_20090408(self):
+        # Title is now multilingual
+        OrderedTable.update_20081113(self)
+
 
 
 class AllAttributes(Enumerate):
@@ -83,7 +89,7 @@ class ProductTypeTable(OrderedTableFile):
 
     record_schema = {
         'name': String(Unique=True, mandatory=True, index='keyword'),
-        'title': Unicode(mandatory=True),
+        'title': Unicode(mandatory=True, multiple=True),
         'mandatory': Boolean,
         'enumerate': AllAttributes(),
         }
@@ -94,6 +100,7 @@ class ProductModelSchema(OrderedTable):
 
     class_id = 'product-model-schema'
     class_title = MSG(u'Model Schema')
+    class_version = '20090408'
     class_handler = ProductTypeTable
 
 
@@ -103,6 +110,10 @@ class ProductModelSchema(OrderedTable):
         BooleanCheckBox('mandatory', title=MSG(u'Mandatoy')),
         SelectWidget('enumerate', title=MSG(u'Choice list')),
         ]
+
+    def update_20090408(self):
+        # Title is now multilingual
+        OrderedTable.update_20081113(self)
 
 
 
