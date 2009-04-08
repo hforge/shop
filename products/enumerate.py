@@ -16,6 +16,7 @@
 
 # Import from itools
 from itools.datatypes import Enumerate
+from itools.gettext import MSG
 from itools.web import get_context
 
 
@@ -52,3 +53,14 @@ class CategoriesEnumerate(Enumerate):
         return options
 
 
+class Datatypes(Enumerate):
+
+    options = [{'name': 'string' ,   'value': MSG(u'String')},
+               {'name': 'unicode',   'value': MSG(u'Unicode')},
+               {'name': 'integer',   'value': MSG(u'Integer')},
+               {'name': 'enumerate', 'value': MSG(u'Enumerate')},
+               {'name': 'decimal',   'value': MSG(u'Decimal')},
+               {'name': 'boolean',   'value': MSG(u'Boolean')},
+               {'name': 'email',     'value': MSG(u'Email')},
+               {'name': 'boolean',   'value': MSG(u'Boolean')},
+               {'name': 'date',      'value': MSG(u'ISOCalendarDate')}]

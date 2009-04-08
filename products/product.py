@@ -67,8 +67,15 @@ class Product(Folder):
 
     @classmethod
     def get_metadata_schema(cls):
+        return merge_dicts(Folder.get_metadata_schema(), product_schema)
+
+
+    def get_dynamic_metadata_schema(self, context):
+        context = get_context()
+        product_model = self.get_product_model(context)
+        product_model_schema = product_model.get_model_schema()
         return merge_dicts(Folder.get_metadata_schema(), product_schema,
-                           product_model=String)
+                            product_model_schema)
 
 
     @staticmethod
@@ -266,6 +273,8 @@ class Product(Folder):
 
 
     def set_property(self, name, value, language=None):
+        # We have to reindex
+        get_context().server.change_resource(self)
         # Dynamic property
         product_model = self.get_product_model(get_context())
         if not product_model:
@@ -273,13 +282,23 @@ class Product(Folder):
             return
         product_model_schema = product_model.get_model_schema()
         if name in product_model_schema:
-            # XXX Check if datatype is multiple
             datatype = product_model_schema[name]
-            Folder.set_property(self, name, datatype.encode(value), language)
+            is_multiple = getattr(datatype, 'multiple', False)
+            if is_multiple:
+                if isinstance(value, list):
+                    for v in value:
+                        v = datatype.encode(v)
+                    self.metadata.properties[name] = value
+                else:
+                    # TODO XXX
+                    raise ValueError
+            else:
+                Folder.set_property(self, name, datatype.encode(value), language)
             return
 
         # Default property
         Folder.set_property(self, name, value, language)
+
 
 
     #######################

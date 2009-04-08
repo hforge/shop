@@ -27,8 +27,21 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable, OrderedTableFile
 
 # Import from shop
+from enumerate import Datatypes
 from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
 from models_views import ProductModel_NewInstance
+
+
+class AllAttributes(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        model = getattr(cls, 'model', context.resource.parent)
+        return [{'name': res.name,
+                 'value': res.get_property('title')}
+                for res in model.search_resources(cls=ProductEnumAttribute)]
+
 
 
 class ProductEnumAttributeTable(OrderedTableFile):
@@ -60,16 +73,6 @@ class ProductEnumAttribute(OrderedTable):
 
 
 
-class AllAttributes(Enumerate):
-
-    @classmethod
-    def get_options(cls):
-        context = get_context()
-        model = context.resource.parent
-        return [{'name': res.name,
-                 'value': res.get_property('title')}
-                for res in model.search_resources(cls=ProductEnumAttribute)]
-
 
 
 class TableEnumerate(Enumerate):
@@ -91,6 +94,10 @@ class ProductTypeTable(OrderedTableFile):
         'name': String(Unique=True, mandatory=True, index='keyword'),
         'title': Unicode(mandatory=True, multiple=True),
         'mandatory': Boolean,
+        'multiple': Boolean,
+        'visible': Boolean,
+        'is_purchase_option': Boolean,
+        'datatype': Datatypes(mandatory=True),
         'enumerate': AllAttributes(),
         }
 
@@ -107,8 +114,12 @@ class ProductModelSchema(OrderedTable):
     form = [
         TextWidget('name', title=MSG(u'Name')),
         TextWidget('title', title=MSG(u'Title')),
-        BooleanCheckBox('mandatory', title=MSG(u'Mandatoy')),
-        SelectWidget('enumerate', title=MSG(u'Choice list')),
+        BooleanCheckBox('mandatory', title=MSG(u'Mandatory')),
+        BooleanCheckBox('multiple', title=MSG(u'Multiple')),
+        BooleanCheckBox('visible', title=MSG(u'Visible')),
+        BooleanCheckBox('is_purchase_option', title=MSG(u'Is purchase option ?')),
+        SelectWidget('datatype', title=MSG(u'Data Type')),
+        SelectWidget('enumerate', title=MSG(u'Enumerate')),
         ]
 
     def update_20090408(self):
@@ -124,7 +135,6 @@ class ProductModel(Folder):
     class_views = ['browse_content', 'new_resource']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['schema']
-
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
@@ -146,10 +156,12 @@ class ProductModel(Folder):
         for record in schema_resource.get_records():
             enumerate = get_value(record, 'enumerate')
             mandatory = get_value(record, 'mandatory') or False
-            datatype = Unicode(mandatory=mandatory)
+            multiple = get_value(record, 'multiple') or False
             if enumerate:
                 datatype = TableEnumerate(model=self, enumerate=enumerate,
-                                          mandatory=mandatory)
+                                          mandatory=mandatory, multiple=multiple)
+            else:
+                datatype = Unicode(mandatory=mandatory, multiple=multiple)
             name = schema_resource.get_record_value(record, 'name')
             schema[name] = datatype
         return schema
@@ -184,9 +196,6 @@ class ProductModel(Folder):
             ns['specific_dic'][name] = kw
             ns['specific_list'].append(kw)
         return ns
-
-
-
 
 
 class ProductModels(Folder):

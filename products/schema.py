@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Decimal, Unicode
+from itools.datatypes import Decimal, String, Unicode
 
 # Import from ikaaro
 from ikaaro.forms import XHTMLBody
@@ -35,6 +35,8 @@ product_schema = {# General informations
                   'title': Unicode,
                   'description': Unicode,
                   'subject': Unicode,
+                  # Model
+                  'product_model': String,
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),
                   # Price
