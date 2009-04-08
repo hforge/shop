@@ -263,6 +263,20 @@ class Product(Folder):
         return datatype.get_default(), None
 
 
+    def set_property(self, name, value, language=None):
+        # Dynamic property
+        product_model = self.get_product_model(get_context())
+        product_model_schema = product_model.get_model_schema()
+        if name in product_model_schema:
+            # XXX Check if datatype is multiple
+            datatype = product_model_schema[name]
+            Folder.set_property(self, name, datatype.encode(value), language)
+            return
+
+        # Default property
+        Folder.set_property(self, name, value, language)
+
+
     #######################
     ## Updates methods
     #######################
