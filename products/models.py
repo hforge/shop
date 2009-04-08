@@ -28,6 +28,7 @@ from ikaaro.table import OrderedTable, OrderedTableFile
 
 # Import from shop
 from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
+from models_views import ProductModel_NewInstance
 
 
 class ProductEnumAttributeTable(OrderedTableFile):
@@ -113,6 +114,7 @@ class ProductModel(Folder):
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['schema']
 
+
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         root = Folder._make_resource(cls, folder, name, **kw)
@@ -180,10 +182,12 @@ class ProductModels(Folder):
 
     class_id = 'product-models'
     class_title = MSG(u'Product Models')
-    class_views = ['view', 'new_resource']
+    class_views = ['view', 'new_instance']
 
     # Views
     view = ProductModels_View()
+    new_instance = ProductModel_NewInstance()
+
 
     def get_document_types(self):
         return [ProductModel]

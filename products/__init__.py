@@ -22,6 +22,7 @@ from ikaaro.skins import register_skin
 
 # Import from shop
 from product import Product, Products
+from product_views import Product_View
 from models import ProductModels
 
 

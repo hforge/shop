@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.xapian import OrQuery, PhraseQuery
@@ -23,6 +24,20 @@ from itools.xapian import OrQuery, PhraseQuery
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.table_views import Table_AddRecord
+from ikaaro.resource_views import DBResource_NewInstance
+
+
+class ProductModel_NewInstance(DBResource_NewInstance):
+
+    query_schema = {
+        'type': String(default='product-model'),
+        }
+
+    schema = {
+        'name': String,
+        'title': Unicode(mandatory=True)}
+
+    context_menus = []
 
 
 class ProductModels_View(Folder_BrowseContent):
@@ -33,6 +48,8 @@ class ProductModels_View(Folder_BrowseContent):
     title = MSG(u'View')
     batch_msg1 = MSG(u"There is 1 product model.")
     batch_msg2 = MSG(u"There are ${n} models.")
+
+    context_menus = []
 
 
     table_columns = [
