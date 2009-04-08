@@ -21,7 +21,8 @@ from random import shuffle
 from itools.datatypes import String
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
-from itools.xapian import KeywordField
+from itools.html import XHTMLFile
+from itools.xapian import KeywordField, TextField
 from itools.web import get_context
 
 # Import from ikaaro
@@ -85,7 +86,8 @@ class Product(Folder):
     def get_catalog_fields(self):
         return (Folder.get_catalog_fields(self)
                 + [KeywordField('product_model'),
-                   KeywordField('categories', is_stored=True)])
+                   KeywordField('categories', is_stored=True),
+                   TextField('html_description')])
 
 
     def get_catalog_values(self):
@@ -98,6 +100,10 @@ class Product(Folder):
             for i in range(len(segments)):
                 categories.append('/'.join(segments[:i+1]))
         values['categories'] = categories
+        # HTML description XXX We must to_text API in itools ?
+        doc = XHTMLFile()
+        doc.events = self.get_property('html_description')
+        values['html_description'] = doc.to_text()
         return values
 
 
