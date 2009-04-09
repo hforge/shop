@@ -27,7 +27,7 @@ from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
-from ikaaro.folder_views import GoToSpecificDocument
+from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
 from ikaaro.registry import register_resource_class
 
 # Import from shop
@@ -300,6 +300,10 @@ class Products(Folder):
 
     def get_document_types(self):
         return [Product]
+
+
+    browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
+
 
 
 register_resource_class(Product)
