@@ -18,7 +18,7 @@
 from random import shuffle
 
 # Import from itools
-from itools.datatypes import String
+from itools.datatypes import String, Tokens
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.html import XHTMLFile
@@ -242,11 +242,16 @@ class Product(Folder):
 
         # Check the property exists
         datatype = product_model_schema[name]
+        is_multiple = getattr(datatype, 'multiple', False)
         if name not in properties:
             default = datatype.get_default()
             return default, None
         # Get the value
         value = properties[name]
+
+        # Multiple
+        if is_multiple:
+            value = list(Tokens.decode(value))
 
         # Monolingual property
         if not isinstance(value, dict):
@@ -285,13 +290,7 @@ class Product(Folder):
             datatype = product_model_schema[name]
             is_multiple = getattr(datatype, 'multiple', False)
             if is_multiple:
-                if isinstance(value, list):
-                    for v in value:
-                        v = datatype.encode(v)
-                    self.metadata.properties[name] = value
-                else:
-                    # TODO XXX
-                    raise ValueError
+                self.metadata.properties[name] = Tokens.encode(value)
             else:
                 Folder.set_property(self, name, datatype.encode(value), language)
             return

@@ -202,8 +202,6 @@ class ProductModel(Folder):
                   'multiple': multiple}
             ns['specific_dic'][name] = kw
             ns['specific_list'].append(kw)
-        from pprint import pprint
-        pprint(ns)
         return ns
 
 
