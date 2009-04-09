@@ -268,6 +268,9 @@ class Product(Folder):
     def set_property(self, name, value, language=None):
         # Dynamic property
         product_model = self.get_product_model(get_context())
+        if not product_model:
+            Folder.set_property(self, name, value, language)
+            return
         product_model_schema = product_model.get_model_schema()
         if name in product_model_schema:
             # XXX Check if datatype is multiple
