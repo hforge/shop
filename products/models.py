@@ -187,14 +187,23 @@ class ProductModel(Folder):
         for record in schema_resource.get_records_in_order():
             name = schema_resource.get_record_value(record, 'name')
             title = schema_resource.get_record_value(record, 'title')
+            multiple = schema_resource.get_record_value(record, 'multiple')
             value = resource.get_property(name)
             enumerate = schema_resource.get_record_value(record, 'enumerate')
             if enumerate:
                 datatype = TableEnumerate(model=self, enumerate=enumerate)
-                value = datatype.get_value(value)
-            kw = {'title': title, 'value': value}
+                if multiple:
+                    values = [datatype.get_value(x) for x in value]
+                    value = ', '.join(values)
+                else:
+                    value = datatype.get_value(value)
+            kw = {'title': title,
+                  'value': value,
+                  'multiple': multiple}
             ns['specific_dic'][name] = kw
             ns['specific_list'].append(kw)
+        from pprint import pprint
+        pprint(ns)
         return ns
 
 
