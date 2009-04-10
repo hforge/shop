@@ -82,8 +82,14 @@ class TableEnumerate(Enumerate):
         context = get_context()
         shop = context.resource.parent.parent
         table = cls.model.get_resource(cls.enumerate).handler
-        return [{'name': str(table.get_record_value(record, 'name')),
-                 'value': table.get_record_value(record, 'title')}
+        get_value = table.get_record_value
+        if hasattr(cls, 'values'):
+            return [{'name': str(get_value(record, 'name')),
+                     'value': get_value(record, 'title')}
+                    for record in table.get_records()
+                    if get_value(record, 'name') in cls.values]
+        return [{'name': str(get_value(record, 'name')),
+                 'value': get_value(record, 'title')}
                 for record in table.get_records()]
 
 
@@ -203,6 +209,25 @@ class ProductModel(Folder):
             ns['specific_dic'][name] = kw
             ns['specific_list'].append(kw)
         return ns
+
+
+    def get_purchase_options(self, resource):
+        widgets = []
+        schema_resource = self.get_resource('schema').handler
+        for record in schema_resource.get_records_in_order():
+            get_value = schema_resource.get_record_value
+            name = get_value(record, 'name')
+            title = get_value(record, 'title')
+            is_purchase_option = get_value(record, 'is_purchase_option')
+            enumerate = schema_resource.get_record_value(record, 'enumerate')
+            if not is_purchase_option or not enumerate:
+                continue
+            values = resource.get_property(name)
+            datatype = TableEnumerate(model=self, enumerate=enumerate,
+                                      values=values)
+            widget = SelectWidget(name, has_empty_option=False)
+            widgets.append(widget.to_html(datatype, None))
+        return widgets
 
 
 class ProductModels(Folder):

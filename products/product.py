@@ -163,14 +163,15 @@ class Product(Folder):
 
     def get_namespace(self, context):
         ns = {}
+        ns['href'] = context.get_link(self)
         # Basic informations
         for key in product_schema.keys():
             ns[key] = self.get_property(key)
-        ns['href'] = context.get_link(self)
         # Specific product informations
         product_model = self.get_product_model(context)
         if product_model:
             ns.update(product_model.get_model_ns(self))
+            ns['buy_options'] = product_model.get_purchase_options(self)
         else:
             ns['specific_dic'] = {}
             ns['specific_list'] = []
