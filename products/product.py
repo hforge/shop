@@ -22,18 +22,21 @@ from itools.datatypes import String, Tokens
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.html import XHTMLFile
-from itools.xapian import KeywordField, TextField
 from itools.web import get_context
+from itools.xapian import KeywordField, TextField
 
 # Import from ikaaro
+from ikaaro.file import Image
 from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
+from ikaaro.folder_views import Folder_PreviewContent, Folder_LastChanges
+from ikaaro.folder_views import Folder_Orphans
 from ikaaro.registry import register_resource_class
 
 # Import from shop
 from images import PhotoOrderedTable
-from product_views import Product_View, Product_Edit, Product_EditModel#, Product_Images
 from product_views import Product_NewInstance, Product_AddToCart
+from product_views import Product_View, Product_Edit, Product_EditModel#, Product_Images
 from schema import product_schema
 
 
@@ -43,12 +46,30 @@ def get_namespace_image(image, context):
     return namespace
 
 
+
+class ImagesFolder(Folder):
+
+    class_id = 'images-folder'
+    class_title = MSG(u'Images folder')
+
+    def get_document_types(self):
+        return [Image]
+
+
+    # Views
+    browse_content = Folder_BrowseContent(access='is_admin')
+    preview_content = Folder_PreviewContent(access='is_admin')
+    last_changes = Folder_LastChanges(access='is_admin')
+    orphans = Folder_Orphans(access='is_admin')
+
+
+
 class Product(Folder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order']
-    class_version = '20090327'
+    class_version = '20090409'
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['images',
                                                       'order-photos']
@@ -83,8 +104,8 @@ class Product(Folder):
     def _make_resource(cls, folder, name, *args, **kw):
         Folder._make_resource(cls, folder, name, *args, **kw)
         # Images folder
-        Folder._make_resource(Folder, folder, '%s/images' % name,
-                             body='', title={'en': 'Images'})
+        ImagesFolder._make_resource(ImagesFolder, folder, '%s/images' % name,
+                                    body='', title={'en': 'Images'})
         # Order images table
         PhotoOrderedTable._make_resource(PhotoOrderedTable, folder,
                            '%s/order-photos' % name,
@@ -306,8 +327,17 @@ class Product(Folder):
     #######################
     def update_20090327(self):
         from images import PhotoOrderedTable
-        PhotoOrderedTable._make_resource(PhotoOrderedTable, self.handler, 'order-photos',
-                           title={'en': u"Order photos"})
+        PhotoOrderedTable._make_resource(PhotoOrderedTable, self.handler,
+                                         'order-photos',
+                                         title={'en': u"Order photos"})
+
+
+    def update_20090409(self):
+        folder = self.get_resource('images')
+        metadata = folder.metadata
+        metadata.format = ImagesFolder.class_id
+        metadata.version = ImagesFolder.class_version
+        metadata.set_changed()
 
 
 
@@ -325,5 +355,6 @@ class Products(Folder):
 
 
 
+register_resource_class(ImagesFolder)
 register_resource_class(Product)
 register_resource_class(Products)
