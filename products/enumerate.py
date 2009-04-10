@@ -62,5 +62,4 @@ class Datatypes(Enumerate):
                {'name': 'decimal',   'value': MSG(u'Decimal')},
                {'name': 'boolean',   'value': MSG(u'Boolean')},
                {'name': 'email',     'value': MSG(u'Email')},
-               {'name': 'boolean',   'value': MSG(u'Boolean')},
-               {'name': 'date',      'value': MSG(u'ISOCalendarDate')}]
+               {'name': 'date',      'value': MSG(u'Date')}]
