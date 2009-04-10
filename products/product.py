@@ -67,7 +67,8 @@ class Product(Folder):
 
     @classmethod
     def get_metadata_schema(cls):
-        return merge_dicts(Folder.get_metadata_schema(), product_schema)
+        return merge_dicts(Folder.get_metadata_schema(), product_schema,
+                           product_model=String)
 
 
     def get_dynamic_metadata_schema(self, context):

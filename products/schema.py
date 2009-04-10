@@ -35,8 +35,6 @@ product_schema = {# General informations
                   'title': Unicode,
                   'description': Unicode,
                   'subject': Unicode,
-                  # Model
-                  'product_model': String,
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),
                   # Price
