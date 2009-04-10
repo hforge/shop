@@ -79,6 +79,6 @@ class ProductEnumAttribute_AddRecord(Table_AddRecord):
 
 
     def action_add_or_edit(self, resource, context, record):
-        record['name'] = checkid(record['title'])
+        record['name'] = checkid(record['title'].value)
         resource.handler.add_record(record)
 
