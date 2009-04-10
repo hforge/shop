@@ -171,7 +171,7 @@ class Product(Folder):
         product_model = self.get_product_model(context)
         if product_model:
             ns.update(product_model.get_model_ns(self))
-            ns['buy_options'] = product_model.get_purchase_options(self)
+            ns['purchase_options'] = product_model.get_purchase_options(self)
         else:
             ns['specific_dic'] = {}
             ns['specific_list'] = []
