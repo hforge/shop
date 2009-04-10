@@ -23,7 +23,7 @@ from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.html import XHTMLFile
 from itools.web import get_context
-from itools.xapian import KeywordField, TextField
+from itools.xapian import KeywordField, TextField, BoolField
 
 # Import from ikaaro
 from ikaaro.file import Image
@@ -116,7 +116,8 @@ class Product(Folder):
         return (Folder.get_catalog_fields(self)
                 + [KeywordField('product_model'),
                    KeywordField('categories', is_stored=True),
-                   TextField('html_description'), TextField('description')])
+                   TextField('html_description'), TextField('description'),
+                   BoolField('has_categories')])
 
 
     def get_catalog_values(self):
@@ -129,6 +130,7 @@ class Product(Folder):
             for i in range(len(segments)):
                 categories.append('/'.join(segments[:i+1]))
         values['categories'] = categories
+        values['has_categories'] = len(categories) != 0
         # HTML description XXX We must to_text API in itools ?
         doc = XHTMLFile()
         doc.events = self.get_property('html_description')
