@@ -22,6 +22,7 @@ from itools.datatypes import String, Tokens
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.html import XHTMLFile
+from itools.uri import Path
 from itools.web import get_context
 from itools.xapian import KeywordField, TextField, BoolField
 
@@ -322,6 +323,35 @@ class Product(Folder):
         # Default property
         Folder.set_property(self, name, value, language)
 
+
+    def get_links(self):
+        links = []
+        real_resource = self.get_real_resource()
+        shop = real_resource.parent.parent
+        categories = shop.get_resource('categories')
+        categories_path = categories.get_abspath()
+        for categorie in self.get_property('categories'):
+            links.append(str(categories_path.resolve2(categorie)))
+        return links
+
+
+    def change_link(self, old_path, new_path):
+        real_resource = self.get_real_resource()
+        shop = real_resource.parent.parent
+        categories = shop.get_resource('categories')
+        categories_path = categories.get_abspath()
+
+        old_name = Path(old_path).get_name()
+        new_name = Path(new_path).get_name()
+        old_categories = self.get_property('categories')
+        new_categories = []
+        for name in self.get_property('categories'):
+            if name == old_name:
+                new_categories.append(new_name)
+            else:
+                new_categories.append(name)
+        self.set_property('categories', new_categories)
+        context.server.change_resource(self)
 
 
     #######################
