@@ -25,20 +25,28 @@ from itools.html import XHTMLFile
 from itools.uri import Path
 from itools.web import get_context
 from itools.xapian import KeywordField, TextField, BoolField
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.file import Image
 from ikaaro.folder import Folder
-from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
-from ikaaro.folder_views import Folder_PreviewContent, Folder_LastChanges
 from ikaaro.folder_views import Folder_Orphans
+from ikaaro.folder_views import Folder_PreviewContent, Folder_LastChanges
+from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
+from ikaaro.forms import PathSelectorWidget
+from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
+from ikaaro.resource_views import DBResource_AddLink
+from ikaaro.table import OrderedTable
+from ikaaro.table_views import OrderedTable_View
 
 # Import from shop
+from cross_selling import CrossSellingTable
 from images import PhotoOrderedTable
 from product_views import Product_NewInstance
 from product_views import Product_View, Product_Edit, Product_EditModel#, Product_Images
 from schema import product_schema
+
 
 
 def get_namespace_image(image, context):
@@ -70,10 +78,11 @@ class Product(Folder):
     class_id = 'product'
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order']
-    class_version = '20090409'
+    class_version = '20090410'
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['images',
-                                                      'order-photos']
+                                                      'order-photos',
+                                                      'cross-selling']
 
     # Views
     new_instance = Product_NewInstance()
@@ -110,6 +119,10 @@ class Product(Folder):
         PhotoOrderedTable._make_resource(PhotoOrderedTable, folder,
                            '%s/order-photos' % name,
                            title={'en': u'Order photos'})
+        # Cross Selling table
+        CrossSellingTable._make_resource(CrossSellingTable, folder,
+                                         '%s/cross-selling' % name,
+                                         title={'en': u'Cross selling'})
 
 
     def get_catalog_fields(self):
@@ -351,7 +364,7 @@ class Product(Folder):
             else:
                 new_categories.append(name)
         self.set_property('categories', new_categories)
-        context.server.change_resource(self)
+        get_context().server.change_resource(self)
 
 
     #######################
@@ -372,6 +385,13 @@ class Product(Folder):
         metadata.set_changed()
 
 
+    def update_20090410(self):
+        # Add the cross selling table
+        if self.has_resource('cross-selling') is False:
+            CrossSellingTable.make_resource(CrossSellingTable, self,
+                                            'cross-selling')
+
+
 
 class Products(Folder):
 
@@ -386,6 +406,9 @@ class Products(Folder):
     browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
 
 
+
+# Hack
+CrossSellingTable.orderable_classes = Product
 
 register_resource_class(ImagesFolder)
 register_resource_class(Product)
