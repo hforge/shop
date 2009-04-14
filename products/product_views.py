@@ -86,7 +86,16 @@ class Product_View(STLView):
     access = True
     title = MSG(u'View')
 
-    template = '/ui/product/product_view.xml'
+
+    def get_template(self, resource, context):
+        # XXX Maybe we have to get template from DB ?
+        product_model = resource.get_property('product_model')
+        if product_model:
+            template = '/ui/product/product_%s_view.xml' % product_model
+        if not product_model or not resource.has_resource(template):
+            template = '/ui/product/product_view.xml'
+        return resource.get_resource(template)
+
 
     def get_namespace(self, resource, context):
         return resource.get_namespace(context)
