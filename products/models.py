@@ -93,7 +93,7 @@ class ProductModelSchema(OrderedTable):
 
     class_id = 'product-model-schema'
     class_title = MSG(u'Model Schema')
-    class_version = '20090408'
+    class_version = '20090414'
     class_handler = ProductTypeTable
 
 
@@ -112,6 +112,11 @@ class ProductModelSchema(OrderedTable):
         # Title is now multilingual
         OrderedTable.update_20081113(self)
 
+
+    def update_20090414(self):
+        handler = self.handler
+        for record in handler.get_records():
+            handler.update_record(record.id, **{'datatype': 'unicode'})
 
 
 class ProductModel(Folder):
