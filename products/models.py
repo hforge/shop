@@ -23,6 +23,7 @@ from itools.web import get_context
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.forms import BooleanCheckBox, SelectWidget, TextWidget
+from ikaaro.forms import get_default_widget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable, OrderedTableFile
 
@@ -70,27 +71,6 @@ class ProductEnumAttribute(OrderedTable):
     def update_20090408(self):
         # Title is now multilingual
         OrderedTable.update_20081113(self)
-
-
-
-
-
-class TableEnumerate(Enumerate):
-
-    @classmethod
-    def get_options(cls):
-        context = get_context()
-        shop = context.resource.parent.parent
-        table = cls.model.get_resource(cls.enumerate).handler
-        get_value = table.get_record_value
-        if hasattr(cls, 'values'):
-            return [{'name': str(get_value(record, 'name')),
-                     'value': get_value(record, 'title')}
-                    for record in table.get_records()
-                    if get_value(record, 'name') in cls.values]
-        return [{'name': str(get_value(record, 'name')),
-                 'value': get_value(record, 'title')}
-                for record in table.get_records()]
 
 
 
@@ -155,57 +135,57 @@ class ProductModel(Folder):
         return [ProductEnumAttribute]
 
 
-    def get_model_schema(self):
-        schema = {}
+    def get_model_informations(self):
+        infos = []
         schema_resource = self.get_resource('schema').handler
         get_value = schema_resource.get_record_value
         for record in schema_resource.get_records():
+            name = get_value(record, 'name')
+            title = get_value(record, 'title')
+            mandatory = get_value(record, 'mandatory')
+            multiple = get_value(record, 'multiple')
+            datatype = get_value(record, 'datatype')
             enumerate = get_value(record, 'enumerate')
-            mandatory = get_value(record, 'mandatory') or False
-            multiple = get_value(record, 'multiple') or False
-            if enumerate:
-                datatype = TableEnumerate(model=self, enumerate=enumerate,
-                                          mandatory=mandatory, multiple=multiple)
-            else:
-                datatype = Unicode(mandatory=mandatory, multiple=multiple)
-            name = schema_resource.get_record_value(record, 'name')
-            schema[name] = datatype
+            is_purchase_option = get_value(record, 'is_purchase_option')
+            datatype = Datatypes.get_real_datatype(datatype, model=self,
+                enumerate=enumerate, mandatory=mandatory, multiple=multiple)
+            widget = get_default_widget(datatype)
+            widget = widget(name, title=MSG(title))
+            infos.append({'name': name,
+                          'title': title,
+                          'datatype': datatype,
+                          'is_purchase_option': is_purchase_option,
+                          'widget': widget})
+        return infos
+
+
+    def get_model_schema(self):
+        schema = {}
+        for info in self.get_model_informations():
+            schema[info['name']] = info['datatype']
         return schema
 
 
     def get_model_widgets(self):
-        widgets = []
-        schema_resource = self.get_resource('schema').handler
-        for record in schema_resource.get_records_in_order():
-            widget = TextWidget
-            if schema_resource.get_record_value(record, 'enumerate'):
-                widget = SelectWidget
-            title = schema_resource.get_record_value(record, 'title')
-            name = schema_resource.get_record_value(record, 'name')
-            widgets.append(widget(name, title=MSG(title)))
-        return widgets
+        return [x['widget'] for x in self.get_model_informations()]
 
 
     def get_model_ns(self, resource):
         ns = {'specific_dic': {},
               'specific_list': []}
-        schema_resource = self.get_resource('schema').handler
-        for record in schema_resource.get_records_in_order():
-            name = schema_resource.get_record_value(record, 'name')
-            title = schema_resource.get_record_value(record, 'title')
-            multiple = schema_resource.get_record_value(record, 'multiple')
+        for info in self.get_model_informations():
+            name = info['name']
             value = resource.get_property(name)
-            enumerate = schema_resource.get_record_value(record, 'enumerate')
-            if enumerate:
-                datatype = TableEnumerate(model=self, enumerate=enumerate)
-                if multiple:
+            datatype = info['datatype']
+            if issubclass(datatype, Enumerate):
+                if datatype.multiple:
                     values = [datatype.get_value(x) for x in value]
                     value = ', '.join(values)
                 else:
                     value = datatype.get_value(value)
-            kw = {'title': title,
+            kw = {'title': info['title'],
                   'value': value,
-                  'multiple': multiple}
+                  'multiple': datatype.multiple}
             ns['specific_dic'][name] = kw
             ns['specific_list'].append(kw)
         return ns
@@ -213,20 +193,14 @@ class ProductModel(Folder):
 
     def get_purchase_options(self, resource):
         widgets = []
-        schema_resource = self.get_resource('schema').handler
-        for record in schema_resource.get_records_in_order():
-            get_value = schema_resource.get_record_value
-            name = get_value(record, 'name')
-            title = get_value(record, 'title')
-            is_purchase_option = get_value(record, 'is_purchase_option')
-            enumerate = schema_resource.get_record_value(record, 'enumerate')
-            if not is_purchase_option or not enumerate:
+        for info in self.get_model_informations():
+            name = info['name']
+            datatype = info['datatype']
+            if (not info['is_purchase_option'] or
+                not issubclass(datatype, Enumerate)):
                 continue
-            values = resource.get_property(name)
-            datatype = TableEnumerate(model=self, enumerate=enumerate,
-                                      values=values)
-            widget = SelectWidget(name, has_empty_option=False)
-            widgets.append(widget.to_html(datatype, None))
+            datatype.multiple = False
+            widgets.append(info['widget'].to_html(datatype, None))
         return widgets
 
 

@@ -15,9 +15,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Enumerate
+from itools.datatypes import String, Unicode, Integer, Decimal, Boolean
+from itools.datatypes import Email, Enumerate, ISOCalendarDate
 from itools.gettext import MSG
 from itools.web import get_context
+
+class TableEnumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        shop = context.resource.parent.parent
+        table = cls.model.get_resource(cls.enumerate).handler
+        get_value = table.get_record_value
+        if hasattr(cls, 'values'):
+            return [{'name': str(get_value(record, 'name')),
+                     'value': get_value(record, 'title')}
+                    for record in table.get_records()
+                    if get_value(record, 'name') in cls.values]
+        return [{'name': str(get_value(record, 'name')),
+                 'value': get_value(record, 'title')}
+                for record in table.get_records()]
 
 
 class ProductModelsEnumerate(Enumerate):
@@ -64,3 +82,18 @@ class Datatypes(Enumerate):
                {'name': 'boolean',   'value': MSG(u'Boolean')},
                {'name': 'email',     'value': MSG(u'Email')},
                {'name': 'date',      'value': MSG(u'Date')}]
+
+    real_datatypes = {'string': String,
+                      'unicode': Unicode,
+                      'integer': Integer,
+                      'decimal': Decimal,
+                      'boolean': Boolean,
+                      'email': Email,
+                      'date': ISOCalendarDate}
+
+    @classmethod
+    def get_real_datatype(cls, name, model, **kw):
+        if name=='enumerate':
+            return TableEnumerate(model=model, **kw)
+        datatype = cls.real_datatypes[name]
+        return datatype(**kw)

@@ -124,7 +124,7 @@ class Product_EditModel(AutoForm):
 
 
     def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name)
+        return datatype.decode(resource.get_property(name))
 
 
     def action(self, resource, context, form):
