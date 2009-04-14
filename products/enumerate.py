@@ -40,7 +40,8 @@ class CategoriesEnumerate(Enumerate):
     def get_options(cls):
         # XXX
         context = get_context()
-        categories = context.resource.parent.parent.get_resource('categories')
+        shop = context.resource.get_real_resource().parent.parent
+        categories = shop.get_resource('categories')
         # Build options
         options = []
         for categorie in categories.traverse_resources():
