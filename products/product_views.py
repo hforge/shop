@@ -17,7 +17,7 @@
 # Import from itools
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
-from itools.web import BaseView, STLView
+from itools.web import STLForm
 
 # Import from ikaaro
 from ikaaro import messages
@@ -64,24 +64,8 @@ class Product_NewInstance(DBResource_NewInstance):
 
 
 
-class Product_AddToCart(BaseView):
 
-    access = True
-
-    def GET(self, resource, context):
-        # Check if we can add to cart
-        if not resource.is_buyable():
-            msg = MSG(u"This product isn't buyable")
-            return context.come_back(msg)
-        # Add to cart
-        cart = ProductCart()
-        cart.add_product(resource.name, 1)
-        msg = MSG(u'Product added to cart !')
-        return context.come_back(msg)
-
-
-
-class Product_View(STLView):
+class Product_View(STLForm):
 
     access = True
     title = MSG(u'View')
@@ -100,6 +84,20 @@ class Product_View(STLView):
     def get_namespace(self, resource, context):
         return resource.get_namespace(context)
 
+
+
+    def action(self, resource, context, form):
+        """ Add to cart """
+        # Check if we can add to cart
+        if not resource.is_buyable():
+            msg = MSG(u"This product isn't buyable")
+            return context.come_back(msg)
+        # Add to cart
+        cart = ProductCart()
+        # XXX Add options
+        cart.add_product(resource.name, 1)
+        msg = MSG(u'Product added to cart !')
+        return context.come_back(msg)
 
 
 

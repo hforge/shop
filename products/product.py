@@ -36,7 +36,7 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop
 from images import PhotoOrderedTable
-from product_views import Product_NewInstance, Product_AddToCart
+from product_views import Product_NewInstance
 from product_views import Product_View, Product_Edit, Product_EditModel#, Product_Images
 from schema import product_schema
 
@@ -80,7 +80,6 @@ class Product(Folder):
     view = Product_View()
     edit = Product_Edit()
     edit_model = Product_EditModel()
-    add_to_cart = Product_AddToCart()
     #images = Product_Images()
     order = GoToSpecificDocument(specific_document='order-photos',
                                  title=MSG(u'Order photos'),
