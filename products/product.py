@@ -25,7 +25,6 @@ from itools.html import XHTMLFile
 from itools.uri import Path
 from itools.web import get_context
 from itools.xapian import KeywordField, TextField, BoolField
-from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.file import Image
@@ -33,12 +32,7 @@ from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_Orphans
 from ikaaro.folder_views import Folder_PreviewContent, Folder_LastChanges
 from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
-from ikaaro.forms import PathSelectorWidget
-from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
-from ikaaro.resource_views import DBResource_AddLink
-from ikaaro.table import OrderedTable
-from ikaaro.table_views import OrderedTable_View
 
 # Import from shop
 from cross_selling import CrossSellingTable
@@ -76,7 +70,8 @@ class Product(Folder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
-    class_views = ['view', 'edit', 'edit_model', 'images', 'order']
+    class_views = ['view', 'edit', 'edit_model', 'images', 'order',
+                   'edit_cross_selling']
     class_version = '20090410'
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['images',
@@ -92,6 +87,9 @@ class Product(Folder):
     order = GoToSpecificDocument(specific_document='order-photos',
                                  title=MSG(u'Order photos'),
                                  access='is_admin')
+    edit_cross_selling = GoToSpecificDocument(
+            specific_document='cross-selling',
+            title=MSG(u'Éditer la vente croisée'))
 
 
     @classmethod
