@@ -178,31 +178,34 @@ class Product(Folder):
 
 
     def get_namespace(self, context):
-        ns = {}
-        ns['href'] = context.get_link(self)
+        namespace = {}
         # Basic informations
+        namespace['href'] = context.get_link(self)
         for key in product_schema.keys():
-            ns[key] = self.get_property(key)
+            namespace[key] = self.get_property(key)
         # Specific product informations
         product_model = self.get_product_model(context)
         if product_model:
-            ns.update(product_model.get_model_ns(self))
-            ns['purchase_options'] = product_model.get_purchase_options(self)
+            namespace.update(product_model.get_model_ns(self))
+            purchase_options = product_model.get_purchase_options(self)
+            namespace['purchase_options'] = purchase_options
         else:
-            ns['specific_dic'] = {}
-            ns['specific_list'] = []
+            namespace['specific_dic'] = {}
+            namespace['specific_list'] = []
         # Complementaty Product
-        ns['complementary_products'] = self.get_ns_other_products(context)
+        complementary_products = self.get_ns_other_products(context)
+        namespace['complementary_products'] = complementary_products
         # Cover
-        ns['cover'] = self.get_cover_namespace(context)
+        namespace['cover'] = self.get_cover_namespace(context)
         # Images
-        ns['images'] = self.get_images_namespace(context)
+        namespace['images'] = self.get_images_namespace(context)
         # Product is buyable
-        ns['is_buyable'] = self.is_buyable()
+        namespace['is_buyable'] = self.is_buyable()
         # Authentificated ?
         ac = self.get_access_control()
-        ns['is_authenticated'] = ac.is_authenticated(context.user, self)
-        return ns
+        namespace['is_authenticated'] = ac.is_authenticated(context.user,
+                                                            self)
+        return namespace
 
 
     def get_ns_other_products(self, context):
