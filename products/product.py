@@ -48,7 +48,6 @@ from product_views import Product_View, Product_Edit, Product_EditModel#, Produc
 from schema import product_schema
 
 
-
 def get_namespace_image(image, context):
     namespace = {'href': context.get_link(image),
                  'title': image.get_property('title')}
@@ -129,7 +128,8 @@ class Product(Folder):
         return (Folder.get_catalog_fields(self)
                 + [KeywordField('product_model'),
                    KeywordField('categories', is_stored=True),
-                   TextField('html_description'), TextField('description'),
+                   TextField('html_description'),
+                   TextField('description'),
                    BoolField('has_categories')])
 
 
@@ -153,6 +153,11 @@ class Product(Folder):
         return values
 
 
+    def get_canonical_path(self):
+        site_root = self.get_site_root()
+        products = site_root.get_resource('shop/products')
+        return products.get_canonical_path().resolve2(self.name)
+
 
     def get_product_model(self, context):
         product_model = self.get_property('product_model')
@@ -160,6 +165,7 @@ class Product(Folder):
             return None
         shop = self.get_real_resource().parent.parent
         return shop.get_resource('products-models/%s' % product_model)
+
 
     ##################################################
     ## Namespace
@@ -211,6 +217,7 @@ class Product(Folder):
             selected_products.append(ns)
         return selected_products
 
+
     #####################
     # Images
     #####################
@@ -250,6 +257,7 @@ class Product(Folder):
             if ac.is_allowed_to_view(user, image):
                 images.append(image)
         return images
+
 
     #####################
     ## API
@@ -399,11 +407,12 @@ class Products(Folder):
     class_title = MSG(u'Products')
     class_views = ['browse_content']
 
+    # Views
+    browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
+
+
     def get_document_types(self):
         return [Product]
-
-
-    browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
 
 
 
