@@ -164,10 +164,15 @@ class Product_Edit(AutoForm):
 
 
     def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name)
+        language = resource.get_content_language(context)
+        return resource.get_property(name, language=language)
 
 
     def action(self, resource, context, form):
-        for key in product_schema.keys():
-            resource.set_property(key, form[key])
+        language = resource.get_content_language(context)
+        for key, datatype in self.schema.iteritems():
+            if issubclass(datatype, Unicode):
+                resource.set_property(key, form[key], language)
+            else:
+                resource.set_property(key, form[key])
         return context.come_back(messages.MSG_CHANGES_SAVED)
