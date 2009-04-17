@@ -341,8 +341,9 @@ class Product(Folder):
         categories = shop.get_resource('categories')
         categories_path = categories.get_abspath()
 
-        old_name = Path(old_path).get_name()
-        new_name = Path(new_path).get_name()
+        old_name = str(categories_path.get_pathto(old_path))
+        new_name = str(categories_path.get_pathto(new_path))
+
         old_categories = self.get_property('categories')
         new_categories = []
         for name in self.get_property('categories'):
