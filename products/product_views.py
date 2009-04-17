@@ -130,13 +130,19 @@ class Product_EditModel(AutoForm):
 
 
     def get_value(self, resource, context, name, datatype):
-        return datatype.decode(resource.get_property(name))
+        language = resource.get_content_language(context)
+        return resource.get_property(name, language=language)
 
 
     def action(self, resource, context, form):
+        language = resource.get_content_language(context)
         product_type = resource.get_product_model(context)
-        for key in product_type.get_model_schema():
-            resource.set_property(key, form[key])
+        for key, datatype in product_type.get_model_schema().iteritems():
+            # FIXME Unicode datatype is not necessary multilingual
+            lang = None
+            if issubclass(datatype, Unicode):
+                lang = language
+            resource.set_property(key, form[key], language=lang)
         return context.come_back(messages.MSG_CHANGES_SAVED)
 
 

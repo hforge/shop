@@ -279,49 +279,20 @@ class Product(Folder):
     #######################################
     def get_property_and_language(self, name, language=None):
         # Default property
+        value = Folder.get_property_and_language(self, name, language)
         if name in Product.get_metadata_schema():
-            return Folder.get_property_and_language(self, name, language)
+            return value
         # Dynamic property
         context = get_context()
         product_model = self.get_product_model(context)
         product_model_schema = product_model.get_model_schema()
-        properties = self.metadata.properties
-
-        # Check the property exists
         datatype = product_model_schema[name]
-        is_multiple = getattr(datatype, 'multiple', False)
-        if name not in properties:
-            default = datatype.get_default()
-            return default, None
-        # Get the value
-        value = properties[name]
 
-        # Multiple
-        if is_multiple:
-            value = list(Tokens.decode(value))
-
-        # Monolingual property
-        if not isinstance(value, dict):
-            return value, None
-
-        # Language negotiation
-        if language is None:
-            context = get_context()
-            if context is None:
-                language = None
-            else:
-                languages = [
-                    k for k, v in value.items() if not datatype.is_empty(v) ]
-                accept = context.accept_language
-                language = accept.select_language(languages)
-            # Default (FIXME pick one at random)
-            if language is None:
-                language = value.keys()[0]
-            return value[language], language
-
-        if language in value:
-            return value[language], language
-        return datatype.get_default(), None
+        value, lang = value
+        # FIXME Default value
+        if value is None:
+            return datatype.get_default(), lang
+        return datatype.decode(value), lang
 
 
     def set_property(self, name, value, language=None):
