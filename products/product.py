@@ -292,6 +292,13 @@ class Product(Folder):
         # FIXME Default value
         if value is None:
             return datatype.get_default(), lang
+        # FIXME Multiple
+        is_multiple = getattr(datatype, 'multiple', False)
+        if is_multiple:
+            if not isinstance(value, list):
+                # Enumerate.get_namespace claims a single value or a list
+                value = list(Tokens.decode(value))
+
         return datatype.decode(value), lang
 
 
