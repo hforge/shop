@@ -28,4 +28,4 @@ class AddLinkCrossSelling(DBResource_AddLink):
 
     def get_filter_types(self):
         from product import Product
-        return (Product,)
+        return [Product]
