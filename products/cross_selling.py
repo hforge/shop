@@ -32,7 +32,7 @@ from cross_selling_views import AddLinkCrossSelling
 
 class ResourcesOrderedTable_Ordered(OrderedTable_View):
 
-    title = MSG('View')
+    title = MSG(u'View')
     thumb_size = (50, 50)
 
     def get_table_columns(self, resource, context):
