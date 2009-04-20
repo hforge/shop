@@ -22,7 +22,6 @@ from itools.datatypes import String, Tokens
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.html import XHTMLFile
-from itools.uri import Path
 from itools.web import get_context
 from itools.xapian import KeywordField, TextField, BoolField
 
@@ -99,7 +98,6 @@ class Product(Folder):
 
 
     def get_dynamic_metadata_schema(self, context):
-        context = get_context()
         product_model = self.get_product_model(context)
         product_model_schema = product_model.get_model_schema()
         return merge_dicts(Folder.get_metadata_schema(), product_schema,
@@ -110,12 +108,13 @@ class Product(Folder):
     def _make_resource(cls, folder, name, *args, **kw):
         Folder._make_resource(cls, folder, name, *args, **kw)
         # Images folder
-        ImagesFolder._make_resource(ImagesFolder, folder, '%s/images' % name,
-                                    body='', title={'en': 'Images'})
+        ImagesFolder._make_resource(ImagesFolder, folder,
+                                    '%s/images' % name, body='',
+                                    title={'en': 'Images'})
         # Order images table
         PhotoOrderedTable._make_resource(PhotoOrderedTable, folder,
-                           '%s/order-photos' % name,
-                           title={'en': u'Order photos'})
+                                         '%s/order-photos' % name,
+                                         title={'en': u'Order photos'})
         # Cross Selling table
         CrossSellingTable._make_resource(CrossSellingTable, folder,
                                          '%s/cross-selling' % name,
@@ -303,10 +302,11 @@ class Product(Folder):
 
 
     def set_property(self, name, value, language=None):
+        context = get_context()
         # We have to reindex
-        get_context().server.change_resource(self)
+        context.server.change_resource(self)
         # Dynamic property
-        product_model = self.get_product_model(get_context())
+        product_model = self.get_product_model(context)
         if not product_model:
             Folder.set_property(self, name, value, language)
             return
