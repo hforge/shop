@@ -91,7 +91,7 @@ class CrossSellingTable(OrderedTable):
     def get_add_selected_classes(self, add_type, target_id):
         if add_type == 'add_link' and target_id == 'name':
             from product import Product
-            return (Product,)
+            return [Product]
         return OrderedTable.get_add_selected_classes(self, add_type,
                                                      target_id)
 
