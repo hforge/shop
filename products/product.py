@@ -190,7 +190,7 @@ class Product(Folder):
             namespace['purchase_options'] = purchase_options
         else:
             namespace['purchase_options'] = []
-            namespace['specific_dic'] = {}
+            namespace['specific_dict'] = {}
             namespace['specific_list'] = []
         # Complementaty Product
         complementary_products = self.get_ns_other_products(context)

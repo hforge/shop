@@ -176,7 +176,7 @@ class ProductModel(Folder):
 
 
     def get_model_ns(self, resource):
-        ns = {'specific_dic': {},
+        ns = {'specific_dict': {},
               'specific_list': []}
         for info in self.get_model_informations():
             name = info['name']
@@ -191,7 +191,7 @@ class ProductModel(Folder):
             kw = {'title': info['title'],
                   'value': value,
                   'multiple': datatype.multiple}
-            ns['specific_dic'][name] = kw
+            ns['specific_dict'][name] = kw
             ns['specific_list'].append(kw)
         return ns
 
