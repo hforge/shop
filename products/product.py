@@ -189,6 +189,7 @@ class Product(Folder):
             purchase_options = product_model.get_purchase_options(self)
             namespace['purchase_options'] = purchase_options
         else:
+            namespace['purchase_options'] = []
             namespace['specific_dic'] = {}
             namespace['specific_list'] = []
         # Complementaty Product
