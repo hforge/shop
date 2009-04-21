@@ -97,8 +97,8 @@ class Product(Folder):
                            product_model=String)
 
 
-    def get_dynamic_metadata_schema(self, context):
-        product_model = self.get_product_model(context)
+    def get_dynamic_metadata_schema(self):
+        product_model = self.get_product_model()
         product_model_schema = product_model.get_model_schema()
         return merge_dicts(Folder.get_metadata_schema(), product_schema,
                             product_model_schema)
@@ -156,12 +156,13 @@ class Product(Folder):
         return products.get_canonical_path().resolve2(self.name)
 
 
-    def get_product_model(self, context):
+    def get_product_model(self):
         product_model = self.get_property('product_model')
         if not product_model:
             return None
-        shop = self.get_real_resource().parent.parent
-        return shop.get_resource('products-models/%s' % product_model)
+        product = self.get_real_resource()
+        path = '../../products-models/%s' % product_model
+        return product.get_resource(path)
 
 
     ##################################################
@@ -183,7 +184,7 @@ class Product(Folder):
         for key in product_schema.keys():
             namespace[key] = self.get_property(key)
         # Specific product informations
-        product_model = self.get_product_model(context)
+        product_model = self.get_product_model()
         if product_model:
             namespace.update(product_model.get_model_ns(self))
             purchase_options = product_model.get_purchase_options(self)
@@ -285,8 +286,7 @@ class Product(Folder):
             return value_language
 
         # Dynamic property
-        context = get_context()
-        product_model = self.get_product_model(context)
+        product_model = self.get_product_model()
         product_model_schema = product_model.get_model_schema()
         datatype = product_model_schema[name]
         value, language = value_language
@@ -314,7 +314,7 @@ class Product(Folder):
         # We have to reindex
         context.server.change_resource(self)
         # Dynamic property
-        product_model = self.get_product_model(context)
+        product_model = self.get_product_model()
         if not product_model:
             Folder.set_property(self, name, value, language)
             return

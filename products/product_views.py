@@ -120,12 +120,12 @@ class Product_EditModel(AutoForm):
 
 
     def get_widgets(self, resource, context):
-        product_type = resource.get_product_model(context)
+        product_type = resource.get_product_model()
         return product_type.get_model_widgets()
 
 
     def get_schema(self, resource, context):
-        product_type = resource.get_product_model(context)
+        product_type = resource.get_product_model()
         return product_type.get_model_schema()
 
 
@@ -136,7 +136,7 @@ class Product_EditModel(AutoForm):
 
     def action(self, resource, context, form):
         language = resource.get_content_language(context)
-        product_type = resource.get_product_model(context)
+        product_type = resource.get_product_model()
         for key, datatype in product_type.get_model_schema().iteritems():
             # FIXME Unicode datatype is not necessary multilingual
             lang = None
