@@ -17,38 +17,42 @@
   <stl:block stl:if="products">
 
   <table id="cart">
-    <tr>
-      <th></th>
-      <th width="400px">Product</th>
-      <th>Unit Price</th>
-      <th>Quantity</th>
-      <th>Total Price</th>
-      <th id="last">Remove</th>
-    </tr>
-    <tr stl:repeat="p products">
-      <td valign="top">
-        <img src="${p/img/href}/;thumb?width=100&amp;height=100"
-             title="${p/img/title}" stl:if="p/img"/>
-        <img src="/ui/icons/48x48/text.png" stl:if="not p/img"/>
-      </td>
-      <td>
-        <a href="${p/uri}">
-          ${p/title}
-        </a>
+    <thead>
+      <tr>
+        <th></th>
+        <th width="400px">Product</th>
+        <th>Unit Price</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th id="last">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr stl:repeat="p products">
+        <td valign="top">
+          <img src="${p/img/href}/;thumb?width=100&amp;height=100"
+            title="${p/img/title}" stl:if="p/img"/>
+          <img src="/ui/icons/48x48/text.png" stl:if="not p/img"/>
         </td>
-      <td>${p/price} €</td>
-      <td>
-        <a id="decrease-quantity" href="?action=remove&amp;product=${p/name}">-</a>
-        ${p/quantity}
-        <a id="increase-quantity" href="?action=add&amp;product=${p/name}">+</a>
-      </td>
-      <td>${p/price_total} €</td>
-      <td>
-        <a href="$?action=delete&amp;product=${p/name}">
-          <img src="/ui/icons/16x16/delete.png"/>
-        </a>
-      </td>
-    </tr>
+        <td>
+          <a href="${p/uri}">
+            ${p/title}
+          </a>
+        </td>
+        <td>${p/price} €</td>
+        <td>
+          <a id="decrease-quantity" href="?action=remove&amp;product=${p/name}">-</a>
+          ${p/quantity}
+          <a id="increase-quantity" href="?action=add&amp;product=${p/name}">+</a>
+        </td>
+        <td>${p/price_total} €</td>
+        <td>
+          <a href="$?action=delete&amp;product=${p/name}">
+            <img src="/ui/icons/16x16/delete.png"/>
+          </a>
+        </td>
+      </tr>
+    </tbody>
   </table>
 
   <fieldset id="totalprice">
