@@ -279,29 +279,28 @@ class Product(Folder):
     ## To FIX in 0.60
     #######################################
     def get_property_and_language(self, name, language=None):
-        # Default property
-        value_language = Folder.get_property_and_language(self, name,
-                                                          language)
-        if name in Product.get_metadata_schema():
-            return value_language
-
-        # Dynamic property
+        value, language = Folder.get_property_and_language(self, name,
+                                                           language)
+        # Dynamic property?
         product_model = self.get_product_model()
-        product_model_schema = product_model.get_model_schema()
-        datatype = product_model_schema[name]
-        value, language = value_language
+        if product_model:
+            product_model_schema = product_model.get_model_schema()
+            if name in product_model_schema:
+                datatype = product_model_schema[name]
+                # Default value
+                if value is None:
+                    value = datatype.get_default()
+                elif getattr(datatype, 'multiple', False):
+                    if not isinstance(value, list):
+                        # Decode the property
+                        # Only support list of strings
+                        value = list(Tokens.decode(value))
+                    # Else a list was already set by "set_property"
+                else:
+                    value = datatype.decode(value)
 
-        # FIXME Default value
-        if value is None:
-            return datatype.get_default(), language
-
-        # FIXME Multiple
-        if getattr(datatype, 'multiple', False):
-            if not isinstance(value, list):
-                # Enumerate.get_namespace claims a single value or a list
-                value = list(Tokens.decode(value))
-
-        return datatype.decode(value), language
+        # Default property
+        return value, language
 
 
     def is_multilingual(self, name, language):
@@ -310,37 +309,35 @@ class Product(Folder):
 
 
     def set_property(self, name, value, language=None):
-        context = get_context()
-        # We have to reindex
-        context.server.change_resource(self)
-        # Dynamic property
+        """Added to handle dynamic properties.
+        The value is encoded because metadata won't know about its datatype.
+        The multilingual status must be detected to give or not the
+        "language" argument.
+        """
+        # Dynamic property?
         product_model = self.get_product_model()
-        if not product_model:
-            Folder.set_property(self, name, value, language)
-            return
-        product_model_schema = product_model.get_model_schema()
-        if name in product_model_schema:
-            datatype = product_model_schema[name]
-            is_multiple = getattr(datatype, 'multiple', False)
-            if is_multiple:
-                self.metadata.properties[name] = Tokens.encode(value)
-            else:
-                # 1. Detect if property is multilingual
-                # 2. Encode the value because metadata won't know about a
-                #    dynamic property
-                if self.is_multilingual(name, language):
-                    Folder.set_property(self, name, datatype.encode(value),
-                                        language)
-                else:
-                    Folder.set_property(self, name, datatype.encode(value))
-            return
+        if product_model:
+            product_model_schema = product_model.get_model_schema()
+            if name in product_model_schema:
+                datatype = product_model_schema[name]
+                if getattr(datatype, 'multiple', False):
+                    return Folder.set_property(self, name,
+                                               Tokens.encode(value))
+                elif self.is_multilingual(name, language):
+                    return Folder.set_property(self, name,
+                                               datatype.encode(value),
+                                               language)
+                # Even if the language was not None, this property is not
+                # multilingual so ignore it.
+                return Folder.set_property(self, name,
+                                           datatype.encode(value))
 
-        # Default property
-        # Detect if property is multilingual
+        # Standard property
+        # (or undeclared property that will raise an error)
+        # Detect if the "language" argument must be given.
         if self.is_multilingual(name, language):
-            Folder.set_property(self, name, value, language)
-        else:
-            Folder.set_property(self, name, value)
+            return Folder.set_property(self, name, value, language)
+        return Folder.set_property(self, name, value)
 
 
     def get_links(self):
