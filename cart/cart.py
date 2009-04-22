@@ -81,6 +81,13 @@ class ProductCart(object):
         self.set_cart([])
 
     ######################
+    # Namespace
+    ######################
+    def get_namespace(self):
+        return {'nb_products': self.get_nb_products()}
+
+
+    ######################
     # Products
     ######################
 
@@ -126,6 +133,13 @@ class ProductCart(object):
                 products.remove(products[i])
                 break
         self.set_list_products(products)
+
+
+    def get_nb_products(self):
+        nb_products = 0
+        for product_cart in self.get_elements():
+            nb_products += int(product_cart['quantity'])
+        return nb_products
 
 
     def get_total_price(self, products):

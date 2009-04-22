@@ -17,7 +17,7 @@
 # Import from itools
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
-from itools.web import STLForm
+from itools.web import INFO, STLForm
 
 # Import from ikaaro
 from ikaaro import messages
@@ -88,8 +88,11 @@ class Product_View(STLForm):
 
 
     def get_namespace(self, resource, context):
-        return resource.get_namespace(context)
-
+        # Product namespace
+        namespace = resource.get_namespace(context)
+        # Cart namespace
+        namespace['cart'] = ProductCart().get_namespace()
+        return namespace
 
 
     def action(self, resource, context, form):
@@ -102,8 +105,8 @@ class Product_View(STLForm):
         cart = ProductCart()
         # XXX Add options
         cart.add_product(resource.name, 1)
-        msg = MSG(u'Product added to cart !')
-        return context.come_back(msg)
+        # Come back
+        context.message = INFO(u'Product added to cart !')
 
 
 
