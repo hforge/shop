@@ -134,7 +134,7 @@ class Paybox_Pay(STLForm):
 
     def GET(self, resource, context, conf):
         # We get the paybox CGI path on serveur
-        cgi_path = Path(sys.executable).resolve('paybox.cgi')
+        cgi_path = Path(sys.prefix).resolve2('bin/paybox.cgi')
         # Get configuration
         configuration_uri = get_abspath('paybox.cfg')
         configuration = ConfigFile(configuration_uri)
