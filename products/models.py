@@ -155,7 +155,7 @@ class ProductModel(Folder):
             datatype = Datatypes.get_real_datatype(datatype, model=self,
                 enumerate=enumerate, mandatory=mandatory, multiple=multiple)
             widget = get_default_widget(datatype)
-            widget = widget(name, title=MSG(title))
+            widget = widget(name, title=MSG(title), has_empty_option=False)
             infos.append({'name': name,
                           'title': title,
                           'datatype': datatype,
@@ -204,6 +204,8 @@ class ProductModel(Folder):
             if (not info['is_purchase_option'] or
                 not issubclass(datatype, Enumerate)):
                 continue
+            datatype.title = info['title']
+            datatype.values = resource.get_property(name)
             datatype.multiple = False
             widgets.append(info['widget'].to_html(datatype, None))
         return widgets

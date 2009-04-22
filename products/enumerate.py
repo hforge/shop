@@ -29,10 +29,12 @@ class TableEnumerate(Enumerate):
         table = cls.model.get_resource(cls.enumerate).handler
         get_value = table.get_record_value
         if hasattr(cls, 'values'):
-            return [{'name': str(get_value(record, 'name')),
+            options = [{'name': str(get_value(record, 'name')),
                      'value': get_value(record, 'title')}
                     for record in table.get_records()
                     if get_value(record, 'name') in cls.values]
+            options.insert(0, {'name': None, 'value': cls.title})
+            return options
         return [{'name': str(get_value(record, 'name')),
                  'value': get_value(record, 'title')}
                 for record in table.get_records()]
