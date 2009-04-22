@@ -34,14 +34,14 @@ class ResourcesOrderedTable_Ordered(OrderedTable_View):
 
     thumb_size = (50, 50)
 
+
     def get_table_columns(self, resource, context):
-        columns = [('checkbox', None),
-                   ('id', MSG(u'id')),
-                   ('title', MSG(u'Title')),
-                   ('description', MSG(u'Description')),
-                   ('image', MSG(u'Image')),
-                   ('order', MSG(u'Order'))]
-        return columns
+        return [('checkbox', None),
+                ('id', MSG(u'id')),
+                ('title', MSG(u'Title')),
+                ('description', MSG(u'Description')),
+                ('image', MSG(u'Image')),
+                ('order', MSG(u'Order'))]
 
 
     def get_item_value(self, resource, context, item, column):
@@ -96,6 +96,7 @@ class CrossSellingTable(OrderedTable):
 
 
     def get_add_bc_root(self, add_type, target_id):
+        # Return "products" container
         return self.get_real_resource().parent.parent
 
 
