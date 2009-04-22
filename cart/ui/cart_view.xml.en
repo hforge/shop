@@ -28,7 +28,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr stl:repeat="p products">
+      <tr stl:repeat="p products" class="${repeat/p/even}">
         <td valign="top">
           <img src="${p/img/href}/;thumb?width=100&amp;height=100"
             title="${p/img/title}" stl:if="p/img"/>
