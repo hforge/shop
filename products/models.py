@@ -196,8 +196,8 @@ class ProductModel(Folder):
         return ns
 
 
-    def get_purchase_options(self, resource):
-        widgets = []
+    def get_purchase_options_schema(self, resource):
+        schema = {}
         for info in self.get_model_informations():
             name = info['name']
             datatype = info['datatype']
@@ -207,7 +207,30 @@ class ProductModel(Folder):
             datatype.title = info['title']
             datatype.values = resource.get_property(name)
             datatype.multiple = False
-            widgets.append(info['widget'].to_html(datatype, None))
+            datatype.mandatory = True
+            schema[name] = datatype
+        return schema
+
+
+    def get_purchase_options_widgets(self, resource, namespace):
+        widgets = []
+        schema = self.get_purchase_options_schema(resource)
+        for info in self.get_model_informations():
+            name = info['name']
+            datatype = info['datatype']
+            if (not info['is_purchase_option'] or
+                not issubclass(datatype, Enumerate)):
+                continue
+            datatype.title = info['title']
+            datatype.values = resource.get_property(name)
+            datatype.multiple = False
+            widget_namespace = namespace[name]
+            value = widget_namespace['value']
+            widget_namespace['title'] = info['title']
+            widget = info['widget']
+            widget.css = widget_namespace['class']
+            widget_namespace['widget'] = widget.to_html(datatype, value)
+            widgets.append(widget_namespace)
         return widgets
 
 

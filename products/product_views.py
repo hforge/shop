@@ -17,6 +17,7 @@
 # Import from itools
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
+from itools.handlers import merge_dicts
 from itools.web import INFO, STLForm
 
 # Import from ikaaro
@@ -87,11 +88,32 @@ class Product_View(STLForm):
         return template
 
 
+    def get_schema(self, resource, context):
+        base_schema = STLForm.get_schema(self, resource, context)
+        # Schema des purchase options
+        purchase_schema = {}
+        model = resource.get_product_model()
+        if model:
+            purchase_schema = model.get_purchase_options_schema(resource)
+        # Merge
+        return merge_dicts(base_schema, purchase_schema)
+
+
     def get_namespace(self, resource, context):
+        # Build namespace
+        namespace = self.build_namespace(resource, context)
         # Product namespace
-        namespace = resource.get_namespace(context)
+        namespace.update(resource.get_namespace(context))
         # Cart namespace
         namespace['cart'] = ProductCart().get_namespace()
+        # Purchase options
+        model = resource.get_product_model()
+        if model:
+            widgets = model.get_purchase_options_widgets(resource, namespace)
+            namespace['purchase_options_widgets'] = widgets
+        else:
+            namespace['purchase_options_widgets'] = []
+        # Return namespace
         return namespace
 
 

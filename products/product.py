@@ -184,13 +184,10 @@ class Product(Folder):
         for key in product_schema.keys():
             namespace[key] = self.get_property(key)
         # Specific product informations
-        product_model = self.get_product_model()
-        if product_model:
-            namespace.update(product_model.get_model_ns(self))
-            purchase_options = product_model.get_purchase_options(self)
-            namespace['purchase_options'] = purchase_options
+        model = self.get_product_model()
+        if model:
+            namespace.update(model.get_model_ns(self))
         else:
-            namespace['purchase_options'] = []
             namespace['specific_dict'] = {}
             namespace['specific_list'] = []
         # Complementaty Product
