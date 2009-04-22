@@ -281,6 +281,11 @@ class Product(Folder):
     def get_property_and_language(self, name, language=None):
         value, language = Folder.get_property_and_language(self, name,
                                                            language)
+
+        # Default properties first (we need "product_model")
+        if name in self.get_metadata_schema():
+            return value, language
+
         # Dynamic property?
         product_model = self.get_product_model()
         if product_model:
@@ -299,7 +304,6 @@ class Product(Folder):
                 else:
                     value = datatype.decode(value)
 
-        # Default property
         return value, language
 
 
