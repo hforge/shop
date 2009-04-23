@@ -340,6 +340,9 @@ class Product(Folder):
             return Folder.set_property(self, name, value, language)
         return Folder.set_property(self, name, value)
 
+    #######################
+    ## Links
+    #######################
 
     def get_links(self):
         links = []
