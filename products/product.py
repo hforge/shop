@@ -372,6 +372,18 @@ class Product(Folder):
         get_context().server.change_resource(self)
 
 
+    def get_virtual_path(self):
+        """XXX hardcoded for values we have always used so far.
+        Remember to change it if your virtual categories folder is named
+        something else.
+        """
+        categories = self.get_property('categories')
+        category = categories[0]
+        path = 'categories/%s/%s' % (category, self.name)
+        website = self.get_site_root()
+        return website.get_abspath().resolve2(path)
+
+
     #######################
     ## Updates methods
     #######################
