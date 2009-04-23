@@ -60,4 +60,9 @@ class PhotoOrderedTable(ChildrenOrderedTable):
         return (Image,)
 
 
+    def get_add_bc_root(self, add_type, target_id):
+        # return "images" folder
+        return self.get_resource('../images')
+
+
 register_resource_class(PhotoOrderedTable)
