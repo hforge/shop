@@ -47,7 +47,7 @@
         </td>
         <td>${p/price_total} €</td>
         <td>
-          <a href="$?action=delete&amp;product=${p/name}">
+          <a href="?action=delete&amp;product=${p/name}">
             <img src="/ui/icons/16x16/delete.png"/>
           </a>
         </td>
