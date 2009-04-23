@@ -34,21 +34,3 @@ class Civilite(Enumerate):
         {'name': 'mister', 'value': MSG(u"M.")},
         {'name': 'madam', 'value': MSG(u"Mme")},
         {'name': 'miss', 'value': MSG(u"Mlle")}]
-
-
-
-class UserAddresses(Enumerate):
-
-    @classmethod
-    def get_options(cls):
-        # Informations
-        shop = cls.shop
-        user_name = cls.user_name
-        addresses = shop.get_resource('addresses').handler
-        # Options
-        options = []
-        for record in addresses.search(user=user_name):
-            title = addresses.get_record_value(record, 'title')
-            options.append({'name': str(record.id),
-                            'value': title})
-        return options

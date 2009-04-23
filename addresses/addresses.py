@@ -31,10 +31,10 @@ from shop.datatypes import Civilite
 class BaseAddresses(BaseTable):
 
     record_schema = {
-      'title': Unicode(index='keyword'),
-      'gender': Civilite,
-      'firstname': Unicode,
-      'lastname': Unicode,
+      'title': Unicode(index='keyword', mandatory=True),
+      'gender': Civilite(mandatory=True),
+      'firstname': Unicode(mandatory=True),
+      'lastname': Unicode(mandatory=True),
       'user': String(index='keyword'),
       'address_1': Unicode(mandatory=True),
       'address_2': Unicode,

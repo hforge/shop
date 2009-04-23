@@ -31,7 +31,7 @@
           </stl:block>
           ${delivery_address/zipcode} ${delivery_address/town}<br/>
           ${delivery_address/country}<br/>
-          <a href=";edit_address?type=delivery" class="address-edit">(Edit *)</a>
+          <a href=";choose_address?type=delivery" class="address-edit">(Edit *)</a>
         </p>
       </td>
       <td>
@@ -47,7 +47,7 @@
           ${bill_address/zipcode} ${bill_address/town}<br/>
           ${bill_address/country}<br/>
         </p>
-        <a href=";edit_address?type=bill" class="address-edit">(Edit *)</a>
+        <a href=";choose_address?type=bill" class="address-edit">(Edit *)</a>
       </td>
     </tr>
   </table>

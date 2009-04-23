@@ -80,7 +80,12 @@ class ProductCart(object):
     def clear(self):
         self.set_cart([])
 
-    ######################
+
+    def clean(self, context):
+        for key in ['delivery_address', 'bill_address',
+                    'shipping', 'shipping_option']:
+            context.del_cookie(key)
+
     # Namespace
     ######################
     def get_namespace(self):

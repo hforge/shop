@@ -36,7 +36,7 @@ from ikaaro.website_views import RegisterForm
 # Import from shop
 from cart import ProductCart
 from orders import Order
-from datatypes import Civilite, UserAddresses
+from datatypes import Civilite
 
 
 class Shop_View(STLView):
@@ -264,55 +264,64 @@ class Shop_Buy(BaseView):
 ## Edit Addresses views
 #########################################
 
-class Shop_ChooseAddress(STLView):
+class Shop_ChooseAddress(STLForm):
 
     access = 'is_authenticated'
     title = MSG(u'Order summary')
     template = '/ui/shop/shop_chooseaddress.xml'
 
-    schema = {'calendar_address': Integer(mandatory=True),
+    schema = {'id_address': Integer(mandatory=True),
               'type': String(mandatory=True, default='delivery')}
 
     def get_namespace(self, resource, context):
-        ns = {}
-        user_name = context.user.name
-        datatype = UserAddresses(shop=resource, user_name=user_name)
-        widget = SelectWidget('calendar_address', has_empty_option=False)
-        ns['widget'] = widget.to_html(datatype, None)
-        ns['type'] = context.get_form_value('type')
-        # Progress bar
-        ns['progress'] = Shop_Progress(index=3).GET(resource, context)
-        return ns
+        # Build namespace
+        namespace = {'addresses': [],
+                     'type': context.get_form_value('type'),
+                     'progress': Shop_Progress(index=3).GET(resource, context)}
+        # GEt cart
+        cart = ProductCart()
+        if context.get_form_value('type') == 'delivery':
+            id_current_address = cart.get_delivery_address()
+            namespace['is_delivery_address'] = True
+        else:
+            id_current_address = cart.get_bill_address()
+            namespace['is_delivery_address'] = False
+        # User address book
+        addresses = resource.get_resource('addresses').handler
+        for record in addresses.search(user=context.user.name):
+            is_selected = record.id==id_current_address
+            ns = {'id': record.id,
+                  'css': 'selected' if is_selected else None}
+            ns.update(resource.get_user_address(record.id))
+            namespace['addresses'].append(ns)
+        return namespace
 
 
     def action_select_address(self, resource, context, form):
         cart = ProductCart()
         if form['type'] == 'delivery':
-            cart.set_delivery_address(form['calendar_address'])
+            cart.set_delivery_address(form['id_address'])
         else:
-            cart.set_bill_address(form['calendar_address'])
+            cart.set_bill_address(form['id_address'])
         # Come back
         msg = MSG(u'Modification ok')
         return context.come_back(msg, goto=';addresses')
 
 
-
-class Shop_EditAddress(AutoForm):
-
-    access = 'is_authenticated'
+class Shop_AddAddress(AutoForm):
 
     title = MSG(u'Fill a new address')
 
     address_title = MSG(u"""
-      Donnez un nom à cette adresse pour que vous puissiez la retrouver
+      Please give a name to your address.
       """)
 
     schema = {
         'type': String(default='delivery'),
         'gender': Civilite(mandatory=True),
-        'firstname': Unicode,
-        'lastname': Unicode,
-        'title': Unicode,
+        'firstname': Unicode(mandatory=True),
+        'lastname': Unicode(mandatory=True),
+        'title': Unicode(mandatory=True),
         'address_1': Unicode(mandatory=True),
         'address_2': Unicode,
         'zipcode': String(mandatory=True),
@@ -337,28 +346,15 @@ class Shop_EditAddress(AutoForm):
     def get_value(self, resource, context, name, datatype):
         if name=='type':
             return context.get_form_value('type', datatype)
-        cart = ProductCart()
-        delivery_address = cart.get_delivery_address()
-        if not delivery_address:
-            return datatype.get_default()
-        return resource.get_user_address(delivery_address)[name]
+        return AutoForm.get_value(self, resource, context, name, datatype)
 
 
     def action(self, resource, context, form):
         addresses = resource.get_resource('addresses').handler
-        # We search if addresses already exist in addresses table
-        query = []
-        query.append(PhraseQuery('title', form['title']))
-        query.append(PhraseQuery('user', context.user.name))
-        records = addresses.search(AndQuery(*query))
         # Add informations to form
         form['user'] = context.user.name
-        # Add or save informations
-        if records:
-            record = records[0]
-            addresses.update_record(record.id, **form)
-        else:
-            record = addresses.add_record(form)
+        # Add
+        record = addresses.add_record(form)
         # We save address in cart
         cart = ProductCart()
         if form['type']=='delivery':
@@ -366,28 +362,62 @@ class Shop_EditAddress(AutoForm):
         else:
             cart.set_bill_address(record.id)
         # Come back
-        msg = MSG(u'Address modify')
+        msg = MSG(u'Address added')
         return context.come_back(msg, goto=';addresses')
 
 
+class Shop_EditAddress(Shop_AddAddress):
 
-class Shop_EditAddressForm(CompositeForm):
+    access = 'is_authenticated'
 
-    access = True
-    title = MSG(u'Choose address')
+    title = MSG(u'Edit address')
 
-    subviews = [Shop_ChooseAddress(),
+    schema = merge_dicts(
+              Shop_AddAddress.schema,
+              id=Integer)
+
+    widgets = [HiddenWidget('id')] + Shop_AddAddress.widgets
+
+
+    def get_value(self, resource, context, name, datatype):
+        id = context.get_form_value('id', type=Integer)
+        if name=='type':
+            return context.get_form_value('type', datatype)
+        if name=='id':
+            return id
+        if not id:
+            return AutoForm.get_value(self, resource, context, name, datatype)
+        return resource.get_user_address(id)[name]
+
+
+    def action(self, resource, context, form):
+        id = form['id']
+        addresses = resource.get_resource('addresses').handler
+        # Add informations to form
+        form['user'] = context.user.name
+        # Edit informations
+        del form['id']
+        addresses.update_record(id, **form)
+        msg = MSG(u'Address modify')
+        return context.come_back(msg, goto=';choose_address',
+                                 keep=['type'])
+
+
+
+class Shop_EditAddressProgress(CompositeForm):
+
+    access = 'is_authenticated'
+
+    subviews = [Shop_Progress(index=3),
                 Shop_EditAddress()]
 
 
-    def get_namespace(self, resource, context):
-        # If user has no addresses show Shop_ChooseAddress()
-        subviews = deepcopy(self.subviews)
-        if not resource.get_user_main_address(context.user.name):
-            subviews = subviews[1:]
-        # Build namespace
-        views = [ view.GET(resource, context) for view in subviews]
-        return {'views': views}
+class Shop_AddAddressProgress(CompositeForm):
+
+    access = 'is_authenticated'
+
+    subviews = [Shop_Progress(index=3),
+                Shop_AddAddress()]
 
 
 #########################################
@@ -439,21 +469,28 @@ class Shop_Register(RegisterForm):
         email = form['email'].strip()
         user = root.get_user_from_login(email)
         if user is not None:
-            msg = MSG(u'This email address is already used')
-            return context.come_back(msg)
+            context.message = ERROR(u'This email address is already used.')
+            return
 
         # Add the user
         users = root.get_resource('users')
         user = users.set_user(email, password)
+
         # Save properties
         user.save_form(self.schema, form)
 
         # Save address
         kw = {'user': user.name}
         addresses = resource.get_resource('addresses')
-        for key in ['address_1', 'address_2', 'zipcode', 'town', 'country']:
+        for key in ['gender', 'lastname', 'firstname', 'address_1',
+                    'address_2', 'zipcode', 'town', 'country']:
             kw[key] = form[key]
+        kw['title'] = MSG(u'Your address').gettext()
         addresses.handler.add_record(kw)
+
+        # Clean cart, if another user already login before
+        cart = ProductCart()
+        cart.clean(context)
 
         # Set the role
         # XXX

@@ -4,27 +4,67 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1 class="payment-process">Choose delivery address</h1>
+  <h1 class="payment-process" stl:if="is_delivery_address">
+    Choose delivery address
+  </h1>
+  <h1 class="payment-process" stl:if="not is_delivery_address">
+    Choose bill address
+  </h1>
+
   ${progress}
 
-  <fieldset>
-    <legend>Your address book</legend>
+  <form method="POST">
 
-    <p>
-    Please choose the address at witch you want to be deliver.<br/>
+    <p stl:if="is_delivery_address">
+      Please choose the address at witch you want to be deliver in your address book.
+    </p>
+    <p stl:if="not is_delivery_address">
+      Please choose the address at witch you want to receive the bill in you address book.
     </p>
 
-    <form method="POST">
-      ${widget}
-      <input type="hidden" name="type" value="${type}"/>
-      <input id="button-order" name=";select_address"
-        type="submit" value="Choose this address"/>
-    </form>
-    <br/>
-
-    If you want to be XXX at another address, please fill the form bellow.<br/><br/>
-
-  </fieldset>
+    <table id="cart">
+      <tr>
+        <th>Address title</th>
+        <th>Address</th>
+        <th/>
+        <th/>
+      </tr>
+      <tr stl:repeat="address addresses" class="${address/css}">
+        <td>
+          ${address/title}
+        </td>
+        <td>
+          ${address/firstname} ${address/lastname}<br/>
+          ${address/address_1}<br/>
+          <stl:block stl:if="address/address_2">
+            ${address/address_2}<br/>
+          </stl:block>
+          ${address/zipcode} ${address/town}<br/>
+          ${address/country}<br/>
+        </td>
+        <td>
+          <form method="post">
+            <input type="hidden" name="id_address" value="${address/id}"/>
+            <input type="hidden" name="type" value="${type}"/>
+            <input type="submit" class="select_all"
+                 name=";select_address"
+                 value="Select this address"/>
+          </form>
+        </td>
+        <td>
+          <a href=";edit_address?type=${type}&amp;id=${address/id}">
+            <img src="/ui/icons/16x16/edit.png"
+                 title="Edit this address"/>
+            Edit address
+          </a>
+        </td>
+      </tr>
+    </table>
+    <p>
+      If you want to add an item in your address book,
+      <a href=";add_address?type=${type}">click here.</a>
+    </p>
+  </form>
 
 
 </stl:block>
