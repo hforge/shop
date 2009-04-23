@@ -10,12 +10,27 @@
 
   <h2>I'm a new customer</h2>
 
-    <form method="GET" action=";register">
-      E-Mail <input type="text" name="email"/>
-      <input type="submit" name="submit" id="continue" value="Continue"
-        class="button_ok"/>
-    </form>
+  <a href=";register">Register</a>
 
   <h2>I'm already a customer</h2>
+
+  <form id="loginform" name="loginform" method="post">
+    <dl>
+      <dt>
+        <label for="username" class="${username/class}">E-mail Address</label>
+      </dt>
+      <dd>
+        <input type="text" id="username" name="username" value="${username/value}"/>
+      </dd>
+      <dt>
+        <label for="password" class="${password/class}">Password</label>
+      </dt>
+      <dd>
+        <input type="password" id="password" name="password"/>
+        <a href="/;forgotten_password">I forgot my password</a>
+      </dd>
+    </dl>
+    <input type="submit" value="Log in" class="button_ok"/>
+  </form>
 
 </stl:block>

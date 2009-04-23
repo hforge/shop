@@ -398,9 +398,6 @@ class Shop_Register(RegisterForm):
 
     access = True
 
-    query_schema = merge_dicts(RegisterForm.query_schema,
-                               email=Email(mandatory=True))
-
     schema = merge_dicts(RegisterForm.schema,
                          gender=Civilite(mandatory=True),
                          password=String(mandatory=True),
@@ -426,25 +423,6 @@ class Shop_Register(RegisterForm):
                TextWidget('town', title=MSG(u"Town")),
                TextWidget('country', title=MSG(u"Pays"))]
 
-
-    def GET(self, resource, context):
-        email = context.query['email']
-        user = context.root.get_user_from_login(email)
-        if user is not None:
-            msg = MSG(u'This email address is already used')
-            return context.come_back(msg)
-        return RegisterForm.GET(self, resource, context)
-
-
-    def on_query_error(self, resource, context):
-        msg = MSG(u'The email address is invalid')
-        return context.come_back(msg)
-
-
-    def get_value(self, resource, context, name, datatype):
-        if name=='email':
-            return context.query['email']
-        return RegisterForm.get_value(self, resource, context, name, datatype)
 
 
     def action(self, resource, context, form):
@@ -515,27 +493,20 @@ class Shop_RegisterProgress(CompositeForm):
 
 
 
-class Shop_LoginMixin(STLView):
+class Shop_Login(LoginView):
+
+    access = True
 
     template = '/ui/shop/shop_login.xml'
 
-
     def get_namespace(self, resource, context):
-        progress = None
+        namespace = self.build_namespace(resource, context)
         if context.resource.class_id == 'shop':
-            progress = Shop_Progress(index=2).GET(resource, context)
-        return {'goto': str(context.uri.path),
-                'progress': progress}
+            namespace['progress'] = Shop_Progress(index=2).GET(resource, context)
+        else:
+            namespace['progress'] = None
+        return namespace
 
-
-
-class Shop_Login(CompositeForm):
-
-    access = True
-    title = MSG(u'Login')
-
-    subviews = [Shop_LoginMixin(),
-                LoginView()]
 
 
 class Shop_End(STLView):
