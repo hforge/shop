@@ -35,7 +35,7 @@
           <img src="/ui/icons/48x48/text.png" stl:if="not p/img"/>
         </td>
         <td>
-          <a href="${p/uri}">
+          <a href="${p/href}">
             ${p/title}
           </a>
         </td>

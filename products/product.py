@@ -383,7 +383,7 @@ class Product(Folder):
         categories = self.get_property('categories')
         category = categories[0]
         path = '../../categories/%s/%s' % (category, self.name)
-        return self.get_abspath().resolve2(path)
+        return self.get_abspath().resolve(path)
 
 
     #######################

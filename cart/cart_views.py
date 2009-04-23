@@ -52,6 +52,7 @@ class Cart_View(STLView):
 
 
     def get_namespace(self, resource, context):
+        abspath = resource.get_abspath()
         namespace = {'products': []}
         # Get cart
         cart = ProductCart()
@@ -73,7 +74,7 @@ class Cart_View(STLView):
             ns = ({'name': product.name,
                    'img': product.get_cover_namespace(context),
                    'title': product.get_title(),
-                   'uri': resource.get_pathto(product),
+                   'href': abspath.get_pathto(product.get_virtual_path()),
                    'quantity': quantity,
                    'price': price,
                    'price_total': price_total})
