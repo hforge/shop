@@ -39,7 +39,7 @@ class Shop(Folder):
 
     class_id = 'shop'
     class_title = MSG(u'Shop')
-    class_views = ['view']
+    class_views = ['view', 'view_cart']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
