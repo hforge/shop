@@ -28,30 +28,39 @@
       </tr>
     </thead>
     <tbody>
-      <tr stl:repeat="p products" class="${repeat/p/even}">
-        <td valign="top">
-          <img src="${p/img/href}/;thumb?width=100&amp;height=100"
-            title="${p/img/title}" stl:if="p/img"/>
-          <img src="/ui/icons/48x48/text.png" stl:if="not p/img"/>
-        </td>
-        <td>
-          <a href="${p/href}">
-            ${p/title}
-          </a>
-        </td>
-        <td>${p/price} €</td>
-        <td>
-          <a id="decrease-quantity" href="?action=remove&amp;product=${p/name}">-</a>
-          ${p/quantity}
-          <a id="increase-quantity" href="?action=add&amp;product=${p/name}">+</a>
-        </td>
-        <td>${p/price_total} €</td>
-        <td>
-          <a href="?action=delete&amp;product=${p/name}">
-            <img src="/ui/icons/16x16/delete.png"/>
-          </a>
-        </td>
-      </tr>
+      <form method="post" stl:repeat="p products">
+        <input type="hidden" name="id" value="${p/id}"/>
+        <tr class="${repeat/p/even}">
+          <td valign="top">
+            <img src="${p/img/href}/;thumb?width=100&amp;height=100"
+              title="${p/img/title}" stl:if="p/img"/>
+            <img src="/ui/icons/48x48/text.png" stl:if="not p/img"/>
+          </td>
+          <td>
+            <a href="${p/href}">
+              ${p/title}
+            </a>
+            <stl:block stl:if="p/options">
+              <ul stl:repeat="option p/options">
+                ${option/title}: ${option/value}
+              </ul>
+            </stl:block>
+          </td>
+          <td>${p/price} €</td>
+          <td>
+            <input type="submit" name=";remove" value="-"
+                src="/ui/icons/16x16/delete.png"/>
+            ${p/quantity}
+            <input type="submit" name=";add" value="+"
+              src="/ui/icons/16x16/delete.png"/>
+          </td>
+          <td>${p/price_total} €</td>
+          <td>
+            <input type="submit" name=";delete" value="x"
+              src="/ui/icons/16x16/delete.png"/>
+          </td>
+        </tr>
+      </form>
     </tbody>
   </table>
 
@@ -68,9 +77,10 @@
 
   <div class="clear"/>
   <p>
-    <a href="?action=clear">
-      <img src="/ui/icons/16x16/delete.png"/> Clear the cart
-    </a>
+    <form method="post">
+      <input type="submit" name=";clear" src="/ui/icons/16x16/delete.png"
+        value="Clear the cart"/>
+    </form>
   </p>
   </stl:block>
 

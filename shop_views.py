@@ -67,9 +67,10 @@ class Shop_Addresses(STLForm):
 
     def GET(self, resource, context):
         # If user has no addresses, redirect to edit_address view
-        cart = ProductCart()
-        delivery_address = cart.get_delivery_address()
-        if not delivery_address:
+        cart = ProductCart(context)
+        delivery_address = cart.addresses['delivery_address']
+        print delivery_address, '=====>'
+        if delivery_address==None:
             delivery_address = resource.get_user_main_address(context.user.name)
             if not delivery_address:
                 return context.uri.resolve(';edit_address')
@@ -84,13 +85,14 @@ class Shop_Addresses(STLForm):
         # Progress bar
         ns['progress'] = Shop_Progress(index=3).GET(resource, context)
         # Get cart
-        cart = ProductCart()
+        cart = ProductCart(context)
         # Delivery address
-        delivery_address = cart.get_delivery_address()
+        delivery_address = cart.addresses['delivery_address']
+        print delivery_address, '=====>'
         ns['delivery_address']  = resource.get_user_address(delivery_address)
         # Bill
         ns['bill_address'] = None
-        bill_address = cart.get_bill_address()
+        bill_address = cart.addresses['bill_address']
         if bill_address:
             ns['bill_address'] = resource.get_user_address(bill_address)
         return ns
@@ -125,9 +127,9 @@ class Shop_Delivery(STLForm):
         shippings = resource.get_resource('shippings')
         shipping = shippings.get_resource(form['shipping'])
         # We save option, if user choose it
-        option = shipping.get_shipping_option(context)
+        option = ''
         # We save shipping mode/option choosen by user
-        cart = ProductCart()
+        cart = ProductCart(context)
         cart.set_shipping(form['shipping'], option)
         # Goto recapitulatif
         return context.uri.resolve(';show_recapitulatif')
@@ -142,7 +144,7 @@ class Shop_ShowRecapitulatif(STLView):
 
     def GET(self, resource, context):
         # Check if cart is valid
-        cart = ProductCart()
+        cart = ProductCart(context)
         if not cart.is_valid():
             msg = MSG(u'Invalid cart')
             return context.come_back(msg, goto='/')
@@ -155,20 +157,20 @@ class Shop_ShowRecapitulatif(STLView):
         # Progress bar
         namespace['progress'] = Shop_Progress(index=5).GET(resource, context)
         # Get cart
-        cart = ProductCart()
+        cart = ProductCart(context)
         # Delivery address
-        delivery_address = cart.get_delivery_address()
+        delivery_address = cart.addresses['delivery_address']
         namespace['delivery_address']  = resource.get_user_address(delivery_address)
         # Bill
         namespace['bill_address'] = None
-        bill_address = cart.get_bill_address()
+        bill_address = cart.addresses['bill_address']
         if bill_address:
             namespace['bill_address'] = resource.get_user_address(bill_address)
         # Get products
         products = resource.get_resource('products')
         # Get products informations
         total = 0.0
-        for product in cart.get_elements():
+        for product in cart.products:
             quantity = product['quantity']
             product = products.get_resource(product['name'])
             # Check product is buyable
@@ -190,8 +192,8 @@ class Shop_ShowRecapitulatif(STLView):
         # Total price
         namespace['total'] = total
         # Delivery
-        shipping_mode = cart.get_shipping()
         shippings = resource.get_resource('shippings')
+        shipping_mode = cart.shipping['name']
         namespace['ship'] = shippings.get_shipping_namespace(context,
                               shipping_mode, 0.0, 0.0)
         # Payments mode
@@ -217,7 +219,7 @@ class Shop_Buy(BaseView):
             msg = MSG(u'Please choose a payment mode')
             return context.come_back(msg)
         # Check if cart is valid
-        cart = ProductCart()
+        cart = ProductCart(context)
         if not cart.is_valid():
             msg = MSG(u'Invalid cart')
             return context.come_back(msg, goto='/')
@@ -226,13 +228,13 @@ class Shop_Buy(BaseView):
         client_mail = context.user.get_property('email')
         client_mail = 'sylvain@itaapy.com'
         # Step 1: Get products in the cart
-        cart = ProductCart()
+        cart = ProductCart(context)
         # Get Total price
         products = resource.get_resource('products')
         total_price = cart.get_total_price(products)
         # Build informations
         products_ns = []
-        for cart_element in cart.get_elements():
+        for cart_element in cart.products:
             product = products.get_resource(cart_element['name'])
             products_ns.append({'name': product.name,
                                 'title': product.get_title(),
@@ -244,10 +246,10 @@ class Shop_Buy(BaseView):
                    'email': client_mail,
                    'mode': context.get_form_value('payment_mode'),
                    'payment_mode': context.get_form_value('payment_mode'),# XXX
-                   'delivery_address': cart.get_delivery_address(),
-                   'bill_address': cart.get_bill_address(),
-                   'shipping': cart.get_shipping(),
-                   'shipping_option': cart.get_shipping_option(),
+                   'delivery_address': cart.addresses['delivery_address'],
+                   'bill_address': cart.addresses['bill_address'],
+                   'shipping': cart.shipping['name'],
+                   'shipping_option': cart.shipping['option'],
                    'products': products_ns}
         # Step 2: We create an order
         Order.make_resource(Order, resource, 'orders/%s' % order_ref,
@@ -279,12 +281,12 @@ class Shop_ChooseAddress(STLForm):
                      'type': context.get_form_value('type'),
                      'progress': Shop_Progress(index=3).GET(resource, context)}
         # GEt cart
-        cart = ProductCart()
+        cart = ProductCart(context)
         if context.get_form_value('type') == 'delivery':
-            id_current_address = cart.get_delivery_address()
+            id_current_address = cart.addresses['delivery_address']
             namespace['is_delivery_address'] = True
         else:
-            id_current_address = cart.get_bill_address()
+            id_current_address = cart.addresses['bill_address']
             namespace['is_delivery_address'] = False
         # User address book
         addresses = resource.get_resource('addresses').handler
@@ -298,7 +300,7 @@ class Shop_ChooseAddress(STLForm):
 
 
     def action_select_address(self, resource, context, form):
-        cart = ProductCart()
+        cart = ProductCart(context)
         if form['type'] == 'delivery':
             cart.set_delivery_address(form['id_address'])
         else:
@@ -356,7 +358,7 @@ class Shop_AddAddress(AutoForm):
         # Add
         record = addresses.add_record(form)
         # We save address in cart
-        cart = ProductCart()
+        cart = ProductCart(context)
         if form['type']=='delivery':
             cart.set_delivery_address(record.id)
         else:
@@ -380,13 +382,13 @@ class Shop_EditAddress(Shop_AddAddress):
 
 
     def get_value(self, resource, context, name, datatype):
-        id = context.get_form_value('id', type=Integer)
         if name=='type':
             return context.get_form_value('type', datatype)
+        if not context.has_form_value('id'):
+            return AutoForm.get_value(self, resource, context, name, datatype)
+        id = context.get_form_value('id', type=Integer)
         if name=='id':
             return id
-        if not id:
-            return AutoForm.get_value(self, resource, context, name, datatype)
         return resource.get_user_address(id)[name]
 
 
@@ -489,8 +491,8 @@ class Shop_Register(RegisterForm):
         addresses.handler.add_record(kw)
 
         # Clean cart, if another user already login before
-        cart = ProductCart()
-        cart.clean(context)
+        cart = ProductCart(context)
+        cart.clean()
 
         # Set the role
         # XXX

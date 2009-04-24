@@ -105,7 +105,7 @@ class Product_View(STLForm):
         # Product namespace
         namespace.update(resource.get_namespace(context))
         # Cart namespace
-        namespace['cart'] = ProductCart().get_namespace()
+        namespace['cart'] = ProductCart(context).get_namespace()
         # Purchase options
         model = resource.get_product_model()
         if model:
@@ -123,10 +123,15 @@ class Product_View(STLForm):
         if not resource.is_buyable():
             msg = MSG(u"This product isn't buyable")
             return context.come_back(msg)
-        # Add to cart
-        cart = ProductCart()
-        # XXX Add options
-        cart.add_product(resource.name, 1)
+        # Get purchase options
+        options = {}
+        model = resource.get_product_model()
+        if model:
+            for key in model.get_purchase_options_schema(resource):
+                options[key] = form[key]
+        # Add to cart
+        cart = ProductCart(context)
+        cart.add_product(resource.name, 1, options)
         # Come back
         context.message = INFO(u'Product added to cart !')
 

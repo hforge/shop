@@ -236,6 +236,42 @@ class ProductModel(Folder):
         return widgets
 
 
+    def options_to_namespace(self, options):
+        """
+          Get:
+              options = {'color': 'red',
+                         'size': '1'}
+          Return:
+              namespace = [{'title': 'Color',
+                            'value': 'Red'},
+                           {'title': 'Size',
+                            'value': 'XL'}]
+        """
+        schema_resource = self.get_resource('schema').handler
+        get_value = schema_resource.get_record_value
+        namespace = []
+        for name, value in options.items():
+            # Search option
+            records = schema_resource.search(name=name)
+            record = records[0]
+            # Get datatype
+            title = get_value(record, 'title')
+            datatype = get_value(record, 'datatype')
+            enumerate = get_value(record, 'enumerate')
+            datatype = Datatypes.get_real_datatype(datatype, model=self,
+                                                    enumerate=enumerate)
+            # Namespace
+            namespace.append({'title': title,
+                              'value': datatype.get_value(value)})
+            #name = get_value(record, 'name')
+            #title = get_value(record, 'title')
+            #mandatory = get_value(record, 'mandatory')
+            #multiple = get_value(record, 'multiple')
+            #datatype = get_value(record, 'datatype')
+        return namespace
+
+
+
 class ProductModels(Folder):
 
     class_id = 'product-models'

@@ -271,6 +271,10 @@ class Product(Folder):
         return self.get_property('price')
 
 
+    def get_options_namespace(self, options):
+        product_model = self.get_product_model()
+        return product_model.options_to_namespace(options)
+
     #######################################
     ## XXX Hack dynamic properties
     ## To FIX in 0.60
