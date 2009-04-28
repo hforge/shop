@@ -59,6 +59,74 @@ class Shop_Progress(STLView):
         return ns
 
 
+class Shop_ViewCart(STLForm):
+
+    access = True
+    title = MSG(u'View Cart')
+
+    template = '/ui/shop/cart_view.xml'
+
+    query_schema = {'action': String,
+                    'product': String}
+
+    def get_namespace(self, resource, context):
+        abspath = resource.get_abspath()
+        namespace = {'products': []}
+        # Get cart
+        cart = ProductCart(context)
+        # Get products
+        products = resource.get_resource('products')
+        # Get products informations
+        total = 0
+        for product_cart in cart.products:
+            # Get product
+            product = products.get_resource(product_cart['name'])
+            # Check product is buyable
+            if not product.is_buyable():
+                continue
+            # Calcul price
+            quantity = product_cart['quantity']
+            price = product.get_price()
+            price_total = price * quantity
+            # All
+            options = product.get_options_namespace(product_cart['options'])
+            ns = ({'id': product_cart['id'],
+                   'name': product.name,
+                   'img': product.get_cover_namespace(context),
+                   'title': product.get_title(),
+                   'href': abspath.get_pathto(product.get_virtual_path()),
+                   'quantity': quantity,
+                   'options': options,
+                   'price': price,
+                   'price_total': price_total})
+            total = total + price_total
+            namespace['products'].append(ns)
+        namespace['total'] = total
+        # Progress bar
+        namespace['progress'] = Shop_Progress(index=1).GET(resource, context)
+        return namespace
+
+
+    schema = {'id': String}
+    def action_delete(self, resource, context, form):
+        cart = ProductCart(context)
+        cart.delete_a_product(form['id'])
+
+
+    def action_add(self, resource, context, form):
+        cart = ProductCart(context)
+        cart.add_a_product(form['id'])
+
+
+    def action_remove(self, resource, context, form):
+        cart = ProductCart(context)
+        cart.remove_a_product(form['id'])
+
+
+    def action_clear(self, resource, context, form):
+        cart = ProductCart(context)
+        cart.clear()
+
 class Shop_Addresses(STLForm):
 
     access = 'is_authenticated'

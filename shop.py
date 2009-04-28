@@ -24,7 +24,6 @@ from itools.gettext import MSG
 # Import from project
 from addresses import Addresses
 from categories import Categories
-from cart.cart_views import Cart_View #XXX
 from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
@@ -33,6 +32,7 @@ from shop_views import Shop_Buy, Shop_Delivery, Shop_RegisterProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_Addresses, Shop_ChooseAddress, Shop_End
+from shop_views import Shop_ViewCart
 
 
 class Shop(Folder):
@@ -57,7 +57,7 @@ class Shop(Folder):
     # 4) Choose delivery
     # 5) Recapitulatif / payment
     # 6) Payment endt
-    view_cart = Cart_View()
+    view_cart = Shop_ViewCart()
     register = Shop_RegisterProgress()
     addresses = Shop_Addresses()
     choose_address= Shop_ChooseAddress()
