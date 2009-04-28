@@ -78,6 +78,7 @@ class CrossSellingTable(OrderedTable):
     class_id = 'CrossSellingTable'
     class_title = MSG(u'Cross-Selling Table')
     class_handler = ResourcesOrderedTableFile
+    class_views = ['view', 'add_record']
 
     form = [PathSelectorWidget('name', title=MSG(u'Product'))]
 
