@@ -65,6 +65,8 @@ class Shipping(Folder):
     class_title = MSG(u'Shipping')
     class_views = ['configure']
 
+    img = 'ui/shop/images/shipping.png'
+
     # Views
     configure = Shipping_Configure()
 
