@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from standard library]
+# Import from standard library
 from copy import deepcopy
 from datetime import datetime
 
@@ -46,6 +46,17 @@ class Shop_View(STLView):
     template = '/ui/shop/shop_view.xml'
 
 
+################################
+# Payment Process has 6 steps
+################################
+# 1) View cart
+# 2) Identification
+# 3) Addresses
+# 4) Shipping
+# 5) Payment
+# 6) Confirmation
+###############################
+
 class Shop_Progress(STLView):
 
     access = True
@@ -62,12 +73,12 @@ class Shop_Progress(STLView):
 class Shop_ViewCart(STLForm):
 
     access = True
+
     title = MSG(u'View Cart')
 
     template = '/ui/shop/cart_view.xml'
 
-    query_schema = {'action': String,
-                    'product': String}
+    schema = {'id': String}
 
     def get_namespace(self, resource, context):
         abspath = resource.get_abspath()
@@ -107,7 +118,6 @@ class Shop_ViewCart(STLForm):
         return namespace
 
 
-    schema = {'id': String}
     def action_delete(self, resource, context, form):
         cart = ProductCart(context)
         cart.delete_a_product(form['id'])
@@ -127,6 +137,7 @@ class Shop_ViewCart(STLForm):
         cart = ProductCart(context)
         cart.clear()
 
+
 class Shop_Addresses(STLForm):
 
     access = 'is_authenticated'
@@ -137,7 +148,6 @@ class Shop_Addresses(STLForm):
         # If user has no addresses, redirect to edit_address view
         cart = ProductCart(context)
         delivery_address = cart.addresses['delivery_address']
-        print delivery_address, '=====>'
         if delivery_address==None:
             delivery_address = resource.get_user_main_address(context.user.name)
             if not delivery_address:
@@ -156,7 +166,6 @@ class Shop_Addresses(STLForm):
         cart = ProductCart(context)
         # Delivery address
         delivery_address = cart.addresses['delivery_address']
-        print delivery_address, '=====>'
         ns['delivery_address']  = resource.get_user_address(delivery_address)
         # Bill
         ns['bill_address'] = None
