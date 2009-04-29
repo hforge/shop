@@ -181,16 +181,18 @@ class ProductModel(Folder):
         for info in self.get_model_informations():
             name = info['name']
             value = resource.get_property(name)
+            real_value = value
             datatype = info['datatype']
             if issubclass(datatype, Enumerate):
                 if datatype.multiple:
-                    values = [datatype.get_value(x) for x in value]
+                    values = [datatype.get_value(x) for x in real_value]
                     value = ', '.join(values)
                 else:
-                    value = datatype.get_value(value)
+                    value = datatype.get_value(real_value)
             kw = {'title': info['title'],
                   'value': value,
-                  'multiple': datatype.multiple}
+                  'multiple': datatype.multiple,
+                  'name': real_value}
             ns['specific_dict'][name] = kw
             ns['specific_list'].append(kw)
         return ns
