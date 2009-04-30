@@ -17,7 +17,7 @@
 # Import from itools
 from itools import vfs, get_abspath
 from itools.csv import Table as BaseTable, CSVFile
-from itools.datatypes import Enumerate, Decimal, String
+from itools.datatypes import Decimal, String
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.stl import stl
