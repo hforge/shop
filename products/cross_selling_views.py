@@ -23,6 +23,8 @@ from itools.xapian import AndQuery, PhraseQuery
 # Import from ikaaro
 from ikaaro.utils import get_base_path_query, reduce_string
 
+# Import from shop
+from shop.utils import get_shop
 
 
 class AddProduct_View(STLForm):
@@ -115,7 +117,7 @@ class AddProduct_View(STLForm):
 
     def get_namespace(self, resource, context):
         real_resource = resource.get_real_resource()
-        shop = real_resource.parent.parent.parent
+        shop = get_shop(real_resource)
         categories = shop.get_resource('categories')
         namespace = {}
         target_id = context.get_form_value('target_id')

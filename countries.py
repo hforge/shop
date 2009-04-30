@@ -26,18 +26,17 @@ from ikaaro.forms import SelectRadio, TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
+# Import from shop
+from utils import get_shop
+
 
 class CountriesEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
-        from shop import Shop
         context = get_context()
         # Search shop
-        resource = context.resource
-        while not isinstance(resource, Shop):
-            resource = resource.parent
-        shop = resource
+        shop = get_shop(context.resource)
         # Get options
         countries = shop.get_resource('countries').handler
         return [{'name': str(record.id),

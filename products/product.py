@@ -34,6 +34,7 @@ from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
 from ikaaro.registry import register_resource_class
 
 # Import from shop
+from shop.utils import get_shop
 from cross_selling import CrossSellingTable
 from images import PhotoOrderedTable
 from product_views import Product_NewInstance
@@ -354,7 +355,7 @@ class Product(Folder):
     def get_links(self):
         links = []
         real_resource = self.get_real_resource()
-        shop = real_resource.parent.parent
+        shop = get_shop(real_resource)
         categories = shop.get_resource('categories')
         categories_path = categories.get_abspath()
         for categorie in self.get_property('categories'):
@@ -364,7 +365,7 @@ class Product(Folder):
 
     def change_link(self, old_path, new_path):
         real_resource = self.get_real_resource()
-        shop = real_resource.parent.parent
+        shop = get_shop(real_resource)
         categories = shop.get_resource('categories')
         categories_path = categories.get_abspath()
 

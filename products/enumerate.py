@@ -20,12 +20,16 @@ from itools.datatypes import Email, Enumerate, ISOCalendarDate
 from itools.gettext import MSG
 from itools.web import get_context
 
+# Import from shop
+from shop.utils import get_shop
+
+
 class TableEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
         context = get_context()
-        shop = context.resource.parent.parent
+        shop = get_shop(context.resource.get_real_resource())
         table = cls.model.get_resource(cls.enumerate).handler
         get_value = table.get_record_value
         if hasattr(cls, 'values'):
@@ -44,9 +48,8 @@ class ProductModelsEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
-        # XXX
         context = get_context()
-        shop = context.resource.parent
+        shop = get_shop(context.resource)
         models = shop.get_resource('products-models')
         return [{'name': res.name,
                  'value': res.get_property('title')}
@@ -58,9 +61,8 @@ class CategoriesEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
-        # XXX
         context = get_context()
-        shop = context.resource.get_real_resource().parent.parent
+        shop = get_shop(context.resource.get_real_resource())
         categories = shop.get_resource('categories')
         # Build options
         options = []

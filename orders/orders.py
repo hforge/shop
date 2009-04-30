@@ -33,6 +33,7 @@ from ikaaro.table import Table
 from ikaaro.workflow import WorkflowAware
 
 # Import from project
+from shop.utils import get_shop
 from orders_views import OrderView, OrderFacture, Orders_Configure
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from workflow import order_workflow
@@ -219,7 +220,7 @@ class Order(WorkflowAware, Folder):
 
 
     def get_order_payments_namespace(self, context):
-        shop = context.resource.parent.parent
+        shop = get_shop(context.resource)
         payments = shop.get_resource('payments')
         return []
         # XXX To fix

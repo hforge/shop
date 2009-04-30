@@ -29,6 +29,9 @@ from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.table_views import Table_View
 
+# Import from shop
+from shop.utils import get_shop
+
 
 class OrdersProductsView(Table_View):
 
@@ -59,7 +62,7 @@ class OrderView(STLView):
     def get_namespace(self, resource, context, query=None):
         root = context.root
         accept = context.accept_language
-        shop = resource.parent.parent
+        shop = get_shop(resource)
         # Date cmd
         creation_datetime = resource.get_property('creation_datetime')
         # Historique des payments associés à la commande
