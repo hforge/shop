@@ -267,8 +267,11 @@ class Product(Folder):
 
 
     def get_price(self):
-        # XXX Add VAT
         return self.get_property('price')
+
+
+    def get_weight(self):
+        return self.get_property('weight')
 
 
     def get_options_namespace(self, options):

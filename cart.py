@@ -151,18 +151,6 @@ class ProductCart(object):
         return nb_products
 
 
-    def get_total_price(self, resource_products):
-        from decimal import Decimal as decimal
-        price = decimal(0)
-        for product in self.products:
-            real_product = resource_products.get_resource(product['name'])
-            # Check product is buyable
-            if not real_product.is_buyable():
-                continue
-            # Calcul price
-            price += real_product.get_price() * product['quantity']
-        return price
-
     ######################
     # Shipping
     ######################

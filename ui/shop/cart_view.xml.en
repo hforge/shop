@@ -20,7 +20,7 @@
     <thead>
       <tr>
         <th></th>
-        <th width="400px">Product</th>
+        <th width="300px">Product</th>
         <th>Unit Price</th>
         <th>Quantity</th>
         <th>Total Price</th>
@@ -48,16 +48,27 @@
           </td>
           <td>${p/price} €</td>
           <td>
-            <input type="submit" name=";remove" value="-"
-                src="/ui/icons/16x16/delete.png"/>
-            ${p/quantity}
-            <input type="submit" name=";add" value="+"
-              src="/ui/icons/16x16/delete.png"/>
+            <table id="table-quantity">
+              <tr>
+                <td>
+                  <input type="image" name=";remove"
+                      src="/ui/shop/images/minus.png"/>
+                </td>
+                <td>
+                  <input type="text" id="quantity" name="quantity"
+                    value="${p/quantity}" size="2" readonly="readonly"/>
+                </td>
+                <td>
+                  <input type="image" name=";add"
+                    src="/ui/shop/images/plus.png"/>
+                </td>
+              </tr>
+            </table>
           </td>
           <td>${p/price_total} €</td>
           <td>
-            <input type="submit" name=";delete" value="x"
-              src="/ui/icons/16x16/delete.png"/>
+            <input type="image" name=";delete"
+              src="/ui/shop/images/delete.png"/>
           </td>
         </tr>
       </form>
@@ -78,8 +89,7 @@
   <div class="clear"/>
   <p>
     <form method="post">
-      <input type="submit" name=";clear" src="/ui/icons/16x16/delete.png"
-        value="Clear the cart"/>
+      <input type="submit" id="clear-cart" name=";clear" value="Clear the cart"/>
     </form>
   </p>
   </stl:block>

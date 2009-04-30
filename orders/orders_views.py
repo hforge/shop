@@ -80,15 +80,14 @@ class OrderView(STLView):
         # Shipping
         shipping = resource.get_property('shipping')
         shippings = shop.get_resource('shippings')
-        shipping = shippings.get_shipping_namespace(context,
-                                      shipping, 0.0, 0.0)
+        shipping = {} # XXX
         # Delivery address
         delivery_address = resource.get_property('delivery_address')
-        delivery_address = shop.get_user_address(delivery_address)
+        delivery_address = shop.get_user_address_namespace(delivery_address)
         # Bill address
         bill_address = resource.get_property('bill_address')
         if bill_address:
-            bill_address = shop.get_user_address(bill_address)
+            bill_address = shop.get_user_address_namespace(bill_address)
         # XXX
         total_price = resource.get_property('total_price')
         # Return namespace

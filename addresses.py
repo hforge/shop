@@ -25,7 +25,8 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
-from shop.datatypes import Civilite
+from countries import CountriesEnumerate
+from datatypes import Civilite
 
 
 class BaseAddresses(BaseTable):
@@ -40,7 +41,7 @@ class BaseAddresses(BaseTable):
       'address_2': Unicode,
       'zipcode': String(mandatory=True),
       'town': Unicode(mandatory=True),
-      'country': Unicode(mandatory=True),
+      'country': CountriesEnumerate(mandatory=True),
       }
 
 
@@ -61,7 +62,7 @@ class Addresses(Table):
         TextWidget('address_2', title=MSG(u'Address (next)')),
         TextWidget('zipcode', title=MSG(u'Zip Code')),
         TextWidget('town', title=MSG(u'Town')),
-        TextWidget('country', title=MSG(u'Country')),
+        SelectWidget('country', title=MSG(u'Country')),
         ]
 
 

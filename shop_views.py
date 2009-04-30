@@ -17,6 +17,7 @@
 # Import from standard library
 from copy import deepcopy
 from datetime import datetime
+from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import Integer, Email, String, Unicode
@@ -35,6 +36,7 @@ from ikaaro.website_views import RegisterForm
 
 # Import from shop
 from cart import ProductCart
+from countries import CountriesEnumerate
 from orders import Order
 from datatypes import Civilite
 
@@ -124,6 +126,7 @@ class Shop_ViewCart(STLForm):
 
 
     def action_add(self, resource, context, form):
+        print context.get_form_keys()
         cart = ProductCart(context)
         cart.add_a_product(form['id'])
 
@@ -166,12 +169,12 @@ class Shop_Addresses(STLForm):
         cart = ProductCart(context)
         # Delivery address
         delivery_address = cart.addresses['delivery_address']
-        ns['delivery_address']  = resource.get_user_address(delivery_address)
+        ns['delivery_address']  = resource.get_user_address_namespace(delivery_address)
         # Bill
         ns['bill_address'] = None
         bill_address = cart.addresses['bill_address']
         if bill_address:
-            ns['bill_address'] = resource.get_user_address(bill_address)
+            ns['bill_address'] = resource.get_user_address_namespace(bill_address)
         return ns
 
 
@@ -188,14 +191,19 @@ class Shop_Delivery(STLForm):
         ns = {}
         # Progress
         ns['progress'] = Shop_Progress(index=4).GET(resource, context)
-        # Total price
-        # XXX
-        total_price = 0#cart.get_total_price(products)
-        total_weight = 0
-        # Shipping
+        # Get total price and weight
+        products = resource.get_resource('products')
+        cart = ProductCart(context)
+        total_price = decimal(0)
+        total_weight = decimal(0)
+        for cart_elt in cart.products:
+            product = products.get_resource(cart_elt['name'])
+            total_price += product.get_price() * cart_elt['quantity']
+            total_weight += product.get_weight() * cart_elt['quantity']
+        # Guess shipping posibilities
         shippings = resource.get_resource('shippings')
-        ns['shipping'] = shippings.get_ns_shipping_way(context, total_price,
-                                                       total_weight)
+        ns['shipping'] = shippings.get_namespace_shipping_way(context,
+                                              10, total_price, total_weight)
         return ns
 
 
@@ -237,12 +245,12 @@ class Shop_ShowRecapitulatif(STLView):
         cart = ProductCart(context)
         # Delivery address
         delivery_address = cart.addresses['delivery_address']
-        namespace['delivery_address']  = resource.get_user_address(delivery_address)
+        namespace['delivery_address']  = resource.get_user_address_namespace(delivery_address)
         # Bill
         namespace['bill_address'] = None
         bill_address = cart.addresses['bill_address']
         if bill_address:
-            namespace['bill_address'] = resource.get_user_address(bill_address)
+            namespace['bill_address'] = resource.get_user_address_namespace(bill_address)
         # Get products
         products = resource.get_resource('products')
         # Get products informations
@@ -271,8 +279,7 @@ class Shop_ShowRecapitulatif(STLView):
         # Delivery
         shippings = resource.get_resource('shippings')
         shipping_mode = cart.shipping['name']
-        namespace['ship'] = shippings.get_shipping_namespace(context,
-                              shipping_mode, 0.0, 0.0)
+        namespace['ship'] = {'title': u'o', 'price': 2.0} # XXX
         # Payments mode
         payments = resource.get_resource('payments')
         namespace['payments'] = payments.get_payments_namespace(context,
@@ -371,7 +378,7 @@ class Shop_ChooseAddress(STLForm):
             is_selected = record.id==id_current_address
             ns = {'id': record.id,
                   'css': 'selected' if is_selected else None}
-            ns.update(resource.get_user_address(record.id))
+            ns.update(resource.get_user_address_namespace(record.id))
             namespace['addresses'].append(ns)
         return namespace
 
@@ -405,7 +412,7 @@ class Shop_AddAddress(AutoForm):
         'address_2': Unicode,
         'zipcode': String(mandatory=True),
         'town': Unicode(mandatory=True),
-        'country': Unicode(mandatory=True),
+        'country': CountriesEnumerate(mandatory=True),
         }
 
     widgets = [
@@ -417,7 +424,7 @@ class Shop_AddAddress(AutoForm):
         TextWidget('address_2', title=MSG(u'Address (next)')),
         TextWidget('zipcode', title=MSG(u'Zip Code')),
         TextWidget('town', title=MSG(u'Town')),
-        TextWidget('country', title=MSG(u'Country')),
+        SelectWidget('country', title=MSG(u'Country')),
         TextWidget('title', title=address_title),
         ]
 
@@ -466,7 +473,10 @@ class Shop_EditAddress(Shop_AddAddress):
         id = context.get_form_value('id', type=Integer)
         if name=='id':
             return id
-        return resource.get_user_address(id)[name]
+        # Get user address
+        addresses = resource.get_resource('addresses').handler
+        record = addresses.get_record(id)
+        return addresses.get_record_value(record, name)
 
 
     def action(self, resource, context, form):
@@ -516,7 +526,7 @@ class Shop_Register(RegisterForm):
                          address_2=Unicode,
                          zipcode=String(mandatory=True),
                          town=Unicode(mandatory=True),
-                         country=Unicode(mandatory=True))
+                         country=CountriesEnumerate(mandatory=True))
 
 
     widgets = [TextWidget('email', title=MSG(u"Email")),
@@ -530,7 +540,7 @@ class Shop_Register(RegisterForm):
                TextWidget('address_2', title=MSG(u"Address")),
                TextWidget('zipcode', title=MSG(u"Zip code")),
                TextWidget('town', title=MSG(u"Town")),
-               TextWidget('country', title=MSG(u"Pays"))]
+               SelectWidget('country', title=MSG(u"Pays"))]
 
 
 

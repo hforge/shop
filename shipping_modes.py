@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools import get_abspath
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.xml import XMLParser
@@ -35,12 +36,28 @@ class Collisimo(Shipping):
 
     class_id = 'collisimo'
     class_title = MSG(u'Collisimo Suivi')
-    class_description = MSG(u"""La livraison de votre commande est assurée en Colissimo.
-                                A compter de la prise en charge par La Poste,
-                                vous êtes livré à domicile en 48 h(1)
-                                sous réserve des heures limites de dépôt""")
 
+    # General informations
+    description = MSG(u"""La livraison de votre commande est assurée en Colissimo.
+                          A compter de la prise en charge par La Poste,
+                          vous êtes livré à domicile en 48 h(1)
+                          sous réserve des heures limites de dépôt""")
     img = 'ui/shop/images/colissimo.png'
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args, **kw):
+        Shipping._make_resource(cls, folder, name, *args, **kw)
+        # Import CSV with prices
+        from shipping import ShippingPricesTable, ShippingPricesCSV
+        table = ShippingPricesTable()
+        csv = ShippingPricesCSV(get_abspath('data/colissimo.csv'))
+        for row in csv.get_rows():
+            table.add_record({'countries': row.get_value('countries').split('@'),
+                              'max-weight': row.get_value('max-weight'),
+                              'price': row.get_value('price')})
+        folder.set_handler('%s/prices' % name, table)
+
+
 
 
 #####################################################
@@ -75,7 +92,6 @@ class ShippShop(Shipping):
 
 
     def get_shipping_option(self, context):
-        print context.get_form_value("option"), '===='
         return context.get_form_value("option")
 
 

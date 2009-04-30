@@ -24,6 +24,7 @@ from itools.gettext import MSG
 # Import from project
 from addresses import Addresses
 from categories import Categories
+from countries import Countries, CountriesEnumerate
 from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
@@ -40,11 +41,12 @@ class Shop(Folder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
+    class_version = '20090430'
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
                           'products', 'products-models',
-                          'shippings']
+                          'shippings', 'countries']
 
     # Views
     view = Shop_View()
@@ -90,6 +92,9 @@ class Shop(Folder):
         # Addresses
         Addresses._make_resource(Addresses, folder, '%s/addresses' % name,
                                  title={'en': u'Addresses'})
+        # Countries
+        Countries._make_resource(Countries, folder, '%s/countries' % name,
+                                 title={'en': u'countries'})
         # Shipping
         Shippings._make_resource(Shippings, folder, '%s/shippings' % name,
                                  title={'en': u'Shipping'})
@@ -108,14 +113,21 @@ class Shop(Folder):
         return None
 
 
-    def get_user_address(self, id):
+    def get_user_address_namespace(self, id):
         addresses = self.get_resource('addresses').handler
         record = addresses.get_record(id)
         ns = {}
         for key in ['firstname', 'lastname', 'address_1', 'address_2',
                     'zipcode', 'town', 'country', 'title', 'gender']:
             ns[key] = addresses.get_record_value(record, key)
+        ns['country'] = CountriesEnumerate.get_value(ns['country'])
         return ns
+
+
+    def update_20090430(self):
+        """ We add countries table """
+        Countries._make_resource(Countries, self.handler, 'countries',
+                                 **{'title': {'en': u'countries'}})
 
 
 register_resource_class(Shop)

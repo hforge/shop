@@ -35,6 +35,7 @@ product_schema = {# General informations
                   'title': Unicode,
                   'description': Unicode,
                   'subject': Unicode,
+                  'weight': Decimal(default=0.0, mandatory=True),
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),
                   # Price

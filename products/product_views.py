@@ -190,6 +190,8 @@ class Product_Edit(AutoForm):
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Subject')),
+        # Weight
+        TextWidget('weight', title=MSG(u'Weight')),
         # Categorie
         SelectWidget('categories', title=MSG(u'Categories')),
         # Price

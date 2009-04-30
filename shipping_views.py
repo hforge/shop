@@ -19,6 +19,7 @@
 from itools.datatypes import Boolean, Decimal, Unicode
 from itools.gettext import MSG
 from itools.xml import XMLParser
+from itools.web import STLView
 
 # Import from ikaaro
 from ikaaro import messages
@@ -45,12 +46,8 @@ class ShippingsView(Folder_BrowseContent):
         ('title', MSG(u'Title')),
         ('description', MSG(u'Description')),
         ('enabled', MSG(u'Enabled ?')),
-        ('configure', None),
         ]
 
-    # XXX 
-    #batch_msg1 = MSG(u"Il y a une commande.")
-    #batch_msg2 = MSG(u"Il y a ${n} commandes.")
 
     def get_item_value(self, resource, context, item, column):
         value = Folder_BrowseContent.get_item_value(self, resource,
@@ -63,13 +60,20 @@ class ShippingsView(Folder_BrowseContent):
             return MSG(u'Yes') if value else MSG(u'No')
         elif column=='title':
             return value, item.name
-        elif column=='configure':
-            title = MSG(u'Configure')
-            logo = '<img src="/ui/icons/16x16/edit.png" title="%s"/>' % title
-            return XMLParser(logo), '%s/;configure' % item.name
         elif column=='description':
             return item.get_property(column)
         return value
+
+
+class Shipping_View(STLView):
+
+    access = 'is_admin'
+    title = MSG(u'Shipping')
+
+    template = '/ui/shop/shipping/view.xml'
+
+    def get_namespace(self, resource, context):
+        return resource.get_namespace(context)
 
 
 class Shipping_Configure(AutoForm):
@@ -83,9 +87,6 @@ class Shipping_Configure(AutoForm):
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
         BooleanCheckBox('enabled', title=MSG(u'Enabled ?')),
-        TextWidget('base_price', title=MSG(u'Base price')),
-        TextWidget('min_weight', title=MSG(u'Min weight (Kg)')),
-        TextWidget('max_weight', title=MSG(u'Max weight (Kg)')),
         ]
 
 

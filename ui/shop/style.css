@@ -25,6 +25,16 @@ table.cart td{
   border:1px solid black;
 }
 
+#quantity{
+  border: 1px solid black;
+  text-align: center;
+}
+
+#clear-cart{
+  background-image: url(/ui/shop/images/delete.png);
+  padding-left: 20px;
+  border: 0px;
+}
 /* Facture */
 
 #facture th {
@@ -127,6 +137,10 @@ table.cart td{
   border: 1px solid #B0B0B0;
   padding: 5px;
   text-align:center;
+}
+
+#cart #table-quantity td{
+  border: 0px;
 }
 
 #totalprice{
