@@ -54,14 +54,12 @@ class OrderView(STLView):
 
     title = MSG(u'Commande')
 
-    template = '/ui/orders/OrderView.xml'
+    template = '/ui/shop/orders/order_view.xml'
 
     def get_namespace(self, resource, context, query=None):
         root = context.root
         accept = context.accept_language
         shop = resource.parent.parent
-        # CSS
-        context.styles.append('/ui/firstluxe/orders/style.css')
         # Date cmd
         creation_datetime = resource.get_property('creation_datetime')
         # Historique des payments associés à la commande
@@ -115,7 +113,7 @@ class OrderFacture(STLView):
 
     title = MSG(u'Facture')
 
-    template = '/ui/orders/OrderFacture.xml'
+    template = '/ui/shop/orders/order_facture.xml'
 
 
     def get_namespace(self, resource, context, query=None):

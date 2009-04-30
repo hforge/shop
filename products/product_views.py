@@ -70,8 +70,8 @@ class Product_View(STLForm):
 
     access = True
     title = MSG(u'View')
-    template = '/ui/product/product_view.xml'
-    model_template = '/ui/product/product_%s_view.xml'
+    template = '/ui/shop/products/product_view.xml'
+    model_template = '/ui/shop/products/product_%s_view.xml'
 
 
     def get_template(self, resource, context):

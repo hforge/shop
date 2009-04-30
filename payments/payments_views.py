@@ -31,7 +31,7 @@ from payment_way import PaymentWay
 
 class Payments_Top_View(STLView):
 
-    template = '/ui/payments/top_view.xml'
+    template = '/ui/shop/payments/top_view.xml'
 
     access = 'is_admin'
 

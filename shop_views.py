@@ -78,7 +78,7 @@ class Shop_ViewCart(STLForm):
 
     title = MSG(u'View Cart')
 
-    template = '/ui/shop/cart_view.xml'
+    template = '/ui/shop/shop_view_cart.xml'
 
     schema = {'id': String}
 

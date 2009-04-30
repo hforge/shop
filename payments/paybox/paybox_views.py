@@ -45,7 +45,7 @@ class Paybox_ViewPayment(STLView):
 
     access = 'is_admin'
 
-    template = '/ui/paybox/view_payment.xml'
+    template = '/ui/shop/paybox/view_payment.xml'
 
     query_schema = {'id': Integer}
 
