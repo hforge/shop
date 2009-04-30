@@ -4,26 +4,56 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Shop control panel</h1>
+  <table cellpadding="0" cellspacing="0">
+    <tr>
+      <td>
+        <img src="/ui/icons/48x48/website.png"/>
+      </td>
+      <td>
+        <h1>
+          Shop control panel
+        </h1>
+      </td>
+    </tr>
+  </table>
 
-  <ul>
-    <li>
-      <a href="./products/">Manage products</a>
-    </li>
-    <li>
-      <a href="./orders/">Manage orders</a>
-    </li>
-    <li>
-      <a href="./payments/">Manage and configure payments</a>
-    </li>
-    <li>
-      <a href="./products-models/">Manage products models</a>
-    </li>
-    <li>
-      <a href="./categories/">Manage categories</a>
-    </li>
-    <li>
-      <a href="./shippings/">Manage shippings way</a>
-    </li>
-  </ul>
+  <p>
+    Welcome in your shop control panel !
+  </p>
+
+  <h2>
+    <img src="/ui/icons/16x16/state.png"/>
+    Shop management
+  </h2>
+    <ul>
+      <li>
+        <a href="./products/">Manage products</a>
+      </li>
+      <li>
+        <a href="./orders/">Manage orders</a>
+      </li>
+      <li>
+        <a href="./categories/">Manage categories</a>
+      </li>
+    </ul>
+
+  <h2>
+    <img src="/ui/icons/16x16/state.png"/>
+    Configuration
+  </h2>
+    <ul>
+      <li>
+        <a href="./payments/">Configure payments</a>
+      </li>
+      <li>
+        <a href="./products-models/">Configure products models</a>
+      </li>
+      <li>
+        <a href="./shippings/">Configure shippings way</a>
+      </li>
+      <li>
+        <a href="./countries/">Configure authorized countries</a>
+      </li>
+    </ul>
+
 </stl:block>
