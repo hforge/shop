@@ -33,7 +33,8 @@ class AddProduct_View(STLForm):
     template = '/ui/shop/products/addproduct.xml'
     tree_template = '/ui/shop/products/addproduct_tree.xml'
     method_to_call = 'add_product'
-    query_schema = {'category': String, 'target_id': String(mandatory=True)}
+    query_schema = {'category': String, 'target_id': String(mandatory=True),
+                    'product': String}
 
     base_scripts = ['/ui/jquery.js',
                     '/ui/javascript.js']
@@ -122,6 +123,18 @@ class AddProduct_View(STLForm):
         namespace = {}
         target_id = context.get_form_value('target_id')
         category = context.get_query_value('category')
+        if not category:
+            # First try to get the category from the current product value
+            product_name = context.get_query_value('product')
+            product = shop.get_resource('products/%s' % product_name)
+            product_categories = product.get_property('categories')
+            if product_categories:
+                category = product_categories[0]
+            else:
+                # Fallback take the first category inside categories
+                category_items = categories._get_names()
+                if category_items:
+                    category = category_items[0]
         namespace['tree'] = self.build_tree(categories, None, category,
                                             target_id)
         namespace['message'] = None

@@ -39,7 +39,8 @@ class ProductSelectorWidget(TextWidget):
       value="${value}" />
     <input id="selector_button_${name}" type="button" value="..."
       name="selector_button_${name}"
-      onclick="popup(';${method}?target_id=selector_${name}', 620, 300);"/>
+      onclick="popup(';${method}?target_id=selector_${name}&amp;product=${value}',
+                     620, 300);"/>
     """, stl_namespaces))
 
 
