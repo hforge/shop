@@ -6,7 +6,7 @@
 
   <ul stl:if="items">
     <li stl:repeat="item items">
-      <a class="${item/css}" href="${item/href}" title="${item/title}">${item/title}"</a>
+      <a class="${item/css}" href="${item/href}" title="${item/title}">${item/title}</a>
       ${item/sub_tree}
     </li>
   </ul>
