@@ -108,6 +108,10 @@ class ProductModelSchema(OrderedTable):
         SelectWidget('enumerate', title=MSG(u'Enumerate')),
         ]
 
+    #########################
+    # Update methods
+    #########################
+
     def update_20090408(self):
         # Title is now multilingual
         OrderedTable.update_20081113(self)

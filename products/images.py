@@ -20,7 +20,10 @@ from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.file import Image
-from ikaaro.folder_views import GoToSpecificDocument
+from ikaaro.folder import Folder
+from ikaaro.folder_views import GoToSpecificDocument, Folder_Orphans
+from ikaaro.folder_views import Folder_PreviewContent, Folder_LastChanges
+from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import ImageSelectorWidget
 from ikaaro.future.order import ChildrenOrderedTable
 from ikaaro.registry import register_resource_class
@@ -65,4 +68,24 @@ class PhotoOrderedTable(ChildrenOrderedTable):
         return self.get_resource('../images')
 
 
+
+class ImagesFolder(Folder):
+
+    class_id = 'images-folder'
+    class_title = MSG(u'Images folder')
+
+    def get_document_types(self):
+        return [Image]
+
+
+    # Views
+    browse_content = Folder_BrowseContent(access='is_admin')
+    preview_content = Folder_PreviewContent(access='is_admin')
+    last_changes = Folder_LastChanges(access='is_admin')
+    orphans = Folder_Orphans(access='is_admin')
+
+
+
+
 register_resource_class(PhotoOrderedTable)
+register_resource_class(ImagesFolder)

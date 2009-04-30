@@ -49,7 +49,6 @@ class Product_NewInstance(DBResource_NewInstance):
     def action(self, resource, context, form):
         name = form['name']
         title = form['title']
-
         # Create the resource
         class_id = context.query['type']
         cls = get_resource_class(class_id)
@@ -62,7 +61,6 @@ class Product_NewInstance(DBResource_NewInstance):
 
         goto = './%s/' % name
         return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
-
 
 
 
@@ -89,24 +87,26 @@ class Product_View(STLForm):
 
 
     def get_schema(self, resource, context):
+        # Base schema
         base_schema = STLForm.get_schema(self, resource, context)
-        # Schema des purchase options
-        purchase_schema = {}
+        # Purchase options (example: color choice for product)
         model = resource.get_product_model()
         if model:
             purchase_schema = model.get_purchase_options_schema(resource)
+        else:
+            purchase_schema = {}
         # Merge
         return merge_dicts(base_schema, purchase_schema)
 
 
     def get_namespace(self, resource, context):
-        # Build namespace
+        # Method build namespace is used to
+        # build namespace (mandatory fields) for
+        # the puchase options
         namespace = self.build_namespace(resource, context)
         # Product namespace
         namespace.update(resource.get_namespace(context))
-        # Cart namespace
-        namespace['cart'] = ProductCart(context).get_namespace()
-        # Purchase options
+        # Purchase options widgets
         model = resource.get_product_model()
         if model:
             widgets = model.get_purchase_options_widgets(resource, namespace)
@@ -132,7 +132,7 @@ class Product_View(STLForm):
         # Add to cart
         cart = ProductCart(context)
         cart.add_product(resource.name, 1, options)
-        # Come back
+        # Information message
         context.message = INFO(u'Product added to cart !')
 
 

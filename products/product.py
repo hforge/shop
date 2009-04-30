@@ -16,9 +16,10 @@
 
 # Import from standard library
 from random import shuffle
+from decimal import Decimal as decimal
 
 # Import from itools
-from itools.datatypes import String, Tokens
+from itools.datatypes import String
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.html import XHTMLFile
@@ -26,47 +27,33 @@ from itools.web import get_context
 from itools.xapian import KeywordField, TextField, BoolField
 
 # Import from ikaaro
-from ikaaro.file import Image
 from ikaaro.folder import Folder
-from ikaaro.folder_views import Folder_Orphans
-from ikaaro.folder_views import Folder_PreviewContent, Folder_LastChanges
 from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
 from ikaaro.registry import register_resource_class
 
 # Import from shop
 from shop.utils import get_shop
 from cross_selling import CrossSellingTable
-from images import PhotoOrderedTable
+from dynamic_folder import DynamicFolder
+from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewInstance
-from product_views import Product_View, Product_Edit, Product_EditModel#, Product_Images
+from product_views import Product_View, Product_Edit, Product_EditModel
 from schema import product_schema
 
-
-def get_namespace_image(image, context):
-    namespace = {'href': context.get_link(image),
-                 'title': image.get_property('title')}
-    return namespace
-
-
-
-class ImagesFolder(Folder):
-
-    class_id = 'images-folder'
-    class_title = MSG(u'Images folder')
-
-    def get_document_types(self):
-        return [Image]
+###############
+# TODO Future
+###############
+#
+# => We can define OrderedContainer in itws (ofen used)
+#    (method get_ordered_photos)
+#
+# => Events -> to_text API in Itools (see get_catalog_values)
+#
+#
+#
 
 
-    # Views
-    browse_content = Folder_BrowseContent(access='is_admin')
-    preview_content = Folder_PreviewContent(access='is_admin')
-    last_changes = Folder_LastChanges(access='is_admin')
-    orphans = Folder_Orphans(access='is_admin')
-
-
-
-class Product(Folder):
+class Product(DynamicFolder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
@@ -74,40 +61,36 @@ class Product(Folder):
                    'edit_cross_selling']
     class_version = '20090410'
 
-    __fixed_handlers__ = Folder.__fixed_handlers__ + ['images',
+    __fixed_handlers__ = DynamicFolder.__fixed_handlers__ + ['images',
                                                       'order-photos',
                                                       'cross-selling']
 
+    #######################
     # Views
+    #######################
     new_instance = Product_NewInstance()
     view = Product_View()
     edit = Product_Edit()
     edit_model = Product_EditModel()
-    #images = Product_Images()
     order = GoToSpecificDocument(specific_document='order-photos',
                                  title=MSG(u'Order photos'),
-                                 access='is_admin')
+                                 access='is_allowed_to_edit')
     edit_cross_selling = GoToSpecificDocument(
             specific_document='cross-selling',
-            title=MSG(u'Éditer la vente croisée'))
+            title=MSG(u'Edit cross selling'),
+            access='is_allowed_to_edit')
 
 
     @classmethod
     def get_metadata_schema(cls):
-        return merge_dicts(Folder.get_metadata_schema(), product_schema,
+        return merge_dicts(DynamicFolder.get_metadata_schema(),
+                           product_schema,
                            product_model=String)
-
-
-    def get_dynamic_metadata_schema(self):
-        product_model = self.get_product_model()
-        product_model_schema = product_model.get_model_schema()
-        return merge_dicts(Folder.get_metadata_schema(), product_schema,
-                            product_model_schema)
 
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        Folder._make_resource(cls, folder, name, *args, **kw)
+        DynamicFolder._make_resource(cls, folder, name, *args, **kw)
         # Images folder
         ImagesFolder._make_resource(ImagesFolder, folder,
                                     '%s/images' % name, body='',
@@ -123,7 +106,7 @@ class Product(Folder):
 
 
     def get_catalog_fields(self):
-        return (Folder.get_catalog_fields(self)
+        return (DynamicFolder.get_catalog_fields(self)
                 + [KeywordField('product_model'),
                    KeywordField('categories', is_stored=True),
                    TextField('html_description'),
@@ -132,9 +115,10 @@ class Product(Folder):
 
 
     def get_catalog_values(self):
-        values = Folder.get_catalog_values(self)
+        values = DynamicFolder.get_catalog_values(self)
+        # Product models
         values['product_model'] = self.get_property('product_model')
-        # categories
+        # We index categories
         categories = []
         for category in self.get_property('categories'):
             segments = category.split('/')
@@ -142,19 +126,13 @@ class Product(Folder):
                 categories.append('/'.join(segments[:i+1]))
         values['categories'] = categories
         values['has_categories'] = len(categories) != 0
-        # HTML description XXX We must to_text API in itools ?
+        # XXX HTML description
         doc = XHTMLFile()
         doc.events = self.get_property('html_description')
         values['html_description'] = doc.to_text()
-        # description
+        # Product description
         values['description'] = self.get_property('description')
         return values
-
-
-    def get_canonical_path(self):
-        site_root = self.get_site_root()
-        products = site_root.get_resource('shop/products')
-        return products.get_canonical_path().resolve2(self.name)
 
 
     def get_product_model(self):
@@ -162,25 +140,46 @@ class Product(Folder):
         if not product_model:
             return None
         product = self.get_real_resource()
-        path = '../../products-models/%s' % product_model
-        return product.get_resource(path)
+        shop = get_shop(product)
+        return shop.get_resource('products-models/%s' % product_model)
 
+
+    ####################################################
+    # Get canonical /virtual paths.
+    ####################################################
+
+    def get_canonical_path(self):
+        site_root = self.get_site_root()
+        products = site_root.get_resource('shop/products')
+        return products.get_canonical_path().resolve2(self.name)
+
+
+    def get_virtual_path(self):
+        """XXX hardcoded for values we have always used so far.
+        Remember to change it if your virtual categories folder is named
+        something else.
+        """
+        categories = self.get_property('categories')
+        category = categories[0]
+        path = '../../categories/%s/%s' % (category, self.name)
+        return self.get_abspath().resolve(path)
 
     ##################################################
     ## Namespace
     ##################################################
     def get_small_namespace(self, context):
+        # get namespace
         namespace = {'name': self.name,
-                     'href': context.get_link(self)}
+                     'href': context.get_link(self),
+                     'cover': self.get_cover_namespace(context)}
         for key in ['title', 'description']:
             namespace[key] = self.get_property(key)
-        namespace['cover'] = self.get_cover_namespace(context)
         return namespace
 
 
     def get_namespace(self, context):
         namespace = {}
-        # Basic informations
+        # Get basic informations
         namespace['href'] = context.get_link(self)
         for key in product_schema.keys():
             namespace[key] = self.get_property(key)
@@ -191,52 +190,32 @@ class Product(Folder):
         else:
             namespace['specific_dict'] = {}
             namespace['specific_list'] = []
-        # Complementaty Product
-        complementary_products = self.get_ns_other_products(context)
-        namespace['complementary_products'] = complementary_products
-        # Cover
-        namespace['cover'] = self.get_cover_namespace(context)
         # Images
         namespace['images'] = self.get_images_namespace(context)
         # Product is buyable
         namespace['is_buyable'] = self.is_buyable()
         # Authentificated ?
         ac = self.get_access_control()
-        namespace['is_authenticated'] = ac.is_authenticated(context.user,
-                                                            self)
+        namespace['is_authenticated'] = ac.is_authenticated(context.user, self)
         return namespace
-
-
-    def get_ns_other_products(self, context):
-        products = self.get_real_resource().parent
-        selected_products = []
-        selection = list(products.get_resources())
-        shuffle(selection)
-        for product in selection[0:5]:
-            ns = product.get_small_namespace(context)
-            selected_products.append(ns)
-        return selected_products
 
 
     #####################
     # Images
     #####################
-    def get_cover_namespace(self, context):
-        cover = self.get_ordered_photos(context, quantity=1)
-        if not cover:
-            return None
-        return get_namespace_image(cover[0], context)
+    def get_cover_namespace(self, context)
+        images = self.get_images_namespace(context, 1)
+        if images:
+            return images[0]
+        return None
 
 
-    def get_images_namespace(self, context):
-        ns_images = []
-        for i, image in enumerate(self.get_ordered_photos(context)):
-            # Ignore cover
-            if i==0:
-                continue
-            ns_image = get_namespace_image(image, context)
-            ns_images.append(ns_image)
-        return ns_images
+    def get_images_namespace(self, context, quantity=1):
+        namespace = []
+        for image in self.get_ordered_photos(context, quantity):
+            namespace.append({'href': context.get_link(image),
+                              'title': image.get_property('title')})
+        return namespace
 
 
     def get_ordered_photos(self, context, quantity=None):
@@ -263,8 +242,7 @@ class Product(Folder):
     ## API
     #####################
     def is_buyable(self):
-        price = self.get_price()
-        return float(price) != 0.0
+        return self.get_price() != decimal(0)
 
 
     def get_price(self):
@@ -276,81 +254,28 @@ class Product(Folder):
 
 
     def get_options_namespace(self, options):
+        """
+          Get:
+              options = {'color': 'red',
+                         'size': '1'}
+          Return:
+              namespace = [{'title': 'Color',
+                            'value': 'Red'},
+                           {'title': 'Size',
+                            'value': 'XL'}]
+        """
         product_model = self.get_product_model()
         return product_model.options_to_namespace(options)
 
-    #######################################
-    ## XXX Hack dynamic properties
-    ## To FIX in 0.60
-    #######################################
-    def get_property_and_language(self, name, language=None):
-        value, language = Folder.get_property_and_language(self, name,
-                                                           language)
 
-        # Default properties first (we need "product_model")
-        if name in self.get_metadata_schema():
-            return value, language
-
-        # Dynamic property?
-        product_model = self.get_product_model()
-        if product_model:
-            product_model_schema = product_model.get_model_schema()
-            if name in product_model_schema:
-                datatype = product_model_schema[name]
-                # Default value
-                if value is None:
-                    value = datatype.get_default()
-                elif getattr(datatype, 'multiple', False):
-                    if not isinstance(value, list):
-                        # Decode the property
-                        # Only support list of strings
-                        value = list(Tokens.decode(value))
-                    # Else a list was already set by "set_property"
-                else:
-                    value = datatype.decode(value)
-
-        return value, language
-
-
-    def is_multilingual(self, name, language):
-        value, language = self.get_property_and_language(name, language)
-        return language is not None
-
-
-    def set_property(self, name, value, language=None):
-        """Added to handle dynamic properties.
-        The value is encoded because metadata won't know about its datatype.
-        The multilingual status must be detected to give or not the
-        "language" argument.
-        """
-        # Dynamic property?
-        product_model = self.get_product_model()
-        if product_model:
-            product_model_schema = product_model.get_model_schema()
-            if name in product_model_schema:
-                datatype = product_model_schema[name]
-                if getattr(datatype, 'multiple', False):
-                    return Folder.set_property(self, name,
-                                               Tokens.encode(value))
-                elif self.is_multilingual(name, language):
-                    return Folder.set_property(self, name,
-                                               datatype.encode(value),
-                                               language)
-                # Even if the language was not None, this property is not
-                # multilingual so ignore it.
-                return Folder.set_property(self, name,
-                                           datatype.encode(value))
-
-        # Standard property
-        # (or undeclared property that will raise an error)
-        # Detect if the "language" argument must be given.
-        if self.is_multilingual(name, language):
-            return Folder.set_property(self, name, value, language)
-        return Folder.set_property(self, name, value)
-
-    #######################
-    ## Links
-    #######################
+    #########################################
+    # Update links mechanism
+    #-------------------------
+    #
+    # If a user rename a category we have
+    # to update categories associated to products
+    #
+    #########################################
 
     def get_links(self):
         links = []
@@ -381,17 +306,6 @@ class Product(Folder):
                 new_categories.append(name)
         self.set_property('categories', new_categories)
         get_context().server.change_resource(self)
-
-
-    def get_virtual_path(self):
-        """XXX hardcoded for values we have always used so far.
-        Remember to change it if your virtual categories folder is named
-        something else.
-        """
-        categories = self.get_property('categories')
-        category = categories[0]
-        path = '../../categories/%s/%s' % (category, self.name)
-        return self.get_abspath().resolve(path)
 
 
     #######################
@@ -435,9 +349,9 @@ class Products(Folder):
 
 
 
-# Hack
+# XXX Hack (Demander à henry ?)
 CrossSellingTable.orderable_classes = Product
 
-register_resource_class(ImagesFolder)
+
 register_resource_class(Product)
 register_resource_class(Products)

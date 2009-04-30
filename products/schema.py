@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from decimal import Decimal as decimal
+
 # Import from itools
 from itools.datatypes import Decimal, String, Unicode
 
@@ -35,12 +38,10 @@ product_schema = {# General informations
                   'title': Unicode,
                   'description': Unicode,
                   'subject': Unicode,
-                  'weight': Decimal(default=0.0, mandatory=True),
+                  'weight': Decimal(default=decimal(0), mandatory=True),
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),
                   # Price
-                  'price': Decimal(default=0.0),
+                  'price': Decimal(default=decimal(0)),
                   # Description
-                  'html_description': XHTMLBody(default=''),
-                  # Référencement
-                  'tags': Unicode}
+                  'html_description': XHTMLBody(default='')}
