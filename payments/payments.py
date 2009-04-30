@@ -30,6 +30,7 @@ from payment_way import PaymentWay
 from paybox import Paybox
 
 
+
 class Payments(Folder):
     """
     This table contains the history of attempted or successful payments.
@@ -121,22 +122,6 @@ class Payments(Folder):
             raise ValueError, u'Invalid payment mode'
         # All is ok: We show the payment form
         return payment_module._show_payment_form(context, payment)
-
-
-    def get_payments_namespace(self, context, only_actif=None):
-        l = []
-        for mode in self.search_resources(cls=PaymentWay):
-            ns = mode.get_namespace(context)
-            if only_actif is True and bool(ns['enabled']) is False:
-                continue
-            l.append(ns)
-        return l
-
-
-    def get_payment_namespace(self, payment_mode, context):
-        payment_mode = self.get_resource(payment_mode)
-        return payment_mode.get_namespace(context)
-
 
 
 register_resource_class(Payments)

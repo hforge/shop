@@ -88,17 +88,18 @@
 
   <h1 class="payment-process">Payment</h1>
 
-  <form name="order" action=";buy" method="POST">
+  <p class="${payment/class}">Please choose a payment mode</p>
+
+  <form name="order" method="POST">
     <table cellpadding="5px" cellspacing="0">
-      <tr stl:repeat="payment payments">
+      <tr stl:repeat="option payment/value">
         <td>
-          <input type="radio" name="payment_mode" value="${payment/name}"/>
+          <input type="radio" name="payment_${option/name}"
+            id="payment_${option/name}" value="${option/name}"/>
+          ${option/title}
         </td>
         <td>
-          ${payment/title}
-        </td>
-        <td>
-          <img src="${payment/logo}"/><br/>
+          <img src="./payments/${option/name}/logo2.png/;download"/><br/>
         </td>
       </tr>
     </table>

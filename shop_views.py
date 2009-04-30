@@ -37,8 +37,9 @@ from ikaaro.website_views import RegisterForm
 # Import from shop
 from cart import ProductCart
 from countries import CountriesEnumerate
-from orders import Order
 from datatypes import Civilite
+from orders import Order
+from payments import PaymentWaysEnumerate
 
 
 class Shop_View(STLView):
@@ -221,46 +222,32 @@ class Shop_Delivery(STLForm):
 
 
 
-class Shop_ShowRecapitulatif(STLView):
+class Shop_ShowRecapitulatif(STLForm):
 
     access = 'is_authenticated'
     title = MSG(u'Order summary')
     template = '/ui/shop/shop_recapitulatif.xml'
 
-    def GET(self, resource, context):
-        # Check if cart is valid
-        cart = ProductCart(context)
-        if not cart.is_valid():
-            msg = MSG(u'Invalid cart')
-            return context.come_back(msg, goto='/')
-        # Normal
-        return STLView.GET(self, resource, context)
-
+    schema = {'payment': PaymentWaysEnumerate(mandatory=True)}
 
     def get_namespace(self, resource, context):
-        namespace = {'products': []}
+        cart = ProductCart(context)
+        products = resource.get_resource('products')
+        shippings = resource.get_resource('shippings')
+        # Base namespace
+        namespace = self.build_namespace(resource, context)
         # Progress bar
         namespace['progress'] = Shop_Progress(index=5).GET(resource, context)
-        # Get cart
-        cart = ProductCart(context)
-        # Delivery address
-        delivery_address = cart.addresses['delivery_address']
-        namespace['delivery_address']  = resource.get_user_address_namespace(delivery_address)
-        # Bill
-        namespace['bill_address'] = None
-        bill_address = cart.addresses['bill_address']
-        if bill_address:
-            namespace['bill_address'] = resource.get_user_address_namespace(bill_address)
-        # Get products
-        products = resource.get_resource('products')
+        # Get delivery and bill address namespace
+        for key in ['delivery_address', 'bill_address']:
+            id = cart.addresses[key]
+            namespace[key]  = resource.get_user_address_namespace(id)
         # Get products informations
+        namespace['products'] = []
         total = 0.0
         for product in cart.products:
             quantity = product['quantity']
             product = products.get_resource(product['name'])
-            # Check product is buyable
-            if not product.is_buyable():
-                continue
             # Price
             price = float(product.get_price())
             price_total = price * int(quantity)
@@ -277,31 +264,12 @@ class Shop_ShowRecapitulatif(STLView):
         # Total price
         namespace['total'] = total
         # Delivery
-        shippings = resource.get_resource('shippings')
         shipping_mode = cart.shipping['name']
         namespace['ship'] = {'title': u'o', 'price': 2.0} # XXX
-        # Payments mode
-        payments = resource.get_resource('payments')
-        namespace['payments'] = payments.get_payments_namespace(context,
-                                                        only_actif=True)
         return namespace
 
 
-
-class Shop_Buy(BaseView):
-
-    access = 'is_authenticated'
-
-
-    def GET(self, resource, context):
-        return get_reference(';view_cart')
-
-
-    def POST(self, resource, context):
-        # XXX We should use schema ?
-        if not context.get_form_value('payment_mode'):
-            msg = MSG(u'Please choose a payment mode')
-            return context.come_back(msg)
+    def action(self, resource, context):
         # Check if cart is valid
         cart = ProductCart(context)
         if not cart.is_valid():
@@ -322,6 +290,9 @@ class Shop_Buy(BaseView):
         # Build informations
         products_ns = []
         for cart_element in cart.products:
+            ## Check product is buyable
+            #if not product.is_buyable():
+            #    continue
             product = products.get_resource(cart_element['name'])
             products_ns.append({'name': product.name,
                                 'title': product.get_title(),
@@ -331,8 +302,8 @@ class Shop_Buy(BaseView):
                    'id_client': context.user.name,
                    'total_price': total_price,
                    'email': client_mail,
-                   'mode': context.get_form_value('payment_mode'),
-                   'payment_mode': context.get_form_value('payment_mode'),# XXX
+                   'mode': form['payment'],
+                   'payment_mode': form['payment'],
                    'delivery_address': cart.addresses['delivery_address'],
                    'bill_address': cart.addresses['bill_address'],
                    'shipping': cart.shipping['name'],

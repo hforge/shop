@@ -16,13 +16,17 @@
 
 # Import from itools
 from itools import vfs
-from itools.datatypes import Boolean
+from itools.datatypes import Boolean, Enumerate
 from itools.utils import get_abspath
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.file import Image
 from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
+
+# Import from shop
+from shop.utils import get_shop
 
 
 class PaymentWay(Folder):
@@ -70,12 +74,21 @@ class PaymentWay(Folder):
         return '%s/;download' % uri
 
 
-    def get_namespace(self, context):
-        ns = {'name': self.name,
-              'title': self.get_title(),
-              'logo': self.get_public_logo(context),
-              'enabled': self.get_property('enabled')}
-        return ns
+class PaymentWaysEnumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        options = []
+        context = get_context()
+        shop = get_shop(context.resource)
+        payments = shop.get_resource('payments')
+        for mode in payments.search_resources(cls=PaymentWay):
+            if not mode.get_property('enabled'):
+                continue
+            options.append({'name': mode.name,
+                            'title': mode.get_title()})
+        return options
+
 
 
 register_resource_class(PaymentWay)

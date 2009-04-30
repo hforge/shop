@@ -16,3 +16,4 @@
 
 # Import from shop
 from payments import Payments
+from payment_way import PaymentWaysEnumerate

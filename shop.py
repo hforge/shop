@@ -29,7 +29,7 @@ from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
 from shipping import Shippings
-from shop_views import Shop_Buy, Shop_Delivery, Shop_RegisterProgress
+from shop_views import Shop_Delivery, Shop_RegisterProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_Addresses, Shop_ChooseAddress, Shop_End
@@ -67,7 +67,6 @@ class Shop(Folder):
     add_address = Shop_AddAddressProgress()
     delivery = Shop_Delivery()
     show_recapitulatif = Shop_ShowRecapitulatif()
-    buy = Shop_Buy()
     end = Shop_End()
 
 

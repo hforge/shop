@@ -72,7 +72,7 @@ class OrderView(STLView):
         # Payment mode
         payment_mode = resource.get_property('payment_mode')
         payments = shop.get_resource('payments')
-        ns_payment_mode = payments.get_payment_namespace(payment_mode, context)
+        ns_payment_mode = {}
         # State
         state = resource.get_state()
         # Acl
