@@ -28,8 +28,8 @@ from ikaaro.utils import get_base_path_query, reduce_string
 class AddProduct_View(STLForm):
 
     access = 'is_allowed_to_edit'
-    template = '/ui/product/addproduct.xml'
-    tree_template = '/ui/product/addproduct_tree.xml'
+    template = '/ui/shop/products/addproduct.xml'
+    tree_template = '/ui/shop/products/addproduct_tree.xml'
     method_to_call = 'add_product'
     query_schema = {'category': String, 'target_id': String(mandatory=True)}
 
@@ -38,13 +38,15 @@ class AddProduct_View(STLForm):
 
     styles = ['/ui/bo.css',
               '/ui/aruni/style.css',
-              '/ui/product/style.css']
+              '/ui/shop/products/style.css']
+
     additional_javascript = """
           function select_element(type, value, caption) {
             window.opener.$("#%s").val(value);
             window.close();
           }
           """
+
     thumb_size = (75, 75)
 
     def get_scripts(self):
