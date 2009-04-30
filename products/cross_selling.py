@@ -19,14 +19,34 @@ from itools.gettext import MSG
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import PathSelectorWidget
+from ikaaro.forms import TextWidget, stl_namespaces
 from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable
 from ikaaro.table_views import OrderedTable_View
 
 # Import from shop
-from cross_selling_views import AddLinkCrossSelling
+from cross_selling_views import AddProduct_View
+
+
+
+class ProductSelectorWidget(TextWidget):
+
+    method_to_call = 'add_product'
+    template = list(XMLParser(
+    """
+    <input type="text" id="selector_${name}" size="${size}" name="${name}"
+      value="${value}" />
+    <input id="selector_button_${name}" type="button" value="..."
+      name="selector_button_${name}"
+      onclick="popup(';${method}?target_id=selector_${name}', 620, 300);"/>
+    """, stl_namespaces))
+
+
+    def get_namespace(self, datatype, value):
+        namespace = TextWidget.get_namespace(self, datatype, value)
+        namespace['method'] = self.method_to_call
+        return namespace
 
 
 
@@ -46,8 +66,10 @@ class ResourcesOrderedTable_Ordered(OrderedTable_View):
 
     def get_item_value(self, resource, context, item, column):
         if column in ('title', 'description', 'image'):
+            real_resource = resource.get_real_resource()
+            categories = real_resource.parent.parent
             try:
-                product = resource.get_resource(item.name)
+                product = categories.get_resource(item.name)
             except LookupError:
                 product = None
         if column == 'title':
@@ -55,6 +77,7 @@ class ResourcesOrderedTable_Ordered(OrderedTable_View):
                 return item.name
             handler = resource.handler
             value = handler.get_record_value(item, column)
+            # FIXME FO or BO link ?
             return product.get_title(), context.get_link(product)
         elif column == 'description':
             if product is None:
@@ -80,25 +103,12 @@ class CrossSellingTable(OrderedTable):
     class_handler = ResourcesOrderedTableFile
     class_views = ['view', 'add_record']
 
-    form = [PathSelectorWidget('name', title=MSG(u'Product'))]
+    form = [ProductSelectorWidget('name', title=MSG(u'Product'))]
 
     # Views
     view = ResourcesOrderedTable_Ordered()
-    add_link = AddLinkCrossSelling()
+    add_product = AddProduct_View()
     # TODO Add get_links, update_link
-
-
-    def get_add_selected_classes(self, add_type, target_id):
-        if add_type == 'add_link' and target_id == 'name':
-            from product import Product
-            return [Product]
-        return OrderedTable.get_add_selected_classes(self, add_type,
-                                                     target_id)
-
-
-    def get_add_bc_root(self, add_type, target_id):
-        # Return "products" container
-        return self.get_real_resource().parent.parent
 
 
 

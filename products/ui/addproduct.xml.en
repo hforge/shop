@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+  <head>
+    <title>Insert link</title>
+    <link type="text/css" rel="stylesheet" stl:repeat="style styles"
+      href="${style}" />
+    <script type="text/javascript" stl:repeat="script scripts"
+      src="${script}" />
+    <script type="text/javascript">
+      ${additional_javascript}
+    </script>
+  </head>
+
+  <body>
+    <div id="body" class="add-product-popup">
+
+      <!-- Message -->
+      <div id="message" stl:if="message">Message: ${message}</div>
+
+      <!-- Internal Link -->
+      <div id="browse">
+        <h3>Browse and link to a Product</h3>
+        <table border="0" cellpadding="1" cellspacing="1" width="100%"
+          class="thumbs">
+          <tr>
+            <th width="150">Browse Categories</th>
+            <th>Select Product</th>
+          </tr>
+          <tr>
+            <td valign="top" class="tree">
+              <!-- Browse Categories -->
+              ${tree}
+            </td>
+            <td valign="top">
+              <!-- Products to select -->
+              <stl:block stl:repeat="item items">
+                <dl class="thumb">
+                  <dt>
+                    <img src="${item/cover/href}/;thumb?width=${thumb/width}&amp;height=${thumb/height}"
+                         alt="${item/title}" stl:if="item/cover" />
+                  </dt>
+                  <dd>
+                    <abbr
+                      title="${item/title}">${item/short_title}</abbr><br/>
+                    <a href="javascript:select_element('link', '${item/path}', '${item/quoted_title}')">
+                      Select
+                    </a>
+                  </dd>
+                </dl>
+              </stl:block>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

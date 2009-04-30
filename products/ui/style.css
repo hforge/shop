@@ -1,0 +1,24 @@
+/* Add product Popup */
+#body.add-product-popup {
+  border-top: 20px solid #30569D;
+  padding: 20px;
+}
+#body.add-product-popup td.tree ul {
+  padding-left: 20px;
+}
+#body.add-product-popup td.tree ul li {
+  list-style-type: disc;
+}
+#body.add-product-popup td.tree ul li a.active {
+  font-weight: bold;
+}
+#body.add-product-popup table.thumbs {
+  border-collapse: collapse;
+}
+#body.add-product-popup table.thumbs th,
+#body.add-product-popup table.thumbs td {
+  border: 2px solid #ccc;
+}
+#body.add-product-popup dt a {
+  white-space: nowrap;
+}
