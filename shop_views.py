@@ -544,7 +544,7 @@ class Shop_ShowRecapitulatif(STLForm):
         return namespace
 
 
-    def action(self, resource, context):
+    def action(self, resource, context, form):
         # Check if cart is valid
         cart = ProductCart(context)
         if not cart.is_valid():
