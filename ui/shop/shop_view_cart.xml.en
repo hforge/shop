@@ -48,14 +48,14 @@
           </td>
           <td>${p/price} €</td>
           <td>
-            <table id="table-quantity">
+            <table class="table-quantity">
               <tr>
                 <td>
                   <input type="image" name=";remove"
                       src="/ui/shop/images/minus.png"/>
                 </td>
                 <td>
-                  <input type="text" id="quantity" name="quantity"
+                  <input type="text" class="quantity" name="quantity"
                     value="${p/quantity}" size="2" readonly="readonly"/>
                 </td>
                 <td>
