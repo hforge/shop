@@ -29,6 +29,16 @@ from ikaaro.table import Table
 # Import from shop
 from utils import get_shop
 
+###########################################################
+# The list of countries is used in the user address book.
+#
+# Administrator of shop can activate/desactivate countries
+# to allow or not the delivery in this countries.
+#
+# Shipping module allow to configure the price of delivery
+# for each countries.
+###########################################################
+
 
 class CountriesEnumerate(Enumerate):
 

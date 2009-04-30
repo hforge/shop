@@ -29,11 +29,10 @@ from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
 from shipping import Shippings
-from shop_views import Shop_Delivery, Shop_RegisterProgress
+from shop_views import Shop_Delivery, Shop_ViewCart
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_Addresses, Shop_ChooseAddress, Shop_End
-from shop_views import Shop_ViewCart
 
 
 class Shop(Folder):
@@ -48,25 +47,37 @@ class Shop(Folder):
                           'products', 'products-models',
                           'shippings', 'countries']
 
-    # Views
+
+    ####################################
+    ## Views
+    ####################################
+
+    # Administrator shop view
     view = Shop_View()
 
+    #------------------------------
+    # 6 Steps for payment process
+    #------------------------------
 
-    # Views for payment processus
     # 1) View cart
-    # 2) Login/Register
-    # 3) Choose addreses
-    # 4) Choose delivery
-    # 5) Recapitulatif / payment
-    # 6) Payment endt
     view_cart = Shop_ViewCart()
+
+    # 2) Login/Register
     register = Shop_RegisterProgress()
+
+    # 3) Choose/edit/add addresses
     addresses = Shop_Addresses()
     choose_address= Shop_ChooseAddress()
     edit_address = Shop_EditAddressProgress()
     add_address = Shop_AddAddressProgress()
+
+    # 4) Choose delivery
     delivery = Shop_Delivery()
+
+    # 5) Recapitulatif / payment
     show_recapitulatif = Shop_ShowRecapitulatif()
+
+    # 6) Payment end
     end = Shop_End()
 
 
@@ -103,8 +114,12 @@ class Shop(Folder):
     def get_document_types(self):
         return []
 
+    ##############################
+    # XXX To deplace
+    ##############################
 
     def get_user_main_address(self, user_name):
+        # TODO: user can define his default address
         ns_addresses = []
         addresses = self.get_resource('addresses').handler
         for record in addresses.search(user=str(user_name)):
@@ -122,6 +137,9 @@ class Shop(Folder):
         ns['country'] = CountriesEnumerate.get_value(ns['country'])
         return ns
 
+    ##############################
+    # Updates
+    ##############################
 
     def update_20090430(self):
         """ We add countries table """
