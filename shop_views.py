@@ -315,7 +315,10 @@ class Shop_Buy(BaseView):
         cart = ProductCart(context)
         # Get Total price
         products = resource.get_resource('products')
-        total_price = cart.get_total_price(products)
+        total_price = decimal(0)
+        for cart_elt in cart.products:
+            product = products.get_resource(cart_elt['name'])
+            total_price += product.get_price() * cart_elt['quantity']
         # Build informations
         products_ns = []
         for cart_element in cart.products:
