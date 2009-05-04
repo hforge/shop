@@ -249,7 +249,7 @@ class Shop_Login(LoginView):
 
     def get_namespace(self, resource, context):
         namespace = self.build_namespace(resource, context)
-        if get_shop(context.resource)==context.resource:
+        if context.resource.name=='shop':
             # If user is in shop, it's a payment process,
             # so we have to show a progress bar
             namespace['progress'] = Shop_Progress(index=2).GET(resource, context)
