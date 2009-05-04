@@ -203,7 +203,7 @@ class Product(DynamicFolder):
     #####################
     # Images
     #####################
-    def get_cover_namespace(self, context)
+    def get_cover_namespace(self, context):
         images = self.get_images_namespace(context, 1)
         if images:
             return images[0]
