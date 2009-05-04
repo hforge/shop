@@ -54,24 +54,6 @@ class PaymentWay(Folder):
                         '%s/%s' % (name, key), body=body, **kw)
 
 
-    # XXX improve
-    def get_private_logo(self, context):
-        if self.has_resource('logo1.png'):
-            logo = self.get_resource('logo1.png')
-            uri = context.get_link(logo)
-        else:
-            uri = '/ui/icons/48x48/text.png'
-        return '%s/;download' % uri
-
-
-    # XXX improve
-    def get_public_logo(self, context):
-        if self.has_resource('logo2.png'):
-            logo = self.get_resource('logo2.png')
-            uri = context.get_link(logo)
-        else:
-            uri = '/ui/icons/48x48/text.png'
-        return '%s/;download' % uri
 
 
 class PaymentWaysEnumerate(Enumerate):

@@ -20,13 +20,11 @@ from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.folder import Folder
-from ikaaro.registry import register_resource_class, get_resource_class
-from ikaaro.resource_ import DBResource
+from ikaaro.registry import register_resource_class
 
 # Import from package
 from payments_views import Payments_View, Payments_Configure
 from payments_views import Payments_History_View
-from payment_way import PaymentWay
 from paybox import Paybox
 
 

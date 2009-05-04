@@ -15,14 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean, Unicode, String
+from itools.datatypes import Boolean
 from itools.gettext import MSG
 from itools.web import STLView
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import AutoForm, BooleanRadio, SelectWidget
+from ikaaro.forms import AutoForm, BooleanRadio
 from ikaaro.views import BrowseForm, CompositeForm
 
 # Import from shop
@@ -36,8 +36,7 @@ class Payments_Top_View(STLView):
     access = 'is_admin'
 
     def get_namespace(self, resource, context):
-        ns = {'enabled': resource.get_property('enabled')}
-        return ns
+        return {'enabled': resource.get_property('enabled')}
 
 
 
@@ -65,7 +64,7 @@ class Payments_History_View(BrowseForm):
         """ Here we concatanate payments off all payment's mode """
         items = []
         for payment_way in resource.search_resources(cls=PaymentWay):
-            ns = payment_way.get_ns_payments()
+            ns = payment_way.get_namespace_payments()
             if ns:
                 items.append(ns)
         return items
@@ -106,8 +105,8 @@ class Payments_List_View(BrowseForm):
         for payment_way in resource.search_resources(cls=PaymentWay):
             name = payment_way.name
             base_logo = '<img src="%s"/>'
-            logo1 = base_logo % payment_way.get_private_logo(context)
-            logo2 = base_logo % payment_way.get_public_logo(context)
+            logo1 = None
+            logo2 = None
             enabled = payment_way.get_property('enabled')
             kw = {'name': (name, name),
                   'title': (payment_way.get_title(), name),
