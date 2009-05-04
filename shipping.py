@@ -21,6 +21,7 @@ from itools.datatypes import Decimal, String
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.stl import stl
+from itools.xapian import PhraseQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -49,7 +50,8 @@ class ShippingPricesCSV(CSVFile):
 class ShippingPricesTable(BaseTable):
 
     record_schema = {
-      'countries': CountriesEnumerate(mandatory=True, multiple=True),
+      'countries': CountriesEnumerate(mandatory=True, multiple=True,
+                                      index='keyword'),
       'max-weight': Decimal(mandatory=True, index='keyword'),
       'price': Decimal(mandatory=True),
       }
@@ -105,11 +107,12 @@ class Shipping(Folder):
         return merge_dicts(Folder.get_metadata_schema(), delivery_schema)
 
 
-    def get_price(self, purchase_price, purchase_weight):
+    def get_price(self, country, purchase_price, purchase_weight):
         list_price_ok = {}
         prices = self.get_resource('prices').handler
         # Get corresponding weight in table of price
-        for record in prices.get_records():
+        query = PhraseQuery('countries', country)
+        for record in prices.search(query):
             max_weight = prices.get_record_value(record, 'max-weight')
             if purchase_weight < max_weight:
                 list_price_ok[max_weight] = record
@@ -147,8 +150,8 @@ class Shipping(Folder):
         """,
         stl_namespaces))
 
-    def get_widget_namespace(self, context, price, weight):
-        price = self.get_price(price, weight)
+    def get_widget_namespace(self, context, country, price, weight):
+        price = self.get_price(country, price, weight)
         if not price:
             return None
         ns = {'name': self.name,
@@ -195,17 +198,24 @@ class Shippings(Folder):
         return [Shipping]
 
 
-    def get_namespace_shipping_way(self, context, country, price, weight):
+    def get_namespace_shipping_ways(self, context, country, price, weight):
         namespace = []
         for mode in self.search_resources(cls=Shipping):
             if not mode.get_property('enabled'):
                 continue
-            widget = mode.get_widget_namespace(context, price, weight)
+            widget = mode.get_widget_namespace(context, country, price, weight)
             if widget:
                 namespace.append(widget)
         # No price corresponding to options,
         # we should set a default price.
         return namespace
+
+
+    def get_namespace_shipping_way(self, context, name, country, price, weight):
+        shipping = self.get_resource(name)
+        if not shipping.get_property('enabled'):
+            return None
+        return shipping.get_widget_namespace(context, country, price, weight)
 
 
 register_resource_class(Shippings)

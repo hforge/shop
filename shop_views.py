@@ -468,10 +468,15 @@ class Shop_Delivery(STLForm):
             product = products.get_resource(cart_elt['name'])
             total_price += product.get_price() * cart_elt['quantity']
             total_weight += product.get_weight() * cart_elt['quantity']
+        # Get user delivery country
+        addresses = resource.get_resource('addresses').handler
+        delivery_address = cart.addresses['delivery_address']
+        record = addresses.get_record(delivery_address)
+        country = addresses.get_record_value(record, 'country')
         # Guess shipping posibilities
         shippings = resource.get_resource('shippings')
-        ns['shipping'] = shippings.get_namespace_shipping_way(context,
-                                              10, total_price, total_weight)
+        ns['shipping'] = shippings.get_namespace_shipping_ways(context,
+                                            country, total_price, total_weight)
         return ns
 
 
@@ -519,28 +524,35 @@ class Shop_ShowRecapitulatif(STLForm):
             namespace[key]  = resource.get_user_address_namespace(id)
         # Get products informations
         namespace['products'] = []
-        total = 0.0
+        total_price = decimal(0)
+        total_weight = decimal(0)
         for product in cart.products:
             quantity = product['quantity']
             product = products.get_resource(product['name'])
-            # Price
-            price = float(product.get_price())
-            price_total = price * int(quantity)
+            price_total = product.get_price() * quantity
+            # Weight and price
+            total_price += product.get_price() * quantity
+            total_weight += product.get_weight() * quantity
             # All
             product = ({'name': product.name,
                         'img': product.get_cover_namespace(context),
                         'title': product.get_title(),
                         'uri': resource.get_pathto(product),
                         'quantity': quantity,
-                        'price': price,
+                        'price': product.get_price(),
                         'price_total': price_total})
-            total = total + price_total
             namespace['products'].append(product)
-        # Total price
-        namespace['total'] = total
-        # Delivery
+        # Get user delivery country
+        addresses = resource.get_resource('addresses').handler
+        delivery_address = cart.addresses['delivery_address']
+        record = addresses.get_record(delivery_address)
+        country = addresses.get_record_value(record, 'country')
+        # Get shipping mode
         shipping_mode = cart.shipping['name']
-        namespace['ship'] = {'title': u'o', 'price': 2.0} # XXX
+        namespace['ship'] = shippings.get_namespace_shipping_way(context,
+                                shipping_mode, country, total_price, total_weight)
+        # Total price
+        namespace['total'] = total_price + namespace['ship']['price']
         return namespace
 
 
