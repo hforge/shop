@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
-from random import shuffle
 from decimal import Decimal as decimal
 
 # Import from itools
@@ -23,6 +22,7 @@ from itools.datatypes import String
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.html import XHTMLFile
+from itools.vfs import get_ctime
 from itools.web import get_context
 from itools.xapian import KeywordField, TextField, BoolField
 
@@ -32,13 +32,13 @@ from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from shop.utils import get_shop
 from cross_selling import CrossSellingTable
 from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewInstance
 from product_views import Product_View, Product_Edit, Product_EditModel
 from schema import product_schema
+from shop.utils import get_shop
 
 ###############
 # TODO Future
@@ -111,7 +111,9 @@ class Product(DynamicFolder):
                    KeywordField('categories', is_stored=True),
                    TextField('html_description'),
                    TextField('description'),
-                   BoolField('has_categories')])
+                   BoolField('has_categories'),
+                   KeywordField('creation_date', is_indexed=True,
+                                is_stored=True)])
 
 
     def get_catalog_values(self):
@@ -132,6 +134,10 @@ class Product(DynamicFolder):
         values['html_description'] = doc.to_text()
         # Product description
         values['description'] = self.get_property('description')
+        # Creation date
+        creation_date = get_ctime(self.metadata.uri)
+        values['creation_date'] = creation_date.strftime('%Y%m%d%H%M%S')
+
         return values
 
 
