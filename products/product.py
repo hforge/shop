@@ -16,6 +16,7 @@
 
 # Import from standard library
 from decimal import Decimal as decimal
+from datetime import datetime
 
 # Import from itools
 from itools.datatypes import String
@@ -135,7 +136,11 @@ class Product(DynamicFolder):
         # Product description
         values['description'] = self.get_property('description')
         # Creation date
-        creation_date = get_ctime(self.metadata.uri)
+        try:
+            creation_date = get_ctime(self.metadata.uri)
+        except OSError:
+            # when creating ressource get_catalog_values is called before commit
+            creation_date = datetime.now()
         values['creation_date'] = creation_date.strftime('%Y%m%d%H%M%S')
 
         return values
