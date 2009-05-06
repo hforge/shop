@@ -220,7 +220,7 @@ class Product(DynamicFolder):
         return None
 
 
-    def get_images_namespace(self, context, quantity=1):
+    def get_images_namespace(self, context, quantity=None):
         namespace = []
         for image in self.get_ordered_photos(context, quantity):
             namespace.append({'href': context.get_link(image),
