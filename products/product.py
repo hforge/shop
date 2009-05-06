@@ -113,8 +113,7 @@ class Product(DynamicFolder):
                    TextField('html_description'),
                    TextField('description'),
                    BoolField('has_categories'),
-                   KeywordField('creation_date', is_indexed=True,
-                                is_stored=True)])
+                   KeywordField('ctime', is_indexed=True, is_stored=True)])
 
 
     def get_catalog_values(self):
@@ -137,11 +136,11 @@ class Product(DynamicFolder):
         values['description'] = self.get_property('description')
         # Creation date
         try:
-            creation_date = get_ctime(self.metadata.uri)
+            ctime = get_ctime(self.metadata.uri)
         except OSError:
             # when creating ressource get_catalog_values is called before commit
-            creation_date = datetime.now()
-        values['creation_date'] = creation_date.strftime('%Y%m%d%H%M%S')
+            ctime = datetime.now()
+        values['ctime'] = ctime.strftime('%Y%m%d%H%M%S')
 
         return values
 
