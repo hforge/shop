@@ -23,12 +23,11 @@ from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
 from itools.datatypes import Email
 from itools.gettext import MSG
 from itools.web import get_context
-from itools.xapian import PhraseQuery, KeywordField
 
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.forms import TextWidget
-from ikaaro.registry import register_resource_class
+from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
 from ikaaro.workflow import WorkflowAware
 
@@ -51,12 +50,12 @@ mail_confirmation_title = MSG(
 mail_confirmation_body = MSG(u"""Bonjour,
 Votre commande sur la boutique en ligne XXX a bien été enregistrée.
 Retrouvez les informations sur votre commande à l'url suivante:\n
-http://www.XXX.com/orders/$order_name/\n
+http://www.XXX.com/orders/{order_name}/\n
 Un E-mail récapitulatif vous sera envoyé aprés validation de votre paiement.\n
 ------------------------
-Référence commande: $order_name
+Référence commande: {order_name}
 ------------------------\n\n
--- 
+--
 L'équipe XXX
 """)
 
@@ -70,9 +69,9 @@ mail_notification_body = MSG(u"""
 Bonjour,
 Une nouvelle commande a été réalisée sur votre boutique en ligne.
 Retrouvez les informations sur la commande à l'url suivante:\n
-http://www.XXX.com/orders/$order_name/\n
+http://www.XXX.com/orders/{order_name}/\n
 ------------------------
-Référence commande: $order_name
+Référence commande: {order_name}
 ------------------------\n\n
 """)
 
@@ -179,20 +178,15 @@ class Order(WorkflowAware, Folder):
         cls.send_email_confirmation(folder, name, kw)
 
 
-    def get_catalog_fields(self):
-        return (Folder.get_catalog_fields(self)
-                + [KeywordField('id_client')])
-
-
-    def get_catalog_values(self):
-        values = Folder.get_catalog_values(self)
+    def _get_catalog_values(self):
+        values = Folder._get_catalog_values(self)
         values['id_client'] = self.get_property('id_client')
         return values
+
 
     ########################################
     # E-Mail confirmation / notification
     ########################################
-
     @classmethod
     def send_email_confirmation(cls, folder, order_name, kw):
         """ """
@@ -250,7 +244,8 @@ class Orders(Folder):
         return [Order]
 
 
-
+# Register
+register_field('id_client', String(is_indexed=True))
 register_resource_class(Order)
 register_resource_class(Orders)
 register_resource_class(OrdersProducts)

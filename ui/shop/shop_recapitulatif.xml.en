@@ -95,7 +95,7 @@
       <tr stl:repeat="option payment/value">
         <td>
           <input type="radio" name="${payment/name}"
-            id="payment_${option/name}" value="${option/name}"/>
+            id="payment-${option/name}" value="${option/name}"/>
           ${option/title}
         </td>
         <td>

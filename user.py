@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.datatypes import String, Unicode
-from itools.handlers import merge_dicts
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class

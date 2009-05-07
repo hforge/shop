@@ -24,12 +24,11 @@ from itools.xapian import OrQuery, PhraseQuery
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.resource_views import DBResource_NewInstance
 from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
 from ikaaro.views import CompositeForm
 
 
-class ProductModel_NewInstance(DBResource_NewInstance):
+class ProductModel_NewInstance(NewInstance):
 
     query_schema = {
         'type': String(default='product-model'),
@@ -97,7 +96,7 @@ class ProductModels_View(Folder_BrowseContent):
 
     title = MSG(u'View')
     batch_msg1 = MSG(u"There is 1 product model.")
-    batch_msg2 = MSG(u"There are ${n} models.")
+    batch_msg2 = MSG(u"There are {n} models.")
 
     context_menus = []
 
@@ -111,8 +110,8 @@ class ProductModels_View(Folder_BrowseContent):
     def action_remove(self, resource, context, form):
         """We can't delete model if it is used by a product"""
         root = context.root
-        query = OrQuery(*[PhraseQuery('product_model', x)
-                                    for x in form['ids']])
+        query = [ PhraseQuery('product_model', x) for x in form['ids'] ]
+        query = OrQuery(*query)
         results = root.search(query)
         if results.get_n_documents()!=0:
             msg = MSG(u'Impossible: this model is used by a product')

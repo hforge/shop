@@ -20,9 +20,9 @@ from datetime import datetime
 from decimal import Decimal as decimal
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.datatypes import Integer, Email, String, Unicode
 from itools.gettext import MSG
-from itools.handlers import merge_dicts
 from itools.uri import get_reference
 from itools.web import BaseView, STLForm, STLView, ERROR
 from itools.xapian import PhraseQuery, AndQuery

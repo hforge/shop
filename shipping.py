@@ -15,12 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools import vfs, get_abspath
+from itools.core import get_abspath, merge_dicts
 from itools.csv import Table as BaseTable, CSVFile
 from itools.datatypes import Decimal, String
 from itools.gettext import MSG
-from itools.handlers import merge_dicts
 from itools.stl import stl
+from itools import vfs
 from itools.xapian import PhraseQuery
 from itools.xml import XMLParser
 
@@ -51,8 +51,8 @@ class ShippingPricesTable(BaseTable):
 
     record_schema = {
       'countries': CountriesEnumerate(mandatory=True, multiple=True,
-                                      index='keyword'),
-      'max-weight': Decimal(mandatory=True, index='keyword'),
+                                      is_indexed=True),
+      'max-weight': Decimal(mandatory=True, is_indexed=True),
       'price': Decimal(mandatory=True),
       }
 
@@ -123,8 +123,8 @@ class Shipping(Folder):
 
 
     def get_logo(self, context):
-        if self.has_resource('logo.png'):
-            logo = self.get_resource('logo.png')
+        logo = self.get_resource('logo.png', soft=True)
+        if logo:
             uri = context.get_link(logo)
         else:
             uri = '/ui/icons/48x48/text.png'

@@ -74,15 +74,13 @@ class Payments(Folder):
     Bonjour, voici les détails de votre paiement sur la boutique XXX.
     Status: Votre paiement a été accepté. \n\n
     ------------------------
-    Référence commande: $ref
-    Montant commande: $price €
+    Référence commande: {ref}
+    Montant commande: {price} €
     ------------------------
     \n\n
     """)
 
-    mail_erreur = MSG(u"""
-    Votre paiement a été refusé\n\n
-    """)
+    mail_erreur = MSG(u"Votre paiement a été refusé\n\n")
     def send_confirmation_mail(self):
         # TODO
         pass

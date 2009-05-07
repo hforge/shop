@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
-from itools.handlers import merge_dicts
 from itools.web import INFO, STLForm
 
 # Import from ikaaro
@@ -25,7 +25,7 @@ from ikaaro import messages
 from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget
 from ikaaro.forms import MultilineWidget, title_widget
 from ikaaro.registry import get_resource_class
-from ikaaro.resource_views import DBResource_NewInstance
+from ikaaro.views_new import NewInstance
 
 # Import from shop
 from enumerate import ProductModelsEnumerate
@@ -34,7 +34,7 @@ from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 
 
-class Product_NewInstance(DBResource_NewInstance):
+class Product_NewInstance(NewInstance):
 
     schema = {
         'name': String,

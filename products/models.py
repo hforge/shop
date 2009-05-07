@@ -50,7 +50,7 @@ class AllAttributes(Enumerate):
 class ProductEnumAttributeTable(OrderedTableFile):
 
     record_schema = {
-        'name': String(Unique=True, index='keyword'),
+        'name': String(Unique=True, is_indexed=True),
         'title': Unicode(mandatory=True, multiple=True),
         }
 
@@ -71,16 +71,12 @@ class ProductEnumAttribute(OrderedTable):
         TextWidget('title', title=MSG(u'Title')),
         ]
 
-    def update_20090408(self):
-        # Title is now multilingual
-        OrderedTable.update_20081113(self)
-
 
 
 class ProductTypeTable(OrderedTableFile):
 
     record_schema = {
-        'name': String(Unique=True, index='keyword'),
+        'name': String(Unique=True, is_indexed=True),
         'title': Unicode(mandatory=True, multiple=True),
         'mandatory': Boolean,
         'multiple': Boolean,
@@ -118,15 +114,10 @@ class ProductModelSchema(OrderedTable):
     # Update methods
     #########################
 
-    def update_20090408(self):
-        # Title is now multilingual
-        OrderedTable.update_20081113(self)
-
-
     def update_20090414(self):
         handler = self.handler
         for record in handler.get_records():
-            handler.update_record(record.id, **{'datatype': 'unicode'})
+            handler.update_record(record.id, datatype='unicode')
 
 
 class ProductModel(Folder):

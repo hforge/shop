@@ -91,15 +91,15 @@ class AddProduct_View(STLForm):
 
     def get_items(self, context, categories, current_category):
         root = context.root
-        query = AndQuery(PhraseQuery('format', 'product'),
-                         PhraseQuery('has_categories', '1'))
         # Search inside the site_root
         site_root = categories.get_site_root()
         abspath = site_root.get_canonical_path()
-        q1 = get_base_path_query(str(abspath))
-        query = AndQuery(q1, query)
+        query = [PhraseQuery('format', 'product'),
+                 PhraseQuery('has_categories', True),
+                 get_base_path_query(str(abspath))]
         if current_category:
-            query = AndQuery(query, PhraseQuery('categories', current_category))
+            query.append(PhraseQuery('categories', current_category))
+        query = AndQuery(*query)
         results = root.search(query)
 
         items = []

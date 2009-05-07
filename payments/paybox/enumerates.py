@@ -56,7 +56,6 @@ class PayboxCGIErrors(Enumerate):
 
 
 class PayboxAccount(Enumerate):
-    """ """
 
     options = [
       {'name': 'paybox_system', 'value': u'PAYBOX SYSTEM'},

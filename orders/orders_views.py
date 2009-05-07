@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.handlers import merge_dicts
+from itools.core import merge_dicts
 from itools.datatypes import Boolean, MultiLinesTokens, String
 from itools.gettext import MSG
 from itools.i18n import format_datetime, format_date
@@ -41,10 +41,9 @@ class OrdersProductsView(Table_View):
         if column=='ref':
             root = context.root
             ref = item.get_value('ref')
-            if not root.has_resource(ref):
-                title = item.get_value('title')
-                return title
-            produit = root.get_resource(ref)
+            produit = root.get_resource(ref, soft=True)
+            if not produit:
+                return item.get_value('title')
             return (produit.name, resource.get_pathto(produit))
         if column=='unit_price':
             return u'%s €' % value
@@ -163,7 +162,7 @@ class OrdersView(Folder_BrowseContent):
 
 
     batch_msg1 = MSG(u"Il y a une commande.")
-    batch_msg2 = MSG(u"Il y a ${n} commandes.")
+    batch_msg2 = MSG(u"Il y a {n} commandes.")
 
     def get_item_value(self, resource, context, item, column):
         value = Folder_BrowseContent.get_item_value(self, resource, context,

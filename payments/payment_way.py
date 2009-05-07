@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools import vfs
+from itools.core import get_abspath
 from itools.datatypes import Boolean, Enumerate
-from itools.utils import get_abspath
+from itools import vfs
 from itools.web import get_context
 
 # Import from ikaaro

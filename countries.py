@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools import get_abspath
+from itools.core import get_abspath
 from itools.csv import Table as BaseTable, CSVFile, Property
 from itools.datatypes import Enumerate, Boolean, Unicode
 from itools.gettext import MSG

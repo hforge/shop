@@ -19,17 +19,16 @@ from decimal import Decimal as decimal
 from datetime import datetime
 
 # Import from itools
-from itools.datatypes import String
+from itools.core import merge_dicts
+from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
-from itools.handlers import merge_dicts
 from itools.vfs import get_ctime
 from itools.web import get_context
-from itools.xapian import KeywordField, TextField, BoolField
 
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
-from ikaaro.registry import register_resource_class
+from ikaaro.registry import register_resource_class, register_field
 
 # Import from shop
 from cross_selling import CrossSellingTable
@@ -107,16 +106,7 @@ class Product(Editable, DynamicFolder):
                                          title={'en': u'Cross selling'})
 
 
-    def get_catalog_fields(self):
-        return (DynamicFolder.get_catalog_fields(self)
-                + [KeywordField('product_model'),
-                   KeywordField('categories', is_stored=True),
-                   TextField('description'),
-                   BoolField('has_categories'),
-                   KeywordField('ctime', is_indexed=True, is_stored=True)])
-
-
-    def get_catalog_values(self):
+    def _get_catalog_values(self):
         values = merge_dicts(DynamicFolder.get_catalog_values(self),
                              Editable.get_catalog_values(self))
         # Product models
@@ -135,7 +125,8 @@ class Product(Editable, DynamicFolder):
         try:
             ctime = get_ctime(self.metadata.uri)
         except OSError:
-            # when creating ressource get_catalog_values is called before commit
+            # when creating ressource get_catalog_values is called before
+            # commit
             ctime = datetime.now()
         values['ctime'] = ctime.strftime('%Y%m%d%H%M%S')
 
@@ -387,5 +378,12 @@ class Products(Folder):
 CrossSellingTable.orderable_classes = Product
 
 
+# Register
+register_field('product_model', String(is_indexed=True))
+register_field('categories', String(is_indexed=True, multiple=True))
+register_field('html_description', Unicode(is_indexed=True))
+register_field('description', Unicode(is_indexed=True))
+register_field('has_categories', Boolean(is_indexed=True))
+register_field('ctime', String(is_indexed=True, is_stored=True))
 register_resource_class(Product)
 register_resource_class(Products)

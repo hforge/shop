@@ -20,9 +20,6 @@ from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.folder import Folder
-from ikaaro.folder_views import Folder_BrowseContent, Folder_PreviewContent
-from ikaaro.folder_views import Folder_NewResource, Folder_LastChanges
-from ikaaro.folder_views import Folder_Orphans
 from ikaaro.registry import register_resource_class
 
 # Import from shop
@@ -71,11 +68,11 @@ class VirtualCategory(Categorie):
 
     # Views
     # XXX Back-office views can't apply
-    browse_content = Folder_BrowseContent(access=False)
-    preview_content = Folder_PreviewContent(access=False)
-    new_resource = Folder_NewResource(access=False)
-    last_changes = Folder_LastChanges(access=False)
-    orphans = Folder_Orphans(access=False)
+    browse_content = None
+    preview_content = None
+    new_resource = None
+    last_changes = None
+    orphans = None
 
 
     def get_canonical_path_and_resource(self, name):
@@ -146,11 +143,11 @@ class VirtualCategories(Folder):
 
     # Views
     # XXX Back-office views can't apply
-    browse_content = Folder_BrowseContent(access=False)
-    preview_content = Folder_PreviewContent(access=False)
-    new_resource = Folder_NewResource(access=False)
-    last_changes = Folder_LastChanges(access=False)
-    orphans = Folder_Orphans(access=False)
+    browse_content = None
+    preview_content = None
+    new_resource = None
+    last_changes = None
+    orphans = None
 
     # XXX do NOT implement "_get_names"
     # The virtual categories must NOT be indexed as real resources

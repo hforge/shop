@@ -15,20 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
-import decimal
-import os
-import re
-import sys
+from decimal import Decimal as decimal
+from os import popen
+from re import match, DOTALL
+from sys import prefix
 
 # Import from itools
-from itools import get_abspath
-from itools.handlers import ConfigFile
-from itools.datatypes import Decimal, Unicode, String
-from itools.datatypes import Boolean, Integer
+from itools.core import get_abspath
+from itools.datatypes import Boolean, Decimal, Integer, Unicode, String
 from itools.gettext import MSG
+from itools.handlers import ConfigFile
+from itools.html import HTMLFile
 from itools.uri import get_reference, Path
 from itools.web import BaseForm, BaseView, STLView, FormError
-from itools.html import HTMLFile
 
 # Import from ikaaro
 from ikaaro import messages
@@ -134,7 +133,7 @@ class Paybox_Pay(STLForm):
 
     def GET(self, resource, context, conf):
         # We get the paybox CGI path on serveur
-        cgi_path = Path(sys.prefix).resolve2('bin/paybox.cgi')
+        cgi_path = Path(prefix).resolve2('bin/paybox.cgi')
         # Get configuration
         configuration_uri = get_abspath('paybox.cfg')
         configuration = ConfigFile(configuration_uri)
@@ -169,10 +168,10 @@ class Paybox_Pay(STLForm):
         # Build cmd
         cmd = '%s %s' % (cgi_path, ' '.join(attributes))
         # Call the CGI
-        file = os.popen(cmd)
+        file = popen(cmd)
         # Check if all is ok
         result = file.read()
-        html = re.match ('.*?<HEAD>(.*?)</HTML>', result, re.DOTALL)
+        html = match ('.*?<HEAD>(.*?)</HTML>', result, DOTALL)
         if html is None:
             raise ValueError, u"Error, payment module can't be load"
         # We return the payment widget
@@ -218,7 +217,7 @@ class Paybox_ConfirmPayment(BaseForm):
             msg = 'IP %s invalide (Ref commande = %s)'
             raise ValueError, msg % (remote_ip, form['ref'])
         # Get form values
-        amount = form['amount'] / decimal.Decimal('100')
+        amount = form['amount'] / decimal('100')
         # TODO Check signature
         # Add a line into payments history
         kw = {'success': bool(form['autorisation']),

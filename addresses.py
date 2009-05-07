@@ -32,11 +32,11 @@ from datatypes import Civilite
 class BaseAddresses(BaseTable):
 
     record_schema = {
-      'title': Unicode(index='keyword', mandatory=True),
+      'title': Unicode(is_indexed=True, mandatory=True),
       'gender': Civilite(mandatory=True),
       'firstname': Unicode(mandatory=True),
       'lastname': Unicode(mandatory=True),
-      'user': String(index='keyword'),
+      'user': String(is_indexed=True),
       'address_1': Unicode(mandatory=True),
       'address_2': Unicode,
       'zipcode': String(mandatory=True),

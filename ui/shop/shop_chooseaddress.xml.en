@@ -46,7 +46,7 @@
           <form method="post">
             <input type="hidden" name="id_address" value="${address/id}"/>
             <input type="hidden" name="type" value="${type}"/>
-            <input type="submit" class="select_all"
+            <input type="submit" class="select-all"
                  name=";select_address"
                  value="Select this address"/>
           </form>

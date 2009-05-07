@@ -38,7 +38,7 @@ from shop.payments.enumerates import PaymentSuccessState
 class PayboxBaseTable(BaseTable):
 
     record_schema = {
-        'ref': String(Unique=True, index='keyword'),
+        'ref': String(Unique=True, is_indexed=True),
         'id_payment': Integer,
         'success': PaymentSuccessState,
         'transaction': String,

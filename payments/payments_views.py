@@ -49,7 +49,7 @@ class Payments_History_View(BrowseForm):
     access = 'is_admin'
 
     batch_msg1 = MSG(u"There is 1 payment.")
-    batch_msg2 = MSG(u"There are ${n} payments.")
+    batch_msg2 = MSG(u"There are {n} payments.")
 
 
     table_columns = [
@@ -87,7 +87,7 @@ class Payments_List_View(BrowseForm):
     access = 'is_admin'
 
     batch_msg1 = MSG(u"There is 1 payment.")
-    batch_msg2 = MSG(u"There are ${n} payments.")
+    batch_msg2 = MSG(u"There are {n} payments.")
 
 
     table_columns = [

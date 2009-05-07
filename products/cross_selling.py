@@ -35,11 +35,11 @@ class ProductSelectorWidget(TextWidget):
     method_to_call = 'add_product'
     template = list(XMLParser(
     """
-    <input type="text" id="selector_${name}" size="${size}" name="${name}"
+    <input type="text" id="selector-${name}" size="${size}" name="${name}"
       value="${value}" />
-    <input id="selector_button_${name}" type="button" value="..."
+    <input id="selector-button-${name}" type="button" value="..."
       name="selector_button_${name}"
-      onclick="popup(';${method}?target_id=selector_${name}&amp;product=${value}',
+      onclick="popup(';${method}?target_id=selector-${name}&amp;product=${value}',
                      620, 300);"/>
     """, stl_namespaces))
 
