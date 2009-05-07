@@ -18,10 +18,7 @@
 from decimal import Decimal as decimal
 
 # Import from itools
-from itools.datatypes import Decimal, String, Unicode
-
-# Import from ikaaro
-from ikaaro.forms import XHTMLBody
+from itools.datatypes import Decimal, Unicode
 
 # Import from shop
 from enumerate import CategoriesEnumerate
@@ -42,6 +39,4 @@ product_schema = {# General informations
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),
                   # Price
-                  'price': Decimal(default=decimal(0)),
-                  # Description
-                  'html_description': XHTMLBody(default='')}
+                  'price': Decimal(default=decimal(0))}

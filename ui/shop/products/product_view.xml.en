@@ -21,7 +21,7 @@
 
   <h1>Description générale</h1>
 
-  ${html_description}
+  ${data}
 
   <h1>Caractéristiques détaillées</h1>
 

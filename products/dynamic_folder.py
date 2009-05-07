@@ -19,7 +19,7 @@
 #######################################
 
 # Import from itools
-from itools.datatypes import Tokens
+from itools.datatypes import Tokens, Unicode
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -56,7 +56,11 @@ class DynamicFolder(Folder):
         return value, language
 
 
-    def is_multilingual(self, name, language):
+    def is_multilingual(self, name, language, datatype):
+        # Hack si Unicode alors forcément multilingue
+        # Hack si name = data alors multilingue
+        if issubclass(datatype, Unicode) or name=='data':
+            return True
         value, language = self.get_property_and_language(name, language)
         return language is not None
 
@@ -76,7 +80,7 @@ class DynamicFolder(Folder):
                 if getattr(datatype, 'multiple', False):
                     return Folder.set_property(self, name,
                                                Tokens.encode(value))
-                elif self.is_multilingual(name, language):
+                elif self.is_multilingual(name, language, datatype):
                     return Folder.set_property(self, name,
                                                datatype.encode(value),
                                                language)
@@ -88,7 +92,9 @@ class DynamicFolder(Folder):
         # Standard property
         # (or undeclared property that will raise an error)
         # Detect if the "language" argument must be given.
-        if self.is_multilingual(name, language):
+        schema = self.get_metadata_schema()
+        datatype = schema[name]
+        if self.is_multilingual(name, language, datatype):
             return Folder.set_property(self, name, value, language)
         return Folder.set_property(self, name, value)
 

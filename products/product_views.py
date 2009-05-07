@@ -31,6 +31,7 @@ from ikaaro.resource_views import DBResource_NewInstance
 from enumerate import ProductModelsEnumerate
 from schema import product_schema
 from shop.cart import ProductCart
+from shop.editable import Editable_View, Editable_Edit
 
 
 class Product_NewInstance(DBResource_NewInstance):
@@ -64,7 +65,7 @@ class Product_NewInstance(DBResource_NewInstance):
 
 
 
-class Product_View(STLForm):
+class Product_View(STLForm, Editable_View):
 
     access = True
     title = MSG(u'View')
@@ -177,12 +178,13 @@ class Product_EditModel(AutoForm):
 
 
 
-class Product_Edit(AutoForm):
+class Product_Edit(AutoForm, Editable_Edit):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'Edit')
 
-    schema = product_schema
+    schema = merge_dicts(product_schema,
+                         Editable_Edit.schema)
 
     widgets = [
         # General informations
@@ -196,12 +198,13 @@ class Product_Edit(AutoForm):
         SelectWidget('categories', title=MSG(u'Categories')),
         # Price
         TextWidget('price', title=MSG(u'Price')),
-        # HTML Description
-        RTEWidget('html_description', title=MSG(u'Product presentation'))
-        ]
+        ] + Editable_Edit.widgets
 
 
     def get_value(self, resource, context, name, datatype):
+        if name == 'data':
+            return Editable_Edit.get_value(self, resource, context, name,
+                                           datatype)
         language = resource.get_content_language(context)
         return resource.get_property(name, language=language)
 
@@ -209,8 +212,11 @@ class Product_Edit(AutoForm):
     def action(self, resource, context, form):
         language = resource.get_content_language(context)
         for key, datatype in self.schema.iteritems():
+            if key == 'data':
+                continue
             if issubclass(datatype, Unicode):
                 resource.set_property(key, form[key], language)
             else:
                 resource.set_property(key, form[key])
+        Editable_Edit.action(self, resource, context, form)
         return context.come_back(messages.MSG_CHANGES_SAVED)

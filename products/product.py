@@ -22,7 +22,6 @@ from datetime import datetime
 from itools.datatypes import String
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
-from itools.html import XHTMLFile
 from itools.vfs import get_ctime
 from itools.web import get_context
 from itools.xapian import KeywordField, TextField, BoolField
@@ -39,6 +38,7 @@ from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewInstance
 from product_views import Product_View, Product_Edit, Product_EditModel
 from schema import product_schema
+from shop.editable import Editable
 from shop.utils import get_shop
 
 ###############
@@ -54,13 +54,13 @@ from shop.utils import get_shop
 #
 
 
-class Product(DynamicFolder):
+class Product(DynamicFolder, Editable):
 
     class_id = 'product'
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order',
                    'edit_cross_selling']
-    class_version = '20090410'
+    class_version = '20090507'
 
     __fixed_handlers__ = DynamicFolder.__fixed_handlers__ + ['images',
                                                       'order-photos',
@@ -85,6 +85,7 @@ class Product(DynamicFolder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(DynamicFolder.get_metadata_schema(),
+                           Editable.get_metadata_schema(),
                            product_schema,
                            product_model=String)
 
@@ -110,14 +111,14 @@ class Product(DynamicFolder):
         return (DynamicFolder.get_catalog_fields(self)
                 + [KeywordField('product_model'),
                    KeywordField('categories', is_stored=True),
-                   TextField('html_description'),
                    TextField('description'),
                    BoolField('has_categories'),
                    KeywordField('ctime', is_indexed=True, is_stored=True)])
 
 
     def get_catalog_values(self):
-        values = DynamicFolder.get_catalog_values(self)
+        values = merge_dicts(DynamicFolder.get_catalog_values(self),
+                             Editable.get_catalog_values(self))
         # Product models
         values['product_model'] = self.get_property('product_model')
         # We index categories
@@ -128,10 +129,6 @@ class Product(DynamicFolder):
                 categories.append('/'.join(segments[:i+1]))
         values['categories'] = categories
         values['has_categories'] = len(categories) != 0
-        # XXX HTML description
-        doc = XHTMLFile()
-        doc.events = self.get_property('html_description')
-        values['html_description'] = doc.to_text()
         # Product description
         values['description'] = self.get_property('description')
         # Creation date
@@ -192,7 +189,11 @@ class Product(DynamicFolder):
         # Get basic informations
         namespace['href'] = context.get_link(self)
         for key in product_schema.keys():
+            if key=='data':
+                continue
             namespace[key] = self.get_property(key)
+        # Data
+        namespace['data'] = self.get_xhtml_data()
         # Specific product informations
         model = self.get_product_model()
         if model:
@@ -295,6 +296,7 @@ class Product(DynamicFolder):
         categories_path = categories.get_abspath()
         for categorie in self.get_property('categories'):
             links.append(str(categories_path.resolve2(categorie)))
+        links += Editable.get_links(self)
         return links
 
 
@@ -341,6 +343,28 @@ class Product(DynamicFolder):
         if self.has_resource('cross-selling') is False:
             CrossSellingTable.make_resource(CrossSellingTable, self,
                                             'cross-selling')
+
+
+    def update_20090507(self):
+        """ Update Unicode properties: add language "fr" if not already set"""
+        from itools.datatypes import Unicode
+        model = self.get_product_model()
+        if model:
+            model_schema = model.get_model_schema()
+        else:
+            model_schema = {}
+        schema = merge_dicts(Product.get_metadata_schema(), model_schema)
+        for name, datatype in schema.items():
+            if not issubclass(datatype, Unicode):
+                continue
+            properties = self.metadata.properties
+            if name not in properties:
+                continue
+            value = properties[name]
+            if isinstance(value, dict):
+                continue
+            self.del_property(name)
+            self.set_property(name, value, 'fr')
 
 
 
