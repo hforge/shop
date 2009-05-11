@@ -143,8 +143,9 @@ class Shop(Folder):
 
     def update_20090430(self):
         """ We add countries table """
-        Countries._make_resource(Countries, self.handler, 'countries',
-                                 **{'title': {'en': u'countries'}})
+        if self.get_resource('countries') is None:
+            Countries._make_resource(Countries, self.handler, 'countries',
+                                     **{'title': {'en': u'countries'}})
 
 
 register_resource_class(Shop)
