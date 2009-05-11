@@ -92,15 +92,23 @@ class Shipping(Folder):
     def _make_resource(cls, folder, name, *args, **kw):
         Folder._make_resource(cls, folder, name, *args, **kw)
         # Image
-        kw = {}
-        kw['state'] = 'public'
         body = vfs.open(get_abspath(cls.img)).read()
         img = Image._make_resource(Image, folder,
-                                   '%s/logo.png' % name, body=body, **kw)
+                                   '%s/logo.png' % name, body=body,
+                                   **{'state': 'public'})
 
-        # Prices
+        # Import CSV with prices
         ShippingPrices._make_resource(ShippingPrices, folder,
                                       '%s/prices' % name)
+        if kw.has_key('csv'):
+            table = ShippingPricesTable()
+            csv = ShippingPricesCSV(kw['csv'])
+            for row in csv.get_rows():
+                table.add_record({'countries': row.get_value('countries').split('@'),
+                                  'max-weight': row.get_value('max-weight'),
+                                  'price': row.get_value('price')})
+            folder.set_handler('%s/prices' % name, table)
+
 
     @classmethod
     def get_metadata_schema(cls):

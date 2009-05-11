@@ -46,16 +46,8 @@ class Collisimo(Shipping):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
+        kw['csv'] = get_abspath('data/colissimo.csv')
         Shipping._make_resource(cls, folder, name, *args, **kw)
-        # Import CSV with prices
-        from shipping import ShippingPricesTable, ShippingPricesCSV
-        table = ShippingPricesTable()
-        csv = ShippingPricesCSV(get_abspath('data/colissimo.csv'))
-        for row in csv.get_rows():
-            table.add_record({'countries': row.get_value('countries').split('@'),
-                              'max-weight': row.get_value('max-weight'),
-                              'price': row.get_value('price')})
-        folder.set_handler('%s/prices' % name, table)
 
 
 
