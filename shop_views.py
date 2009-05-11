@@ -321,7 +321,7 @@ class Shop_Addresses(STLForm):
         if delivery_address==None:
             delivery_address = resource.get_user_main_address(context.user.name)
             if not delivery_address:
-                return context.uri.resolve(';edit_address')
+                return context.uri.resolve(';add_address')
             else:
                 cart.set_delivery_address(delivery_address.id)
         # Normal
