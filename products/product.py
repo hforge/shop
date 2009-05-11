@@ -119,6 +119,10 @@ class Product(Editable, DynamicFolder):
                 categories.append('/'.join(segments[:i+1]))
         values['categories'] = categories
         values['has_categories'] = len(categories) != 0
+        # Images
+        order = self.get_resource('order-photos')
+        ordered_names = list(order.get_ordered_names())
+        values['has_images'] = (len(ordered_names) != 0)
         # Product description
         values['description'] = self.get_property('description')
         # Creation date
@@ -384,6 +388,7 @@ register_field('categories', String(is_indexed=True, multiple=True))
 register_field('html_description', Unicode(is_indexed=True))
 register_field('description', Unicode(is_indexed=True))
 register_field('has_categories', Boolean(is_indexed=True))
+register_field('has_images', Boolean(is_indexed=True))
 register_field('ctime', String(is_indexed=True, is_stored=True))
 register_resource_class(Product)
 register_resource_class(Products)
