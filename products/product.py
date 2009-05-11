@@ -59,7 +59,7 @@ class Product(Editable, DynamicFolder):
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order',
                    'edit_cross_selling']
-    class_version = '20090507'
+    class_version = '20090511'
 
     __fixed_handlers__ = DynamicFolder.__fixed_handlers__ + ['images',
                                                       'order-photos',
@@ -107,8 +107,8 @@ class Product(Editable, DynamicFolder):
 
 
     def _get_catalog_values(self):
-        values = merge_dicts(DynamicFolder.get_catalog_values(self),
-                             Editable.get_catalog_values(self))
+        values = merge_dicts(DynamicFolder._get_catalog_values(self),
+                             Editable._get_catalog_values(self))
         # Product models
         values['product_model'] = self.get_property('product_model')
         # We index categories
@@ -128,7 +128,7 @@ class Product(Editable, DynamicFolder):
         # Creation date
         try:
             ctime = get_ctime(self.metadata.uri)
-        except OSError:
+        except Exception:
             # when creating ressource get_catalog_values is called before
             # commit
             ctime = datetime.now()
@@ -196,6 +196,8 @@ class Product(Editable, DynamicFolder):
         else:
             namespace['specific_dict'] = {}
             namespace['specific_list'] = []
+        # Data
+        namespace['data'] = self.get_xhtml_data()
         # Images
         namespace['images'] = self.get_images_namespace(context)
         # Product is buyable
@@ -343,6 +345,9 @@ class Product(Editable, DynamicFolder):
     def update_20090507(self):
         """ Update Unicode properties: add language "fr" if not already set"""
         from itools.datatypes import Unicode
+
+    def update_20090511(self):
+        """ Update Unicode properties: add language "fr" if not already set"""
         model = self.get_product_model()
         if model:
             model_schema = model.get_model_schema()
@@ -350,7 +355,7 @@ class Product(Editable, DynamicFolder):
             model_schema = {}
         schema = merge_dicts(Product.get_metadata_schema(), model_schema)
         for name, datatype in schema.items():
-            if not issubclass(datatype, Unicode):
+            if not getattr(datatype, 'multilingual', False):
                 continue
             properties = self.metadata.properties
             if name not in properties:
@@ -360,7 +365,12 @@ class Product(Editable, DynamicFolder):
                 continue
             self.del_property(name)
             self.set_property(name, value, 'fr')
-
+        # Replace html_description by data
+        description = self.get_property('html_description')
+        # Delete property
+        self.del_property('html_description')
+        if description and description.strip():
+            self.set_property('data', description, language='fr')
 
 
 class Products(Folder):
@@ -381,14 +391,14 @@ class Products(Folder):
 # XXX Hack (Demander à henry ?)
 CrossSellingTable.orderable_classes = Product
 
-
-# Register
+# Register fields
 register_field('product_model', String(is_indexed=True))
 register_field('categories', String(is_indexed=True, multiple=True))
-register_field('html_description', Unicode(is_indexed=True))
 register_field('description', Unicode(is_indexed=True))
 register_field('has_categories', Boolean(is_indexed=True))
 register_field('has_images', Boolean(is_indexed=True))
 register_field('ctime', String(is_indexed=True, is_stored=True))
+
+# Register resources
 register_resource_class(Product)
 register_resource_class(Products)

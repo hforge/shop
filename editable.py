@@ -23,8 +23,7 @@ from itools.web import STLView
 # Import from ikaaro
 from ikaaro.forms import RTEWidget
 from ikaaro.forms import HTMLBody, XHTMLBody
-from ikaaro.html import _get_links
-
+from ikaaro.registry import register_field
 
 #######################################
 # TODO
@@ -72,10 +71,10 @@ class Editable(object):
 
     @classmethod
     def get_metadata_schema(cls):
-        return {'data': String(default='')}
+        return {'data': String(default='', multilingual=True)}
 
 
-    def get_catalog_values(self):
+    def _get_catalog_values(self):
         return {'data': self.get_property('data')}
 
 
@@ -100,5 +99,10 @@ class Editable(object):
         links = []
         for language in languages:
             events = self.get_xhtml_data(language=language)
-            links.extend(_get_links(base, events))
+            # XXX API Ikaaro
+            #links.extend(_get_links(base, events))
         return links
+
+
+
+register_field('data', String(is_indexed=True))

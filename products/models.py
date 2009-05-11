@@ -80,6 +80,7 @@ class ProductTypeTable(OrderedTableFile):
         'title': Unicode(mandatory=True, multiple=True),
         'mandatory': Boolean,
         'multiple': Boolean,
+        'multilingual': Boolean,
         'visible': Boolean,
         'is_purchase_option': Boolean,
         'datatype': Datatypes(mandatory=True),
@@ -104,6 +105,7 @@ class ProductModelSchema(OrderedTable):
         TextWidget('title', title=MSG(u'Title')),
         BooleanCheckBox('mandatory', title=MSG(u'Mandatory')),
         BooleanCheckBox('multiple', title=MSG(u'Multiple')),
+        BooleanCheckBox('multilingual', title=MSG(u'Multilingual')),
         BooleanCheckBox('visible', title=MSG(u'Visible')),
         BooleanCheckBox('is_purchase_option', title=MSG(u'Is purchase option ?')),
         SelectWidget('datatype', title=MSG(u'Data Type')),
@@ -154,11 +156,13 @@ class ProductModel(Folder):
             title = get_value(record, 'title')
             mandatory = get_value(record, 'mandatory')
             multiple = get_value(record, 'multiple')
+            multilingual = get_value(record, 'multilingual')
             datatype = get_value(record, 'datatype')
             enumerate = get_value(record, 'enumerate')
             is_purchase_option = get_value(record, 'is_purchase_option')
             datatype = Datatypes.get_real_datatype(datatype, model=self,
-                enumerate=enumerate, mandatory=mandatory, multiple=multiple)
+                enumerate=enumerate, mandatory=mandatory, multiple=multiple,
+                multilingual=multilingual)
             widget = get_default_widget(datatype)
             widget = widget(name, title=MSG(title), has_empty_option=False)
             infos.append({'name': name,

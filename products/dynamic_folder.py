@@ -56,15 +56,6 @@ class DynamicFolder(Folder):
         return value, language
 
 
-    def is_multilingual(self, name, language, datatype):
-        # Hack si Unicode alors forcément multilingue
-        # Hack si name = data alors multilingue
-        if issubclass(datatype, Unicode) or name=='data':
-            return True
-        value, language = self.get_property_and_language(name, language)
-        return language is not None
-
-
     def set_property(self, name, value, language=None):
         """Added to handle dynamic properties.
         The value is encoded because metadata won't know about its datatype.
@@ -80,7 +71,7 @@ class DynamicFolder(Folder):
                 if getattr(datatype, 'multiple', False):
                     return Folder.set_property(self, name,
                                                Tokens.encode(value))
-                elif self.is_multilingual(name, language, datatype):
+                elif getattr(datatype, 'multilingual', False):
                     return Folder.set_property(self, name,
                                                datatype.encode(value),
                                                language)
@@ -90,11 +81,8 @@ class DynamicFolder(Folder):
                                            datatype.encode(value))
 
         # Standard property
-        # (or undeclared property that will raise an error)
-        # Detect if the "language" argument must be given.
         schema = self.get_metadata_schema()
         datatype = schema[name]
-        if self.is_multilingual(name, language, datatype):
+        if getattr(datatype, 'multilingual', False):
             return Folder.set_property(self, name, value, language)
         return Folder.set_property(self, name, value)
-

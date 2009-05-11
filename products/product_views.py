@@ -22,7 +22,7 @@ from itools.web import INFO, STLForm
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget
+from ikaaro.forms import AutoForm, SelectWidget, TextWidget
 from ikaaro.forms import MultilineWidget, title_widget
 from ikaaro.registry import get_resource_class
 from ikaaro.views_new import NewInstance
@@ -174,11 +174,7 @@ class Product_EditModel(AutoForm):
         language = resource.get_content_language(context)
         product_type = resource.get_product_model()
         for key, datatype in product_type.get_model_schema().iteritems():
-            # FIXME Unicode datatype is not necessary multilingual
-            lang = None
-            if issubclass(datatype, Unicode):
-                lang = language
-            resource.set_property(key, form[key], language=lang)
+            resource.set_property(key, form[key], language=language)
         return context.come_back(messages.MSG_CHANGES_SAVED)
 
 

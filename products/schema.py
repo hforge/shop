@@ -32,9 +32,9 @@ from enumerate import CategoriesEnumerate
 
 product_schema = {# General informations
                   'reference': Unicode,
-                  'title': Unicode,
-                  'description': Unicode,
-                  'subject': Unicode,
+                  'title': Unicode(multilingual=True),
+                  'description': Unicode(multilingual=True),
+                  'subject': Unicode(multilingual=True),
                   'weight': Decimal(default=decimal(0), mandatory=True),
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),
