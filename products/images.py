@@ -24,7 +24,7 @@ from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument, Folder_Orphans
 from ikaaro.folder_views import Folder_BrowseContent, Folder_PreviewContent
 from ikaaro.forms import ImageSelectorWidget
-from ikaaro.future.order import ChildrenOrderedTable
+from ikaaro.future.order import ResourcesOrderedTable
 from ikaaro.registry import register_resource_class
 from ikaaro.resource_views import DBResource_AddImage
 from ikaaro.revisions_views import DBResource_LastChanges
@@ -43,29 +43,23 @@ class PhotoOrderedTableFile(OrderedTableFile):
 
 
 
-class PhotoOrderedTable(ChildrenOrderedTable):
+class PhotoOrderedTable(ResourcesOrderedTable):
 
     class_id = 'gallery-ordered-table'
     class_title = MSG(u'Photo Ordered Table')
     class_handler = PhotoOrderedTableFile
     class_views = ['view', 'add_record', 'goto_preview']
 
-    form = [ImageSelectorWidget('name', title=MSG(u'Chemin'))]
+    orderable_classes = (Image,)
+    order_root_path = '../images'
+
+    form = [ImageSelectorWidget('name', title=MSG(u'Name'))]
 
     # Views
     view = PhotoOrderedTable_View()
     add_image = DBResource_AddImage()
     goto_preview = GoToSpecificDocument(specific_document='..',
-                                 title=MSG(u'See product'))
-
-
-    def get_orderable_classes(self):
-        return (Image,)
-
-
-    def get_add_bc_root(self, add_type, target_id):
-        # return "images" folder
-        return self.get_resource('../images')
+                                        title=MSG(u'See product'))
 
 
 
@@ -74,16 +68,15 @@ class ImagesFolder(Folder):
     class_id = 'images-folder'
     class_title = MSG(u'Images folder')
 
-    def get_document_types(self):
-        return [Image]
-
-
     # Views
     browse_content = Folder_BrowseContent(access='is_admin')
     preview_content = Folder_PreviewContent(access='is_admin')
     last_changes = DBResource_LastChanges(access='is_admin')
     orphans = Folder_Orphans(access='is_admin')
 
+
+    def get_document_types(self):
+        return [Image]
 
 
 
