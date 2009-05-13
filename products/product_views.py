@@ -145,8 +145,13 @@ class Product_EditModel(AutoForm):
 
     def GET(self, resource, context):
         if not resource.get_property('product_model'):
-            msg = MSG(u'No product type is selected')
-            return context.come_back(msg)
+            msg = MSG(u'Error: No product type is selected.')
+            return context.come_back(msg, goto='./;edit')
+        # Check if schema is not empty
+        if not self.get_schema(resource, context):
+            msg = MSG(u'The model is empty, no informations to edit.')
+            return context.come_back(msg, goto='./;edit')
+        # Build form
         return AutoForm.GET(self, resource, context)
 
 

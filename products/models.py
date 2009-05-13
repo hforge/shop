@@ -31,7 +31,8 @@ from ikaaro.table import OrderedTable, OrderedTableFile
 from enumerate import Datatypes
 from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
 from models_views import ProductModel_NewInstance, ProductModelSchema_View
-from models_views import ProductModelSchema_EditRecord
+from models_views import ProductModelSchema_EditRecord, ProductModel_View
+from models_views import ProductModelSchema_AddRecord, ProductEnumAttribute_View
 
 
 class AllAttributes(Enumerate):
@@ -49,7 +50,7 @@ class AllAttributes(Enumerate):
 class ProductEnumAttributeTable(OrderedTableFile):
 
     record_schema = {
-        'name': String(Unique=True, mandatory=True, index='keyword'),
+        'name': String(Unique=True, index='keyword'),
         'title': Unicode(mandatory=True, multiple=True),
         }
 
@@ -61,11 +62,12 @@ class ProductEnumAttribute(OrderedTable):
     class_title = MSG(u'Product Enumerate Attribute')
     class_version = '20090408'
     class_handler = ProductEnumAttributeTable
+    class_views = ['view', 'add_record']
 
+    view = ProductEnumAttribute_View()
     add_record = ProductEnumAttribute_AddRecord()
 
     form = [
-        TextWidget('name', title=MSG(u'Name')),
         TextWidget('title', title=MSG(u'Title')),
         ]
 
@@ -78,14 +80,14 @@ class ProductEnumAttribute(OrderedTable):
 class ProductTypeTable(OrderedTableFile):
 
     record_schema = {
-        'name': String(Unique=True, mandatory=True, index='keyword'),
+        'name': String(Unique=True, index='keyword'),
         'title': Unicode(mandatory=True, multiple=True),
         'mandatory': Boolean,
         'multiple': Boolean,
         'visible': Boolean,
         'is_purchase_option': Boolean,
         'datatype': Datatypes(mandatory=True),
-        'enumerate': AllAttributes(),
+        'enumerate': AllAttributes(index='keyword'),
         }
 
 
@@ -99,10 +101,10 @@ class ProductModelSchema(OrderedTable):
     class_views = ['view', 'add_record']
 
     view = ProductModelSchema_View()
+    add_record = ProductModelSchema_AddRecord()
     edit_record = ProductModelSchema_EditRecord()
 
     form = [
-        TextWidget('name', title=MSG(u'Name')),
         TextWidget('title', title=MSG(u'Title')),
         BooleanCheckBox('mandatory', title=MSG(u'Mandatory')),
         BooleanCheckBox('multiple', title=MSG(u'Multiple')),
@@ -131,9 +133,13 @@ class ProductModel(Folder):
 
     class_id = 'product-model'
     class_title = MSG(u'Product Model')
-    class_views = ['browse_content', 'new_resource']
+    class_views = ['view', 'new_resource']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['schema']
+
+
+    view = ProductModel_View()
+
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):

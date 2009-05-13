@@ -18,14 +18,15 @@
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
-from itools.web import INFO
+from itools.web import INFO, STLView
 from itools.xapian import OrQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
 from ikaaro.resource_views import DBResource_NewInstance
+from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
+from ikaaro.views import CompositeForm
 
 
 class ProductModel_NewInstance(DBResource_NewInstance):
@@ -39,6 +40,54 @@ class ProductModel_NewInstance(DBResource_NewInstance):
         'title': Unicode(mandatory=True)}
 
     context_menus = []
+
+
+
+class ProductModel_ViewTop(STLView):
+
+    access = 'is_allowed_to_edit'
+    template = '/ui/shop/products/model_view_top.xml'
+
+
+    def get_namespace(self, resource, context):
+        namespace = {'title': resource.get_title}
+        return namespace
+
+
+
+class ProductModel_ViewBottom(Folder_BrowseContent):
+
+    table_actions = []
+    search_template = None
+
+    access = 'is_allowed_to_edit'
+
+    batch_msg1 = MSG(u"There is 1 enumerate")
+    batch_msg2 = MSG(u"There are ${n} enumerates.")
+
+    table_columns = [
+        ('checkbox', None),
+        ('name', MSG(u'Name')),
+        ('title', MSG(u'Title'))
+        ]
+
+
+    def get_items(self, resource, context, *args):
+        from models import ProductEnumAttribute
+        args = PhraseQuery('format', ProductEnumAttribute.class_id)
+        return Folder_BrowseContent.get_items(self, resource, context, args)
+
+
+
+class ProductModel_View(CompositeForm):
+
+    access = 'is_allowed_to_edit'
+
+    title = MSG(u'View')
+
+    subviews = [ProductModel_ViewTop(),
+                ProductModel_ViewBottom()]
+
 
 
 class ProductModels_View(Folder_BrowseContent):
@@ -119,7 +168,7 @@ class ProductModelSchema_EditRecord(Table_EditRecord):
 
 
 
-class ProductEnumAttribute_AddRecord(Table_AddRecord):
+class ProductModelSchema_AddRecord(Table_AddRecord):
 
     title = MSG(u'Add Record')
     submit_value = MSG(u'Add')
@@ -129,3 +178,56 @@ class ProductEnumAttribute_AddRecord(Table_AddRecord):
         record['name'] = checkid(record['title'].value)
         resource.handler.add_record(record)
 
+
+
+
+class ProductEnumAttribute_View(Table_View):
+
+
+    def action_remove(self, resource, context, form):
+        """If we delete an item in an Enumerate,
+           we have to delete the property of products that
+           value correspond to the enumerate value we delete.
+        """
+        ids = form['ids']
+        properties = []
+        schema_handler = resource.parent.get_resource('schema').handler
+        for id in ids:
+            # Get value of record
+            record = resource.handler.get_record(id)
+            record_value = resource.handler.get_record_value(record, 'name')
+            # We search the names of the dynamic properties that
+            # references to the current enumerate
+            for record in schema_handler.search(
+                            PhraseQuery('enumerate', resource.name)):
+                property_name = schema_handler.get_record_value(records[0], 'name')
+                # We memorize the values we have to search in products
+                properties.append((property_name, record_value))
+            # We delete value in the table
+            resource.handler.del_record(id)
+        # Search products
+        root = context.root
+        product_model = resource.parent
+        query = PhraseQuery('product_model', product_model.name)
+        results = root.search(query)
+        for doc in results.get_documents():
+            product = root.get_resource(doc.abspath)
+            for name, value in properties:
+                # We delete properties if value is the same
+                # that the value we wants to remove
+                if value==product.get_property(name):
+                    product.del_property(name)
+        # Reindex the resource
+        context.server.change_resource(resource)
+        context.message = INFO(u'Record deleted.')
+
+
+class ProductEnumAttribute_AddRecord(Table_AddRecord):
+
+    title = MSG(u'Add Record')
+    submit_value = MSG(u'Add')
+
+
+    def action_add_or_edit(self, resource, context, record):
+        record['name'] = checkid(record['title'].value)
+        resource.handler.add_record(record)
