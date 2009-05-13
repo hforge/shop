@@ -32,6 +32,11 @@ class Categorie(Folder):
     class_title = MSG(u'Categorie')
     class_views = ['browse_content', 'new_resource?type=categorie', 'edit']
 
+
+    def get_unique_id(self):
+        return str(self.get_abspath()).split('categories/', 1)[1]
+
+
     def get_document_types(self):
         return [Categorie]
 
@@ -42,6 +47,7 @@ class Categories(Folder):
     class_id = 'categories'
     class_title = MSG(u'Categories')
     class_views = ['browse_content', 'new_resource?type=categorie']
+
 
     def get_document_types(self):
         return [Categorie]
@@ -75,44 +81,30 @@ class VirtualCategory(Categorie):
     orphans = None
 
 
-    def get_canonical_path_and_resource(self, name):
-        """Get the real resource and its abspath, but wrapped into our virtual
-        classes.
-        """
-        category_class = self.virtual_category_class or self.__class__
-        # Try if the name matches a category then a subcategory
-        # TODO better heuristic to find subcategories
-        search_paths = [('shop/categories/%s' % name, category_class),
-                        ('shop/categories/%s/%s' % (self.name, name),
-                         category_class)]
-        # Try at demand if the name matches a product
-        if self.wrap_products:
-            search_paths.append(('shop/products/%s' % name,
-                                 self.virtual_product_class))
-        site_root = self.get_site_root()
-        for path, cls in search_paths:
-            try:
-                resource = site_root.get_resource(path)
-            except LookupError:
-                continue
-            else:
-                # Return the real path and wrap into our virtual class
-                return resource.get_canonical_path(), cls(resource.metadata)
-        raise LookupError
-
-
-    def get_canonical_path(self):
-        """Get the real abspath from the shop.
-        """
-        path, resource = self.get_canonical_path_and_resource(self.name)
-        return path
-
-
     def _get_resource(self, name):
         """Get the real resource from the shop.
         """
-        path, resource = self.get_canonical_path_and_resource(name)
-        return resource
+        # Get the unique id of the category
+        real_resource = self.get_real_resource()
+        try:
+            resource = real_resource.get_resource(name)
+        except LookupError:
+            resource = None
+        else:
+            virtual_cls = self.virtual_category_class or self.__class__
+        # Try at demand if the name matches a product
+        if resource is None and self.wrap_products:
+            site_root = self.get_site_root()
+            try:
+                resource = site_root.get_resource('shop/products/%s' % name)
+            except LookupError:
+                resource = None
+            else:
+                virtual_cls = self.virtual_product_class
+        if resource is None:
+            raise LookupError
+        # Return the real path and wrap into our virtual class
+        return virtual_cls(resource.metadata)
 
 
 
@@ -151,6 +143,12 @@ class VirtualCategories(Folder):
 
     # XXX do NOT implement "_get_names"
     # The virtual categories must NOT be indexed as real resources
+
+
+    def get_canonical_path(self):
+        site_root = self.get_site_root()
+        categories = site_root.get_resource('shop/categories')
+        return categories.get_canonical_path()
 
 
     def _get_resource(self, name):
