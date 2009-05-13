@@ -26,6 +26,7 @@ from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
 from ikaaro.views import CompositeForm
+from ikaaro.views_new import NewInstance
 
 
 class ProductModel_NewInstance(NewInstance):
