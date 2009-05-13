@@ -1,4 +1,5 @@
 Makefile
+*.patch
 MANIFEST
 build/*
 *.swp
