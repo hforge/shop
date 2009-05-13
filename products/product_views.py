@@ -65,7 +65,7 @@ class Product_NewInstance(DBResource_NewInstance):
 
 
 
-class Product_View(STLForm, Editable_View):
+class Product_View(Editable_View, STLForm):
 
     access = True
     title = MSG(u'View')
@@ -178,13 +178,14 @@ class Product_EditModel(AutoForm):
 
 
 
-class Product_Edit(AutoForm, Editable_Edit):
+class Product_Edit(Editable_Edit, AutoForm):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'Edit')
 
-    schema = merge_dicts(product_schema,
-                         Editable_Edit.schema)
+    schema = merge_dicts(Editable_Edit.schema,
+                         product_schema)
+
 
     widgets = [
         # General informations

@@ -54,7 +54,7 @@ from shop.utils import get_shop
 #
 
 
-class Product(DynamicFolder, Editable):
+class Product(Editable, DynamicFolder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
