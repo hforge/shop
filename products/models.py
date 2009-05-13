@@ -30,7 +30,8 @@ from ikaaro.table import OrderedTable, OrderedTableFile
 # Import from shop
 from enumerate import Datatypes
 from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
-from models_views import ProductModel_NewInstance
+from models_views import ProductModel_NewInstance, ProductModelSchema_View
+from models_views import ProductModelSchema_EditRecord
 
 
 class AllAttributes(Enumerate):
@@ -95,7 +96,10 @@ class ProductModelSchema(OrderedTable):
     class_title = MSG(u'Model Schema')
     class_version = '20090414'
     class_handler = ProductTypeTable
+    class_views = ['view', 'add_record']
 
+    view = ProductModelSchema_View()
+    edit_record = ProductModelSchema_EditRecord()
 
     form = [
         TextWidget('name', title=MSG(u'Name')),

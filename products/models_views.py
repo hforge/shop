@@ -18,12 +18,13 @@
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
+from itools.web import INFO
 from itools.xapian import OrQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.table_views import Table_AddRecord
+from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
 from ikaaro.resource_views import DBResource_NewInstance
 
 
@@ -69,6 +70,52 @@ class ProductModels_View(Folder_BrowseContent):
             return context.come_back(msg)
         return Folder_BrowseContent.action_remove(self, resource, context,
                                                   form)
+
+
+class ProductModelSchema_View(Table_View):
+
+    search_template = None
+
+    def action_remove(self, resource, context, form):
+        """When we delete an attribute we have to delete it in products"""
+        ids = form['ids']
+        properties_name = []
+        table_h = resource.handler
+        for id in ids:
+            record = table_h.get_record(id)
+            property_name = table_h.get_record_value(record, 'name')
+            properties_name.append(property_name)
+            table_h.del_record(id)
+        # Search products
+        root = context.root
+        product_model = resource.parent.name
+        query = PhraseQuery('product_model', product_model)
+        results = root.search(query)
+        for doc in results.get_documents():
+            product = root.get_resource(doc.abspath)
+            for property_name in properties_name:
+                product.del_property(property_name)
+        # Reindex the resource
+        context.server.change_resource(resource)
+        context.message = INFO(u'Record deleted.')
+
+
+class ProductModelSchema_EditRecord(Table_EditRecord):
+    """ We can't edit name, datatype nor enumerate
+    """
+    cant_edit_fields = ['name', 'datatype', 'enumerate']
+
+    def get_schema(self, resource, context):
+        schema = {}
+        base_schema = resource.get_schema()
+        for widget in self.get_widgets(resource, context):
+            schema[widget.name] = base_schema[widget.name]
+        return schema
+
+
+    def get_widgets(self, resource, context):
+        return [x for x in Table_EditRecord.get_widgets(self, resource, context) \
+                                        if x.name not in self.cant_edit_fields]
 
 
 
