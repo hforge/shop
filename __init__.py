@@ -15,14 +15,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools import get_version
+from itools import get_version, get_abspath
 
-# Import from package
+# Import from ikaaro
+from itools.gettext import register_domain
+
+# Import from shop
 from shop import Shop
 
+# Import from package
 import skin
 import user
 import shipping_modes
 
 # Make the product version available to Python code
 __version__ = get_version()
+
+# Register the shop domain
+path = get_abspath('locale')
+register_domain('shop', path)
