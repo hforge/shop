@@ -24,9 +24,12 @@ from ikaaro.user import User
 
 # Import from project
 from datatypes import Civilite
+from user_views import SHOPUser_EditAccount
 
 
 class ShopUser(User):
+
+    edit_account = SHOPUser_EditAccount()
 
     @classmethod
     def get_metadata_schema(cls):

@@ -35,6 +35,7 @@ from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
 
 # Import from shop
+from user_views import user_schema, user_widgets
 from utils import get_shop
 from cart import ProductCart
 from countries import CountriesEnumerate
@@ -157,30 +158,9 @@ class Shop_Register(RegisterForm):
 
     access = True
 
-    schema = merge_dicts(RegisterForm.schema,
-                         gender=Civilite(mandatory=True),
-                         password=String(mandatory=True),
-                         password_check=String(mandatory=True),
-                         phone=String(mandatory=True),
-                         address_1=Unicode(mandatory=True),
-                         address_2=Unicode,
-                         zipcode=String(mandatory=True),
-                         town=Unicode(mandatory=True),
-                         country=CountriesEnumerate(mandatory=True))
+    schema = user_schema
 
-
-    widgets = [TextWidget('email', title=MSG(u"Email")),
-               SelectRadio('gender', title=MSG(u"Civility")),
-               TextWidget('lastname', title=MSG(u"Lastname")),
-               TextWidget('firstname', title=MSG(u"Firstname")),
-               PasswordWidget('password', title=MSG(u"Password")),
-               PasswordWidget('password_check', title=MSG(u"Repeat password")),
-               TextWidget('phone', title=MSG(u"Phone")),
-               TextWidget('address_1', title=MSG(u"Address")),
-               TextWidget('address_2', title=MSG(u"Address")),
-               TextWidget('zipcode', title=MSG(u"Zip code")),
-               TextWidget('town', title=MSG(u"Town")),
-               SelectWidget('country', title=MSG(u"Pays"))]
+    widgets = user_widgets
 
 
     def action(self, resource, context, form):
