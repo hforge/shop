@@ -37,6 +37,9 @@ class Categorie(Folder):
 
 
     def get_unique_id(self):
+        """Get the path to get from the categories container to this category.
+        Used by products to store the categories they belong to.
+        """
         return str(self.get_abspath()).split('categories/', 1)[1]
 
 
@@ -85,9 +88,10 @@ class VirtualCategory(Categorie):
 
 
     def _get_resource(self, name):
-        """Get the real resource from the shop.
+        """Get the virtual category.
+        Or the virtual product if we expose products into categories.
         """
-        # Get the unique id of the category
+        # Get the real category
         real_resource = self.get_real_resource()
         try:
             resource = real_resource.get_resource(name)
@@ -95,7 +99,7 @@ class VirtualCategory(Categorie):
             resource = None
         else:
             virtual_cls = self.virtual_category_class or self.__class__
-        # Try at demand if the name matches a product
+        # Or maybe the name matches a product
         if resource is None and self.wrap_products:
             site_root = self.get_site_root()
             try:
@@ -106,7 +110,7 @@ class VirtualCategory(Categorie):
                 virtual_cls = self.virtual_product_class
         if resource is None:
             raise LookupError
-        # Return the real path and wrap into our virtual class
+        # Return a copy of the resource wrapped into our virtual class
         return virtual_cls(resource.metadata)
 
 
