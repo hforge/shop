@@ -22,7 +22,6 @@ from datetime import datetime
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
-from itools.vfs import get_ctime
 from itools.web import get_context
 
 # Import from ikaaro
@@ -59,7 +58,7 @@ class Product(Editable, DynamicFolder):
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order',
                    'edit_cross_selling']
-    class_version = '20090511'
+    class_version = '20090514'
 
     __fixed_handlers__ = DynamicFolder.__fixed_handlers__ + ['images',
                                                       'order-photos',
@@ -91,7 +90,11 @@ class Product(Editable, DynamicFolder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
+        # Add ctime if not already in kw
+        if not 'ctime' in kw:
+            kw['ctime'] = datetime.now()
         DynamicFolder._make_resource(cls, folder, name, *args, **kw)
+
         # Images folder
         ImagesFolder._make_resource(ImagesFolder, folder,
                                     '%s/images' % name, body='',
@@ -125,13 +128,8 @@ class Product(Editable, DynamicFolder):
         values['has_images'] = (len(ordered_names) != 0)
         # Product description
         values['description'] = self.get_property('description')
-        # Creation date
-        try:
-            ctime = get_ctime(self.metadata.uri)
-        except Exception:
-            # when creating ressource get_catalog_values is called before
-            # commit
-            ctime = datetime.now()
+        # Creation time
+        ctime = self.get_property('ctime')
         values['ctime'] = ctime.strftime('%Y%m%d%H%M%S')
 
         return values
@@ -342,10 +340,6 @@ class Product(Editable, DynamicFolder):
                                             'cross-selling')
 
 
-    def update_20090507(self):
-        """ Update Unicode properties: add language "fr" if not already set"""
-        from itools.datatypes import Unicode
-
     def update_20090511(self):
         """ Update Unicode properties: add language "fr" if not already set"""
         model = self.get_product_model()
@@ -371,6 +365,13 @@ class Product(Editable, DynamicFolder):
         self.del_property('html_description')
         if description and description.strip():
             self.set_property('data', description, language='fr')
+
+
+    def update_20090514(self):
+        """Add ctime property"""
+        if self.get_property('ctime') is None:
+            self.set_property('ctime', datetime.now())
+
 
 
 class Products(Folder):

@@ -16,7 +16,4 @@
 
 
 def get_shop(resource):
-    from shop import Shop
-    while not isinstance(resource, Shop):
-        resource = resource.parent
-    return resource
+    return resource.get_site_root().get_resource('shop')
