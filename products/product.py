@@ -60,7 +60,7 @@ class Product(Editable, DynamicFolder):
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order',
                    'edit_cross_selling']
-    class_version = '20090507'
+    class_version = '20090514'
 
     __fixed_handlers__ = DynamicFolder.__fixed_handlers__ + ['images',
                                                       'order-photos',
@@ -92,7 +92,11 @@ class Product(Editable, DynamicFolder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
+        # Add ctime if not already in kw
+        if not 'ctime' in kw:
+            kw['ctime'] = datetime.now()
         DynamicFolder._make_resource(cls, folder, name, *args, **kw)
+
         # Images folder
         ImagesFolder._make_resource(ImagesFolder, folder,
                                     '%s/images' % name, body='',
@@ -131,12 +135,8 @@ class Product(Editable, DynamicFolder):
         values['has_categories'] = len(categories) != 0
         # Product description
         values['description'] = self.get_property('description')
-        # Creation date
-        try:
-            ctime = get_ctime(self.metadata.uri)
-        except OSError:
-            # when creating ressource get_catalog_values is called before commit
-            ctime = datetime.now()
+        # ctime
+        ctime = self.get_property('ctime')
         values['ctime'] = ctime.strftime('%Y%m%d%H%M%S')
 
         return values
@@ -365,6 +365,12 @@ class Product(Editable, DynamicFolder):
                 continue
             self.del_property(name)
             self.set_property(name, value, 'fr')
+
+
+    def update_20090514(self):
+        """Add ctime property"""
+        if self.get_property('ctime') is None:
+            self.set_property('ctime', datetime.now())
 
 
 
