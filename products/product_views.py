@@ -19,9 +19,12 @@ from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.handlers import merge_dicts
 from itools.web import INFO, STLForm
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
+from ikaaro.buttons import RemoveButton
+from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget
 from ikaaro.forms import MultilineWidget, title_widget
 from ikaaro.registry import get_resource_class
@@ -226,3 +229,54 @@ class Product_Edit(Editable_Edit, AutoForm):
                 resource.set_property(key, form[key])
         Editable_Edit.action(self, resource, context, form)
         return context.come_back(messages.MSG_CHANGES_SAVED)
+
+
+class Products_View(Folder_BrowseContent):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'View')
+
+    batch_msg1 = MSG(u"There is 1 product")
+    batch_msg2 = MSG(u"There are ${n} products")
+
+    context_menus = []
+
+    table_actions = [RemoveButton]
+
+    table_columns = [
+        ('checkbox', None),
+        ('cover', MSG(u'Cover')),
+        ('title', MSG(u'Title')),
+        ('mtime', MSG(u'Last Modified')),
+        ('product_model', MSG(u'Product model'))
+        ]
+
+
+    def get_query_schema(self):
+        schema = Folder_BrowseContent.get_query_schema(self)
+        # Override the default values
+        schema['sort_by'] = String(default='title')
+        return schema
+
+
+    def get_item_value(self, resource, context, item, column):
+        if column == 'cover':
+            cover = item.get_cover_namespace(context)
+            if cover:
+                uri = '%s/;thumb?width=48&amp;size=48' % cover['href']
+                return XMLParser('<img src="%s"/>' % uri)
+            return u'-'
+        elif column == 'title':
+            path = item.get_virtual_path()
+            if not path:
+                path = resource.get_pathto(item)
+            else:
+                root = context.root
+                item = root.get_resource(path)
+                path = resource.get_pathto(item)
+            return item.get_property('title'), path
+        elif column == 'product_model':
+            product_model = item.get_property('product_model')
+            return ProductModelsEnumerate.get_value(product_model)
+        return Folder_BrowseContent.get_item_value(self, resource, context,
+                  item, column)

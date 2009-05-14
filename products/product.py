@@ -35,7 +35,7 @@ from ikaaro.registry import register_resource_class
 from cross_selling import CrossSellingTable
 from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
-from product_views import Product_NewInstance
+from product_views import Product_NewInstance, Products_View
 from product_views import Product_View, Product_Edit, Product_EditModel
 from schema import product_schema
 from shop.editable import Editable
@@ -112,7 +112,7 @@ class Product(Editable, DynamicFolder):
 
     def get_catalog_fields(self):
         return (DynamicFolder.get_catalog_fields(self)
-                + [KeywordField('product_model'),
+                + [KeywordField('product_model', is_stored=True),
                    KeywordField('categories', is_stored=True),
                    TextField('description'),
                    BoolField('has_categories'),
@@ -166,6 +166,8 @@ class Product(Editable, DynamicFolder):
         something else.
         """
         categories = self.get_property('categories')
+        if not categories:
+            return None
         category = categories[0]
         path = '../../categories/%s/%s' % (category, self.name)
         return self.get_abspath().resolve(path)
@@ -377,9 +379,10 @@ class Products(Folder):
 
     class_id = 'products'
     class_title = MSG(u'Products')
-    class_views = ['browse_content']
+    class_views = ['view', 'browse_content']
 
     # Views
+    view = Products_View()
     browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
 
 
