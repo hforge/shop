@@ -166,6 +166,7 @@ class Shop_Register(RegisterForm):
     def action(self, resource, context, form):
         shop = get_shop(resource)
         root = context.root
+        site_root = resource.get_site_root()
         language = resource.get_content_language(context)
 
         # Check the new password matches
@@ -202,7 +203,7 @@ class Shop_Register(RegisterForm):
         cart.clean()
 
         # Set the role
-        resource.set_user_role(user.name, 'guests')
+        site_root.set_user_role(user.name, 'guests')
 
         # TODO Send confirmation email
         #subject = MSG(u"Inscription confirmation.")
@@ -218,7 +219,11 @@ class Shop_Register(RegisterForm):
 
         # Redirect
         msg = MSG(u'Inscription ok')
-        return context.come_back(msg, goto = './;addresses')
+        if resource==get_shop(resource):
+            goto = './;addresses'
+        else:
+            goto = './'
+        return context.come_back(msg, goto)
 
 
 
