@@ -434,7 +434,7 @@ msgstr ""
 #: ../ui/shop/shop_progress.xml.en:12
 msgctxt "link"
 msgid "1<g id='2'>Cart</g>"
-msgstr ""
+msgstr "1<g id='2'>Panier</g>"
 
 #: ../payments/paybox/enumerates.py:88
 msgid "24H00"
@@ -443,27 +443,27 @@ msgstr ""
 #: ../ui/shop/shop_progress.xml.en:17
 msgctxt "div"
 msgid "2<g id='3'>Identification</g>"
-msgstr ""
+msgstr "2<g id='3'>Identification</g>"
 
 #: ../ui/shop/shop_progress.xml.en:20
 msgctxt "div"
 msgid "3<g id='4'>Addresses</g>"
-msgstr ""
+msgstr "3<g id='4'>Adresses</g>"
 
 #: ../ui/shop/shop_progress.xml.en:23
 msgctxt "div"
 msgid "4<g id='5'>Shipping</g>"
-msgstr ""
+msgstr "4<g id='5'>Livraison</g>"
 
 #: ../ui/shop/shop_progress.xml.en:26
 msgctxt "div"
 msgid "5<g id='6'>Payment</g>"
-msgstr ""
+msgstr "5<g id='6'>Paiement</g>"
 
 #: ../ui/shop/shop_progress.xml.en:29
 msgctxt "div"
 msgid "6<g id='7'>Confirmation</g>"
-msgstr ""
+msgstr "6<g id='7'>Confirmation</g>"
 
 #: ../ui/shop/products/addproduct_tree.xml.en:9
 msgctxt "link"
@@ -754,7 +754,7 @@ msgstr ""
 
 #: ../user_views.py:47
 msgid "Civility"
-msgstr ""
+msgstr "Civilité"
 
 #: ../ui/shop/shop_view_cart.xml.en:92
 msgctxt "button"
@@ -1012,7 +1012,7 @@ msgstr ""
 #: ../ui/shop/shop_chooseaddress.xml.en:56
 msgctxt "title attribute"
 msgid "Edit this address"
-msgstr ""
+msgstr "Modifier cette adresse"
 
 #: ../user_views.py:46 ../products/enumerate.py:87
 msgid "Email"
@@ -1111,7 +1111,7 @@ msgstr ""
 
 #: ../user_views.py:49 ../shop_views.py:353 ../addresses.py:59
 msgid "Firstname"
-msgstr ""
+msgstr "Prénom"
 
 #: ../ui/shop/orders/order_view.xml.en:5
 msgctxt "heading"
@@ -1130,17 +1130,17 @@ msgstr ""
 #: ../ui/shop/shop_login.xml.en:30
 msgctxt "link"
 msgid "I forgot my password"
-msgstr ""
+msgstr "J'ai oublié mon mot de passe"
 
 #: ../ui/shop/shop_login.xml.en:11
 msgctxt "heading"
 msgid "I'm a new customer"
-msgstr ""
+msgstr "Je suis un nouveau client"
 
 #: ../ui/shop/shop_login.xml.en:15
 msgctxt "heading"
 msgid "I'm already a customer"
-msgstr ""
+msgstr "Je suis déjà client"
 
 #: ../payments/paybox/paybox_views.py:69 ../payments/payments_views.py:56
 msgid "Id"
@@ -1250,7 +1250,7 @@ msgstr ""
 
 #: ../user_views.py:48 ../shop_views.py:354 ../addresses.py:60
 msgid "Lastname"
-msgstr ""
+msgstr "Nom"
 
 #: ../ui/shop/shop_login.xml.en:33
 msgctxt "button"
@@ -1980,7 +1980,7 @@ msgstr ""
 #: ../ui/shop/shop_view_cart.xml.en:26 ../ui/shop/shop_recapitulatif.xml.en:56
 msgctxt "table cell"
 msgid "Total Price"
-msgstr ""
+msgstr "Prix total"
 
 #: ../orders/orders_views.py:157
 msgid "Total price"
@@ -2008,7 +2008,7 @@ msgstr ""
 
 #: ../user_views.py:56 ../shop_views.py:358 ../addresses.py:64
 msgid "Town"
-msgstr ""
+msgstr "Ville"
 
 #: ../payments/paybox/enumerates.py:107
 msgid "Transaction approuvée ou traitée avec succès"
@@ -2110,24 +2110,24 @@ msgstr ""
 #: ../ui/shop/shop_view_cart.xml.en:13
 msgctxt "div"
 msgid "Your cart is empty !"
-msgstr ""
+msgstr "Votre panier est vide !"
 
 #: ../ui/shop/shop_view_cart.xml.en:7
 msgctxt "heading"
 msgid "Your order"
-msgstr ""
+msgstr "Votre commande"
 
 #: ../shop_views.py:357 ../addresses.py:63
 msgid "Zip Code"
-msgstr ""
+msgstr "Code postal"
 
 #: ../user_views.py:55
 msgid "Zip code"
-msgstr ""
+msgstr "Code postal"
 
 #: ../shop.py:107 ../shop.py:147
 msgid "countries"
-msgstr ""
+msgstr "pays"
 
 #: ../products/cross_selling.py:61
 msgid "id"
