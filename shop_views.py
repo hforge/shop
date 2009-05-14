@@ -222,7 +222,7 @@ class Shop_Register(RegisterForm):
         cart.clean()
 
         # Set the role
-        root.set_user_role(user.name, 'guests')
+        resource.set_user_role(user.name, 'guests')
 
         # TODO Send confirmation email
         #subject = MSG(u"Inscription confirmation.")
