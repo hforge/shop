@@ -91,12 +91,11 @@ class Product(Editable, DynamicFolder):
 
 
     @staticmethod
-    def _make_resource(cls, folder, name, *args, **kw):
-        # Add ctime if not already in kw
-        if not 'ctime' in kw:
-            kw['ctime'] = datetime.now()
-        DynamicFolder._make_resource(cls, folder, name, *args, **kw)
-
+    def _make_resource(cls, folder, name, ctime=None, *args, **kw):
+        if ctime is None:
+            ctime = datetime.now()
+        DynamicFolder._make_resource(cls, folder, name, ctime=ctime, *args,
+                                     **kw)
         # Images folder
         ImagesFolder._make_resource(ImagesFolder, folder,
                                     '%s/images' % name, body='',

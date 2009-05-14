@@ -218,7 +218,7 @@ class Product_Edit(Editable_Edit, AutoForm):
     def action(self, resource, context, form):
         language = resource.get_content_language(context)
         for key, datatype in self.schema.iteritems():
-            if key == 'data':
+            if key in ('data', 'ctime'):
                 continue
             if issubclass(datatype, Unicode):
                 resource.set_property(key, form[key], language)
