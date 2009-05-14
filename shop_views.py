@@ -184,6 +184,7 @@ class Shop_Register(RegisterForm):
 
 
     def action(self, resource, context, form):
+        shop = get_shop(resource)
         root = context.root
         language = resource.get_content_language(context)
 
@@ -209,7 +210,7 @@ class Shop_Register(RegisterForm):
 
         # Save address in addresses table
         kw = {'user': user.name}
-        addresses = resource.get_resource('addresses')
+        addresses = shop.get_resource('addresses')
         for key in ['gender', 'lastname', 'firstname', 'address_1',
                     'address_2', 'zipcode', 'town', 'country']:
             kw[key] = form[key]
