@@ -165,6 +165,7 @@ class ProductModel(Folder):
             multiple = get_value(record, 'multiple')
             datatype = get_value(record, 'datatype')
             enumerate = get_value(record, 'enumerate')
+            visible = get_value(record, 'visible')
             is_purchase_option = get_value(record, 'is_purchase_option')
             datatype = Datatypes.get_real_datatype(datatype, model=self,
                 enumerate=enumerate, mandatory=mandatory, multiple=multiple)
@@ -174,7 +175,8 @@ class ProductModel(Folder):
                           'title': title,
                           'datatype': datatype,
                           'is_purchase_option': is_purchase_option,
-                          'widget': widget})
+                          'widget': widget,
+                          'visible': visible})
         return infos
 
 
@@ -206,7 +208,8 @@ class ProductModel(Folder):
             kw = {'title': info['title'],
                   'value': value,
                   'multiple': datatype.multiple,
-                  'name': real_value}
+                  'name': real_value,
+                  'visible': info['visible']}
             ns['specific_dict'][name] = kw
             ns['specific_list'].append(kw)
         return ns
