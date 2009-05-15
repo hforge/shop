@@ -25,7 +25,7 @@ from itools.gettext import MSG
 # Import from project
 from addresses import Addresses
 from categories import Categories
-from countries import Countries, CountriesEnumerate
+from countries import Countries
 from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
@@ -139,13 +139,8 @@ class Shop(Folder):
 
     def get_user_address_namespace(self, id):
         addresses = self.get_resource('addresses').handler
-        record = addresses.get_record(id)
-        ns = {}
-        for key in ['firstname', 'lastname', 'address_1', 'address_2',
-                    'zipcode', 'town', 'country', 'title', 'gender']:
-            ns[key] = addresses.get_record_value(record, key)
-        ns['country'] = CountriesEnumerate.get_value(ns['country'])
-        return ns
+        return addresses.get_record_namespace(id)
+
 
     ##############################
     # Updates

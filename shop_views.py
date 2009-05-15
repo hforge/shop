@@ -594,6 +594,7 @@ class Shop_ShowRecapitulatif(STLForm):
         kw = {'metadata': {'customer_id': context.user.name,
                            'payment_mode': form['payment']},
               'customer_email': context.user.get_property('email'),
+              'cart': cart,
               'shop': resource,
               'shop_uri': context.uri.resolve('/')}
         Order.make_resource(Order, resource, 'orders/%s' % order_ref,

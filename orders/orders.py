@@ -31,6 +31,7 @@ from ikaaro.table import Table
 from ikaaro.workflow import WorkflowAware
 
 # Import from project
+from shop.addresses import Addresses, BaseAddresses
 from shop.utils import get_shop
 from orders_views import OrderView, OrderFacture
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
@@ -118,7 +119,7 @@ class Order(WorkflowAware, Folder):
     class_title = MSG(u'Order')
     class_views = ['view', 'edit_state']
 
-    __fixed_handlers__ = Folder.__fixed_handlers__ + ['products']
+    __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses', 'products']
 
     workflow = order_workflow
 
@@ -142,20 +143,35 @@ class Order(WorkflowAware, Folder):
     def _make_resource(cls, folder, name, *args, **kw):
         shop = kw['shop']
         shop_uri = kw['shop_uri']
+        cart = kw['cart']
         customer_email = kw['customer_email']
         # Build metadata/order
         metadata = kw['metadata']
         metadata['creation_datetime'] = datetime.now()
         Folder._make_resource(cls, folder, name, *args, **metadata)
-        # We save list of products in order.
-        #handler = BaseOrdersProducts()
-        #for product in kw['products']:
-        #    handler.add_record(product)
-        #metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
-        #folder.set_handler('%s/products.metadata' % name, metadata)
-        #folder.set_handler('%s/products' % name, handler)
+        # Save products
+        handler = BaseOrdersProducts()
+        products = shop.get_resource('products')
+        for product_cart in cart.products:
+            product = products.get_resource(product_cart['name'])
+            handler.add_record({'name': product.name,
+                                'title': product.get_title(),
+                                'price': product.get_price(),
+                                'quantity': product_cart['quantity']})
+        metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
+        folder.set_handler('%s/products.metadata' % name, metadata)
+        folder.set_handler('%s/products' % name, handler)
+        # Get bill and delivery addresses
+        addresses = shop.get_resource('addresses').handler
+        delivery_record = addresses.get_record_kw(cart.addresses['delivery_address'])
+        bill_record = addresses.get_record_kw(cart.addresses['bill_address'] or 0)
         # Save addresses
-        # TODO
+        handler = BaseAddresses()
+        handler.add_record(delivery_record)
+        handler.add_record(bill_record)
+        metadata = Addresses.build_metadata(title={'en': u'Addresses'})
+        folder.set_handler('%s/addresses.metadata' % name, metadata)
+        folder.set_handler('%s/addresses' % name, handler)
         # Send mail of confirmation / notification
         cls.send_email_confirmation(shop, shop_uri, customer_email, name)
 
@@ -190,35 +206,19 @@ class Order(WorkflowAware, Folder):
         root.send_email(customer_email, subject, from_addr, body)
 
 
-    ######################################
-    ## Usefull API for order
-    ######################################
-    def get_order_products_namespace(self, context):
-        products = self.get_resource('products')
-        return products.get_namespace(context)
-
-
-    def get_order_payments_namespace(self, context):
-        shop = get_shop(context.resource)
-        payments = shop.get_resource('payments')
-        return []
-        # XXX To fix
-        #payments.get_payments_namespace(ref=self.name, context=context)
-
-
 
 class Orders(Folder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')
-    class_views = ['view']
+    class_views = ['my_orders', 'view']
 
     # Views
     view = OrdersView()
     my_orders = MyOrdersView()
 
     def get_document_types(self):
-        return [Order]
+        return []
 
 
 # Register catalog fields

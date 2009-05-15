@@ -44,6 +44,19 @@ class BaseAddresses(BaseTable):
       'country': CountriesEnumerate(mandatory=True),
       }
 
+    def get_record_kw(self, id):
+        kw = {}
+        record = self.get_record(id)
+        for key in self.record_schema.keys():
+            kw[key] = self.get_record_value(record, key)
+        return kw
+
+
+    def get_record_namespace(self, id):
+        namespace = self.get_record_kw(id)
+        namespace['country'] = CountriesEnumerate.get_value(
+                                  namespace['country'])
+        return namespace
 
 
 class Addresses(Table):

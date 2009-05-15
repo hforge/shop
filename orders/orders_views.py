@@ -50,7 +50,7 @@ class OrdersProductsView(Table_View):
 
 class OrderView(STLView):
 
-    access = 'is_admin'
+    access = True#'is_admin'
 
     title = MSG(u'Commande')
 
@@ -58,51 +58,15 @@ class OrderView(STLView):
 
     def get_namespace(self, resource, context, query=None):
         root = context.root
-        accept = context.accept_language
         shop = get_shop(resource)
-        # Date cmd
+        # Build namespace
+        namespace = {}
+        # General informations
+        namespace['order_number'] = resource.name
+        # Order creation date time
         creation_datetime = resource.get_property('creation_datetime')
-        # Historique des payments associés à la commande
-        ns_payments = resource.get_order_payments_namespace(context)
-        # Produits commandes
-        ns_products = resource.get_order_products_namespace(context)
-        # Payment mode
-        payment_mode = resource.get_property('payment_mode')
-        payments = shop.get_resource('payments')
-        ns_payment_mode = {}
-        # State
-        state = resource.get_state()
-        # Acl
-        ac = resource.get_access_control()
-        is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
-        # Shipping
-        shipping = resource.get_property('shipping')
-        shippings = shop.get_resource('shippings')
-        shipping = {} # XXX
-        # Delivery address
-        delivery_address = resource.get_property('delivery_address')
-        delivery_address = shop.get_user_address_namespace(delivery_address)
-        # Bill address
-        bill_address = resource.get_property('bill_address')
-        if bill_address:
-            bill_address = shop.get_user_address_namespace(bill_address)
-        # XXX
-        total_price = resource.get_property('total_price')
-        # Return namespace
-        namespace = {'order_number': resource.name,
-                     'payments': ns_payments,
-                     'products': ns_products,
-                     'payment_mode': ns_payment_mode,
-                     'state': state['title'],
-                     'creation_datetime': format_datetime(creation_datetime,
-                                                          accept=accept),
-                     'delivery_address': delivery_address,
-                     'shipping': shipping,
-                     'shipping_option': resource.get_property('shipping_option'),
-                     'bill_address': bill_address,
-                     'frais_de_port': 0,
-                     'total_price': total_price,
-                     'is_allowed_to_edit': is_allowed_to_edit}
+        namespace['creation_datetime'] = format_datetime(creation_datetime,
+                                              context.accept_language)
         # Customer informations
         users = root.get_resource('users')
         customer_id = resource.get_property('customer_id')
@@ -112,6 +76,32 @@ class OrderView(STLView):
                                  'title': customer.get_title(),
                                  'email': customer.get_property('email'),
                                  'href': resource.get_pathto(customer)}
+        # Order state
+        state = resource.get_state()
+        namespace['state'] = state['title']
+        # Addresses
+        addresses = shop.get_resource('addresses').handler
+        namespace['delivery_address'] = addresses.get_record_namespace(0)
+        namespace['bill_address'] = addresses.get_record_namespace(1)
+        # Products
+        products = resource.get_resource('products')
+        namespace['products'] = products.get_namespace(context)
+        # Payments XXX
+        payment_mode = resource.get_property('payment_mode')
+        payments = shop.get_resource('payments')
+        ns_payment_mode = {}
+        namespace['payments'] = []
+        namespace['payment_mode'] = []
+        namespace['frais_de_port'] = 0
+        namespace['total_price'] = 0
+        # Acl
+        ac = resource.get_access_control()
+        is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
+        namespace['is_allowed_to_edit'] = is_allowed_to_edit
+        # Shipping XXX
+        shipping = resource.get_property('shipping')
+        shippings = shop.get_resource('shippings')
+        namespace['shipping'] = {}
         return namespace
 
 
@@ -167,8 +157,8 @@ class OrdersView(Folder_BrowseContent):
                                reverse=Boolean(default=True))
 
 
-    batch_msg1 = MSG(u"Il y a une commande.")
-    batch_msg2 = MSG(u"Il y a {n} commandes.")
+    batch_msg1 = MSG(u"There's one order.")
+    batch_msg2 = MSG(u"There are {n} orders.")
 
     def get_item_value(self, resource, context, item, column):
         value = Folder_BrowseContent.get_item_value(self, resource, context,
@@ -188,11 +178,14 @@ class OrdersView(Folder_BrowseContent):
 
 
 
+
 class MyOrdersView(OrdersView):
 
     access = 'is_authenticated'
     title = MSG(u'Order history')
 
+    batch_msg1 = MSG(u"There's one order.")
+    batch_msg2 = MSG(u"There are {n} orders.")
 
     def get_items(self, resource, context, *args):
         args = PhraseQuery('customer_id', str(context.user.name))
