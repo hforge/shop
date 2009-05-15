@@ -35,7 +35,8 @@ class ShopUser(User):
     def get_metadata_schema(cls):
         return merge_dicts(User.get_metadata_schema(),
                            gender=Civilite,
-                           phone=String)
+                           phone1=String,
+                           phone2=String)
 
 
     def save_form(self, schema, form):
