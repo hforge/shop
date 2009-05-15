@@ -242,8 +242,8 @@ class ProductCart(object):
         """
         return (self.shipping['name'] is not None and
                 len(self.products) > 0 and
-                self.addresses['delivery_address'] is not None and
-                self.addresses['bill_address'] is not None)
+                self.addresses['delivery_address'] is not None)
+
 
     def clear(self):
         for key in ['products', 'addresses', 'shipping']:
