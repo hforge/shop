@@ -497,6 +497,7 @@ class Shop_ShowRecapitulatif(STLForm):
     schema = {'payment': PaymentWaysEnumerate(mandatory=True)}
 
     def get_namespace(self, resource, context):
+        abspath = resource.get_abspath()
         cart = ProductCart(context)
         products = resource.get_resource('products')
         shippings = resource.get_resource('shippings')
@@ -526,7 +527,7 @@ class Shop_ShowRecapitulatif(STLForm):
             product = ({'name': product.name,
                         'img': product.get_cover_namespace(context),
                         'title': product.get_title(),
-                        'uri': resource.get_pathto(product),
+                        'href': abspath.get_pathto(product.get_virtual_path()),
                         'quantity': quantity,
                         'price': product.get_price(),
                         'price_total': price_total})
