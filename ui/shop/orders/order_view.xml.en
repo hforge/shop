@@ -49,9 +49,9 @@
           <span stl:if="bill_address">
             ${bill_address/firstname} ${bill_address/lastname}<br/>
             ${bill_address/address_1}<br/>
-            <stl:block stl:if="bill_address/address_2">
+            <stl:inline stl:if="bill_address/address_2">
               ${bill_address/address_2}<br/>
-            </stl:block>
+            </stl:inline>
             ${bill_address/zipcode} ${bill_address/town}<br/>
             ${bill_address/country}<br/>
           </span>
