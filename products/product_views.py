@@ -196,7 +196,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         TextWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
-        TextWidget('subject', title=MSG(u'Subject')),
+        TextWidget('subject', title=MSG(u'Keywords')),
         # Weight
         TextWidget('weight', title=MSG(u'Weight')),
         # Categorie
