@@ -2,23 +2,37 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1 class="order">General informations</h1>
+  <h1>Details about your order (Number #${order_number})</h1>
 
-    <table cellpadding="0" id="facture" cellspacing="0">
-      <tr>
-        <th>Customer id</th>
-        <td>${id_client}</td>
-      </tr>
-      <tr>
-        <th>E-Mail</th>
-        <td>${email_client}</td>
-      </tr>
-      <tr>
-        <th>Date de la commande</th>
-        <td>${creation_datetime}</td>
-      </tr>
+    <p>
+      Hi
+      <a href="${customer/href}" style="text-decoration:none">
+      ${customer/gender} ${customer/title} (${customer/email}) !
+      </a><br/>
+      Your order has been recorded the ${creation_datetime}.<br/>
+      In this section you will find all informations concerning your order.<br/>
+      <a onclick="return popup('./;facture', 880, 800);" href="#">
+        <img src="/ui/icons/16x16/pdf.png"/> Download bill
+      </a>
+    </p>
+
+    <h2>Order state</h2>
+
+      <p stl:if="not payments">
+        Payment: No payment done.
+      </p>
+    <!--
+    <a href=";edit_state" stl:if="is_allowed_to_edit">${state}</a>  <span stl:if="not is_allowed_to_edit">${state}</span>
+    -->
+
+    <h2>Delivery and bill addresses</h2>
+
+    <table id="cart" style="width:400px">
       <tr>
         <th>Delivery address</th>
+        <th>Bill address</th>
+      </tr>
+      <tr>
         <td>
           ${delivery_address/firstname} ${delivery_address/lastname}<br/>
           ${delivery_address/address_1}<br/>
@@ -28,35 +42,26 @@
           ${delivery_address/zipcode} ${delivery_address/town}<br/>
           ${delivery_address/country}<br/>
         </td>
-      </tr>
-      <tr>
-        <th>Bill address</th>
         <td>
-          <span stl:if="bill_address">${bill_address}</span>
           <span stl:if="not bill_address">
             Same that delivery address
           </span>
-        </td>
-      </tr>
-      <tr>
-        <th>Bill</th>
-        <td>
-          <a onclick="return popup('./;facture', 880, 800);" href="#">
-            <img src="/ui/icons/16x16/pdf.png"/> Download bill
-          </a>
+          <span stl:if="bill_address">
+            ${bill_address/firstname} ${bill_address/lastname}<br/>
+            ${bill_address/address_1}<br/>
+            <stl:block stl:if="bill_address/address_2">
+              ${bill_address/address_2}<br/>
+            </stl:block>
+            ${bill_address/zipcode} ${bill_address/town}<br/>
+            ${bill_address/country}<br/>
+          </span>
         </td>
       </tr>
     </table>
 
-  <h1 class="order">Order state</h1>
+  <h2>Your order</h2>
 
-    <p stl:if="not payments">Payment: No payment done.</p>
-  <!--
-  <a href=";edit_state" stl:if="is_allowed_to_edit">${state}</a>  <span stl:if="not is_allowed_to_edit">${state}</span>
-  -->
-  <h1 class="order">Products</h1>
-
-  <table cellpadding="0" id="facture" cellspacing="0">
+  <table id="cart">
     <tr>
       <th>Name</th>
       <th>Title</th>
@@ -75,9 +80,9 @@
 
 
   <!-- Shipping informations -->
-  <h1 class="order">Shipping informations</h1>
+  <h2>Shipping informations</h2>
 
-    <table cellpadding="0" id="facture" cellspacing="0">
+    <table cellpadding="0" id="cart" cellspacing="0" stl:if="shipping">
       <tr>
         <th colspan="4">Shipping informations</th>
       </tr>
@@ -97,11 +102,11 @@
       </tr>
     </table>
 
-  <h1 class="order">Payment informations</h1>
+  <h2>Payment informations</h2>
 
     <!-- Payment Mode -->
 
-    <table cellpadding="0" id="facture" cellspacing="0">
+    <table cellpadding="0" id="cart" cellspacing="0" stl:if="payment_mode">
       <tr>
         <th colspan="2">Payment mode</th>
       </tr>
@@ -118,7 +123,7 @@
     <!-- Payment history -->
 
     <p stl:if="payments">
-      <table cellpadding="0" id="facture" cellspacing="0">
+      <table cellpadding="0" id="cart" cellspacing="0">
         <tr>
           <th>Date et Heure</th>
           <th>Paiement validé/refusé ?</th>

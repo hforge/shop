@@ -30,6 +30,7 @@ from ikaaro.resource_views import DBResource_Edit
 from ikaaro.table_views import Table_View
 
 # Import from shop
+from shop.datatypes import Civilite
 from shop.utils import get_shop
 
 
@@ -91,7 +92,8 @@ class OrderView(STLView):
         # XXX
         total_price = resource.get_property('total_price')
         # Return namespace
-        namespace = {'payments': ns_payments,
+        namespace = {'order_number': resource.name,
+                     'payments': ns_payments,
                      'products': ns_products,
                      'payment_mode': ns_payment_mode,
                      'state': state['title'],
@@ -104,8 +106,15 @@ class OrderView(STLView):
                      'frais_de_port': 0,
                      'total_price': total_price,
                      'is_allowed_to_edit': is_allowed_to_edit}
-        for key in ['email_client', 'id_client']:
-            namespace[key] = resource.get_property(key)
+        # Customer informations
+        users = root.get_resource('users')
+        customer_id = resource.get_property('id_client')
+        customer = users.get_resource(customer_id)
+        gender = customer.get_property('gender')
+        namespace['customer'] = {'gender': Civilite.get_value(gender),
+                                 'title': customer.get_title(),
+                                 'email': customer.get_property('email'),
+                                 'href': resource.get_pathto(customer)}
         return namespace
 
 
