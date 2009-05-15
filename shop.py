@@ -19,6 +19,7 @@ from ikaaro.registry import register_resource_class
 from ikaaro.folder import Folder
 
 # Import from itools
+from itools.datatypes import Email, Unicode
 from itools.gettext import MSG
 
 # Import from project
@@ -29,7 +30,7 @@ from orders import Orders
 from payments import Payments
 from products import Products, ProductModels
 from shipping import Shippings
-from shop_views import Shop_Delivery, Shop_ViewCart
+from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_Addresses, Shop_ChooseAddress, Shop_End
@@ -52,8 +53,9 @@ class Shop(Folder):
     ## Views
     ####################################
 
-    # Administrator shop view
+    # Administrator shop views
     view = Shop_View()
+    configure = Shop_Configure()
 
     #------------------------------
     # 6 Steps for payment process
@@ -109,6 +111,14 @@ class Shop(Folder):
         Shippings._make_resource(Shippings, folder, '%s/shippings' % name,
                                  title={'en': u'Shipping'})
 
+
+    @classmethod
+    def get_metadata_schema(cls):
+        schema = Folder.get_metadata_schema()
+        schema['order_notification_mails'] = Email(multiple=True)
+        schema['shop_signature'] = Unicode
+        schema['shop_from_addr'] = Email
+        return schema
 
 
     def get_document_types(self):

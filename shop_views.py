@@ -22,6 +22,7 @@ from decimal import Decimal as decimal
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Integer, Email, String, Unicode
+from itools.datatypes import MultiLinesTokens
 from itools.gettext import MSG
 from itools.uri import get_reference
 from itools.web import BaseView, STLForm, STLView, ERROR
@@ -30,7 +31,9 @@ from itools.xapian import PhraseQuery, AndQuery
 # Import from ikaaro
 from ikaaro.forms import AutoForm, SelectRadio, SelectWidget
 from ikaaro.forms import HiddenWidget, TextWidget, PasswordWidget
-from ikaaro.resource_views import LoginView
+from ikaaro.forms import MultilineWidget
+from ikaaro.messages import MSG_CHANGES_SAVED
+from ikaaro.resource_views import LoginView, DBResource_Edit
 from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
 
@@ -50,6 +53,37 @@ class Shop_View(STLView):
     access = 'is_admin'
     title = MSG(u'Shop control panel')
     template = '/ui/shop/shop_view.xml'
+
+
+class Shop_Configure(DBResource_Edit):
+
+    access = 'is_admin'
+    title = MSG(u'Configure shop')
+
+    schema = {'shop_from_addr': Email(mandatory=True),
+              'order_notification_mails': MultiLinesTokens(mandatory=True),
+              'shop_signature': Unicode(mandatory=True)}
+
+    widgets = [
+        TextWidget('shop_from_addr', title=MSG(u'Shop from address')),
+        MultilineWidget('order_notification_mails',
+            title=MSG(u'New order notification emails (1 per line)'),
+            rows=8, cols=50),
+        MultilineWidget('shop_signature',
+            title=MSG(u'Shop signature'), rows=8, cols=50),
+        ]
+
+    submit_value = MSG(u'Edit configuration')
+
+    def action(self, resource, context, form):
+        for key in self.schema.keys():
+            if key == 'order_notification_mails':
+                continue
+            resource.set_property(key, form[key])
+        values = [x.strip() for x in form['order_notification_mails']]
+        resource.set_property('order_notification_mails', values)
+        context.message = MSG_CHANGES_SAVED
+        return
 
 
 class Shop_Progress(STLView):
@@ -519,6 +553,9 @@ class Shop_ShowRecapitulatif(STLForm):
         for product in cart.products:
             quantity = product['quantity']
             product = products.get_resource(product['name'])
+            # Check product is buyable
+            if not product.is_buyable():
+                continue
             price_total = product.get_price() * quantity
             # Weight and price
             total_price += product.get_price() * quantity
@@ -552,49 +589,31 @@ class Shop_ShowRecapitulatif(STLForm):
         if not cart.is_valid():
             msg = MSG(u'Invalid cart')
             return context.come_back(msg, goto='/')
-        # Get informations
+        # We create a new order
         order_ref = datetime.now().strftime('%y%m%d%M%S')
-        client_mail = context.user.get_property('email')
-        client_mail = 'sylvain@itaapy.com'
-        # Step 1: Get products in the cart
-        cart = ProductCart(context)
-        # Get Total price
+        kw = {'metadata': {'customer_id': context.user.name,
+                           'payment_mode': form['payment']},
+              'customer_email': context.user.get_property('email'),
+              'shop': resource,
+              'shop_uri': context.uri.resolve('/')}
+        Order.make_resource(Order, resource, 'orders/%s' % order_ref,
+                            title={'en': u'#%s' % order_ref},
+                            **kw)
+        # We clear the cart
+        #cart .clear()
+        # We show the payment form
         products = resource.get_resource('products')
         total_price = decimal(0)
         for cart_elt in cart.products:
             product = products.get_resource(cart_elt['name'])
             total_price += product.get_price() * cart_elt['quantity']
-        # Build informations
-        products_ns = []
-        for cart_element in cart.products:
-            ## Check product is buyable
-            #if not product.is_buyable():
-            #    continue
-            product = products.get_resource(cart_element['name'])
-            products_ns.append({'name': product.name,
-                                'title': product.get_title(),
-                                'quantity': cart_element['quantity'],
-                                'price': product.get_price()})
-        payment = {'id': order_ref,
-                   'id_client': context.user.name,
-                   'total_price': total_price,
-                   'email': client_mail,
-                   'mode': form['payment'],
-                   'payment_mode': form['payment'],
-                   'delivery_address': cart.addresses['delivery_address'],
-                   'bill_address': cart.addresses['bill_address'],
-                   'shipping': cart.shipping['name'],
-                   'shipping_option': cart.shipping['option'],
-                   'products': products_ns}
-        # Step 2: We create an order
-        Order.make_resource(Order, resource, 'orders/%s' % order_ref,
-                            title={'en': u'Order %s' % order_ref},
-                            **payment)
-        # Step 3: We clear the cart
-        #cart .clear()
-        # Step 4: We show the payment form
+        kw = {'id': order_ref,
+              'total_price': total_price,
+              'email': context.user.get_property('email'),
+              'mode': form['payment']}
         payments = resource.get_resource('payments')
-        return payments.show_payment_form(context, payment)
+        return payments.show_payment_form(context, kw)
+
 
 #-------------------------------------
 # Step6: Purchase end

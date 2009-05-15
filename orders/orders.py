@@ -22,7 +22,6 @@ from itools.csv import Table as BaseTable
 from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
 from itools.datatypes import Email
 from itools.gettext import MSG
-from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -33,7 +32,7 @@ from ikaaro.workflow import WorkflowAware
 
 # Import from project
 from shop.utils import get_shop
-from orders_views import OrderView, OrderFacture, Orders_Configure
+from orders_views import OrderView, OrderFacture
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from workflow import order_workflow
 
@@ -42,37 +41,30 @@ from workflow import order_workflow
 #############################################
 # Email de confirmation de commande client  #
 #############################################
-# XXX Translate
+mail_confirmation_title = MSG(u'Order confirmation')
 
-mail_confirmation_title = MSG(
-  u'Confirmation de votre commande sur la boutique en ligne XXX')
-
-mail_confirmation_body = MSG(u"""Bonjour,
-Votre commande sur la boutique en ligne XXX a bien été enregistrée.
-Retrouvez les informations sur votre commande à l'url suivante:\n
-http://www.XXX.com/orders/{order_name}/\n
-Un E-mail récapitulatif vous sera envoyé aprés validation de votre paiement.\n
-------------------------
-Référence commande: {order_name}
-------------------------\n\n
---
-L'équipe XXX
+mail_confirmation_body = MSG(u"""Hi,
+Your order number {order_name} in our shop has been recorded.
+You can found details on our website:\n
+  {order_uri}\n
+-- 
+{shop_signature}
 """)
 
 #############################################
 # Email de confirmation de commande client  #
 #############################################
 
-mail_notification_title = MSG(u'Nouvelle commande sur votre boutique en ligne')
+mail_notification_title = MSG(u'New order in your shop')
 
 mail_notification_body = MSG(u"""
-Bonjour,
-Une nouvelle commande a été réalisée sur votre boutique en ligne.
-Retrouvez les informations sur la commande à l'url suivante:\n
-http://www.XXX.com/orders/{order_name}/\n
-------------------------
-Référence commande: {order_name}
-------------------------\n\n
+Hi,
+A new order has been done in your shop.
+You can found details here:\n
+  {order_uri}\n
+
+-- 
+{shop_signature}
 """)
 
 ###################################################################
@@ -124,7 +116,7 @@ class Order(WorkflowAware, Folder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
-    class_views = ['view', 'administrate', 'edit_state']
+    class_views = ['view', 'edit_state']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['products']
 
@@ -132,7 +124,6 @@ class Order(WorkflowAware, Folder):
 
     # Views
     view = OrderView()
-    administrate = OrderView()
     facture = OrderFacture()
 
     @classmethod
@@ -141,46 +132,37 @@ class Order(WorkflowAware, Folder):
         schema.update(WorkflowAware.get_metadata_schema())
         schema['total_price'] = Decimal
         schema['creation_datetime'] = ISODateTime
-        schema['id_client'] = String
-        schema['email_client'] = Email
+        schema['customer_id'] = String
         schema['payment_mode'] = String
         schema['shipping'] = String
-        schema['shipping_option'] = String
-        schema['bill_address'] = Integer
-        schema['delivery_address'] = Integer
         return schema
 
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        metadata = {}
-        # XXX Improve that + do APi
-        metadata['id_client'] = kw['id_client']
-        metadata['email_client'] = kw['email']
-        metadata['total_price'] = kw['total_price']
-        metadata['payment_mode'] = kw['payment_mode']
+        shop = kw['shop']
+        shop_uri = kw['shop_uri']
+        customer_email = kw['customer_email']
+        # Build metadata/order
+        metadata = kw['metadata']
         metadata['creation_datetime'] = datetime.now()
-        metadata['delivery_address'] = kw['delivery_address']
-        metadata['bill_address'] = kw['bill_address']
-        metadata['shipping'] = kw['shipping']
-        metadata['shipping_option'] = kw['shipping_option']
-        metadata['title'] = {'en': u'Order %s' % name}
         Folder._make_resource(cls, folder, name, *args, **metadata)
         # We save list of products in order.
-        handler = BaseOrdersProducts()
-        for product in kw['products']:
-            handler.add_record(product)
-        metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
-        folder.set_handler('%s/products.metadata' % name, metadata)
-        folder.set_handler('%s/products' % name, handler)
-        # XXX TODO Add address de livraison et de facturation
+        #handler = BaseOrdersProducts()
+        #for product in kw['products']:
+        #    handler.add_record(product)
+        #metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
+        #folder.set_handler('%s/products.metadata' % name, metadata)
+        #folder.set_handler('%s/products' % name, handler)
+        # Save addresses
+        # TODO
         # Send mail of confirmation / notification
-        cls.send_email_confirmation(folder, name, kw)
+        cls.send_email_confirmation(shop, shop_uri, customer_email, name)
 
 
     def _get_catalog_values(self):
         values = Folder._get_catalog_values(self)
-        values['id_client'] = self.get_property('id_client')
+        values['customer_id'] = self.get_property('customer_id')
         return values
 
 
@@ -188,22 +170,25 @@ class Order(WorkflowAware, Folder):
     # E-Mail confirmation / notification
     ########################################
     @classmethod
-    def send_email_confirmation(cls, folder, order_name, kw):
+    def send_email_confirmation(cls, shop, shop_uri, customer_email, order_name):
         """ """
-        context = get_context()
-        root = context.root
-        here = context.resource
-        orders = here.get_resource('orders')
-        from_addr = context.server.smtp_from
+        root = shop.get_root()
+        # Get configuration
+        from_addr = shop.get_property('shop_from_addr')
+        # Build email informations
+        kw = {'order_name': order_name,
+              'order_uri': shop_uri.resolve('/shop/orders/%s/' % order_name),
+              'shop_signature': shop.get_property('shop_signature')}
         # Send confirmation to the shop
         subject = mail_notification_title.gettext()
-        body = mail_notification_body.gettext(order_name=order_name)
-        for to_addr in orders.get_property('order_notification_mails'):
+        body = mail_notification_body.gettext(**kw)
+        for to_addr in shop.get_property('order_notification_mails'):
             root.send_email(to_addr, subject, from_addr, body)
         # Send confirmation to client
         subject = mail_confirmation_title.gettext()
-        body = mail_confirmation_body.gettext(order_name=order_name)
-        #root.send_email(kw['email_client'], subject, from_addr, body)
+        body = mail_confirmation_body.gettext(**kw)
+        root.send_email(customer_email, subject, from_addr, body)
+
 
     ######################################
     ## Usefull API for order
@@ -226,26 +211,20 @@ class Orders(Folder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')
-    class_views = ['view', 'configure']
+    class_views = ['view']
 
     # Views
     view = OrdersView()
     my_orders = MyOrdersView()
-    configure = Orders_Configure()
-
-    @classmethod
-    def get_metadata_schema(cls):
-        schema = Folder.get_metadata_schema()
-        schema['order_notification_mails'] = Email(multiple=True)
-        return schema
-
 
     def get_document_types(self):
         return [Order]
 
 
-# Register
-register_field('id_client', String(is_indexed=True))
+# Register catalog fields
+register_field('customer_id', String(is_indexed=True))
+
+# Register resources
 register_resource_class(Order)
 register_resource_class(Orders)
 register_resource_class(OrdersProducts)

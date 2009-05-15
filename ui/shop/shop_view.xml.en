@@ -43,6 +43,9 @@
   </h2>
     <ul>
       <li>
+        <a href="./;configure">Configure shop</a>
+      </li>
+      <li>
         <a href="./payments/">Configure payments</a>
       </li>
       <li>

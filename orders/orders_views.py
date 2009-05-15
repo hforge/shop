@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, MultiLinesTokens, String
+from itools.datatypes import Boolean, String
 from itools.gettext import MSG
 from itools.i18n import format_datetime, format_date
 from itools.web import STLView
@@ -24,9 +24,6 @@ from itools.xapian import PhraseQuery
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import MultilineWidget
-from ikaaro.messages import MSG_CHANGES_SAVED
-from ikaaro.resource_views import DBResource_Edit
 from ikaaro.table_views import Table_View
 
 # Import from shop
@@ -108,7 +105,7 @@ class OrderView(STLView):
                      'is_allowed_to_edit': is_allowed_to_edit}
         # Customer informations
         users = root.get_resource('users')
-        customer_id = resource.get_property('id_client')
+        customer_id = resource.get_property('customer_id')
         customer = users.get_resource(customer_id)
         gender = customer.get_property('gender')
         namespace['customer'] = {'gender': Civilite.get_value(gender),
@@ -198,30 +195,5 @@ class MyOrdersView(OrdersView):
 
 
     def get_items(self, resource, context, *args):
-        args = PhraseQuery('id_client', str(context.user.name))
+        args = PhraseQuery('customer_id', str(context.user.name))
         return Folder_BrowseContent.get_items(self, resource, context, args)
-
-
-
-class Orders_Configure(DBResource_Edit):
-
-    access = 'is_admin'
-    title = MSG(u'Configure orders')
-
-    schema = {'order_notification_mails': MultiLinesTokens()}
-
-    widgets = [
-        MultilineWidget('order_notification_mails',
-            title=MSG(u'Notification emails (1 per lige)'),
-            rows=8, cols=50),
-        ]
-
-    submit_value = MSG(u'Edit configuration')
-
-    def action(self, resource, context, form):
-        values = []
-        for value in form['order_notification_mails']:
-            values.append(value.strip())
-        resource.set_property('order_notification_mails', values)
-        context.message = MSG_CHANGES_SAVED
-        return
