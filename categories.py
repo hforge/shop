@@ -106,7 +106,7 @@ class VirtualCategory(Categorie):
             else:
                 virtual_cls = self.virtual_product_class
         if resource is None:
-            raise LookupError
+            return None
         # Return a copy of the resource wrapped into our virtual class
         return virtual_cls(resource.metadata)
 
