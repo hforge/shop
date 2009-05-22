@@ -213,6 +213,7 @@ table.cart td{
 }
 .number a{
   color: white;
+  text-decoration: none;
 }
 
 .number .title{
