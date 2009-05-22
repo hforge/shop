@@ -45,7 +45,7 @@ user_schema = merge_dicts(RegisterForm.schema,
 
 
 user_widgets = [TextWidget('email', title=MSG(u"Email")),
-                SelectRadio('gender', title=MSG(u"Civility")),
+                SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
                 TextWidget('lastname', title=MSG(u"Lastname")),
                 TextWidget('firstname', title=MSG(u"Firstname")),
                 PasswordWidget('password', title=MSG(u"Password")),
