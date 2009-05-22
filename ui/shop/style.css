@@ -198,11 +198,11 @@ table.cart td{
 
 /* Payment process :Barre d'avancement */
 
-#number-table td{
+#progress-number-table td {
   padding-right: 30px;
   padding-bottom: 30px;
 }
-.number{
+.progress-number {
   background: url('/ui/shop/images/payment_number.png') no-repeat;
   height: 24px;
   color: white;
@@ -211,19 +211,19 @@ table.cart td{
   font-family: arial, helvetica, sans-serif ;
   font-size: 18px;
 }
-.number a{
+.progress-number a {
   color: white;
   text-decoration: none;
 }
 
-.number .title{
+.progress-number .title {
   color: gray;
   padding-left: 20px;
   font-size: 16px;
 }
-.number.actif{
+.progress-number.active {
   background: url('/ui/shop/images/payment_number_actif.png') no-repeat;
 }
-.number.actif .title{
+.progress-number.active .title {
   color: #ff7500;
 }

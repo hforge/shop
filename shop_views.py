@@ -96,7 +96,7 @@ class Shop_Progress(STLView):
     def get_namespace(self, resource, context):
         ns = {'progress': {}}
         for i in range(0, 7):
-            css = 'actif' if self.index==i else None
+            css = 'active' if self.index == i else None
             ns['progress'][str(i)] = css
         return ns
 

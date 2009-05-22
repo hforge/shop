@@ -4,29 +4,29 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <table id="number-table">
+  <table id="progress-number-table">
     <tr>
       <td>
-        <div class="number ${progress/1}">
+        <div class="progress-number ${progress/1}">
           <a href=";view_cart">
             1<span class="title">Cart</span>
           </a>
         </div>
       </td>
       <td>
-        <div class="number ${progress/2}">2<span class="title">Identification</span></div>
+        <div class="progress-number ${progress/2}">2<span class="title">Identification</span></div>
       </td>
       <td>
-        <div class="number ${progress/3}">3<span class="title">Addresses</span></div>
+        <div class="progress-number ${progress/3}">3<span class="title">Addresses</span></div>
       </td>
       <td>
-        <div class="number ${progress/4}">4<span class="title">Shipping</span></div>
+        <div class="progress-number ${progress/4}">4<span class="title">Shipping</span></div>
       </td>
       <td>
-        <div class="number ${progress/5}">5<span class="title">Payment</span></div>
+        <div class="progress-number ${progress/5}">5<span class="title">Payment</span></div>
       </td>
       <td>
-        <div class="number ${progress/6}">6<span class="title">Confirmation</span></div>
+        <div class="progress-number ${progress/6}">6<span class="title">Confirmation</span></div>
       </td>
     </tr>
   </table>

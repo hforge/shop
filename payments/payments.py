@@ -111,10 +111,10 @@ class Payments(Folder):
         for key in ['id', 'total_price', 'email', 'mode']:
             if key not in payment:
                 raise ValueError, u'Invalid order'
-        # We check mode is valid and actif
+        # We check mode is valid and active
         payment_module = self.get_resource(payment['mode'])
         # XXX Check if enabled
-        if 1==0:
+        if 1 == 0:
             raise ValueError, u'Invalid payment mode'
         # All is ok: We show the payment form
         return payment_module._show_payment_form(context, payment)
