@@ -17,6 +17,8 @@
 # Import from itools
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
+from itools.uri import Path
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.file import Image
@@ -66,6 +68,37 @@ class PhotoOrderedTable(ChildrenOrderedTable):
     def get_add_bc_root(self, add_type, target_id):
         # return "images" folder
         return self.get_resource('../images')
+
+
+    def get_links(self):
+        # Use the canonical path instead of the abspath
+        base = self.get_canonical_path()
+        handler = self.handler
+        get_value = handler.get_record_value
+        links = []
+
+        for record in handler.get_records_in_order():
+            name = get_value(record, 'name')
+            links.append(str(base.resolve2(name)))
+
+        return links
+
+
+    def change_link(self, old_path, new_path):
+        # Use the canonical path instead of the abspath
+        base = self.get_canonical_path()
+        handler = self.handler
+        get_value = handler.get_record_value
+
+        for record in handler.get_records_in_order():
+            name = get_value(record, 'name')
+            path = base.resolve2(name)
+            if str(path) == old_path:
+                # Hit the old name
+                new_path2 = base.get_pathto(Path(new_path))
+                handler.update_record(record.id, **{'name': str(new_path2)})
+
+        get_context().server.change_resource(self)
 
 
 
