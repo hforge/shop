@@ -38,6 +38,8 @@ from product_views import Product_View, Product_Edit, Product_EditModel
 from schema import product_schema
 from shop.editable import Editable
 from shop.utils import get_shop
+from shop.views import BrowseFormBatchNumeric
+
 
 ###############
 # TODO Future
@@ -385,6 +387,7 @@ class Products(Folder):
     # Views
     view = Products_View()
     browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
+    browse_content_batch = BrowseFormBatchNumeric(access='is_allowed_to_edit')
 
 
     def get_document_types(self):

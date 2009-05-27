@@ -244,3 +244,34 @@ table.cart td{
   border-bottom: 1px solid gray;
   border-right: 1px dashed gray;
 }
+
+/* Batch numerotation */
+.batch-numerotation{
+  padding: 0;
+}
+
+.batch-numerotation ul {
+  list-style-type: none;
+}
+.batch-numerotation li {
+  display: inline;
+}
+
+.batch-numerotation a {
+  width: 7px;
+  height: 7px;
+  color: #000;
+  text-decoration: none;
+  padding: 5px;
+  margin: 2px;
+  border: 1px solid #D3D7CF;
+}
+
+.batch-numerotation a:hover {
+  background-color: #EEEEEC;
+}
+
+.batch-numerotation a.current {
+  background-color: #EEEEEC;
+  font-weight: bold;
+}
