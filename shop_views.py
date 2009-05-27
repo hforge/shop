@@ -669,3 +669,74 @@ class Shop_AddAddressProgress(CompositeForm):
     subviews = [Shop_Progress(index=3),
                 Shop_AddAddress()]
 
+
+##########################################################
+# Comparateur
+##########################################################
+class Shop_BrowseComparator(STLView):
+
+    access = True
+
+    template = '/ui/shop/shop_browse_comparator_view.xml'
+
+
+
+class Shop_ComparatorView(STLView):
+
+    access = True
+
+    template = '/ui/shop/shop_comparator_view.xml'
+
+    query_schema = {'products': String(multiple=True)}
+
+
+    def get_namespace(self, resource, context):
+        # Check resources
+        if len(context.query['products'])>3:
+            return {'error': MSG(u'Too many products to compare')}
+        if len(context.query['products'])<1:
+            return {'error': MSG(u'Please select products to compare')}
+        # Get real product resources
+        products_to_compare = []
+        products_models = []
+        products = resource.get_resource('products')
+        for product in context.query['products']:
+            try:
+                product_resource = products.get_resource(product)
+            except LookupError:
+                product_resource = None
+            if not product_resource:
+                return {'error': MSG(u'Error: product invalid')}
+            products_to_compare.append(product_resource)
+            product_model = product_resource.get_property('product_model')
+            products_models.append(product_model)
+        # Check if products models are the same
+        if len(set(products_models))!=1:
+            return {'error': MSG(u"You can't compare this products.")}
+        # Build comparator namespace
+        namespace = {'error': None,
+                     'products': []}
+        abspath = resource.get_abspath()
+        for product in products_to_compare:
+            # Base products namespace
+            ns = product.get_small_namespace(context)
+            ns['href'] = abspath.get_pathto(product.get_virtual_path())
+            namespace['products'].append(ns)
+        # Comporator model schema
+        model = products_to_compare[0].get_product_model()
+        if model:
+            model_ns = model.get_model_ns(products_to_compare[0])
+            comparator = {}
+            for key in model_ns['specific_dict'].keys():
+                title = model_ns['specific_dict'][key]['title']
+                comparator[key] = {'name': key,
+                                   'title': title,
+                                   'values': []}
+            for product in products_to_compare:
+                model_ns = model.get_model_ns(product)
+                kw = []
+                for key in model_ns['specific_dict'].keys():
+                    value = model_ns['specific_dict'][key]['value']
+                    comparator[key]['values'].append(value)
+            namespace['comparator'] = comparator.values()
+        return namespace

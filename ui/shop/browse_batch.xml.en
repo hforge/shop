@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+<p class="batchcontrol">
+  ${msg}
+  <stl:block stl:if="control">
+    View from ${start} to ${end}
+
+    <ul class="numerotation">
+      <li stl:if="previous">
+        <a href="${previous}">« Previous</a>
+      </li>
+
+      <stl:block stl:if="first">
+        <li stl:if="first"><a href="${first}">1</a></li>
+        <li class="next" stl:if="first">...</li>
+      </stl:block>
+
+      <li stl:repeat="page pages" class="${page/class}">
+        <a href="${page/uri}">${page/number}</a>
+      </li>
+
+      <stl:block stl:if="last">
+        <li class="next">...</li>
+        <li><a href="${last/uri}">${last/number}</a></li>
+      </stl:block>
+
+      <li stl:if="next">
+        <a href="${next}">» Next</a>
+      </li>
+    </ul>
+  </stl:block>
+
+</p>
+
+</stl:block>

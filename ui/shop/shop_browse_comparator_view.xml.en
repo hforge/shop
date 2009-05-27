@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <style>
+   #products .checkbox{
+     background: transparent url(/ui/shop/images/comparator_pointilles.png) repeat-y scroll left top;
+     vertical-align: middle;
+   }
+   #products .product{
+     margin: 5px;
+   }
+   #products .description{
+     padding: 5px;
+   }
+   #products .box{
+     padding: 5px;
+     border: 1px solid gray;
+     width: 500px;
+   }
+   #products .product-title{
+     text-decoration: underline;
+   }
+
+  .numerotation li {
+    background-color: #A4988A;
+    border: 1px solid #000000;
+    color: #000000;
+    display: inline;
+    height: 14px;
+    margin: 2px;
+    padding: 7px;
+    width: 14px;
+  }
+
+  </style>
+
+  <div id="products">
+    <form method="GET" action="./;comparator">
+      <table cellpadding="0" cellspacing="0">
+        <tr>
+          <td>
+            <img src="/ui/shop/images/fleche_bas.png"/>
+          </td>
+          <td>
+            <input id="button-order" type="submit"
+                value="Compare the selected products"/>
+          </td>
+        </tr>
+        <tr class="product">
+          <td class="checkbox">
+            <input id="toto" type="checkbox" name="products"/>
+          </td>
+          <td class="description">
+            <div class="box">
+              <h2 class="product-title">Product XXX</h2>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="checkbox">
+            <input id="toto" type="checkbox" name="products"/>
+          </td>
+          <td class="description">
+            <div class="box">
+              <h2>Product XXX</h2>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+              aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+
+  <ul class="numerotation">
+    <li>« Page précédente</li>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li class="next">...</li>
+    <li>11</li>
+    <li>» Page suivante</li>
+  </ul>
+
+
+</stl:block>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h1>Products comparator</h1>
+
+  <div stl:if="error">
+    ${error}
+  </div>
+
+  <div stl:if="not error">
+    <table id="comparator" cellpadding="0" cellspacing="0">
+        <!-- General informations of products -->
+        <tr>
+          <th></th>
+          <td stl:repeat="product products">
+            <a href="${product/href}">
+              ${product/title}
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td stl:repeat="product products">${product/price} €</td>
+        </tr>
+        <tr>
+          <th></th>
+          <td stl:repeat="product products">
+            <img stl:if="product/cover"
+              title="${product/cover/title}"
+              src="${product/cover/href}/;thumb?width=124&amp;width=124"/>
+          </td>
+        </tr>
+        <!-- Attributs -->
+        <stl:block>
+        <tr stl:repeat="compare comparator">
+          <th>${compare/title}</th>
+          <td stl:repeat="value compare/values">
+            ${value}
+          </td>
+        </tr>
+      </stl:block>
+    </table>
+  </div>
+
+</stl:block>

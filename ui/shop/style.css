@@ -227,3 +227,20 @@ table.cart td{
 .progress-number.active .title {
   color: #ff7500;
 }
+
+/* Comparator */
+
+#comparator th{
+  text-align: left;
+  padding: 5px;
+  color: #FFF;
+  border-bottom: 1px solid black;
+  background-color: #58616E;
+}
+
+#comparator td{
+  text-align: center;
+  padding: 5px;
+  border-bottom: 1px solid gray;
+  border-right: 1px dashed gray;
+}

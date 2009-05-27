@@ -172,6 +172,7 @@ class Product(Editable, DynamicFolder):
         # get namespace
         namespace = {'name': self.name,
                      'href': context.get_link(self),
+                     'price': self.get_price(),
                      'cover': self.get_cover_namespace(context)}
         for key in ['title', 'description']:
             namespace[key] = self.get_property(key)
