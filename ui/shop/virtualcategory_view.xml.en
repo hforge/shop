@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <style>
+   #products .checkbox{
+     background: transparent url(/ui/shop/images/comparator_pointilles.png) repeat-y scroll left top;
+     vertical-align: middle;
+   }
+   #products .product{
+     margin: 5px;
+   }
+   #products .description{
+     padding: 5px;
+   }
+   #products .box{
+     padding: 5px;
+     border: 1px solid gray;
+     width: 500px;
+   }
+   #products .product-title{
+     text-decoration: underline;
+   }
+   .buttoncompare{
+     background-color: #FF8A00;
+     border: 1px solid #006;
+     padding: 5px;
+     color: #FFF;
+   }
+  </style>
+
+  <div id="products">
+    <form method="GET" action="/shop/;comparator">
+      <table cellpadding="0" cellspacing="0">
+        <tr>
+          <td>
+            <img src="/ui/shop/images/fleche_bas.png"/>
+          </td>
+          <td valign="top" class="description">
+            <div style="float:left;">
+              <input class="buttoncompare" type="submit"
+                  value="Compare the selected products"/>
+            </div>
+            <div style="float:right;">
+              Sort by:
+              <select name="sort">
+                <option value="">Growing price</option>
+                <option value="">Descending price</option>
+                <option value="">A-Z</option>
+                <option value="">Z-A</option>
+              </select>
+              <input type="submit" value="Ok"/>
+            </div>
+          </td>
+        </tr>
+        <tr class="product" stl:repeat="product products">
+          <td class="checkbox">
+            <input type="checkbox" name="products" value="${product/name}"/>
+          </td>
+          <td class="description">
+            <div class="box">
+              <h2 class="product-title">${product/title}</h2>
+                ${product/description}<br/>
+                ${product/price} €<br/>
+                <img src="${product/cover/href}/;thumb?width=90&amp;height=90"
+                    stl:if="product/cover"/><br/>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img src="/ui/shop/images/fleche_haut.png"/>
+          </td>
+          <td class="description">
+            <input class="buttoncompare" type="submit"
+                value="Compare the selected products"/>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+
+  ${batch}
+
+</stl:block>

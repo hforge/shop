@@ -24,6 +24,7 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop
 from products import Product
+from categories_views import VirualCategory_View
 
 
 class Categorie(Folder):
@@ -63,6 +64,7 @@ class VirtualCategory(Categorie):
 
     class_id = 'VirtualCategory'
     class_title = MSG(u"Category")
+    class_views = ['view']
 
     # Class to wrap subcategories into
     # Default is ourself
@@ -76,6 +78,8 @@ class VirtualCategory(Categorie):
     wrap_products = True
 
     # Views
+    view = VirualCategory_View()
+
     # XXX Back-office views can't apply
     browse_content = None
     preview_content = None

@@ -673,14 +673,6 @@ class Shop_AddAddressProgress(CompositeForm):
 ##########################################################
 # Comparateur
 ##########################################################
-class Shop_BrowseComparator(STLView):
-
-    access = True
-
-    template = '/ui/shop/shop_browse_comparator_view.xml'
-
-
-
 class Shop_ComparatorView(STLView):
 
     access = True
