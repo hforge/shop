@@ -37,6 +37,8 @@ class BrowseFormBatchNumeric(Folder_BrowseContent):
             nb_pages += 1
         current_page = (batch_start / size) + 1
 
+        namespace['control'] = nb_pages > 1
+
         # Message (singular or plural)
         total = len(items)
         if total == 1:
