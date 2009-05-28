@@ -36,14 +36,14 @@ class OrdersProductsView(Table_View):
 
     def get_item_value(self, resource, context, item, column):
         value = Table_View.get_item_value(self, resource, context, item, column)
-        if column=='ref':
+        if column == 'ref':
             root = context.root
             ref = item.get_value('ref')
             produit = root.get_resource(ref, soft=True)
             if not produit:
                 return item.get_value('title')
             return (produit.name, resource.get_pathto(produit))
-        if column=='unit_price':
+        if column == 'unit_price':
             return u'%s €' % value
         return value
 
@@ -161,20 +161,20 @@ class OrdersView(Folder_BrowseContent):
     batch_msg2 = MSG(u"There are {n} orders.")
 
     def get_item_value(self, resource, context, item, column):
-        value = Folder_BrowseContent.get_item_value(self, resource, context,
-                    item, column)
-        if column=='numero':
-            return (item.name, item.name)
-        if column=='total_price':
-            return '%s € ' % item.get_property(column)
-        if column=='creation_datetime':
-            value = item.get_property(column)
+        item_brain, item_resource = item
+        if column == 'numero':
+            return (item_brain.name, item_brain.name)
+        elif column == 'total_price':
+            return '%s € ' % item_resource.get_property(column)
+        elif column == 'creation_datetime':
+            value = item_resource.get_property(column)
             accept = context.accept_language
             return format_datetime(value, accept=accept)
-        if column=='state':
-            state = item.get_state()
+        elif column == 'state':
+            state = item_resource.get_state()
             return state['title']
-        return value
+        return Folder_BrowseContent.get_item_value(self, resource, context,
+                                                   item, column)
 
 
 

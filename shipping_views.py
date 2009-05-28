@@ -50,19 +50,19 @@ class ShippingsView(Folder_BrowseContent):
 
 
     def get_item_value(self, resource, context, item, column):
-        value = Folder_BrowseContent.get_item_value(self, resource,
-                    context, item, column)
-        if column=='logo':
-            logo = '<img src="%s"/>' % item.get_logo(context)
+        item_brain, item_resource = item
+        if column == 'logo':
+            logo = '<img src="%s"/>' % item_resource.get_logo(context)
             return XMLParser(logo)
-        elif column=='enabled':
-            value = item.get_property(column)
+        elif column == 'enabled':
+            value = item_resource.get_property(column)
             return MSG(u'Yes') if value else MSG(u'No')
-        elif column=='title':
-            return value, item.name
-        elif column=='description':
-            return item.get_property(column)
-        return value
+        elif column == 'title':
+            return value, item_brain.name
+        elif column == 'description':
+            return item_resource.get_property(column)
+        return Folder_BrowseContent.get_item_value(self, resource, context,
+                                                   item, column)
 
 
 class Shipping_View(STLView):

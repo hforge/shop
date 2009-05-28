@@ -256,23 +256,20 @@ class Products_View(Folder_BrowseContent):
 
 
     def get_item_value(self, resource, context, item, column):
+        item_brain, item_resource = item
         if column == 'cover':
-            cover = item.get_cover_namespace(context)
+            cover = item_resource.get_cover_namespace(context)
             if cover:
                 uri = '%s/;thumb?width=48&amp;size=48' % cover['href']
                 return XMLParser('<img src="%s"/>' % uri)
             return u'-'
         elif column == 'title':
-            path = item.get_virtual_path()
+            path = item_resource.get_virtual_path()
             if not path:
-                path = resource.get_pathto(item)
-            else:
-                root = context.root
-                item = root.get_resource(path)
-                path = resource.get_pathto(item)
-            return item.get_property('title'), path
+                path = resource.get_pathto(item_resource)
+            return item_resource.get_property('title'), path
         elif column == 'product_model':
-            product_model = item.get_property('product_model')
+            product_model = item_resource.get_property('product_model')
             return ProductModelsEnumerate.get_value(product_model)
         return Folder_BrowseContent.get_item_value(self, resource, context,
-                  item, column)
+                                                   item, column)
