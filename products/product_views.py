@@ -233,7 +233,7 @@ class Products_View(Folder_BrowseContent):
     title = MSG(u'View')
 
     batch_msg1 = MSG(u"There is 1 product")
-    batch_msg2 = MSG(u"There are ${n} products")
+    batch_msg2 = MSG(u"There are {n} products")
 
     context_menus = []
 

@@ -63,7 +63,7 @@ class ProductModel_ViewBottom(Folder_BrowseContent):
     access = 'is_allowed_to_edit'
 
     batch_msg1 = MSG(u"There is 1 enumerate")
-    batch_msg2 = MSG(u"There are ${n} enumerates.")
+    batch_msg2 = MSG(u"There are {n} enumerates.")
 
     table_columns = [
         ('checkbox', None),
