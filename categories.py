@@ -165,7 +165,10 @@ class VirtualCategories(Folder):
 
     def _get_resource(self, name):
         site_root = self.get_site_root()
-        category = site_root.get_resource('shop/categories/%s' % name)
+        category = site_root.get_resource('shop/categories/%s' % name,
+                                          soft=True)
+        if category is None:
+            return None
         metadata = category.metadata
         # Build another instance with the same properties
         return self.virtual_category_class(metadata)
