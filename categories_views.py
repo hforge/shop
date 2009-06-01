@@ -42,9 +42,12 @@ class VirualCategory_View(BrowseFormBatchNumeric):
         # Build namespace
         namespace = {'batch': batch,
                      'products': []}
+        product_models = []
         for item in items:
             ns = item.get_small_namespace(context)
+            product_models.append(item.get_property('product_model'))
             namespace['products'].append(ns)
+        namespace['can_compare'] = len(set(product_models)) == 1
         return namespace
 
 

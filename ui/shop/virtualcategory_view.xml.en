@@ -33,8 +33,18 @@
 
   <div id="products">
     <form method="GET" action="/shop/;comparator">
+    <div style="float:right;">
+      Sort by:
+      <select name="sort">
+        <option value="">Growing price</option>
+        <option value="">Descending price</option>
+        <option value="">A-Z</option>
+        <option value="">Z-A</option>
+      </select>
+      <input type="submit" value="Ok"/>
+    </div>
       <table cellpadding="0" cellspacing="0">
-        <tr>
+        <tr stl:if="can_compare">
           <td>
             <img src="/ui/shop/images/fleche_bas.png"/>
           </td>
@@ -43,20 +53,10 @@
               <input class="buttoncompare" type="submit"
                   value="Compare the selected products"/>
             </div>
-            <div style="float:right;">
-              Sort by:
-              <select name="sort">
-                <option value="">Growing price</option>
-                <option value="">Descending price</option>
-                <option value="">A-Z</option>
-                <option value="">Z-A</option>
-              </select>
-              <input type="submit" value="Ok"/>
-            </div>
           </td>
         </tr>
         <tr class="product" stl:repeat="product products">
-          <td class="checkbox">
+          <td class="checkbox" stl:if="can_compare">
             <input type="checkbox" name="products" value="${product/name}"/>
           </td>
           <td class="description">
@@ -69,7 +69,7 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <tr stl:if="can_compare">
           <td>
             <img src="/ui/shop/images/fleche_haut.png"/>
           </td>
