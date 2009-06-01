@@ -229,13 +229,24 @@ table.cart td{
 }
 
 /* Comparator */
+#comparator{
+  width: 100%;
+}
+
+#comparator #title{
+  text-align: left;
+  padding: 5px;
+  color: #FFF;
+  border-bottom: 1px solid black;
+  background-color: #FF7500;
+}
 
 #comparator th{
   text-align: left;
   padding: 5px;
   color: #FFF;
   border-bottom: 1px solid black;
-  background-color: #58616E;
+  background-color: #808080;
 }
 
 #comparator td{

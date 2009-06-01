@@ -24,7 +24,9 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop
 from products import Product
-from categories_views import VirualCategory_View, VirualCategory_BoxSubCategories
+from categories_views import VirualCategory_View
+from categories_views import VirualCategory_BoxSubCategories
+from categories_views import VirualCategory_Comparator
 
 
 class Categorie(Folder):
@@ -80,6 +82,7 @@ class VirtualCategory(Categorie):
     # Views
     view = VirualCategory_View()
     view2 = VirualCategory_BoxSubCategories()
+    comparator = VirualCategory_Comparator()
 
     # XXX Back-office views can't apply
     browse_content = None

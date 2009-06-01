@@ -18,6 +18,8 @@
 from operator import itemgetter
 
 # Import from itools
+from itools.datatypes import String
+from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import STLView
 from itools.xapian import PhraseQuery, AndQuery
@@ -26,6 +28,7 @@ from itools.xapian import PhraseQuery, AndQuery
 from ikaaro.utils import get_base_path_query
 
 # Import from shop
+from utils import get_shop
 from views import BrowseFormBatchNumeric
 
 
@@ -103,3 +106,71 @@ class VirualCategory_View(BrowseFormBatchNumeric):
             PhraseQuery('format', 'product'),
             PhraseQuery('categories', resource.get_unique_id())]
         return context.root.search(AndQuery(*query))
+
+
+##########################################################
+# Comparateur
+##########################################################
+class VirualCategory_Comparator(STLView):
+
+    access = True
+
+    template = '/ui/shop/virtualcategory_comparator.xml'
+
+    query_schema = {'products': String(multiple=True)}
+
+
+    def get_namespace(self, resource, context):
+        namespace = {'category': resource.get_title()}
+        shop = get_shop(resource)
+        # Check resources
+        if len(context.query['products'])>3:
+            return {'error': MSG(u'Too many products to compare')}
+        if len(context.query['products'])<1:
+            return {'error': MSG(u'Please select products to compare')}
+        # Get real product resources
+        products_to_compare = []
+        products_models = []
+        products = shop.get_resource('products')
+        for product in context.query['products']:
+            try:
+                product_resource = products.get_resource(product)
+            except LookupError:
+                product_resource = None
+            if not product_resource:
+                return {'error': MSG(u'Error: product invalid')}
+            products_to_compare.append(product_resource)
+            product_model = product_resource.get_property('product_model')
+            products_models.append(product_model)
+        # Check if products models are the same
+        if len(set(products_models))!=1:
+            return {'error': MSG(u"You can't compare this products.")}
+        # Build comparator namespace
+        namespace['error'] = None
+        namespace['products'] = []
+        namespace['nb_products'] = len(products_to_compare)
+        namespace['nb_products_plus_1'] = len(products_to_compare) +1
+        abspath = shop.get_abspath()
+        for product in products_to_compare:
+            # Base products namespace
+            ns = product.get_small_namespace(context)
+            ns['href'] = abspath.get_pathto(product.get_virtual_path())
+            namespace['products'].append(ns)
+        # Comporator model schema
+        model = products_to_compare[0].get_product_model()
+        if model:
+            model_ns = model.get_model_ns(products_to_compare[0])
+            comparator = {}
+            for key in model_ns['specific_dict'].keys():
+                title = model_ns['specific_dict'][key]['title']
+                comparator[key] = {'name': key,
+                                   'title': title,
+                                   'values': []}
+            for product in products_to_compare:
+                model_ns = model.get_model_ns(product)
+                kw = []
+                for key in model_ns['specific_dict'].keys():
+                    value = model_ns['specific_dict'][key]['value']
+                    comparator[key]['values'].append(value)
+            namespace['comparator'] = comparator.values()
+        return namespace

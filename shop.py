@@ -34,7 +34,6 @@ from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_Addresses, Shop_ChooseAddress, Shop_End
-from shop_views import Shop_ComparatorView
 
 
 class Shop(Folder):
@@ -57,9 +56,6 @@ class Shop(Folder):
     # Administrator shop views
     view = Shop_View()
     configure = Shop_Configure()
-
-    # Comparator
-    comparator = Shop_ComparatorView()
 
     #------------------------------
     # 6 Steps for payment process

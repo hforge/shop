@@ -32,7 +32,7 @@
   </style>
 
   <div id="products">
-    <form method="GET" action="/shop/;comparator">
+    <form method="GET" action="./;comparator">
     <div style="float:right;">
       Sort by:
       <select name="sort">
