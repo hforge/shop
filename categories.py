@@ -81,7 +81,7 @@ class VirtualCategory(Categorie):
 
     # Views
     view = VirualCategory_View()
-    view2 = VirualCategory_BoxSubCategories()
+    view2 = VirualCategory_BoxSubCategories() # XXX to remove
     comparator = VirualCategory_Comparator()
 
     # XXX Back-office views can't apply

@@ -35,7 +35,7 @@ from views import BrowseFormBatchNumeric
 class VirualCategory_BoxSubCategories(STLView):
 
     access = True
-    template = '/ui/shop/virtualcategorie_boxsubcategories.xml'
+    template = '/ui/shop/virtualcategory_boxsubcategories.xml'
 
 
     def get_namespace(self, resource, context):
