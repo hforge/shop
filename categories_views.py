@@ -14,12 +14,59 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from operator import itemgetter
+
 # Import from itools
 from itools.stl import stl
+from itools.web import STLView
 from itools.xapian import PhraseQuery, AndQuery
+
+# Import from ikaaro
+from ikaaro.utils import get_base_path_query
 
 # Import from shop
 from views import BrowseFormBatchNumeric
+
+
+class VirualCategory_BoxSubCategories(STLView):
+
+    access = True
+    template = '/ui/shop/virtualcategorie_boxsubcategories.xml'
+
+
+    def get_namespace(self, resource, context):
+        root = context.root
+        site_root = context.resource.get_site_root()
+
+        # get the category
+        namespace = {'title': resource.get_title(),
+                     'description': resource.get_property('description'),
+                     'sub_categories': []}
+
+        # Get sub categories
+        abspath = site_root.get_canonical_path()
+        base_query = [
+            get_base_path_query(str(abspath)),
+            PhraseQuery('format', 'product')]
+        for subcat in resource.search_resources(format='categorie'):
+            subcat_path = '%s/%s' % (resource.name, subcat.name)
+            query = base_query + [PhraseQuery('categories', subcat_path)]
+            query = AndQuery(*query)
+            # Search inside the site_root
+            results = root.search(query)
+            nb_items = results.get_n_documents()
+            if nb_items:
+                namespace['sub_categories'].append(
+                            {'title': subcat.get_title(),
+                             'uri': context.get_link(subcat),
+                             'nb_items': nb_items})
+
+        # Sort by title
+        namespace['sub_categories'].sort(key=itemgetter('title'))
+
+        return namespace
+
 
 
 class VirualCategory_View(BrowseFormBatchNumeric):

@@ -61,7 +61,11 @@
           </td>
           <td class="description">
             <div class="box">
-              <h2 class="product-title">${product/title}</h2>
+              <h2 class="product-title">
+                <a href="${product/name}">
+                ${product/title}
+                </a>
+              </h2>
                 ${product/description}<br/>
                 ${product/price} €<br/>
                 <img src="${product/cover/href}/;thumb?width=90&amp;height=90"
