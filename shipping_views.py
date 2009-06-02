@@ -58,7 +58,7 @@ class ShippingsView(Folder_BrowseContent):
             value = item_resource.get_property(column)
             return MSG(u'Yes') if value else MSG(u'No')
         elif column == 'title':
-            return value, item_brain.name
+            return item_resource.get_title(), item_brain.name
         elif column == 'description':
             return item_resource.get_property(column)
         return Folder_BrowseContent.get_item_value(self, resource, context,
