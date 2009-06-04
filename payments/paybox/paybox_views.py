@@ -44,7 +44,7 @@ class Paybox_ViewPayment(STLView):
 
     access = 'is_admin'
 
-    template = '/ui/shop/paybox/view_payment.xml'
+    template = '/ui/shop/payments/paybox/view_payment.xml'
 
     query_schema = {'id': Integer}
 
@@ -234,7 +234,7 @@ class Paybox_ConfirmPayment(BaseForm):
         response = context.response
         response.set_header('Content-Type', 'text/plain')
         # XXX confirm_payment
-        resource.parent.update_payment_state(form)
+        resource.parent.update_payment_state(form, context)
 
 
 

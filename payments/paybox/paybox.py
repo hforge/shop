@@ -128,10 +128,11 @@ class Paybox(PaymentWay):
         PayboxTable._make_resource(PayboxTable, folder, '%s/payments' % name)
 
 
-    def get_namespace_payments(self):
-        namespace = {}
-        for record in self.get_resource('payments').handler.get_records():
-            kw = payment_way.get_record_namespace(context, record)
+    def get_namespace_payments(self, context):
+        namespace = []
+        payments = self.get_resource('payments')
+        for record in payments.handler.get_records():
+            kw = payments.get_record_namespace(context, record)
             kw['payment_mode'] = self.get_title()
             namespace.append(kw)
         return namespace

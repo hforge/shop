@@ -54,6 +54,7 @@ class Payments_History_View(BrowseForm):
 
     table_columns = [
         ('complete_id', MSG(u'Id')),
+        ('ref', MSG(u'Ref')),
         ('ts', MSG(u'Date')),
         ('payment_mode', MSG(u'Payment mode')),
         ('success', MSG(u'Success')),
@@ -64,9 +65,7 @@ class Payments_History_View(BrowseForm):
         """ Here we concatanate payments off all payment's mode """
         items = []
         for payment_way in resource.search_resources(cls=PaymentWay):
-            ns = payment_way.get_namespace_payments()
-            if ns:
-                items.append(ns)
+            items += payment_way.get_namespace_payments(context)
         return items
 
 
@@ -111,8 +110,8 @@ class Payments_List_View(BrowseForm):
             kw = {'name': (name, name),
                   'title': (payment_way.get_title(), name),
                   'description': payment_way.get_property('description'),
-                  'logo1': XMLParser(logo1),
-                  'logo2': XMLParser(logo2),
+                  'logo1': None, #XMLParser(logo1),
+                  'logo2': None, #XMLParser(logo2),
                   'enabled': enabled}
             items.append(kw)
         return items

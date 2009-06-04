@@ -22,11 +22,14 @@ from itools.gettext import MSG
 from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
 
-# Import from package
+# Import from payments
 from payments_views import Payments_View, Payments_Configure
 from payments_views import Payments_History_View
 from paybox import Paybox
 
+# Import from shop
+from payment_way import PaymentWay
+from shop.utils import get_shop
 
 
 class Payments(Folder):
@@ -66,6 +69,30 @@ class Payments(Folder):
         return schema
 
 
+    def get_payments_records(self, ref=None):
+        records = []
+        for payment_way in self.search_resources(cls=PaymentWay):
+            payments = payment_way.get_resource('payments')
+            if ref is None:
+                payments_records = (payment_way, payments.handler.get_records())
+            else:
+                payments_records = (payment_way, payments.handler.search(ref=ref))
+            records.append(payments_records)
+        return records
+
+
+    def get_payments_namespace(self, context, ref=None):
+        payments = []
+        for payment_way, records in self.get_payments_records(ref):
+            table = payment_way.get_resource('payments')
+            img = context.get_link(payment_way.get_resource('logo1.png'))
+            for record in records:
+                ns = table.get_record_namespace(context, record)
+                ns['title'] = payment_way.get_title()
+                ns['img']= img
+                payments.append(ns)
+        return payments
+
     ######################
     # Confirmation
     ######################
@@ -86,16 +113,22 @@ class Payments(Folder):
         pass
 
 
-    def update_payment_state(self, id_payment):
+    def update_payment_state(self, form, context):
+        # Send payment confirmation
         self.send_confirmation_mail()
+        # Update order state
+        shop = get_shop()
+        order = shop.get_resource('orders/%s' % form['ref'])
+        order.generate_pdf_bill(context)
 
-
-    def is_in_test_mode(self):
-        return not self.get_property('enabled')
 
     ######################
     # Public API
     ######################
+
+    def is_in_test_mode(self):
+        return not self.get_property('enabled')
+
 
     def show_payment_form(self, context, payment):
         """

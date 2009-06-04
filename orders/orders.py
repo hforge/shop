@@ -18,12 +18,16 @@
 from datetime import datetime
 
 # Import from itools
+from itools.core import freeze, get_abspath
 from itools.csv import Table as BaseTable
 from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
 from itools.datatypes import Email
+from itools.i18n import format_date
 from itools.gettext import MSG
+from itools.pdf import stl_pmltopdf
 
 # Import from ikaaro
+from ikaaro.file import PDF
 from ikaaro.folder import Folder
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class, register_field
@@ -33,7 +37,7 @@ from ikaaro.workflow import WorkflowAware
 # Import from project
 from shop.addresses import Addresses, BaseAddresses
 from shop.utils import get_shop
-from orders_views import OrderView, OrderFacture
+from orders_views import OrderView
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from workflow import order_workflow
 
@@ -125,7 +129,6 @@ class Order(WorkflowAware, Folder):
 
     # Views
     view = OrderView()
-    facture = OrderFacture()
 
     @classmethod
     def get_metadata_schema(cls):
@@ -204,6 +207,28 @@ class Order(WorkflowAware, Folder):
         subject = mail_confirmation_title.gettext()
         body = mail_confirmation_body.gettext(**kw)
         root.send_email(customer_email, subject, from_addr, body)
+
+
+
+
+    def generate_pdf_bill(self, context):
+        accept = context.accept_language
+        creation_date = self.get_property('creation_datetime')
+        creation_date = format_date(creation_date, accept=accept)
+        namespace =  {'num_cmd': self.name,
+                      'facturation': None,
+                      'livraison': None,
+                      'products': self.get_resource('products').get_namespace(context),
+                      'frais_de_port': 0,
+                      'total_price': self.get_property('total_price'),
+                      'creation_date': creation_date}
+
+        document = self.get_resource('/ui/shop/orders/order_facture.xml')
+        pdf = stl_pmltopdf(document, namespace=namespace)
+        metadata =  {'title': {'en': u'Bill'}}
+        PDF._make_resource(PDF, self.handler, 'bill.pdf',
+                           body=pdf, **metadata)
+
 
 
 

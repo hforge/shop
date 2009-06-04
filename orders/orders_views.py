@@ -86,54 +86,22 @@ class OrderView(STLView):
         # Products
         products = resource.get_resource('products')
         namespace['products'] = products.get_namespace(context)
-        # Payments XXX
-        payment_mode = resource.get_property('payment_mode')
+        # Payments
         payments = shop.get_resource('payments')
-        ns_payment_mode = {}
-        namespace['payments'] = []
-        namespace['payment_mode'] = []
-        namespace['frais_de_port'] = 0
-        namespace['total_price'] = 0
-        # Acl
-        ac = resource.get_access_control()
-        is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
-        namespace['is_allowed_to_edit'] = is_allowed_to_edit
+        namespace['payments'] = payments.get_payments_namespace(context,
+                                    resource.name)
         # Shipping XXX
         shipping = resource.get_property('shipping')
         shippings = shop.get_resource('shippings')
         namespace['shipping'] = {}
+        # Acl
+        ac = resource.get_access_control()
+        is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
+        namespace['is_allowed_to_edit'] = is_allowed_to_edit
+        # OLD XXX
+        namespace['frais_de_port'] = 0
+        namespace['total_price'] = 0
         return namespace
-
-
-class OrderFacture(STLView):
-
-    access = 'is_admin'
-
-    title = MSG(u'Facture')
-
-    template = '/ui/shop/orders/order_facture.xml'
-
-
-    def get_namespace(self, resource, context, query=None):
-        # Return a blank page
-        response = context.response
-        response.set_header('Content-Type', 'text/html')
-        #
-        accept = context.accept_language
-        # Build namespace
-        creation_date = resource.get_property('creation_datetime')
-        creation_date = format_date(creation_date, accept=accept)
-        # Total price
-        total_price = resource.get_property('total_price')
-        # return namespace
-        return {'num_cmd': resource.name,
-                'facturation': None,
-                'livraison': None,
-                'products': resource.get_order_products_namespace(context),
-                'frais_de_port': 0,
-                'total_price': total_price,
-                'creation_date': creation_date}
-
 
 
 class OrdersView(Folder_BrowseContent):

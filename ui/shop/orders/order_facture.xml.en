@@ -61,7 +61,7 @@
           ${product/title}
         </td>
         <td>
-          ${product/unit_price}&nbsp;€
+          ${product/price}&nbsp;€
         </td>
       </tr>
       <tr>

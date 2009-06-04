@@ -11,19 +11,13 @@
       </a><br/>
       Your order has been recorded the ${creation_datetime}.<br/>
       In this section you will find all informations concerning your order.<br/>
-      <a onclick="return popup('./;facture', 880, 800);" href="#">
+      <a href="./bill.pdf/;download" target="blank">
         <img src="/ui/icons/16x16/pdf.png"/> Download bill
       </a>
     </p>
 
     <h2>Order state</h2>
-
-      <p stl:if="not payments">
-        Payment: No payment done.
-      </p>
-    <!--
     <a href=";edit_state" stl:if="is_allowed_to_edit">${state}</a>  <span stl:if="not is_allowed_to_edit">${state}</span>
-    -->
 
     <h2>Delivery and bill addresses</h2>
 
@@ -104,50 +98,24 @@
 
   <h2>Payment informations</h2>
 
-    <!-- Payment Mode -->
-
-    <table cellpadding="0" id="cart" cellspacing="0" stl:if="payment_mode">
+    <table cellpadding="0" id="cart" cellspacing="0">
       <tr>
         <th colspan="2">Payment mode</th>
+        <th>Datetime</th>
+        <th></th>
+        <th>Amount</th>
+        <th>Payment state</th>
       </tr>
-      <tr>
+      <tr stl:repeat="payment payments">
         <td>
-          <img src="${payment_mode/logo}" title="${payment_mode/title}"/>
+          <img src="${payment/img}/;download"/>
         </td>
-        <td>
-          ${payment_mode/title}
-        </td>
+        <td>${payment/title}</td>
+        <td>${payment/ts}</td>
+        <td>${payment/success}</td>
+        <td>${payment/amount}</td>
+        <td>${payment/status}</td>
       </tr>
     </table>
-
-    <!-- Payment history -->
-
-    <p stl:if="payments">
-      <table cellpadding="0" id="cart" cellspacing="0">
-        <tr>
-          <th>Date et Heure</th>
-          <th>Paiement validé/refusé ?</th>
-          <th>Montant</th>
-          <th stl:if="is_allowed_to_edit">Numéro de transaction paiement</th>
-          <th stl:if="is_allowed_to_edit">Numéro d'autorisation</th>
-          <th>Status du paiement (Fournie par la banque)</th>
-        </tr>
-        <tr stl:repeat="payment payments">
-          <td>${payment/ts}</td>
-          <td>
-            <stl:block stl:if="payment/payment_ok">
-              Validé
-            </stl:block>
-            <stl:block stl:if="not payment/payment_ok">
-              Refusé
-            </stl:block>
-          </td>
-          <td>${payment/amount} €</td>
-          <td stl:if="is_allowed_to_edit">${payment/transaction}</td>
-          <td stl:if="is_allowed_to_edit">${payment/autorisation}</td>
-          <td>${payment/status}</td>
-        </tr>
-      </table>
-    </p>
 
 </stl:block>
