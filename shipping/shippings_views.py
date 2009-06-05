@@ -63,38 +63,3 @@ class ShippingsView(Folder_BrowseContent):
             return item_resource.get_property(column)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
-
-
-class Shipping_View(STLView):
-
-    access = 'is_admin'
-    title = MSG(u'Shipping')
-
-    template = '/ui/shop/shipping/view.xml'
-
-    def get_namespace(self, resource, context):
-        return resource.get_namespace(context)
-
-
-class Shipping_Configure(AutoForm):
-
-    access = 'is_allowed_to_edit'
-    title = MSG(u'Edit')
-
-    schema = delivery_schema
-
-    widgets = [
-        TextWidget('title', title=MSG(u'Title')),
-        MultilineWidget('description', title=MSG(u'Description')),
-        BooleanCheckBox('enabled', title=MSG(u'Enabled ?')),
-        ]
-
-
-    def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name)
-
-
-    def action(self, resource, context, form):
-        for key in self.schema.keys():
-            resource.set_property(key, form[key])
-        return context.come_back(messages.MSG_CHANGES_SAVED)

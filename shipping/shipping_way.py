@@ -33,9 +33,11 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
-from countries import CountriesEnumerate
+from shop.countries import CountriesEnumerate
+
+# Import from shipping
 from schema import delivery_schema
-from shipping_views import ShippingsView, Shipping_View, Shipping_Configure
+from shipping_views import Shipping_View, Shipping_Configure
 
 
 class ShippingPricesCSV(CSVFile):
@@ -73,17 +75,19 @@ class ShippingPrices(Table):
 
 
 
-class Shipping(Folder):
+class ShippingWay(Folder):
 
     class_id = 'shipping'
     class_title = MSG(u'Shipping')
-    class_views = ['view', 'configure', 'prices']
+    class_views = ['view', 'configure', 'history', 'prices']
 
     img = 'ui/shop/images/shipping.png'
 
     # Views
     view = Shipping_View()
     configure = Shipping_Configure()
+    history = GoToSpecificDocument(specific_document='history',
+                                  title=MSG(u'History'))
     prices = GoToSpecificDocument(specific_document='prices',
                                   title=MSG(u'Prices'))
 
@@ -160,7 +164,7 @@ class Shipping(Folder):
 
     def get_widget_namespace(self, context, country, price, weight):
         price = self.get_price(country, price, weight)
-        if not price:
+        if price is None:
             return None
         ns = {'name': self.name,
               'price': price}
@@ -179,53 +183,5 @@ class Shipping(Folder):
         return None
 
 
-
-class Shippings(Folder):
-
-    class_id = 'shippings'
-    class_title = MSG(u'Shipping')
-    class_views = ['view', 'new_resource?type=shipping']
-
-
-    # Views
-    view = ShippingsView()
-
-
-    @staticmethod
-    def _make_resource(cls, folder, name, *args, **kw):
-        Folder._make_resource(cls, folder, name, *args, **kw)
-        # XXX
-        from shipping_modes import Collisimo, ShippShop
-        # Init with some shippings mode
-        for c in [Collisimo, ShippShop]:
-            c._make_resource(c, folder, '%s/%s' % (name, c.class_id))
-
-
-
-    def get_document_types(self):
-        return [Shipping]
-
-
-    def get_namespace_shipping_ways(self, context, country, price, weight):
-        namespace = []
-        for mode in self.search_resources(cls=Shipping):
-            if not mode.get_property('enabled'):
-                continue
-            widget = mode.get_widget_namespace(context, country, price, weight)
-            if widget:
-                namespace.append(widget)
-        # No price corresponding to options,
-        # we should set a default price.
-        return namespace
-
-
-    def get_namespace_shipping_way(self, context, name, country, price, weight):
-        shipping = self.get_resource(name)
-        if not shipping.get_property('enabled'):
-            return None
-        return shipping.get_widget_namespace(context, country, price, weight)
-
-
-register_resource_class(Shippings)
-register_resource_class(Shipping)
+register_resource_class(ShippingWay)
 register_resource_class(ShippingPrices)

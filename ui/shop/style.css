@@ -286,3 +286,29 @@ table.cart td{
   background-color: #EEEEEC;
   font-weight: bold;
 }
+
+/* Tableaux */
+#browse-list{
+  width: 100%;
+  border: 1px solid #DFD5C3;
+  border-collapse:collapse;
+  padding: 0;
+}
+
+#browse-list thead th{
+  background: #A774A8;
+  padding: 4px 6px;
+}
+
+#browse-list tr td {
+  border-bottom: 1px solid #F0EADA;
+  color: #000;
+  font-size:0.9em;
+  height:23px;
+  padding: 4px;
+}
+
+/* Order */
+.wf-order-open{
+  color: green;
+}

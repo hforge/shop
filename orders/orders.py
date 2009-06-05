@@ -34,12 +34,15 @@ from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
 from ikaaro.workflow import WorkflowAware
 
-# Import from project
+# Import from shop
 from shop.addresses import Addresses, BaseAddresses
 from shop.utils import get_shop
-from orders_views import OrderView
+
+# Import from shop.orders
+from orders_views import OrderView, Order_Delivery
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from workflow import order_workflow
+
 
 
 
@@ -121,7 +124,7 @@ class Order(WorkflowAware, Folder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
-    class_views = ['view', 'edit_state']
+    class_views = ['view', 'delivery', 'edit_state']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses', 'products']
 
@@ -129,6 +132,7 @@ class Order(WorkflowAware, Folder):
 
     # Views
     view = OrderView()
+    delivery = Order_Delivery()
 
     @classmethod
     def get_metadata_schema(cls):

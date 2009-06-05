@@ -19,11 +19,14 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String
 from itools.gettext import MSG
 from itools.i18n import format_datetime, format_date
-from itools.web import STLView
+from itools.stl import stl
 from itools.xapian import PhraseQuery
+from itools.xml import XMLParser
+from itools.web import STLView
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
+from ikaaro.forms import stl_namespaces
 from ikaaro.table_views import Table_View
 
 # Import from shop
@@ -90,10 +93,11 @@ class OrderView(STLView):
         payments = shop.get_resource('payments')
         namespace['payments'] = payments.get_payments_namespace(context,
                                     resource.name)
-        # Shipping XXX
-        shipping = resource.get_property('shipping')
+        # Shipping
+        shipping = resource.get_property('shipping') # XXX
         shippings = shop.get_resource('shippings')
-        namespace['shipping'] = {}
+        namespace['shippings'] = shippings.get_shippings_namespace(context,
+                                    resource.name)
         # Acl
         ac = resource.get_access_control()
         is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
@@ -116,9 +120,11 @@ class OrdersView(Folder_BrowseContent):
     table_columns = [
         ('checkbox', None),
         ('numero', MSG(u'Order id')),
+        ('customer', MSG(u'Customer')),
         ('state', MSG(u'State')),
         ('total_price', MSG(u'Total price')),
-        ('creation_datetime', MSG(u'Date and Time'))]
+        ('creation_datetime', MSG(u'Date and Time')),
+        ('actions', MSG(u'Actions'))]
 
     query_schema = merge_dicts(Folder_BrowseContent.query_schema,
                                sort_by=String(),
@@ -128,10 +134,24 @@ class OrdersView(Folder_BrowseContent):
     batch_msg1 = MSG(u"There's one order.")
     batch_msg2 = MSG(u"There are {n} orders.")
 
+    actions_html = list(XMLParser("""
+        <a href="${order_name}/${action/link}"
+            stl:repeat="action actions">
+          <img src="${action/img}"/>
+        </a>
+        """,
+        stl_namespaces))
+
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
         if column == 'numero':
             return (item_brain.name, item_brain.name)
+        elif column == 'customer':
+            users = context.root.get_resource('users')
+            customer_id = item_resource.get_property('customer_id')
+            customer = users.get_resource(customer_id)
+            gender = Civilite.get_value(customer.get_property('gender'))
+            return '%s %s' % (gender.gettext(), customer.get_title())
         elif column == 'total_price':
             return '%s € ' % item_resource.get_property(column)
         elif column == 'creation_datetime':
@@ -140,11 +160,25 @@ class OrdersView(Folder_BrowseContent):
             return format_datetime(value, accept=accept)
         elif column == 'state':
             state = item_resource.get_state()
-            return state['title']
+            state = '<strong class="wf-order-%s">%s</strong>' % (
+                        item_resource.get_statename(),
+                        state['title'].gettext())
+            return XMLParser(state.encode('utf-8'))
+        elif column == 'actions':
+            actions = [{'link': ';view', 'img': '/ui/icons/16x16/view.png'},
+                       {'link': ';edit', 'img': '/ui/icons/16x16/edit.png'}]
+            namespace = {'order_name': item_brain.name,
+                         'actions': actions}
+            print actions
+            return stl(events=self.actions_html, namespace=namespace)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
 
 
+class Order_Delivery(STLView):
+
+    access = 'is_admin'
+    title = MSG(u'Manage delivery')
 
 
 class MyOrdersView(OrdersView):

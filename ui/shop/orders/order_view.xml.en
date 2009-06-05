@@ -73,32 +73,29 @@
   </table>
 
 
-  <!-- Shipping informations -->
   <h2>Shipping informations</h2>
 
-    <table cellpadding="0" id="cart" cellspacing="0" stl:if="shipping">
+    <table cellpadding="0" id="cart" cellspacing="0" stl:if="shippings">
       <tr>
-        <th colspan="4">Shipping informations</th>
+        <th colspan="2">Shipping informations</th>
+        <th>Description</th>
+        <th>State</th>
+        <th>Informations</th>
       </tr>
-      <tr>
+      <tr stl:repeat="shipping shippings">
         <td>
-          <img src="${shipping/img}" title="${shipping/title}"/>
+          <img src="${shipping/img}/;download" title="${shipping/title}"/>
         </td>
-        <td>
-          ${shipping/title}
-        </td>
-        <td>
-          ${shipping/description}
-        </td>
-        <td>
-          Shipping option ${shipping_option}
-        </td>
+        <td>${shipping/title}</td>
+        <td>${shipping/description}</td>
+        <td>${shipping/state}</td>
+        <td>${shipping/html}</td>
       </tr>
     </table>
 
   <h2>Payment informations</h2>
 
-    <table cellpadding="0" id="cart" cellspacing="0">
+    <table cellpadding="0" id="cart" cellspacing="0" stl:if="payments">
       <tr>
         <th colspan="2">Payment mode</th>
         <th>Datetime</th>
@@ -108,7 +105,7 @@
       </tr>
       <tr stl:repeat="payment payments">
         <td>
-          <img src="${payment/img}/;download"/>
+          <img src="${payment/img}/;download" title="${payment/title}"/>
         </td>
         <td>${payment/title}</td>
         <td>${payment/ts}</td>

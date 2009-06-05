@@ -41,7 +41,7 @@ class Shop(Folder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20090430'
+    class_version = '20090605'
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
@@ -151,6 +151,19 @@ class Shop(Folder):
         if self.get_resource('countries') is None:
             Countries._make_resource(Countries, self.handler, 'countries',
                                      **{'title': {'en': u'countries'}})
+
+
+    def update_20090604(self):
+        self.del_resource('shippings')
+        self.del_resource('orders')
+
+
+    def update_20090605(self):
+        Shippings._make_resource(Shippings, self.handler, 'shippings',
+                                  **{'title': {'en': u'Shippings'}})
+
+        Orders._make_resource(Orders, self.handler, 'orders',
+                                  **{'title': {'en': u'Orders'}})
 
 
 register_resource_class(Shop)

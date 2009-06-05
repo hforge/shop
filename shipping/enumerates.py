@@ -14,10 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from itools
-from itools.datatypes import Boolean, Unicode
+
+# Import from itools
+from itools.datatypes import Enumerate
+from itools.gettext import MSG
 
 
-delivery_schema = {'title': Unicode,
-                   'description': Unicode,
-                   'enabled': Boolean}
+
+class ShippingStates(Enumerate):
+
+    default = 'wait'
+
+    options = [{'name': 'wait', 'value': MSG(u'Wait')},
+               {'name': 'ok', 'value': MSG(u'ok')}]
