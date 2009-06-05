@@ -312,3 +312,28 @@ table.cart td{
 .wf-order-open{
   color: green;
 }
+
+/* Comparator */
+#products .checkbox{
+ background: transparent url(/ui/shop/images/comparator_pointilles.png) repeat-y scroll left top;
+ vertical-align: middle;
+}
+#products .product{
+ margin: 5px;
+}
+#products .description{
+ padding: 5px;
+}
+#products .box{
+ padding: 5px;
+ border: 1px solid gray;
+ width: 500px;
+}
+#products .product-title{
+ text-decoration: underline;
+}
+.buttoncompare{
+ border: 1px solid #006;
+ padding: 5px;
+ color: #FFF;
+}
