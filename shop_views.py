@@ -45,6 +45,7 @@ from countries import CountriesEnumerate
 from datatypes import Civilite
 from orders import Order
 from payments import PaymentWaysEnumerate
+from shop_utils_views import Shop_Progress
 
 
 class Shop_View(STLView):
@@ -84,21 +85,6 @@ class Shop_Configure(DBResource_Edit):
         resource.set_property('order_notification_mails', values)
         context.message = MSG_CHANGES_SAVED
         return
-
-
-class Shop_Progress(STLView):
-    """ Graphic progress bar that inform user
-    of payment progression (6 Steps)
-    """
-    access = True
-    template = '/ui/shop/shop_progress.xml'
-
-    def get_namespace(self, resource, context):
-        ns = {'progress': {}}
-        for i in range(0, 7):
-            css = 'active' if self.index == i else None
-            ns['progress'][str(i)] = css
-        return ns
 
 
 ################################

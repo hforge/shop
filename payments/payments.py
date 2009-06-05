@@ -26,6 +26,7 @@ from ikaaro.registry import register_resource_class
 from payments_views import Payments_View, Payments_Configure
 from payments_views import Payments_History_View
 from paybox import Paybox
+from check import CheckPayment
 
 # Import from shop
 from payment_way import PaymentWay
@@ -58,8 +59,10 @@ class Payments(Folder):
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         Folder._make_resource(cls, folder, name, *args, **kw)
-        # Add paybox Payment
+        # Add paybox Payment way
         Paybox._make_resource(Paybox, folder, '%s/paybox' % name)
+        # Add check Payment way
+        CheckPayment._make_resource(CheckPayment, folder, '%s/check' % name)
 
 
     @classmethod
@@ -85,7 +88,9 @@ class Payments(Folder):
         payments = []
         for payment_way, records in self.get_payments_records(ref):
             table = payment_way.get_resource('payments')
-            img = context.get_link(payment_way.get_resource('logo1.png'))
+            # XXX sylvain
+            #img = context.get_link(payment_way.get_property('logo'))
+            img = None
             for record in records:
                 ns = table.get_record_namespace(context, record)
                 ns['title'] = payment_way.get_title()
@@ -116,7 +121,7 @@ class Payments(Folder):
     def update_payment_state(self, form, context):
         # Send payment confirmation
         self.send_confirmation_mail()
-        # Update order state
+        # We generate bill
         shop = get_shop()
         order = shop.get_resource('orders/%s' % form['ref'])
         order.generate_pdf_bill(context)
@@ -146,8 +151,8 @@ class Payments(Folder):
                 raise ValueError, u'Invalid order'
         # We check mode is valid and active
         payment_module = self.get_resource(payment['mode'])
-        # XXX Check if enabled
-        if 1 == 0:
+        # Check if enabled
+        if not payment_module.get_property('enabled'):
             raise ValueError, u'Invalid payment mode'
         # All is ok: We show the payment form
         return payment_module._show_payment_form(context, payment)

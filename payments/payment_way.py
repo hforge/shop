@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import get_abspath
-from itools.datatypes import Boolean, Enumerate
+from itools.datatypes import Boolean, Enumerate, String
 from itools import vfs
 from itools.web import get_context
 
@@ -37,6 +37,7 @@ class PaymentWay(Folder):
     def get_metadata_schema(cls):
         schema = Folder.get_metadata_schema()
         schema['enabled'] = Boolean(default=True)
+        schema['logo'] = String
         return schema
 
 
@@ -45,14 +46,8 @@ class PaymentWay(Folder):
         # Create resource
         kw['title'] = {'en': cls.class_title.gettext()}
         kw['description'] = {'en': cls.class_description.gettext()}
+        kw['logo'] = cls.logo
         Folder._make_resource(cls, folder, name, *args, **kw)
-        # Logo
-        for key in ['logo1.png', 'logo2.png']:
-            uri = '%s/ui/images/%s' % (cls.class_id, key)
-            body = vfs.open(get_abspath(uri)).read()
-            img = Image._make_resource(Image, folder,
-                        '%s/%s' % (name, key), body=body, **kw)
-
 
 
 

@@ -26,8 +26,10 @@ from ikaaro import messages
 from ikaaro.forms import AutoForm, TextWidget, BooleanCheckBox, MultilineWidget
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.table_views import Table_View
+from ikaaro.views import BrowseForm
 
 # Import from shop
+from shipping_way import ShippingWay
 from schema import delivery_schema
 
 
@@ -63,3 +65,38 @@ class ShippingsView(Folder_BrowseContent):
             return item_resource.get_property(column)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
+
+
+class Shippings_History(BrowseForm):
+
+    title = MSG(u'Shippings history')
+    access = 'is_admin'
+
+    table_columns = [
+        ('complete_id', MSG(u'Id')),
+        ('ref', MSG(u'Ref')),
+        ('ts', MSG(u'Date')),
+        ('shipping_mode', MSG(u'Shipping mode')),
+        ('state', MSG(u'State')),
+        ]
+
+    def get_items(self, resource, context):
+        """ Here we concatanate payments off all payment's mode """
+        items = []
+        for shipping_way in resource.search_resources(cls=ShippingWay):
+            items += shipping_way.get_namespace_shippings(context)
+        return items
+
+
+    def sort_and_batch(self, resource, context, items):
+        # Batch
+        start = context.query['batch_start']
+        size = context.query['batch_size']
+        return items[start:start+size]
+
+
+    def get_item_value(self, resource, context, item, column):
+        if column == 'ref':
+            href = '../orders/%s' % item['ref']
+            return item[column], href
+        return item[column]

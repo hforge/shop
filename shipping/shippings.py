@@ -24,7 +24,7 @@ from ikaaro.registry import register_resource_class
 # Import from shop.shipping
 from colissimo import Colissimo
 from withdrawal import Withdrawal
-from shippings_views import ShippingsView
+from shippings_views import ShippingsView, Shippings_History
 from shipping_way import ShippingWay
 
 
@@ -33,11 +33,12 @@ class Shippings(Folder):
 
     class_id = 'shippings'
     class_title = MSG(u'Shipping')
-    class_views = ['view', 'new_resource?type=shipping']
+    class_views = ['view', 'history', 'new_resource?type=shipping']
 
 
     # Views
     view = ShippingsView()
+    history = Shippings_History()
 
 
     @staticmethod
@@ -100,7 +101,6 @@ class Shippings(Folder):
                 ns['img'] = img
                 shippings.append(ns)
         return shippings
-
 
 
 register_resource_class(Shippings)

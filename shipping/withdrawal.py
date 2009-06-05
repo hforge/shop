@@ -21,6 +21,7 @@ from decimal import Decimal as decimal
 from itools.csv import Table as BaseTable
 from itools.datatypes import Enumerate, String, Unicode
 from itools.gettext import MSG
+from itools.i18n import format_datetime
 from itools.stl import stl
 from itools.xml import XMLParser
 
@@ -82,10 +83,26 @@ class WithdrawalTable(Table):
 
 
     def get_record_namespace(self, context, record):
-        get_value = self.handler.get_record_value
-        state = get_value(record, 'state')
-        return {'state': WithdrawalStates.get_value(state),
-                'html': self.get_html(context, record)}
+        ns = {}
+        # Id
+        ns['id'] = record.id
+        # Complete id
+        resource = context.resource
+        complete_id = 'withdrawal-%s' % record.id
+        uri = '%s/;view_payment?id=%s' % (resource.get_pathto(self), record.id)
+        ns['complete_id'] = (complete_id, uri)
+        # Base namespace
+        for key in self.handler.record_schema.keys():
+            ns[key] = self.handler.get_record_value(record, key)
+        # State
+        ns['state'] = WithdrawalStates.get_value(ns['state'])
+        # Html
+        ns['html'] = self.get_html(context, record)
+        # Timestamp
+        accept = context.accept_language
+        value = self.handler.get_record_value(record, 'ts')
+        ns['ts'] = format_datetime(value,  accept)
+        return ns
 
 
 

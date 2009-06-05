@@ -57,6 +57,7 @@ class Payments_History_View(BrowseForm):
         ('ref', MSG(u'Ref')),
         ('ts', MSG(u'Date')),
         ('payment_mode', MSG(u'Payment mode')),
+        ('state', MSG(u'State')),
         ('success', MSG(u'Success')),
         ('amount', MSG(u'Amount')),
         ]
@@ -77,6 +78,9 @@ class Payments_History_View(BrowseForm):
 
 
     def get_item_value(self, resource, context, item, column):
+        if column == 'ref':
+            href = '../orders/%s' % item['ref']
+            return item[column], href
         return item[column]
 
 
@@ -85,17 +89,16 @@ class Payments_List_View(BrowseForm):
     title = MSG(u'View')
     access = 'is_admin'
 
-    batch_msg1 = MSG(u"There is 1 payment.")
-    batch_msg2 = MSG(u"There are {n} payments.")
+    batch_msg1 = MSG(u"There is 1 payment mode.")
+    batch_msg2 = MSG(u"There are {n} payments mode.")
 
 
     table_columns = [
-        ('logo1', None),
+        ('logo', None),
         ('name', MSG(u'Name')),
         ('title', MSG(u'Title')),
         ('description', MSG(u'Description')),
         ('enabled', MSG(u'Enabled ?')),
-        ('logo2', MSG(u'Payment public image')),
         ]
 
     def get_items(self, resource, context):
@@ -103,16 +106,12 @@ class Payments_List_View(BrowseForm):
         items = []
         for payment_way in resource.search_resources(cls=PaymentWay):
             name = payment_way.name
-            base_logo = '<img src="%s"/>'
-            logo1 = None
-            logo2 = None
-            enabled = payment_way.get_property('enabled')
+            logo = payment_way.get_property('logo')
             kw = {'name': (name, name),
                   'title': (payment_way.get_title(), name),
                   'description': payment_way.get_property('description'),
-                  'logo1': None, #XMLParser(logo1),
-                  'logo2': None, #XMLParser(logo2),
-                  'enabled': enabled}
+                  'logo': XMLParser('<img src="%s"/>' % logo),
+                  'enabled': payment_way.get_property('enabled')}
             items.append(kw)
         return items
 

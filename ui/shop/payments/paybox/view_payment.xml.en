@@ -16,8 +16,8 @@
       <td>${ts}</td>
     </tr>
     <tr>
-      <th>Status</th>
-      <td>${status}</td>
+      <th>State</th>
+      <td>${state}</td>
     </tr>
     <tr>
       <th>Transaction id</th>

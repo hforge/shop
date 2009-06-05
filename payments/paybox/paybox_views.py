@@ -32,6 +32,7 @@ from itools.web import BaseForm, BaseView, STLView, FormError
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.table_views import Table_View
+from ikaaro.forms import ImageSelectorWidget
 from ikaaro.forms import STLForm, TextWidget, BooleanCheckBox
 from ikaaro.resource_views import DBResource_Edit
 
@@ -100,10 +101,12 @@ class Paybox_Configure(DBResource_Edit):
               'PBX_RANG': StringFixSize(size=2),
               'PBX_IDENTIFIANT': String,
               'PBX_DIFF': StringFixSize(size=2),
+              'logo': String,
               'enabled': Boolean}
 
     widgets = [
-        BooleanCheckBox('enabled', title=MSG(u'Actif ?')),
+        BooleanCheckBox('enabled', title=MSG(u'Enabled ?')),
+        ImageSelectorWidget('logo',  title=MSG(u'Logo')),
         TextWidget('PBX_SITE', title=MSG(u'Paybox Site')),
         TextWidget('PBX_RANG', title=MSG(u'Paybox Rang')),
         TextWidget('PBX_IDENTIFIANT', title=MSG(u'Paybox Identifiant')),

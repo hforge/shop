@@ -183,5 +183,16 @@ class ShippingWay(Folder):
         return None
 
 
+    def get_namespace_shippings(self, context):
+        namespace = []
+        payments = self.get_resource('history')
+        for record in payments.handler.get_records():
+            kw = payments.get_record_namespace(context, record)
+            kw['shipping_mode'] = self.get_title()
+            namespace.append(kw)
+        return namespace
+
+
+
 register_resource_class(ShippingWay)
 register_resource_class(ShippingPrices)

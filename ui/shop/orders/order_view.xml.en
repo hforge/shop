@@ -68,7 +68,7 @@
       </td>
       <td>${product/title}</td>
       <td>${product/quantity}</td>
-      <td>${product/price} €</td>
+      <td>${product/price}</td>
     </tr>
   </table>
 
@@ -98,8 +98,6 @@
     <table cellpadding="0" id="cart" cellspacing="0" stl:if="payments">
       <tr>
         <th colspan="2">Payment mode</th>
-        <th>Datetime</th>
-        <th></th>
         <th>Amount</th>
         <th>Payment state</th>
       </tr>
@@ -108,10 +106,8 @@
           <img src="${payment/img}/;download" title="${payment/title}"/>
         </td>
         <td>${payment/title}</td>
-        <td>${payment/ts}</td>
-        <td>${payment/success}</td>
-        <td>${payment/amount}</td>
-        <td>${payment/status}</td>
+        <td>${payment/amount} €</td>
+        <td>${payment/state}</td>
       </tr>
     </table>
 

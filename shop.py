@@ -156,6 +156,7 @@ class Shop(Folder):
     def update_20090604(self):
         self.del_resource('shippings')
         self.del_resource('orders')
+        self.del_resource('payments')
 
 
     def update_20090605(self):
@@ -164,6 +165,10 @@ class Shop(Folder):
 
         Orders._make_resource(Orders, self.handler, 'orders',
                                   **{'title': {'en': u'Orders'}})
+
+
+        Payments._make_resource(Payments, self.handler, 'payments',
+                                  **{'title': {'en': u'Payments'}})
 
 
 register_resource_class(Shop)
