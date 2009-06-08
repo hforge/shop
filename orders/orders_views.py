@@ -186,8 +186,12 @@ class MyOrdersView(OrdersView):
     access = 'is_authenticated'
     title = MSG(u'Order history')
 
-    batch_msg1 = MSG(u"There's one order.")
-    batch_msg2 = MSG(u"There are {n} orders.")
+    table_columns = [
+        ('numero', MSG(u'Order id')),
+        ('state', MSG(u'State')),
+        ('total_price', MSG(u'Total price')),
+        ('creation_datetime', MSG(u'Date and Time'))]
+
 
     def get_items(self, resource, context, *args):
         args = PhraseQuery('customer_id', str(context.user.name))
