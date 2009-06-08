@@ -31,6 +31,8 @@ from ikaaro.views_new import NewInstance
 
 class ProductModel_NewInstance(NewInstance):
 
+    title = MSG(u'New product model')
+
     query_schema = {
         'type': String(default='product-model'),
         }
@@ -91,6 +93,8 @@ class ProductModel_View(CompositeForm):
 
 
 class ProductModels_View(Folder_BrowseContent):
+
+    access = 'is_allowed_to_edit'
 
     table_actions = [RemoveButton]
     search_template = None
