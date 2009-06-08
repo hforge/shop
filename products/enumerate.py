@@ -29,7 +29,6 @@ class TableEnumerate(Enumerate):
     @classmethod
     def get_options(cls):
         context = get_context()
-        shop = get_shop(context.resource.get_real_resource())
         table = cls.model.get_resource(cls.enumerate).handler
         get_value = table.get_record_value
         if hasattr(cls, 'values'):
@@ -76,16 +75,19 @@ class CategoriesEnumerate(Enumerate):
         return options
 
 
+
+
+
 class Datatypes(Enumerate):
 
-    options = [{'name': 'string' ,   'value': MSG(u'String')},
-               {'name': 'unicode',   'value': MSG(u'Unicode')},
-               {'name': 'integer',   'value': MSG(u'Integer')},
-               {'name': 'enumerate', 'value': MSG(u'Enumerate')},
-               {'name': 'decimal',   'value': MSG(u'Decimal')},
-               {'name': 'boolean',   'value': MSG(u'Boolean')},
-               {'name': 'email',     'value': MSG(u'Email')},
-               {'name': 'date',      'value': MSG(u'Date')}]
+    base_options = [
+      {'name': 'string' , 'value': MSG(u'String')},
+      {'name': 'unicode', 'value': MSG(u'Unicode')},
+      {'name': 'integer', 'value': MSG(u'Integer')},
+      {'name': 'decimal', 'value': MSG(u'Decimal')},
+      {'name': 'boolean', 'value': MSG(u'Boolean')},
+      {'name': 'email',   'value': MSG(u'Email')},
+      {'name': 'date', 'value': MSG(u'Date')}]
 
     real_datatypes = {'string': String,
                       'unicode': Unicode,
@@ -95,9 +97,19 @@ class Datatypes(Enumerate):
                       'email': Email,
                       'date': ISOCalendarDate}
 
+
     @classmethod
-    def get_real_datatype(cls, name, model, **kw):
-        if name=='enumerate':
-            return TableEnumerate(model=model, **kw)
-        datatype = cls.real_datatypes[name]
-        return datatype(**kw)
+    def get_options(cls):
+        from models import ProductEnumAttribute
+        model = get_context().resource.parent
+        return cls.base_options + \
+               [{'name': res.name,
+                 'value': res.get_property('title'),
+                 'datatype': None}
+                for res in model.search_resources(cls=ProductEnumAttribute)]
+
+
+    @classmethod
+    def get_real_datatype(cls, name, model):
+        default = TableEnumerate(model=model, enumerate=name)
+        return cls.real_datatypes.get(name, default)

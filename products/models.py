@@ -17,6 +17,7 @@
 
 # Import from itools
 from itools.datatypes import Boolean, Enumerate, String, Unicode
+from itools.datatypes import Integer, Decimal, Email, ISOCalendarDate
 from itools.gettext import MSG
 from itools.web import get_context
 
@@ -31,19 +32,10 @@ from ikaaro.table import OrderedTable, OrderedTableFile
 from enumerate import Datatypes
 from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
 from models_views import ProductModel_NewInstance, ProductModelSchema_View
+from models_views import ProductEnumAttribute_NewInstance
 from models_views import ProductModelSchema_EditRecord, ProductModel_View
 from models_views import ProductModelSchema_AddRecord, ProductEnumAttribute_View
 
-
-class AllAttributes(Enumerate):
-
-    @classmethod
-    def get_options(cls):
-        context = get_context()
-        model = getattr(cls, 'model', context.resource.parent)
-        return [{'name': res.name,
-                 'value': res.get_property('title')}
-                for res in model.search_resources(cls=ProductEnumAttribute)]
 
 
 
@@ -65,6 +57,7 @@ class ProductEnumAttribute(OrderedTable):
     class_views = ['view', 'add_record']
 
     view = ProductEnumAttribute_View()
+    new_instance = ProductEnumAttribute_NewInstance()
     add_record = ProductEnumAttribute_AddRecord()
 
     form = [
@@ -83,8 +76,8 @@ class ProductTypeTable(OrderedTableFile):
         'multilingual': Boolean,
         'visible': Boolean,
         'is_purchase_option': Boolean,
-        'datatype': Datatypes(mandatory=True),
-        'enumerate': AllAttributes(index='keyword'),
+        'datatype': Datatypes(mandatory=True, index='keyword'),
+        'enumerate': String
         }
 
 
@@ -93,7 +86,7 @@ class ProductModelSchema(OrderedTable):
 
     class_id = 'product-model-schema'
     class_title = MSG(u'Model Schema')
-    class_version = '20090414'
+    class_version = '20090609'
     class_handler = ProductTypeTable
     class_views = ['view', 'add_record']
 
@@ -109,7 +102,6 @@ class ProductModelSchema(OrderedTable):
         BooleanCheckBox('visible', title=MSG(u'Visible')),
         BooleanCheckBox('is_purchase_option', title=MSG(u'Is purchase option ?')),
         SelectWidget('datatype', title=MSG(u'Data Type')),
-        SelectWidget('enumerate', title=MSG(u'Enumerate')),
         ]
 
     #########################
@@ -122,11 +114,20 @@ class ProductModelSchema(OrderedTable):
             handler.update_record(record.id, datatype='unicode')
 
 
+    def update_20090609(self):
+        handler = self.handler
+        for record in handler.get_records():
+            if handler.get_record_value(record, 'datatype') == 'enumerate':
+                enumerate = handler.get_record_value(record, 'enumerate')
+                handler.update_record(record.id, datatype=enumerate)
+
+
+
 class ProductModel(Folder):
 
     class_id = 'product-model'
     class_title = MSG(u'Product Model')
-    class_views = ['view', 'new_resource']
+    class_views = ['view']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['schema']
 
@@ -158,11 +159,10 @@ class ProductModel(Folder):
             multiple = get_value(record, 'multiple')
             multilingual = get_value(record, 'multilingual')
             datatype = get_value(record, 'datatype')
-            enumerate = get_value(record, 'enumerate')
             visible = get_value(record, 'visible')
             is_purchase_option = get_value(record, 'is_purchase_option')
-            datatype = Datatypes.get_real_datatype(datatype, model=self,
-                enumerate=enumerate, mandatory=mandatory, multiple=multiple,
+            datatype = Datatypes.get_real_datatype(datatype, model=self)
+            datatype = datatype(mandatory=mandatory, multiple=multiple,
                 multilingual=multilingual)
             widget = get_default_widget(datatype)
             widget = widget(name, title=MSG(title), has_empty_option=False)
@@ -269,9 +269,7 @@ class ProductModel(Folder):
             # Get datatype
             title = get_value(record, 'title')
             datatype = get_value(record, 'datatype')
-            enumerate = get_value(record, 'enumerate')
-            datatype = Datatypes.get_real_datatype(datatype, model=self,
-                                                    enumerate=enumerate)
+            datatype = Datatypes.get_real_datatype(datatype, model=self)
             # Namespace
             namespace.append({'title': title,
                               'value': datatype.get_value(value)})

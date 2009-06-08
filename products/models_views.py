@@ -18,15 +18,20 @@
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
-from itools.web import INFO, STLView
+from itools.web import ERROR, INFO, STLView
 from itools.xapian import OrQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
+from ikaaro.forms import SelectWidget
+from ikaaro.views_new import NewInstance
 from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
 from ikaaro.views import CompositeForm
 from ikaaro.views_new import NewInstance
+
+# Import from project
+from enumerate import Datatypes, TableEnumerate
 
 
 class ProductModel_NewInstance(NewInstance):
@@ -70,7 +75,8 @@ class ProductModel_ViewBottom(Folder_BrowseContent):
     table_columns = [
         ('checkbox', None),
         ('name', MSG(u'Name')),
-        ('title', MSG(u'Title'))
+        ('title', MSG(u'Title')),
+        ('list', MSG(u'List'))
         ]
 
 
@@ -78,6 +84,16 @@ class ProductModel_ViewBottom(Folder_BrowseContent):
         from models import ProductEnumAttribute
         args = PhraseQuery('format', ProductEnumAttribute.class_id)
         return Folder_BrowseContent.get_items(self, resource, context, args)
+
+
+    def get_item_value(self, resource, context, item, column):
+        if column=='list':
+            xapian_doc, enum_attribute = item
+            datatype = TableEnumerate(enumerate=enum_attribute.name,
+                                      model=resource)
+            return SelectWidget('html_list').to_html(datatype, None)
+        return Folder_BrowseContent.get_item_value(self, resource, context,
+            item, column)
 
 
 
@@ -235,3 +251,16 @@ class ProductEnumAttribute_AddRecord(Table_AddRecord):
     def action_add_or_edit(self, resource, context, record):
         record['name'] = checkid(record['title'].value)
         resource.handler.add_record(record)
+
+
+
+class ProductEnumAttribute_NewInstance(NewInstance):
+
+
+    def action(self, resource, context, form):
+        from models import Datatypes
+        name = form['name']
+        if name in [x['name'] for x in Datatypes.get_options()]:
+            context.message = ERROR(u'Name already used')
+            return
+        return NewInstance.action(self, resource, context, form)

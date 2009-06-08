@@ -4,10 +4,10 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Product schema <i>"${title}"</i></h1>
+  <h1>Product model <i>"${title}"</i></h1>
 
     <a href="./schema/">
-      See/Edit product schema
+      See/Edit product model
     </a>
 
   <h2>Associated enumerates</h2>
