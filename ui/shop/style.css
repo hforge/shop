@@ -308,9 +308,39 @@ table.cart td{
   padding: 4px;
 }
 
+/* Order browse */
+.order-browse{
+  width: 100%;
+  border: 1px solid #DFD5C3;
+  border-collapse:collapse;
+  padding: 0;
+}
+
+.order-browse thead th{
+  background: #A774A8;
+  color: #FFF;
+  padding: 4px 6px;
+}
+
+.order-browse tr td {
+  border: 1px solid gray;
+  color: #000;
+  font-size:0.9em;
+  height:23px;
+  padding: 4px;
+}
+
 /* Order */
 .wf-order-open{
   color: green;
+}
+
+.wf-order-closed{
+  color: red;
+}
+
+.wf-order-sended{
+  color: blue;
 }
 
 /* Comparator */

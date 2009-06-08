@@ -587,7 +587,7 @@ class Shop_ShowRecapitulatif(STLForm):
                             title={'en': u'#%s' % order_ref},
                             **kw)
         # We clear the cart
-        #cart .clear()
+        #cart.clear()
         # We show the payment form
         products = resource.get_resource('products')
         total_price = decimal(0)
@@ -600,27 +600,6 @@ class Shop_ShowRecapitulatif(STLForm):
               'mode': form['payment']}
         payments = resource.get_resource('payments')
         return payments.show_payment_form(context, kw)
-
-
-#-------------------------------------
-# Step6: Purchase end
-#    -> Show payment confirmation
-#-------------------------------------
-
-class Shop_End(STLView):
-
-    access = "is_authenticated"
-
-    template = '/ui/shop/shop_end.xml'
-
-    query_schema = {'state': Unicode,
-                    'ref': String}
-
-
-    def get_namespace(self, resource, context):
-        ns = context.query
-        ns['progress'] = Shop_Progress(index=6).GET(resource, context)
-        return ns
 
 
 ##########################################################

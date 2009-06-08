@@ -33,7 +33,7 @@ from shipping import Shippings
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
-from shop_views import Shop_Addresses, Shop_ChooseAddress, Shop_End
+from shop_views import Shop_Addresses, Shop_ChooseAddress
 
 
 class Shop(Folder):
@@ -79,8 +79,7 @@ class Shop(Folder):
     # 5) Recapitulatif / payment
     show_recapitulatif = Shop_ShowRecapitulatif()
 
-    # 6) Payment end
-    end = Shop_End()
+    # 6) Payment end (Define in payments views)
 
 
     @staticmethod

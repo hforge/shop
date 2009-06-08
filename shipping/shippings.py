@@ -33,7 +33,7 @@ class Shippings(Folder):
 
     class_id = 'shippings'
     class_title = MSG(u'Shipping')
-    class_views = ['view', 'history', 'new_resource?type=shipping']
+    class_views = ['view', 'history']
 
 
     # Views
@@ -53,7 +53,7 @@ class Shippings(Folder):
 
 
     def get_document_types(self):
-        return [ShippingWay]
+        return []
 
 
     def get_namespace_shipping_ways(self, context, country, price, weight):

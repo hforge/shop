@@ -17,7 +17,6 @@
 
 # Import from itools
 from itools.gettext import MSG
-from itools.web import STLView
 
 # Import from ikaaro
 from ikaaro import messages
@@ -25,18 +24,6 @@ from ikaaro.forms import AutoForm, TextWidget, BooleanCheckBox, MultilineWidget
 
 # Import from shop
 from schema import delivery_schema
-
-
-
-class ShippingWay_View(STLView):
-
-    access = 'is_admin'
-    title = MSG(u'Shipping')
-
-    template = '/ui/shop/shipping/view.xml'
-
-    def get_namespace(self, resource, context):
-        return resource.get_namespace(context)
 
 
 class ShippingWay_Configure(AutoForm):

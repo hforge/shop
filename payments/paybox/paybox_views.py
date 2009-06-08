@@ -27,7 +27,7 @@ from itools.gettext import MSG
 from itools.handlers import ConfigFile
 from itools.html import HTMLFile
 from itools.uri import get_reference, Path
-from itools.web import BaseForm, BaseView, STLView, FormError
+from itools.web import BaseForm, STLView, FormError
 
 # Import from ikaaro
 from ikaaro import messages
@@ -37,23 +37,9 @@ from ikaaro.forms import STLForm, TextWidget, BooleanCheckBox
 from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
-from shop.datatypes import StringFixSize
 from enumerates import PBXState, PayboxCGIErrors
-
-
-class Paybox_ViewPayment(STLView):
-
-    access = 'is_admin'
-
-    template = '/ui/shop/payments/paybox/view_payment.xml'
-
-    query_schema = {'id': Integer}
-
-    def get_namespace(self, resource, context):
-        id = context.query['id']
-        record = resource.handler.get_record(id)
-        return resource.get_record_namespace(context, record)
-
+from shop.datatypes import StringFixSize
+from shop.shop_utils_views import Shop_Progress
 
 
 class Paybox_View(Table_View):
@@ -236,36 +222,36 @@ class Paybox_ConfirmPayment(BaseForm):
         # Return a blank page to payment
         response = context.response
         response.set_header('Content-Type', 'text/plain')
-        # XXX confirm_payment
-        resource.parent.update_payment_state(form, context)
+        # Confirm_payment
+        if bool(form['autorisation']):
+            resource.set_payment_as_ok(context, form['ref'])
 
 
 
-class Paybox_End(BaseView):
+class Paybox_End(STLView):
     """The customer is redirect on this page after payment"""
 
-    access = True
+    access = "is_authenticated"
 
     query_schema = {'state': Integer,
                     'ref': String,
                     'NUMERR': String}
 
-    def GET(self, resource, context):
-        # Root
-        root = context.root
-        server = context.server
-        from_addr = server.smtp_from
-        # Check if no CGI problem
+    template = '/ui/shop/payments/paybox/paybox_end.xml'
+
+    def get_namespace(self, resource, context):
         erreur = context.query['NUMERR']
         if erreur:
             # Send mail
+            root = context.root
+            server = context.server
+            from_addr = server.smtp_from
             subject = u'Paybox problem'
             body = 'Paybox error: %s' % PayboxCGIErrors.get_value(erreur)
             root.send_email(from_addr, subject, from_addr, body)
-            # Come back
-            msg = u'Online payment is unavalaible, please try later !'
-            return context.come_back(MSG(msg), goto='/')
         state = PBXState.get_value(context.query['state']).gettext()
-        goto = get_reference('../../;end')
-        goto.query['state'] = state.encode('utf-8')
-        return context.come_back(None, goto, keep=['ref'])
+        ns = {
+          'progress': Shop_Progress(index=6).GET(resource, context),
+          'state': state,
+          'ref': context.query['ref']}
+        return ns

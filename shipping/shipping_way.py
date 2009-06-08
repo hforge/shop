@@ -37,7 +37,7 @@ from shop.countries import CountriesEnumerate
 
 # Import from shipping
 from schema import delivery_schema
-from shipping_views import Shipping_View, Shipping_Configure
+from shipping_way_views import ShippingWay_Configure
 
 
 class ShippingPricesCSV(CSVFile):
@@ -84,8 +84,7 @@ class ShippingWay(Folder):
     img = 'ui/shop/images/shipping.png'
 
     # Views
-    view = Shipping_View()
-    configure = Shipping_Configure()
+    configure = ShippingWay_Configure()
     history = GoToSpecificDocument(specific_document='history',
                                   title=MSG(u'History'))
     prices = GoToSpecificDocument(specific_document='prices',

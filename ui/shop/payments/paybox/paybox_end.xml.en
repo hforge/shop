@@ -19,7 +19,7 @@
   </div>
 
   <p>
-    <a href="./orders/${ref}">
+    <a href="../../orders/${ref}" stl:if="ref">
       Your can see order details here.
     </a>
   </p>

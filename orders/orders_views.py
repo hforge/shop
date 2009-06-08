@@ -66,6 +66,9 @@ class OrderView(STLView):
         namespace = {}
         # General informations
         namespace['order_number'] = resource.name
+        # Bill
+        has_bill = resource.get_resource('bill.pdf', soft=True) is not None
+        namespace['has_bill'] = has_bill
         # Order creation date time
         creation_datetime = resource.get_property('creation_datetime')
         namespace['creation_datetime'] = format_datetime(creation_datetime,
@@ -81,7 +84,8 @@ class OrderView(STLView):
                                  'href': resource.get_pathto(customer)}
         # Order state
         state = resource.get_state()
-        namespace['state'] = state['title']
+        namespace['state'] = {'name': resource.get_statename(),
+                              'title': state['title']}
         # Addresses
         addresses = shop.get_resource('addresses').handler
         namespace['delivery_address'] = addresses.get_record_namespace(0)
@@ -98,10 +102,6 @@ class OrderView(STLView):
         shippings = shop.get_resource('shippings')
         namespace['shippings'] = shippings.get_shippings_namespace(context,
                                     resource.name)
-        # Acl
-        ac = resource.get_access_control()
-        is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
-        namespace['is_allowed_to_edit'] = is_allowed_to_edit
         # OLD XXX
         namespace['frais_de_port'] = 0
         namespace['total_price'] = 0
@@ -169,16 +169,9 @@ class OrdersView(Folder_BrowseContent):
                        {'link': ';edit', 'img': '/ui/icons/16x16/edit.png'}]
             namespace = {'order_name': item_brain.name,
                          'actions': actions}
-            print actions
             return stl(events=self.actions_html, namespace=namespace)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
-
-
-class Order_Delivery(STLView):
-
-    access = 'is_admin'
-    title = MSG(u'Manage delivery')
 
 
 class MyOrdersView(OrdersView):

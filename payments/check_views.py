@@ -22,8 +22,10 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import MultilineWidget, TextWidget
+from ikaaro.forms import MultilineWidget, ReadOnlyWidget, TextWidget
+from ikaaro.forms import SelectWidget
 from ikaaro.resource_views import DBResource_Edit
+from ikaaro.table_views import Table_EditRecord
 
 # Import from shop
 from shop.shop_utils_views import Shop_Progress
@@ -51,6 +53,29 @@ class CheckPayment_Pay(STLView):
         address = resource.get_property('address').encode('utf-8')
         namespace['address'] = XMLParser(address.replace('\n', '<br/>'))
         return namespace
+
+
+
+class CheckPayment_Manage(Table_EditRecord):
+
+    widgets = [ReadOnlyWidget('ref', title=MSG(u'Order ref')),
+               ReadOnlyWidget('amount', title=MSG(u'Amount')),
+               TextWidget('check_number', title=MSG(u'Check number')),
+               TextWidget('bank', title=MSG(u'Bank')),
+               TextWidget('account_holder', title=MSG(u'Account holder')),
+               SelectWidget('state', title=MSG(u'State'))]
+
+    def get_widgets(self, resource, context):
+        return self.widgets
+
+
+    def action_add_or_edit(self, resource, context, record):
+        # Add or edit
+        Table_EditRecord.action_add_or_edit(self, resource, context, record)
+        # Set workflow
+        if record['state'] == 'success':
+            payments = resource.parent.set_payment_as_ok(context,
+                          record['ref'])
 
 
 

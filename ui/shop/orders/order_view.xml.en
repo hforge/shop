@@ -11,104 +11,123 @@
       </a><br/>
       Your order has been recorded the ${creation_datetime}.<br/>
       In this section you will find all informations concerning your order.<br/>
-      <a href="./bill.pdf/;download" target="blank">
+      <a href="./bill.pdf/;download" target="blank" stl:if="has_bill">
         <img src="/ui/icons/16x16/pdf.png"/> Download bill
       </a>
     </p>
 
     <h2>Order state</h2>
-    <a href=";edit_state" stl:if="is_allowed_to_edit">${state}</a>  <span stl:if="not is_allowed_to_edit">${state}</span>
+
+    <span class="wf-order-${state/name}">${state/title}</span>
 
     <h2>Delivery and bill addresses</h2>
 
-    <table id="cart" style="width:400px">
-      <tr>
-        <th>Delivery address</th>
-        <th>Bill address</th>
-      </tr>
-      <tr>
-        <td>
-          ${delivery_address/firstname} ${delivery_address/lastname}<br/>
-          ${delivery_address/address_1}<br/>
-          <stl:block stl:if="delivery_address/address_2">
-            ${delivery_address/address_2}<br/>
-          </stl:block>
-          ${delivery_address/zipcode} ${delivery_address/town}<br/>
-          ${delivery_address/country}<br/>
-        </td>
-        <td>
-          <span stl:if="not bill_address">
-            Same that delivery address
-          </span>
-          <span stl:if="bill_address">
-            ${bill_address/firstname} ${bill_address/lastname}<br/>
-            ${bill_address/address_1}<br/>
-            <stl:inline stl:if="bill_address/address_2">
-              ${bill_address/address_2}<br/>
-            </stl:inline>
-            ${bill_address/zipcode} ${bill_address/town}<br/>
-            ${bill_address/country}<br/>
-          </span>
-        </td>
-      </tr>
+    <table class="order-browse" style="width:400px">
+      <thead>
+        <tr>
+          <th>Delivery address</th>
+          <th>Bill address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            ${delivery_address/firstname} ${delivery_address/lastname}<br/>
+            ${delivery_address/address_1}<br/>
+            <stl:block stl:if="delivery_address/address_2">
+              ${delivery_address/address_2}<br/>
+            </stl:block>
+            ${delivery_address/zipcode} ${delivery_address/town}<br/>
+            ${delivery_address/country}<br/>
+          </td>
+          <td>
+            <span stl:if="not bill_address">
+              Same that delivery address
+            </span>
+            <span stl:if="bill_address">
+              ${bill_address/firstname} ${bill_address/lastname}<br/>
+              ${bill_address/address_1}<br/>
+              <stl:inline stl:if="bill_address/address_2">
+                ${bill_address/address_2}<br/>
+              </stl:inline>
+              ${bill_address/zipcode} ${bill_address/town}<br/>
+              ${bill_address/country}<br/>
+            </span>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
   <h2>Your order</h2>
 
-  <table id="cart">
-    <tr>
-      <th>Name</th>
-      <th>Title</th>
-      <th>Quantity</th>
-      <th>Total price</th>
-    </tr>
-    <tr stl:repeat="product products">
-      <td>
-        ${product/name}
-      </td>
-      <td>${product/title}</td>
-      <td>${product/quantity}</td>
-      <td>${product/price}</td>
-    </tr>
+  <table class="order-browse">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Title</th>
+        <th>Quantity</th>
+        <th>Total price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr stl:repeat="product products">
+        <td>
+          ${product/name}
+        </td>
+        <td>${product/title}</td>
+        <td>${product/quantity}</td>
+        <td>${product/price}</td>
+      </tr>
+    </tbody>
   </table>
 
 
   <h2>Shipping informations</h2>
 
-    <table cellpadding="0" id="cart" cellspacing="0" stl:if="shippings">
-      <tr>
-        <th colspan="2">Shipping informations</th>
-        <th>Description</th>
-        <th>State</th>
-        <th>Informations</th>
-      </tr>
-      <tr stl:repeat="shipping shippings">
-        <td>
-          <img src="${shipping/img}/;download" title="${shipping/title}"/>
-        </td>
-        <td>${shipping/title}</td>
-        <td>${shipping/description}</td>
-        <td>${shipping/state}</td>
-        <td>${shipping/html}</td>
-      </tr>
+    <table cellpadding="0" class="order-browse" cellspacing="0" stl:if="shippings">
+      <thead>
+        <tr>
+          <th colspan="2">Shipping informations</th>
+          <th>Description</th>
+          <th>State</th>
+          <th/>
+        </tr>
+      </thead>
+      <tbody>
+        <tr stl:repeat="shipping shippings">
+          <td>
+            <img src="${shipping/img}/;download" title="${shipping/title}"/>
+          </td>
+          <td>${shipping/title}</td>
+          <td>${shipping/description}</td>
+          <td>${shipping/state}</td>
+          <td>${shipping/html}</td>
+        </tr>
+      </tbody>
     </table>
 
   <h2>Payment informations</h2>
 
-    <table cellpadding="0" id="cart" cellspacing="0" stl:if="payments">
-      <tr>
-        <th colspan="2">Payment mode</th>
-        <th>Amount</th>
-        <th>Payment state</th>
-      </tr>
-      <tr stl:repeat="payment payments">
-        <td>
-          <img src="${payment/img}/;download" title="${payment/title}"/>
-        </td>
-        <td>${payment/title}</td>
-        <td>${payment/amount} €</td>
-        <td>${payment/state}</td>
-      </tr>
+    <table cellpadding="0" class="order-browse" cellspacing="0" stl:if="payments">
+      <thead>
+        <tr>
+          <th colspan="2">Payment mode</th>
+          <th>Amount</th>
+          <th>Payment state</th>
+          <th/>
+        </tr>
+      </thead>
+      <tbody>
+        <tr stl:repeat="payment payments">
+          <td>
+            <img src="${payment/img}/;download" title="${payment/title}"/>
+          </td>
+          <td>${payment/title}</td>
+          <td>${payment/amount} €</td>
+          <td>${payment/state}</td>
+          <td>${payment/html}</td>
+        </tr>
+      </tbody>
     </table>
 
 </stl:block>

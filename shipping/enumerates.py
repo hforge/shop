@@ -23,7 +23,8 @@ from itools.gettext import MSG
 
 class ShippingStates(Enumerate):
 
-    default = 'wait'
+    default = 'preparation'
 
-    options = [{'name': 'wait', 'value': MSG(u'Wait')},
-               {'name': 'ok', 'value': MSG(u'ok')}]
+    options = [{'name': 'preparation', 'value': MSG(u'In preparation')},
+               {'name': 'sended',      'value': MSG(u'Sended')}]
+

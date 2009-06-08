@@ -29,7 +29,7 @@ from ikaaro.table import Table
 # Import from shop
 from enumerates import PayboxStatus
 from paybox_views import Paybox_Configure, Paybox_Pay, Paybox_View
-from paybox_views import Paybox_ViewPayment, Paybox_End, Paybox_ConfirmPayment
+from paybox_views import Paybox_End, Paybox_ConfirmPayment
 from shop.datatypes import StringFixSize
 from shop.payments.payment_way import PaymentWay
 from shop.payments.enumerates import PaymentSuccessState
@@ -56,7 +56,6 @@ class PayboxTable(Table):
     class_handler = PayboxBaseTable
 
     view = Paybox_View()
-    view_payment = Paybox_ViewPayment()
 
 
     form = [
@@ -75,9 +74,7 @@ class PayboxTable(Table):
         ns['id'] = record.id
         # Complete id
         resource = context.resource
-        complete_id = 'paybox-%s' % record.id
-        uri = '%s/;view_payment?id=%s' % (resource.get_pathto(self), record.id)
-        ns['complete_id'] = (complete_id, uri)
+        ns['complete_id'] = 'paybox-%s' % record.id
         # Base namespace
         for key in self.handler.record_schema.keys():
             ns[key] = self.handler.get_record_value(record, key)
@@ -85,6 +82,8 @@ class PayboxTable(Table):
         ns['state'] = PayboxStatus.get_value(ns['state'])
         # Ns success
         ns['success'] = PaymentSuccessState.get_value(ns['success'])
+        # HTML
+        ns['html'] = None
         # Timestamp
         accept = context.accept_language
         value = self.handler.get_record_value(record, 'ts')
@@ -100,7 +99,7 @@ class Paybox(PaymentWay):
     class_description = MSG(u'Secured payment paybox')
 
     # Views
-    class_views = ['view', 'configure']
+    class_views = ['configure', 'payments']
 
     logo = '/ui/shop/payments/paybox/images/logo.png'
 

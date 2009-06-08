@@ -98,34 +98,6 @@ class Payments(Folder):
                 payments.append(ns)
         return payments
 
-    ######################
-    # Confirmation
-    ######################
-
-    mail_ok = MSG(u"""
-    Bonjour, voici les détails de votre paiement sur la boutique XXX.
-    Status: Votre paiement a été accepté. \n\n
-    ------------------------
-    Référence commande: {ref}
-    Montant commande: {price} €
-    ------------------------
-    \n\n
-    """)
-
-    mail_erreur = MSG(u"Votre paiement a été refusé\n\n")
-    def send_confirmation_mail(self):
-        # TODO
-        pass
-
-
-    def update_payment_state(self, form, context):
-        # Send payment confirmation
-        self.send_confirmation_mail()
-        # We generate bill
-        shop = get_shop()
-        order = shop.get_resource('orders/%s' % form['ref'])
-        order.generate_pdf_bill(context)
-
 
     ######################
     # Public API

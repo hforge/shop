@@ -39,7 +39,7 @@ from shop.addresses import Addresses, BaseAddresses
 from shop.utils import get_shop
 
 # Import from shop.orders
-from orders_views import OrderView, Order_Delivery
+from orders_views import OrderView
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from workflow import order_workflow
 
@@ -124,7 +124,7 @@ class Order(WorkflowAware, Folder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
-    class_views = ['view', 'delivery', 'edit_state']
+    class_views = ['view', 'manage', 'edit_state']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses', 'products']
 
@@ -132,7 +132,6 @@ class Order(WorkflowAware, Folder):
 
     # Views
     view = OrderView()
-    delivery = Order_Delivery()
 
     @classmethod
     def get_metadata_schema(cls):
@@ -155,6 +154,7 @@ class Order(WorkflowAware, Folder):
         # Build metadata/order
         metadata = kw['metadata']
         metadata['creation_datetime'] = datetime.now()
+        metadata['shipping'] = cart.shipping
         Folder._make_resource(cls, folder, name, *args, **metadata)
         # Save products
         handler = BaseOrdersProducts()
@@ -213,6 +213,13 @@ class Order(WorkflowAware, Folder):
         root.send_email(customer_email, subject, from_addr, body)
 
 
+    def payment_is_ok(self, context):
+        # The payment is ok
+        self.set_workflow_state('payment_ok')
+        # We generate the bill
+        self.generate_pdf_bill(context)
+        # Create a delivery
+        self.create_delivery(context)
 
 
     def generate_pdf_bill(self, context):
@@ -232,6 +239,14 @@ class Order(WorkflowAware, Folder):
         metadata =  {'title': {'en': u'Bill'}}
         PDF._make_resource(PDF, self.handler, 'bill.pdf',
                            body=pdf, **metadata)
+
+
+    def create_delivery(self, context):
+        shop = get_shop(self)
+        shipping = self.get_property('shipping')
+        shipping = shop.get_resource('shippings/%s' % shipping)
+        history = shipping.get_resource('history')
+        history.handler.add_record({'ref': self.name})
 
 
 

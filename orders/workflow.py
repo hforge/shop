@@ -24,8 +24,14 @@ order_workflow = Workflow()
 add_state = order_workflow.add_state
 add_trans = order_workflow.add_trans
 # State: Open
-add_state('open', title=MSG(u'Open'),
+add_state('open', title=MSG(u'Order registered'),
     description=MSG(u'Open'))
+# State: Payment validated
+add_state('payment_ok', title=MSG(u'Payment validated'),
+    description=MSG(u'The payment is validated'))
+# State: sended
+add_state('sended', title=MSG(u'Sended'),
+    description=MSG(u'Order sended'))
 # State: Closed
 add_state('closed', title=MSG(u'Closed'),
     description=MSG(u'Closed'))

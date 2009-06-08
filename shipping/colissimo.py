@@ -63,11 +63,14 @@ class ColissimoTable(Table):
 
 
     html_form = list(XMLParser("""
-        Colissimo number ${num_colissimo}<br/>
-        <a href="http://www.coliposte.net/gp/services/main.jsp?m=10003005&amp;colispart=${num_colissimo}"
-          target="blank">
-          More informations
-        </a>
+        <p stl:if="num_colissimo">
+          Colissimo number ${num_colissimo}<br/>
+          <a href="http://www.coliposte.net/gp/services/main.jsp?m=10003005&amp;colispart=${num_colissimo}"
+            target="blank">
+            More informations
+          </a>
+        </p>
+        <p stl:if="not num_colissimo">-</p>
         """,
         stl_namespaces))
 
@@ -86,9 +89,7 @@ class ColissimoTable(Table):
         ns['id'] = record.id
         # Complete id
         resource = context.resource
-        complete_id = 'colissimo-%s' % record.id
-        uri = '%s/;view_payment?id=%s' % (resource.get_pathto(self), record.id)
-        ns['complete_id'] = (complete_id, uri)
+        ns['complete_id'] = 'colissimo-%s' % record.id
         # Base namespace
         for key in self.handler.record_schema.keys():
             ns[key] = self.handler.get_record_value(record, key)
@@ -109,10 +110,10 @@ class Colissimo(ShippingWay):
     class_id = 'colissimo'
     class_title = MSG(u'Colissimo Suivi')
 
-    class_description = MSG(u"""La livraison de votre commande est assurée en Colissimo.
-                          A compter de la prise en charge par La Poste,
-                          vous êtes livré à domicile en 48 h(1)
-                          sous réserve des heures limites de dépôt""")
+    class_description = MSG(u"La livraison de votre commande est assurée en Colissimo."
+                            u"A compter de la prise en charge par La Poste,"
+                            u"vous êtes livré à domicile en 48 h(1)"
+                            u"sous réserve des heures limites de dépôt")
 
     img = '../ui/shop/images/colissimo.png'
 

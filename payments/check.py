@@ -19,15 +19,19 @@ from itools.csv import Table as BaseTable
 from itools.datatypes import Enumerate, String, Decimal, Integer, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
+from itools.stl import stl
+from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import TextWidget, SelectWidget
+from ikaaro.forms import TextWidget, SelectWidget, stl_namespaces
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop.payments
 from payment_way import PaymentWay
 from check_views import CheckPayment_Pay, CheckPayment_Configure
+from check_views import CheckPayment_Manage
+
 
 class CheckStates(Enumerate):
 
@@ -36,8 +40,9 @@ class CheckStates(Enumerate):
     options = [
       {'name': 'wait',     'value': MSG(u'Waiting for your check')},
       {'name': 'received', 'value': MSG(u'Check received')},
-      {'name': 'valid',    'value': MSG(u'Payment successful')},
       {'name': 'refused',  'value': MSG(u'Check refused')},
+      {'name': 'success',  'value': MSG(u'Payment successful')},
+      {'name': 'invalid',  'value': MSG(u'Invalid amount')},
       ]
 
 
@@ -47,6 +52,8 @@ class CheckPaymentBaseTable(BaseTable):
         'ref': String(Unique=True, is_indexed=True),
         'amount': Decimal,
         'check_number': Integer,
+        'bank': Unicode,
+        'account_holder': Unicode,
         'state': CheckStates(default=CheckStates.default),
         }
 
@@ -57,12 +64,47 @@ class CheckPaymentTable(Table):
     class_title = MSG(u'Check payment Module')
     class_handler = CheckPaymentBaseTable
 
+    class_views = ['view', 'add_record']
+
+    edit_record = CheckPayment_Manage()
+
     form = [
         TextWidget('ref', title=MSG(u'Facture number')),
         TextWidget('amount', title=MSG(u'Amount')),
         TextWidget('check_number', title=MSG(u'Check number')),
+        TextWidget('bank', title=MSG(u'Bank')),
+        TextWidget('account_holder', title=MSG(u'Account holder')),
         SelectWidget('state', title=MSG(u'State'))
         ]
+
+
+    html_form = list(XMLParser("""
+        <p>
+          <dl>
+            <dt>Order reference:</dt>
+            <dd>${ref} (Please write this number in your mail)</dd>
+            <dt>Total price:</dt>
+            <dd>${amount} €</dd>
+            <dt>A l'ordre de:</dt>
+            <dd>${to}</dd>
+            <dt>Address:</dt>
+            <dd>${address}</dd>
+          </dl>
+        </p>
+        """,
+        stl_namespaces))
+
+
+    def get_html(self, context, record):
+        state = self.handler.get_record_value(record, 'state')
+        if state!='wait':
+            return None
+        namespace = {'to': self.get_property('to'),
+                     'address': self.get_property('address')}
+        get_value = self.handler.get_record_value
+        for key in ['ref', 'amount']:
+            namespace[key] = get_value(record, key)
+        return stl(events=self.html_form, namespace=namespace)
 
 
     def get_record_namespace(self, context, record):
@@ -71,14 +113,15 @@ class CheckPaymentTable(Table):
         ns['id'] = record.id
         # Complete id
         resource = context.resource
-        complete_id = 'check-%s' % record.id
-        uri = '%s/;view_payment?id=%s' % (resource.get_pathto(self), record.id)
-        ns['complete_id'] = (complete_id, uri)
+        ns['complete_id'] = 'check-%s' % record.id
         # Base namespace
         for key in self.handler.record_schema.keys():
             ns[key] = self.handler.get_record_value(record, key)
         # Ns success
         ns['success'] = 'XXX'
+        # Html
+        ns['html'] = self.get_html(context, record)
+        # State
         ns['state'] = CheckStates.get_value(ns['state'])
         # Timestamp
         accept = context.accept_language
@@ -98,7 +141,7 @@ class CheckPayment(PaymentWay):
     logo = '/ui/shop/payments/paybox/images/logo.png'
 
     # Views
-    class_views = ['view', 'configure']
+    class_views = ['configure', 'payments']
 
     # Views
     configure = CheckPayment_Configure()

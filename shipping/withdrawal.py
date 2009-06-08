@@ -26,7 +26,8 @@ from itools.stl import stl
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import SelectWidget, TextWidget, stl_namespaces
+from ikaaro.forms import SelectWidget, TextWidget, MultilineWidget
+from ikaaro.forms import stl_namespaces
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
@@ -41,8 +42,9 @@ from shipping_way import ShippingWay
 class WithdrawalStates(Enumerate):
 
     options = [
-      {'name': 'rdv',      'value': MSG(u'Waiting for a rdv')},
-      {'name': 'rdv_take', 'value': MSG(u'RDV Taken')},
+      {'name': 'appointment',    'value': MSG(u'Waiting for an appointment')},
+      {'name': 'appointment_ok', 'value': MSG(u'Appointment taken')},
+      {'name': 'end', 'value': MSG(u'End')},
       ]
 
 
@@ -65,8 +67,8 @@ class WithdrawalTable(Table):
 
     form = [
         TextWidget('ref', title=MSG(u'Facture number')),
-        TextWidget('description', title=MSG(u'Description')),
-        SelectWidget('state', title=MSG(u'State'))
+        SelectWidget('state', title=MSG(u'State')),
+        MultilineWidget('description', title=MSG(u'Description')),
         ]
 
 
@@ -88,9 +90,7 @@ class WithdrawalTable(Table):
         ns['id'] = record.id
         # Complete id
         resource = context.resource
-        complete_id = 'withdrawal-%s' % record.id
-        uri = '%s/;view_payment?id=%s' % (resource.get_pathto(self), record.id)
-        ns['complete_id'] = (complete_id, uri)
+        ns['complete_id'] = 'withdrawal-%s' % record.id
         # Base namespace
         for key in self.handler.record_schema.keys():
             ns[key] = self.handler.get_record_value(record, key)
