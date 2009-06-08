@@ -23,6 +23,7 @@ from itools.gettext import MSG
 from ikaaro.forms import SelectRadio, TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
+from ikaaro.table_views import Table_View
 
 # Import from shop
 from countries import CountriesEnumerate
@@ -64,6 +65,9 @@ class Addresses(Table):
     class_id = 'addresses'
     class_title = MSG(u'Adresse')
     class_handler = BaseAddresses
+
+    view = Table_View(access='is_admin')
+    last_changes = None
 
     form = [
         TextWidget('title', title=MSG(u'Title')),
