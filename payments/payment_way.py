@@ -15,20 +15,71 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools import vfs
-from itools.core import get_abspath
-from itools.datatypes import Boolean, Enumerate, String
+from itools.csv import Table as BaseTable
+from itools.datatypes import Boolean, Enumerate, String, Decimal
 from itools.gettext import MSG
+from itools.i18n import format_datetime
 from itools.web import get_context
 
 # Import from ikaaro
-from ikaaro.file import Image
 from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
+from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
+from ikaaro.table import Table
 
 # Import from shop
+from shop.payments.enumerates import PaymentState
 from shop.utils import get_shop
+
+class PaymentWayBaseTable(BaseTable):
+
+    record_schema = {
+        'ref': String(Unique=True, is_indexed=True),
+        'user': String,
+        'state': PaymentState,
+        'amount': Decimal}
+
+
+
+class PaymentWayTable(Table):
+
+    form = [
+        TextWidget('ref', title=MSG(u'Facture number')),
+        TextWidget('user', title=MSG(u'User id')),
+        SelectWidget('state', title=MSG(u'State')),
+        TextWidget('amount', title=MSG(u'Amount'))]
+
+
+    def get_html(self, context, record):
+        return None
+
+
+    def get_record_namespace(self, context, record):
+        get_value = self.handler.get_record_value
+        namespace = {'id': record.id,
+                     'complete_id': '%s-%s' % (self.parent.name, record.id),
+                     'payment_name': self.parent.name}
+        # Base namespace
+        for key in self.handler.record_schema.keys():
+            namespace[key] = get_value(record, key)
+        # Amount
+        namespace['amount'] = '%s €' % get_value(record, 'amount')
+        # User
+        users = context.root.get_resource('users')
+        user = users.get_resource(get_value(record, 'user'))
+        namespace['user_title'] = user.get_title()
+        namespace['user_email'] = user.get_property('email')
+        # State
+        namespace['state'] = PaymentState.get_logo(get_value(record, 'state'))
+        namespace['advance_state'] = None
+        # HTML
+        namespace['html'] = self.get_html(context, record)
+        # Timestamp
+        accept = context.accept_language
+        value = self.handler.get_record_value(record, 'ts')
+        namespace['ts'] = format_datetime(value,  accept)
+        return namespace
 
 
 class PaymentWay(Folder):
@@ -58,7 +109,7 @@ class PaymentWay(Folder):
     def set_payment_as_ok(self, context, ref):
         # Send payment confirmation
         self.send_confirmation_mail()
-        # We generate bill
+        # We generate bill # XXX do not do there
         order = self.get_resource('../../orders/%s' % ref)
         order.payment_is_ok(context)
 

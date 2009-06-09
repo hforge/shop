@@ -14,30 +14,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from operator import itemgetter
+
 # Import from itools
-from itools.datatypes import Boolean
 from itools.gettext import MSG
-from itools.web import STLView
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro import messages
-from ikaaro.forms import AutoForm, BooleanRadio
-from ikaaro.views import BrowseForm, CompositeForm
+from ikaaro.views import BrowseForm
 
 # Import from shop
 from payment_way import PaymentWay
-
-
-class Payments_Top_View(STLView):
-
-    template = '/ui/shop/payments/top_view.xml'
-
-    access = 'is_admin'
-
-    def get_namespace(self, resource, context):
-        return {'enabled': resource.get_property('enabled')}
-
 
 
 class Payments_History_View(BrowseForm):
@@ -53,12 +41,14 @@ class Payments_History_View(BrowseForm):
 
 
     table_columns = [
+        ('state', u' '),
         ('complete_id', MSG(u'Id')),
-        ('ref', MSG(u'Ref')),
         ('ts', MSG(u'Date')),
+        ('ref', MSG(u'Ref')),
+        ('user_title', MSG(u'Customer')),
+        ('user_email', MSG(u'Customer email')),
         ('payment_mode', MSG(u'Payment mode')),
-        ('state', MSG(u'State')),
-        ('success', MSG(u'Success')),
+        ('advance_state', MSG(u'State')),
         ('amount', MSG(u'Amount')),
         ]
 
@@ -71,20 +61,30 @@ class Payments_History_View(BrowseForm):
 
 
     def sort_and_batch(self, resource, context, items):
+        # Sort
+        sort_by = context.query['sort_by']
+        reverse = context.query['reverse']
+        if sort_by:
+            items.sort(key=itemgetter(sort_by), reverse=reverse)
+
         # Batch
         start = context.query['batch_start']
         size = context.query['batch_size']
         return items[start:start+size]
 
 
+
     def get_item_value(self, resource, context, item, column):
-        if column == 'ref':
+        if column == 'complete_id':
+            href = './%s/payments/;edit_record?id=%s'
+            return item[column], href % (item['payment_name'], item['id'])
+        elif column == 'ref':
             href = '../orders/%s' % item['ref']
             return item[column], href
         return item[column]
 
 
-class Payments_List_View(BrowseForm):
+class Payments_View(BrowseForm):
 
     title = MSG(u'View')
     access = 'is_admin'
@@ -125,43 +125,3 @@ class Payments_List_View(BrowseForm):
 
     def get_item_value(self, resource, context, item, column):
         return item[column]
-
-
-class Payments_View(CompositeForm):
-
-    access = 'is_admin'
-
-    title = MSG(u'View')
-
-    subviews = [
-        Payments_Top_View(),
-        Payments_List_View(),
-    ]
-
-
-
-class Payments_Configure(AutoForm):
-
-    access = 'is_admin'
-
-    title = MSG(u'Configure')
-
-    widgets = [
-        BooleanRadio('enabled', title=MSG(u'Payments in real mode')),
-        ]
-
-    schema = {
-        'enabled': Boolean(mandatory=True),
-    }
-
-
-    def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name)
-
-
-    def action(self, resource, context, form):
-        # Save configuration
-        for key in ['enabled']:
-            resource.set_property(key, form[key])
-        # Come back
-        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')

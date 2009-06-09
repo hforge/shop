@@ -15,20 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.csv import Table as BaseTable
-from itools.datatypes import Enumerate, String, Decimal, Integer, Unicode
+from itools.core import merge_dicts
+from itools.datatypes import Enumerate, Integer, Unicode
 from itools.gettext import MSG
-from itools.i18n import format_datetime
 from itools.stl import stl
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import TextWidget, SelectWidget, stl_namespaces
 from ikaaro.registry import register_resource_class
-from ikaaro.table import Table
 
 # Import from shop.payments
-from payment_way import PaymentWay
+from payment_way import PaymentWay, PaymentWayBaseTable, PaymentWayTable
 from check_views import CheckPayment_Pay, CheckPayment_Configure
 from check_views import CheckPayment_Manage
 
@@ -46,19 +44,17 @@ class CheckStates(Enumerate):
       ]
 
 
-class CheckPaymentBaseTable(BaseTable):
+class CheckPaymentBaseTable(PaymentWayBaseTable):
 
-    record_schema = {
-        'ref': String(Unique=True, is_indexed=True),
-        'amount': Decimal,
-        'check_number': Integer,
-        'bank': Unicode,
-        'account_holder': Unicode,
-        'state': CheckStates(default=CheckStates.default),
-        }
+    record_schema = merge_dicts(
+        PaymentWayBaseTable.record_schema,
+        check_number=Integer,
+        bank=Unicode,
+        account_holder=Unicode,
+        advance_state=CheckStates)
 
 
-class CheckPaymentTable(Table):
+class CheckPaymentTable(PaymentWayTable):
 
     class_id = 'checkpayment-payments'
     class_title = MSG(u'Check payment Module')
@@ -68,13 +64,11 @@ class CheckPaymentTable(Table):
 
     edit_record = CheckPayment_Manage()
 
-    form = [
-        TextWidget('ref', title=MSG(u'Facture number')),
-        TextWidget('amount', title=MSG(u'Amount')),
+    form = PaymentWayTable.form + [
         TextWidget('check_number', title=MSG(u'Check number')),
         TextWidget('bank', title=MSG(u'Bank')),
         TextWidget('account_holder', title=MSG(u'Account holder')),
-        SelectWidget('state', title=MSG(u'State'))
+        SelectWidget('advance_state', title=MSG(u'Advance state'))
         ]
 
 
@@ -96,7 +90,7 @@ class CheckPaymentTable(Table):
 
 
     def get_html(self, context, record):
-        state = self.handler.get_record_value(record, 'state')
+        state = self.handler.get_record_value(record, 'advance_state')
         if state!='wait':
             return None
         namespace = {'to': self.get_property('to'),
@@ -108,26 +102,11 @@ class CheckPaymentTable(Table):
 
 
     def get_record_namespace(self, context, record):
-        ns = {}
-        # Id
-        ns['id'] = record.id
-        # Complete id
-        resource = context.resource
-        ns['complete_id'] = 'check-%s' % record.id
-        # Base namespace
-        for key in self.handler.record_schema.keys():
-            ns[key] = self.handler.get_record_value(record, key)
-        # Ns success
-        ns['success'] = 'XXX'
-        # Html
-        ns['html'] = self.get_html(context, record)
-        # State
-        ns['state'] = CheckStates.get_value(ns['state'])
-        # Timestamp
-        accept = context.accept_language
-        value = self.handler.get_record_value(record, 'ts')
-        ns['ts'] = format_datetime(value,  accept)
-        return ns
+        namespace = PaymentWayTable.get_record_namespace(self, context, record)
+        # Advance State
+        advance_state = self.handler.get_record_value(record, 'advance_state')
+        namespace['advance_state'] = CheckStates.get_value(advance_state)
+        return namespace
 
 
 
@@ -178,7 +157,8 @@ class CheckPayment(PaymentWay):
         # Add a record in payments
         payments = self.get_resource('payments')
         payments.handler.add_record({'ref': payment['id'],
-                                     'amount': payment['total_price']})
+                                     'amount': payment['total_price'],
+                                     'user': context.user.name})
         # Show payment form
         return CheckPayment_Pay().GET(self, context, payment)
 

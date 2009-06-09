@@ -17,6 +17,7 @@
 # Import from itools
 from itools.datatypes import Enumerate
 from itools.gettext import MSG
+from itools.xml import XMLParser
 
 
 class Devises(Enumerate):
@@ -28,9 +29,21 @@ class Devises(Enumerate):
       ]
 
 
-class PaymentSuccessState(Enumerate):
+class PaymentState(Enumerate):
+
+    default = 'wait'
 
     options = [
-      {'name': '1',  'value': MSG(u'Payment successfull')},
-      {'name': '0', 'value': MSG(u'Payment error')},
+      {'name': 'wait',  'value': MSG(u'To validate'), 'logo': 'blue.png'},
+      {'name': 'ok', 'value': MSG(u'Validated'), 'logo': 'green.png'},
+      {'name': 'error', 'value': MSG(u'Refused'), 'logo': 'red.png'},
       ]
+
+    img = '<img src="/ui/shop/payments/images/%s" title="%s"/>'
+
+    @classmethod
+    def get_logo(cls, name):
+        for option in cls.get_options():
+            if option['name'] == name:
+                img = cls.img % (option['logo'], option['value'].gettext())
+                return XMLParser(img.encode('utf-8'))

@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -23,14 +22,13 @@ from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
 
 # Import from payments
-from payments_views import Payments_View, Payments_Configure
+from payments_views import Payments_View
 from payments_views import Payments_History_View
 from paybox import Paybox
 from check import CheckPayment
 
 # Import from shop
 from payment_way import PaymentWay
-from shop.utils import get_shop
 
 
 class Payments(Folder):
@@ -43,7 +41,7 @@ class Payments(Folder):
     class_title = MSG(u'Payment Module')
 
     # Views
-    class_views = ['view', 'history', 'configure']
+    class_views = ['history', 'view']
 
     # XXX We have to secure
     # Fixed handlers
@@ -53,7 +51,6 @@ class Payments(Folder):
     # List of views
     view = Payments_View()
     history = Payments_History_View()
-    configure = Payments_Configure()
 
 
     @staticmethod
@@ -63,13 +60,6 @@ class Payments(Folder):
         Paybox._make_resource(Paybox, folder, '%s/paybox' % name)
         # Add check Payment way
         CheckPayment._make_resource(CheckPayment, folder, '%s/check' % name)
-
-
-    @classmethod
-    def get_metadata_schema(cls):
-        schema = Folder.get_metadata_schema()
-        schema['enabled'] = Boolean
-        return schema
 
 
     def get_payments_records(self, ref=None):
@@ -102,10 +92,6 @@ class Payments(Folder):
     ######################
     # Public API
     ######################
-
-    def is_in_test_mode(self):
-        return not self.get_property('enabled')
-
 
     def show_payment_form(self, context, payment):
         """

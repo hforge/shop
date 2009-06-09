@@ -32,7 +32,7 @@ from itools.web import BaseForm, STLView, FormError
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.table_views import Table_View
-from ikaaro.forms import ImageSelectorWidget
+from ikaaro.forms import ImageSelectorWidget, BooleanRadio
 from ikaaro.forms import STLForm, TextWidget, BooleanCheckBox
 from ikaaro.resource_views import DBResource_Edit
 
@@ -88,6 +88,7 @@ class Paybox_Configure(DBResource_Edit):
               'PBX_IDENTIFIANT': String,
               'PBX_DIFF': StringFixSize(size=2),
               'logo': String,
+              'real_mode': Boolean,
               'enabled': Boolean}
 
     widgets = [
@@ -97,7 +98,9 @@ class Paybox_Configure(DBResource_Edit):
         TextWidget('PBX_RANG', title=MSG(u'Paybox Rang')),
         TextWidget('PBX_IDENTIFIANT', title=MSG(u'Paybox Identifiant')),
         TextWidget('PBX_DIFF', title=MSG(u'Diff days (On two digits ex: 04)'),
-                   size=2)]
+                   size=2),
+        BooleanRadio('real_mode', title=MSG(u'Payments in real mode'))]
+
 
     submit_value = MSG(u'Edit configuration')
 
@@ -149,8 +152,7 @@ class Paybox_Pay(STLForm):
         # PBX_PORTEUR
         kw['PBX_PORTEUR'] = conf['email']
         # En mode test:
-        payments = resource.parent
-        if payments.is_in_test_mode():
+        if not resource.get_property('real_mode'):
             kw.update(self.test_configuration)
         # Attributes
         attributes = ['%s=%s' % (x[0], x[1]) for x in kw.items()]
@@ -181,50 +183,46 @@ class Paybox_ConfirmPayment(BaseForm):
               'transaction': Unicode,
               'autorisation': Unicode,
               'amount': Decimal,
-              'status': String}
+              'advance_state': String}
 
-    # XXX Why that ?
     def POST(self, resource, context):
-        # (1) Find out which button has been pressed, if more than one
-        self._get_action(resource, context)
+        form = self._get_form(resource, context)
 
-        # (2) Automatically validate and get the form input (from the schema).
-        try:
-            form = self._get_form(resource, context)
-        except FormError, error:
-            context.form_error = error
-            return self.on_form_error(resource, context)
-        return self.action(resource, context, form)
+        # Get payment record
+        payments = resource.get_resource('payments').handler
+        record = payments.search(ref=form['ref'])[0]
 
-
-    def action(self, resource, context, form):
-        # Ensure that remote ip address belongs to Paybox
-        # return get_abspath('paybox.cfg')
-
+        # Get informations
+        infos = {'state': 'ok' if form['autorisation'] else 'error'}
+        for key in ['transaction', 'autorisation', 'advance_state']:
+            infos[key] = form[key]
+        # We Check amount
+        amount = form['amount'] / decimal('100')
+        if payments.get_record_value(record, 'amount') != amount:
+            infos['state'] = 'error'
+            infos['advance_state'] = 'amount_invalid'
+        # We ensure that remote ip address belongs to Paybox
         remote_ip = context.request.get_remote_ip()
         if remote_ip not in self.authorized_ip:
-            msg = 'IP %s invalide (Ref commande = %s)'
-            raise ValueError, msg % (remote_ip, form['ref'])
-        # Get form values
-        amount = form['amount'] / decimal('100')
+            infos['state'] = 'error'
+            infos['advance_state'] = 'ip_not_authorized'
+        # If it's the first payment for the order ref we update record
+        # If another payment (First payment state!=wait) we add a new record
+        if payments.get_record_value(record, 'state') == 'wait':
+            payments.update_record(record.id, **infos)
+        else:
+            kw = {}
+            for key in payments.record_schema:
+                kw[key] = payments.get_record_value(record, key)
+            kw.update(infos)
+            payments.add_record(kw)
         # TODO Check signature
-        # Add a line into payments history
-        kw = {'success': bool(form['autorisation']),
-              'devise': resource.get_property('devise')}
-        for key in ['ref', 'transaction', 'autorisation', 'status']:
-            kw[key] = form[key]
-        kw['amount'] = amount
-        payment_record = resource.handler.add_record(kw)
-        # Maybe we have to do a specific traitement ?
-        self.do_treatment(resource, context, payment_record)
-        # Send an email of confirmation
-        self.send_mail_confirmation(context, payment_record)
+        # Confirm_payment XXX , to check
+        if bool(form['autorisation']):
+            resource.set_payment_as_ok(context, form['ref'])
         # Return a blank page to payment
         response = context.response
         response.set_header('Content-Type', 'text/plain')
-        # Confirm_payment
-        if bool(form['autorisation']):
-            resource.set_payment_as_ok(context, form['ref'])
 
 
 

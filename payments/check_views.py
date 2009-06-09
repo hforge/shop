@@ -60,10 +60,13 @@ class CheckPayment_Manage(Table_EditRecord):
 
     widgets = [ReadOnlyWidget('ref', title=MSG(u'Order ref')),
                ReadOnlyWidget('amount', title=MSG(u'Amount')),
+               ReadOnlyWidget('user', title=MSG(u'User')),
                TextWidget('check_number', title=MSG(u'Check number')),
                TextWidget('bank', title=MSG(u'Bank')),
                TextWidget('account_holder', title=MSG(u'Account holder')),
-               SelectWidget('state', title=MSG(u'State'))]
+               SelectWidget('state', title=MSG(u'State')),
+               SelectWidget('advance_state', title=MSG(u'Advance State'))]
+
 
     def get_widgets(self, resource, context):
         return self.widgets
@@ -73,7 +76,7 @@ class CheckPayment_Manage(Table_EditRecord):
         # Add or edit
         Table_EditRecord.action_add_or_edit(self, resource, context, record)
         # Set workflow
-        if record['state'] == 'success':
+        if record['advance_state'] == 'success':
             payments = resource.parent.set_payment_as_ok(context,
                           record['ref'])
 

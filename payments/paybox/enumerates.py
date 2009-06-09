@@ -98,11 +98,12 @@ class ModeAutorisation(Enumerate):
 
 class PayboxStatus(Enumerate):
 
-    default = '-1'
-
     # XXX Must be in english !
     info = {}
-    info['-1'] = MSG(u"Waiting for payment")
+    # Our states
+    info['ip_not_authorized'] = MSG(u"Paybox IP address invalid")
+    info['amount_invalid'] = MSG(u"Invalid payment amount")
+    # Paybox states
     info['00000'] = MSG(u"Paiement Ok")
     info['00001'] = MSG(u"La connection au centre d'autorisation a échoué.")
     info['00100'] = MSG(u"Transaction approuvée ou traitée avec succès")
