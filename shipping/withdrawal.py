@@ -18,26 +18,36 @@
 from decimal import Decimal as decimal
 
 # Import from itools
-from itools.csv import Table as BaseTable
+from itools.core import merge_dicts
 from itools.datatypes import Enumerate, String, Unicode
 from itools.gettext import MSG
-from itools.i18n import format_datetime
 from itools.stl import stl
+from itools.web import STLView
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import SelectWidget, TextWidget, MultilineWidget
 from ikaaro.forms import stl_namespaces
 from ikaaro.registry import register_resource_class
-from ikaaro.table import Table
 
 # Import from shop.shipping
-from shipping_way import ShippingWay
+from shipping_way import ShippingWay, ShippingWayBaseTable, ShippingWayTable
 
 
 #####################################################
 ## Withdrawal
 #####################################################
+class Withdrawal_RecordOrderView(STLView):
+
+    template = '/ui/shop/shipping/withdrawal_record_order_view.xml'
+
+
+    def get_namespace(self, resource, context):
+        record = self.record
+        get_value = resource.handler.get_record_value
+        return {'description': get_value(record, 'description')}
+
+
 
 class WithdrawalStates(Enumerate):
 
@@ -48,60 +58,31 @@ class WithdrawalStates(Enumerate):
       ]
 
 
-class WithdrawalBaseTable(BaseTable):
+class WithdrawalBaseTable(ShippingWayBaseTable):
 
-    record_schema = {
-        'ref': String(Unique=True, is_indexed=True),
-        'description': Unicode,
-        'state': WithdrawalStates
-        }
+    record_schema = merge_dicts(
+        ShippingWayBaseTable.record_schema,
+        description=Unicode)
 
 
 
-class WithdrawalTable(Table):
+class WithdrawalTable(ShippingWayTable):
 
     class_id = 'withdrawal-table'
     class_title = MSG(u'Withdrawal')
     class_handler = WithdrawalBaseTable
 
 
-    form = [
-        TextWidget('ref', title=MSG(u'Facture number')),
-        SelectWidget('state', title=MSG(u'State')),
+    form = ShippingWayTable.form + [
         MultilineWidget('description', title=MSG(u'Description')),
         ]
 
 
-    html_form = list(XMLParser("""
-      ${description}
-        """,
-        stl_namespaces))
-
-
-    def get_html(self, context, record):
-        get_value = self.handler.get_record_value
-        namespace = {'description': get_value(record, 'description')}
-        return stl(events=self.html_form, namespace=namespace)
-
+    record_order_view = Withdrawal_RecordOrderView
 
     def get_record_namespace(self, context, record):
-        ns = {}
-        # Id
-        ns['id'] = record.id
-        # Complete id
-        resource = context.resource
-        ns['complete_id'] = 'withdrawal-%s' % record.id
-        # Base namespace
-        for key in self.handler.record_schema.keys():
-            ns[key] = self.handler.get_record_value(record, key)
-        # State
+        ns = ShippingWayTable.get_record_namespace(self, context, record)
         ns['state'] = WithdrawalStates.get_value(ns['state'])
-        # Html
-        ns['html'] = self.get_html(context, record)
-        # Timestamp
-        accept = context.accept_language
-        value = self.handler.get_record_value(record, 'ts')
-        ns['ts'] = format_datetime(value,  accept)
         return ns
 
 

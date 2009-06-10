@@ -81,18 +81,21 @@
     </tbody>
   </table>
 
+  <br/>
+
   <stl:block stl:repeat="payment payments" stl:if="payment/html">
-    <h2>Payment</h2>
     ${payment/html}
   </stl:block>
+
+  <br/>
 
   <h2>
     Order state:
     <i class="wf-order-${state/name}">${state/title}</i>
   </h2>
 
+  <br/>
   <stl:block stl:repeat="shipping shippings" stl:if="shipping/html">
-    <h2>Shipping</h2>
     ${shipping/html}
   </stl:block>
 

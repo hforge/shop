@@ -19,6 +19,7 @@ from itools.core import get_abspath, merge_dicts
 from itools.csv import Table as BaseTable, CSVFile
 from itools.datatypes import Decimal, String
 from itools.gettext import MSG
+from itools.i18n import format_datetime
 from itools.stl import stl
 from itools import vfs
 from itools.xapian import PhraseQuery
@@ -36,8 +37,54 @@ from ikaaro.table import Table
 from shop.countries import CountriesEnumerate
 
 # Import from shipping
+from enumerates import ShippingStates
 from schema import delivery_schema
 from shipping_way_views import ShippingWay_Configure
+
+
+
+class ShippingWayBaseTable(BaseTable):
+
+    record_schema = {
+        'ref': String(Unique=True, is_indexed=True),
+        'state': ShippingStates
+        }
+
+
+
+class ShippingWayTable(Table):
+
+    form = [
+        TextWidget('ref', title=MSG(u'Facture number')),
+        SelectWidget('state', title=MSG(u'State')),
+        ]
+
+    record_order_view = None
+
+    def get_record_namespace(self, context, record):
+        namespace = {}
+        # Id
+        namespace['id'] = record.id
+        namespace['shipping_mode'] = self.parent.get_title()
+        # Complete id
+        namespace['complete_id'] = '%s-%s' % (self.parent.name, record.id)
+        # Base namespace
+        for key in self.handler.record_schema.keys():
+            namespace[key] = self.handler.get_record_value(record, key)
+        # State
+        namespace['state'] = ShippingStates.get_value(namespace['state'])
+        # Html
+        if self.record_order_view:
+            view = self.record_order_view()
+            view.record = record
+            namespace['html'] = view.GET(self, context)
+        else:
+            namespace['html'] = None
+        # Timestamp
+        accept = context.accept_language
+        value = self.handler.get_record_value(record, 'ts')
+        namespace['ts'] = format_datetime(value,  accept)
+        return namespace
 
 
 class ShippingPricesCSV(CSVFile):

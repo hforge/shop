@@ -19,7 +19,6 @@ from itools.core import merge_dicts
 from itools.datatypes import Enumerate, Integer, Unicode
 from itools.gettext import MSG
 from itools.stl import stl
-from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import TextWidget, SelectWidget, stl_namespaces
@@ -28,7 +27,7 @@ from ikaaro.registry import register_resource_class
 # Import from shop.payments
 from payment_way import PaymentWay, PaymentWayBaseTable, PaymentWayTable
 from check_views import CheckPayment_Pay, CheckPayment_Configure
-from check_views import CheckPayment_Manage
+from check_views import CheckPayment_Manage, Check_RecordOrderView
 
 
 class CheckStates(Enumerate):
@@ -72,35 +71,7 @@ class CheckPaymentTable(PaymentWayTable):
         ]
 
 
-    html_form = list(XMLParser("""
-        Please send a mail with this informations:
-        <p>
-          <dl>
-            <dt>Order reference:</dt>
-            <dd>${ref}</dd>
-            <dt>Total price:</dt>
-            <dd>${amount} €</dd>
-            <dt>A l'ordre de:</dt>
-            <dd>${to}</dd>
-            <dt>Address:</dt>
-            <dd>${address}</dd>
-          </dl>
-        </p>
-        """,
-        stl_namespaces))
-
-
-    def get_html(self, context, record):
-        state = self.handler.get_record_value(record, 'advance_state')
-        if state!='wait':
-            return None
-        namespace = {'to': self.get_property('to'),
-                     'address': self.get_property('address')}
-        get_value = self.handler.get_record_value
-        for key in ['ref', 'amount']:
-            namespace[key] = get_value(record, key)
-        return stl(events=self.html_form, namespace=namespace)
-
+    record_order_view = Check_RecordOrderView
 
     def get_record_namespace(self, context, record):
         namespace = PaymentWayTable.get_record_namespace(self, context, record)

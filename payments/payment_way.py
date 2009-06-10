@@ -50,10 +50,7 @@ class PaymentWayTable(Table):
         SelectWidget('state', title=MSG(u'State')),
         TextWidget('amount', title=MSG(u'Amount'))]
 
-
-    def get_html(self, context, record):
-        return None
-
+    record_order_view = None
 
     def get_record_namespace(self, context, record):
         get_value = self.handler.get_record_value
@@ -74,7 +71,12 @@ class PaymentWayTable(Table):
         namespace['state'] = PaymentState.get_logo(get_value(record, 'state'))
         namespace['advance_state'] = None
         # HTML
-        namespace['html'] = self.get_html(context, record)
+        if self.record_order_view:
+            view = self.record_order_view()
+            view.record = record
+            namespace['html'] = view.GET(self, context)
+        else:
+            namespace['html'] = None
         # Timestamp
         accept = context.accept_language
         value = self.handler.get_record_value(record, 'ts')

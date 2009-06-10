@@ -81,6 +81,21 @@ class CheckPayment_Manage(Table_EditRecord):
                           record['ref'])
 
 
+class Check_RecordOrderView(STLView):
+
+    template = '/ui/shop/payments/check_record_order_view.xml'
+
+    def get_namespace(self, resource, context):
+        record = self.record
+        get_value = resource.handler.get_record_value
+        namespace = {'is_wait': get_value(record, 'advance_state') == 'wait',
+                     'to': resource.parent.get_property('to'),
+                     'address': resource.parent.get_property('address')}
+        for key in ['ref', 'amount']:
+            namespace[key] = get_value(record, key)
+        return namespace
+
+
 
 class CheckPayment_Configure(DBResource_Edit):
 

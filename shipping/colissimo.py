@@ -15,94 +15,57 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.core import get_abspath
-from itools.csv import Table as BaseTable
+from itools.core import get_abspath, merge_dicts
 from itools.datatypes import String
 from itools.gettext import MSG
-from itools.i18n import format_datetime
 from itools.stl import stl
+from itools.web import STLView
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import SelectWidget, TextWidget, stl_namespaces
 from ikaaro.registry import register_resource_class
-from ikaaro.table import Table
 
 # Import from shop.shipping
-from enumerates import ShippingStates
-from shipping_way import ShippingWay
+from shipping_way import ShippingWay, ShippingWayBaseTable, ShippingWayTable
 
 
 #####################################################
 ## Colissimo (La poste)
 #####################################################
 
-
-class ColissimoBaseTable(BaseTable):
-
-    record_schema = {
-        'ref': String(Unique=True, is_indexed=True),
-        'num_colissimo': String,
-        'state': ShippingStates
-        }
+class Colissimo_RecordOrderView(STLView):
 
 
+    template = '/ui/shop/shipping/colissimo_record_order_view.xml'
 
-class ColissimoTable(Table):
+    def get_namespace(self, resource, context):
+        record = self.record
+        get_value = resource.handler.get_record_value
+        return {'num_colissimo': get_value(record, 'num_colissimo')}
+
+
+
+class ColissimoBaseTable(ShippingWayBaseTable):
+
+    record_schema = merge_dicts(
+        ShippingWayBaseTable.record_schema,
+        num_colissimo=String)
+
+
+
+class ColissimoTable(ShippingWayTable):
 
     class_id = 'colissimo-table'
     class_title = MSG(u'Colissimo')
     class_handler = ColissimoBaseTable
 
+    record_order_view = Colissimo_RecordOrderView
 
-    form = [
-        TextWidget('ref', title=MSG(u'Facture number')),
+    form = ShippingWayTable.form + [
         TextWidget('num_colissimo', title=MSG(u'Numéro de colissimo')),
-        SelectWidget('state', title=MSG(u'State')),
         ]
 
-
-    html_form = list(XMLParser("""
-        <p stl:if="num_colissimo">
-          Colissimo number ${num_colissimo}<br/>
-          <a href="http://www.coliposte.net/gp/services/main.jsp?m=10003005&amp;colispart=${num_colissimo}"
-            target="blank">
-            More informations
-          </a>
-        </p>
-        <p stl:if="not num_colissimo">-</p>
-        """,
-        stl_namespaces))
-
-
-    def get_html(self, context, record):
-        get_value = self.handler.get_record_value
-        namespace = {
-          'num_colissimo': get_value(record, 'num_colissimo')}
-        return stl(events=self.html_form, namespace=namespace)
-
-
-    def get_record_namespace(self, context, record):
-        # XXX Sylvain, we can reused code from payment_way
-        ns = {}
-        # Id
-        ns['id'] = record.id
-        ns['shipping_mode'] = self.parent.get_title()
-        # Complete id
-        resource = context.resource
-        ns['complete_id'] = 'colissimo-%s' % record.id
-        # Base namespace
-        for key in self.handler.record_schema.keys():
-            ns[key] = self.handler.get_record_value(record, key)
-        # State
-        ns['state'] = ShippingStates.get_value(ns['state'])
-        # Html
-        ns['html'] = self.get_html(context, record)
-        # Timestamp
-        accept = context.accept_language
-        value = self.handler.get_record_value(record, 'ts')
-        ns['ts'] = format_datetime(value,  accept)
-        return ns
 
 
 
