@@ -9,38 +9,39 @@
       <table cellpadding="0" cellspacing="0">
         <tr stl:if="can_compare">
           <td>
-            <img src="/ui/shop/images/fleche_bas.png"/>
+            <div class="fleche-bas"></div>
           </td>
-          <td valign="top" class="description">
-            <div style="float:left;">
-              <input class="buttoncompare" type="submit"
-                  value="Compare the selected products"/>
-            </div>
+          <td valign="top">
+            <input class="buttoncompare" type="submit"
+                value="Compare the selected products"/>
           </td>
         </tr>
         <tr class="product" stl:repeat="product products">
           <td class="checkbox" stl:if="can_compare">
             <input type="checkbox" name="products" value="${product/name}"/>
           </td>
-          <td class="description">
+          <td class="product-box">
             <div class="box">
-              <h2 class="product-title">
-                <a href="${product/name}">
-                ${product/title}
-                </a>
-              </h2>
-                ${product/description}<br/>
-                ${product/price} €<br/>
-                <img src="${product/cover/href}/;thumb?width=90&amp;height=90"
-                    stl:if="product/cover"/><br/>
+              <div class="product-title">
+                <h2><a href="${product/name}">${product/title}</a></h2>
+              </div>
+              <div class="description-wrapper">
+                <img class="cover"
+                     src="${product/cover/href}/;thumb?width=90&amp;height=90"
+                     stl:if="product/cover"/>
+                <span class="price">
+                  ${product/price} €
+                </span>
+                <p class="description">${product/description}</p>
+              </div>
             </div>
           </td>
         </tr>
         <tr stl:if="can_compare">
           <td>
-            <img src="/ui/shop/images/fleche_haut.png"/>
+            <div class="fleche-haut"></div>
           </td>
-          <td class="description">
+          <td>
             <input class="buttoncompare" type="submit"
                 value="Compare the selected products"/>
           </td>

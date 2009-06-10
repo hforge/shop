@@ -355,6 +355,7 @@ table.cart td{
  padding: 5px;
 }
 #products .box{
+ margin: 5px;
  padding: 5px;
  border: 1px solid gray;
  width: 500px;
@@ -366,4 +367,15 @@ table.cart td{
  border: 1px solid #006;
  padding: 5px;
  color: #FFF;
+ margin: 5px;
+}
+#products .fleche-bas{
+  background-image: url(/ui/shop/images/fleche_bas.png);
+  width: 17px;
+  height: 27px;
+}
+#products .fleche-haut{
+  background-image: url(/ui/shop/images/fleche_haut.png);
+  width: 17px;
+  height: 27px;
 }
