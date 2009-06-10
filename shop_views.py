@@ -583,10 +583,20 @@ class Shop_ShowRecapitulatif(STLForm):
             product = products.get_resource(cart_elt['name'])
             total_price += product.get_price() * cart_elt['quantity']
             total_weight += product.get_weight() * cart_elt['quantity']
+        # XXX GEt Shipping price (Hardcoded, fix it)
+        addresses = resource.get_resource('addresses').handler
+        delivery_address = cart.addresses['delivery_address']
+        record = addresses.get_record(delivery_address)
+        country = addresses.get_record_value(record, 'country')
+        shippings = resource.get_resource('shippings')
+        shipping_mode = cart.shipping['name']
+        shipping_price = shippings.get_namespace_shipping_way(context,
+                  shipping_mode, country, total_price, total_weight)['price']
         # We create a new order
         ref = datetime.now().strftime('%y%m%d%M%S')
         kw = {'user': context.user,
               'payment_mode': form['payment'],
+              'shipping_price': shipping_price,
               'total_price': total_price,
               'total_weight': total_weight,
               'cart': cart,

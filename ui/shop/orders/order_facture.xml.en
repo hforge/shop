@@ -54,22 +54,26 @@
     <table id="articles" cellpadding="0" cellspacing="0">
       <tr>
         <th>Designation</th>
-        <th>Price</th>
+        <th>Unit price</th>
+        <th>Quantity</th>
+        <th>Total price</th>
       </tr>
       <tr stl:repeat="product products">
         <td>
           ${product/title}
         </td>
         <td>
-          ${product/price}&nbsp;€
+          ${product/unit_price}&nbsp;€
         </td>
+        <td>${product/quantity}</td>
+        <td>${product/total_price}</td>
       </tr>
       <tr>
         <td style="text-align:right">
           <b>Transport: </b>
         </td>
         <td>
-          ${frais_de_port}&nbsp;€
+          ${shipping_price}&nbsp;€
         </td>
       </tr>
       <tr>

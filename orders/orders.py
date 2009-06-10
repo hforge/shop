@@ -86,6 +86,7 @@ class BaseOrdersProducts(BaseTable):
     record_schema = {
       'name': String(mandatory=True),
       'title': Unicode,
+      'options': Unicode,
       'quantity': Integer,
       'unit_price': Decimal(mandatory=True),
       }
@@ -105,6 +106,7 @@ class OrdersProducts(Table):
     form = [
         TextWidget('name', title=MSG(u'Product name')),
         TextWidget('title', title=MSG(u'Title')),
+        TextWidget('options', title=MSG(u'Title')),
         TextWidget('unit_price', title=MSG(u'Unit price')),
         TextWidget('quantity', title=MSG(u'Quantity'))]
 
@@ -142,6 +144,8 @@ class Order(WorkflowAware, Folder):
         schema = Folder.get_metadata_schema()
         schema.update(WorkflowAware.get_metadata_schema())
         schema['total_price'] = Decimal
+        schema['shipping_price'] = Decimal
+        schema['total_weight'] = Decimal
         schema['creation_datetime'] = ISODateTime
         schema['customer_id'] = String
         schema['payment_mode'] = String
@@ -153,15 +157,15 @@ class Order(WorkflowAware, Folder):
     def _make_resource(cls, folder, name, *args, **kw):
         shop = kw['shop']
         user = kw['user']
-        # XXX
         shop_uri = kw['shop_uri']
         cart = kw['cart']
         # Email
         user_email = user.get_property('email')
         # Build metadata/order
         metadata = {}
+        for key in ['shipping_price', 'total_price', 'total_weight']:
+            metadata[key] = kw[key]
         metadata['customer_id'] = user.name
-        metadata['total_price'] = kw['total_price']
         metadata['creation_datetime'] = datetime.now()
         metadata['shipping'] = cart.shipping
         Folder._make_resource(cls, folder, name, *args, **metadata)
@@ -170,8 +174,11 @@ class Order(WorkflowAware, Folder):
         products = shop.get_resource('products')
         for product_cart in cart.products:
             product = products.get_resource(product_cart['name'])
+            options = '\n'.join(['%s: %s' % (x, y)
+                          for x, y in product_cart['options'].items()])
             handler.add_record({'name': product.name,
                                 'title': product.get_title(),
+                                'options': options,
                                 'unit_price': product.get_price(),
                                 'quantity': product_cart['quantity']})
         metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
@@ -235,13 +242,13 @@ class Order(WorkflowAware, Folder):
         accept = context.accept_language
         creation_date = self.get_property('creation_datetime')
         creation_date = format_date(creation_date, accept=accept)
-        namespace =  {'num_cmd': self.name,
-                      'facturation': None,
-                      'livraison': None,
-                      'products': self.get_resource('products').get_namespace(context),
-                      'frais_de_port': 0,
-                      'total_price': self.get_property('total_price'),
-                      'creation_date': creation_date}
+        # XXX Add addresses
+        namespace =  {
+          'num_cmd': self.name,
+          'products': self.get_resource('products').get_namespace(context),
+          'shipping_price': self.get_property('shipping_price'),
+          'total_price': self.get_property('total_price'),
+          'creation_date': creation_date}
 
         document = self.get_resource('/ui/shop/orders/order_facture.xml')
         pdf = stl_pmltopdf(document, namespace=namespace)

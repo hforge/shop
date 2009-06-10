@@ -53,7 +53,7 @@ class Payments_History_View(BrowseForm):
         ]
 
     def get_items(self, resource, context):
-        return resource.get_payments_items(resource, context)
+        return resource.get_payments_items(context)
 
 
     def sort_and_batch(self, resource, context, items):

@@ -44,6 +44,7 @@ class OrdersProductsView(Table_View):
     columns = [
         ('checkbox', None),
         ('name', MSG(u'Product')),
+        ('options', MSG(u'Options')),
         ('unit_price', MSG(u'Unit price')),
         ('quantity', MSG(u'Quantity')),
         ('total_price', MSG(u'Total price')),

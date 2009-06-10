@@ -58,6 +58,7 @@
     <thead>
       <tr>
         <th>Product</th>
+        <th>Options</th>
         <th>Unit price</th>
         <th>Quantity</th>
         <th>Total price</th>
@@ -66,16 +67,17 @@
     <tbody>
       <tr stl:repeat="product products">
         <td>${product/title}</td>
+        <td>${product/options}</td>
         <td>${product/unit_price} €</td>
         <td>${product/quantity}</td>
         <td>${product/total_price} €</td>
       </tr>
       <tr>
-        <td colspan="3" style="text-align:right">Shipping</td>
+        <td colspan="4" style="text-align:right">Shipping</td>
         <td>${shipping_price} €</td>
       </tr>
       <tr>
-        <td colspan="3" style="text-align:right">Total Price</td>
+        <td colspan="4" style="text-align:right">Total Price</td>
         <td>${total_price} €</td>
       </tr>
     </tbody>
