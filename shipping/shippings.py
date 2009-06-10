@@ -76,31 +76,30 @@ class Shippings(Folder):
         return shipping.get_widget_namespace(context, country, price, weight)
 
 
-
-    def get_shippings_records(self, ref=None):
-        records = []
+    def get_shippings_items(self, context, ref=None):
+        items = []
         for shipping_way in self.search_resources(cls=ShippingWay):
             history = shipping_way.get_resource('history')
-            if ref is None:
-                shipping_records = (shipping_way, history.handler.get_records())
+            if ref:
+                records = history.handler.search(ref=ref)
             else:
-                shipping_records = (shipping_way, history.handler.search(ref=ref))
-            records.append(shipping_records)
-        return records
-
-
-    def get_shippings_namespace(self, context, ref=None):
-        shippings = []
-        for shipping_way, records in self.get_shippings_records(ref):
-            table = shipping_way.get_resource('history')
-            img = context.get_link(shipping_way.get_resource('logo.png'))
+                records = history.handler.get_records()
             for record in records:
-                ns = table.get_record_namespace(context, record)
-                ns['title'] = shipping_way.get_title()
-                ns['description'] = shipping_way.get_property('description')
-                ns['img'] = img
-                shippings.append(ns)
-        return shippings
+                items.append(history.get_record_namespace(context, record))
+        return items
+
+    #def get_shippings_namespace(self, context, ref=None):
+    #    shippings = []
+    #    for shipping_way, records in self.get_shippings_records(ref):
+    #        table = shipping_way.get_resource('history')
+    #        img = context.get_link(shipping_way.get_resource('logo.png'))
+    #        for record in records:
+    #            ns = table.get_record_namespace(context, record)
+    #            ns['title'] = shipping_way.get_title()
+    #            ns['description'] = shipping_way.get_property('description')
+    #            ns['img'] = img
+    #            shippings.append(ns)
+    #    return shippings
 
 
 register_resource_class(Shippings)

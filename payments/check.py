@@ -73,10 +73,11 @@ class CheckPaymentTable(PaymentWayTable):
 
 
     html_form = list(XMLParser("""
+        Please send a mail with this informations:
         <p>
           <dl>
             <dt>Order reference:</dt>
-            <dd>${ref} (Please write this number in your mail)</dd>
+            <dd>${ref}</dd>
             <dt>Total price:</dt>
             <dd>${amount} €</dd>
             <dt>A l'ordre de:</dt>
@@ -143,21 +144,11 @@ class CheckPayment(PaymentWay):
             '%s/payments' % name)
 
 
-    def get_namespace_payments(self, context):
-        namespace = []
-        payments = self.get_resource('payments')
-        for record in payments.handler.get_records():
-            kw = payments.get_record_namespace(context, record)
-            kw['payment_mode'] = self.get_title()
-            namespace.append(kw)
-        return namespace
-
-
     def _show_payment_form(self, context, payment):
         # Add a record in payments
         payments = self.get_resource('payments')
-        payments.handler.add_record({'ref': payment['id'],
-                                     'amount': payment['total_price'],
+        payments.handler.add_record({'ref': payment['ref'],
+                                     'amount': payment['amount'],
                                      'user': context.user.name})
         # Show payment form
         return CheckPayment_Pay().GET(self, context, payment)

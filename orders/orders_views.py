@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from operator import itemgetter
+
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String
@@ -28,26 +31,42 @@ from itools.web import STLView
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import stl_namespaces
 from ikaaro.table_views import Table_View
+from ikaaro.views import BrowseForm
 
 # Import from shop
 from shop.datatypes import Civilite
 from shop.utils import get_shop
 
 
+
 class OrdersProductsView(Table_View):
+
+    columns = [
+        ('checkbox', None),
+        ('name', MSG(u'Product')),
+        ('unit_price', MSG(u'Unit price')),
+        ('quantity', MSG(u'Quantity')),
+        ('total_price', MSG(u'Total price')),
+        ]
+
+    def get_table_columns(self, resource, context):
+        return self.columns
 
 
     def get_item_value(self, resource, context, item, column):
         value = Table_View.get_item_value(self, resource, context, item, column)
-        if column == 'ref':
-            root = context.root
-            ref = item.get_value('ref')
-            produit = root.get_resource(ref, soft=True)
+        if column == 'name':
+            shop = get_shop(resource)
+            ref = item.get_value('name')
+            produit = shop.get_resource('products/%s' % ref, soft=True)
             if not produit:
-                return item.get_value('title')
+                return ref
             return (produit.name, resource.get_pathto(produit))
-        if column == 'unit_price':
+        elif column == 'unit_price':
             return u'%s €' % value
+        elif column == 'total_price':
+            total_price = item.get_value('quantity') * item.get_value('unit_price')
+            return u'%s €' % total_price
         return value
 
 
@@ -95,17 +114,86 @@ class OrderView(STLView):
         namespace['products'] = products.get_namespace(context)
         # Payments
         payments = shop.get_resource('payments')
-        namespace['payments'] = payments.get_payments_namespace(context,
-                                    resource.name)
+        namespace['payments'] = payments.get_payments_items(context, resource.name)
         # Shipping
-        shipping = resource.get_property('shipping') # XXX
         shippings = shop.get_resource('shippings')
-        namespace['shippings'] = shippings.get_shippings_namespace(context,
-                                    resource.name)
-        # OLD XXX
-        namespace['frais_de_port'] = 0
-        namespace['total_price'] = 0
+        namespace['shippings'] = shippings.get_shippings_items(context, resource.name)
+        # Prices
+        for key in ['shipping_price', 'total_price']:
+            namespace[key] = resource.get_property(key)
         return namespace
+
+
+
+class Order_PaymentsView(BrowseForm):
+
+    access = 'is_admin'
+    title = MSG(u'Order payments')
+
+    table_columns = [
+        ('state', u' '),
+        ('complete_id', MSG(u'Id')),
+        ('ref', MSG(u'Ref')),
+        ('payment_name', MSG(u'Payment mode')),
+        ('advance_state', MSG(u'State')),
+        ('amount', MSG(u'Amount')),
+        ]
+
+    def get_items(self, resource, context):
+        payments = get_shop(resource).get_resource('payments')
+        return payments.get_payments_items(context, resource.name)
+
+
+    def get_item_value(self, resource, context, item, column):
+        return item[column]
+
+
+    def sort_and_batch(self, resource, context, items):
+        # Sort
+        sort_by = context.query['sort_by']
+        reverse = context.query['reverse']
+        if sort_by:
+            items.sort(key=itemgetter(sort_by), reverse=reverse)
+
+        # Batch
+        start = context.query['batch_start']
+        size = context.query['batch_size']
+        return items[start:start+size]
+
+
+class Order_ShippingsView(BrowseForm):
+
+    access = 'is_admin'
+    title = MSG(u'Order shippings')
+
+    table_columns = [
+        ('complete_id', MSG(u'Id')),
+        ('ts', MSG(u'Date')),
+        ('shipping_mode', MSG(u'Shipping mode')),
+        ('state', MSG(u'State')),
+        ]
+
+    def get_items(self, resource, context):
+        shippings = get_shop(resource).get_resource('shippings')
+        return shippings.get_shippings_items(context, resource.name)
+
+
+    def get_item_value(self, resource, context, item, column):
+        return item[column]
+
+
+    def sort_and_batch(self, resource, context, items):
+        # Sort
+        sort_by = context.query['sort_by']
+        reverse = context.query['reverse']
+        if sort_by:
+            items.sort(key=itemgetter(sort_by), reverse=reverse)
+
+        # Batch
+        start = context.query['batch_start']
+        size = context.query['batch_size']
+        return items[start:start+size]
+
 
 
 class OrdersView(Folder_BrowseContent):

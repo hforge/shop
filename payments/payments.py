@@ -62,31 +62,17 @@ class Payments(Folder):
         CheckPayment._make_resource(CheckPayment, folder, '%s/check' % name)
 
 
-    def get_payments_records(self, ref=None):
-        records = []
+    def get_payments_items(self, context, ref=None):
+        items = []
         for payment_way in self.search_resources(cls=PaymentWay):
             payments = payment_way.get_resource('payments')
-            if ref is None:
-                payments_records = (payment_way, payments.handler.get_records())
+            if ref:
+                records = payments.handler.search(ref=ref)
             else:
-                payments_records = (payment_way, payments.handler.search(ref=ref))
-            records.append(payments_records)
-        return records
-
-
-    def get_payments_namespace(self, context, ref=None):
-        payments = []
-        for payment_way, records in self.get_payments_records(ref):
-            table = payment_way.get_resource('payments')
-            # XXX sylvain
-            #img = context.get_link(payment_way.get_property('logo'))
-            img = None
+                records = payments.handler.get_records()
             for record in records:
-                ns = table.get_record_namespace(context, record)
-                ns['title'] = payment_way.get_title()
-                ns['img']= img
-                payments.append(ns)
-        return payments
+                items.append(payments.get_record_namespace(context, record))
+        return items
 
 
     ######################
@@ -98,13 +84,12 @@ class Payments(Folder):
            payment must be a dictionnary with order's identifiant
            and order price.
            For example:
-           payment = {'id': 'A250',
-                      'total_price': 250,
-                      'email': 'toto@example.fr',
+           payment = {'ref': 'A250',
+                      'amount': 250,
                       'mode': 'paybox'}
         """
         # We check that payment dictionnary is correctly fill.
-        for key in ['id', 'total_price', 'email', 'mode']:
+        for key in ['ref', 'amount', 'mode']:
             if key not in payment:
                 raise ValueError, u'Invalid order'
         # We check mode is valid and active

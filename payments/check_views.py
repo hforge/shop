@@ -48,8 +48,8 @@ class CheckPayment_Pay(STLView):
         namespace = {
             'to': resource.get_property('to'),
             'progress': Shop_Progress(index=6).GET(resource, context),
-            'ref': self.conf['id'],
-            'total_price': self.conf['total_price']}
+            'ref': self.conf['ref'],
+            'amount': self.conf['amount']}
         address = resource.get_property('address').encode('utf-8')
         namespace['address'] = XMLParser(address.replace('\n', '<br/>'))
         return namespace

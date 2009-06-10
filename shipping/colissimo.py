@@ -87,6 +87,7 @@ class ColissimoTable(Table):
         ns = {}
         # Id
         ns['id'] = record.id
+        ns['shipping_mode'] = self.parent.get_title()
         # Complete id
         resource = context.resource
         ns['complete_id'] = 'colissimo-%s' % record.id

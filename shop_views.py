@@ -575,29 +575,30 @@ class Shop_ShowRecapitulatif(STLForm):
         if not cart.is_valid():
             msg = MSG(u'Invalid cart')
             return context.come_back(msg, goto='/')
+        # Calcul total price
+        products = resource.get_resource('products')
+        total_price = decimal(0)
+        total_weight = decimal(0)
+        for cart_elt in cart.products:
+            product = products.get_resource(cart_elt['name'])
+            total_price += product.get_price() * cart_elt['quantity']
+            total_weight += product.get_weight() * cart_elt['quantity']
         # We create a new order
-        order_ref = datetime.now().strftime('%y%m%d%M%S')
-        kw = {'metadata': {'customer_id': context.user.name,
-                           'payment_mode': form['payment']},
-              'customer_email': context.user.get_property('email'),
+        ref = datetime.now().strftime('%y%m%d%M%S')
+        kw = {'user': context.user,
+              'payment_mode': form['payment'],
+              'total_price': total_price,
+              'total_weight': total_weight,
               'cart': cart,
               'shop': resource,
               'shop_uri': context.uri.resolve('/')}
-        Order.make_resource(Order, resource, 'orders/%s' % order_ref,
-                            title={'en': u'#%s' % order_ref},
+        Order.make_resource(Order, resource, 'orders/%s' % ref,
+                            title={'en': u'#%s' % ref},
                             **kw)
         # We clear the cart
         #cart.clear()
         # We show the payment form
-        products = resource.get_resource('products')
-        total_price = decimal(0)
-        for cart_elt in cart.products:
-            product = products.get_resource(cart_elt['name'])
-            total_price += product.get_price() * cart_elt['quantity']
-        kw = {'id': order_ref,
-              'total_price': total_price,
-              'email': context.user.get_property('email'),
-              'mode': form['payment']}
+        kw = {'ref': ref, 'amount': total_price, 'mode': form['payment']}
         payments = resource.get_resource('payments')
         return payments.show_payment_form(context, kw)
 

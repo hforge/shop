@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from operator import itemgetter
 
 # Import from itools
 from itools.datatypes import Boolean, Decimal, Unicode
@@ -81,14 +83,16 @@ class Shippings_History(BrowseForm):
         ]
 
     def get_items(self, resource, context):
-        """ Here we concatanate payments off all payment's mode """
-        items = []
-        for shipping_way in resource.search_resources(cls=ShippingWay):
-            items += shipping_way.get_namespace_shippings(context)
-        return items
+        return resource.get_shippings_items(context)
 
 
     def sort_and_batch(self, resource, context, items):
+        # Sort
+        sort_by = context.query['sort_by']
+        reverse = context.query['reverse']
+        if sort_by:
+            items.sort(key=itemgetter(sort_by), reverse=reverse)
+
         # Batch
         start = context.query['batch_start']
         size = context.query['batch_size']

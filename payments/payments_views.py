@@ -47,17 +47,13 @@ class Payments_History_View(BrowseForm):
         ('ref', MSG(u'Ref')),
         ('user_title', MSG(u'Customer')),
         ('user_email', MSG(u'Customer email')),
-        ('payment_mode', MSG(u'Payment mode')),
+        ('payment_name', MSG(u'Payment mode')),
         ('advance_state', MSG(u'State')),
         ('amount', MSG(u'Amount')),
         ]
 
     def get_items(self, resource, context):
-        """ Here we concatanate payments off all payment's mode """
-        items = []
-        for payment_way in resource.search_resources(cls=PaymentWay):
-            items += payment_way.get_namespace_payments(context)
-        return items
+        return resource.get_payments_items(resource, context)
 
 
     def sort_and_batch(self, resource, context, items):

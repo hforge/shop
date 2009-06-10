@@ -107,21 +107,11 @@ class Paybox(PaymentWay):
         PayboxTable._make_resource(PayboxTable, folder, '%s/payments' % name)
 
 
-    def get_namespace_payments(self, context):
-        namespace = []
-        payments = self.get_resource('payments')
-        for record in payments.handler.get_records():
-            kw = payments.get_record_namespace(context, record)
-            kw['payment_mode'] = self.get_title()
-            namespace.append(kw)
-        return namespace
-
-
     def _show_payment_form(self, context, payment):
         # Add payment in history
         payments = self.get_resource('payments').handler
-        payments.add_record({'ref': payment['id'],
-                             'amount': payment['total_price'],
+        payments.add_record({'ref': payment['ref'],
+                             'amount': payment['amount'],
                              'user': context.user.name})
         # Show payment form
         return Paybox_Pay().GET(self, context, payment)

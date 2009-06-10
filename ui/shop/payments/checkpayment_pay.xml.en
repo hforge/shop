@@ -16,7 +16,7 @@
     <dt>Order reference:</dt>
     <dd>${ref} (Please write this number in your mail)</dd>
     <dt>Total price:</dt>
-    <dd>${total_price} €</dd>
+    <dd>${amount} €</dd>
     <dt>A l'ordre de:</dt>
     <dd>${to}</dd>
     <dt>Address:</dt>

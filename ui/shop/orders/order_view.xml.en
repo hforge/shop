@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Details about your order (Number #${order_number})</h1>
+
+  <h2>Order number: ${order_number}, registered the ${creation_datetime}</h2>
 
     <p>
-      Hi
       <a href="${customer/href}" style="text-decoration:none">
-      ${customer/gender} ${customer/title} (${customer/email}) !
+      ${customer/gender} ${customer/title} (${customer/email})
       </a><br/>
-      Your order has been recorded the ${creation_datetime}.<br/>
-      In this section you will find all informations concerning your order.<br/>
       <a href="./bill.pdf/;download" target="blank" stl:if="has_bill">
         <img src="/ui/icons/16x16/pdf.png"/> Download bill
       </a>
     </p>
-
-    <h2>Order state</h2>
-
-    <span class="wf-order-${state/name}">${state/title}</span>
-
-    <h2>Delivery and bill addresses</h2>
 
     <table class="order-browse" style="width:400px">
       <thead>
@@ -58,76 +52,50 @@
       </tbody>
     </table>
 
-  <h2>Your order</h2>
+    <br/>
 
   <table class="order-browse">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Title</th>
+        <th>Product</th>
+        <th>Unit price</th>
         <th>Quantity</th>
         <th>Total price</th>
       </tr>
     </thead>
     <tbody>
       <tr stl:repeat="product products">
-        <td>
-          ${product/name}
-        </td>
         <td>${product/title}</td>
+        <td>${product/unit_price} €</td>
         <td>${product/quantity}</td>
-        <td>${product/price}</td>
+        <td>${product/total_price} €</td>
+      </tr>
+      <tr>
+        <td colspan="3" style="text-align:right">Shipping</td>
+        <td>${shipping_price} €</td>
+      </tr>
+      <tr>
+        <td colspan="3" style="text-align:right">Total Price</td>
+        <td>${total_price} €</td>
       </tr>
     </tbody>
   </table>
 
+  <stl:block stl:repeat="payment payments" stl:if="payment/html">
+    <h2>Payment</h2>
+    ${payment/html}
+  </stl:block>
 
-  <h2>Shipping informations</h2>
+  <h2>
+    Order state:
+    <i class="wf-order-${state/name}">${state/title}</i>
+  </h2>
 
-    <table cellpadding="0" class="order-browse" cellspacing="0" stl:if="shippings">
-      <thead>
-        <tr>
-          <th colspan="2">Shipping informations</th>
-          <th>Description</th>
-          <th>State</th>
-          <th/>
-        </tr>
-      </thead>
-      <tbody>
-        <tr stl:repeat="shipping shippings">
-          <td>
-            <img src="${shipping/img}/;download" title="${shipping/title}"/>
-          </td>
-          <td>${shipping/title}</td>
-          <td>${shipping/description}</td>
-          <td>${shipping/state}</td>
-          <td>${shipping/html}</td>
-        </tr>
-      </tbody>
-    </table>
+  <stl:block stl:repeat="shipping shippings" stl:if="shipping/html">
+    <h2>Shipping</h2>
+    ${shipping/html}
+  </stl:block>
 
-  <h2>Payment informations</h2>
 
-    <table cellpadding="0" class="order-browse" cellspacing="0" stl:if="payments">
-      <thead>
-        <tr>
-          <th colspan="2">Payment mode</th>
-          <th>Amount</th>
-          <th>Payment state</th>
-          <th/>
-        </tr>
-      </thead>
-      <tbody>
-        <tr stl:repeat="payment payments">
-          <td>
-            <img src="${payment/img}/;download" title="${payment/title}"/>
-          </td>
-          <td>${payment/title}</td>
-          <td>${payment/amount} €</td>
-          <td>${payment/state}</td>
-          <td>${payment/html}</td>
-        </tr>
-      </tbody>
-    </table>
 
 </stl:block>

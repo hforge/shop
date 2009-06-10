@@ -131,8 +131,8 @@ class Paybox_Pay(STLForm):
         configuration = ConfigFile(configuration_uri)
         # Configuration
         kw = {}
-        kw['PBX_CMD'] = conf['id']
-        kw['PBX_TOTAL'] = int(conf['total_price'] * 100)
+        kw['PBX_CMD'] = conf['ref']
+        kw['PBX_TOTAL'] = int(conf['amount'] * 100)
         # Basic configuration
         for key in configuration.values.keys():
             kw[key] = configuration.get_value(key)
@@ -150,7 +150,7 @@ class Paybox_Pay(STLForm):
         # XXX Euro par défaut
         kw['PBX_DEVISE'] = '978'
         # PBX_PORTEUR
-        kw['PBX_PORTEUR'] = conf['email']
+        kw['PBX_PORTEUR'] = context.user.get_property('email')
         # En mode test:
         if not resource.get_property('real_mode'):
             kw.update(self.test_configuration)

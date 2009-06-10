@@ -39,7 +39,7 @@ from shop.addresses import Addresses, BaseAddresses
 from shop.utils import get_shop
 
 # Import from shop.orders
-from orders_views import OrderView
+from orders_views import OrderView, Order_PaymentsView, Order_ShippingsView
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from workflow import order_workflow
 
@@ -86,8 +86,8 @@ class BaseOrdersProducts(BaseTable):
     record_schema = {
       'name': String(mandatory=True),
       'title': Unicode,
-      'price': Decimal(mandatory=True),
       'quantity': Integer,
+      'unit_price': Decimal(mandatory=True),
       }
 
 
@@ -105,7 +105,7 @@ class OrdersProducts(Table):
     form = [
         TextWidget('name', title=MSG(u'Product name')),
         TextWidget('title', title=MSG(u'Title')),
-        TextWidget('price', title=MSG(u'Price')),
+        TextWidget('unit_price', title=MSG(u'Unit price')),
         TextWidget('quantity', title=MSG(u'Quantity'))]
 
 
@@ -116,6 +116,7 @@ class OrdersProducts(Table):
             kw = {}
             for key in BaseOrdersProducts.record_schema.keys():
                 kw[key] = handler.get_record_value(record, key)
+            kw['total_price'] = kw['unit_price'] * kw['quantity']
             ns.append(kw)
         return ns
 
@@ -124,7 +125,7 @@ class Order(WorkflowAware, Folder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
-    class_views = ['view', 'manage', 'edit_state']
+    class_views = ['view', 'payments', 'shippings', 'edit_state']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses', 'products']
 
@@ -132,6 +133,9 @@ class Order(WorkflowAware, Folder):
 
     # Views
     view = OrderView()
+    payments = Order_PaymentsView()
+    shippings = Order_ShippingsView()
+
 
     @classmethod
     def get_metadata_schema(cls):
@@ -148,11 +152,16 @@ class Order(WorkflowAware, Folder):
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         shop = kw['shop']
+        user = kw['user']
+        # XXX
         shop_uri = kw['shop_uri']
         cart = kw['cart']
-        customer_email = kw['customer_email']
+        # Email
+        user_email = user.get_property('email')
         # Build metadata/order
-        metadata = kw['metadata']
+        metadata = {}
+        metadata['customer_id'] = user.name
+        metadata['total_price'] = kw['total_price']
         metadata['creation_datetime'] = datetime.now()
         metadata['shipping'] = cart.shipping
         Folder._make_resource(cls, folder, name, *args, **metadata)
@@ -163,7 +172,7 @@ class Order(WorkflowAware, Folder):
             product = products.get_resource(product_cart['name'])
             handler.add_record({'name': product.name,
                                 'title': product.get_title(),
-                                'price': product.get_price(),
+                                'unit_price': product.get_price(),
                                 'quantity': product_cart['quantity']})
         metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
         folder.set_handler('%s/products.metadata' % name, metadata)
@@ -180,7 +189,7 @@ class Order(WorkflowAware, Folder):
         folder.set_handler('%s/addresses.metadata' % name, metadata)
         folder.set_handler('%s/addresses' % name, handler)
         # Send mail of confirmation / notification
-        cls.send_email_confirmation(shop, shop_uri, customer_email, name)
+        cls.send_email_confirmation(shop, shop_uri, user_email, name)
 
 
     def _get_catalog_values(self):
