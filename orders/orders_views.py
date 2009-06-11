@@ -34,6 +34,8 @@ from ikaaro.table_views import Table_View
 from ikaaro.views import BrowseForm
 
 # Import from shop
+from shop.payments.payment_way import PaymentWaysEnumerate
+from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.datatypes import Civilite
 from shop.utils import get_shop
 
@@ -211,6 +213,8 @@ class OrdersView(Folder_BrowseContent):
         ('numero', MSG(u'Order id')),
         ('customer', MSG(u'Customer')),
         ('state', MSG(u'State')),
+        ('payment_mode', MSG(u'Payment mode')),
+        ('shipping', MSG(u'Shipping mode')),
         ('total_price', MSG(u'Total price')),
         ('creation_datetime', MSG(u'Date and Time')),
         ('actions', MSG(u'Actions'))]
@@ -235,6 +239,12 @@ class OrdersView(Folder_BrowseContent):
         item_brain, item_resource = item
         if column == 'numero':
             return (item_brain.name, item_brain.name)
+        elif column == 'payment_mode':
+            payment_mode = item_resource.get_property('payment_mode')
+            return PaymentWaysEnumerate.get_value(payment_mode)
+        elif column == 'shipping':
+            shipping_mode = item_resource.get_property('shipping')
+            return ShippingWaysEnumerate.get_value(shipping_mode)
         elif column == 'customer':
             users = context.root.get_resource('users')
             customer_id = item_resource.get_property('customer_id')

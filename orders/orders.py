@@ -36,6 +36,8 @@ from ikaaro.workflow import WorkflowAware
 
 # Import from shop
 from shop.addresses import Addresses, BaseAddresses
+from shop.payments.payment_way import PaymentWaysEnumerate
+from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.utils import get_shop
 
 # Import from shop.orders
@@ -148,8 +150,8 @@ class Order(WorkflowAware, Folder):
         schema['total_weight'] = Decimal
         schema['creation_datetime'] = ISODateTime
         schema['customer_id'] = String
-        schema['payment_mode'] = String
-        schema['shipping'] = String
+        schema['payment_mode'] = PaymentWaysEnumerate
+        schema['shipping'] = ShippingWaysEnumerate
         return schema
 
 

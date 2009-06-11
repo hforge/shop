@@ -15,13 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools import vfs
 from itools.core import get_abspath, merge_dicts
 from itools.csv import Table as BaseTable, CSVFile
-from itools.datatypes import Decimal, String
+from itools.datatypes import Decimal, Enumerate, String
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.stl import stl
-from itools import vfs
+from itools.web import get_context
 from itools.xapian import PhraseQuery
 from itools.xml import XMLParser
 
@@ -35,6 +36,7 @@ from ikaaro.table import Table
 
 # Import from shop
 from shop.countries import CountriesEnumerate
+from shop.utils import get_shop
 
 # Import from shipping
 from enumerates import ShippingStates
@@ -228,6 +230,21 @@ class ShippingWay(Folder):
     def get_shipping_option(self, context):
         return None
 
+
+
+class ShippingWaysEnumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        options = []
+        context = get_context()
+        shop = get_shop(context.resource)
+        shippings = shop.get_resource('shippings')
+        for way in shippings.search_resources(cls=ShippingWay):
+            options.append({'name': way.name,
+                            'value': way.get_title(),
+                            'enabled': way.get_property('enabled')})
+        return options
 
 
 register_resource_class(ShippingWay)

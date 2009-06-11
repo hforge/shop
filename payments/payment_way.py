@@ -145,10 +145,9 @@ class PaymentWaysEnumerate(Enumerate):
         shop = get_shop(context.resource)
         payments = shop.get_resource('payments')
         for mode in payments.search_resources(cls=PaymentWay):
-            if not mode.get_property('enabled'):
-                continue
             options.append({'name': mode.name,
-                            'title': mode.get_title()})
+                            'value': mode.get_title(),
+                            'enabled': mode.get_property('enabled')})
         return options
 
 
