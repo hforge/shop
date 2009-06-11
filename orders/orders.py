@@ -90,6 +90,7 @@ class BaseOrdersProducts(BaseTable):
       'title': Unicode,
       'options': Unicode,
       'quantity': Integer,
+      'weight': Decimal,
       'unit_price': Decimal(mandatory=True),
       }
 
@@ -108,6 +109,7 @@ class OrdersProducts(Table):
     form = [
         TextWidget('name', title=MSG(u'Product name')),
         TextWidget('title', title=MSG(u'Title')),
+        TextWidget('weight', title=MSG(u'Weight')),
         TextWidget('options', title=MSG(u'Title')),
         TextWidget('unit_price', title=MSG(u'Unit price')),
         TextWidget('quantity', title=MSG(u'Quantity'))]
@@ -182,6 +184,7 @@ class Order(WorkflowAware, Folder):
                                 'title': product.get_title(),
                                 'options': options,
                                 'unit_price': product.get_price(),
+                                'weight': product.get_weight(),
                                 'quantity': product_cart['quantity']})
         metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
         folder.set_handler('%s/products.metadata' % name, metadata)
