@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  We are waiting for the customer check.<br/>
+  <hr/>
+
+  <table cellpadding="5" cellspacing="0">
+    <tr>
+      <th>
+        Check number:
+      </th>
+      <td>
+        <input type="text" name="check_number"/>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Bank:
+      </th>
+      <td>
+        <input type="text" name="bank"/>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Account Holder:
+      </th>
+      <td>
+        <input type="text" name="account_holder"/>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" class="button-ok" value="Validate"/>
+      </td>
+    </tr>
+  </table>
+
+
+</stl:block>

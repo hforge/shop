@@ -317,7 +317,7 @@ table.cart td{
 }
 
 .order-browse thead th{
-  background: #A774A8;
+  background: #B2A88D;
   color: #FFF;
   padding: 4px 6px;
 }
@@ -379,3 +379,26 @@ table.cart td{
   width: 17px;
   height: 27px;
 }
+
+/* Legend */
+legend {
+  background: #000;
+  color: #FFF;
+  border: 1px solid #561B57;
+  font-weight:bold;
+  margin: 0;
+  padding: 2px 4px;
+}
+fieldset{
+  background: #FFFFEF;
+  border: 1px solid #561B57;
+  font-size: 1.1em;
+  margin: 10px;
+  padding: 10px;
+}
+hr{
+  background-color: gray;
+  height: 1px;
+  border: medium none;
+}
+

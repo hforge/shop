@@ -19,13 +19,12 @@ from operator import itemgetter
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String
+from itools.datatypes import Boolean, Integer, String
 from itools.gettext import MSG
 from itools.i18n import format_datetime, format_date
-from itools.stl import stl
 from itools.xapian import PhraseQuery
 from itools.xml import XMLParser
-from itools.web import STLView
+from itools.web import STLView, STLForm
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
@@ -75,9 +74,9 @@ class OrdersProductsView(Table_View):
 
 class OrderView(STLView):
 
-    access = True#'is_admin'
+    access = 'is_admin'
 
-    title = MSG(u'Commande')
+    title = MSG(u'View')
 
     template = '/ui/shop/orders/order_view.xml'
 
@@ -110,8 +109,11 @@ class OrderView(STLView):
                               'title': state['title']}
         # Addresses
         addresses = shop.get_resource('addresses').handler
-        namespace['delivery_address'] = addresses.get_record_namespace(0)
-        namespace['bill_address'] = addresses.get_record_namespace(1)
+        get_address = addresses.get_record_namespace
+        bill_address = resource.get_property('bill_address')
+        delivery_address = resource.get_property('delivery_address')
+        namespace['delivery_address'] = get_address(delivery_address)
+        namespace['bill_address'] = get_address(bill_address)
         # Products
         products = resource.get_resource('products')
         namespace['products'] = products.get_namespace(context)
@@ -128,81 +130,10 @@ class OrderView(STLView):
 
 
 
-class Order_PaymentsView(BrowseForm):
-
-    access = 'is_admin'
-    title = MSG(u'Order payments')
-
-    table_columns = [
-        ('state', u' '),
-        ('complete_id', MSG(u'Id')),
-        ('ref', MSG(u'Ref')),
-        ('payment_name', MSG(u'Payment mode')),
-        ('advance_state', MSG(u'State')),
-        ('amount', MSG(u'Amount')),
-        ]
-
-    def get_items(self, resource, context):
-        payments = get_shop(resource).get_resource('payments')
-        return payments.get_payments_items(context, resource.name)
-
-
-    def get_item_value(self, resource, context, item, column):
-        return item[column]
-
-
-    def sort_and_batch(self, resource, context, items):
-        # Sort
-        sort_by = context.query['sort_by']
-        reverse = context.query['reverse']
-        if sort_by:
-            items.sort(key=itemgetter(sort_by), reverse=reverse)
-
-        # Batch
-        start = context.query['batch_start']
-        size = context.query['batch_size']
-        return items[start:start+size]
-
-
-class Order_ShippingsView(BrowseForm):
-
-    access = 'is_admin'
-    title = MSG(u'Order shippings')
-
-    table_columns = [
-        ('complete_id', MSG(u'Id')),
-        ('ts', MSG(u'Date')),
-        ('shipping_mode', MSG(u'Shipping mode')),
-        ('state', MSG(u'State')),
-        ]
-
-    def get_items(self, resource, context):
-        shippings = get_shop(resource).get_resource('shippings')
-        return shippings.get_shippings_items(context, resource.name)
-
-
-    def get_item_value(self, resource, context, item, column):
-        return item[column]
-
-
-    def sort_and_batch(self, resource, context, items):
-        # Sort
-        sort_by = context.query['sort_by']
-        reverse = context.query['reverse']
-        if sort_by:
-            items.sort(key=itemgetter(sort_by), reverse=reverse)
-
-        # Batch
-        start = context.query['batch_start']
-        size = context.query['batch_size']
-        return items[start:start+size]
-
-
-
 class OrdersView(Folder_BrowseContent):
 
     access = 'is_admin'
-    title = MSG(u'Orders')
+    title = MSG(u'Manage Orders')
 
     # Configuration
     table_actions = []
@@ -216,8 +147,7 @@ class OrdersView(Folder_BrowseContent):
         ('payment_mode', MSG(u'Payment mode')),
         ('shipping', MSG(u'Shipping mode')),
         ('total_price', MSG(u'Total price')),
-        ('creation_datetime', MSG(u'Date and Time')),
-        ('actions', MSG(u'Actions'))]
+        ('creation_datetime', MSG(u'Date and Time'))]
 
     query_schema = merge_dicts(Folder_BrowseContent.query_schema,
                                sort_by=String(),
@@ -227,13 +157,6 @@ class OrdersView(Folder_BrowseContent):
     batch_msg1 = MSG(u"There's one order.")
     batch_msg2 = MSG(u"There are {n} orders.")
 
-    actions_html = list(XMLParser("""
-        <a href="${order_name}/${action/link}"
-            stl:repeat="action actions">
-          <img src="${action/img}"/>
-        </a>
-        """,
-        stl_namespaces))
 
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
@@ -263,12 +186,6 @@ class OrdersView(Folder_BrowseContent):
                         item_resource.get_statename(),
                         state['title'].gettext())
             return XMLParser(state.encode('utf-8'))
-        elif column == 'actions':
-            actions = [{'link': ';view', 'img': '/ui/icons/16x16/view.png'},
-                       {'link': ';edit', 'img': '/ui/icons/16x16/edit.png'}]
-            namespace = {'order_name': item_brain.name,
-                         'actions': actions}
-            return stl(events=self.actions_html, namespace=namespace)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
 
@@ -288,3 +205,115 @@ class MyOrdersView(OrdersView):
     def get_items(self, resource, context, *args):
         args = PhraseQuery('customer_id', str(context.user.name))
         return Folder_BrowseContent.get_items(self, resource, context, args)
+
+
+class Order_ManageShipping(STLForm):
+
+    access = 'is_admin'
+    title = MSG(u'Manage shipping')
+
+    template = '/ui/shop/orders/order_manage.xml'
+
+    def get_shipping_way(self, resource):
+        shipping_way = resource.get_property('shipping')
+        return get_shop(resource).get_resource('shippings/%s' % shipping_way)
+
+
+    def get_namespace(self, resource, context):
+        namespace = {}
+        shop = get_shop(resource)
+        shippings = shop.get_resource('shippings')
+        # Get current shipping way
+        shipping_way = self.get_shipping_way(resource)
+        # Delivery address
+        addresses = shop.get_resource('addresses').handler
+        get_address = addresses.get_record_namespace
+        delivery_address = resource.get_property('delivery_address')
+        namespace['delivery_address'] = get_address(delivery_address)
+        # Order informations
+        for key in ['shipping_price', 'total_price', 'total_weight']:
+            namespace[key] = resource.get_property(key)
+        # Shipping mode
+        namespace['shipping_mode'] = ShippingWaysEnumerate.get_value(
+                                        shipping_way.name)
+        # Products
+        products = resource.get_resource('products')
+        namespace['products'] = products.get_namespace(context)
+        # Add shipping
+        view = shipping_way.order_add_view
+        namespace['create_shipping'] = view.GET(resource, context)
+        # History
+        namespace['shippings'] = shippings.get_shippings_items(context, resource.name)
+        return namespace
+
+
+    def get_schema(self, resource, context):
+        shipping_way = self.get_shipping_way(resource)
+        table = shipping_way.get_resource('history')
+        view = shipping_way.order_add_view
+        return view.get_schema(table, context)
+
+
+    def action_add_shipping(self, resource, context, form):
+        shipping_way = self.get_shipping_way(resource)
+        table = shipping_way.get_resource('history')
+        view = shipping_way.order_add_view
+        return view.action(table, context, form)
+
+
+class Order_ManagePayment(STLForm):
+
+    access = 'is_admin'
+    title = MSG(u'Manage payment')
+
+    template = '/ui/shop/orders/order_manage_payment.xml'
+
+    def get_payment_way(self, resource):
+        payment_way = resource.get_property('payment_mode') or 'paybox'
+        return get_shop(resource).get_resource('payments/%s' % payment_way)
+
+
+    def get_namespace(self, resource, context):
+        namespace = {}
+        shop = get_shop(resource)
+        payments = shop.get_resource('payments')
+        # Get current payment way
+        payment_way = self.get_payment_way(resource)
+        # Bill address
+        addresses = shop.get_resource('addresses').handler
+        bill_address = resource.get_property('bill_address')
+        namespace['bill_address'] = addresses.get_record_namespace(
+                                        bill_address)
+        # Payment mode
+        namespace['payment_mode'] = PaymentWaysEnumerate.get_value(
+                                        payment_way.name)
+        # Order informations
+        for key in ['shipping_price', 'total_price']:
+            namespace[key] = resource.get_property(key)
+        # Products
+        products = resource.get_resource('products')
+        namespace['products'] = products.get_namespace(context)
+        # Add shipping
+        view = payment_way.order_edit_view
+        if view:
+            namespace['payment'] = {'id': 0, 'html': view.GET(resource, context)}
+        else:
+            namespace['payment'] = None
+        # History
+        namespace['payments'] = payments.get_payments_items(context, resource.name)
+        return namespace
+
+
+    def get_schema(self, resource, context):
+        payment_way = self.get_payment_way(resource)
+        table = payment_way.get_resource('payments')
+        view = payment_way.order_edit_view
+        return view.get_schema(table, context)
+
+
+
+    def action(self, resource, context, form):
+        payment_way = self.get_payment_way(resource)
+        table = payment_way.get_resource('payments')
+        view = payment_way.order_edit_view
+        return view.action(table, context, form)

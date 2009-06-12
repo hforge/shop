@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <form method="POST">
+    To send the packages by colissimo, please fill the colissimo number:<br/><br/>
+    <input type="text" size="30" name="num_colissimo"/>
+    <input name=";add_shipping" type="submit" class="button-ok" value="Ok"/>
+  </form>
+
+</stl:block>

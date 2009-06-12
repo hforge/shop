@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h1>Manage delivery</h1>
+
+  <fieldset style="width:300px;float:left">
+    <legend>Delivery address</legend>
+      ${delivery_address/firstname} ${delivery_address/lastname}<br/>
+      ${delivery_address/address_1}<br/>
+      <stl:block stl:if="delivery_address/address_2">
+        ${delivery_address/address_2}<br/>
+      </stl:block>
+      ${delivery_address/zipcode} ${delivery_address/town}<br/>
+      ${delivery_address/country}<br/>
+  </fieldset>
+
+  <fieldset style="width:300px;float:left">
+    <legend>Order informations</legend>
+      <b>Order Weight:</b> ${total_weight} KG<br/>
+      <b>Order price:</b> ${total_price} €<br/>
+      <b>Shipping price payed by customer:</b> ${shipping_price} €<br/>
+      <b>Shipping mode choose by customer:</b> ${shipping_mode}
+  </fieldset>
+
+  <fieldset style="width:100%;">
+    <legend>Products</legend>
+
+    <table class="order-browse">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Options</th>
+          <th>Weight</th>
+          <th>Unit price</th>
+          <th>Quantity</th>
+          <th>Total price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr stl:repeat="product products">
+          <td>${product/title}</td>
+          <td>${product/options}</td>
+          <td>${product/weight} kg</td>
+          <td>${product/unit_price} €</td>
+          <td>${product/quantity}</td>
+          <td>${product/total_price} €</td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+
+  <fieldset style="width:100%;" stl:if="shippings">
+    <legend>Shipping history</legend>
+
+    <table class="order-browse">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Datetime</th>
+          <th>Mode</th>
+          <th>State</th>
+        </tr>
+      </thead>
+      <tbody>
+        <stl:block stl:repeat="shipping shippings">
+          <tr>
+            <td>${shipping/complete_id}</td>
+            <td>${shipping/ts}</td>
+            <td>${shipping/shipping_mode}</td>
+            <td>${shipping/state}</td>
+          </tr>
+        </stl:block>
+      </tbody>
+    </table>
+  </fieldset>
+
+  <fieldset style="width:100%;" stl:if="not shippings">
+    <legend>Send order</legend>
+    ${create_shipping}
+  </fieldset>
+
+</stl:block>

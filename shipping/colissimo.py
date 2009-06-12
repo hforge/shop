@@ -19,7 +19,7 @@ from itools.core import get_abspath, merge_dicts
 from itools.datatypes import String
 from itools.gettext import MSG
 from itools.stl import stl
-from itools.web import STLView
+from itools.web import STLView, STLForm
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -45,6 +45,25 @@ class Colissimo_RecordOrderView(STLView):
         return {'num_colissimo': get_value(record, 'num_colissimo')}
 
 
+class Colissimo_RecordAdd(STLForm):
+
+    template = '/ui/shop/shipping/colissimo_add_record.xml'
+
+    access = 'is_admin'
+
+    schema = {'num_colissimo': String}
+
+    def action(self, resource, context, form):
+        order = context.resource
+        order.set_as_sended()
+        kw = {'ref': order.name,
+              'state': 'sended',
+              'num_colissimo': form['num_colissimo']}
+        resource.handler.add_record(kw)
+        msg = MSG(u'The colissimo has been added')
+        return context.come_back(msg)
+
+
 
 class ColissimoBaseTable(ShippingWayBaseTable):
 
@@ -61,6 +80,7 @@ class ColissimoTable(ShippingWayTable):
     class_handler = ColissimoBaseTable
 
     record_order_view = Colissimo_RecordOrderView
+    add_record = Colissimo_RecordAdd()
 
     form = ShippingWayTable.form + [
         TextWidget('num_colissimo', title=MSG(u'Numéro de colissimo')),
@@ -80,6 +100,10 @@ class Colissimo(ShippingWay):
                             u"sous réserve des heures limites de dépôt")
 
     img = '../ui/shop/images/colissimo.png'
+
+
+    order_add_view = Colissimo_RecordAdd()
+
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):

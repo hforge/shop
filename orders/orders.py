@@ -41,8 +41,9 @@ from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.utils import get_shop
 
 # Import from shop.orders
-from orders_views import OrderView, Order_PaymentsView, Order_ShippingsView
+from orders_views import OrderView
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
+from orders_views import Order_ManagePayment, Order_ManageShipping
 from workflow import order_workflow
 
 
@@ -131,7 +132,7 @@ class Order(WorkflowAware, Folder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
-    class_views = ['view', 'payments', 'shippings', 'edit_state']
+    class_views = ['view', 'manage_payment', 'manage_shipping']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses', 'products']
 
@@ -139,8 +140,8 @@ class Order(WorkflowAware, Folder):
 
     # Views
     view = OrderView()
-    payments = Order_PaymentsView()
-    shippings = Order_ShippingsView()
+    manage_payment = Order_ManagePayment()
+    manage_shipping = Order_ManageShipping()
 
 
     @classmethod
@@ -154,6 +155,8 @@ class Order(WorkflowAware, Folder):
         schema['customer_id'] = String
         schema['payment_mode'] = PaymentWaysEnumerate
         schema['shipping'] = ShippingWaysEnumerate
+        schema['delivery_address'] = Integer
+        schema['bill_address'] = Integer
         return schema
 
 
@@ -169,6 +172,9 @@ class Order(WorkflowAware, Folder):
         metadata = {}
         for key in ['shipping_price', 'total_price', 'total_weight']:
             metadata[key] = kw[key]
+        # Addresses
+        metadata['delivery_address'] = cart.addresses['delivery_address']
+        metadata['bill_address'] = cart.addresses['bill_address']
         metadata['customer_id'] = user.name
         metadata['creation_datetime'] = datetime.now()
         metadata['shipping'] = cart.shipping
@@ -243,6 +249,10 @@ class Order(WorkflowAware, Folder):
         self.create_delivery(context)
 
 
+    def set_as_sended(self):
+        self.set_workflow_state('sended')
+
+
     def generate_pdf_bill(self, context):
         accept = context.accept_language
         creation_date = self.get_property('creation_datetime')
@@ -276,7 +286,7 @@ class Orders(Folder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')
-    class_views = ['my_orders', 'view']
+    class_views = ['view', 'my_orders']
 
     # Views
     view = OrdersView()

@@ -56,6 +56,17 @@ class Shippings(Folder):
         return []
 
 
+    def get_price(self, shipping_way, country, purchase_price,
+                  purchase_weight):
+        shipping_way = self.get_resource(shipping_way)
+        return shipping_way.get_price(country, purchase_price, purchase_weight)
+
+
+    #def get_shipping_ways(self, country, purchase_price, purchase_weight):
+    #    ways = []
+    #    for mode in self.search_resources(cls=ShippingWay):
+
+
     def get_namespace_shipping_ways(self, context, country, price, weight):
         namespace = []
         for mode in self.search_resources(cls=ShippingWay):
@@ -88,18 +99,6 @@ class Shippings(Folder):
                 items.append(history.get_record_namespace(context, record))
         return items
 
-    #def get_shippings_namespace(self, context, ref=None):
-    #    shippings = []
-    #    for shipping_way, records in self.get_shippings_records(ref):
-    #        table = shipping_way.get_resource('history')
-    #        img = context.get_link(shipping_way.get_resource('logo.png'))
-    #        for record in records:
-    #            ns = table.get_record_namespace(context, record)
-    #            ns['title'] = shipping_way.get_title()
-    #            ns['description'] = shipping_way.get_property('description')
-    #            ns['img'] = img
-    #            shippings.append(ns)
-    #    return shippings
 
 
 register_resource_class(Shippings)

@@ -15,15 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Unicode
+from itools.datatypes import Integer, Unicode
 from itools.gettext import MSG
-from itools.web import STLView
+from itools.web import STLView, STLForm
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.forms import MultilineWidget, ReadOnlyWidget, TextWidget
-from ikaaro.forms import SelectWidget
+from ikaaro.forms import SelectWidget, AutoForm
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.table_views import Table_EditRecord
 
@@ -56,29 +56,23 @@ class CheckPayment_Pay(STLView):
 
 
 
-class CheckPayment_Manage(Table_EditRecord):
+class CheckPayment_RecordEdit(STLForm):
 
-    widgets = [ReadOnlyWidget('ref', title=MSG(u'Order ref')),
-               ReadOnlyWidget('amount', title=MSG(u'Amount')),
-               ReadOnlyWidget('user', title=MSG(u'User')),
-               TextWidget('check_number', title=MSG(u'Check number')),
-               TextWidget('bank', title=MSG(u'Bank')),
-               TextWidget('account_holder', title=MSG(u'Account holder')),
-               SelectWidget('state', title=MSG(u'State')),
-               SelectWidget('advance_state', title=MSG(u'Advance State'))]
+    template = '/ui/shop/payments/check_payment_record_edit.xml'
 
+    schema = {'id': Integer(mandatory=True)}
 
-    def get_widgets(self, resource, context):
-        return self.widgets
+    def action(self, resource, context, form):
+        order = context.resource
+        # We update payment
+        kw = {'ref': order.name,
+              'state': 'ok'}
+        resource.handler.update_record(form['id'], **kw)
+        # We update order
+        order.payment_is_ok(context)
+        # Modification ok
+        context.message = MSG(u'Payment validated.')
 
-
-    def action_add_or_edit(self, resource, context, record):
-        # Add or edit
-        Table_EditRecord.action_add_or_edit(self, resource, context, record)
-        # Set workflow
-        if record['advance_state'] == 'success':
-            payments = resource.parent.set_payment_as_ok(context,
-                          record['ref'])
 
 
 class Check_RecordOrderView(STLView):

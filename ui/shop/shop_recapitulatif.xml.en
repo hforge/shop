@@ -92,11 +92,11 @@
 
   <form name="order" method="POST">
     <table cellpadding="5px" cellspacing="0">
-      <tr stl:repeat="option payment/value">
+      <tr stl:repeat="option payment/value" stl:if="option/enabled">
         <td>
           <input type="radio" name="${payment/name}"
             id="payment-${option/name}" value="${option/name}"/>
-          ${option/title}
+          ${option/value}
         </td>
         <td>
           <img src="./payments/${option/name}/logo2.png/;download"/><br/>

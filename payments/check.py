@@ -27,7 +27,7 @@ from ikaaro.registry import register_resource_class
 # Import from shop.payments
 from payment_way import PaymentWay, PaymentWayBaseTable, PaymentWayTable
 from check_views import CheckPayment_Pay, CheckPayment_Configure
-from check_views import CheckPayment_Manage, Check_RecordOrderView
+from check_views import Check_RecordOrderView
 
 
 class CheckStates(Enumerate):
@@ -60,8 +60,6 @@ class CheckPaymentTable(PaymentWayTable):
     class_handler = CheckPaymentBaseTable
 
     class_views = ['view', 'add_record']
-
-    edit_record = CheckPayment_Manage()
 
     form = PaymentWayTable.form + [
         TextWidget('check_number', title=MSG(u'Check number')),

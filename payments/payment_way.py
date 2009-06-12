@@ -91,6 +91,9 @@ class PaymentWay(Folder):
     payments = GoToSpecificDocument(specific_document='payments',
                                     title=MSG(u'Payments'))
 
+    # Backoffice views
+    order_edit_view = None
+
     @classmethod
     def get_metadata_schema(cls):
         schema = Folder.get_metadata_schema()

@@ -49,7 +49,9 @@ class ShippingWayBaseTable(BaseTable):
 
     record_schema = {
         'ref': String(Unique=True, is_indexed=True),
-        'state': ShippingStates
+        'state': ShippingStates,
+        'price': Decimal,
+        'weight': Decimal
         }
 
 
@@ -59,6 +61,8 @@ class ShippingWayTable(Table):
     form = [
         TextWidget('ref', title=MSG(u'Facture number')),
         SelectWidget('state', title=MSG(u'State')),
+        TextWidget('price', title=MSG(u'Price')),
+        TextWidget('weight', title=MSG(u'Weight')),
         ]
 
     record_order_view = None
@@ -139,6 +143,8 @@ class ShippingWay(Folder):
     prices = GoToSpecificDocument(specific_document='prices',
                                   title=MSG(u'Prices'))
 
+    # Backoffice order views
+    order_add_view = None
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
