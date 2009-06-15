@@ -4,15 +4,16 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Référencement</h1>
-  ${title}<br/>
-  ${description}<br/>
+  <h1>${title}</h1>
+
+  <p>${description}</p>
+
   ${subject}<br/>
 
   <h1>Price / weight</h1>
 
-  ${price}<br/>
-  ${weight}<br/>
+  ${price} €<br/>
+  ${weight} Kg<br/>
 
   <h1>Images</h1>
 
@@ -31,13 +32,12 @@
 
   <h1>Actions</h1>
 
-  <a href="">Print</a><br/>
-  <a href="${document_path}/;download" stl:if="document_path">View PDF</a><br/>
-  <a href="">Send by mail</a><br/>
-  <a href=";add_to_cart">Add to the cart</a><br/>
+  <form method="post">
+    <stl:block stl:repeat="widget purchase_options_widgets">
+      ${widget/widget}
+    </stl:block>
+    <input type="submit" name="action_add_to_cart"
+      value="Add to cart"/>
+  </form>
 
-
-  <h1>Produits complémentaires</h1>
-
-  XXX
 </stl:block>
