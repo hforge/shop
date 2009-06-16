@@ -23,7 +23,7 @@ from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
-from ikaaro.forms import BooleanCheckBox, SelectWidget, TextWidget
+from ikaaro.forms import BooleanRadio, BooleanCheckBox, SelectWidget, TextWidget
 from ikaaro.forms import get_default_widget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable, OrderedTableFile
@@ -165,6 +165,8 @@ class ProductModel(Folder):
             datatype = datatype(mandatory=mandatory, multiple=multiple,
                 multilingual=multilingual)
             widget = get_default_widget(datatype)
+            if widget is BooleanCheckBox:
+                widget = BooleanRadio
             widget = widget(name, title=MSG(title), has_empty_option=False)
             infos.append({'name': name,
                           'title': title,
