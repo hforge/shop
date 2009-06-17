@@ -132,7 +132,9 @@ class Shop_ViewCart(STLForm):
             price = product.get_price()
             price_total = price * quantity
             # All
-            options = product.get_options_namespace(product_cart['options'])
+            options = product_cart['options']
+            if options:
+                options = product.get_options_namespace(options)
             ns = ({'id': product_cart['id'],
                    'name': product.name,
                    'img': product.get_cover_namespace(context),
