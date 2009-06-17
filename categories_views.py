@@ -51,7 +51,7 @@ class VirualCategory_BoxSubCategories(STLView):
         abspath = site_root.get_canonical_path()
         base_query = [
             get_base_path_query(str(abspath)),
-            PhraseQuery('format', 'product')]
+            PhraseQuery('format', resource.virtual_product_class.class_id)]
         for subcat in resource.search_resources(format='categorie'):
             subcat_path = '%s/%s' % (resource.name, subcat.name)
             query = base_query + [PhraseQuery('categories', subcat_path)]
@@ -103,7 +103,7 @@ class VirualCategory_View(BrowseFormBatchNumeric):
 
     def get_items(self, resource, context):
         query = [
-            PhraseQuery('format', 'product'),
+            PhraseQuery('format', resource.virtual_product_class.class_id),
             PhraseQuery('categories', resource.get_unique_id())]
         return context.root.search(AndQuery(*query))
 
