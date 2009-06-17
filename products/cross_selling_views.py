@@ -33,7 +33,8 @@ class AddProduct_View(STLForm):
     template = '/ui/shop/products/addproduct.xml'
     tree_template = '/ui/shop/products/addproduct_tree.xml'
     method_to_call = 'add_product'
-    query_schema = {'category': String, 'target_id': String(mandatory=True),
+    query_schema = {'category': String,
+                    'target_id': String(mandatory=True),
                     'product': String}
 
     base_scripts = ['/ui/jquery.js',
@@ -92,9 +93,10 @@ class AddProduct_View(STLForm):
     def get_items(self, context, categories, current_category):
         root = context.root
         # Search inside the site_root
+        shop = categories.parent
         site_root = categories.get_site_root()
         abspath = site_root.get_canonical_path()
-        query = [PhraseQuery('format', 'product'),
+        query = [PhraseQuery('format', shop.product_class.class_id),
                  PhraseQuery('has_categories', True),
                  get_base_path_query(str(abspath))]
         if current_category:

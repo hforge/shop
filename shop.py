@@ -28,7 +28,7 @@ from categories import Categories
 from countries import Countries
 from orders import Orders
 from payments import Payments
-from products import Products, ProductModels
+from products import Products, Product, ProductModels
 from shipping import Shippings
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
@@ -48,6 +48,11 @@ class Shop(Folder):
                           'products', 'products-models',
                           'shippings', 'countries']
 
+    ####################################
+    # Shop configuration
+    ####################################
+
+    product_class = Product
 
     ####################################
     ## Views
