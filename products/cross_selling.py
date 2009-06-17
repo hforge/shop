@@ -21,10 +21,10 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import TextWidget, stl_namespaces
+from ikaaro.future.order import ResourcesOrderedTable
 from ikaaro.future.order import ResourcesOrderedTable_Ordered
 from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
-from ikaaro.table import OrderedTable
 
 # Import from shop
 from cross_selling_views import AddProduct_View
@@ -75,7 +75,7 @@ class ProductsOrderedTable_Ordered(ResourcesOrderedTable_Ordered):
 
 
 
-class CrossSellingTable(OrderedTable):
+class CrossSellingTable(ResourcesOrderedTable):
 
     class_id = 'CrossSellingTable'
     class_title = MSG(u'Cross-Selling Table')
