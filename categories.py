@@ -24,7 +24,7 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop
 from products import Product
-from categories_views import VirualCategory_View
+from categories_views import VirualCategory_View, VirualCategory_ComparatorView
 from categories_views import VirualCategory_BoxSubCategories
 from categories_views import VirualCategory_Comparator
 
@@ -66,7 +66,7 @@ class VirtualCategory(Categorie):
 
     class_id = 'VirtualCategory'
     class_title = MSG(u"Category")
-    class_views = ['view']
+    class_views = ['view', 'compare']
 
     # Class to wrap subcategories into
     # Default is ourself
@@ -81,6 +81,7 @@ class VirtualCategory(Categorie):
 
     # Views
     view = VirualCategory_View()
+    compare = VirualCategory_ComparatorView()
     view2 = VirualCategory_BoxSubCategories() # XXX to remove
     comparator = VirualCategory_Comparator()
 

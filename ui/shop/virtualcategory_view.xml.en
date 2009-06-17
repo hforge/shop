@@ -4,39 +4,13 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <div id="products">
-    <form method="GET" action="./;comparator">
-      <table cellpadding="0" cellspacing="0">
-        <tr stl:if="can_compare">
-          <td>
-            <div class="fleche-bas"></div>
-          </td>
-          <td valign="top">
-            <input class="buttoncompare" type="submit"
-                value="Compare the selected products"/>
-          </td>
-        </tr>
-        <tr class="product" stl:repeat="product products">
-          <td class="checkbox" stl:if="can_compare">
-            <input type="checkbox" name="products" value="${product/name}"/>
-          </td>
-          <td class="product-box">
-            ${product/viewbox}
-          </td>
-        </tr>
-        <tr stl:if="can_compare">
-          <td>
-            <div class="fleche-haut"></div>
-          </td>
-          <td>
-            <input class="buttoncompare" type="submit"
-                value="Compare the selected products"/>
-          </td>
-        </tr>
-      </table>
-    </form>
-    ${batch}
-  </div>
+  <stl:block stl:repeat="product products">
+    ${product/box}
+  </stl:block>
+
+  <div class="clear"/>
+
+  ${batch}
 
 
 </stl:block>

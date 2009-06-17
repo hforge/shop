@@ -94,12 +94,9 @@ class VirualCategory_View(BrowseFormBatchNumeric):
                      'products': []}
         product_models = []
         for item_brain, item_resource in items:
-            ns = item_resource.get_small_namespace(context)
             viewbox = item_resource.viewbox
-            ns['viewbox'] = viewbox.GET(item_resource, context)
-            product_models.append(item_resource.get_property('product_model'))
-            namespace['products'].append(ns)
-        namespace['can_compare'] = len(set(product_models)) == 1
+            namespace['products'].append({'name': item_resource.name,
+                                          'box': viewbox.GET(item_resource, context)})
         return namespace
 
 
@@ -108,6 +105,15 @@ class VirualCategory_View(BrowseFormBatchNumeric):
             PhraseQuery('format', resource.virtual_product_class.class_id),
             PhraseQuery('categories', resource.get_unique_id())]
         return context.root.search(AndQuery(*query))
+
+
+
+class VirualCategory_ComparatorView(VirualCategory_View):
+
+    access = True
+
+    search_template = None
+    template = '/ui/shop/virtualcategory_comparator_view.xml'
 
 
 ##########################################################
