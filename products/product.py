@@ -181,6 +181,20 @@ class Product(Editable, DynamicFolder):
         return namespace
 
 
+    def get_cross_selling_namespace(self, context):
+        cross_selling = []
+        categories = self.get_real_resource().parent
+        products = get_shop(self).get_resource('products')
+        table = self.get_resource('cross-selling').handler
+        viewbox = self.viewbox
+        for id in table.get_record_ids_in_order():
+            record = table.get_record(id)
+            path = table.get_record_value(record, 'name')
+            product = categories.get_resource(path)
+            cross_selling.append(viewbox.GET(product, context))
+        return cross_selling
+
+
     def get_namespace(self, context):
         namespace = {}
         # Get basic informations
@@ -204,6 +218,8 @@ class Product(Editable, DynamicFolder):
         namespace['images'] = self.get_images_namespace(context)
         # Product is buyable
         namespace['is_buyable'] = self.is_buyable()
+        # Cross selling
+        namespace['cross_selling'] = self.get_cross_selling_namespace(context)
         # Authentificated ?
         ac = self.get_access_control()
         namespace['is_authenticated'] = ac.is_authenticated(context.user, self)
