@@ -18,7 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
-from itools.web import INFO, STLForm
+from itools.web import INFO, STLView, STLForm
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -227,6 +227,19 @@ class Product_Edit(Editable_Edit, AutoForm):
                 resource.set_property(key, form[key])
         Editable_Edit.action(self, resource, context, form)
         return context.come_back(messages.MSG_CHANGES_SAVED)
+
+
+
+class Product_ViewBox(STLView):
+
+    access = True
+    title = MSG(u'View Box')
+    template = '/ui/shop/products/product_viewbox.xml'
+
+
+    def get_namespace(self, resource, context):
+        return resource.get_small_namespace(context)
+
 
 
 class Products_View(Folder_BrowseContent):

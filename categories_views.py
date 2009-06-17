@@ -95,6 +95,8 @@ class VirualCategory_View(BrowseFormBatchNumeric):
         product_models = []
         for item_brain, item_resource in items:
             ns = item_resource.get_small_namespace(context)
+            viewbox = item_resource.viewbox
+            ns['viewbox'] = viewbox.GET(item_resource, context)
             product_models.append(item_resource.get_property('product_model'))
             namespace['products'].append(ns)
         namespace['can_compare'] = len(set(product_models)) == 1

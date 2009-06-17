@@ -33,7 +33,7 @@ from ikaaro.registry import register_resource_class, register_field
 from cross_selling import CrossSellingTable
 from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
-from product_views import Product_NewInstance, Products_View
+from product_views import Product_NewInstance, Products_View, Product_ViewBox
 from product_views import Product_View, Product_Edit, Product_EditModel
 from schema import product_schema
 from shop.editable import Editable
@@ -79,6 +79,7 @@ class Product(Editable, DynamicFolder):
             specific_document='cross-selling',
             title=MSG(u'Edit cross selling'),
             access='is_allowed_to_edit')
+    viewbox = Product_ViewBox()
 
 
     @classmethod

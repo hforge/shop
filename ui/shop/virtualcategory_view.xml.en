@@ -21,20 +21,7 @@
             <input type="checkbox" name="products" value="${product/name}"/>
           </td>
           <td class="product-box">
-            <div class="box">
-              <div class="product-title">
-                <h2><a href="${product/name}">${product/title}</a></h2>
-              </div>
-              <div class="description-wrapper">
-                <img class="cover"
-                     src="${product/cover/href}/;thumb?width=90&amp;height=90"
-                     stl:if="product/cover"/>
-                <span class="price">
-                  ${product/price} €
-                </span>
-                <p class="description">${product/description}</p>
-              </div>
-            </div>
+            ${product/viewbox}
           </td>
         </tr>
         <tr stl:if="can_compare">
