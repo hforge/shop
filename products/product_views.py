@@ -26,7 +26,7 @@ from ikaaro import messages
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget
-from ikaaro.forms import MultilineWidget, title_widget
+from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.registry import get_resource_class
 from ikaaro.views_new import NewInstance
 
@@ -197,6 +197,8 @@ class Product_Edit(Editable_Edit, AutoForm):
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Keywords')),
+        # Cover
+        ImageSelectorWidget('cover', title=MSG(u'Cover')),
         # Weight
         TextWidget('weight', title=MSG(u'Weight')),
         # Categorie

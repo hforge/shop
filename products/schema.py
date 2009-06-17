@@ -18,7 +18,7 @@
 from decimal import Decimal as decimal
 
 # Import from itools
-from itools.datatypes import Decimal, Unicode, DateTime
+from itools.datatypes import DateTime, Decimal, PathDataType, Unicode
 
 # Import from shop
 from enumerate import CategoriesEnumerate
@@ -35,6 +35,7 @@ product_schema = {# General informations
                   'title': Unicode(multilingual=True),
                   'description': Unicode(multilingual=True),
                   'subject': Unicode(multilingual=True),
+                  'cover': PathDataType(mandatory=True),
                   'weight': Decimal(default=decimal(0), mandatory=True),
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),

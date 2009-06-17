@@ -213,21 +213,30 @@ class Product(Editable, DynamicFolder):
     # Images
     #####################
     def get_cover_namespace(self, context):
-        images = self.get_images_namespace(context, 1)
-        if images:
-            return images[0]
-        return None
+        cover = self.get_property('cover')
+        if not cover:
+            return
+        image = self.get_resource(cover)
+        return {'href': context.get_link(image),
+                'title': image.get_property('title'),
+                'is_cover': True}
 
 
-    def get_images_namespace(self, context, quantity=None):
+    def get_images_namespace(self, context):
         namespace = []
-        for image in self.get_ordered_photos(context, quantity):
+        # Cover
+        cover = self.get_cover_namespace(context)
+        if cover:
+            namespace = [cover]
+        # Other images
+        for image in self.get_ordered_photos(context):
             namespace.append({'href': context.get_link(image),
-                              'title': image.get_property('title')})
+                              'title': image.get_property('title'),
+                              'is_cover': False})
         return namespace
 
 
-    def get_ordered_photos(self, context, quantity=None):
+    def get_ordered_photos(self, context):
         # Search photos
         order = self.get_resource('order-photos')
         ordered_names = list(order.get_ordered_names())
@@ -238,9 +247,7 @@ class Product(Editable, DynamicFolder):
         images = []
         ac = self.get_access_control()
         user = context.user
-        if quantity is None:
-            quantity = len(ordered_names)
-        for name in ordered_names[0:quantity]:
+        for name in ordered_names:
             image = order.get_resource(name)
             if ac.is_allowed_to_view(user, image):
                 images.append(image)

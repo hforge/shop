@@ -219,7 +219,6 @@ table.cart td{
 .progress-number .title {
   color: gray;
   padding-left: 20px;
-  font-size: 16px;
 }
 .progress-number.active {
   background: url('/ui/shop/images/payment_number_actif.png') no-repeat;
