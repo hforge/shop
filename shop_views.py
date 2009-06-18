@@ -38,7 +38,7 @@ from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
 
 # Import from shop
-from user_views import user_schema, user_widgets
+#from user_views import user_schema, user_widgets
 from utils import get_shop
 from cart import ProductCart
 from countries import CountriesEnumerate
@@ -175,14 +175,40 @@ class Shop_ViewCart(STLForm):
 # Step2: Identification
 #    -> Registration or login
 #-------------------------------------
+from user import ShopUser
 
 class Shop_Register(RegisterForm):
 
     access = True
 
-    schema = user_schema
+    schema = {'email': Email(mandatory=True),
+              'lastname': Unicode(mandatory=True),
+              'firstname': Unicode(mandatory=True),
+              'gender': Civilite(mandatory=True),
+              'password': String(mandatory=True),
+              'password_check': String(mandatory=True),
+              'phone1': String,
+              'phone2': String,
+              'address_1': Unicode(mandatory=True),
+              'address_2': Unicode,
+              'zipcode': String(mandatory=True),
+              'town': Unicode(mandatory=True),
+              'country': CountriesEnumerate(mandatory=True)}
 
-    widgets = user_widgets
+
+    widgets = [TextWidget('email', title=MSG(u"Email")),
+               SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
+               TextWidget('lastname', title=MSG(u"Lastname")),
+               TextWidget('firstname', title=MSG(u"Firstname")),
+               PasswordWidget('password', title=MSG(u"Password")),
+               PasswordWidget('password_check', title=MSG(u"Repeat password")),
+               TextWidget('phone1', title=MSG(u"Phone number")),
+               TextWidget('phone2', title=MSG(u"Mobile")),
+               TextWidget('address_1', title=MSG(u"Address")),
+               TextWidget('address_2', title=MSG(u"Address")),
+               TextWidget('zipcode', title=MSG(u"Zip code")),
+               TextWidget('town', title=MSG(u"Town")),
+               SelectWidget('country', title=MSG(u"Pays"))]
 
 
     def action(self, resource, context, form):

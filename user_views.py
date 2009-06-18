@@ -16,63 +16,41 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import String, Unicode
+from itools.datatypes import String
 from itools.gettext import MSG
 
 # Import from ikaaro
-from ikaaro.forms import SelectRadio, SelectWidget
-from ikaaro.forms import TextWidget, PasswordWidget
+from ikaaro.forms import SelectRadio, TextWidget, PasswordWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
 
 # Import from shop
-from countries import CountriesEnumerate
 from datatypes import Civilite
 
-
-user_schema = merge_dicts(RegisterForm.schema,
-                          gender=Civilite(mandatory=True),
-                          password=String(mandatory=True),
-                          password_check=String(mandatory=True),
-                          phone1=String,
-                          phone2=String,
-                          address_1=Unicode(mandatory=True),
-                          address_2=Unicode,
-                          zipcode=String(mandatory=True),
-                          town=Unicode(mandatory=True),
-                          country=CountriesEnumerate(mandatory=True))
-
-
-user_widgets = [TextWidget('email', title=MSG(u"Email")),
-                SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
-                TextWidget('lastname', title=MSG(u"Lastname")),
-                TextWidget('firstname', title=MSG(u"Firstname")),
-                PasswordWidget('password', title=MSG(u"Password")),
-                PasswordWidget('password_check', title=MSG(u"Repeat password")),
-                TextWidget('phone1', title=MSG(u"Phone number")),
-                TextWidget('phone2', title=MSG(u"Mobile")),
-                TextWidget('address_1', title=MSG(u"Address")),
-                TextWidget('address_2', title=MSG(u"Address")),
-                TextWidget('zipcode', title=MSG(u"Zip code")),
-                TextWidget('town', title=MSG(u"Town")),
-                SelectWidget('country', title=MSG(u"Pays"))]
 
 
 
 class SHOPUser_EditAccount(User_EditAccount):
 
     def get_schema(self, resource, context):
-        return user_schema
+        return merge_dicts(RegisterForm.schema,
+                           gender=Civilite(mandatory=True),
+                           phone1=String,
+                           phone2=String)
 
 
     def get_widgets(self, resource, context):
-        return user_widgets
+        return [TextWidget('email', title=MSG(u"Email")),
+                SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
+                TextWidget('lastname', title=MSG(u"Lastname")),
+                TextWidget('firstname', title=MSG(u"Firstname")),
+                TextWidget('phone1', title=MSG(u"Phone number")),
+                TextWidget('phone2', title=MSG(u"Mobile"))]
+
 
 
     def get_value(self, resource, context, name, datatype):
-        if name == 'password':
-            return None
         return resource.get_property(name) or datatype.get_default()
 
 

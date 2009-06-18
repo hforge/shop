@@ -17,8 +17,10 @@
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import String, Unicode
+from itools.gettext import MSG
 
 # Import from ikaaro
+from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.registry import register_resource_class
 from ikaaro.user import User
 
@@ -29,7 +31,14 @@ from user_views import SHOPUser_EditAccount
 
 class ShopUser(User):
 
+    class_views = ['profile', 'edit_account', 'my_orders',
+                   'edit_preferences', 'edit_password']
+
+    # Views
     edit_account = SHOPUser_EditAccount()
+    my_orders = GoToSpecificDocument(specific_document='../../shop/orders',
+                     icon='tasks.png', title=MSG(u'My orders'),
+                     description=MSG(u'Orders history in the shop'))
 
     @classmethod
     def get_metadata_schema(cls):
