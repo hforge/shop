@@ -71,27 +71,38 @@
               src="/ui/shop/images/delete.png"/>
           </td>
         </tr>
+        <tr>
+          <td colspan="4" style="text-align:right">
+            <b>Total price</b>
+          </td>
+          <td>${total} €</td>
+          <td/>
+        </tr>
       </form>
     </tbody>
   </table>
 
-  <fieldset id="totalprice">
-    <legend>Total price</legend>
-    <p>
-      <span class="price">${total} €</span><br/>
-      <br/>
-      <a id="button-order" href=";addresses">
-        Order
-      </a>
-    </p>
-  </fieldset>
+  <form method="post">
+    <input type="submit" id="clear-cart" name=";clear" value="Clear the cart"/>
+  </form>
 
   <div class="clear"/>
-  <p>
-    <form method="post">
-      <input type="submit" id="clear-cart" name=";clear" value="Clear the cart"/>
-    </form>
-  </p>
+
+  <h1 class="payment-process">Terms of service</h1>
+
+  <form method="GET" action=";addresses">
+    <p>
+      <input type="checkbox" id="cgv" name="cgv" value="1"/>
+      <label for="cgv">
+        I agree with the terms of service and I adhere to them unconditionally.
+      </label>
+      <a href="./terms-and-conditions-of-use" target="blank">(Read)</a>
+      <br/>
+      <input type="submit" id="button-order" value="Order"/>
+    </p>
+  </form>
+
+
   </stl:block>
 
 </stl:block>

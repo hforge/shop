@@ -22,7 +22,7 @@ from decimal import Decimal as decimal
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Integer, Email, String, Unicode
-from itools.datatypes import MultiLinesTokens
+from itools.datatypes import Boolean, MultiLinesTokens
 from itools.gettext import MSG
 from itools.uri import get_reference
 from itools.web import BaseView, STLForm, STLView, ERROR
@@ -347,8 +347,11 @@ class Shop_Addresses(STLForm):
     access = 'is_authenticated'
     template = '/ui/shop/shop_addresses.xml'
 
-
     def GET(self, resource, context):
+        # CGV accepted ?
+        if not context.get_query_value('cgv', default=False, type=Boolean):
+            msg = MSG(u'You have to accept the terms of service.')
+            return context.come_back(msg)
         # If user has no addresses, redirect to edit_address view
         cart = ProductCart(context)
         delivery_address = cart.addresses['delivery_address']

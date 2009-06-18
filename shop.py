@@ -14,13 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from ikaaro
-from ikaaro.registry import register_resource_class
-from ikaaro.folder import Folder
-
 # Import from itools
 from itools.datatypes import Email, Unicode
 from itools.gettext import MSG
+
+# Import from ikaaro
+from ikaaro.folder import Folder
+from ikaaro.registry import register_resource_class
+from ikaaro.webpage import WebPage
 
 # Import from project
 from addresses import Addresses
@@ -41,12 +42,13 @@ class Shop(Folder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20090605'
+    class_version = '20090618'
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
                           'products', 'products-models',
-                          'shippings', 'countries']
+                          'shippings', 'countries',
+                          'terms-and-conditions-of-use']
 
     ####################################
     # Shop configuration
@@ -114,6 +116,10 @@ class Shop(Folder):
         # Shipping
         Shippings._make_resource(Shippings, folder, '%s/shippings' % name,
                                  title={'en': u'Shipping'})
+        # Conditions of users
+        WebPage._make_resource(WebPage, folder, 'terms-and-conditions-of-use',
+                                **{'title': {'fr': u'Conditions Générales de ventes',
+                                             'en': u'Terms and conditions of user'}})
 
 
     @classmethod
@@ -173,6 +179,13 @@ class Shop(Folder):
 
         Payments._make_resource(Payments, self.handler, 'payments',
                                   **{'title': {'en': u'Payments'}})
+
+
+
+    def update_20090618(self):
+        WebPage._make_resource(WebPage, self.handler, 'terms-and-conditions-of-use',
+                                **{'title': {'fr': u'Conditions Générales de ventes',
+                                             'en': u'Terms and conditions of user'}})
 
 
 register_resource_class(Shop)

@@ -32,7 +32,9 @@ table.cart td{
 
 #clear-cart{
   background-image: url(/ui/shop/images/delete.png);
+  margin: 5px;
   padding-left: 20px;
+  float: right;
   border: 0px;
 }
 /* Facture */
@@ -141,27 +143,6 @@ table.cart td{
 
 #cart .table-quantity td{
   border: 0px;
-}
-
-#totalprice{
-  float: right;
-  border: 1px solid #D7D7D7;
-  width: 200px;
-  height: 100px;
-  margin: 5px;
-  background: url(/ui/cart/buy_bg.png) repeat-x;
-}
-
-#totalprice legend {
-  color: #334048;
-  font-size: 14px;
-  font-weight: bold;
-  margin: 5px 0;
-}
-
-#totalprice .price{
-  padding: 5px;
-  font-size: 16px;
 }
 
 #button-order{
@@ -380,7 +361,7 @@ table.cart td{
 }
 
 /* Legend */
-legend {
+#order-backoffice legend {
   background: #000;
   color: #FFF;
   border: 1px solid #561B57;
@@ -388,16 +369,16 @@ legend {
   margin: 0;
   padding: 2px 4px;
 }
-fieldset{
+#order-fieldset{
   background: #FFFFEF;
   border: 1px solid #561B57;
   font-size: 1.1em;
   margin: 10px;
   padding: 10px;
 }
+
 hr{
   background-color: gray;
   height: 1px;
   border: medium none;
 }
-
