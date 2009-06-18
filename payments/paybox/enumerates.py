@@ -103,7 +103,7 @@ class PayboxStatus(Enumerate):
     info['ip_not_authorized'] = MSG(u"Paybox IP address invalid")
     info['amount_invalid'] = MSG(u"Invalid payment amount")
     # Paybox states
-    info['00000'] = MSG(u"Paiement successful")
+    info['00000'] = MSG(u"Operation successful")
     info['00001'] = MSG(u"The connection to the authorization centre has failed")
     info['00003'] = MSG(u"Paybox error")
     info['00004'] = MSG(u"Cardholder's number or visual cryptogram invalid")
