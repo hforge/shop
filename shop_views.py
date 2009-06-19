@@ -351,7 +351,7 @@ class Shop_Addresses(STLForm):
         # CGV accepted ?
         if not context.get_query_value('cgv', default=False, type=Boolean):
             msg = MSG(u'You have to accept the terms of service.')
-            return context.come_back(msg)
+            return context.come_back(msg, goto='/shop/')
         # If user has no addresses, redirect to edit_address view
         cart = ProductCart(context)
         delivery_address = cart.addresses['delivery_address']
