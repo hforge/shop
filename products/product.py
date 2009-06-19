@@ -36,6 +36,7 @@ from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewInstance, Products_View, Product_ViewBox
 from product_views import Product_View, Product_Edit, Product_EditModel
 from schema import product_schema
+from taxes import TaxesEnumerate
 from shop.editable import Editable
 from shop.utils import get_shop
 
@@ -174,7 +175,7 @@ class Product(Editable, DynamicFolder):
         # get namespace
         namespace = {'name': self.name,
                      'href': context.get_link(self),
-                     'price': self.get_price(),
+                     'price-with-tax': self.get_price_with_tax(),
                      'cover': self.get_cover_namespace(context)}
         for key in ['title', 'description']:
             namespace[key] = self.get_property(key)
@@ -203,6 +204,8 @@ class Product(Editable, DynamicFolder):
             if key=='data':
                 continue
             namespace[key] = self.get_property(key)
+        # Price
+        namespace['price-with-tax'] = self.get_price_with_tax()
         # Data
         namespace['data'] = self.get_xhtml_data()
         # Specific product informations
@@ -275,11 +278,17 @@ class Product(Editable, DynamicFolder):
     ## API
     #####################
     def is_buyable(self):
-        return self.get_price() != decimal(0)
+        return self.get_property('pre-tax-price') != decimal(0)
 
 
-    def get_price(self):
-        return self.get_property('price')
+    def get_price_without_tax(self):
+        return self.get_property('pre-tax-price')
+
+
+    def get_price_with_tax(self):
+        price = self.get_property('pre-tax-price')
+        tax = self.get_property('tax')
+        return price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
 
 
     def get_weight(self):

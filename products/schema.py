@@ -22,6 +22,7 @@ from itools.datatypes import DateTime, Decimal, PathDataType, Unicode
 
 # Import from shop
 from enumerate import CategoriesEnumerate
+from taxes import TaxesEnumerate
 
 
 
@@ -40,6 +41,8 @@ product_schema = {# General informations
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True),
                   # Price
-                  'price': Decimal(default=decimal(0)),
+                  'purchase-price': Decimal,
+                  'pre-tax-price': Decimal(default=decimal(0), mandatory=True),
+                  'tax': TaxesEnumerate(mandatory=True),
                   # ctime,
                   'ctime': DateTime}

@@ -8,79 +8,7 @@
 
   ${progress}
 
-  <stl:block stl:if="not products">
-    <div id="empty-cart">
-      Your cart is empty !
-    </div>
-  </stl:block>
-
-  <stl:block stl:if="products">
-
-  <table id="cart">
-    <thead>
-      <tr>
-        <th></th>
-        <th width="300px">Product</th>
-        <th>Unit Price</th>
-        <th>Quantity</th>
-        <th>Total Price</th>
-        <th id="last">Remove</th>
-      </tr>
-    </thead>
-    <tbody>
-      <form method="post" stl:repeat="p products">
-        <input type="hidden" name="id" value="${p/id}"/>
-        <tr class="${repeat/p/even}">
-          <td valign="top">
-            <img src="${p/img/href}/;thumb?width=100&amp;height=100"
-              title="${p/img/title}" stl:if="p/img"/>
-            <img src="/ui/icons/48x48/text.png" stl:if="not p/img"/>
-          </td>
-          <td>
-            <a href="${p/href}">
-              ${p/title}
-            </a>
-            <stl:block stl:if="p/options">
-              <ul stl:repeat="option p/options">
-                ${option/title}: ${option/value}
-              </ul>
-            </stl:block>
-          </td>
-          <td>${p/price} €</td>
-          <td>
-            <table class="table-quantity">
-              <tr>
-                <td>
-                  <input type="image" name=";remove"
-                      src="/ui/shop/images/minus.png"/>
-                </td>
-                <td>
-                  <input type="text" class="quantity" name="quantity"
-                    value="${p/quantity}" size="2" readonly="readonly"/>
-                </td>
-                <td>
-                  <input type="image" name=";add"
-                    src="/ui/shop/images/plus.png"/>
-                </td>
-              </tr>
-            </table>
-          </td>
-          <td>${p/price_total} €</td>
-          <td>
-            <input type="image" name=";delete"
-              src="/ui/shop/images/delete.png"/>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="4" style="text-align:right">
-            <b>Total price</b>
-          </td>
-          <td>${total} €</td>
-          <td/>
-        </tr>
-      </form>
-    </tbody>
-  </table>
+  ${cart}
 
   <form method="post">
     <input type="submit" id="clear-cart" name=";clear" value="Clear the cart"/>
@@ -113,7 +41,5 @@
       });
     });
   </script>
-
-  </stl:block>
 
 </stl:block>

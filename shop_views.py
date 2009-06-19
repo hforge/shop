@@ -38,14 +38,13 @@ from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
 
 # Import from shop
-#from user_views import user_schema, user_widgets
 from utils import get_shop
 from cart import ProductCart
 from countries import CountriesEnumerate
 from datatypes import Civilite
 from orders import Order
 from payments import PaymentWaysEnumerate
-from shop_utils_views import Shop_Progress
+from shop_utils_views import Cart_View, Shop_Progress
 
 
 class Shop_View(STLView):
@@ -113,43 +112,14 @@ class Shop_ViewCart(STLForm):
     schema = {'id': String}
 
     def get_namespace(self, resource, context):
-        abspath = resource.get_abspath()
-        namespace = {'products': []}
-        # Get cart
-        cart = ProductCart(context)
-        # Get products
-        products = resource.get_resource('products')
-        # Get products informations
-        total = 0
-        for product_cart in cart.products:
-            # Get product
-            product = products.get_resource(product_cart['name'])
-            # Check product is buyable
-            if not product.is_buyable():
-                continue
-            # Calcul price
-            quantity = product_cart['quantity']
-            price = product.get_price()
-            price_total = price * quantity
-            # All
-            options = product_cart['options']
-            if options:
-                options = product.get_options_namespace(options)
-            ns = ({'id': product_cart['id'],
-                   'name': product.name,
-                   'img': product.get_cover_namespace(context),
-                   'title': product.get_title(),
-                   'href': abspath.get_pathto(product.get_virtual_path()),
-                   'quantity': quantity,
-                   'options': options,
-                   'price': price,
-                   'price_total': price_total})
-            total = total + price_total
-            namespace['products'].append(ns)
-        namespace['total'] = total
-        # Progress bar
-        namespace['progress'] = Shop_Progress(index=1).GET(resource, context)
-        return namespace
+        cart_is_empty = ProductCart(context).products == []
+        if cart_is_empty:
+            cart = None
+        else:
+            cart = Cart_View(see_actions=True).GET(resource, context)
+        return {'cart': cart,
+                'cart_is_empty': cart_is_empty,
+                'progress': Shop_Progress(index=1).GET(resource, context)}
 
 
     def action_delete(self, resource, context, form):
@@ -503,7 +473,7 @@ class Shop_Delivery(STLForm):
         total_weight = decimal(0)
         for cart_elt in cart.products:
             product = products.get_resource(cart_elt['name'])
-            total_price += product.get_price() * cart_elt['quantity']
+            total_price += product.get_price_with_tax() * cart_elt['quantity']
             total_weight += product.get_weight() * cart_elt['quantity']
         # Get user delivery country
         addresses = resource.get_resource('addresses').handler
@@ -550,8 +520,6 @@ class Shop_ShowRecapitulatif(STLForm):
     def get_namespace(self, resource, context):
         abspath = resource.get_abspath()
         cart = ProductCart(context)
-        products = resource.get_resource('products')
-        shippings = resource.get_resource('shippings')
         # Base namespace
         namespace = self.build_namespace(resource, context)
         # Progress bar
@@ -564,39 +532,12 @@ class Shop_ShowRecapitulatif(STLForm):
             else:
                 namespace[key] = None
         # Get products informations
-        namespace['products'] = []
-        total_price = decimal(0)
-        total_weight = decimal(0)
-        for product in cart.products:
-            quantity = product['quantity']
-            product = products.get_resource(product['name'])
-            # Check product is buyable
-            if not product.is_buyable():
-                continue
-            price_total = product.get_price() * quantity
-            # Weight and price
-            total_price += product.get_price() * quantity
-            total_weight += product.get_weight() * quantity
-            # All
-            product = ({'name': product.name,
-                        'img': product.get_cover_namespace(context),
-                        'title': product.get_title(),
-                        'href': abspath.get_pathto(product.get_virtual_path()),
-                        'quantity': quantity,
-                        'price': product.get_price(),
-                        'price_total': price_total})
-            namespace['products'].append(product)
+        namespace['cart'] = Cart_View(see_actions=False).GET(resource, context)
         # Get user delivery country
         addresses = resource.get_resource('addresses').handler
         delivery_address = cart.addresses['delivery_address']
         record = addresses.get_record(delivery_address)
         country = addresses.get_record_value(record, 'country')
-        # Get shipping mode
-        shipping_mode = cart.shipping['name']
-        namespace['ship'] = shippings.get_namespace_shipping_way(context,
-                                shipping_mode, country, total_price, total_weight)
-        # Total price
-        namespace['total'] = total_price + namespace['ship']['price']
         return namespace
 
 
@@ -612,7 +553,7 @@ class Shop_ShowRecapitulatif(STLForm):
         total_weight = decimal(0)
         for cart_elt in cart.products:
             product = products.get_resource(cart_elt['name'])
-            total_price += product.get_price() * cart_elt['quantity']
+            total_price += product.get_price_with_tax() * cart_elt['quantity']
             total_weight += product.get_weight() * cart_elt['quantity']
         # XXX GEt Shipping price (Hardcoded, fix it)
         addresses = resource.get_resource('addresses').handler

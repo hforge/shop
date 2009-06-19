@@ -33,6 +33,7 @@ from ikaaro.views_new import NewInstance
 # Import from shop
 from enumerate import ProductModelsEnumerate
 from schema import product_schema
+from taxes import PriceWidget
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 
@@ -204,7 +205,8 @@ class Product_Edit(Editable_Edit, AutoForm):
         # Categorie
         SelectWidget('categories', title=MSG(u'Categories')),
         # Price
-        TextWidget('price', title=MSG(u'Price')),
+        TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),
+        PriceWidget('pre-tax-price', title=MSG(u'Selling price')),
         ] + Editable_Edit.widgets
 
 
@@ -217,6 +219,7 @@ class Product_Edit(Editable_Edit, AutoForm):
 
 
     def action(self, resource, context, form):
+        print form
         language = resource.get_content_language(context)
         for key, datatype in self.schema.iteritems():
             if key in ('data', 'ctime'):

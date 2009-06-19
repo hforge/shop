@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <stl:block stl:if="not products">
+    <div id="empty-cart">
+      Your cart is empty !
+    </div>
+  </stl:block>
+
+  <stl:block stl:if="products">
+
+  <table id="cart">
+    <thead>
+      <tr>
+        <th></th>
+        <th width="300px">Product</th>
+        <th>Unit Price with tax</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th id="last" stl:if="see_actions">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <form method="post" stl:repeat="p products">
+        <input type="hidden" name="id" value="${p/id}"/>
+        <tr class="${repeat/p/even}">
+          <td valign="top">
+            <img src="${p/img/href}/;thumb?width=100&amp;height=100"
+              title="${p/img/title}" stl:if="p/img"/>
+            <img src="/ui/icons/48x48/text.png" stl:if="not p/img"/>
+          </td>
+          <td>
+            <a href="${p/href}">
+              ${p/title}
+            </a>
+            <stl:block stl:if="p/options">
+              <ul stl:repeat="option p/options">
+                ${option/title}: ${option/value}
+              </ul>
+            </stl:block>
+          </td>
+          <td>${p/price/unit/with_tax} €</td>
+          <td>
+            <p stl:if="not see_actions">${p/quantity}</p>
+            <table class="table-quantity" stl:if="see_actions">
+              <tr>
+                <td>
+                  <input type="image" name=";remove"
+                      src="/ui/shop/images/minus.png"/>
+                </td>
+                <td>
+                  <input type="text" class="quantity" name="quantity"
+                    value="${p/quantity}" size="2" readonly="readonly"/>
+                </td>
+                <td>
+                  <input type="image" name=";add"
+                    src="/ui/shop/images/plus.png"/>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td>${p/price/total/with_tax} €</td>
+          <td stl:if="see_actions">
+            <input type="image" name=";delete"
+              src="/ui/shop/images/delete.png"/>
+          </td>
+        </tr>
+        <tr stl:if="ship">
+          <td colspan="4" style="text-align:right">
+            Delivery (${ship/title}):<br/>
+          </td>
+          <td>
+            ${ship/price} €
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" style="text-align:right">
+            <b>Total price without tax</b>
+          </td>
+          <td>${total/without_tax} €</td>
+        </tr>
+        <tr>
+          <td colspan="4" style="text-align:right">
+            <b>Total price (with tax)</b>
+          </td>
+          <td>${total/with_tax} €</td>
+        </tr>
+      </form>
+    </tbody>
+  </table>
+
+  </stl:block>
+
+</stl:block>

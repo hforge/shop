@@ -52,6 +52,9 @@
         <a href="./payments/">Configure payments</a>
       </li>
       <li>
+        <a href="./taxes/">Edit/Add Taxes</a>
+      </li>
+      <li>
         <a href="./products-models/">Configure products models</a>
       </li>
       <li>

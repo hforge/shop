@@ -14,8 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from decimal import Decimal as decimal
+
 # Import from itools
 from itools.web import STLView
+
+# Import from shop
+from cart import ProductCart
 
 
 class Shop_Progress(STLView):
@@ -31,3 +37,69 @@ class Shop_Progress(STLView):
             css = 'active' if self.index == i else None
             ns['progress'][str(i)] = css
         return ns
+
+
+class Cart_View(STLView):
+
+    access = True
+    template = '/ui/shop/cart_view.xml'
+
+    def get_namespace(self, resource, context):
+        namespace = {'products': [],
+                     'see_actions': self.see_actions}
+        abspath = resource.get_abspath()
+        # Get cart
+        cart = ProductCart(context)
+        # Get products
+        products = resource.get_resource('products')
+        # Get products informations
+        total_weight = decimal(0)
+        total = {'with_tax': 0,
+                 'without_tax': 0}
+        for product_cart in cart.products:
+            # Get product
+            product = products.get_resource(product_cart['name'])
+            # Check product is buyable
+            if not product.is_buyable():
+                continue
+            # Calcul price
+            quantity = product_cart['quantity']
+            # Weight
+            total_weight +=  product.get_weight()
+            # Price
+            unit_price_with_tax = product.get_price_with_tax()
+            unit_price_without_tax = product.get_price_without_tax()
+            price = {
+              'unit': {'with_tax': unit_price_with_tax,
+                       'without_tax': unit_price_without_tax},
+              'total': {'with_tax': unit_price_with_tax * quantity,
+                        'without_tax': unit_price_without_tax * quantity}}
+            # All
+            options = product_cart['options']
+            if options:
+                options = product.get_options_namespace(options)
+            ns = ({'id': product_cart['id'],
+                   'name': product.name,
+                   'img': product.get_cover_namespace(context),
+                   'title': product.get_title(),
+                   'href': abspath.get_pathto(product.get_virtual_path()),
+                   'quantity': quantity,
+                   'options': options,
+                   'price': price})
+            total['without_tax'] += price['total']['without_tax']
+            total['with_tax'] += price['total']['with_tax']
+            namespace['products'].append(ns)
+        namespace['total'] = total
+        # Get shippings
+        namespace['ship'] = None
+        if cart.shipping:
+            shipping_mode = cart.shipping['name']
+            shippings = resource.get_resource('shippings')
+            addresses = resource.get_resource('addresses').handler
+            delivery_address = cart.addresses['delivery_address']
+            record = addresses.get_record(delivery_address)
+            country = addresses.get_record_value(record, 'country')
+            namespace['ship'] = shippings.get_namespace_shipping_way(context,
+                                    shipping_mode, country, namespace['total']['with_tax'],
+                                    total_weight)
+        return namespace

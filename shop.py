@@ -30,6 +30,7 @@ from countries import Countries
 from orders import Orders
 from payments import Payments
 from products import Products, Product, ProductModels
+from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
@@ -42,13 +43,13 @@ class Shop(Folder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20090618'
+    class_version = '20090619'
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
                           'products', 'products-models',
                           'shippings', 'countries',
-                          'terms-and-conditions-of-use']
+                          'terms-and-conditions-of-use', 'taxes']
 
     ####################################
     # Shop configuration
@@ -117,10 +118,19 @@ class Shop(Folder):
         Shippings._make_resource(Shippings, folder, '%s/shippings' % name,
                                  title={'en': u'Shipping'})
         # Conditions of users
-        WebPage._make_resource(WebPage, folder, 'terms-and-conditions-of-use',
+        WebPage._make_resource(WebPage, folder, '%s/terms-and-conditions-of-use',
                                 **{'title': {'fr': u'Conditions Générales de ventes',
                                              'en': u'Terms and conditions of user'},
                                    'state': 'public'})
+        # Taxes
+        Taxes_TableResource._make_resource(Taxes_TableResource, folder, '%s/taxes',
+                                **{'title': {'fr': u'TVA',
+                                             'en': u'Taxes'}})
+        table = Taxes_TableHandler()
+        table.add_record({'value': '19.6'})
+        folder.set_handler('%s/taxes' % name, table)
+
+
 
 
     @classmethod
@@ -187,6 +197,16 @@ class Shop(Folder):
         WebPage._make_resource(WebPage, self.handler, 'terms-and-conditions-of-use',
                                 **{'title': {'fr': u'Conditions Générales de ventes',
                                              'en': u'Terms and conditions of user'}})
+
+
+    def update_20090619(self):
+        Taxes_TableResource._make_resource(Taxes_TableResource, self.handler,
+                                'taxes', **{'title': {'fr': u'TVA',
+                                                      'en': u'Taxes'}})
+        table = Taxes_TableHandler()
+        table.add_record({'value': '19.6'})
+        self.handler.set_handler('taxes', table)
+
 
 
 register_resource_class(Shop)

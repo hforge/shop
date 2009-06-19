@@ -45,6 +45,7 @@ from orders_views import OrderView
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from orders_views import Order_ManagePayment, Order_ManageShipping
 from workflow import order_workflow
+from shop.products.taxes import TaxesEnumerate
 
 
 
@@ -92,7 +93,8 @@ class BaseOrdersProducts(BaseTable):
       'options': Unicode,
       'quantity': Integer,
       'weight': Decimal,
-      'unit_price': Decimal(mandatory=True),
+      'pre-tax-price': Decimal(mandatory=True),
+      'tax': Decimal(mandatory=True),
       }
 
 
@@ -112,7 +114,7 @@ class OrdersProducts(Table):
         TextWidget('title', title=MSG(u'Title')),
         TextWidget('weight', title=MSG(u'Weight')),
         TextWidget('options', title=MSG(u'Title')),
-        TextWidget('unit_price', title=MSG(u'Unit price')),
+        TextWidget('pre-tax-price', title=MSG(u'Unit price (pre-tax)')),
         TextWidget('quantity', title=MSG(u'Quantity'))]
 
 
@@ -123,7 +125,7 @@ class OrdersProducts(Table):
             kw = {}
             for key in BaseOrdersProducts.record_schema.keys():
                 kw[key] = handler.get_record_value(record, key)
-            kw['total_price'] = kw['unit_price'] * kw['quantity']
+            kw['total_price'] = kw['pre-tax-price'] * kw['quantity']
             ns.append(kw)
         return ns
 
@@ -186,12 +188,14 @@ class Order(WorkflowAware, Folder):
             product = products.get_resource(product_cart['name'])
             options = '\n'.join(['%s: %s' % (x, y)
                           for x, y in product_cart['options'].items()])
-            handler.add_record({'name': product.name,
-                                'title': product.get_title(),
-                                'options': options,
-                                'unit_price': product.get_price(),
-                                'weight': product.get_weight(),
-                                'quantity': product_cart['quantity']})
+            handler.add_record(
+              {'name': product.name,
+               'title': product.get_title(),
+               'options': options,
+               'pre-tax-price': product.get_price_without_tax(),
+               'tax': TaxesEnumerate.get_value(product.get_property('tax')),
+               'weight': product.get_weight(),
+               'quantity': product_cart['quantity']})
         metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
         folder.set_handler('%s/products.metadata' % name, metadata)
         folder.set_handler('%s/products' % name, handler)
