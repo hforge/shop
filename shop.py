@@ -119,7 +119,8 @@ class Shop(Folder):
         # Conditions of users
         WebPage._make_resource(WebPage, folder, 'terms-and-conditions-of-use',
                                 **{'title': {'fr': u'Conditions Générales de ventes',
-                                             'en': u'Terms and conditions of user'}})
+                                             'en': u'Terms and conditions of user'},
+                                   'state': 'public'})
 
 
     @classmethod
