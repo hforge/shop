@@ -60,7 +60,7 @@ class Product(Editable, DynamicFolder):
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order',
                    'edit_cross_selling']
-    class_version = '20090514'
+    class_version = '20090619'
 
     __fixed_handlers__ = DynamicFolder.__fixed_handlers__ + ['images',
                                                       'order-photos',
@@ -408,6 +408,25 @@ class Product(Editable, DynamicFolder):
         """Add ctime property"""
         if self.get_property('ctime') is None:
             self.set_property('ctime', datetime.now())
+
+
+    def update_20090619(self):
+        """Bind the old product's cover management with the new one
+        """
+        order = self.get_resource('order-photos')
+        order_handler = order.get_handler()
+        records = list(order_handler.get_records_in_order())
+
+        # If no photos, return
+        if not records:
+            return
+
+        abspath = self.get_abspath()
+        order_path = order.get_abspath()
+        image_path = order_handler.get_record_value(records[0], 'name')
+        real_image_path = order_path.resolve2(image_path)
+        new_image_path = abspath.get_pathto(real_image_path)
+        self.set_property('cover', new_image_path)
 
 
 
