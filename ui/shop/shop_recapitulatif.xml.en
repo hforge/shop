@@ -49,11 +49,23 @@
 
   ${cart}
 
-  <h1 class="payment-process">Payment</h1>
 
-  <p class="${payment/class}">Please choose a payment mode</p>
+  <form id="form-order" name="form-order" method="POST">
+    <h1 class="payment-process">Terms of service</h1>
 
-  <form name="order" method="POST">
+    <p>
+      <input type="checkbox" id="cgv" name="cgv" value="1"/>
+      <label for="cgv" class="${cgv/class}">
+        I agree with the terms of service and I adhere to them unconditionally.
+      </label>
+      <a href="./terms-and-conditions-of-use" target="blank">(Read)</a>
+      <br/>
+    </p>
+
+    <h1 class="payment-process">Payment</h1>
+
+    <p class="${payment/class}">Please choose a payment mode</p>
+
     <table cellpadding="5px" cellspacing="0">
       <tr stl:repeat="option payment/value" stl:if="option/enabled">
         <td>
@@ -68,6 +80,18 @@
     </table>
     <input type="submit" id="button-order" value="Buy" name="buy"/>
   </form>
+
+  <script>
+    $(document).ready(function(){
+      $("#form-order").submit(function() {
+        if ($('#cgv').is(':checked') == false) {
+          alert('To continue, you have to validate the terms of service !');
+          return false;
+        }
+        return true;
+      });
+    });
+  </script>
 
 
 </stl:block>

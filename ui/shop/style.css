@@ -34,7 +34,7 @@ table.cart td{
   background-image: url(/ui/shop/images/delete.png);
   margin: 5px;
   padding-left: 20px;
-  float: left;
+  float: right;
   border: 0px;
 }
 /* Facture */

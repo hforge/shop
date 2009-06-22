@@ -13,33 +13,8 @@
   <form method="post">
     <input type="submit" id="clear-cart" name=";clear" value="Clear the cart"/>
   </form>
-
   <div class="clear"/>
 
-  <h1 class="payment-process">Terms of service</h1>
-
-  <form id="form-cgv" method="GET" action=";addresses">
-    <p>
-      <input type="checkbox" id="cgv" name="cgv" value="1"/>
-      <label for="cgv">
-        I agree with the terms of service and I adhere to them unconditionally.
-      </label>
-      <a href="./terms-and-conditions-of-use" target="blank">(Read)</a>
-      <br/>
-      <input type="submit" id="button-order" value="Order"/>
-    </p>
-  </form>
-
-  <script>
-    $(document).ready(function(){
-      $("#form-cgv").submit(function() {
-        if ($('#cgv').is(':checked') == false) {
-          alert('To continue, you have to validate the terms of service !');
-          return false;
-        }
-        return true;
-      });
-    });
-  </script>
+  <a href=";addresses"  id="button-order">Order</a>
 
 </stl:block>
