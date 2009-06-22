@@ -29,11 +29,11 @@ from categories_views import VirtualCategory_BoxSubCategories
 from categories_views import VirtualCategory_Comparator
 
 
-class Categorie(Folder):
+class Category(Folder):
 
-    class_id = 'categorie'
-    class_title = MSG(u'Categorie')
-    class_views = ['browse_content', 'new_resource?type=categorie', 'edit']
+    class_id = 'category'
+    class_title = MSG(u'Category')
+    class_views = ['browse_content', 'new_resource?type=category', 'edit']
 
 
     def get_unique_id(self):
@@ -44,7 +44,7 @@ class Categorie(Folder):
 
 
     def get_document_types(self):
-        return [Categorie]
+        return [Category]
 
 
 
@@ -52,15 +52,15 @@ class Categories(Folder):
 
     class_id = 'categories'
     class_title = MSG(u'Categories')
-    class_views = ['browse_content', 'new_resource?type=categorie']
+    class_views = ['browse_content', 'new_resource?type=category']
 
 
     def get_document_types(self):
-        return [Categorie]
+        return [Category]
 
 
 
-class VirtualCategory(Categorie):
+class VirtualCategory(Category):
     """The Category wrapper. No need to register it: it's built dynamically.
     """
 
@@ -177,6 +177,6 @@ class VirtualCategories(Folder):
 
 
 
-register_resource_class(Categorie)
+register_resource_class(Category)
 register_resource_class(Categories)
 register_resource_class(VirtualCategories)

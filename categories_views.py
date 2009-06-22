@@ -52,7 +52,7 @@ class VirtualCategory_BoxSubCategories(STLView):
         base_query = [
             get_base_path_query(str(abspath)),
             PhraseQuery('format', resource.virtual_product_class.class_id)]
-        for subcat in resource.search_resources(format='categorie'):
+        for subcat in resource.search_resources(format='category'):
             subcat_path = '%s/%s' % (resource.name, subcat.name)
             query = base_query + [PhraseQuery('categories', subcat_path)]
             query = AndQuery(*query)
