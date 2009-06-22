@@ -32,7 +32,7 @@ from utils import get_shop
 from views import BrowseFormBatchNumeric
 
 
-class VirualCategory_BoxSubCategories(STLView):
+class VirtualCategory_BoxSubCategories(STLView):
 
     access = True
     template = '/ui/shop/virtualcategory_boxsubcategories.xml'
@@ -72,7 +72,7 @@ class VirualCategory_BoxSubCategories(STLView):
 
 
 
-class VirualCategory_View(BrowseFormBatchNumeric):
+class VirtualCategory_View(BrowseFormBatchNumeric):
 
     access = True
 
@@ -108,7 +108,7 @@ class VirualCategory_View(BrowseFormBatchNumeric):
 
 
 
-class VirualCategory_ComparatorView(VirualCategory_View):
+class VirtualCategory_ComparatorView(VirtualCategory_View):
 
     access = True
 
@@ -119,7 +119,7 @@ class VirualCategory_ComparatorView(VirualCategory_View):
 ##########################################################
 # Comparateur
 ##########################################################
-class VirualCategory_Comparator(STLView):
+class VirtualCategory_Comparator(STLView):
 
     access = True
 
