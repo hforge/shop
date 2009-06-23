@@ -118,12 +118,12 @@ class Shop(Folder):
         Shippings._make_resource(Shippings, folder, '%s/shippings' % name,
                                  title={'en': u'Shipping'})
         # Conditions of users
-        WebPage._make_resource(WebPage, folder, '%s/terms-and-conditions-of-use',
+        WebPage._make_resource(WebPage, folder, '%s/terms-and-conditions-of-use' % name,
                                 **{'title': {'fr': u'Conditions Générales de ventes',
                                              'en': u'Terms and conditions of user'},
                                    'state': 'public'})
         # Taxes
-        Taxes_TableResource._make_resource(Taxes_TableResource, folder, '%s/taxes',
+        Taxes_TableResource._make_resource(Taxes_TableResource, folder, '%s/taxes' % name,
                                 **{'title': {'fr': u'TVA',
                                              'en': u'Taxes'}})
         table = Taxes_TableHandler()

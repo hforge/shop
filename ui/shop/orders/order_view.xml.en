@@ -103,6 +103,41 @@
     ${shipping/html}
   </stl:block>
 
+  <h1>Messages</h1>
+
+  <table cellpadding="0" cellspacing="0" class="order-browse">
+    <thead>
+      <tr>
+        <th colspan="2">Messages</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr stl:repeat="message messages" stl:if="not message/private">
+        <td style="width:200px;">
+          <b>${message/ts} - ${message/author}:</b>
+        </td>
+        <td>
+          ${message/message}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <form method="post">
+            <p>If you want to add a message:</p>
+            <textarea name="message" cols="80" rows="8"/><br/>
+            <input type="submit" name=";add_message"
+              class="button-ok" value="Send message"/>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+
+
+
 
 
 </stl:block>

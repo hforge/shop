@@ -19,12 +19,12 @@ from operator import itemgetter
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, Integer, String
+from itools.datatypes import Boolean, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime, format_date
 from itools.xapian import PhraseQuery
 from itools.xml import XMLParser
-from itools.web import STLView, STLForm
+from itools.web import INFO, STLView, STLForm
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
@@ -72,7 +72,7 @@ class OrdersProductsView(Table_View):
         return value
 
 
-class OrderView(STLView):
+class OrderView(STLForm):
 
     access = 'is_admin'
 
@@ -126,7 +126,20 @@ class OrderView(STLView):
         # Prices
         for key in ['shipping_price', 'total_price']:
             namespace[key] = resource.get_property(key)
+        # Messages
+        messages = resource.get_resource('messages')
+        namespace['messages'] = messages.get_namespace_messages(context)
         return namespace
+
+
+    action_add_message_schema = {'message': Unicode}
+
+    def action_add_message(self, resource, context, form):
+        messages = resource.get_resource('messages').handler
+        messages.add_record({'author': context.user.name,
+                             'private': False,
+                             'message': form['message']})
+        context.message = INFO(u'Your message has been sended')
 
 
 

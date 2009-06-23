@@ -41,6 +41,7 @@ from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.utils import get_shop
 
 # Import from shop.orders
+from messages import Messages_TableResource
 from orders_views import OrderView
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from orders_views import Order_ManagePayment, Order_ManageShipping
@@ -145,7 +146,8 @@ class Order(WorkflowAware, Folder):
     class_title = MSG(u'Order')
     class_views = ['view', 'manage_payment', 'manage_shipping']
 
-    __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses', 'products']
+    __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
+                          'messages', 'products']
 
     workflow = order_workflow
 
@@ -219,6 +221,10 @@ class Order(WorkflowAware, Folder):
         metadata = Addresses.build_metadata(title={'en': u'Addresses'})
         folder.set_handler('%s/addresses.metadata' % name, metadata)
         folder.set_handler('%s/addresses' % name, handler)
+        # Add messages resource
+        Messages_TableResource._make_resource(Messages_TableResource, folder,
+                                '%s/messages' % name,
+                                **{'title': {'en': u'Messages'}})
         # Send mail of confirmation / notification
         cls.send_email_confirmation(shop, shop_uri, user_email, name)
 
