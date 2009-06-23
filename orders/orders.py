@@ -46,8 +46,7 @@ from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from orders_views import Order_ManagePayment, Order_ManageShipping
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
-
-
+from shop.utils import format_price
 
 
 #############################################
@@ -115,6 +114,7 @@ class OrdersProducts(Table):
         TextWidget('weight', title=MSG(u'Weight')),
         TextWidget('options', title=MSG(u'Title')),
         TextWidget('pre-tax-price', title=MSG(u'Unit price (pre-tax)')),
+        TextWidget('tax', title=MSG(u'Tax')),
         TextWidget('quantity', title=MSG(u'Quantity'))]
 
 
@@ -125,7 +125,16 @@ class OrdersProducts(Table):
             kw = {}
             for key in BaseOrdersProducts.record_schema.keys():
                 kw[key] = handler.get_record_value(record, key)
-            kw['total_price'] = kw['pre-tax-price'] * kw['quantity']
+            # Get prices
+            unit_price_with_tax = kw['pre-tax-price'] * ((kw['tax']/100)+1)
+            unit_price_without_tax = kw['pre-tax-price']
+            total_price_with_tax = unit_price_with_tax * kw['quantity']
+            total_price_without_tax = unit_price_without_tax * kw['quantity']
+            kw['price'] = {
+              'unit': {'with_tax': format_price(unit_price_with_tax),
+                       'without_tax': format_price(unit_price_without_tax)},
+              'total': {'with_tax': format_price(total_price_with_tax),
+                        'without_tax': format_price(total_price_without_tax)}}
             ns.append(kw)
         return ns
 

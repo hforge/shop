@@ -469,7 +469,8 @@ class Shop_Delivery(STLForm):
         total_weight = decimal(0)
         for cart_elt in cart.products:
             product = products.get_resource(cart_elt['name'])
-            total_price += product.get_price_with_tax() * cart_elt['quantity']
+            unit_price = decimal(product.get_price_with_tax())
+            total_price += unit_price * cart_elt['quantity']
             total_weight += product.get_weight() * cart_elt['quantity']
         # Get user delivery country
         addresses = resource.get_resource('addresses').handler
@@ -550,7 +551,8 @@ class Shop_ShowRecapitulatif(STLForm):
         total_weight = decimal(0)
         for cart_elt in cart.products:
             product = products.get_resource(cart_elt['name'])
-            total_price += product.get_price_with_tax() * cart_elt['quantity']
+            unit_price = decimal(product.get_price_with_tax())
+            total_price += unit_price * cart_elt['quantity']
             total_weight += product.get_weight() * cart_elt['quantity']
         # XXX GEt Shipping price (Hardcoded, fix it)
         addresses = resource.get_resource('addresses').handler
@@ -561,6 +563,7 @@ class Shop_ShowRecapitulatif(STLForm):
         shipping_mode = cart.shipping['name']
         shipping_price = shippings.get_namespace_shipping_way(context,
                   shipping_mode, country, total_price, total_weight)['price']
+        total_price += shipping_price
         # We create a new order
         ref = datetime.now().strftime('%y%m%d%M%S')
         kw = {'user': context.user,

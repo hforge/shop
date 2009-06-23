@@ -38,7 +38,7 @@ from product_views import Product_View, Product_Edit, Product_EditModel
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.editable import Editable
-from shop.utils import get_shop
+from shop.utils import get_shop, format_price
 
 
 ###############
@@ -282,13 +282,14 @@ class Product(Editable, DynamicFolder):
 
 
     def get_price_without_tax(self):
-        return self.get_property('pre-tax-price')
+        return format_price(self.get_property('pre-tax-price'))
 
 
     def get_price_with_tax(self):
         price = self.get_property('pre-tax-price')
         tax = self.get_property('tax')
-        return price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
+        price = price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
+        return format_price(price)
 
 
     def get_weight(self):

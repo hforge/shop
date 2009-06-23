@@ -22,6 +22,7 @@ from itools.web import STLView
 
 # Import from shop
 from cart import ProductCart
+from utils import format_price
 
 
 class Shop_Progress(STLView):
@@ -54,26 +55,29 @@ class Cart_View(STLView):
         products = resource.get_resource('products')
         # Get products informations
         total_weight = decimal(0)
-        total = {'with_tax': 0,
-                 'without_tax': 0}
+        total = {'with_tax': decimal(0),
+                 'without_tax': decimal(0)}
         for product_cart in cart.products:
             # Get product
             product = products.get_resource(product_cart['name'])
             # Check product is buyable
             if not product.is_buyable():
                 continue
-            # Calcul price
             quantity = product_cart['quantity']
             # Weight
             total_weight +=  product.get_weight()
-            # Price
-            unit_price_with_tax = product.get_price_with_tax()
-            unit_price_without_tax = product.get_price_without_tax()
+            # Prices
+            unit_price_with_tax = decimal(product.get_price_with_tax())
+            unit_price_without_tax = decimal(product.get_price_without_tax())
+            total_price_with_tax = unit_price_with_tax * quantity
+            total_price_without_tax = unit_price_without_tax * quantity
             price = {
-              'unit': {'with_tax': unit_price_with_tax,
-                       'without_tax': unit_price_without_tax},
-              'total': {'with_tax': unit_price_with_tax * quantity,
-                        'without_tax': unit_price_without_tax * quantity}}
+              'unit': {'with_tax': format_price(unit_price_with_tax),
+                       'without_tax': format_price(unit_price_without_tax)},
+              'total': {'with_tax': format_price(total_price_with_tax),
+                        'without_tax': format_price(total_price_without_tax)}}
+            total['without_tax'] += total_price_without_tax
+            total['with_tax'] += total_price_with_tax
             # All
             options = product_cart['options']
             if options:
@@ -86,8 +90,6 @@ class Cart_View(STLView):
                    'quantity': quantity,
                    'options': options,
                    'price': price})
-            total['without_tax'] += price['total']['without_tax']
-            total['with_tax'] += price['total']['with_tax']
             namespace['products'].append(ns)
         namespace['total'] = total
         # Get shippings
@@ -102,4 +104,9 @@ class Cart_View(STLView):
             namespace['ship'] = shippings.get_namespace_shipping_way(context,
                                     shipping_mode, country, namespace['total']['with_tax'],
                                     total_weight)
+            namespace['total']['with_tax'] += namespace['ship']['price']
+            namespace['total']['without_tax'] += namespace['ship']['price']
+        # Format total prices
+        for key in ['with_tax', 'without_tax']:
+            namespace['total'][key] = format_price(namespace['total'][key])
         return namespace

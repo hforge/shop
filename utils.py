@@ -17,3 +17,9 @@
 
 def get_shop(resource):
     return resource.get_site_root().get_resource('shop')
+
+
+def format_price(price):
+    if price._isinteger():
+        return str(int(price))
+    return '%.2f' % price
