@@ -72,6 +72,11 @@
             <td>${shipping/shipping_mode}</td>
             <td>${shipping/state}</td>
           </tr>
+          <tr stl:if="shipping/html">
+            <td colspan="4">
+            ${shipping/html}
+            </td>
+          </tr>
         </stl:block>
       </tbody>
     </table>

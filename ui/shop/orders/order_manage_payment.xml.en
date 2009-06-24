@@ -74,6 +74,9 @@
             <td>${payment/ts}</td>
             <td>${payment/amount}</td>
           </tr>
+          <tr stl:if="payment/html">
+            <td colspan="5">${payment/html}</td>
+          </tr>
         </stl:block>
       </tbody>
     </table>
