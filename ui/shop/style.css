@@ -159,8 +159,9 @@ table.cart td{
   padding: 50px 0;
 }
 
-.address-edit{
+#cart a{
   color: #FF8A00;
+  text-decoration: none;
 }
 
 #payment_state{
