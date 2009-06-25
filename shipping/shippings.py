@@ -100,5 +100,15 @@ class Shippings(Folder):
         return items
 
 
+    def get_shippings_records(self, context, ref=None):
+        records = []
+        for shipping_way in self.search_resources(cls=ShippingWay):
+            history = shipping_way.get_resource('history')
+            if ref:
+                records.extend(history.handler.search(ref=ref))
+            else:
+                records.extend(history.handler.get_records())
+        return records
+
 
 register_resource_class(Shippings)

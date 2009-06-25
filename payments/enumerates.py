@@ -29,21 +29,21 @@ class Devises(Enumerate):
       ]
 
 
-class PaymentState(Enumerate):
-
-    default = 'wait'
-
-    options = [
-      {'name': 'wait',  'value': MSG(u'To validate'), 'logo': 'blue.png'},
-      {'name': 'ok', 'value': MSG(u'Validated'), 'logo': 'green.png'},
-      {'name': 'error', 'value': MSG(u'Refused'), 'logo': 'red.png'},
-      ]
-
-    img = '<img src="/ui/shop/payments/images/%s" title="%s"/>'
-
-    @classmethod
-    def get_logo(cls, name):
-        for option in cls.get_options():
-            if option['name'] == name:
-                img = cls.img % (option['logo'], option['value'].gettext())
-                return XMLParser(img.encode('utf-8'))
+#class PaymentState(Enumerate):
+#
+#    default = 'wait'
+#
+#    options = [
+#      {'name': 'wait',  'value': MSG(u'To validate'), 'logo': 'blue.png'},
+#      {'name': 'ok', 'value': MSG(u'Validated'), 'logo': 'green.png'},
+#      {'name': 'error', 'value': MSG(u'Refused'), 'logo': 'red.png'},
+#      ]
+#
+#    img = '<img src="/ui/shop/payments/images/%s" title="%s"/>'
+#
+#    @classmethod
+#    def get_logo(cls, name):
+#        for option in cls.get_options():
+#            if option['name'] == name:
+#                img = cls.img % (option['logo'], option['value'].gettext())
+#                return XMLParser(img.encode('utf-8'))

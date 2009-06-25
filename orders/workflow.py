@@ -15,40 +15,33 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.workflow import Workflow
+
+class Order_States(Enumerate):
+
+    options = [
+      {'name': 'waiting',       'value': MSG(u'Waiting for payment')},
+      {'name': 'payment_error', 'value': MSG(u'Payment error')},
+      {'name': 'preparation',   'value': MSG(u'Order in reparation')},
+      {'name': 'cancel',        'value': MSG(u'Canceled')},
+      {'name': 'closed',        'value': MSG(u'Closed')},
+      {'name': 'delivered',     'value': MSG(u'Delivered')}]
 
 
 # Workflow definition
 order_workflow = Workflow()
 add_state = order_workflow.add_state
 add_trans = order_workflow.add_trans
-# State: Open
-add_state('open', title=MSG(u'Order registered'),
-    description=MSG(u'Open'))
-# State: Payment validated
-add_state('payment_ok', title=MSG(u'Payment validated'),
-    description=MSG(u'The payment is validated'))
-# State: sended
-add_state('sended', title=MSG(u'Sended'),
-    description=MSG(u'Order sended'))
-# State: Closed
-add_state('closed', title=MSG(u'Closed'),
-    description=MSG(u'Closed'))
-# State: Cancel
-add_state('canceled', title=MSG(u'Canceled'),
-    description=MSG(u'Canceled'))
-# Transition: Cancel
-add_trans('cancel', 'open', 'canceled',
-    description=MSG(u'Cancel order.'))
+
+# States
+for option in Order_States.get_options():
+    add_state(option['name'], title=option['value'])
+
 # Transition: Close
-add_trans('close', 'open', 'closed',
+add_trans('close', 'waiting', 'closed',
     description=MSG(u'Close order.'))
-# Transition: Reopen1
-add_trans('reopen1', 'closed', 'open',
-    description=MSG(u'Re-open order.'))
-# Transition: Repoen2
-add_trans('reopen2', 'canceled', 'open',
-    description=MSG(u'Re-open order.'))
+
 # Define the initial state
-order_workflow.set_initstate('open')
+order_workflow.set_initstate('waiting')

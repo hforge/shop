@@ -36,12 +36,21 @@ from shipping_way import ShippingWay, ShippingWayBaseTable, ShippingWayTable
 
 class Colissimo_RecordOrderView(STLView):
 
-
     template = '/ui/shop/shipping/colissimo_record_order_view.xml'
 
-    def get_namespace(self, resource, context):
-        record = self.record
-        get_value = resource.handler.get_record_value
+    def GET(self, order, shipping_way, record, context):
+        # Get the template
+        template = self.get_template(order, context)
+        # Get the namespace
+        namespace = self.get_namespace(order, shipping_way, record, context)
+        # Ok
+        from itools.stl import stl
+        return stl(template, namespace)
+
+
+    def get_namespace(self, order, shipping_way, record, context):
+        history = shipping_way.get_resource('history').handler
+        get_value = history.get_record_value
         return {'num_colissimo': get_value(record, 'num_colissimo')}
 
 
@@ -51,15 +60,19 @@ class Colissimo_RecordAdd(STLForm):
 
     access = 'is_admin'
 
-    schema = {'num_colissimo': String}
+    schema = {'num_colissimo': String(mandatory=True)}
 
-    def action(self, resource, context, form):
-        order = context.resource
-        order.set_as_sended()
+    def get_namespace(self, resource, context):
+        return self.build_namespace(resource, context)
+
+
+    def add_shipping(self, order, shipping_way, context, form):
+        order.set_as_sent()
         kw = {'ref': order.name,
               'state': 'sended',
               'num_colissimo': form['num_colissimo']}
-        resource.handler.add_record(kw)
+        history = shipping_way.get_resource('history')
+        history.handler.add_record(kw)
         msg = MSG(u'The colissimo has been added')
         return context.come_back(msg)
 
@@ -103,6 +116,7 @@ class Colissimo(ShippingWay):
 
 
     order_add_view = Colissimo_RecordAdd()
+    order_edit_view = Colissimo_RecordOrderView()
 
 
     @staticmethod

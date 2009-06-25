@@ -19,10 +19,10 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Enumerate, String, Unicode
+from itools.datatypes import Boolean, Enumerate, String, Unicode
 from itools.gettext import MSG
 from itools.stl import stl
-from itools.web import STLView
+from itools.web import STLForm, STLView
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -46,6 +46,46 @@ class Withdrawal_RecordOrderView(STLView):
         record = self.record
         get_value = resource.handler.get_record_value
         return {'description': get_value(record, 'description')}
+
+class Withdrawal_RecordEdit(STLView):
+
+    template = '/ui/shop/shipping/withdrawal_record_order_view.xml'
+
+    def GET(self, order, shipping_way, record, context):
+        # Get the template
+        template = self.get_template(order, context)
+        # Get the namespace
+        namespace = self.get_namespace(order, shipping_way, record, context)
+        # Ok
+        from itools.stl import stl
+        return stl(template, namespace)
+
+
+    def get_namespace(self, order, shipping_way, record, context):
+        namespace = {}
+        return namespace
+
+
+class Withdrawal_RecordAdd(STLForm):
+
+    access = 'is_admin'
+
+    template = '/ui/shop/shipping/withdrawal_record_order_add.xml'
+
+    schema = {'state': Boolean}
+
+    def get_namespace(self, resource, context):
+        return self.build_namespace(resource, context)
+
+
+    def add_shipping(self, order, shipping_way, context, form):
+        order.set_as_sent()
+        kw = {'ref': order.name,
+              'state': 'sended'}
+        history = shipping_way.get_resource('history')
+        history.handler.add_record(kw)
+        msg = MSG(u'Modifications ok')
+        return context.come_back(msg)
 
 
 
@@ -91,10 +131,13 @@ class Withdrawal(ShippingWay):
 
     class_id = 'withdrawal'
     class_title = MSG(u'Withdrawal')
-
     class_description = MSG(u'Withdrawal to the store.')
 
     img = '../ui/shop/images/noship.png'
+
+    # Admin views
+    order_add_view = Withdrawal_RecordAdd()
+    order_edit_view = Withdrawal_RecordEdit()
 
     html_form = list(XMLParser("""
         <form method="POST">

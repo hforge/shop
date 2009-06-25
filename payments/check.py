@@ -16,31 +16,18 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Enumerate, Integer, Unicode
+from itools.datatypes import Integer, Unicode
 from itools.gettext import MSG
-from itools.stl import stl
 
 # Import from ikaaro
-from ikaaro.forms import TextWidget, SelectWidget, stl_namespaces
+from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
 
 # Import from shop.payments
 from payment_way import PaymentWay, PaymentWayBaseTable, PaymentWayTable
-from check_views import CheckPayment_Pay, CheckPayment_Configure
-from check_views import Check_RecordOrderView
-
-
-class CheckStates(Enumerate):
-
-    default = 'wait'
-
-    options = [
-      {'name': 'wait',     'value': MSG(u'Waiting for your check')},
-      {'name': 'received', 'value': MSG(u'Check received')},
-      {'name': 'refused',  'value': MSG(u'Check refused')},
-      {'name': 'success',  'value': MSG(u'Payment successful')},
-      {'name': 'invalid',  'value': MSG(u'Invalid amount')},
-      ]
+from check_views import CheckPayment_RecordEdit
+from check_views import CheckPayment_Pay, CheckPayment_Configure, CheckStates
+from check_views import CheckPayment_RecordAdd
 
 
 class CheckPaymentBaseTable(PaymentWayBaseTable):
@@ -69,8 +56,6 @@ class CheckPaymentTable(PaymentWayTable):
         ]
 
 
-    record_order_view = Check_RecordOrderView
-
     def get_record_namespace(self, context, record):
         namespace = PaymentWayTable.get_record_namespace(self, context, record)
         # Advance State
@@ -79,21 +64,22 @@ class CheckPaymentTable(PaymentWayTable):
         return namespace
 
 
-
 class CheckPayment(PaymentWay):
 
     class_id = 'check-payment'
     class_title = MSG(u'Payment by check')
     class_description = MSG(u'Payment by check')
+    class_views = ['configure', 'payments']
 
     # XXX found a good logo
     logo = '/ui/shop/payments/paybox/images/logo.png'
 
     # Views
-    class_views = ['configure', 'payments']
-
-    # Views
     configure = CheckPayment_Configure()
+
+    # Order admin views
+    order_add_view = CheckPayment_RecordAdd()
+    order_edit_view = CheckPayment_RecordEdit()
 
     # Schema
     base_schema = {'to': Unicode,
@@ -114,12 +100,6 @@ class CheckPayment(PaymentWay):
 
 
     def _show_payment_form(self, context, payment):
-        # Add a record in payments
-        payments = self.get_resource('payments')
-        payments.handler.add_record({'ref': payment['ref'],
-                                     'amount': payment['amount'],
-                                     'user': context.user.name})
-        # Show payment form
         return CheckPayment_Pay().GET(self, context, payment)
 
 

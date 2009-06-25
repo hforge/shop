@@ -289,22 +289,61 @@ table.cart td{
   padding: 4px;
 }
 
-/* Order browse */
+/* order browse */
 .order-browse{
   width: 100%;
-  border: 1px solid #DFD5C3;
+  border: 1px solid #dfd5c3;
   border-collapse:collapse;
   padding: 0;
+  margin: 10px;
+}
+.order-browse input{
+  border: 1px solid gray;
+}
+.order-browse textarea, .order-browse select{
+  border: 1px solid #dfd5c3;
 }
 
 .order-browse thead th{
-  background: #B2A88D;
-  color: #FFF;
+  /*background: #f4e6c9;
+  */
+  height: 25px;
+  background: url('/ui/shop/images/table-back2.png') repeat;
+  color: #fff;
   padding: 4px 6px;
+  text-align: left;
+}
+.order-browse thead th img{
+  vertical-align: bottom;
+}
+.order-browse tr td {
+  border: 1px solid #dfd5c3;
+  color: #000;
+  font-size:0.9em;
+  height:23px;
+  padding: 4px;
 }
 
-.order-browse tr td {
-  border: 1px solid gray;
+/* order browse */
+.order-sub-browse{
+  width: 98%;
+  border: 1px solid #dfd5c3;
+  border-collapse:collapse;
+  padding: 0;
+  margin: 10px;
+}
+.order-sub-browse thead th{
+  height: 25px;
+  background: url('/ui/shop/images/table-back.png') repeat;
+  color: #fff;
+  padding: 4px 6px;
+  text-align: left;
+}
+.order-sub-browse thead th img{
+  vertical-align: bottom;
+}
+.order-sub-browse tr td {
+  border: 1px solid #dfd5c3;
   color: #000;
   font-size:0.9em;
   height:23px;
@@ -362,21 +401,29 @@ table.cart td{
 }
 
 /* Legend */
-#order-backoffice legend {
-  background: #000;
-  color: #FFF;
-  border: 1px solid #561B57;
+legend {
+  background: #F4E6C9;
+  color: #000;
+  border: 1px solid #DFD5C3;
   font-weight:bold;
   margin: 0;
   padding: 2px 4px;
 }
-#order-fieldset{
+fieldset{
   background: #FFFFEF;
-  border: 1px solid #561B57;
+  border: 1px solid #DFD5C3;
   font-size: 1.1em;
-  margin: 10px;
-  padding: 10px;
+  margin: 0;
+  padding: 0.2em 0.5em;
 }
+fieldset img{
+  padding: 0 4px 0 0;
+  vertical-align: bottom;
+}
+fieldset textarea{
+  border: 1px solid #DFD5C3;
+}
+
 
 hr{
   background-color: gray;

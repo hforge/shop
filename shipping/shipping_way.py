@@ -65,8 +65,6 @@ class ShippingWayTable(Table):
         TextWidget('weight', title=MSG(u'Weight')),
         ]
 
-    record_order_view = None
-
     def get_record_namespace(self, context, record):
         namespace = {}
         # Id
@@ -79,13 +77,6 @@ class ShippingWayTable(Table):
             namespace[key] = self.handler.get_record_value(record, key)
         # State
         namespace['state'] = ShippingStates.get_value(namespace['state'])
-        # Html
-        if self.record_order_view:
-            view = self.record_order_view()
-            view.record = record
-            namespace['html'] = view.GET(self, context)
-        else:
-            namespace['html'] = None
         # Timestamp
         accept = context.accept_language
         value = self.handler.get_record_value(record, 'ts')

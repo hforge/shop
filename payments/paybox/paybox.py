@@ -27,7 +27,7 @@ from ikaaro.registry import register_resource_class
 # Import from shop
 from enumerates import PayboxStatus
 from paybox_views import Paybox_Configure, Paybox_Pay, Paybox_View
-from paybox_views import Paybox_End, Paybox_ConfirmPayment
+from paybox_views import Paybox_End, Paybox_ConfirmPayment, Paybox_Record_Edit
 from shop.datatypes import StringFixSize
 from shop.payments.payment_way import PaymentWay, PaymentWayBaseTable
 from shop.payments.payment_way import PaymentWayTable
@@ -84,6 +84,10 @@ class Paybox(PaymentWay):
     configure = Paybox_Configure()
     confirm_payment = Paybox_ConfirmPayment()
     end = Paybox_End()
+
+    # Admin order views
+    order_add_view = None
+    edit_record_view = Paybox_Record_Edit()
 
     # Schema
     base_schema = {'PBX_SITE': StringFixSize(size=7),

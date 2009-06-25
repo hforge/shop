@@ -4,41 +4,66 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  We are waiting for the customer check.<br/>
-  <hr/>
+  <form method="post">
+    <input type="hidden" name="payment_way" value="check"/>
+    We are waiting for the customer check.<br/>
 
-  <table cellpadding="5" cellspacing="0">
-    <tr>
-      <th>
-        Check number:
-      </th>
-      <td>
-        <input type="text" name="check_number"/>
-      </td>
-    </tr>
-    <tr>
-      <th>
-        Bank:
-      </th>
-      <td>
-        <input type="text" name="bank"/>
-      </td>
-    </tr>
-    <tr>
-      <th>
-        Account Holder:
-      </th>
-      <td>
-        <input type="text" name="account_holder"/>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <input type="submit" class="button-ok" value="Validate"/>
-      </td>
-    </tr>
-  </table>
-
+    <table cellpadding="5" cellspacing="0">
+      <tr>
+        <th>
+          <label for="check_number" class="${check_number/class}">
+          Check number:
+          </label>
+        </th>
+        <td>
+          <input type="text" id="check_number" name="check_number"
+            value="${check_number/value}"/>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="bank" class="${bank/class}">
+          Bank:
+          </label>
+        </th>
+        <td>
+          <input type="text" id="bank" name="bank"
+            value="${bank/value}"/>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="account_holder" class="${account_holder/class}">
+          Account Holder:
+          </label>
+        </th>
+        <td>
+          <input type="text" name="account_holder"
+            value="${account_holder/value}"/>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="advance_state" class="${advance_state/class}">
+          State
+          </label>
+        </th>
+        <td>
+          <select name="advance_state">
+            <option stl:repeat="option advance_state/value"
+              value="${option/name}" selected="${option/selected}">
+              ${option/value}
+            </option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="submit" name=";add_payment"
+            class="button-ok" value="Validate"/>
+        </td>
+      </tr>
+    </table>
+  </form>
 
 </stl:block>

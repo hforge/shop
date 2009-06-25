@@ -4,10 +4,9 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  Your order has been send.<br/>
-  <a href="http://www.coliposte.net/gp/services/main.jsp?m=10003005&amp;colispart=${num_colissimo}"
-    target="blank">
-    Click here to get more informations.
-  </a>
-
+  State: ${advance_state}<br/>
+  Amount: ${amount}<br/>
+  Check number: ${check_number}<br/>
+  Bank: ${bank}<br/>
+  Account holder: ${account_holder}<br/>
 </stl:block>

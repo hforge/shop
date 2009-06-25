@@ -15,20 +15,31 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Integer, Unicode
+from itools.datatypes import Enumerate, Integer, Unicode
 from itools.gettext import MSG
 from itools.web import STLView, STLForm
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import MultilineWidget, ReadOnlyWidget, TextWidget
-from ikaaro.forms import SelectWidget, AutoForm
+from ikaaro.forms import MultilineWidget, TextWidget
 from ikaaro.resource_views import DBResource_Edit
-from ikaaro.table_views import Table_EditRecord
 
 # Import from shop
 from shop.shop_utils_views import Shop_Progress
+
+
+
+class CheckStates(Enumerate):
+
+    default = 'wait'
+
+    options = [
+      {'name': 'refused',  'value': MSG(u'Check refused by the bank')},
+      {'name': 'invalid',  'value': MSG(u'Invalid amount')},
+      {'name': 'success',  'value': MSG(u'Payment successful')},
+      ]
+
 
 
 class CheckPayment_Pay(STLView):
@@ -56,37 +67,70 @@ class CheckPayment_Pay(STLView):
 
 
 
-class CheckPayment_RecordEdit(STLForm):
+class CheckPayment_RecordAdd(STLForm):
 
     template = '/ui/shop/payments/check_payment_record_edit.xml'
 
-    schema = {'id': Integer(mandatory=True)}
-
-    def action(self, resource, context, form):
-        order = context.resource
-        # We update payment
-        kw = {'ref': order.name,
-              'state': 'ok'}
-        resource.handler.update_record(form['id'], **kw)
-        # We update order
-        order.payment_is_ok(context)
-        # Modification ok
-        context.message = MSG(u'Payment validated.')
+    schema = {'check_number': Integer,
+              'bank': Unicode,
+              'account_holder': Unicode,
+              'advance_state': CheckStates(mandatory=True)}
 
 
+    def get_namespace(self, resource, context):
+        return self.build_namespace(resource, context)
 
-class Check_RecordOrderView(STLView):
+
+    def add_payment(self, order, payment_way, context, form):
+        kw = form
+        kw['ref'] = order.name
+        if form['advance_state'] == 'success':
+            kw['state'] = True
+            order.set_as_payed()
+        else:
+            kw['state'] = False
+            order.set_as_not_payed()
+        history = payment_way.get_resource('payments')
+        history.handler.add_record(kw)
+        msg = MSG(u'Changes ok')
+        return context.come_back(msg)
+
+
+class CheckPayment_RecordView(STLForm):
 
     template = '/ui/shop/payments/check_record_order_view.xml'
 
     def get_namespace(self, resource, context):
-        record = self.record
-        get_value = resource.handler.get_record_value
-        namespace = {'is_wait': get_value(record, 'advance_state') == 'wait',
+        order = context.resource
+        namespace = {'ref': order.name,
+                     'amount': 'XXX',
                      'to': resource.parent.get_property('to'),
                      'address': resource.parent.get_property('address')}
-        for key in ['ref', 'amount']:
-            namespace[key] = get_value(record, key)
+        return namespace
+
+
+
+class CheckPayment_RecordEdit(STLForm):
+
+    template = '/ui/shop/payments/check_record_order_edit.xml'
+
+    def GET(self, order, payment_way, record, context):
+        # Get the template
+        template = self.get_template(order, context)
+        # Get the namespace
+        namespace = self.get_namespace(order, payment_way, record, context)
+        # Ok
+        from itools.stl import stl
+        return stl(template, namespace)
+
+
+    def get_namespace(self, order, payment_way, record, context):
+        namespace = {}
+        get_val = payment_way.get_resource('payments').handler.get_record_value
+        for key in ['amount', 'check_number', 'bank', 'account_holder']:
+            namespace[key] = get_val(record, key)
+        advance_state = get_val(record, 'advance_state')
+        namespace['advance_state'] = CheckStates.get_value(advance_state)
         return namespace
 
 

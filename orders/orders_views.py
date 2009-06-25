@@ -14,25 +14,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from standard library
-from operator import itemgetter
-
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, Integer, String, Unicode
+from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
-from itools.i18n import format_datetime, format_date
+from itools.i18n import format_datetime
 from itools.xapian import PhraseQuery
 from itools.xml import XMLParser
-from itools.web import INFO, STLView, STLForm
+from itools.web import INFO, STLForm, FormError
+from itools.web.views import process_form
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import stl_namespaces
+from ikaaro.forms import SelectWidget
 from ikaaro.table_views import Table_View
-from ikaaro.views import BrowseForm
 
 # Import from shop
+from workflow import Order_States
 from shop.payments.payment_way import PaymentWaysEnumerate
 from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.datatypes import Civilite
@@ -119,10 +117,8 @@ class OrderView(STLForm):
         namespace['products'] = products.get_namespace(context)
         # Payments
         payments = shop.get_resource('payments')
-        namespace['payments'] = payments.get_payments_items(context, resource.name)
         # Shipping
         shippings = shop.get_resource('shippings')
-        namespace['shippings'] = shippings.get_shippings_items(context, resource.name)
         # Prices
         for key in ['shipping_price', 'total_price']:
             namespace[key] = resource.get_property(key)
@@ -220,113 +216,195 @@ class MyOrdersView(OrdersView):
         return Folder_BrowseContent.get_items(self, resource, context, args)
 
 
-class Order_ManageShipping(STLForm):
+class Order_Manage(STLForm):
 
     access = 'is_admin'
     title = MSG(u'Manage shipping')
 
     template = '/ui/shop/orders/order_manage.xml'
 
-    def get_shipping_way(self, resource):
-        shipping_way = resource.get_property('shipping')
-        return get_shop(resource).get_resource('shippings/%s' % shipping_way)
+    def get_states_history(self, resource, context):
+        from ikaaro.workflow import parse_git_message
+        history = []
+        for revision in resource.get_revisions():
+            transition, comment = parse_git_message(revision['message'])
+            if transition is not None:
+                history.append(
+                    {'name': transition,
+                     'title': transition,
+                     'date': format_datetime(revision['date']),
+                     'user': context.root.get_user_title(revision['username']),
+                     'comments': comment})
+        history.reverse()
+        return history
 
 
     def get_namespace(self, resource, context):
-        namespace = {}
+        # Get some resources
+        root = context.root
         shop = get_shop(resource)
-        shippings = shop.get_resource('shippings')
-        # Get current shipping way
-        shipping_way = self.get_shipping_way(resource)
-        # Delivery address
         addresses = shop.get_resource('addresses').handler
+        # Build namespace
+        namespace = {}
+        # States
+        namespace['states_history'] = self.get_states_history(resource, context)
+        namespace['states'] = SelectWidget('state').to_html(Order_States, None)
+        # Order
+        creation_datetime = resource.get_property('creation_datetime')
+        namespace['order'] = {
+          'id': resource.name,
+          'date': format_datetime(creation_datetime, context.accept_language)}
+        for key in ['shipping_price', 'total_price', 'total_weight']:
+            namespace['order'][key] =resource.get_property(key)
+        namespace['order']['shipping_way'] = ShippingWaysEnumerate.get_value(
+                                        resource.get_property('shipping'))
+        namespace['order']['payment_way'] = PaymentWaysEnumerate.get_value(
+                                        resource.get_property('payment_mode'))
+        # Delivery and shipping addresses
         get_address = addresses.get_record_namespace
         delivery_address = resource.get_property('delivery_address')
+        shipping_address = resource.get_property('bill_address')
         namespace['delivery_address'] = get_address(delivery_address)
-        # Order informations
-        for key in ['shipping_price', 'total_price', 'total_weight']:
-            namespace[key] = resource.get_property(key)
-        # Shipping mode
-        namespace['shipping_mode'] = ShippingWaysEnumerate.get_value(
-                                        shipping_way.name)
+        namespace['shipping_address'] = get_address(shipping_address)
+        # Customer
+        customer_id = resource.get_property('customer_id')
+        user = root.get_user(customer_id)
+        namespace['customer'] = {'id': customer_id,
+                                 'title': user.get_title(),
+                                 'email': user.get_property('email')}
         # Products
         products = resource.get_resource('products')
         namespace['products'] = products.get_namespace(context)
-        # Add shipping
-        view = shipping_way.order_add_view
-        namespace['create_shipping'] = view.GET(resource, context)
-        # History
-        namespace['shippings'] = shippings.get_shippings_items(context, resource.name)
-        return namespace
-
-
-    def get_schema(self, resource, context):
-        shipping_way = self.get_shipping_way(resource)
-        table = shipping_way.get_resource('history')
-        view = shipping_way.order_add_view
-        return view.get_schema(table, context)
-
-
-    def action_add_shipping(self, resource, context, form):
-        shipping_way = self.get_shipping_way(resource)
-        table = shipping_way.get_resource('history')
-        view = shipping_way.order_add_view
-        return view.action(table, context, form)
-
-
-class Order_ManagePayment(STLForm):
-
-    access = 'is_admin'
-    title = MSG(u'Manage payment')
-
-    template = '/ui/shop/orders/order_manage_payment.xml'
-
-    def get_payment_way(self, resource):
-        payment_way = resource.get_property('payment_mode') or 'paybox'
-        return get_shop(resource).get_resource('payments/%s' % payment_way)
-
-
-    def get_namespace(self, resource, context):
-        namespace = {}
-        shop = get_shop(resource)
-        payments = shop.get_resource('payments')
-        # Get current payment way
-        payment_way = self.get_payment_way(resource)
-        # Bill address
-        addresses = shop.get_resource('addresses').handler
-        bill_address = resource.get_property('bill_address')
-        namespace['bill_address'] = addresses.get_record_namespace(
-                                        bill_address)
-        # Payment mode
-        namespace['payment_mode'] = PaymentWaysEnumerate.get_value(
-                                        payment_way.name)
-        # Order informations
         for key in ['shipping_price', 'total_price']:
             namespace[key] = resource.get_property(key)
-        # Products
-        products = resource.get_resource('products')
-        namespace['products'] = products.get_namespace(context)
-        # Add shipping
-        view = payment_way.order_edit_view
-        if view:
-            namespace['payment'] = {'id': 0, 'html': view.GET(resource, context)}
+        # Messages
+        messages = resource.get_resource('messages')
+        namespace['messages'] = messages.get_namespace_messages(context)
+        # Payments
+        payments = shop.get_resource('payments')
+        is_payed = resource.get_property('is_payed')
+        need_payment = resource.get_property('need_payment')
+        payments_records = payments.get_payments_records(context, resource.name)
+        payment_way = resource.get_property('payment_mode')
+        payment_way_resource = shop.get_resource('payments/%s/' % payment_way)
+        if is_payed or not need_payment:
+            # We show last payment
+            last_payment = payments_records[0]
+            edit_record_view = payment_way_resource.order_edit_view
+            view = edit_record_view.GET(resource, payment_way_resource,
+                          last_payment, context)
         else:
-            namespace['payment'] = None
-        # History
-        namespace['payments'] = payments.get_payments_items(context, resource.name)
+            # We have to add a new payment
+            add_record_view = payment_way_resource.order_add_view
+            if add_record_view:
+                view = add_record_view.GET(resource, context)
+            else:
+                view = None
+        namespace['payment_ways'] = SelectWidget('payment_way',
+                has_empty_option=False).to_html(PaymentWaysEnumerate,
+                                                payment_way)
+        namespace['payment'] = {'is_payed': is_payed,
+                                'need_payment': need_payment,
+                                'history': payments.get_payments_items(context, resource.name), # XXX
+                                'view': view}
+        # Shippings
+        is_sent = resource.get_property('is_sent')
+        shippings = shop.get_resource('shippings')
+        shipping_way = resource.get_property('shipping')
+        shipping_way_resource = shop.get_resource('shippings/%s/' % shipping_way)
+        shippings_records = shippings.get_shippings_records(context, resource.name)
+        if is_sent:
+            # We show last delivery
+            last_delivery = shippings_records[0]
+            edit_record_view = shipping_way_resource.order_edit_view
+            view = edit_record_view.GET(resource, shipping_way_resource,
+                          last_delivery, context)
+        else:
+            # We have to add delivery
+            add_record_view = shipping_way_resource.order_add_view
+            if add_record_view:
+                view = add_record_view.GET(resource, context)
+            else:
+                view = None
+        namespace['shipping_ways'] = SelectWidget('shipping_way',
+                has_empty_option=False).to_html(ShippingWaysEnumerate,
+                                                shipping_way)
+        namespace['shipping'] = {'is_sent': is_sent,
+                                 'history': shippings.get_shippings_items(context, resource.name),
+                                 'view': view}
         return namespace
 
 
-    def get_schema(self, resource, context):
-        payment_way = self.get_payment_way(resource)
-        table = payment_way.get_resource('payments')
-        view = payment_way.order_edit_view
-        return view.get_schema(table, context)
+    action_change_order_state = {'state': Order_States,
+                                 'comment': Unicode}
+    def action_change_order_state(self, resource, context, form):
+        return
 
 
+    action_add_message_schema = {'message': Unicode(mandatory=True)}
+    def action_add_message(self, resource, context, form):
+        messages = resource.get_resource('messages').handler
+        messages.add_record({'author': context.user.name,
+                             'private': False,
+                             'message': form['message']})
+        context.message = INFO(u'Your message has been sent')
 
-    def action(self, resource, context, form):
-        payment_way = self.get_payment_way(resource)
-        table = payment_way.get_resource('payments')
-        view = payment_way.order_edit_view
-        return view.action(table, context, form)
+
+    action_change_payment_way_schema = {'payment_way': PaymentWaysEnumerate}
+    def action_change_payment_way(self, resource, context, form):
+        resource.set_property('payment_mode', form['payment_way'])
+        resource.set_property('need_payment', True)
+        context.message = INFO(u'Payment way has been changed')
+
+
+    action_change_shipping_way_schema = {'shipping_way': ShippingWaysEnumerate}
+    def action_change_shipping_way(self, resource, context, form):
+        resource.set_property('shipping', form['shipping_way'])
+        context.message = INFO(u'Shipping way has been changed')
+
+    ######################################
+    # Add shipping way
+    ######################################
+
+    action_add_shipping_schema = {'shipping_way': String(mandatory=True)}
+    def action_add_shipping(self, resource, context, form):
+        shop = get_shop(resource)
+        # We get shipping way
+        shipping_way = shop.get_resource('shippings/%s/' % form['shipping_way'])
+        # We get add_record view
+        add_record_view = shipping_way.order_add_view
+        # We get shipping way add form schema
+        schema = add_record_view.schema
+        # We get form
+        try:
+            form = process_form(context.get_form_value, schema)
+        except FormError, error:
+            context.form_error = error
+            return self.on_form_error(resource, context)
+        # Do actions
+        return add_record_view.add_shipping(resource, shipping_way,
+                    context, form)
+
+
+    ######################################
+    # Add payment way
+    ######################################
+
+    action_add_payment_schema = {'payment_way': String(mandatory=True)}
+    def action_add_payment(self, resource, context, form):
+        shop = get_shop(resource)
+        # We get shipping way
+        payment_way = shop.get_resource('payments/%s/' % form['payment_way'])
+        # We get add_record view
+        add_record_view = payment_way.order_add_view
+        # We get shipping way add form schema
+        schema = add_record_view.schema
+        # We get form
+        try:
+            form = process_form(context.get_form_value, schema)
+        except FormError, error:
+            context.form_error = error
+            return self.on_form_error(resource, context)
+        # Do actions
+        return add_record_view.add_payment(resource, payment_way,
+                    context, form)

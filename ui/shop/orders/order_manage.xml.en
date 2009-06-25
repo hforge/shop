@@ -4,87 +4,405 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Manage delivery</h1>
+  <h1>Manage Order</h1>
 
-  <fieldset style="width:300px;float:left">
-    <legend>Delivery address</legend>
-      ${delivery_address/firstname} ${delivery_address/lastname}<br/>
-      ${delivery_address/address_1}<br/>
-      <stl:block stl:if="delivery_address/address_2">
-        ${delivery_address/address_2}<br/>
+  <!-- States -->
+  <table class="order-browse" style="float:left;width:350px;">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/history.png"/>
+          States history
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:110px">
+        <td valign="top">
+          <table class="order-sub-browse">
+            <tr stl:repeat="state states_history">
+              <td>
+                ${state/date}
+              </td>
+              <td>
+                ${state/user}
+              </td>
+              <td>
+                <i class="wf-order-${state/name}"
+                   title="${state/comments}">
+                ${state/title}
+                </i>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#FFFBF2">
+          <b>Update order state:</b>${states}
+          <input type="submit" name=";change_order_state" value="Ok"/><br/>
+          <textarea style="height:30px;width:320px;"/><br/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Order informations -->
+  <table class="order-browse" style="width:350px;float:left">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/text.png"/>
+          Order informations
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          Id: ${order/id}<br/>
+          Date: ${order/date}<br/>
+          Total weight: ${order/total_weight} kg<br/>
+          Total price: ${order/total_price} €<br/>
+          Shipping: ${order/shipping_way} - ${order/shipping_price} €<br/>
+          Payment: ${order/payment_way}<br/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Customer -->
+
+  <table class="order-browse" style="width:350px;float:left">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/shop/icons/16x16/users.png"/>
+          Customer [Id n°${customer/id}]
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          ${customer/title}<br/>
+          ${customer/email}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="clear"/>
+
+  <!-- Payment -->
+  <table class="order-browse" style="width:500px;float:left;">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/paste.png"/>
+          <span stl:if="not payment/is_payed">
+            We're waiting for payment
+          </span>
+          <span stl:if="payment/is_payed">
+            Last payment
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <p stl:if="payment/view">${payment/view}</p>
+          <p stl:if="not payment/view">
+            <strong>${order/payment_way}:</strong>
+            We're waiting for customer payment
+          </p>
+        </td>
+      </tr>
+      <stl:block stl:if="not payment/is_payed">
+      <tr stl:if="not payment/need_payment">
+        <td>
+          <form method="post">
+            Add a new payment way: ${payment_ways}
+            <input type="submit" name=";change_payment_way"
+              value="Add"/>
+          </form>
+        </td>
+      </tr>
       </stl:block>
-      ${delivery_address/zipcode} ${delivery_address/town}<br/>
-      ${delivery_address/country}<br/>
-  </fieldset>
+      <stl:block stl:if="payment/need_payment">
+      <tr stl:if="not payment/is_payed">
+        <td style="background-color:#FFFBF2">
+          <form method="post">
+            Choose another payment way: ${payment_ways}
+            <input type="submit" name=";change_payment_way"
+              value="Change"/>
+          </form>
+        </td>
+      </tr>
+      </stl:block>
+    </tbody>
+  </table>
 
-  <fieldset style="width:300px;float:left">
-    <legend>Order informations</legend>
-      <b>Order Weight:</b> ${total_weight} KG<br/>
-      <b>Order price:</b> ${total_price} €<br/>
-      <b>Shipping price payed by customer:</b> ${shipping_price} €<br/>
-      <b>Shipping mode choose by customer:</b> ${shipping_mode}
-  </fieldset>
+  <table class="order-browse" style="width:200px;float:left;">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/shop/icons/16x16/users.png"/>
+          Shipping address
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          ${shipping_address/firstname} ${shipping_address/lastname}<br/>
+          ${shipping_address/address_1}<br/>
+          <stl:block stl:if="shipping_address/address_2">
+            ${shipping_address/address_2}<br/>
+          </stl:block>
+          ${shipping_address/zipcode} ${shipping_address/town}<br/>
+          ${shipping_address/country}<br/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-  <fieldset style="width:100%;">
-    <legend>Products</legend>
 
-    <table class="order-browse">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Options</th>
-          <th>Weight</th>
-          <th>Unit price</th>
-          <th>Quantity</th>
-          <th>Total price</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr stl:repeat="product products">
-          <td>${product/title}</td>
-          <td>${product/options}</td>
-          <td>${product/weight} kg</td>
-          <td>${product/price/unit/with_tax} €</td>
-          <td>${product/quantity}</td>
-          <td>${product/price/total/with_tax} €</td>
-        </tr>
-      </tbody>
-    </table>
-  </fieldset>
+  <!-- Shipping -->
+  <table class="order-browse" style="width:500px;float:left;"
+    stl:if="payment/is_payed">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/next.png"/>
+          Payment has been validated, preparation of order
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          ${shipping/view}
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#FFFBF2" stl:if="not shipping/is_sent">
+          <form method="post">
+            Choose another shipping way: ${shipping_ways}
+            <input type="submit" name=";change_shipping_way"
+              value="Change"/>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-  <fieldset style="width:100%;" stl:if="shippings">
-    <legend>Shipping history</legend>
+  <table class="order-browse" style="width:200px;float:left;"
+    stl:if="payment/is_payed">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/shop/icons/16x16/users.png"/>
+          Delivery address
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          ${delivery_address/firstname} ${delivery_address/lastname}<br/>
+          ${delivery_address/address_1}<br/>
+          <stl:block stl:if="delivery_address/address_2">
+            ${delivery_address/address_2}<br/>
+          </stl:block>
+          ${delivery_address/zipcode} ${delivery_address/town}<br/>
+          ${delivery_address/country}<br/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <table class="order-browse">
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Datetime</th>
-          <th>Mode</th>
-          <th>State</th>
-        </tr>
-      </thead>
-      <tbody>
-        <stl:block stl:repeat="shipping shippings">
-          <tr>
-            <td>${shipping/complete_id}</td>
-            <td>${shipping/ts}</td>
-            <td>${shipping/shipping_mode}</td>
-            <td>${shipping/state}</td>
-          </tr>
-          <tr stl:if="shipping/html">
-            <td colspan="4">
-            ${shipping/html}
-            </td>
-          </tr>
-        </stl:block>
-      </tbody>
-    </table>
-  </fieldset>
+  <!-- Products -->
+  <table class="order-browse" style="width:720px;">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/view.png"/>
+          Products
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          <table class="order-sub-browse">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Unit price HT</th>
+                <th>Quantity</th>
+                <th>Total price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr stl:repeat="product products">
+                <td>${product/title}
+                  <stl:block stl:if="product/options">
+                    <br/>${product/options}
+                  </stl:block>
+                </td>
+                <td>${product/price/unit/with_tax} €</td>
+                <td>${product/quantity}</td>
+                <td>${product/price/total/with_tax} €</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="text-align:right">Shipping</td>
+                <td>${shipping_price} €</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="text-align:right">Total Price</td>
+                <td>${total_price} €</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-  <fieldset style="width:100%;" stl:if="not shippings">
-    <legend>Send order</legend>
-    ${create_shipping}
-  </fieldset>
+
+  <!-- Messages -->
+  <table class="order-browse" style="width:720px;">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/mail.png"/>
+          Messages
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <table cellpadding="0" cellspacing="0" class="order-sub-browse">
+            <tbody>
+              <tr stl:repeat="message messages" stl:if="not message/private">
+                <td>
+                  <b>${message/ts}</b>
+                </td>
+                <td>
+                  ${message/author}
+                </td>
+                <td>
+                  <span stl:if="not message/private">
+                    Public
+                  </span>
+                  <span stl:if="message/private">
+                    Private
+                  </span>
+                </td>
+                <td>
+                  ${message/message}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <form method="post">
+            <p>
+              If you want to add a message:<br/>
+              <input type="radio" id="radio-public" name="public" value="1"
+                checked="checked"/>
+              <label for="radio-public">Public</label>
+              <input type="radio" id="radio-private" name="public" value="0"/>
+              <label for="radio-private">Private</label><br/>
+            </p>
+            <textarea name="message" style="width:100%;height:30px"/><br/>
+            <input type="submit" name=";add_message"
+              class="button-ok" value="Send message"/>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Payments history -->
+  <table class="order-browse" style="width:720px;" stl:if="payment/history">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/history.png"/>
+          Payments history
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <table class="order-sub-browse">
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Id</th>
+                <th>Mode</th>
+                <th>Datetime</th>
+                <th>Amount</th>
+                <th>State</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr stl:repeat="payment payment/history">
+                <td>${payment/state}</td>
+                <td>${payment/complete_id}</td>
+                <td>${payment/payment_name}</td>
+                <td>${payment/ts}</td>
+                <td>${payment/amount}</td>
+                <td>${payment/advance_state}</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- shipping history -->
+  <table class="order-browse" style="width:720px;" stl:if="shipping/history">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/history.png"/>
+          Shipping history
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <table class="order-sub-browse">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Datetime</th>
+                <th>Mode</th>
+                <th>State</th>
+              </tr>
+            </thead>
+            <tbody>
+              <stl:block stl:repeat="shipping shipping/history">
+                <tr>
+                  <td>${shipping/complete_id}</td>
+                  <td>${shipping/ts}</td>
+                  <td>${shipping/shipping_mode}</td>
+                  <td>${shipping/state}</td>
+                </tr>
+              </stl:block>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
 
 </stl:block>

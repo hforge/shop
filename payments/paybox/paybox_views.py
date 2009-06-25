@@ -193,18 +193,18 @@ class Paybox_ConfirmPayment(BaseForm):
         record = payments.search(ref=form['ref'])[0]
 
         # Get informations
-        infos = {'state': 'ok' if form['autorisation'] else 'error'}
+        infos = {'state': True if form['autorisation'] else False}
         for key in ['transaction', 'autorisation', 'advance_state']:
             infos[key] = form[key]
         # We Check amount
         amount = form['amount'] / decimal('100')
         if payments.get_record_value(record, 'amount') != amount:
-            infos['state'] = 'error'
+            infos['state'] = False
             infos['advance_state'] = 'amount_invalid'
         # We ensure that remote ip address belongs to Paybox
         remote_ip = context.request.get_remote_ip()
         if remote_ip not in self.authorized_ip:
-            infos['state'] = 'error'
+            infos['state'] = False
             infos['advance_state'] = 'ip_not_authorized'
         # If it's the first payment for the order ref we update record
         # If another payment (First payment state!=wait) we add a new record
@@ -216,13 +216,19 @@ class Paybox_ConfirmPayment(BaseForm):
                 kw[key] = payments.get_record_value(record, key)
             kw.update(infos)
             payments.add_record(kw)
+        # XXX
         # TODO Check signature
         # Confirm_payment XXX , to check
-        if bool(form['autorisation']):
-            resource.set_payment_as_ok(context, form['ref'])
+        #if bool(form['autorisation']):
+        #    resource.set_payment_as_ok(context, form['ref'])
         # Return a blank page to payment
         response = context.response
         response.set_header('Content-Type', 'text/plain')
+
+
+class Paybox_Record_Edit(STLForm):
+
+    template = '/ui/shop/payments/paybox/paybox_end.xml'
 
 
 

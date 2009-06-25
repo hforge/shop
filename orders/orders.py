@@ -18,10 +18,9 @@
 from datetime import datetime
 
 # Import from itools
-from itools.core import freeze, get_abspath
 from itools.csv import Table as BaseTable
 from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
-from itools.datatypes import Email
+from itools.datatypes import Boolean
 from itools.i18n import format_date
 from itools.gettext import MSG
 from itools.pdf import stl_pmltopdf
@@ -44,7 +43,7 @@ from shop.utils import get_shop
 from messages import Messages_TableResource
 from orders_views import OrderView
 from orders_views import OrdersView, MyOrdersView, OrdersProductsView
-from orders_views import Order_ManagePayment, Order_ManageShipping
+from orders_views import Order_Manage
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
 from shop.utils import format_price
@@ -144,7 +143,7 @@ class Order(WorkflowAware, Folder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
-    class_views = ['view', 'manage_payment', 'manage_shipping']
+    class_views = ['view', 'manage']
 
     __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
                           'messages', 'products']
@@ -153,8 +152,7 @@ class Order(WorkflowAware, Folder):
 
     # Views
     view = OrderView()
-    manage_payment = Order_ManagePayment()
-    manage_shipping = Order_ManageShipping()
+    manage = Order_Manage()
 
 
     @classmethod
@@ -170,6 +168,10 @@ class Order(WorkflowAware, Folder):
         schema['shipping'] = ShippingWaysEnumerate
         schema['delivery_address'] = Integer
         schema['bill_address'] = Integer
+        # States
+        schema['is_payed'] = Boolean(default=False)
+        schema['is_sent'] = Boolean(default=False)
+        schema['need_payment'] = Boolean(default=True)
         return schema
 
 
@@ -183,7 +185,7 @@ class Order(WorkflowAware, Folder):
         user_email = user.get_property('email')
         # Build metadata/order
         metadata = {}
-        for key in ['shipping_price', 'total_price', 'total_weight']:
+        for key in ['payment_mode', 'shipping_price', 'total_price', 'total_weight']:
             metadata[key] = kw[key]
         # Addresses
         metadata['delivery_address'] = cart.addresses['delivery_address']
@@ -235,9 +237,9 @@ class Order(WorkflowAware, Folder):
         return values
 
 
-    ########################################
-    # E-Mail confirmation / notification
-    ########################################
+    #########################################################
+    # E-Mail confirmation / notification -> Order creation
+    #########################################################
     @classmethod
     def send_email_confirmation(cls, shop, shop_uri, customer_email, order_name):
         """ """
@@ -258,18 +260,22 @@ class Order(WorkflowAware, Folder):
         body = mail_confirmation_body.gettext(**kw)
         root.send_email(customer_email, subject, from_addr, body)
 
+    ##################################################
+    # Update order states
+    ##################################################
 
-    def payment_is_ok(self, context):
-        # The payment is ok
-        self.set_workflow_state('payment_ok')
-        # We generate the bill
-        self.generate_pdf_bill(context)
-        # Create a delivery
-        self.create_delivery(context)
+    def set_as_not_payed(self):
+        self.set_property('is_payed', False)
+        self.set_property('need_payment', False)
 
 
-    def set_as_sended(self):
-        self.set_workflow_state('sended')
+    def set_as_payed(self):
+        self.set_property('is_payed', True)
+        self.set_property('need_payment', False)
+
+
+    def set_as_sent(self):
+        self.set_property('is_sent', True)
 
 
     def generate_pdf_bill(self, context):

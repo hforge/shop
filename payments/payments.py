@@ -75,6 +75,17 @@ class Payments(Folder):
         return items
 
 
+    def get_payments_records(self, context, ref=None):
+        records = []
+        for payment_way in self.search_resources(cls=PaymentWay):
+            payments = payment_way.get_resource('payments')
+            if ref:
+                records.extend(payments.handler.search(ref=ref))
+            else:
+                records.extend(payments.handler.get_records())
+        records.reverse()
+        return records
+
     ######################
     # Public API
     ######################

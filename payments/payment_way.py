@@ -29,7 +29,6 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
-from shop.payments.enumerates import PaymentState
 from shop.utils import get_shop
 
 class PaymentWayBaseTable(BaseTable):
@@ -37,7 +36,7 @@ class PaymentWayBaseTable(BaseTable):
     record_schema = {
         'ref': String(Unique=True, is_indexed=True),
         'user': String,
-        'state': PaymentState,
+        'state': Boolean,
         'amount': Decimal}
 
 
@@ -64,11 +63,10 @@ class PaymentWayTable(Table):
         namespace['amount'] = '%s €' % get_value(record, 'amount')
         # User
         users = context.root.get_resource('users')
-        user = users.get_resource(get_value(record, 'user'))
+        user = users.get_resource(get_value(record, 'user') or '0')
         namespace['user_title'] = user.get_title()
         namespace['user_email'] = user.get_property('email')
         # State
-        namespace['state'] = PaymentState.get_logo(get_value(record, 'state'))
         namespace['advance_state'] = None
         # HTML
         if self.record_order_view:
@@ -111,16 +109,8 @@ class PaymentWay(Folder):
         Folder._make_resource(cls, folder, name, *args, **kw)
 
 
-    def set_payment_as_ok(self, context, ref):
-        # Send payment confirmation
-        self.send_confirmation_mail()
-        # We generate bill # XXX do not do there
-        order = self.get_resource('../../orders/%s' % ref)
-        order.payment_is_ok(context)
-
-
     ######################
-    # Confirmation
+    # XXX Confirmation
     ######################
 
     mail_ok = MSG(u"""
