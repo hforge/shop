@@ -287,7 +287,7 @@
         <td>
           <table cellpadding="0" cellspacing="0" class="order-sub-browse">
             <tbody>
-              <tr stl:repeat="message messages" stl:if="not message/private">
+              <tr stl:repeat="message messages">
                 <td>
                   <b>${message/ts}</b>
                 </td>
@@ -311,10 +311,10 @@
           <form method="post">
             <p>
               If you want to add a message:<br/>
-              <input type="radio" id="radio-public" name="public" value="1"
+              <input type="radio" id="radio-public" name="private" value="0"
                 checked="checked"/>
               <label for="radio-public">Public</label>
-              <input type="radio" id="radio-private" name="public" value="0"/>
+              <input type="radio" id="radio-private" name="private" value="1"/>
               <label for="radio-private">Private</label><br/>
             </p>
             <textarea name="message" style="width:100%;height:30px"/><br/>

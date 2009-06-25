@@ -341,11 +341,12 @@ class Order_Manage(STLForm):
         return
 
 
-    action_add_message_schema = {'message': Unicode(mandatory=True)}
+    action_add_message_schema = {'message': Unicode(mandatory=True),
+                                 'private': Boolean(mandatory=True)}
     def action_add_message(self, resource, context, form):
         messages = resource.get_resource('messages').handler
         messages.add_record({'author': context.user.name,
-                             'private': False,
+                             'private': form['private'],
                              'message': form['message']})
         context.message = INFO(u'Your message has been sent')
 
