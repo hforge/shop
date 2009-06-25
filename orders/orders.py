@@ -16,6 +16,7 @@
 
 # Import from standard library
 from datetime import datetime
+from decimal import Decimal as decimal
 
 # Import from itools
 from itools.csv import Table as BaseTable
@@ -205,7 +206,7 @@ class Order(WorkflowAware, Folder):
               {'name': product.name,
                'title': product.get_title(),
                'options': options,
-               'pre-tax-price': product.get_price_without_tax(),
+               'pre-tax-price': decimal(product.get_price_without_tax()),
                'tax': TaxesEnumerate.get_value(product.get_property('tax')),
                'weight': product.get_weight(),
                'quantity': product_cart['quantity']})
