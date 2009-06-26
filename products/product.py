@@ -173,8 +173,9 @@ class Product(Editable, DynamicFolder):
     ##################################################
     def get_small_namespace(self, context):
         # get namespace
+        abspath = context.resource.get_abspath()
         namespace = {'name': self.name,
-                     'href': context.get_link(self),
+                     'href': abspath.get_pathto(self.get_virtual_path()),
                      'price-with-tax': self.get_price_with_tax(),
                      'cover': self.get_cover_namespace(context)}
         for key in ['title', 'description']:
