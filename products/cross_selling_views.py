@@ -67,10 +67,10 @@ class AddProduct_View(STLForm):
 
 
     def build_tree(self, parent, base_dir, current_category, target_id):
-        from shop.categories import Categorie
+        from shop.categories import Category
 
         items = []
-        for category in parent.search_resources(cls=Categorie):
+        for category in parent.search_resources(cls=Category):
             cat_name = category.name
             if base_dir:
                 cat_name = '%s/%s' % (base_dir, cat_name)
