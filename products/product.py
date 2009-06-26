@@ -219,6 +219,7 @@ class Product(Editable, DynamicFolder):
         # Data
         namespace['data'] = self.get_xhtml_data()
         # Images
+        namespace['cover'] = self.get_cover_namespace(context)
         namespace['images'] = self.get_images_namespace(context)
         # Product is buyable
         namespace['is_buyable'] = self.is_buyable()
@@ -239,22 +240,15 @@ class Product(Editable, DynamicFolder):
             return
         image = self.get_resource(cover)
         return {'href': context.get_link(image),
-                'title': image.get_property('title'),
-                'is_cover': True}
+                'title': image.get_property('title')}
 
 
     def get_images_namespace(self, context):
-        namespace = []
-        # Cover
-        cover = self.get_cover_namespace(context)
-        if cover:
-            namespace = [cover]
-        # Other images
+        images = []
         for image in self.get_ordered_photos(context):
-            namespace.append({'href': context.get_link(image),
-                              'title': image.get_property('title'),
-                              'is_cover': False})
-        return namespace
+            images.append({'href': context.get_link(image),
+                           'title': image.get_property('title')})
+        return images
 
 
     def get_ordered_photos(self, context):
