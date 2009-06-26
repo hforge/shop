@@ -75,6 +75,7 @@ class VirtualCategory_BoxSubCategories(STLView):
 class VirtualCategory_View(BrowseFormBatchNumeric):
 
     access = True
+    title = MSG(u'View')
 
     search_template = None
     template = '/ui/shop/virtualcategory_view.xml'
