@@ -68,6 +68,7 @@
               src="/ui/shop/images/delete.png"/>
           </td>
         </tr>
+      </form>
         <tr stl:if="ship">
           <td colspan="4" style="text-align:right">
             Delivery (${ship/title}):<br/>
@@ -88,7 +89,6 @@
           </td>
           <td>${total/with_tax} €</td>
         </tr>
-      </form>
     </tbody>
   </table>
 
