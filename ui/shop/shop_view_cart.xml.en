@@ -8,13 +8,19 @@
 
   ${progress}
 
-  ${cart}
+  <div id="empty-cart" stl:if="not cart">
+    Your cart is empty
+  </div>
 
-  <form method="post">
-    <input type="submit" id="clear-cart" name=";clear" value="Clear the cart"/>
-  </form>
-  <div class="clear"/>
+  <stl:block stl:if="cart">
+    ${cart}
 
-  <a href=";addresses"  id="button-order">Order</a>
+    <form method="post">
+      <input type="submit" id="clear-cart" name=";clear" value="Clear the cart"/>
+    </form>
+    <div class="clear"/>
+
+    <a href=";addresses"  id="button-order">Order</a>
+  </stl:block>
 
 </stl:block>
