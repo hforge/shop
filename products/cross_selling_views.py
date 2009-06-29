@@ -15,16 +15,47 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.datatypes import Boolean, Integer
+from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import STLForm
 from itools.datatypes import String
 from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
+from ikaaro.forms import AutoForm, BooleanCheckBox, TextWidget
 from ikaaro.utils import get_base_path_query, reduce_string
 
 # Import from shop
 from shop.utils import get_shop
+
+
+class CrossSelling_Configure(AutoForm):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Configure')
+
+    schema = {
+        'random': Boolean,
+        'products_quantity': Integer(default=5)
+        }
+
+    widgets = [
+        BooleanCheckBox('random', title=MSG(u'Random selection')),
+        TextWidget('products_quantity', title=MSG(u'Numbers of products')),
+        ]
+
+
+    def get_value(self, resource, context, name, datatype):
+        return resource.get_property(name)
+
+
+    def action(self, resource, context, form):
+        for key in self.schema.keys():
+            resource.set_property(key, form[key])
+        msg = MSG(u'Configuration ok')
+        return context.come_back(msg)
+
 
 
 class AddProduct_View(STLForm):

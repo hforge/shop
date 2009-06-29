@@ -17,6 +17,7 @@
 # Import from standard library
 from decimal import Decimal as decimal
 from datetime import datetime
+from random import shuffle
 
 # Import from itools
 from itools.core import merge_dicts
@@ -184,16 +185,28 @@ class Product(Editable, DynamicFolder):
 
 
     def get_cross_selling_namespace(self, context):
+        viewbox = self.viewbox
         cross_selling = []
         categories = self.get_real_resource().parent
         products = get_shop(self).get_resource('products')
-        table = self.get_resource('cross-selling').handler
-        viewbox = self.viewbox
-        for id in table.get_record_ids_in_order():
-            record = table.get_record(id)
-            path = table.get_record_value(record, 'name')
-            product = categories.get_resource(path)
-            cross_selling.append(viewbox.GET(product, context))
+        table = self.get_resource('cross-selling')
+        if table.get_property('random'):
+            # Random selection
+            root = context.root
+            results = root.search(format=self.class_id)
+            brains = list(results.get_documents())
+            shuffle(brains)
+            for brain in brains[:table.get_property('products_quantity')]:
+                product = root.get_resource(brain.abspath)
+                cross_selling.append(viewbox.GET(product, context))
+        else:
+            # Selection in cross selling table
+            table = table.handler
+            for id in table.get_record_ids_in_order():
+                record = table.get_record(id)
+                path = table.get_record_value(record, 'name')
+                product = categories.get_resource(path)
+                cross_selling.append(viewbox.GET(product, context))
         return cross_selling
 
 

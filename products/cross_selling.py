@@ -16,6 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
+from itools.datatypes import Integer, Boolean
 from itools.gettext import MSG
 from itools.xml import XMLParser
 
@@ -27,7 +28,7 @@ from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from cross_selling_views import AddProduct_View
+from cross_selling_views import AddProduct_View, CrossSelling_Configure
 
 
 
@@ -80,16 +81,24 @@ class CrossSellingTable(ResourcesOrderedTable):
     class_id = 'CrossSellingTable'
     class_title = MSG(u'Cross-Selling Table')
     class_handler = ResourcesOrderedTableFile
-    class_views = ['view', 'add_record']
+    class_views = ['view', 'add_record', 'configure']
 
     form = [ProductSelectorWidget('name', title=MSG(u'Product'))]
 
     # Views
     view = ProductsOrderedTable_Ordered()
     add_product = AddProduct_View()
+    configure = CrossSelling_Configure()
 
     # TODO Add get_links, update_link
 
+
+    @classmethod
+    def get_metadata_schema(cls):
+        schema = ResourcesOrderedTable.get_metadata_schema()
+        schema['random'] = Boolean
+        schema['products_quantity'] = Integer
+        return schema
 
 
 register_resource_class(CrossSellingTable)
