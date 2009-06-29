@@ -190,7 +190,8 @@ class Order(WorkflowAware, Folder):
             metadata[key] = kw[key]
         # Addresses
         metadata['delivery_address'] = cart.addresses['delivery_address']
-        metadata['bill_address'] = cart.addresses['bill_address']
+        metadata['bill_address'] = cart.addresses['bill_address'] or \
+            cart.addresses['delivery_address']
         metadata['customer_id'] = user.name
         metadata['creation_datetime'] = datetime.now()
         metadata['shipping'] = cart.shipping
