@@ -285,7 +285,7 @@ class Products_View(Folder_BrowseContent):
             path = item_resource.get_virtual_path()
             if not path:
                 path = resource.get_pathto(item_resource)
-            return item_resource.get_property('title'), path
+            return item_resource.get_title(), path
         elif column == 'product_model':
             product_model = item_resource.get_property('product_model')
             return ProductModelsEnumerate.get_value(product_model)
