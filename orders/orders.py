@@ -27,6 +27,7 @@ from itools.gettext import MSG
 from itools.pdf import stl_pmltopdf
 
 # Import from ikaaro
+from ikaaro.access import AccessControl
 from ikaaro.file import PDF
 from ikaaro.folder import Folder
 from ikaaro.forms import TextWidget
@@ -140,7 +141,7 @@ class OrdersProducts(Table):
         return ns
 
 
-class Order(WorkflowAware, Folder):
+class Order(AccessControl, WorkflowAware, Folder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
@@ -305,6 +306,24 @@ class Order(WorkflowAware, Folder):
         shipping = shop.get_resource('shippings/%s' % shipping)
         history = shipping.get_resource('history')
         history.handler.add_record({'ref': self.name})
+
+
+    ########################################################################
+    # Access control
+    ########################################################################
+
+    def is_allowed_to_view_order(self, user, resource):
+        # You are nobody here, ha ha ha
+        if user is None:
+            return False
+
+        # In my home I am the king
+        if self.get_property('customer_id') == user.name:
+            return True
+
+        # The all-powerfull
+        return self.is_admin(user, resource)
+
 
 
 

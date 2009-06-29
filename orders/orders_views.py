@@ -72,7 +72,7 @@ class OrdersProductsView(Table_View):
 
 class OrderView(STLForm):
 
-    access = 'is_admin'
+    access = 'is_allowed_to_view_order'
 
     title = MSG(u'View')
 
