@@ -220,15 +220,7 @@ class ProductCart(object):
 
 
     def set_bill_address(self, id):
-        self._set_addresses(id, self.addresses['delivery_address'])
-
-
-#    def get_delivery_address(self):
-#        return self.addresses['delivery_address']
-#
-#
-#    def get_bill_address(self):
-#        return self.addresses['bill_address']
+        self._set_addresses(self.addresses['delivery_address'], id)
 
 
     ######################
