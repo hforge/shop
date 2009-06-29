@@ -273,7 +273,8 @@ class Product(Editable, DynamicFolder):
     ## API
     #####################
     def is_buyable(self):
-        return self.get_property('pre-tax-price') != decimal(0)
+        return (self.get_property('pre-tax-price') != decimal(0) and
+                self.get_property('tax') is not None)
 
 
     def get_price_without_tax(self):
@@ -283,6 +284,8 @@ class Product(Editable, DynamicFolder):
     def get_price_with_tax(self):
         price = self.get_property('pre-tax-price')
         tax = self.get_property('tax')
+        if self.is_buyable() is False:
+            return 0
         price = price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
         return format_price(price)
 
