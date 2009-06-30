@@ -283,9 +283,8 @@ class Products_View(Folder_BrowseContent):
                 return XMLParser('<img src="%s"/>' % uri)
             return u'-'
         elif column == 'title':
-            path = item_resource.get_virtual_path()
-            if not path:
-                path = resource.get_pathto(item_resource)
+            abspath = context.resource.get_abspath()
+            path = abspath.get_pathto(item_resource.get_virtual_path())
             return item_resource.get_title(), path
         elif column == 'product_model':
             product_model = item_resource.get_property('product_model')
