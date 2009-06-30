@@ -18,12 +18,10 @@
 from itools.core import get_abspath, merge_dicts
 from itools.datatypes import String
 from itools.gettext import MSG
-from itools.stl import stl
 from itools.web import STLView, STLForm
-from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import SelectWidget, TextWidget, stl_namespaces
+from ikaaro.forms import TextWidget, stl_namespaces
 from ikaaro.registry import register_resource_class
 
 # Import from shop.shipping

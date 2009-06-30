@@ -20,7 +20,7 @@ from itools.datatypes import String
 from itools.gettext import MSG
 
 # Import from ikaaro
-from ikaaro.forms import SelectRadio, TextWidget, PasswordWidget
+from ikaaro.forms import SelectRadio, TextWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm

@@ -17,9 +17,7 @@
 
 # Import from itools
 from itools.datatypes import Boolean, Enumerate, String, Unicode
-from itools.datatypes import Integer, Decimal, Email, ISOCalendarDate
 from itools.gettext import MSG
-from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder

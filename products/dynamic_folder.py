@@ -19,7 +19,7 @@
 #######################################
 
 # Import from itools
-from itools.datatypes import Tokens, Unicode
+from itools.datatypes import Tokens
 
 # Import from ikaaro
 from ikaaro.folder import Folder

@@ -25,13 +25,12 @@ from itools.xapian import OrQuery, PhraseQuery
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import SelectWidget
-from ikaaro.views_new import NewInstance
 from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
 from ikaaro.views import CompositeForm
 from ikaaro.views_new import NewInstance
 
 # Import from project
-from enumerate import Datatypes, TableEnumerate
+from enumerate import TableEnumerate
 
 
 class ProductModel_NewInstance(NewInstance):

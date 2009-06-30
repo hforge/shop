@@ -25,7 +25,7 @@ from itools.xml import XMLParser
 from ikaaro import messages
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import AutoForm, RTEWidget, SelectWidget, TextWidget
+from ikaaro.forms import AutoForm, SelectWidget, TextWidget
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.registry import get_resource_class
 from ikaaro.views_new import NewInstance
