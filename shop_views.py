@@ -525,7 +525,7 @@ class Shop_ShowRecapitulatif(STLForm):
         # Get delivery and bill address namespace
         for key in ['delivery_address', 'bill_address']:
             id = cart.addresses[key]
-            if id:
+            if id is not None:
                 namespace[key] = resource.get_user_address_namespace(id)
             else:
                 namespace[key] = None
