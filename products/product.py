@@ -62,6 +62,7 @@ class Product(Editable, DynamicFolder):
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order',
                    'edit_cross_selling']
+    class_description = MSG(u'A product')
     class_version = '20090619'
 
     __fixed_handlers__ = DynamicFolder.__fixed_handlers__ + ['images',
@@ -450,7 +451,7 @@ class Products(Folder):
 
     class_id = 'products'
     class_title = MSG(u'Products')
-    class_views = ['view', 'browse_content']
+    class_views = ['view']
 
     # Views
     view = Products_View()
@@ -458,7 +459,8 @@ class Products(Folder):
 
 
     def get_document_types(self):
-        return [Product]
+        shop = get_shop(self)
+        return [shop.product_class]
 
 
 
