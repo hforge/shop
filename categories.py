@@ -33,8 +33,9 @@ class Category(Folder):
 
     class_id = 'category'
     class_title = MSG(u'Category')
-    class_views = ['browse_content', 'new_resource?type=category', 'edit']
+    class_views = ['view', 'new_resource?type=category', 'edit']
 
+    view = Categories_View()
 
     def get_unique_id(self):
         """Get the path to get from the categories container to this category.
