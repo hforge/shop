@@ -41,14 +41,15 @@ from shop.editable import Editable_View, Editable_Edit
 class Product_NewInstance(NewInstance):
 
     schema = {
-        'name': String,
-        'title': Unicode,
+        'name': String(mandatory=True),
+        'title': Unicode(mandatory=True),
         'product_model': ProductModelsEnumerate}
 
     widgets = [
         title_widget,
         TextWidget('name', title=MSG(u'Name'), default=''),
-        SelectWidget('product_model', title=MSG(u'Product model'))]
+        SelectWidget('product_model', title=MSG(u'Product model'),
+            has_empty_option=False)]
 
 
     def action(self, resource, context, form):
