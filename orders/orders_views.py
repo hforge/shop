@@ -182,6 +182,8 @@ class OrdersView(Folder_BrowseContent):
             customer_id = item_resource.get_property('customer_id')
             customer = users.get_resource(customer_id)
             gender = Civilite.get_value(customer.get_property('gender'))
+            if gender is None:
+                return customer.get_title()
             return '%s %s' % (gender.gettext(), customer.get_title())
         elif column == 'total_price':
             return '%s € ' % item_resource.get_property(column)
