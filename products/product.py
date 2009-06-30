@@ -24,6 +24,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
 from itools.web import get_context
+from itools.xapian import AndQuery, OrQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -193,7 +194,10 @@ class Product(Editable, DynamicFolder):
         if table.get_property('random'):
             # Random selection
             root = context.root
-            results = root.search(format=self.class_id)
+            query = OrQuery(*[PhraseQuery('categories', x) \
+                        for x in self.get_property('categories')])
+            query = AndQuery(query, PhraseQuery('format', self.class_id))
+            results = root.search(query)
             brains = list(results.get_documents())
             shuffle(brains)
             for brain in brains[:table.get_property('products_quantity')]:
