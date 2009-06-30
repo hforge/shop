@@ -217,7 +217,8 @@ class Product(Editable, DynamicFolder):
     def get_namespace(self, context):
         namespace = {}
         # Get basic informations
-        namespace['href'] = context.get_link(self)
+        abspath = context.resource.get_abspath()
+        namespace['href'] = abspath.get_pathto(self.get_virtual_path())
         for key in product_schema.keys():
             if key=='data':
                 continue
