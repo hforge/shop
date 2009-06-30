@@ -12,7 +12,7 @@
 
   <h1>Price / weight</h1>
 
-  ${price} €<br/>
+  ${price-with-tax} €<br/>
   ${weight} Kg<br/>
 
   <h1>Images</h1>

@@ -12,7 +12,7 @@
            src="${cover/href}/;thumb?width=90&amp;height=90"
            stl:if="cover"/>
       <span class="price">
-        ${price} €
+        ${price-with-tax} €
       </span>
       <p class="description">${description}</p>
     </div>
