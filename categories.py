@@ -26,7 +26,7 @@ from ikaaro.registry import register_resource_class
 from products import Product
 from categories_views import VirtualCategory_View, VirtualCategory_ComparatorView
 from categories_views import VirtualCategory_BoxSubCategories
-from categories_views import VirtualCategory_Comparator
+from categories_views import VirtualCategory_Comparator, Categories_View
 
 
 class Category(Folder):
@@ -52,8 +52,9 @@ class Categories(Folder):
 
     class_id = 'categories'
     class_title = MSG(u'Categories')
-    class_views = ['browse_content', 'new_resource?type=category']
+    class_views = ['view', 'new_resource?type=category']
 
+    view = Categories_View()
 
     def get_document_types(self):
         return [Category]

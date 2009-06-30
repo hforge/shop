@@ -25,6 +25,8 @@ from itools.web import STLView
 from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
+from ikaaro.buttons import RemoveButton
+from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.utils import get_base_path_query
 
 # Import from shop
@@ -183,3 +185,30 @@ class VirtualCategory_Comparator(STLView):
                     comparator[key]['values'].append(value)
             namespace['comparator'] = comparator.values()
         return namespace
+
+
+
+class Categories_View(Folder_BrowseContent):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'View')
+
+    batch_msg1 = MSG(u"There is 1 category")
+    batch_msg2 = MSG(u"There are {n} categories")
+
+    context_menus = []
+
+    table_actions = [RemoveButton]
+
+    table_columns = [
+        ('checkbox', None),
+        ('name', MSG(u'Name')),
+        ('title', MSG(u'Title')),
+        ]
+
+
+    def get_query_schema(self):
+        schema = Folder_BrowseContent.get_query_schema(self)
+        # Override the default values
+        schema['sort_by'] = String(default='title')
+        return schema
