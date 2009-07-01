@@ -123,6 +123,9 @@ class VirtualCategory(Category):
         return virtual_cls(resource.metadata)
 
 
+    def get_document_types(self):
+        return []
+
 
 class VirtualCategories(Folder):
     """The Virtual Categories Folder allows to publish categories (and
@@ -180,6 +183,9 @@ class VirtualCategories(Folder):
         # Build another instance with the same properties
         return self.virtual_category_class(metadata)
 
+
+    def get_document_types(self):
+        return []
 
 
 
