@@ -222,7 +222,9 @@ class Product(Editable, DynamicFolder):
         """
         categories = self.get_property('categories')
         if not categories:
-            return None
+            # If there is no category attached to the product
+            # Just return his absolute path
+            return self.get_abspath()
         category = categories[0]
         path = '../../categories/%s/%s' % (category, self.name)
         return self.get_abspath().resolve(path)
