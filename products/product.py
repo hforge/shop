@@ -77,7 +77,7 @@ class Product(Editable, DynamicFolder):
     edit = Product_Edit()
     edit_model = Product_EditModel()
     order = GoToSpecificDocument(specific_document='order-photos',
-                                 title=MSG(u'Order photos'),
+                                 title=MSG(u'Manage photos'),
                                  access='is_allowed_to_edit')
     edit_cross_selling = GoToSpecificDocument(
             specific_document='cross-selling',

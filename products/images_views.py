@@ -20,11 +20,12 @@ from itools.gettext import MSG
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.table_views import OrderedTable_View
+from ikaaro.table_views import OrderedTable_View, Table_AddRecord
+from ikaaro.views import CompositeForm
 
 
 
-class PhotoOrderedTable_View(OrderedTable_View):
+class PhotoOrderedTable_TableView(OrderedTable_View):
 
     def get_table_columns(self, resource, context):
         columns = OrderedTable_View.get_table_columns(self, resource, context)
@@ -66,3 +67,30 @@ class PhotoOrderedTable_View(OrderedTable_View):
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
 
+
+class PhotoOrderedTable_AddRecord(Table_AddRecord):
+
+    def action_on_success(self, resource, context):
+        return context.come_back(MSG(u'New record added.'))
+
+
+
+class PhotoOrderedTable_View(CompositeForm):
+
+    access = 'is_allowed_to_edit'
+
+    title = MSG(u'Manage photos')
+
+    subviews = [PhotoOrderedTable_AddRecord(),
+                PhotoOrderedTable_TableView()]
+
+    def get_schema(self, resource, context):
+        if 'name' in context.get_form_keys():
+            return self.subviews[0].get_schema(resource, context)
+        return self.subviews[1].get_schema(resource, context)
+
+
+    def get_action_method(self, resource, context):
+        if 'name' in context.get_form_keys():
+            return self.subviews[0].action
+        return getattr(self.subviews[1], context.form_action, None)

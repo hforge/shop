@@ -50,7 +50,7 @@ class PhotoOrderedTable(ResourcesOrderedTable):
     class_id = 'gallery-ordered-table'
     class_title = MSG(u'Photo Ordered Table')
     class_handler = PhotoOrderedTableFile
-    class_views = ['view', 'add_record', 'goto_preview']
+    class_views = ['view', 'back']
 
     orderable_classes = (Image,)
     order_root_path = '../images'
@@ -60,8 +60,8 @@ class PhotoOrderedTable(ResourcesOrderedTable):
     # Views
     view = PhotoOrderedTable_View()
     add_image = DBResource_AddImage()
-    goto_preview = GoToSpecificDocument(specific_document='..',
-                                        title=MSG(u'See product'))
+    back = GoToSpecificDocument(specific_document='..',
+                                title=MSG(u'See product'))
 
 
     def get_links(self):
