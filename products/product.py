@@ -21,7 +21,7 @@ from random import shuffle
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Unicode
+from itools.datatypes import Boolean, String, Unicode, Enumerate, is_datatype
 from itools.gettext import MSG
 from itools.web import get_context
 from itools.xapian import AndQuery, OrQuery, PhraseQuery
@@ -147,6 +147,62 @@ class Product(Editable, DynamicFolder):
         product = self.get_real_resource()
         shop = get_shop(product)
         return shop.get_resource('products-models/%s' % product_model)
+
+
+    def to_text(self):
+        result = {}
+        languages = self.get_site_root().get_property('website_languages')
+        product_model = self.get_product_model()
+        schema = None
+        if product_model:
+            schema = product_model.get_model_schema()
+
+        for language in languages:
+            for key in ('title', 'description'):
+                value = self.get_property(key, language=language)
+                if value:
+                    texts = result.setdefault(language, [])
+                    texts.append(value)
+
+            # data (html)
+            value = self.get_property('data', language=language)
+            if value:
+                texts = result.setdefault(language, [])
+                texts.append(Unicode.decode(value))
+
+            # Dynamic properties
+            if schema is None:
+                continue
+            for key, datatype in schema.iteritems():
+                value = self.get_property(key)
+                if value:
+                    text = None
+                    multiple = datatype.multiple
+                    if is_datatype(datatype, Unicode):
+                        if multiple:
+                            text = ' '.join([ x for x in value ])
+                        else:
+                            text = value
+                    elif is_datatype(datatype, String):
+                        if multiple:
+                            text = ' '.join([ Unicode.decode(x)
+                                              for x in value ])
+                        else:
+                            text = Unicode.decode(value)
+                    elif is_datatype(datatype, Enumerate):
+                        values = value
+                        if multiple is False:
+                            values = [value]
+                        # XXX use multilingual label
+                        text = ' '.join(values)
+                    if text:
+                        texts.append(text)
+
+        # Join
+        for language, texts in result.iteritems():
+            result[language] = u'\n'.join(texts)
+
+        return result
 
 
     ####################################################
