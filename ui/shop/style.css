@@ -399,34 +399,3 @@ table.cart td{
   width: 17px;
   height: 27px;
 }
-
-/* Legend */
-legend {
-  background: #F4E6C9;
-  color: #000;
-  border: 1px solid #DFD5C3;
-  font-weight:bold;
-  margin: 0;
-  padding: 2px 4px;
-}
-fieldset{
-  background: #FFFFEF;
-  border: 1px solid #DFD5C3;
-  font-size: 1.1em;
-  margin: 0;
-  padding: 0.2em 0.5em;
-}
-fieldset img{
-  padding: 0 4px 0 0;
-  vertical-align: bottom;
-}
-fieldset textarea{
-  border: 1px solid #DFD5C3;
-}
-
-
-hr{
-  background-color: gray;
-  height: 1px;
-  border: medium none;
-}
