@@ -110,6 +110,13 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
         return context.root.search(AndQuery(*query))
 
 
+class VirtualCategories_View(VirtualCategory_View):
+
+    def get_items(self, resource, context):
+        shop = get_shop(resource)
+        query = PhraseQuery('format', shop.product_class.class_id)
+        return context.root.search(query)
+
 
 class VirtualCategory_ComparatorView(VirtualCategory_View):
 

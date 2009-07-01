@@ -24,6 +24,7 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop
 from products import Product
+from categories_views import VirtualCategories_View
 from categories_views import VirtualCategory_View, VirtualCategory_ComparatorView
 from categories_views import VirtualCategory_BoxSubCategories
 from categories_views import VirtualCategory_Comparator, Categories_View
@@ -144,6 +145,9 @@ class VirtualCategories(Folder):
 
     class_id = 'VirtualCategories'
     class_title = MSG(u"Categories")
+    class_views =  ['view']
+
+    view = VirtualCategories_View()
 
     # Class to wrap categories into
     virtual_category_class = VirtualCategory
