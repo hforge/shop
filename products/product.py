@@ -187,24 +187,44 @@ class Product(Editable, DynamicFolder):
 
 
     def get_cross_selling_namespace(self, context):
+        root = context.root
         viewbox = self.viewbox
         cross_selling = []
         categories = self.get_real_resource().parent
         products = get_shop(self).get_resource('products')
         table = self.get_resource('cross-selling')
-        if table.get_property('random'):
+        products_quantity = table.get_property('products_quantity')
+        if table.get_property('enabled') is False:
+            return []
+        mode = table.get_property('mode')
+        query_categorie = OrQuery(*[PhraseQuery('categories', x) \
+                            for x in self.get_property('categories')])
+        if mode.startswith('random'):
             # Random selection
             root = context.root
-            query = OrQuery(*[PhraseQuery('categories', x) \
-                        for x in self.get_property('categories')])
-            query = AndQuery(query, PhraseQuery('format', self.class_id))
+            query = AndQuery(PhraseQuery('format', self.class_id),
+                             PhraseQuery('has_categories', True))
+            if mode.endswith('_category'):
+                query = AndQuery(query, query_categorie)
             results = root.search(query)
             brains = list(results.get_documents())
             shuffle(brains)
-            for brain in brains[:table.get_property('products_quantity')]:
+            for brain in brains[:products_quantity]:
                 product = root.get_resource(brain.abspath)
                 cross_selling.append(viewbox.GET(product, context))
-        else:
+        elif mode.startswith('last'):
+            # Last products
+            query = AndQuery(PhraseQuery('format', self.class_id),
+                             PhraseQuery('has_categories', True))
+            if mode.endswith('_category'):
+                query = AndQuery(query, query_categorie)
+            results = root.search(query)
+            brains = list(results.get_documents(sort_by='ctime',
+                            reverse=True, size=products_quantity))
+            for brain in brains:
+                product = root.get_resource(brain.abspath)
+                cross_selling.append(viewbox.GET(product, context))
+        elif mode == 'table':
             # Selection in cross selling table
             table = table.handler
             for id in table.get_record_ids_in_order():

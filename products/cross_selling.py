@@ -21,14 +21,15 @@ from itools.gettext import MSG
 from itools.xml import XMLParser
 
 # Import from ikaaro
+from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import TextWidget, stl_namespaces
 from ikaaro.future.order import ResourcesOrderedTable
-from ikaaro.future.order import ResourcesOrderedTable_Ordered
 from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from cross_selling_views import AddProduct_View, CrossSelling_Configure
+from cross_selling_views import AddProduct_View, CrossSelling_Modes
+from cross_selling_views import CrossSelling_Configure, CrossSelling_TableView
 
 
 
@@ -52,43 +53,21 @@ class ProductSelectorWidget(TextWidget):
 
 
 
-class ProductsOrderedTable_Ordered(ResourcesOrderedTable_Ordered):
-
-    def get_table_columns(self, resource, context):
-        return [('checkbox', None),
-                ('title', MSG(u'Title')),
-                ('description', MSG(u'Description')),
-                ('order', MSG(u'Order')),
-                ('order_preview', MSG(u'Preview'))]
-
-
-    def get_item_value(self, resource, context, item, column):
-        if column == 'description':
-            order_root = resource.get_order_root()
-            try:
-                product = order_root.get_resource(item.name)
-            except LookupError:
-                return None
-            return product.get_property('description')
-        return ResourcesOrderedTable_Ordered.get_item_value(self, resource,
-                                                            context, item,
-                                                            column)
-
-
-
 class CrossSellingTable(ResourcesOrderedTable):
 
     class_id = 'CrossSellingTable'
     class_title = MSG(u'Cross-Selling Table')
     class_handler = ResourcesOrderedTableFile
-    class_views = ['view', 'add_record', 'configure']
+    class_views = ['configure', 'back']
 
     form = [ProductSelectorWidget('name', title=MSG(u'Product'))]
 
     # Views
-    view = ProductsOrderedTable_Ordered()
-    add_product = AddProduct_View()
     configure = CrossSelling_Configure()
+    view_table = CrossSelling_TableView()
+    add_product = AddProduct_View()
+    back = GoToSpecificDocument(specific_document='..',
+                                title=MSG(u'See product'))
 
     # TODO Add get_links, update_link
 
@@ -96,8 +75,9 @@ class CrossSellingTable(ResourcesOrderedTable):
     @classmethod
     def get_metadata_schema(cls):
         schema = ResourcesOrderedTable.get_metadata_schema()
-        schema['random'] = Boolean
-        schema['products_quantity'] = Integer
+        schema['mode'] = CrossSelling_Modes
+        schema['enabled'] = Boolean(default=False)
+        schema['products_quantity'] = Integer(default=5)
         return schema
 
 

@@ -15,34 +15,60 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean, Integer
+from itools.datatypes import Boolean, Enumerate, Integer
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import STLForm
 from itools.datatypes import String
 from itools.xapian import AndQuery, PhraseQuery
+from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import AutoForm, BooleanCheckBox, TextWidget
+from ikaaro.forms import AutoForm, BooleanRadio, SelectRadio, TextWidget
+from ikaaro.future.order import ResourcesOrderedTable_Ordered
+from ikaaro.table_views import Table_AddRecord
 from ikaaro.utils import get_base_path_query, reduce_string
+from ikaaro.views import CompositeForm
 
 # Import from shop
 from shop.utils import get_shop
 
 
+class CrossSelling_Modes(Enumerate):
+
+    link_table = XMLParser("""
+        Select products from <a href=";view_table"> Cross selling table</a>""")
+
+
+    options = [
+      {'name': 'random_category',
+       'value': MSG(u'Random choice from current category')},
+      {'name': 'random_shop',
+       'value': MSG(u'Random choice from shop')},
+      {'name': 'last_products_category',
+       'value': MSG(u'Select last products from current category')},
+      {'name': 'last_products_shop',
+       'value': MSG(u'Select last products from shop')},
+      {'name': 'table', 'value': list(link_table)},
+      ]
+
+
 class CrossSelling_Configure(AutoForm):
 
     access = 'is_allowed_to_edit'
-    title = MSG(u'Configure')
+    title = MSG(u'Configure cross selling')
 
     schema = {
-        'random': Boolean,
-        'products_quantity': Integer(default=5)
+        'enabled': Boolean(mandatory=True, default=True),
+        'mode': CrossSelling_Modes(mandatory=True),
+        'products_quantity': Integer(default=5, mandatory=True)
         }
 
     widgets = [
-        BooleanCheckBox('random', title=MSG(u'Random selection')),
+        BooleanRadio('enabled', title=MSG(u'Enabled')),
         TextWidget('products_quantity', title=MSG(u'Numbers of products')),
+        SelectRadio('mode', title=MSG(u'Cross selling mode'),
+            has_empty_option=False),
         ]
 
 
@@ -185,3 +211,56 @@ class AddProduct_View(STLForm):
         response = context.response
         response.set_header('Content-Type', 'text/html; charset=UTF-8')
         return namespace
+
+
+
+class ProductsOrderedTable_Ordered(ResourcesOrderedTable_Ordered):
+
+    def get_table_columns(self, resource, context):
+        return [('checkbox', None),
+                ('title', MSG(u'Title')),
+                ('description', MSG(u'Description')),
+                ('order', MSG(u'Order')),
+                ('order_preview', MSG(u'Preview'))]
+
+
+    def get_item_value(self, resource, context, item, column):
+        if column == 'description':
+            order_root = resource.get_order_root()
+            try:
+                product = order_root.get_resource(item.name)
+            except LookupError:
+                return None
+            return product.get_property('description')
+        return ResourcesOrderedTable_Ordered.get_item_value(self, resource,
+                                                            context, item,
+                                                            column)
+
+#####################################
+# XXX HACK utilisation CompositeForm
+#####################################
+
+
+class CrossSelling_AddRecord(Table_AddRecord):
+
+    def action_on_success(self, resource, context):
+        return context.come_back(MSG(u'New record added.'))
+
+
+
+class CrossSelling_TableView(CompositeForm):
+
+    access = 'is_allowed_to_edit'
+
+    subviews = [CrossSelling_AddRecord(), ProductsOrderedTable_Ordered()]
+
+    def get_schema(self, resource, context):
+        if 'name' in context.get_form_keys():
+            return self.subviews[0].get_schema(resource, context)
+        return self.subviews[1].get_schema(resource, context)
+
+
+    def get_action_method(self, resource, context):
+        if 'name' in context.get_form_keys():
+            return self.subviews[0].action
+        return getattr(self.subviews[1], context.form_action, None)
