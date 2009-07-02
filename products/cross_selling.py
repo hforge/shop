@@ -14,10 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from random import shuffle
+
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Integer, Boolean
 from itools.gettext import MSG
+from itools.xapian import OrQuery, AndQuery, PhraseQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -79,6 +83,49 @@ class CrossSellingTable(ResourcesOrderedTable):
         schema['enabled'] = Boolean(default=False)
         schema['products_quantity'] = Integer(default=5)
         return schema
+
+
+    def get_products(self, context, product_format, products, categories=None):
+        if self.get_property('enabled') is False:
+            return
+
+        root = context.root
+        mode = self.get_property('mode')
+        products_quantity = self.get_property('products_quantity')
+
+        if categories:
+            query_categorie = OrQuery(*[ PhraseQuery('categories', x)
+                                         for x in categories ])
+
+        if mode.startswith('random'):
+            # Random selection
+            query = AndQuery(PhraseQuery('format', product_format),
+                             PhraseQuery('has_categories', True))
+            if mode.endswith('_category'):
+                query = AndQuery(query, query_categorie)
+            results = root.search(query)
+            brains = list(results.get_documents())
+            shuffle(brains)
+            for brain in brains[:products_quantity]:
+                yield root.get_resource(brain.abspath)
+        elif mode.startswith('last'):
+            # Last products
+            query = AndQuery(PhraseQuery('format', product_format),
+                             PhraseQuery('has_categories', True))
+            if mode.endswith('_category'):
+                query = AndQuery(query, query_categorie)
+            results = root.search(query)
+            brains = list(results.get_documents(sort_by='ctime',
+                            reverse=True, size=products_quantity))
+            for brain in brains:
+                yield root.get_resource(brain.abspath)
+        elif mode == 'table':
+            # Selection in cross selling table
+            handler = self.handler
+            get_value = handler.get_record_value
+            for record in handler.get_records_in_order():
+                path = get_value(record, 'name')
+                yield products.get_resource(path)
 
 
 register_resource_class(CrossSellingTable)
