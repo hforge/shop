@@ -85,7 +85,7 @@
     $(document).ready(function(){
       $("#form-order").submit(function() {
         if ($('#cgv').is(':checked') == false) {
-          alert('To continue, you have to validate the terms of service !');
+          alert('${alert_msg}');
           return false;
         }
         return true;

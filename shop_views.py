@@ -520,6 +520,9 @@ class Shop_ShowRecapitulatif(STLForm):
         cart = ProductCart(context)
         # Base namespace
         namespace = self.build_namespace(resource, context)
+        # Alert MSG
+        namespace['alert_msg'] = MSG(
+          u"""To continue, you have to validate the terms of service !""")
         # Progress bar
         namespace['progress'] = Shop_Progress(index=5).GET(resource, context)
         # Get delivery and bill address namespace

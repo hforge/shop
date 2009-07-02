@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-07-02 09:07+CET\n"
+"POT-Creation-Date: 2009-07-02 10:07+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgid ""
 "{shop_signature}\n"
 msgstr ""
 
-#: ../shop_views.py:578
+#: ../shop_views.py:581
 msgid "#%s"
 msgstr ""
 
@@ -1731,7 +1731,7 @@ msgstr "Montant invalide"
 msgid "Invalid amount"
 msgstr ""
 
-#: ../shop_views.py:546
+#: ../shop_views.py:549
 msgid "Invalid cart"
 msgstr ""
 
@@ -2751,6 +2751,10 @@ msgstr "Temps d'attente > 15 mn par l'acheteur"
 #: ../products/models.py:96
 msgid "Title"
 msgstr "Titre"
+
+#: ../shop_views.py:525
+msgid "To continue, you have to validate the terms of service !"
+msgstr "Pour continuer, vous devez accepter les conditions générales de ventes !"
 
 #: ../ui/shop/payments/check_record_order_view.xml.en:8
 msgctxt "heading"
