@@ -308,8 +308,7 @@ class Order(AccessControl, WorkflowAware, Folder):
         document = self.get_resource('/ui/shop/orders/order_facture.xml')
         pdf = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'}}
-        PDF._make_resource(PDF, self.handler, 'bill',
-                           body=pdf, **metadata)
+        PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
 
 
     ########################################################################
