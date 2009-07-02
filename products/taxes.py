@@ -61,64 +61,12 @@ class Taxes_TableResource(Table):
 
 class PriceWidget(Widget):
 
-    template = list(XMLParser(
-        """
-        Pre-tax retail price:<br/>
-          <input type="text" id="pre-tax-price" name="pre-tax-price"
-            value="${pre-tax-price}"/>€ <br/>
-        Final pre-tax retail price:<br/>
-          <span style="font-weight:bold" id="final-pre-tax-price"></span> €<br/>
-        Tax:<br/>
-          ${taxes}
-          <br/>
-        Tax value:<br/>
-          <input type="text" id="tax-value" readonly="readonly"
-            style="background-color:#F1F1F1"/>€<br/>
-        Retail price with tax:<br/>
-          <input type="text" id="retail-price" name="retail-price"/>€<br/>
-        Final retail price:<br/>
-          <span style="font-weight:bold" id="final-retail-price"></span> €
-        <script>
-          $(document).ready(function(){
-            $(".tax-widget").change(function(){
-              calculTTCPrice()
-            });
-            $("#pre-tax-price").keyup(function(){
-              calculTTCPrice()
-            });
-            $("#retail-price").keyup(function(){
-              calculHTPrice()
-            });
-            calculTTCPrice();
-          });
-          function getTax(){
-            return parseFloat($(".tax-widget").find(':selected').text())/100;
-          }
-          function setPrice(id, price){
-            $(id).val((isNaN(price) == true) ? '' : (Math.round(price * 1000000) / 1000000));
-          }
-          function setFinalPrice(id, price){
-            $(id).html((isNaN(price) == true) ? '' : price.toFixed(2));
-          }
-          function calculTTCPrice(){
-            var price = parseFloat($("#pre-tax-price").val());
-            var new_price = price * (getTax() + 1);
-            setPrice('#tax-value', new_price - price);
-            setPrice('#retail-price', new_price);
-            setFinalPrice("#final-pre-tax-price", price);
-            setFinalPrice("#final-retail-price", new_price);
-          }
-          function calculHTPrice(){
-            var price = parseFloat($("#retail-price").val());
-            var new_price = price / (getTax() + 1);
-            setPrice('#tax-value', price - new_price);
-            setPrice('#pre-tax-price', new_price);
-            setFinalPrice("#final-pre-tax-price", new_price);
-            setFinalPrice("#final-retail-price", price);
-          }
-        </script>
-        """,
-        stl_namespaces))
+    template = 'ui/shop/widgets/taxes.xml'
+
+    def get_template(self, datatype, value):
+        context = get_context()
+        handler = context.root.get_resource(self.template)
+        return handler.events
 
 
     def get_namespace(self, datatype, value):

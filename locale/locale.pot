@@ -86,6 +86,10 @@ msgstr ""
 msgid "${subject}"
 msgstr ""
 
+#: ../ui/shop/widgets/taxes.xml.en:13
+msgid "${taxes} <x id='8'/> Tax value:"
+msgstr ""
+
 #: ../orders/orders_views.py:66
 #: ../orders/orders_views.py:69
 msgid "%s €"
@@ -1096,6 +1100,10 @@ msgstr ""
 msgid "Please take a RDV with us"
 msgstr ""
 
+#: ../ui/shop/widgets/taxes.xml.en:7
+msgid "Pre-tax retail price:"
+msgstr ""
+
 #: ../products/product_views.py:209
 msgid "Pre-tax wholesale price"
 msgstr ""
@@ -1617,6 +1625,26 @@ msgstr ""
 
 #: ../views.py:82
 msgid "…"
+msgstr ""
+
+#: ../ui/shop/widgets/taxes.xml.en:21
+msgid "€"
+msgstr ""
+
+#: ../ui/shop/widgets/taxes.xml.en:9
+msgid "€ <x id='3'/> Final pre-tax retail price:"
+msgstr ""
+
+#: ../ui/shop/widgets/taxes.xml.en:17
+msgid "€<x id='11'/> Retail price with tax:"
+msgstr ""
+
+#: ../ui/shop/widgets/taxes.xml.en:19
+msgid "€<x id='14'/> Final retail price:"
+msgstr ""
+
+#: ../ui/shop/widgets/taxes.xml.en:11
+msgid "€<x id='6'/> Tax:"
 msgstr ""
 
 #: ../ui/shop/products/addproduct.xml.en:46

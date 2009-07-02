@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-07-02 08:07+CET\n"
+"POT-Creation-Date: 2009-07-02 09:07+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -357,7 +357,8 @@ msgstr ""
 #: ../ui/shop/orders/order_manage.xml.en:67
 msgctxt "table cell"
 msgid "${order/shipping_way} - ${order/shipping_price} €<x id='13'/> Payment:"
-msgstr "${order/shipping_way} - ${order/shipping_price} €<x id='13'/> Paiement:"
+msgstr ""
+"${order/shipping_way} - ${order/shipping_price} €<x id='13'/> Paiement:"
 
 #: ../ui/shop/orders/order_manage.xml.en:66
 msgctxt "table cell"
@@ -653,6 +654,10 @@ msgstr ""
 msgid "${subject}"
 msgstr ""
 
+#: ../ui/shop/widgets/taxes.xml.en:13
+msgid "${taxes} <x id='8'/> Tax value:"
+msgstr "${taxes} <x id='8'/> TVA:"
+
 #: ../ui/shop/products/product_view.xml.en:7
 #: ../ui/shop/virtualcategory_boxsubcategories.xml.en:9
 msgctxt "heading"
@@ -794,7 +799,8 @@ msgctxt "span"
 msgid ""
 "<g id='18'> We're waiting for payment </g>  <g id='19'> Last payment </g>"
 msgstr ""
-"<g id='18'> Nous attendons le paiement </g>  <g id='19'> Dernier paiement </g>"
+"<g id='18'> Nous attendons le paiement </g>  <g id='19'> Dernier paiement </"
+"g>"
 
 #: ../ui/shop/shipping/colissimo_add_record.xml.en:14
 msgctxt "label"
@@ -802,8 +808,8 @@ msgid ""
 "<g id='2'> To send the packages by colissimo, please fill the colissimo "
 "number:"
 msgstr ""
-"<g id='2'> Pour envoyer le colis par colissimo, veuillez saisir le "
-"numéro de colissimo:"
+"<g id='2'> Pour envoyer le colis par colissimo, veuillez saisir le numéro de "
+"colissimo:"
 
 #: ../ui/shop/products/addproduct.xml.en:46
 msgctxt "abbr"
@@ -1668,7 +1674,8 @@ msgctxt "paragraph"
 msgid ""
 "If you want to add an item in your address book, <g id='11'>click here.</g>"
 msgstr ""
-"Si vous voulez ajouter une adresse dans votre carnet d'adresses, <g id='11'>cliquez ici.</g>"
+"Si vous voulez ajouter une adresse dans votre carnet d'adresses, <g "
+"id='11'>cliquez ici.</g>"
 
 #: ../products/images_views.py:33
 msgid "Image"
@@ -2283,6 +2290,10 @@ msgstr "Veuillez envoyer un courrier avec ces informations:"
 #: ../ui/shop/shipping/withdrawal_record_order_view.xml.en:7
 msgid "Please take a RDV with us"
 msgstr "Veuillez prendre un rendez vous avec nous"
+
+#: ../ui/shop/widgets/taxes.xml.en:7
+msgid "Pre-tax retail price:"
+msgstr "Prix de vente HT:"
 
 #: ../products/product_views.py:209
 msgid "Pre-tax wholesale price"
@@ -3012,3 +3023,23 @@ msgstr "« Précédent"
 #: ../views.py:82
 msgid "…"
 msgstr ""
+
+#: ../ui/shop/widgets/taxes.xml.en:21
+msgid "€"
+msgstr ""
+
+#: ../ui/shop/widgets/taxes.xml.en:9
+msgid "€ <x id='3'/> Final pre-tax retail price:"
+msgstr "€ <x id='3'/> Prix de vente final HT:"
+
+#: ../ui/shop/widgets/taxes.xml.en:17
+msgid "€<x id='11'/> Retail price with tax:"
+msgstr "€<x id='11'/> Prix de vente TTC"
+
+#: ../ui/shop/widgets/taxes.xml.en:19
+msgid "€<x id='14'/> Final retail price:"
+msgstr "€<x id='14'/> Prix de vente final:"
+
+#: ../ui/shop/widgets/taxes.xml.en:11
+msgid "€<x id='6'/> Tax:"
+msgstr "€<x id='6'/> TVA:"
