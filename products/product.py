@@ -313,8 +313,6 @@ class Product(Editable, DynamicFolder):
         else:
             namespace['specific_dict'] = {}
             namespace['specific_list'] = []
-        # Data
-        namespace['data'] = self.get_xhtml_data()
         # Images
         namespace['cover'] = self.get_cover_namespace(context)
         namespace['images'] = self.get_images_namespace(context)
