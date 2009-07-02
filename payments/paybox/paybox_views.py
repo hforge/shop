@@ -26,6 +26,7 @@ from itools.datatypes import Boolean, Decimal, Integer, Unicode, String
 from itools.gettext import MSG
 from itools.handlers import ConfigFile
 from itools.html import HTMLFile
+from itools.stl import stl
 from itools.uri import get_reference, Path
 from itools.web import BaseForm, STLView, FormError
 
@@ -37,9 +38,10 @@ from ikaaro.forms import STLForm, TextWidget, BooleanCheckBox
 from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
-from enumerates import PBXState, PayboxCGIErrors
+from enumerates import PBXState, PayboxStatus, PayboxCGIErrors
 from shop.datatypes import StringFixSize
 from shop.shop_utils_views import Shop_Progress
+from shop.utils import get_shop
 
 
 class Paybox_View(Table_View):
@@ -216,11 +218,12 @@ class Paybox_ConfirmPayment(BaseForm):
                 kw[key] = payments.get_record_value(record, key)
             kw.update(infos)
             payments.add_record(kw)
-        # XXX
-        # TODO Check signature
-        # Confirm_payment XXX , to check
-        #if bool(form['autorisation']):
-        #    resource.set_payment_as_ok(context, form['ref'])
+        # XXX TODO Check signature
+        # Confirm_payment
+        if bool(form['autorisation']):
+            shop = get_shop(resource)
+            order = shop.get_resource('orders/%s' % form['ref'])
+            order.set_as_payed()
         # Return a blank page to payment
         response = context.response
         response.set_header('Content-Type', 'text/plain')
@@ -228,8 +231,25 @@ class Paybox_ConfirmPayment(BaseForm):
 
 class Paybox_Record_Edit(STLForm):
 
-    template = '/ui/shop/payments/paybox/paybox_end.xml'
+    template = '/ui/shop/payments/paybox/paybox_record_edit.xml'
 
+    def GET(self, order, payment_way, record, context):
+        # Get the template
+        template = self.get_template(order, context)
+        # Get the namespace
+        namespace = self.get_namespace(order, payment_way, record, context)
+        # Ok
+        return stl(template, namespace)
+
+
+    def get_namespace(self, order, payment_way, record, context):
+        namespace = {}
+        get_val = payment_way.get_resource('payments').handler.get_record_value
+        for key in payment_way.get_resource('payments').handler.record_schema:
+            namespace[key] = get_val(record, key)
+        namespace['advance_state'] = PayboxStatus.get_value(
+                                          namespace['advance_state'])
+        return namespace
 
 
 class Paybox_End(STLView):

@@ -18,6 +18,7 @@
 from itools.datatypes import Enumerate, Integer, Unicode
 from itools.gettext import MSG
 from itools.web import STLView, STLForm
+from itools.stl import stl
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -120,7 +121,6 @@ class CheckPayment_RecordEdit(STLForm):
         # Get the namespace
         namespace = self.get_namespace(order, payment_way, record, context)
         # Ok
-        from itools.stl import stl
         return stl(template, namespace)
 
 
