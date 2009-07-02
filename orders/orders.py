@@ -267,24 +267,29 @@ class Order(AccessControl, WorkflowAware, Folder):
     # Update order states
     ##################################################
 
-    def set_as_not_payed(self):
+    def set_as_not_payed(self, context):
         self.set_property('is_payed', False)
         self.set_property('need_payment', False)
 
 
-    def set_as_payed(self):
+    def set_as_payed(self, context):
         self.set_property('is_payed', True)
         self.set_property('need_payment', False)
+        self.generate_pdf_bill(context)
 
 
-    def set_as_sent(self):
+    def set_as_sent(self, context):
         self.set_property('is_sent', True)
 
 
     def generate_pdf_bill(self, context):
+        shop = get_shop(self)
         accept = context.accept_language
         creation_date = self.get_property('creation_datetime')
         creation_date = format_date(creation_date, accept=accept)
+        # Delete old bill
+        if self.get_resource('bill', soft=True):
+            self.del_resource('bill')
         # XXX Add addresses
         namespace =  {
           'num_cmd': self.name,
@@ -292,24 +297,23 @@ class Order(AccessControl, WorkflowAware, Folder):
           'shipping_price': self.get_property('shipping_price'),
           'total_price': self.get_property('total_price'),
           'creation_date': creation_date}
-
+        # Addresses
+        addresses = shop.get_resource('addresses').handler
+        get_address = addresses.get_record_namespace
+        bill_address = self.get_property('bill_address')
+        delivery_address = self.get_property('delivery_address')
+        namespace['delivery_address'] = get_address(delivery_address)
+        namespace['bill_address'] = get_address(bill_address)
+        # Build pdf
         document = self.get_resource('/ui/shop/orders/order_facture.xml')
         pdf = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'}}
-        PDF._make_resource(PDF, self.handler, 'bill.pdf',
+        PDF._make_resource(PDF, self.handler, 'bill',
                            body=pdf, **metadata)
 
 
-    def create_delivery(self, context):
-        shop = get_shop(self)
-        shipping = self.get_property('shipping')
-        shipping = shop.get_resource('shippings/%s' % shipping)
-        history = shipping.get_resource('history')
-        history.handler.add_record({'ref': self.name})
-
-
     ########################################################################
-    # Access control
+    # Access con#trol
     ########################################################################
 
     def is_allowed_to_view_order(self, user, resource):

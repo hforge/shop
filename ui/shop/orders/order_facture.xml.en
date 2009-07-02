@@ -1,46 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:pml="http://www.hforge.org/xml-namespaces/pml"
       xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Bill</title>
 
+    <style>
+      #articles{
+        margin-top: 20px;
+        border: 1px solid black;
+      }
+      #articles th{
+        background-color: #E2E2E2;
+      }
+      .align-right{
+        text-align: right;
+      }
+
+      /* FOOTER */
+
+      p.page {
+        font-family: sansserif;
+        text-align: right;
+        font-size: 6;
+        font-weight: normal;
+        padding: 0;
+      }
+    </style>
   </head>
-  <body>
 
-    <input type="button" onclick="javascript:window.print()" value="Imprimer"/>
+  <pml:header>
+    <img src="http://www.google.fr/intl/fr_fr/images/logo.gif"/>
+  </pml:header>
 
-    <div id="htmlFacture">
-    <img src="http://XXX/images/logo_fr/;download" alt="First Luxe" title="First Luxe"/>
+  <pml:footer>
+    <p class="page">Page <pml:pagenumber/> / <pml:pagetotal/></p>
+  </pml:footer>
 
-    <h1>Bill</h1>
 
-    <!--
-    <table id="addresses" cellpadding="0" cellspacing="0">
-      <tr>
-        <td>
-          <br/><br/><br/><br/>
-          <b>Adresse de livraison</b><br/>
-          ${livraison/lastname} ${livraison/firstname}<br/>
-          ${livraison/address}<br/>
-          ${livraison/cp} ${livraison/town}<br/>
-          ${livraison/country}
-        </td>
-        <td></td>
-        <td>
-          <b>Adresse de facturation</b><br/>
-          ${facturation/lastname} ${facturation/firstname}<br/>
-          ${facturation/address}<br/>
-          ${facturation/cp} ${facturation/town}<br/>
-          ${facturation/country}
-        </td>
-      </tr>
-    </table>
-    -->
-
-    <table id="infos" cellpadding="0" cellspacing="0">
+  <body style="margin-left:0.5cm; margin-right:0.5cm; padding-left:0; padding-right:0;">
+    <table id="infos">
       <tr>
         <th>Order number</th>
         <td>${num_cmd}</td>
@@ -51,50 +50,62 @@
       </tr>
     </table>
 
-    <table id="articles" cellpadding="0" cellspacing="0">
+    <table id="addresses">
       <tr>
-        <th>Designation</th>
-        <th>Unit price</th>
-        <th>Quantity</th>
-        <th>Total price</th>
-      </tr>
-      <tr stl:repeat="product products">
         <td>
-          ${product/title}
+          <p>
+            <b>Delivery address</b><br/>
+            ${delivery_address/firstname} ${delivery_address/lastname}<br/>
+            ${delivery_address/address_1}<br/>
+            <stl:block stl:if="delivery_address/address_2">
+              ${delivery_address/address_2}<br/>
+            </stl:block>
+            ${delivery_address/zipcode} ${delivery_address/town}<br/>
+            ${delivery_address/country}<br/>
+          </p>
         </td>
+        <td></td>
         <td>
-          ${product/unit_price}&nbsp;€
-        </td>
-        <td>${product/quantity}</td>
-        <td>${product/total_price}</td>
-      </tr>
-      <tr>
-        <td style="text-align:right">
-          <b>Transport: </b>
-        </td>
-        <td>
-          ${shipping_price}&nbsp;€
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align:right">
-          <b>Total: </b>
-        </td>
-        <td>
-          ${total_price}&nbsp;€
+          <p>
+            <b>Bill address</b><br/>
+            ${bill_address/firstname} ${bill_address/lastname}<br/>
+            ${bill_address/address_1}<br/>
+            <stl:block stl:if="bill_address/address_2">
+              ${bill_address/address_2}<br/>
+            </stl:block>
+            ${bill_address/zipcode} ${bill_address/town}<br/>
+            ${bill_address/country}<br/>
+          </p>
         </td>
       </tr>
     </table>
 
-    <br/><br/>
-    <p>
-      <i>
-      XXX<br/>
-      XXX<br/>
-      XXX<br/>
-      </i>
-    </p>
-    </div>
+    <table id="articles">
+      <tr>
+        <th>Product</th>
+        <th>Unit price HT</th>
+        <th>Quantity</th>
+        <th>Total price</th>
+      </tr>
+      <tr stl:repeat="product products">
+        <td>${product/title}
+          <stl:block stl:if="product/options">
+            <br/>${product/options}
+          </stl:block>
+        </td>
+        <td>${product/price/unit/with_tax} €</td>
+        <td>${product/quantity}</td>
+        <td>${product/price/total/with_tax} €</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="align-right">Shipping</td>
+        <td>${shipping_price} €</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="align-right">Total Price</td>
+        <td>${total_price} €</td>
+      </tr>
+    </table>
 
  </body>
 </html>

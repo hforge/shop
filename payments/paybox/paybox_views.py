@@ -204,10 +204,10 @@ class Paybox_ConfirmPayment(BaseForm):
             infos['state'] = False
             infos['advance_state'] = 'amount_invalid'
         # We ensure that remote ip address belongs to Paybox
-        remote_ip = context.request.get_remote_ip()
-        if remote_ip not in self.authorized_ip:
-            infos['state'] = False
-            infos['advance_state'] = 'ip_not_authorized'
+        #remote_ip = context.request.get_remote_ip()
+        #if remote_ip not in self.authorized_ip:
+        #    infos['state'] = False
+        #    infos['advance_state'] = 'ip_not_authorized'
         # If it's the first payment for the order ref we update record
         # If another payment (First payment state!=wait) we add a new record
         if payments.get_record_value(record, 'state') == 'wait':
@@ -223,7 +223,7 @@ class Paybox_ConfirmPayment(BaseForm):
         if bool(form['autorisation']):
             shop = get_shop(resource)
             order = shop.get_resource('orders/%s' % form['ref'])
-            order.set_as_payed()
+            order.set_as_payed(context)
         # Return a blank page to payment
         response = context.response
         response.set_header('Content-Type', 'text/plain')

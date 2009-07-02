@@ -87,10 +87,10 @@ class CheckPayment_RecordAdd(STLForm):
         kw['ref'] = order.name
         if form['advance_state'] == 'success':
             kw['state'] = True
-            order.set_as_payed()
+            order.set_as_payed(context)
         else:
             kw['state'] = False
-            order.set_as_not_payed()
+            order.set_as_not_payed(context)
         history = payment_way.get_resource('payments')
         history.handler.add_record(kw)
         msg = MSG(u'Changes ok')
