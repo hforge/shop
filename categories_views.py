@@ -168,7 +168,7 @@ class VirtualCategory_Comparator(STLView):
         namespace['products'] = []
         namespace['nb_products'] = len(products_to_compare)
         namespace['nb_products_plus_1'] = len(products_to_compare) +1
-        abspath = shop.get_abspath()
+        abspath = context.resource.get_abspath()
         for product in products_to_compare:
             # Base products namespace
             ns = product.get_small_namespace(context)
