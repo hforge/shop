@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Email, Unicode
+from itools.datatypes import Email, PathDataType, Unicode
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -139,6 +139,7 @@ class Shop(Folder):
         schema['order_notification_mails'] = Email(multiple=True)
         schema['shop_signature'] = Unicode
         schema['shop_from_addr'] = Email
+        schema['bill_logo'] = PathDataType
         return schema
 
 

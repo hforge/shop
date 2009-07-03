@@ -30,7 +30,7 @@
   </head>
 
   <pml:header>
-    <img src="http://www.google.fr/intl/fr_fr/images/logo.gif"/>
+    <img src="${logo}/;download"/>
   </pml:header>
 
   <pml:footer>

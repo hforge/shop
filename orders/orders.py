@@ -292,6 +292,7 @@ class Order(AccessControl, WorkflowAware, Folder):
             self.del_resource('bill')
         # XXX Add addresses
         namespace =  {
+          'logo': shop.get_property('bill_logo'),
           'num_cmd': self.name,
           'products': self.get_resource('products').get_namespace(context),
           'shipping_price': self.get_property('shipping_price'),

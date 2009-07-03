@@ -22,7 +22,7 @@ from decimal import Decimal as decimal
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Integer, Email, String, Unicode
-from itools.datatypes import Boolean, MultiLinesTokens
+from itools.datatypes import Boolean, MultiLinesTokens, PathDataType
 from itools.gettext import MSG
 from itools.uri import get_reference
 from itools.web import BaseView, STLForm, STLView, ERROR
@@ -31,7 +31,7 @@ from itools.xapian import PhraseQuery, AndQuery
 # Import from ikaaro
 from ikaaro.forms import AutoForm, SelectRadio, SelectWidget
 from ikaaro.forms import HiddenWidget, TextWidget, PasswordWidget
-from ikaaro.forms import MultilineWidget
+from ikaaro.forms import MultilineWidget, ImageSelectorWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.resource_views import LoginView, DBResource_Edit
 from ikaaro.views import CompositeForm
@@ -62,7 +62,8 @@ class Shop_Configure(DBResource_Edit):
 
     schema = {'shop_from_addr': Email(mandatory=True),
               'order_notification_mails': MultiLinesTokens(mandatory=True),
-              'shop_signature': Unicode(mandatory=True)}
+              'shop_signature': Unicode(mandatory=True),
+              'bill_logo': PathDataType}
 
     widgets = [
         TextWidget('shop_from_addr', title=MSG(u'Shop from address')),
@@ -71,6 +72,7 @@ class Shop_Configure(DBResource_Edit):
             rows=8, cols=50),
         MultilineWidget('shop_signature',
             title=MSG(u'Shop signature'), rows=8, cols=50),
+        ImageSelectorWidget('bill_logo', title=MSG(u'Bill logo'))
         ]
 
     submit_value = MSG(u'Edit configuration')
