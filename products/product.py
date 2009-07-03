@@ -20,7 +20,7 @@ from datetime import datetime
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Unicode, Enumerate, is_datatype
+from itools.datatypes import Boolean, String, Unicode, Enumerate
 from itools.gettext import MSG
 from itools.web import get_context
 from itools.xml import TEXT
@@ -179,18 +179,18 @@ class Product(Editable, DynamicFolder):
                 if value:
                     text = None
                     multiple = datatype.multiple
-                    if is_datatype(datatype, Unicode):
+                    if issubclass(datatype, Unicode):
                         if multiple:
                             text = ' '.join([ x for x in value ])
                         else:
                             text = value
-                    elif is_datatype(datatype, String):
+                    elif issubclass(datatype, String):
                         if multiple:
                             text = ' '.join([ Unicode.decode(x)
                                               for x in value ])
                         else:
                             text = Unicode.decode(value)
-                    elif is_datatype(datatype, Enumerate):
+                    elif issubclass(datatype, Enumerate):
                         values = value
                         if multiple is False:
                             values = [value]
