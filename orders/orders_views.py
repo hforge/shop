@@ -86,7 +86,7 @@ class OrderView(STLForm):
         # General informations
         namespace['order_number'] = resource.name
         # Bill
-        has_bill = resource.get_resource('bill.pdf', soft=True) is not None
+        has_bill = resource.get_resource('bill', soft=True) is not None
         namespace['has_bill'] = has_bill
         # Order creation date time
         creation_datetime = resource.get_property('creation_datetime')

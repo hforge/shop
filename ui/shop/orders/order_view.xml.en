@@ -11,7 +11,7 @@
       <a href="${customer/href}" style="text-decoration:none">
       ${customer/gender} ${customer/title} (${customer/email})
       </a><br/>
-      <a href="./bill.pdf/;download" target="blank" stl:if="has_bill">
+      <a href="./bill/;download" target="blank" stl:if="has_bill">
         <img src="/ui/icons/16x16/pdf.png"/> Download bill
       </a>
     </p>
