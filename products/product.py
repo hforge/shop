@@ -23,6 +23,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate, is_datatype
 from itools.gettext import MSG
 from itools.web import get_context
+from itools.xml import TEXT
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -163,10 +164,12 @@ class Product(Editable, DynamicFolder):
                     texts.append(value)
 
             # data (html)
-            value = self.get_property('data', language=language)
-            if value:
+            events = self.get_xhtml_data(language=language)
+            text = [ unicode(value, 'utf-8') for event, value, line in events
+                     if event == TEXT ]
+            if text:
                 texts = result.setdefault(language, [])
-                texts.append(Unicode.decode(value))
+                texts.append(u' '.join(text))
 
             # Dynamic properties
             if schema is None:
