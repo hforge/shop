@@ -86,6 +86,7 @@ class Paybox(PaymentWay):
     end = Paybox_End()
 
     # Admin order views
+    order_view = None
     order_add_view = None
     order_edit_view = Paybox_Record_Edit()
 

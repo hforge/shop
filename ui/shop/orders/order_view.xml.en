@@ -117,11 +117,13 @@
     </tbody>
   </table>
 
+  <stl:block stl:if="payment_view">
+    ${payment_view}
+  </stl:block>
 
-
-
-
-
+  <stl:block stl:if="shipping_view">
+    ${shipping_view}
+  </stl:block>
 
 
 </stl:block>

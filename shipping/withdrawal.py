@@ -32,38 +32,29 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop.shipping
 from shipping_way import ShippingWay, ShippingWayBaseTable, ShippingWayTable
+from shop.shop_utils_views import Shop_PluginWay_Form
 
 
 #####################################################
 ## Withdrawal
 #####################################################
-class Withdrawal_RecordOrderView(STLView):
+class Withdrawal_RecordView(Shop_PluginWay_Form):
 
     template = '/ui/shop/shipping/withdrawal_record_order_view.xml'
-
-
-    def get_namespace(self, resource, context):
-        record = self.record
-        get_value = resource.handler.get_record_value
-        return {'description': get_value(record, 'description')}
-
-class Withdrawal_RecordEdit(STLView):
-
-    template = '/ui/shop/shipping/withdrawal_record_order_view.xml'
-
-    def GET(self, order, shipping_way, record, context):
-        # Get the template
-        template = self.get_template(order, context)
-        # Get the namespace
-        namespace = self.get_namespace(order, shipping_way, record, context)
-        # Ok
-        from itools.stl import stl
-        return stl(template, namespace)
 
 
     def get_namespace(self, order, shipping_way, record, context):
-        namespace = {}
-        return namespace
+        return Shop_PluginWay_Form().get_namespace(shipping_way, context)
+
+
+class Withdrawal_RecordEdit(Shop_PluginWay_Form):
+
+    # XXX TODO: allow to take RDV
+    template = '/ui/shop/shipping/withdrawal_record_order_view.xml'
+
+    def get_namespace(self, order, shipping_way, record, context):
+        return Shop_PluginWay_Form().get_namespace(shipping_way, context)
+
 
 
 class Withdrawal_RecordAdd(STLForm):
@@ -118,7 +109,6 @@ class WithdrawalTable(ShippingWayTable):
         ]
 
 
-    record_order_view = Withdrawal_RecordOrderView
 
     def get_record_namespace(self, context, record):
         ns = ShippingWayTable.get_record_namespace(self, context, record)
@@ -136,8 +126,10 @@ class Withdrawal(ShippingWay):
     img = '../ui/shop/images/noship.png'
 
     # Admin views
+    order_view = Withdrawal_RecordView()
     order_add_view = Withdrawal_RecordAdd()
     order_edit_view = Withdrawal_RecordEdit()
+
 
     html_form = list(XMLParser("""
         <form method="POST">

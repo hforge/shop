@@ -26,30 +26,27 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop.shipping
 from shipping_way import ShippingWay, ShippingWayBaseTable, ShippingWayTable
+from shop.shop_utils_views import Shop_PluginWay_Form
 
 
 #####################################################
 ## Colissimo (La poste)
 #####################################################
 
-class Colissimo_RecordOrderView(STLView):
+class Colissimo_RecordView(Shop_PluginWay_Form):
 
     template = '/ui/shop/shipping/colissimo_record_order_view.xml'
-
-    def GET(self, order, shipping_way, record, context):
-        # Get the template
-        template = self.get_template(order, context)
-        # Get the namespace
-        namespace = self.get_namespace(order, shipping_way, record, context)
-        # Ok
-        from itools.stl import stl
-        return stl(template, namespace)
-
 
     def get_namespace(self, order, shipping_way, record, context):
         history = shipping_way.get_resource('history').handler
         get_value = history.get_record_value
         return {'num_colissimo': get_value(record, 'num_colissimo')}
+
+
+class Colissimo_RecordEdit(Colissimo_RecordView):
+
+    # TODO Edit can do more things
+    pass
 
 
 class Colissimo_RecordAdd(STLForm):
@@ -90,9 +87,6 @@ class ColissimoTable(ShippingWayTable):
     class_title = MSG(u'Colissimo')
     class_handler = ColissimoBaseTable
 
-    record_order_view = Colissimo_RecordOrderView
-    add_record = Colissimo_RecordAdd()
-
     form = ShippingWayTable.form + [
         TextWidget('num_colissimo', title=MSG(u'Numéro de colissimo')),
         ]
@@ -113,8 +107,9 @@ class Colissimo(ShippingWay):
     img = '../ui/shop/images/colissimo.png'
 
 
+    order_view = Colissimo_RecordView()
     order_add_view = Colissimo_RecordAdd()
-    order_edit_view = Colissimo_RecordOrderView()
+    order_edit_view = Colissimo_RecordEdit()
 
 
     @staticmethod

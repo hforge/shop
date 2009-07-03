@@ -189,11 +189,10 @@ class ShippingWay(Folder):
 
 
     def get_namespace(self, context):
-        namespace = {'name': self.name,
-                     'description': self.get_property('description'),
-                     'logo': self.get_logo(context),
-                     'title': self.get_title()}
-        return namespace
+        return  {'name': self.name,
+                 'description': self.get_property('description'),
+                 'logo': self.get_logo(context),
+                 'title': self.get_title()}
 
 
 

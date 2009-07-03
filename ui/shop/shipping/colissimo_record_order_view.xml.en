@@ -4,6 +4,8 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h1>Details about colissimo</h1>
+
   Your order has been send.<br/>
   <a href="http://www.coliposte.net/gp/services/main.jsp?m=10003005&amp;colispart=${num_colissimo}"
     target="blank">

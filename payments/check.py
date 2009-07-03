@@ -27,7 +27,7 @@ from ikaaro.registry import register_resource_class
 from payment_way import PaymentWay, PaymentWayBaseTable, PaymentWayTable
 from check_views import CheckPayment_RecordEdit
 from check_views import CheckPayment_Pay, CheckPayment_Configure, CheckStates
-from check_views import CheckPayment_RecordAdd
+from check_views import CheckPayment_RecordAdd, CheckPayment_RecordView
 
 
 class CheckPaymentBaseTable(PaymentWayBaseTable):
@@ -78,6 +78,7 @@ class CheckPayment(PaymentWay):
     configure = CheckPayment_Configure()
 
     # Order admin views
+    order_view = CheckPayment_RecordView()
     order_add_view = CheckPayment_RecordAdd()
     order_edit_view = CheckPayment_RecordEdit()
 

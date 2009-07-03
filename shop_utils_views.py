@@ -18,7 +18,8 @@
 from decimal import Decimal as decimal
 
 # Import from itools
-from itools.web import STLView
+from itools.stl import stl
+from itools.web import STLView, STLForm
 
 # Import from shop
 from cart import ProductCart
@@ -110,3 +111,15 @@ class Cart_View(STLView):
         for key in ['with_tax', 'without_tax']:
             namespace['total'][key] = format_price(namespace['total'][key])
         return namespace
+
+
+
+class Shop_PluginWay_Form(STLForm):
+
+    def GET(self, order, way, record, context):
+        # Get the template
+        template = self.get_template(order, context)
+        # Get the namespace
+        namespace = self.get_namespace(order, way, record, context)
+        # Ok
+        return stl(template, namespace)

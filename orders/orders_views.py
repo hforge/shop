@@ -130,6 +130,35 @@ class OrderView(STLForm):
         # Messages
         messages = resource.get_resource('messages')
         namespace['messages'] = messages.get_namespace_messages(context)
+        # Payment view
+        payments = shop.get_resource('payments')
+        payments_records = payments.get_payments_records(context, resource.name)
+        payment_way = resource.get_property('payment_mode')
+        payment_way_resource = shop.get_resource('payments/%s/' % payment_way)
+        if payments_records:
+            last_payment = payments_records[0]
+        else:
+            last_payment = None
+        record_view = payment_way_resource.order_view
+        print 'ok', record_view
+        if record_view:
+            namespace['payment_view'] = record_view.GET(resource,
+                payment_way_resource, last_payment, context)
+        else:
+            namespace['payment_view'] = None
+        # Shipping view
+        shippings = shop.get_resource('shippings')
+        shipping_way = resource.get_property('shipping')
+        shipping_way_resource = shop.get_resource('shippings/%s/' % shipping_way)
+        shippings_records = shippings.get_shippings_records(context, resource.name)
+        if shippings_records:
+            last_delivery = shippings_records[0]
+            record_view = shipping_way_resource.order_view
+            view = record_view.GET(resource, shipping_way_resource,
+                          last_delivery, context)
+            namespace['shipping_view'] = view
+        else:
+            namespace['shipping_view'] = None
         return namespace
 
 
@@ -198,6 +227,8 @@ class OrdersView(Folder_BrowseContent):
             return format_datetime(value, accept=accept)
         elif column == 'state':
             state = item_resource.get_state()
+            if state is None:
+                return MSG(u'Unknow')
             state = '<strong class="wf-order-%s">%s</strong>' % (
                         item_resource.get_statename(),
                         state['title'].gettext())
@@ -311,9 +342,10 @@ class Order_Manage(STLForm):
         namespace['payment_ways'] = SelectWidget('payment_way',
                 has_empty_option=False).to_html(PaymentWaysEnumerate,
                                                 payment_way)
+        # XXX get_payments_items is useless since exist get_payments_records
         namespace['payment'] = {'is_payed': is_payed,
                                 'need_payment': need_payment,
-                                'history': payments.get_payments_items(context, resource.name), # XXX
+                                'history': payments.get_payments_items(context, resource.name),
                                 'view': view}
         # Shippings
         is_sent = resource.get_property('is_sent')

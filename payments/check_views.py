@@ -27,7 +27,7 @@ from ikaaro.forms import MultilineWidget, TextWidget
 from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
-from shop.shop_utils_views import Shop_Progress
+from shop.shop_utils_views import Shop_Progress, Shop_PluginWay_Form
 
 
 
@@ -97,32 +97,22 @@ class CheckPayment_RecordAdd(STLForm):
         return context.come_back(msg)
 
 
-class CheckPayment_RecordView(STLForm):
+class CheckPayment_RecordView(Shop_PluginWay_Form):
 
     template = '/ui/shop/payments/check_record_order_view.xml'
 
-    def get_namespace(self, resource, context):
-        order = context.resource
+    def get_namespace(self, order, payment_way, record, context):
         namespace = {'ref': order.name,
-                     'amount': 'XXX',
-                     'to': resource.parent.get_property('to'),
-                     'address': resource.parent.get_property('address')}
+                     'amount': order.get_property('total_price'),
+                     'to': payment_way.get_property('to'),
+                     'address': payment_way.get_property('address')}
         return namespace
 
 
 
-class CheckPayment_RecordEdit(STLForm):
+class CheckPayment_RecordEdit(Shop_PluginWay_Form):
 
     template = '/ui/shop/payments/check_record_order_edit.xml'
-
-    def GET(self, order, payment_way, record, context):
-        # Get the template
-        template = self.get_template(order, context)
-        # Get the namespace
-        namespace = self.get_namespace(order, payment_way, record, context)
-        # Ok
-        return stl(template, namespace)
-
 
     def get_namespace(self, order, payment_way, record, context):
         namespace = {}
