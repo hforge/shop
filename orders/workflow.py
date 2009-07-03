@@ -40,8 +40,14 @@ for option in Order_States.get_options():
     add_state(option['name'], title=option['value'])
 
 # Transition: Close
-add_trans('close', 'waiting', 'closed',
-    description=MSG(u'Close order.'))
+add_trans('close', 'waiting', 'closed', description=MSG(u'Close order.'))
+add_trans('accept_payment', 'waiting', 'preparation',
+    description=MSG(u'Accept payment'))
+add_trans('send_order', 'preparation', 'delivered',
+    description=MSG(u'Send order'))
+add_trans('delivered_to_close', 'delivered', 'closed',
+    description=MSG(u'Close order'))
+
 
 # Define the initial state
 order_workflow.set_initstate('waiting')

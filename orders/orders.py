@@ -276,10 +276,12 @@ class Order(AccessControl, WorkflowAware, Folder):
         self.set_property('is_payed', True)
         self.set_property('need_payment', False)
         self.generate_pdf_bill(context)
+        self.make_transition('accept_payment')
 
 
     def set_as_sent(self, context):
         self.set_property('is_sent', True)
+        self.make_transition('send_order')
 
 
     def generate_pdf_bill(self, context):
