@@ -17,17 +17,28 @@
 # Import from itools
 from itools.datatypes import Enumerate
 from itools.gettext import MSG
+from itools.web import get_context
 from itools.workflow import Workflow
 
-class Order_States(Enumerate):
+class Order_Transitions(Enumerate):
 
-    options = [
-      {'name': 'waiting',       'value': MSG(u'Waiting for payment')},
-      {'name': 'payment_error', 'value': MSG(u'Payment error')},
-      {'name': 'preparation',   'value': MSG(u'Order in reparation')},
-      {'name': 'cancel',        'value': MSG(u'Canceled')},
-      {'name': 'closed',        'value': MSG(u'Closed')},
-      {'name': 'delivered',     'value': MSG(u'Delivered')}]
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        user = context.user
+        resource = context.resource
+        state = resource.get_state()
+        if not state:
+            return []
+        ac = resource.get_access_control()
+        options = []
+        for name, trans in state.transitions.items():
+            view = resource.get_view(name)
+            if ac.is_allowed_to_trans(user, resource, view) is False:
+                continue
+            description = trans['description'].gettext()
+            options.append({'name': name, 'value': description})
+        return options
 
 
 # Workflow definition
@@ -36,18 +47,29 @@ add_state = order_workflow.add_state
 add_trans = order_workflow.add_trans
 
 # States
-for option in Order_States.get_options():
-    add_state(option['name'], title=option['value'])
+add_state('open', title=MSG(u'Open'))
+add_state('payment_ok', title=MSG(u'Payment validated'))
+add_state('preparation', title=MSG(u'Order in preparation')),
+add_state('delivery', title=MSG(u'Delivery ok')),
+add_state('payment_error', title=MSG(u'Payment error'))
+add_state('cancel', title=MSG(u'Cancel'))
+add_state('closed', title=MSG(u'Closed'))
 
-# Transition: Close
-add_trans('close', 'waiting', 'closed', description=MSG(u'Close order.'))
-add_trans('accept_payment', 'waiting', 'preparation',
-    description=MSG(u'Accept payment'))
-add_trans('send_order', 'preparation', 'delivered',
-    description=MSG(u'Send order'))
-add_trans('delivered_to_close', 'delivered', 'closed',
-    description=MSG(u'Close order'))
 
+# Transition:
+transitions = [
+  ('open', 'payment_ok', MSG(u'Validate the payment')),
+  ('payment_ok', 'preparation', MSG(u'The order is in preparation')),
+  ('preparation', 'delivery', MSG(u'Delivery ongoing')),
+  ('delivery', 'closed', MSG(u'Closed')),
+  ('open', 'payment_error', MSG(u'Signal a payment error')),
+  ('open', 'cancel', MSG(u'Cancel the order')),
+  ('closed', 'open', MSG(u'Re-open the order')),
+  ('cancel', 'open', MSG(u'Re-open the order'))]
+
+
+for before, after, title in transitions:
+    add_trans('%s_to_%s' % (before, after), before, after, description=title)
 
 # Define the initial state
-order_workflow.set_initstate('waiting')
+order_workflow.set_initstate('open')

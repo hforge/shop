@@ -21,8 +21,9 @@ from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.xapian import PhraseQuery
 from itools.xml import XMLParser
-from itools.web import INFO, STLForm, FormError
+from itools.web import ERROR, INFO, STLForm, FormError
 from itools.web.views import process_form
+from itools.workflow import WorkflowError
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
@@ -30,7 +31,7 @@ from ikaaro.forms import SelectWidget
 from ikaaro.table_views import Table_View
 
 # Import from shop
-from workflow import Order_States
+from workflow import Order_Transitions
 from shop.payments.payment_way import PaymentWaysEnumerate
 from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.datatypes import Civilite
@@ -103,8 +104,12 @@ class OrderView(STLForm):
                                  'href': resource.get_pathto(customer)}
         # Order state
         state = resource.get_state()
-        namespace['state'] = {'name': resource.get_statename(),
-                              'title': state['title']}
+        if not state:
+            namespace['state'] = {'name': 'unknow',
+                                  'title': MSG(u'Unknow')}
+        else:
+            namespace['state'] = {'name': resource.get_statename(),
+                                  'title': state['title']}
         # Addresses
         addresses = shop.get_resource('addresses').handler
         get_address = addresses.get_record_namespace
@@ -229,6 +234,7 @@ class Order_Manage(STLForm):
         from ikaaro.workflow import parse_git_message
         history = []
         for revision in resource.get_revisions():
+            print revision
             transition, comment = parse_git_message(revision['message'])
             if transition is not None:
                 history.append(
@@ -250,7 +256,7 @@ class Order_Manage(STLForm):
         namespace = {}
         # States
         namespace['states_history'] = self.get_states_history(resource, context)
-        namespace['states'] = SelectWidget('state').to_html(Order_States, None)
+        namespace['transitions'] = SelectWidget('transition').to_html(Order_Transitions, None)
         # Order
         creation_datetime = resource.get_property('creation_datetime')
         namespace['order'] = {
@@ -337,10 +343,19 @@ class Order_Manage(STLForm):
         return namespace
 
 
-    action_change_order_state = {'state': Order_States,
-                                 'comment': Unicode}
+    action_change_order_state_schema = {'transition': Order_Transitions,
+                                        'comments': Unicode}
     def action_change_order_state(self, resource, context, form):
-        return
+        try:
+            resource.make_transition(form['transition'], form['comments'])
+        except WorkflowError, excp:
+            context.server.log_error(context)
+            context.message = ERROR(unicode(excp.message, 'utf-8'))
+            return
+
+        # Ok
+        context.message = INFO(u'Transition done.')
+
 
 
     action_add_message_schema = {'message': Unicode(mandatory=True),

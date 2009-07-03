@@ -33,7 +33,7 @@ from ikaaro.folder import Folder
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
-from ikaaro.workflow import WorkflowAware
+from ikaaro.workflow import WorkflowAware, WorkflowError
 
 # Import from shop
 from shop.addresses import Addresses, BaseAddresses
@@ -276,12 +276,18 @@ class Order(AccessControl, WorkflowAware, Folder):
         self.set_property('is_payed', True)
         self.set_property('need_payment', False)
         self.generate_pdf_bill(context)
-        self.make_transition('accept_payment')
+        try:
+            self.make_transition('open_to_payment_ok')
+        except WorkflowError:
+            self.set_workflow_state('payment_ok')
 
 
     def set_as_sent(self, context):
         self.set_property('is_sent', True)
-        self.make_transition('send_order')
+        try:
+            self.make_transition('preparation_to_delivery')
+        except WorkflowError:
+            self.set_workflow_state('delivery')
 
 
     def generate_pdf_bill(self, context):
