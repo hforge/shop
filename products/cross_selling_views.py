@@ -66,7 +66,8 @@ class CrossSelling_Configure(AutoForm):
 
     widgets = [
         BooleanRadio('enabled', title=MSG(u'Enabled')),
-        TextWidget('products_quantity', title=MSG(u'Numbers of products')),
+        TextWidget('products_quantity', title=MSG(u'Numbers of products'),
+                   size=3),
         SelectRadio('mode', title=MSG(u'Cross selling mode'),
             has_empty_option=False),
         ]

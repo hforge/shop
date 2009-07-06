@@ -123,7 +123,9 @@ class CrossSellingTable(ResourcesOrderedTable):
             # Selection in cross selling table
             handler = self.handler
             get_value = handler.get_record_value
-            for record in handler.get_records_in_order():
+            ids = list(handler.get_record_ids_in_order())
+            for id in ids[:products_quantity]:
+                record = handler.get_record(id)
                 path = get_value(record, 'name')
                 yield products.get_resource(path)
 
