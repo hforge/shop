@@ -21,7 +21,7 @@ from random import shuffle
 from itools.core import merge_dicts
 from itools.datatypes import Integer, Boolean
 from itools.gettext import MSG
-from itools.xapian import OrQuery, AndQuery, PhraseQuery
+from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -85,7 +85,8 @@ class CrossSellingTable(ResourcesOrderedTable):
         return schema
 
 
-    def get_products(self, context, product_format, products, categories=None):
+    def get_products(self, context, product_format, products_folder,
+                     categories=None, excluded_products=[]):
         if self.get_property('enabled') is False:
             return
 
@@ -93,16 +94,22 @@ class CrossSellingTable(ResourcesOrderedTable):
         mode = self.get_property('mode')
         products_quantity = self.get_property('products_quantity')
 
-        if categories:
+        # Base query
+        query = AndQuery(PhraseQuery('format', product_format),
+                         PhraseQuery('has_categories', True))
+        # Excluded products query
+        if excluded_products:
+            exclude_query = OrQuery(*[ PhraseQuery('abspath', str(abspath))
+                                       for abspath in excluded_products ])
+            query = AndQuery(query, NotQuery(exclude_query))
+        # Categories query
+        if categories and mode.endswith('_category'):
             query_categorie = OrQuery(*[ PhraseQuery('categories', x)
                                          for x in categories ])
+            query = AndQuery(query, query_categorie)
 
         if mode.startswith('random'):
             # Random selection
-            query = AndQuery(PhraseQuery('format', product_format),
-                             PhraseQuery('has_categories', True))
-            if mode.endswith('_category'):
-                query = AndQuery(query, query_categorie)
             results = root.search(query)
             brains = list(results.get_documents())
             shuffle(brains)
@@ -110,10 +117,6 @@ class CrossSellingTable(ResourcesOrderedTable):
                 yield root.get_resource(brain.abspath)
         elif mode.startswith('last'):
             # Last products
-            query = AndQuery(PhraseQuery('format', product_format),
-                             PhraseQuery('has_categories', True))
-            if mode.endswith('_category'):
-                query = AndQuery(query, query_categorie)
             results = root.search(query)
             brains = list(results.get_documents(sort_by='ctime',
                             reverse=True, size=products_quantity))
@@ -127,7 +130,7 @@ class CrossSellingTable(ResourcesOrderedTable):
             for id in ids[:products_quantity]:
                 record = handler.get_record(id)
                 path = get_value(record, 'name')
-                yield products.get_resource(path)
+                yield products_folder.get_resource(path)
 
 
 register_resource_class(CrossSellingTable)

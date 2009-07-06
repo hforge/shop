@@ -246,13 +246,23 @@ class Product(Editable, DynamicFolder):
 
 
     def get_cross_selling_namespace(self, context):
+        from shop.categories import Category
+
         table = self.get_resource('cross-selling')
         viewbox = self.viewbox
         cross_selling = []
-        categories = self.get_property('categories')
-        products = self.get_real_resource().parent
+        real_resource = self.get_real_resource()
+        abspath = real_resource.get_abspath()
+        products = real_resource.parent
+        parent = self.parent
+        if isinstance(parent, Category):
+            current_category = parent.get_unique_id()
+        else:
+            current_category = self.get_property('categories')
+
         cross_products = table.get_products(context, self.class_id,
-                                            products, categories)
+                                            products, [current_category],
+                                            [abspath])
         for product in cross_products:
             cross_selling.append(viewbox.GET(product, context))
         return cross_selling
