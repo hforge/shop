@@ -6,9 +6,18 @@
 
   <h1>Product model <i>"${title}"</i></h1>
 
-    <a href="./schema/">
-      See/Edit product model
-    </a>
+  <ul>
+    <li>
+      <a href="./schema/">
+        See/Edit product model
+      </a>
+    </li>
+    <li>
+      <a href="./;edit_default_cover">
+        See/Edit default cover
+      </a>
+    </li>
+  </ul>
 
   <h2>Associated enumerates</h2>
 

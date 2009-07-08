@@ -33,7 +33,7 @@ from models_views import ProductModel_NewInstance, ProductModelSchema_View
 from models_views import ProductEnumAttribute_NewInstance
 from models_views import ProductModelSchema_EditRecord, ProductModel_View
 from models_views import ProductModelSchema_AddRecord, ProductEnumAttribute_View
-
+from models_views import ProductModelDefaultCover_Edit
 
 
 
@@ -131,6 +131,7 @@ class ProductModel(Folder):
 
 
     view = ProductModel_View()
+    edit_default_cover = ProductModelDefaultCover_Edit()
 
 
     @staticmethod

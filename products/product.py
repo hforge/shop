@@ -306,9 +306,18 @@ class Product(Editable, DynamicFolder):
     #####################
     def get_cover_namespace(self, context):
         cover = self.get_property('cover')
-        if not cover:
-            return
-        image = self.get_resource(cover)
+        image = None
+        if cover:
+            image = self.get_resource(cover, soft=True)
+        if not image:
+            model = self.get_product_model()
+            cover = model.get_property('default_cover')
+            if cover:
+                image = model.get_resource(cover, soft=True)
+            else:
+                return
+            if not image:
+                return
         return {'href': context.get_link(image),
                 'title': image.get_property('title')}
 

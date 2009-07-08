@@ -24,7 +24,7 @@ from itools.xapian import OrQuery, PhraseQuery
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import SelectWidget
+from ikaaro.forms import AutoForm, ImageSelectorWidget, SelectWidget
 from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
 from ikaaro.views import CompositeForm
 from ikaaro.views_new import NewInstance
@@ -263,3 +263,28 @@ class ProductEnumAttribute_NewInstance(NewInstance):
             context.message = ERROR(u'Name already used')
             return
         return NewInstance.action(self, resource, context, form)
+
+
+
+class ProductModelDefaultCover_Edit(AutoForm):
+
+    access='is_allowed_to_edit'
+    title = MSG(u'Default cover')
+    submit_value = MSG(u'OK')
+    submit_class = 'button_ok'
+    schema = {'default_cover': String(default='')}
+    widgets = [ImageSelectorWidget('default_cover', title=title)]
+
+
+    def get_value(self, resource, context, name, datatype):
+       if name == 'default_cover':
+           return resource.get_property(name)
+
+
+    def action(self, resource, context, form):
+        # Check default cover image
+        path = form['default_cover']
+        language = resource.get_content_language(context)
+        resource.set_property('default_cover', form['default_cover'],
+                              language=language)
+        return context.come_back(INFO(u'Default cover saved'))
