@@ -18,11 +18,12 @@
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
-from itools.web import ERROR, INFO, STLView
+from itools.web import ERROR, FormError, INFO, STLView
 from itools.xapian import OrQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton
+from ikaaro.file import Image
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, ImageSelectorWidget, SelectWidget
 from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
@@ -279,6 +280,18 @@ class ProductModelDefaultCover_Edit(AutoForm):
     def get_value(self, resource, context, name, datatype):
        if name == 'default_cover':
            return resource.get_property(name)
+
+
+    def _get_form(self, resource, context):
+        form = AutoForm._get_form(self, resource, context)
+
+        # Check cover
+        path = form['default_cover']
+        if path:
+            img_resource = resource.get_resource(str(path), soft=True)
+            if not img_resource or not isinstance(img_resource, Image):
+                raise FormError(invalid=['default_cover'])
+        return form
 
 
     def action(self, resource, context, form):
