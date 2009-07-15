@@ -311,6 +311,8 @@ class Product(Editable, DynamicFolder):
             image = self.get_resource(cover, soft=True)
         if not image:
             model = self.get_product_model()
+            if model is None:
+                return
             cover = model.get_property('default_cover')
             if cover:
                 image = model.get_resource(cover, soft=True)
