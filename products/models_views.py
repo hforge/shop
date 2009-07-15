@@ -26,6 +26,7 @@ from ikaaro.buttons import RemoveButton
 from ikaaro.file import Image
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, ImageSelectorWidget, SelectWidget
+from ikaaro.table_views import OrderedTable_View
 from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
 from ikaaro.views import CompositeForm
 from ikaaro.views_new import NewInstance
@@ -141,7 +142,7 @@ class ProductModels_View(Folder_BrowseContent):
                                                   form)
 
 
-class ProductModelSchema_View(Table_View):
+class ProductModelSchema_View(OrderedTable_View):
 
     search_template = None
 

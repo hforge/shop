@@ -151,7 +151,7 @@ class ProductModel(Folder):
         infos = []
         schema_resource = self.get_resource('schema').handler
         get_value = schema_resource.get_record_value
-        for record in schema_resource.get_records():
+        for record in schema_resource.get_records_in_order():
             name = get_value(record, 'name')
             title = get_value(record, 'title')
             mandatory = get_value(record, 'mandatory')
