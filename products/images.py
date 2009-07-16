@@ -33,7 +33,9 @@ from ikaaro.revisions_views import DBResource_LastChanges
 from ikaaro.table import OrderedTableFile
 
 # Import from shop
-from images_views import PhotoOrderedTable_View
+from images_views import PhotoOrderedTable_View, PhotoOrderedTable_AddRecord
+from images_views import PhotoOrderedTable_EditRecord
+
 
 
 class PhotoOrderedTableFile(OrderedTableFile):
@@ -60,6 +62,8 @@ class PhotoOrderedTable(ResourcesOrderedTable):
     # Views
     view = PhotoOrderedTable_View()
     add_image = DBResource_AddImage()
+    add_record = PhotoOrderedTable_AddRecord()
+    edit_record = PhotoOrderedTable_EditRecord()
     back = GoToSpecificDocument(specific_document='..',
                                 title=MSG(u'See product'))
 

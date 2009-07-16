@@ -17,10 +17,13 @@
 
 # Import from itools
 from itools.gettext import MSG
+from itools.web import FormError
 from itools.xml import XMLParser
 
 # Import from ikaaro
+from ikaaro.file import Image
 from ikaaro.table_views import OrderedTable_View, Table_AddRecord
+from ikaaro.table_views import Table_EditRecord
 from ikaaro.views import CompositeForm
 
 
@@ -68,10 +71,30 @@ class PhotoOrderedTable_TableView(OrderedTable_View):
                                                 item, column)
 
 
+
 class PhotoOrderedTable_AddRecord(Table_AddRecord):
+
+    def _get_form(self, resource, context):
+        form = Table_AddRecord._get_form(self, resource, context)
+        # We check if the image path refer to an Image instance
+        path = form['name']
+        check_photo(path, resource, 'name')
+        return form
+
 
     def action_on_success(self, resource, context):
         return context.come_back(MSG(u'New record added.'))
+
+
+
+class PhotoOrderedTable_EditRecord(Table_EditRecord):
+
+    def _get_form(self, resource, context):
+        form = Table_EditRecord._get_form(self, resource, context)
+        # We check if the image path refer to an Image instance
+        path = form['name']
+        check_photo(path, resource, 'name')
+        return form
 
 
 
@@ -90,7 +113,22 @@ class PhotoOrderedTable_View(CompositeForm):
         return self.subviews[1].get_schema(resource, context)
 
 
-    def get_action_method(self, resource, context):
-        if 'name' in context.get_form_keys():
-            return self.subviews[0].action
-        return getattr(self.subviews[1], context.form_action, None)
+    def _get_form(self, resource, context):
+        form = CompositeForm._get_form(self, resource, context)
+        if 'name' in form:
+            # We check if the image path refer to an Image instance
+            path = form['name']
+            check_photo(path, resource, 'name')
+        return form
+
+
+
+def check_photo(path, resource, form_key):
+    """ check if the path refer to an Image instance
+    """
+    if path:
+        img_resource = resource.get_resource(str(path), soft=True)
+        if not img_resource or not isinstance(img_resource, Image):
+            raise FormError(invalid=[form_key])
+    else:
+        raise FormError(invalid=[form_key])
