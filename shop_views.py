@@ -579,7 +579,8 @@ class Shop_ShowRecapitulatif(STLForm):
               'cart': cart,
               'shop': resource,
               'shop_uri': context.uri.resolve('/')}
-        Order.make_resource(Order, resource, 'orders/%s' % ref,
+        orders = resource.get_resource('orders')
+        Order.make_resource(Order, orders, str(ref),
                             title={'en': u'#%s' % ref},
                             **kw)
         # We clear the cart
