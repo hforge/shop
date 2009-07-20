@@ -190,7 +190,14 @@ class VirtualCategory_Comparator(STLView):
                 for key in model_ns['specific_dict'].keys():
                     value = model_ns['specific_dict'][key]['value']
                     comparator[key]['values'].append(value)
-            namespace['comparator'] = comparator.values()
+            # fetch info keys in order
+            keys = []
+            for info in model.get_model_informations():
+                name = info['name']
+                if info['visible']:
+                    keys.append(name)
+            # sort informations
+            namespace['comparator'] = [comparator[key] for key in keys]
         return namespace
 
 
