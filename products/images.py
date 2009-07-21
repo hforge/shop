@@ -47,6 +47,18 @@ class PhotoOrderedTableFile(OrderedTableFile):
 
 
 
+class PhotoAddImage(DBResource_AddImage):
+
+    def get_root(self, context):
+        return context.resource.parent.get_resource('images')
+
+
+    # XXX to avoid to start on a parent of root resource
+    def get_start(self, resource):
+        return resource.parent.get_resource('images')
+
+
+
 class PhotoOrderedTable(ResourcesOrderedTable):
 
     class_id = 'gallery-ordered-table'
@@ -61,7 +73,7 @@ class PhotoOrderedTable(ResourcesOrderedTable):
 
     # Views
     view = PhotoOrderedTable_View()
-    add_image = DBResource_AddImage()
+    add_image = PhotoAddImage()
     add_record = PhotoOrderedTable_AddRecord()
     edit_record = PhotoOrderedTable_EditRecord()
     back = GoToSpecificDocument(specific_document='..',
