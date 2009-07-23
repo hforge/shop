@@ -93,6 +93,7 @@ class Editable(object):
 
 
     def get_links(self):
+        # TODO implement update_links
         base = self.get_abspath()
         languages = self.get_site_root().get_property('website_languages')
 

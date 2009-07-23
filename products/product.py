@@ -400,18 +400,20 @@ class Product(Editable, DynamicFolder):
     #########################################
 
     def get_links(self):
-        links = []
+        links = Editable.get_links(self)
+        links += DynamicFolder.get_links(self)
         real_resource = self.get_real_resource()
         shop = get_shop(real_resource)
         categories = shop.get_resource('categories')
         categories_path = categories.get_abspath()
         for categorie in self.get_property('categories'):
             links.append(str(categories_path.resolve2(categorie)))
-        links += Editable.get_links(self)
         return links
 
 
-    def change_link(self, old_path, new_path):
+    def update_links(self, old_path, new_path):
+        DynamicFolder.update_links(self, old_path, new_path)
+
         real_resource = self.get_real_resource()
         shop = get_shop(real_resource)
         categories = shop.get_resource('categories')
