@@ -24,7 +24,9 @@ from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
 
 # Import from shop.payments
-from payment_way import PaymentWay, PaymentWayBaseTable, PaymentWayTable
+from shop.payments.payment_way import PaymentWay, PaymentWayBaseTable
+from shop.payments.payment_way import PaymentWayTable
+from shop.payments.registry import register_payment_way
 from check_views import CheckPayment_RecordEdit
 from check_views import CheckPayment_Pay, CheckPayment_Configure, CheckStates
 from check_views import CheckPayment_RecordAdd, CheckPayment_RecordView
@@ -101,9 +103,11 @@ class CheckPayment(PaymentWay):
 
 
     def _show_payment_form(self, context, payment):
-        return CheckPayment_Pay().GET(self, context, payment)
+        return CheckPayment_Pay(conf=payment).GET(self, context)
 
 
 
 register_resource_class(CheckPayment)
 register_resource_class(CheckPaymentTable)
+
+register_payment_way(CheckPayment)

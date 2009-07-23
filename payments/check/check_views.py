@@ -15,18 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.datatypes import Enumerate, Integer, Unicode
 from itools.gettext import MSG
 from itools.web import STLView, STLForm
-from itools.stl import stl
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro import messages
 from ikaaro.forms import MultilineWidget, TextWidget
-from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
+from shop.payments.payment_way_views import PaymentWay_Configure
 from shop.shop_utils_views import Shop_Progress, Shop_PluginWay_Form
 
 
@@ -48,13 +47,6 @@ class CheckPayment_Pay(STLView):
     access = "is_authenticated"
 
     template = '/ui/shop/payments/checkpayment_pay.xml'
-
-    conf = None
-
-    def GET(self, resource, context, conf):
-        self.conf = conf
-        return STLView.GET(self, resource, context)
-
 
     def get_namespace(self, resource, context):
         namespace = {
@@ -125,23 +117,16 @@ class CheckPayment_RecordEdit(Shop_PluginWay_Form):
 
 
 
-class CheckPayment_Configure(DBResource_Edit):
+class CheckPayment_Configure(PaymentWay_Configure):
 
-    title = MSG(u'Configure CheckPayment module')
-    access = 'is_admin'
+    title = MSG(u'Configure checkpayment module')
 
-    schema = {'to': Unicode,
-              'address': Unicode}
+    schema = merge_dicts(PaymentWay_Configure.schema,
+                         to=Unicode(mandatory=True),
+                         address=Unicode(mandatory=True))
 
 
-    widgets = [
+    widgets = PaymentWay_Configure.widgets + [
         TextWidget('to', title=MSG(u"A l'ordre de")),
         MultilineWidget('address', title=MSG(u'Address'))]
 
-    submit_value = MSG(u'Edit configuration')
-
-
-    def action(self, resource, context, form):
-        for key in self.schema.keys():
-            resource.set_property(key, form[key])
-        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')

@@ -31,6 +31,7 @@ from paybox_views import Paybox_End, Paybox_ConfirmPayment, Paybox_Record_Edit
 from shop.datatypes import StringFixSize
 from shop.payments.payment_way import PaymentWay, PaymentWayBaseTable
 from shop.payments.payment_way import PaymentWayTable
+from shop.payments.registry import register_payment_way
 
 
 class PayboxBaseTable(PaymentWayBaseTable):
@@ -119,9 +120,10 @@ class Paybox(PaymentWay):
                              'amount': payment['amount'],
                              'user': context.user.name})
         # Show payment form
-        return Paybox_Pay().GET(self, context, payment)
+        return Paybox_Pay(conf=payment).GET(self, context)
 
 
 
 register_resource_class(Paybox)
+register_payment_way(Paybox)
 register_resource_class(PayboxTable)

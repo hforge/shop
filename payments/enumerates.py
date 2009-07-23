@@ -17,8 +17,17 @@
 # Import from itools
 from itools.datatypes import Enumerate
 from itools.gettext import MSG
+from itools.web import get_context
+
+# Import from payment
+from payment_way import PaymentWay
+
+# Import from shop
+from shop.utils import get_shop, ShopFolder
 
 
+
+# XXX We have to use devises
 class Devises(Enumerate):
     """ ISO 4217 """
 
@@ -26,3 +35,18 @@ class Devises(Enumerate):
       {'name': '978', 'value': MSG(u'Euro'),   'code': 'EUR', 'symbol': '€'},
       {'name': '840', 'value': MSG(u'Dollar'), 'code': 'USD', 'symbol': '$'},
       ]
+
+
+class PaymentWaysEnumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        options = []
+        context = get_context()
+        shop = get_shop(context.resource)
+        payments = shop.get_resource('payments')
+        for mode in payments.search_resources(cls=PaymentWay):
+            options.append({'name': mode.name,
+                            'value': mode.get_title(),
+                            'enabled': mode.get_property('enabled')})
+        return options

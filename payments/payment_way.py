@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
-from itools.datatypes import Boolean, Enumerate, String, Decimal
+from itools.datatypes import Boolean, String, Decimal
+from itools.datatypes import PathDataType, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
-from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
@@ -28,7 +29,9 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
-from shop.utils import get_shop, ShopFolder
+from shop.editable import Editable
+from shop.utils import ShopFolder
+
 
 class PaymentWayBaseTable(BaseTable):
 
@@ -36,17 +39,19 @@ class PaymentWayBaseTable(BaseTable):
         'ref': String(Unique=True, is_indexed=True),
         'user': String,
         'state': Boolean,
-        'amount': Decimal}
+        'amount': Decimal,
+        'description': Unicode}
 
 
 
 class PaymentWayTable(Table):
 
     form = [
-        TextWidget('ref', title=MSG(u'Facture number')),
+        TextWidget('ref', title=MSG(u'Payment number')),
         TextWidget('user', title=MSG(u'User id')),
         SelectWidget('state', title=MSG(u'State')),
-        TextWidget('amount', title=MSG(u'Amount'))]
+        TextWidget('amount', title=MSG(u'Amount')),
+        TextWidget('description', title=MSG(u'Description'))]
 
     record_order_view = None
 
@@ -81,9 +86,11 @@ class PaymentWayTable(Table):
         return namespace
 
 
-class PaymentWay(ShopFolder):
+class PaymentWay(Editable, ShopFolder):
 
     class_id = 'payment_way'
+
+    logo = None
 
     payments = GoToSpecificDocument(specific_document='payments',
                                     title=MSG(u'Payments'))
@@ -93,10 +100,10 @@ class PaymentWay(ShopFolder):
 
     @classmethod
     def get_metadata_schema(cls):
-        schema = ShopFolder.get_metadata_schema()
-        schema['enabled'] = Boolean(default=True)
-        schema['logo'] = String
-        return schema
+        return merge_dicts(ShopFolder.get_metadata_schema(),
+                           Editable.get_metadata_schema(),
+                           enabled=Boolean(default=True),
+                           logo=PathDataType(multilingual=True))
 
 
     @staticmethod
@@ -106,6 +113,11 @@ class PaymentWay(ShopFolder):
         kw['description'] = {'en': cls.class_description.gettext()}
         kw['logo'] = cls.logo
         ShopFolder._make_resource(cls, folder, name, *args, **kw)
+
+
+    def _get_catalog_values(self):
+        # XXX We do not index data from Editable
+        return ShopFolder._get_catalog_values(self)
 
 
     ######################
@@ -126,21 +138,6 @@ class PaymentWay(ShopFolder):
     def send_confirmation_mail(self):
         # TODO
         pass
-
-
-class PaymentWaysEnumerate(Enumerate):
-
-    @classmethod
-    def get_options(cls):
-        options = []
-        context = get_context()
-        shop = get_shop(context.resource)
-        payments = shop.get_resource('payments')
-        for mode in payments.search_resources(cls=PaymentWay):
-            options.append({'name': mode.name,
-                            'value': mode.get_title(),
-                            'enabled': mode.get_property('enabled')})
-        return options
 
 
 

@@ -36,7 +36,7 @@ from ikaaro.workflow import WorkflowAware, WorkflowError
 
 # Import from shop
 from shop.addresses import Addresses, BaseAddresses
-from shop.payments.payment_way import PaymentWaysEnumerate
+from shop.payments.enumerates import PaymentWaysEnumerate
 from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.utils import get_shop
 

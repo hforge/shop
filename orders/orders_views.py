@@ -32,7 +32,7 @@ from ikaaro.table_views import Table_View
 
 # Import from shop
 from workflow import Order_Transitions
-from shop.payments.payment_way import PaymentWaysEnumerate
+from shop.payments.enumerates import PaymentWaysEnumerate
 from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.datatypes import Civilite
 from shop.utils import get_shop

@@ -23,19 +23,14 @@ from ikaaro.registry import register_resource_class
 # Import from payments
 from payments_views import Payments_View
 from payments_views import Payments_History_View
-from paybox import Paybox
-from check import CheckPayment
 
 # Import from shop
 from payment_way import PaymentWay
 from shop.utils import ShopFolder
+from registry import payment_ways_registry
 
 
 class Payments(ShopFolder):
-    """
-    This table contains the history of attempted or successful payments.
-    They can be done by several ways (Paybox, paypal ...)
-    """
 
     class_id = 'payments'
     class_title = MSG(u'Payment Module')
@@ -43,24 +38,18 @@ class Payments(ShopFolder):
     # Views
     class_views = ['history', 'view']
 
-    # XXX We have to secure
-    # Fixed handlers
-    __fixed_handlers__ = []
-
-
     # List of views
     view = Payments_View()
     history = Payments_History_View()
 
 
-    @staticmethod
-    def _make_resource(cls, folder, name, *args, **kw):
-        ShopFolder._make_resource(cls, folder, name, *args, **kw)
-        # Add paybox Payment way
-        Paybox._make_resource(Paybox, folder, '%s/paybox' % name)
-        # Add check Payment way
-        CheckPayment._make_resource(CheckPayment, folder, '%s/check' % name)
+    def get_document_types(self):
+        return payment_ways_registry.values()
 
+
+    ######################
+    # Public API
+    ######################
 
     def get_payments_items(self, context, ref=None):
         items = []
@@ -86,9 +75,6 @@ class Payments(ShopFolder):
         records.reverse()
         return records
 
-    ######################
-    # Public API
-    ######################
 
     def show_payment_form(self, context, payment):
         """

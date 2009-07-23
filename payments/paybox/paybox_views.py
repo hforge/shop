@@ -21,24 +21,23 @@ from re import match, DOTALL
 from sys import prefix
 
 # Import from itools
-from itools.core import get_abspath
+from itools.core import get_abspath, merge_dicts
 from itools.datatypes import Boolean, Decimal, Integer, Unicode, String
 from itools.gettext import MSG
 from itools.handlers import ConfigFile
 from itools.html import HTMLFile
 from itools.stl import stl
 from itools.uri import get_reference, Path
-from itools.web import BaseForm, STLView, FormError
+from itools.web import BaseView, BaseForm, STLView, STLForm, FormError
 
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.table_views import Table_View
-from ikaaro.forms import ImageSelectorWidget, BooleanRadio
-from ikaaro.forms import STLForm, TextWidget, BooleanCheckBox
-from ikaaro.resource_views import DBResource_Edit
+from ikaaro.forms import BooleanRadio, TextWidget
 
 # Import from shop
 from enumerates import PBXState, PayboxStatus, PayboxCGIErrors
+from shop.payments.payment_way_views import PaymentWay_Configure
 from shop.datatypes import StringFixSize
 from shop.shop_utils_views import Shop_Progress
 from shop.utils import get_shop
@@ -76,26 +75,19 @@ class Paybox_View(Table_View):
 
 
 
-class Paybox_Configure(DBResource_Edit):
-    """ View that allow to configure paybox :
-          - User account
-          - ...
-    """
+class Paybox_Configure(PaymentWay_Configure):
 
     title = MSG(u'Configure Paybox')
-    access = 'is_admin'
 
-    schema = {'PBX_SITE': StringFixSize(size=7),
-              'PBX_RANG': StringFixSize(size=2),
-              'PBX_IDENTIFIANT': String,
-              'PBX_DIFF': StringFixSize(size=2),
-              'logo': String,
-              'real_mode': Boolean,
-              'enabled': Boolean}
+    schema = merge_dicts(PaymentWay_Configure.schema,
+                         PBX_SITE=StringFixSize(size=7),
+                         PBX_RANG=StringFixSize(size=2),
+                         PBX_IDENTIFIANT=String,
+                         PBX_DIFF=StringFixSize(size=2),
+                         real_mode=Boolean)
 
-    widgets = [
-        BooleanCheckBox('enabled', title=MSG(u'Enabled ?')),
-        ImageSelectorWidget('logo',  title=MSG(u'Logo')),
+
+    widgets = PaymentWay_Configure.widgets + [
         TextWidget('PBX_SITE', title=MSG(u'Paybox Site')),
         TextWidget('PBX_RANG', title=MSG(u'Paybox Rang')),
         TextWidget('PBX_IDENTIFIANT', title=MSG(u'Paybox Identifiant')),
@@ -104,17 +96,8 @@ class Paybox_Configure(DBResource_Edit):
         BooleanRadio('real_mode', title=MSG(u'Payments in real mode'))]
 
 
-    submit_value = MSG(u'Edit configuration')
 
-
-    def action(self, resource, context, form):
-        for key in self.schema.keys():
-            resource.set_property(key, form[key])
-        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
-
-
-
-class Paybox_Pay(STLForm):
+class Paybox_Pay(BaseView):
     """This view load the paybox cgi. That script redirect on paybox serveur
        to show the payment form.
        It must be call via the method show_payment_form() of payment resource.
@@ -125,7 +108,8 @@ class Paybox_Pay(STLForm):
                           'PBX_IDENTIFIANT': 2}
 
 
-    def GET(self, resource, context, conf):
+    def GET(self, resource, context):
+        conf = self.conf
         # We get the paybox CGI path on serveur
         cgi_path = Path(prefix).resolve2('bin/paybox.cgi')
         # Get configuration

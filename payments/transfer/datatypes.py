@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2008 Sylvain Taverne <sylvain@itaapy.com>
+# Copyright (C) 2009 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,13 +14,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from shop
-from payments import Payments
-from enumerates import PaymentWaysEnumerate
-from registry import register_payment_way
+# Import from itools
+from itools.datatypes import String
 
-# Register payment ways
-import cash
-import check
-import paybox
-import transfer
+
+class RIB(String):
+
+    # TODO
+    # http://fr.wikipedia.org/wiki/Clé_RIB#V.C3.A9rifier_un_RIB_avec_une_formule_Excel
+    pass
+
+
+class IBAN(String):
+
+    # TODO
+    # http://fr.wikipedia.org/wiki/IBAN#V.C3.A9rification
+    pass
