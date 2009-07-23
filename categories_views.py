@@ -120,6 +120,7 @@ class VirtualCategories_View(VirtualCategory_View):
 
 class VirtualCategory_ComparatorView(VirtualCategory_View):
 
+    title = MSG(u'Compare')
     access = True
 
     search_template = None
