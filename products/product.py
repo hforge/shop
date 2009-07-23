@@ -26,8 +26,7 @@ from itools.web import get_context
 from itools.xml import TEXT
 
 # Import from ikaaro
-from ikaaro.folder import Folder
-from ikaaro.folder_views import GoToSpecificDocument, Folder_BrowseContent
+from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.registry import register_resource_class, register_field
 
 # Import from shop
@@ -39,7 +38,7 @@ from product_views import Product_View, Product_Edit, Product_EditModel
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.editable import Editable
-from shop.utils import get_shop, format_price
+from shop.utils import get_shop, format_price, ShopFolder
 
 
 ###############
@@ -511,7 +510,7 @@ class Product(Editable, DynamicFolder):
 
 
 
-class Products(Folder):
+class Products(ShopFolder):
 
     class_id = 'products'
     class_title = MSG(u'Products')
@@ -519,7 +518,6 @@ class Products(Folder):
 
     # Views
     view = Products_View()
-    browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
 
 
     def get_document_types(self):

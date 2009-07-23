@@ -29,7 +29,6 @@ from itools.pdf import stl_pmltopdf
 # Import from ikaaro
 from ikaaro.access import AccessControl
 from ikaaro.file import PDF
-from ikaaro.folder import Folder
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
@@ -48,7 +47,7 @@ from orders_views import OrdersView, MyOrdersView, OrdersProductsView
 from orders_views import Order_Manage
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
-from shop.utils import format_price
+from shop.utils import format_price, ShopFolder
 
 
 #############################################
@@ -141,13 +140,13 @@ class OrdersProducts(Table):
         return ns
 
 
-class Order(AccessControl, WorkflowAware, Folder):
+class Order(AccessControl, WorkflowAware, ShopFolder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
     class_views = ['view', 'manage']
 
-    __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
+    __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'messages', 'products']
 
     workflow = order_workflow
@@ -159,7 +158,7 @@ class Order(AccessControl, WorkflowAware, Folder):
 
     @classmethod
     def get_metadata_schema(cls):
-        schema = Folder.get_metadata_schema()
+        schema = ShopFolder.get_metadata_schema()
         schema.update(WorkflowAware.get_metadata_schema())
         schema['total_price'] = Decimal
         schema['shipping_price'] = Decimal
@@ -196,7 +195,7 @@ class Order(AccessControl, WorkflowAware, Folder):
         metadata['customer_id'] = user.name
         metadata['creation_datetime'] = datetime.now()
         metadata['shipping'] = cart.shipping
-        Folder._make_resource(cls, folder, name, *args, **metadata)
+        ShopFolder._make_resource(cls, folder, name, *args, **metadata)
         # Save products
         handler = BaseOrdersProducts()
         products = shop.get_resource('products')
@@ -235,7 +234,7 @@ class Order(AccessControl, WorkflowAware, Folder):
 
 
     def _get_catalog_values(self):
-        values = Folder._get_catalog_values(self)
+        values = ShopFolder._get_catalog_values(self)
         values['customer_id'] = self.get_property('customer_id')
         return values
 
@@ -340,7 +339,7 @@ class Order(AccessControl, WorkflowAware, Folder):
 
 
 
-class Orders(Folder):
+class Orders(ShopFolder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')

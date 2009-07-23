@@ -22,14 +22,13 @@ from itools.i18n import format_datetime
 from itools.web import get_context
 
 # Import from ikaaro
-from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
-from shop.utils import get_shop
+from shop.utils import get_shop, ShopFolder
 
 class PaymentWayBaseTable(BaseTable):
 
@@ -82,7 +81,7 @@ class PaymentWayTable(Table):
         return namespace
 
 
-class PaymentWay(Folder):
+class PaymentWay(ShopFolder):
 
     class_id = 'payment_way'
 
@@ -94,7 +93,7 @@ class PaymentWay(Folder):
 
     @classmethod
     def get_metadata_schema(cls):
-        schema = Folder.get_metadata_schema()
+        schema = ShopFolder.get_metadata_schema()
         schema['enabled'] = Boolean(default=True)
         schema['logo'] = String
         return schema
@@ -106,7 +105,7 @@ class PaymentWay(Folder):
         kw['title'] = {'en': cls.class_title.gettext()}
         kw['description'] = {'en': cls.class_description.gettext()}
         kw['logo'] = cls.logo
-        Folder._make_resource(cls, folder, name, *args, **kw)
+        ShopFolder._make_resource(cls, folder, name, *args, **kw)
 
 
     ######################

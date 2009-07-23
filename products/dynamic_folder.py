@@ -21,15 +21,15 @@
 # Import from itools
 from itools.datatypes import Tokens
 
-# Import from ikaaro
-from ikaaro.folder import Folder
+# Import from Shop
+from shop.utils import ShopFolder
 
 
-class DynamicFolder(Folder):
+class DynamicFolder(ShopFolder):
 
     def get_property_and_language(self, name, language=None):
-        value, language = Folder.get_property_and_language(self, name,
-                                                           language)
+        value, language = ShopFolder.get_property_and_language(self, name,
+                                                               language)
 
         # Default properties first (we need "product_model")
         if name in self.get_metadata_schema():
@@ -69,20 +69,20 @@ class DynamicFolder(Folder):
             if name in product_model_schema:
                 datatype = product_model_schema[name]
                 if getattr(datatype, 'multiple', False):
-                    return Folder.set_property(self, name,
-                                               Tokens.encode(value))
+                    return ShopFolder.set_property(self, name,
+                                                   Tokens.encode(value))
                 elif getattr(datatype, 'multilingual', False):
-                    return Folder.set_property(self, name,
-                                               datatype.encode(value),
-                                               language)
+                    return ShopFolder.set_property(self, name,
+                                                   datatype.encode(value),
+                                                   language)
                 # Even if the language was not None, this property is not
                 # multilingual so ignore it.
-                return Folder.set_property(self, name,
-                                           datatype.encode(value))
+                return ShopFolder.set_property(self, name,
+                                               datatype.encode(value))
 
         # Standard property
         schema = self.get_metadata_schema()
         datatype = schema[name]
         if getattr(datatype, 'multilingual', False):
-            return Folder.set_property(self, name, value, language)
-        return Folder.set_property(self, name, value)
+            return ShopFolder.set_property(self, name, value, language)
+        return ShopFolder.set_property(self, name, value)

@@ -19,7 +19,6 @@ from itools.datatypes import Email, PathDataType, Unicode
 from itools.gettext import MSG
 
 # Import from ikaaro
-from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
 from ikaaro.webpage import WebPage
 
@@ -32,20 +31,21 @@ from payments import Payments
 from products import Products, Product, ProductModels
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
-from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
-from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
-from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_Addresses, Shop_ChooseAddress
+from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
+from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
+from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
+from utils import ShopFolder
 
 
-class Shop(Folder):
+class Shop(ShopFolder):
 
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
     class_version = '20090619'
 
-    __fixed_handlers__ = Folder.__fixed_handlers__ + ['addresses',
+    __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
                           'products', 'products-models',
                           'shippings', 'countries',
@@ -92,7 +92,7 @@ class Shop(Folder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        root = Folder._make_resource(cls, folder, name, **kw)
+        root = ShopFolder._make_resource(cls, folder, name, **kw)
         # Categories
         Categories._make_resource(Categories, folder, '%s/categories' % name,
                                 title={'en': u'Categories'})
@@ -135,7 +135,7 @@ class Shop(Folder):
 
     @classmethod
     def get_metadata_schema(cls):
-        schema = Folder.get_metadata_schema()
+        schema = ShopFolder.get_metadata_schema()
         schema['order_notification_mails'] = Email(multiple=True)
         schema['shop_signature'] = Unicode
         schema['shop_from_addr'] = Email

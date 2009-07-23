@@ -28,7 +28,6 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.file import Image
-from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import SelectWidget, TextWidget, stl_namespaces
 from ikaaro.registry import register_resource_class
@@ -36,7 +35,7 @@ from ikaaro.table import Table
 
 # Import from shop
 from shop.countries import CountriesEnumerate
-from shop.utils import get_shop
+from shop.utils import get_shop, ShopFolder
 
 # Import from shipping
 from enumerates import ShippingStates
@@ -119,7 +118,7 @@ class ShippingPrices(Table):
 
 
 
-class ShippingWay(Folder):
+class ShippingWay(ShopFolder):
 
     class_id = 'shipping'
     class_title = MSG(u'Shipping')
@@ -139,7 +138,7 @@ class ShippingWay(Folder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        Folder._make_resource(cls, folder, name, *args, **kw)
+        ShopFolder._make_resource(cls, folder, name, *args, **kw)
         # Image
         body = vfs.open(get_abspath(cls.img)).read()
         img = Image._make_resource(Image, folder,
@@ -161,7 +160,7 @@ class ShippingWay(Folder):
 
     @classmethod
     def get_metadata_schema(cls):
-        return merge_dicts(Folder.get_metadata_schema(), delivery_schema)
+        return merge_dicts(ShopFolder.get_metadata_schema(), delivery_schema)
 
 
     def get_price(self, country, purchase_price, purchase_weight):

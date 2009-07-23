@@ -22,7 +22,6 @@ from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.file import Image
-from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument, Folder_Orphans
 from ikaaro.folder_views import Folder_BrowseContent, Folder_PreviewContent
 from ikaaro.forms import ImageSelectorWidget
@@ -35,6 +34,7 @@ from ikaaro.table import OrderedTableFile
 # Import from shop
 from images_views import PhotoOrderedTable_View, PhotoOrderedTable_AddRecord
 from images_views import PhotoOrderedTable_EditRecord
+from shop.utils import ShopFolder
 
 
 
@@ -112,7 +112,7 @@ class PhotoOrderedTable(ResourcesOrderedTable):
 
 
 
-class ImagesFolder(Folder):
+class ImagesFolder(ShopFolder):
 
     class_id = 'images-folder'
     class_title = MSG(u'Images folder')

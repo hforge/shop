@@ -20,7 +20,6 @@ from itools.datatypes import Boolean, Enumerate, String, Unicode
 from itools.gettext import MSG
 
 # Import from ikaaro
-from ikaaro.folder import Folder
 from ikaaro.forms import BooleanRadio, BooleanCheckBox, SelectWidget, TextWidget
 from ikaaro.forms import get_default_widget
 from ikaaro.registry import register_resource_class
@@ -28,12 +27,13 @@ from ikaaro.table import OrderedTable, OrderedTableFile
 
 # Import from shop
 from enumerate import Datatypes
-from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
-from models_views import ProductModel_NewInstance, ProductModelSchema_View
 from models_views import ProductEnumAttribute_NewInstance
-from models_views import ProductModelSchema_EditRecord, ProductModel_View
-from models_views import ProductModelSchema_AddRecord, ProductEnumAttribute_View
 from models_views import ProductModelDefaultCover_Edit
+from models_views import ProductModelSchema_AddRecord, ProductEnumAttribute_View
+from models_views import ProductModelSchema_EditRecord, ProductModel_View
+from models_views import ProductModel_NewInstance, ProductModelSchema_View
+from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
+from shop.utils import ShopFolder
 
 
 
@@ -121,13 +121,13 @@ class ProductModelSchema(OrderedTable):
 
 
 
-class ProductModel(Folder):
+class ProductModel(ShopFolder):
 
     class_id = 'product-model'
     class_title = MSG(u'Product Model')
     class_views = ['view']
 
-    __fixed_handlers__ = Folder.__fixed_handlers__ + ['schema']
+    __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['schema']
 
 
     view = ProductModel_View()
@@ -136,7 +136,7 @@ class ProductModel(Folder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        root = Folder._make_resource(cls, folder, name, **kw)
+        root = ShopFolder._make_resource(cls, folder, name, **kw)
         # Base schema
         ProductModelSchema._make_resource(ProductModelSchema, folder,
                                           '%s/schema' % name,
@@ -283,7 +283,7 @@ class ProductModel(Folder):
 
 
 
-class ProductModels(Folder):
+class ProductModels(ShopFolder):
 
     class_id = 'product-models'
     class_title = MSG(u'Product Models')

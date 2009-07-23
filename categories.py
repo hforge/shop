@@ -19,18 +19,18 @@
 from itools.gettext import MSG
 
 # Import from ikaaro
-from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from products import Product
 from categories_views import VirtualCategories_View
-from categories_views import VirtualCategory_View, VirtualCategory_ComparatorView
 from categories_views import VirtualCategory_BoxSubCategories
 from categories_views import VirtualCategory_Comparator, Categories_View
+from categories_views import VirtualCategory_View, VirtualCategory_ComparatorView
+from products import Product
+from utils import ShopFolder
 
 
-class Category(Folder):
+class Category(ShopFolder):
 
     class_id = 'category'
     class_title = MSG(u'Category')
@@ -50,7 +50,7 @@ class Category(Folder):
 
 
 
-class Categories(Folder):
+class Categories(ShopFolder):
 
     class_id = 'categories'
     class_title = MSG(u'Categories')
@@ -127,7 +127,7 @@ class VirtualCategory(Category):
         return []
 
 
-class VirtualCategories(Folder):
+class VirtualCategories(ShopFolder):
     """The Virtual Categories Folder allows to publish categories (and
     products) in a front-office without exposing the shop module which
     belongs to the back-office.

@@ -18,7 +18,6 @@
 from itools.gettext import MSG
 
 # Import from ikaaro
-from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
 
 # Import from payments
@@ -29,9 +28,10 @@ from check import CheckPayment
 
 # Import from shop
 from payment_way import PaymentWay
+from shop.utils import ShopFolder
 
 
-class Payments(Folder):
+class Payments(ShopFolder):
     """
     This table contains the history of attempted or successful payments.
     They can be done by several ways (Paybox, paypal ...)
@@ -55,7 +55,7 @@ class Payments(Folder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        Folder._make_resource(cls, folder, name, *args, **kw)
+        ShopFolder._make_resource(cls, folder, name, *args, **kw)
         # Add paybox Payment way
         Paybox._make_resource(Paybox, folder, '%s/paybox' % name)
         # Add check Payment way

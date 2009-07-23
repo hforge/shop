@@ -18,7 +18,6 @@
 from itools.gettext import MSG
 
 # Import from ikaaro
-from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
 
 # Import from shop.shipping
@@ -26,10 +25,11 @@ from colissimo import Colissimo
 from withdrawal import Withdrawal
 from shippings_views import ShippingsView, Shippings_History
 from shipping_way import ShippingWay
+from shop.utils import ShopFolder
 
 
 
-class Shippings(Folder):
+class Shippings(ShopFolder):
 
     class_id = 'shippings'
     class_title = MSG(u'Shipping')
@@ -43,7 +43,7 @@ class Shippings(Folder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        Folder._make_resource(cls, folder, name, *args, **kw)
+        ShopFolder._make_resource(cls, folder, name, *args, **kw)
         # Init with some shippings mode
         for c in [Colissimo, Withdrawal]:
             kw = {'title': {'en': c.class_title.gettext()},
