@@ -18,12 +18,13 @@
 # Import from itools
 from itools.datatypes import String
 from itools.gettext import MSG
-from itools.web import STLView
+from itools.web import STLView, get_context
 
 # Import from ikaaro
 from ikaaro.forms import RTEWidget
 from ikaaro.forms import HTMLBody, XHTMLBody
 from ikaaro.registry import register_field
+from ikaaro.webpage import _get_links, _change_link
 
 #######################################
 # TODO
@@ -93,16 +94,29 @@ class Editable(object):
 
 
     def get_links(self):
-        # TODO implement update_links
         base = self.get_abspath()
         languages = self.get_site_root().get_property('website_languages')
 
         links = []
         for language in languages:
             events = self.get_xhtml_data(language=language)
-            # XXX API Ikaaro
-            #links.extend(_get_links(base, events))
+            links.extend(_get_links(base, events))
         return links
+
+
+    def update_links(self, old_path, new_path):
+        base = self.get_abspath()
+        languages = self.get_site_root().get_property('website_languages')
+
+        links = []
+        for language in languages:
+            events = self.get_xhtml_data(language=language)
+            events = _change_link(old_path, new_path, base, events)
+            # Save as XHTML
+            data = XHTMLBody.encode(events)
+            self.set_property('data', data, language=language)
+        get_context().server.change_resource(self)
+
 
 
 

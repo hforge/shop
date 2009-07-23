@@ -411,6 +411,7 @@ class Product(Editable, DynamicFolder):
 
 
     def update_links(self, old_path, new_path):
+        Editable.update_links(self, old_path, new_path)
         DynamicFolder.update_links(self, old_path, new_path)
 
         real_resource = self.get_real_resource()
