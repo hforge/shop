@@ -25,7 +25,7 @@ from itools.web import STLView
 from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
-from ikaaro.buttons import RemoveButton
+from ikaaro.buttons import RemoveButton, RenameButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.utils import get_base_path_query
 
@@ -213,7 +213,7 @@ class Categories_View(Folder_BrowseContent):
 
     context_menus = []
 
-    table_actions = [RemoveButton]
+    table_actions = [RemoveButton, RenameButton]
 
     table_columns = [
         ('checkbox', None),
