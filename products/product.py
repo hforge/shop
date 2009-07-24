@@ -535,7 +535,7 @@ register_field('product_model', String(is_indexed=True))
 register_field('categories', String(is_indexed=True, multiple=True))
 register_field('description', Unicode(is_indexed=True))
 register_field('has_categories', Boolean(is_indexed=True))
-register_field('has_images', Boolean(is_indexed=True))
+register_field('has_images', Boolean(is_indexed=True, is_stored=True))
 register_field('ctime', String(is_indexed=True, is_stored=True))
 
 # Register resources
