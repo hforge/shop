@@ -24,6 +24,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Integer, Email, String, Unicode
 from itools.datatypes import Boolean, MultiLinesTokens, PathDataType
 from itools.gettext import MSG
+from itools.stl import stl
 from itools.uri import get_reference
 from itools.web import BaseView, STLForm, STLView, ERROR
 from itools.xapian import PhraseQuery, AndQuery
@@ -588,7 +589,10 @@ class Shop_ShowRecapitulatif(STLForm):
         # We show the payment form
         kw = {'ref': ref, 'amount': total_price, 'mode': form['payment']}
         payments = resource.get_resource('payments')
-        return payments.show_payment_form(context, kw)
+        namespace = {'progress': Shop_Progress(index=6).GET(resource, context),
+                     'payment_form': payments.show_payment_form(context, kw)}
+        handler = resource.get_resource('/ui/shop/shop_payment_form.xml')
+        return stl(handler, namespace)
 
 
 ##########################################################

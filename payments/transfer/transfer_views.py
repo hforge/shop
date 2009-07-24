@@ -30,7 +30,7 @@ from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
 from datatypes import RIB, IBAN
-from shop.shop_utils_views import Shop_Progress, Shop_PluginWay_Form
+from shop.shop_utils_views import Shop_PluginWay_Form
 
 #
 #class CheckPayment_RecordAdd(STLForm):

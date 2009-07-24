@@ -26,7 +26,7 @@ from ikaaro.forms import MultilineWidget, TextWidget
 
 # Import from shop
 from shop.payments.payment_way_views import PaymentWay_Configure
-from shop.shop_utils_views import Shop_Progress, Shop_PluginWay_Form
+from shop.shop_utils_views import Shop_PluginWay_Form
 
 
 
@@ -51,7 +51,6 @@ class CheckPayment_Pay(STLView):
     def get_namespace(self, resource, context):
         namespace = {
             'to': resource.get_property('to'),
-            'progress': Shop_Progress(index=6).GET(resource, context),
             'ref': self.conf['ref'],
             'amount': self.conf['amount']}
         address = resource.get_property('address').encode('utf-8')

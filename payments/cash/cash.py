@@ -23,7 +23,6 @@ from itools.gettext import MSG
 from ikaaro.registry import register_resource_class
 
 # Import from shop.payments
-from datatypes import RIB, IBAN
 from cash_views import CashPayment_Pay, CashPayment_Configure
 from shop.payments.payment_way import PaymentWay
 from shop.payments.registry import register_payment_way

@@ -4,8 +4,6 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  ${progress}
-
   <b>
     Your order has been recorded !<br/>
     To finalize your purchase, you have to send a check. <br/>
