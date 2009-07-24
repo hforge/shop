@@ -75,6 +75,7 @@ class CheckPayment(PaymentWay):
 
     # XXX found a good logo
     logo = '/ui/shop/payments/paybox/images/logo.png'
+    payment_table = CheckPaymentTable
 
     # Views
     configure = CheckPayment_Configure()
@@ -84,22 +85,11 @@ class CheckPayment(PaymentWay):
     order_add_view = CheckPayment_RecordAdd()
     order_edit_view = CheckPayment_RecordEdit()
 
-    # Schema
-    base_schema = {'to': Unicode,
-                   'address': Unicode}
-
     @classmethod
     def get_metadata_schema(cls):
-        schema = PaymentWay.get_metadata_schema()
-        schema.update(cls.base_schema)
-        return schema
-
-
-    @staticmethod
-    def _make_resource(cls, folder, name, *args, **kw):
-        PaymentWay._make_resource(cls, folder, name, *args, **kw)
-        CheckPaymentTable._make_resource(CheckPaymentTable, folder,
-            '%s/payments' % name)
+        return merge_dicts(PaymentWay.get_metadata_schema(),
+                           to=Unicode,
+                           address=Unicode)
 
 
     def _show_payment_form(self, context, payment):

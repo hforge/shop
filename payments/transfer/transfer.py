@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -50,14 +51,11 @@ class TransfertPayment(PaymentWay):
     #order_add_view = CheckPayment_RecordAdd()
     #order_edit_view = CheckPayment_RecordEdit()
 
-    # Schema
-    base_schema = {'RIB': RIB, 'IBAN': IBAN}
-
     @classmethod
     def get_metadata_schema(cls):
-        schema = PaymentWay.get_metadata_schema()
-        schema.update(cls.base_schema)
-        return schema
+        return merge_dicts(PaymentWay.get_metadata_schema(),
+                           RIB=RIB,
+                           IBAN=IBAN)
 
 
     def _show_payment_form(self, context, payment):

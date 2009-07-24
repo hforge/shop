@@ -80,6 +80,7 @@ class Paybox(PaymentWay):
     class_views = ['configure', 'payments']
 
     logo = '/ui/shop/payments/paybox/images/logo.png'
+    payment_table = PayboxTable
 
     # Views
     configure = Paybox_Configure()
@@ -105,12 +106,6 @@ class Paybox(PaymentWay):
         schema.update(cls.base_schema)
         return schema
 
-
-    @staticmethod
-    def _make_resource(cls, folder, name, *args, **kw):
-        PaymentWay._make_resource(cls, folder, name, *args, **kw)
-        # Add paybox table
-        PayboxTable._make_resource(PayboxTable, folder, '%s/payments' % name)
 
 
     def _show_payment_form(self, context, payment):

@@ -43,8 +43,10 @@ class PaymentWayBaseTable(BaseTable):
         'description': Unicode}
 
 
-
 class PaymentWayTable(Table):
+
+    class_id = 'payment-table'
+    class_handler = PaymentWayBaseTable
 
     form = [
         TextWidget('ref', title=MSG(u'Payment number')),
@@ -91,6 +93,7 @@ class PaymentWay(Editable, ShopFolder):
     class_id = 'payment_way'
 
     logo = None
+    payment_table = PaymentWayTable
 
     payments = GoToSpecificDocument(specific_document='payments',
                                     title=MSG(u'Payments'))
@@ -113,6 +116,8 @@ class PaymentWay(Editable, ShopFolder):
         kw['description'] = {'en': cls.class_description.gettext()}
         kw['logo'] = cls.logo
         ShopFolder._make_resource(cls, folder, name, *args, **kw)
+        cls.payment_table._make_resource(cls.payment_table, folder,
+            '%s/payments' % name)
 
 
     def _get_catalog_values(self):
@@ -142,3 +147,4 @@ class PaymentWay(Editable, ShopFolder):
 
 
 register_resource_class(PaymentWay)
+register_resource_class(PaymentWayTable)

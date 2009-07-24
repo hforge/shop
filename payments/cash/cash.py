@@ -34,6 +34,7 @@ from shop.payments.registry import register_payment_way
 
 
 
+
 class CashPayment(PaymentWay):
 
     class_id = 'cash-payment'
@@ -48,6 +49,7 @@ class CashPayment(PaymentWay):
     #order_view = CheckPayment_RecordView()
     #order_add_view = CheckPayment_RecordAdd()
     #order_edit_view = CheckPayment_RecordEdit()
+
 
     @classmethod
     def get_metadata_schema(cls):
