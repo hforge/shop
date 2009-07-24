@@ -30,7 +30,6 @@ from ikaaro.forms import ImageSelectorWidget
 from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
-from datatypes import RIB, IBAN
 from shop.shop_utils_views import Shop_Progress, Shop_PluginWay_Form
 from shop.payments.payment_way_views import PaymentWay_Configure
 
