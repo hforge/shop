@@ -531,7 +531,7 @@ class Products(ShopFolder):
 CrossSellingTable.orderable_classes = Product
 
 # Register fields
-register_field('product_model', String(is_indexed=True))
+register_field('product_model', String(is_indexed=True, is_stored=True))
 register_field('categories', String(is_indexed=True, multiple=True))
 register_field('description', Unicode(is_indexed=True))
 register_field('has_categories', Boolean(is_indexed=True))
