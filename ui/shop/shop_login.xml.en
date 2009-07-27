@@ -10,7 +10,7 @@
 
   <h2>I'm a new customer</h2>
 
-  <a href=";register">Register</a>
+  <a href="/shop/;register">Register</a>
 
   <h2>I'm already a customer</h2>
 
