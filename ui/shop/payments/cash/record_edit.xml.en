@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <form method="post">
+    <input type="hidden" name="payment_way" value="${payment_way/value}"/>
+    <input type="hidden" name="id_payment" value="${id_payment/value}"/>
+
+    <h2 class="${state/class}">Payment validated ?</h2>
+    <label for="state-yes">Yes</label>
+    <input id="state-yes" name="state" type="radio" value="1"
+      checked="checked" stl:if="state/value"/>
+    <input id="state-yes" name="state" type="radio" value="1"
+      stl:if="not state/value"/>
+
+    <label for="state-no">No</label>
+    <input id="state-no" name="state" type="radio" value="0"
+      checked="checked" stl:if="not state/value"/>
+    <input id="state-no" name="state" type="radio" value="0"
+      stl:if="state/value"/>
+
+    <br/> <br/>
+    <input type="submit" name=";edit_payment"
+      class="button-ok" value="Validate"/>
+  </form>
+</stl:block>

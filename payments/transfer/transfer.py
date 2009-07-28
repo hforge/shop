@@ -23,33 +23,28 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop.payments
 from datatypes import RIB, IBAN
-from transfer_views import TransfertPayment_Configure, TransfertPayment_Pay
+from transfer_views import TransferPayment_Configure, TransferPayment_Pay
+from transfer_views import TransferPayment_RecordView, TransferPayment_RecordEdit
 from shop.payments.payment_way import PaymentWay
 from shop.payments.registry import register_payment_way
 
 
-#from check_views import CheckPayment_RecordEdit
-#from check_views import CheckPayment_Pay, CheckPayment_Configure, CheckStates
-#from check_views import CheckPayment_RecordAdd, CheckPayment_RecordView
 
+class TransferPayment(PaymentWay):
 
-
-class TransfertPayment(PaymentWay):
-
-    class_id = 'transfert-payment'
-    class_title = MSG(u'Payment by transfert')
-    class_description = MSG(u'Payment by transfert')
+    class_id = 'transfer-payment'
+    class_title = MSG(u'Payment by transfer')
+    class_description = MSG(u'Payment by transfer')
     class_views = ['configure', 'payments']
 
     logo = '/ui/shop/payments/transfer/images/logo.png'
 
     # Views
-    configure = TransfertPayment_Configure()
+    configure = TransferPayment_Configure()
 
     # Order admin views
-    #order_view = CheckPayment_RecordView()
-    #order_add_view = CheckPayment_RecordAdd()
-    #order_edit_view = CheckPayment_RecordEdit()
+    order_view = TransferPayment_RecordView
+    order_edit_view = TransferPayment_RecordEdit
 
     @classmethod
     def get_metadata_schema(cls):
@@ -59,9 +54,9 @@ class TransfertPayment(PaymentWay):
 
 
     def _show_payment_form(self, context, payment):
-        return TransfertPayment_Pay(conf=payment).GET(self, context)
+        return TransferPayment_Pay(conf=payment).GET(self, context)
 
 
 
-register_resource_class(TransfertPayment)
-register_payment_way(TransfertPayment)
+register_resource_class(TransferPayment)
+register_payment_way(TransferPayment)

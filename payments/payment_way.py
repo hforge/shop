@@ -23,8 +23,7 @@ from itools.gettext import MSG
 from itools.i18n import format_datetime
 
 # Import from ikaaro
-from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import TextWidget, SelectWidget
+from ikaaro.forms import TextWidget, BooleanCheckBox
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
@@ -47,15 +46,23 @@ class PaymentWayTable(Table):
 
     class_id = 'payment-table'
     class_handler = PaymentWayBaseTable
+    class_views = ['view']
 
     form = [
         TextWidget('ref', title=MSG(u'Payment number')),
         TextWidget('user', title=MSG(u'User id')),
-        SelectWidget('state', title=MSG(u'State')),
+        BooleanCheckBox('state', title=MSG(u'State')),
         TextWidget('amount', title=MSG(u'Amount')),
         TextWidget('description', title=MSG(u'Description'))]
 
+    # Views
+    # XXX Sylvain
+    # add_record = None
+    edit_record = None
+
+    # XXX Sylvain, to delete
     record_order_view = None
+
 
     def get_record_namespace(self, context, record):
         get_value = self.handler.get_record_value
@@ -94,9 +101,6 @@ class PaymentWay(Editable, ShopFolder):
 
     logo = None
     payment_table = PaymentWayTable
-
-    payments = GoToSpecificDocument(specific_document='payments',
-                                    title=MSG(u'Payments'))
 
     # Backoffice views
     order_edit_view = None

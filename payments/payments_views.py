@@ -18,14 +18,92 @@
 from operator import itemgetter
 
 # Import from itools
+from itools.datatypes import Integer
 from itools.gettext import MSG
 from itools.xml import XMLParser
+from itools.web import BaseView, BaseForm, ERROR, FormError
+from itools.web.views import process_form
 
 # Import from ikaaro
 from ikaaro.views import BrowseForm
 
 # Import from shop
+from shop.utils import get_shop
+from enumerates import PaymentWaysEnumerate
 from payment_way import PaymentWay
+
+
+class Payments_ViewPayment(BaseView):
+
+    access = 'is_admin'
+
+    query_schema = {'payment_way': PaymentWaysEnumerate,
+                    'id_payment': Integer}
+
+    def GET(self, resource, context):
+        query = context.query
+        payment_way = resource.get_resource(query['payment_way'])
+        payment_way_table = payment_way.get_resource('payments')
+        view = payment_way.order_view
+        if view is None:
+            return context.come_back(ERROR(u'Unavailable view'))
+        payment_table = payment_way.get_resource('payments').handler
+        record = payment_table.get_record(query['id_payment'])
+        return view(payment_way=payment_way,
+                    payment_table=payment_table,
+                    record=record,
+                    id_payment=query['id_payment']).GET(resource, context)
+
+
+
+class Payments_EditPayment(BaseForm):
+
+    access = 'is_admin'
+
+    query_schema = {'payment_way': PaymentWaysEnumerate,
+                    'id_payment': Integer}
+
+    def GET(self, resource, context):
+        query = context.query
+        payment_way = resource.get_resource(query['payment_way'])
+        payment_way_table = payment_way.get_resource('payments')
+        view = payment_way.order_edit_view
+        if view is None:
+            return context.come_back(ERROR(u'Unavailable view'))
+        payment_table = payment_way.get_resource('payments').handler
+        record = payment_table.get_record(query['id_payment'])
+        return view(payment_way=payment_way,
+                    payment_table=payment_table,
+                    record=record,
+                    id_payment=query['id_payment']).GET(resource, context)
+
+
+    action_edit_payment_schema = {'payment_way': PaymentWaysEnumerate(mandatory=True),
+                                  'id_payment': Integer(mandatory=True)}
+    def action_edit_payment(self, resource, context, form):
+        shop = get_shop(resource)
+        # We get shipping way
+        payment_way = shop.get_resource('payments/%s/' % form['payment_way'])
+        # We get order_edit_view
+        view = payment_way.order_edit_view
+        # We get schema
+        schema = view.schema
+        # We get form
+        try:
+            form = process_form(context.get_form_value, schema)
+        except FormError, error:
+            context.form_error = error
+            return self.on_form_error(resource, context)
+        # Instanciate view
+        payment_table = payment_way.get_resource('payments').handler
+        record = payment_table.get_record(form['id_payment'])
+        view = view(payment_way=payment_way,
+                    payment_table=payment_table,
+                    record=record,
+                    id_payment=form['id_payment'])
+        # Do actions
+        return view.action_edit_payment(resource, context, form)
+
 
 
 class Payments_History_View(BrowseForm):
@@ -50,6 +128,7 @@ class Payments_History_View(BrowseForm):
         ('payment_name', MSG(u'Payment mode')),
         ('advance_state', MSG(u'State')),
         ('amount', MSG(u'Amount')),
+        ('buttons', None),
         ]
 
     def get_items(self, resource, context):
@@ -70,13 +149,20 @@ class Payments_History_View(BrowseForm):
 
 
 
+    buttons_template = """
+              <a href=";view_payment?payment_way={way}&amp;id_payment={id}">
+                <img src="/ui/icons/16x16/view.png"/>
+              </a>
+              <a href=";edit_payment?payment_way={way}&amp;id_payment={id}">
+                <img src="/ui/icons/16x16/edit.png"/>
+              </a>
+                       """
+
     def get_item_value(self, resource, context, item, column):
-        if column == 'complete_id':
-            href = './%s/payments/;edit_record?id=%s'
-            return item[column], href % (item['payment_name'], item['id'])
-        elif column == 'ref':
-            href = '../orders/%s' % item['ref']
-            return item[column], href
+        if column == 'buttons':
+            kw = {'id': item['id'],
+                  'way': item['payment_name']}
+            return XMLParser(self.buttons_template.format(**kw))
         return item[column]
 
 

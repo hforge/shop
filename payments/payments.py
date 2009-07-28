@@ -21,8 +21,8 @@ from itools.gettext import MSG
 from ikaaro.registry import register_resource_class
 
 # Import from payments
-from payments_views import Payments_View
-from payments_views import Payments_History_View
+from payments_views import Payments_View, Payments_History_View
+from payments_views import Payments_ViewPayment, Payments_EditPayment
 
 # Import from shop
 from payment_way import PaymentWay
@@ -34,13 +34,14 @@ class Payments(ShopFolder):
 
     class_id = 'payments'
     class_title = MSG(u'Payment Module')
-
-    # Views
     class_views = ['history', 'view']
 
-    # List of views
+    # Views
     view = Payments_View()
     history = Payments_History_View()
+
+    view_payment = Payments_ViewPayment()
+    edit_payment = Payments_EditPayment()
 
 
     def get_document_types(self):

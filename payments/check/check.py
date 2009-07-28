@@ -29,7 +29,7 @@ from shop.payments.payment_way import PaymentWayTable
 from shop.payments.registry import register_payment_way
 from check_views import CheckPayment_RecordEdit
 from check_views import CheckPayment_Pay, CheckPayment_Configure, CheckStates
-from check_views import CheckPayment_RecordAdd, CheckPayment_RecordView
+from check_views import CheckPayment_RecordView
 
 
 class CheckPaymentBaseTable(PaymentWayBaseTable):
@@ -81,9 +81,8 @@ class CheckPayment(PaymentWay):
     configure = CheckPayment_Configure()
 
     # Order admin views
-    order_view = CheckPayment_RecordView()
-    order_add_view = CheckPayment_RecordAdd()
-    order_edit_view = CheckPayment_RecordEdit()
+    order_view = CheckPayment_RecordView
+    order_edit_view = CheckPayment_RecordEdit
 
     @classmethod
     def get_metadata_schema(cls):

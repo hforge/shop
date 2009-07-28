@@ -23,7 +23,7 @@ from itools.web import get_context
 from payment_way import PaymentWay
 
 # Import from shop
-from shop.utils import get_shop, ShopFolder
+from shop.utils import get_shop
 
 
 

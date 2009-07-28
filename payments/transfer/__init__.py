@@ -15,4 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from shop
-from transfer import TransfertPayment
+from transfer import TransferPayment

@@ -24,15 +24,9 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop.payments
 from cash_views import CashPayment_Pay, CashPayment_Configure
+from cash_views import CashPayment_RecordView, CashPayment_RecordEdit
 from shop.payments.payment_way import PaymentWay
 from shop.payments.registry import register_payment_way
-
-
-#from check_views import CheckPayment_RecordEdit
-#from check_views import CheckPayment_Pay, CheckPayment_Configure, CheckStates
-#from check_views import CheckPayment_RecordAdd, CheckPayment_RecordView
-
-
 
 
 class CashPayment(PaymentWay):
@@ -46,9 +40,8 @@ class CashPayment(PaymentWay):
     configure = CashPayment_Configure()
 
     # Order admin views
-    #order_view = CheckPayment_RecordView()
-    #order_add_view = CheckPayment_RecordAdd()
-    #order_edit_view = CheckPayment_RecordEdit()
+    order_view = CashPayment_RecordView
+    order_edit_view = CashPayment_RecordEdit
 
 
     @classmethod

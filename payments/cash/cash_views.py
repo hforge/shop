@@ -16,78 +16,59 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, Enumerate, Integer, Unicode
-from itools.datatypes import PathDataType
+from itools.datatypes import Boolean, Integer, Unicode
+from itools.datatypes import String
 from itools.gettext import MSG
 from itools.web import STLView, STLForm
-from itools.stl import stl
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro import messages
-from ikaaro.forms import MultilineWidget, TextWidget, BooleanCheckBox
-from ikaaro.forms import ImageSelectorWidget
-from ikaaro.resource_views import DBResource_Edit
+from ikaaro.forms import MultilineWidget
+from ikaaro.messages import MSG_CHANGES_SAVED
 
 # Import from shop
-from shop.shop_utils_views import Shop_Progress, Shop_PluginWay_Form
 from shop.payments.payment_way_views import PaymentWay_Configure
 
-#
-#class CheckPayment_RecordAdd(STLForm):
-#
-#    template = '/ui/shop/payments/check_payment_record_edit.xml'
-#
-#    schema = {'check_number': Integer,
-#              'bank': Unicode,
-#              'account_holder': Unicode,
-#              'advance_state': CheckStates(mandatory=True)}
-#
-#
-#    def get_namespace(self, resource, context):
-#        return self.build_namespace(resource, context)
-#
-#
-#    def add_payment(self, order, payment_way, context, form):
-#        kw = form
-#        kw['ref'] = order.name
-#        if form['advance_state'] == 'success':
-#            kw['state'] = True
-#            order.set_as_payed(context)
-#        else:
-#            kw['state'] = False
-#            order.set_as_not_payed(context)
-#        history = payment_way.get_resource('payments')
-#        history.handler.add_record(kw)
-#        msg = MSG(u'Changes ok')
-#        return context.come_back(msg)
-#
-#
-#class CheckPayment_RecordView(Shop_PluginWay_Form):
-#
-#    template = '/ui/shop/payments/check_record_order_view.xml'
-#
-#    def get_namespace(self, order, payment_way, record, context):
-#        namespace = {'ref': order.name,
-#                     'amount': order.get_property('total_price'),
-#                     'to': payment_way.get_property('to'),
-#                     'address': payment_way.get_property('address')}
-#        return namespace
-#
-#
-#
-#class CheckPayment_RecordEdit(Shop_PluginWay_Form):
-#
-#    template = '/ui/shop/payments/check_record_order_edit.xml'
-#
-#    def get_namespace(self, order, payment_way, record, context):
-#        namespace = {}
-#        get_val = payment_way.get_resource('payments').handler.get_record_value
-#        for key in ['amount', 'check_number', 'bank', 'account_holder']:
-#            namespace[key] = get_val(record, key)
-#        advance_state = get_val(record, 'advance_state')
-#        namespace['advance_state'] = CheckStates.get_value(advance_state)
-#        return namespace
+
+
+class CashPayment_RecordView(STLView):
+
+    template = '/ui/shop/payments/cash/record_view.xml'
+
+    def get_namespace(self, resource, context):
+        get_record_value = self.payment_table.get_record_value
+        return {'amount': get_record_value(self.record, 'amount'),
+                'ref': get_record_value(self.record, 'ref'),
+                'address': self.payment_way.get_property('address')}
+
+
+class CashPayment_RecordEdit(STLForm):
+
+    template = '/ui/shop/payments/cash/record_edit.xml'
+
+    schema = {'payment_way': String,
+              'id_payment': Integer,
+              'state': Boolean}
+
+
+    def get_namespace(self, resource, context):
+        return self.build_namespace(resource, context)
+
+
+    def get_value(self, resource, context, name, datatype):
+        if name == 'payment_way':
+            return self.payment_way.name
+        elif name == 'id_payment':
+            return self.id_payment
+        get_record_value = self.payment_table.get_record_value
+        return get_record_value(self.record, name)
+
+
+    def action_edit_payment(self, resource, context, form):
+        kw = {'state': form['state']}
+        self.payment_table.update_record(self.id_payment, **kw)
+        return context.come_back(MSG_CHANGES_SAVED)
+
 
 
 class CashPayment_Configure(PaymentWay_Configure):

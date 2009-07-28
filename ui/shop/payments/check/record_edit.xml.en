@@ -5,7 +5,8 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <form method="post">
-    <input type="hidden" name="payment_way" value="check"/>
+    <input type="hidden" name="payment_way" value="${payment_way/value}"/>
+    <input type="hidden" name="id_payment" value="${id_payment/value}"/>
     We are waiting for the customer check.<br/>
 
     <table cellpadding="5" cellspacing="0">
@@ -59,7 +60,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <input type="submit" name=";add_payment"
+          <input type="submit" name=";edit_payment"
             class="button-ok" value="Validate"/>
         </td>
       </tr>

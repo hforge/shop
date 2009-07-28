@@ -4,9 +4,11 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  State: ${advance_state}<br/>
-  Amount: ${amount}<br/>
-  Check number: ${check_number}<br/>
-  Bank: ${bank}<br/>
-  Account holder: ${account_holder}<br/>
+  You decide to pay by bank transfer.<br/>
+
+  Ref: ${ref}<br/>
+  Amount: ${amount} €<br/>
+  RIB: ${RIB}<br/>
+  IBAN: ${IBAN}<br/>
+
 </stl:block>
