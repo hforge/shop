@@ -91,12 +91,17 @@ class Payments(ShopFolder):
             if key not in payment:
                 raise ValueError, u'Invalid order'
         # We check mode is valid and active
-        payment_module = self.get_resource(payment['mode'])
+        payment_way = self.get_resource(payment['mode'])
         # Check if enabled
-        if not payment_module.get_property('enabled'):
-            raise ValueError, u'Invalid payment mode'
+        if not payment_way.get_property('enabled'):
+            raise ValueError, u'Invalid payment mode (not enabled)'
+        # Add payment in history
+        payments = payment_way.get_resource('payments').handler
+        payments.add_record({'ref': payment['ref'],
+                             'amount': payment['amount'],
+                             'user': context.user.name})
         # All is ok: We show the payment form
-        return payment_module._show_payment_form(context, payment)
+        return payment_way._show_payment_form(context, payment)
 
 
 register_resource_class(Payments)

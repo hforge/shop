@@ -88,9 +88,6 @@ class Paybox(PaymentWay):
     end = Paybox_End()
 
     # Admin order views
-    #order_view = None
-    #order_add_view = None
-    #order_edit_view = Paybox_Record_Edit()
     order_view = None
     order_edit_view = None
 
@@ -111,11 +108,6 @@ class Paybox(PaymentWay):
 
 
     def _show_payment_form(self, context, payment):
-        # Add payment in history
-        payments = self.get_resource('payments').handler
-        payments.add_record({'ref': payment['ref'],
-                             'amount': payment['amount'],
-                             'user': context.user.name})
         # Show payment form
         return Paybox_Pay(conf=payment).GET(self, context)
 
