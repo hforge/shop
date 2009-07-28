@@ -151,6 +151,7 @@ class VirtualCategories(ShopFolder):
     class_views =  ['view']
 
     view = VirtualCategories_View()
+    comparator = VirtualCategory_Comparator()
 
     # Class to wrap categories into
     virtual_category_class = VirtualCategory
