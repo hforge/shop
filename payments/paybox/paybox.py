@@ -89,7 +89,7 @@ class Paybox(PaymentWay):
 
     # Admin order views
     order_view = None
-    order_edit_view = None
+    order_edit_view = Paybox_Record_Edit
 
     # Schema
     base_schema = {'PBX_SITE': StringFixSize(size=7),

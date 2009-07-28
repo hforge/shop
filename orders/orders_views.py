@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Unicode
+from itools.datatypes import Boolean, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.xapian import PhraseQuery
@@ -33,6 +33,7 @@ from ikaaro.table_views import Table_View
 # Import from shop
 from workflow import Order_Transitions
 from shop.payments.enumerates import PaymentWaysEnumerate
+from shop.payments.payments_views import Payments_EditablePayment
 from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.datatypes import Civilite
 from shop.utils import get_shop
@@ -133,20 +134,15 @@ class OrderView(STLForm):
         # Payment view
         payments = shop.get_resource('payments')
         payments_records = payments.get_payments_records(context, resource.name)
-        payment_way = resource.get_property('payment_mode')
-        payment_way_resource = shop.get_resource('payments/%s/' % payment_way)
-        if payments_records:
-            last_payment = payments_records[0]
-        else:
-            last_payment = None
-        record_view = payment_way_resource.order_view
+        payment_way, payment_record = payments_records[0]
+        record_view = payment_way.order_view
         if record_view:
-            payment_table = payment_way_resource.get_resource('payments').handler
+            payment_table = payment_way.get_resource('payments').handler
             record_view = record_view(
-                    payment_way=payment_way_resource,
+                    payment_way=payment_way,
                     payment_table=payment_table,
-                    record=last_payment,
-                    id_payment=last_payment.id)
+                    record=payment_record,
+                    id_payment=payment_record.id)
             namespace['payment_view'] = record_view.GET(resource, context)
         else:
             namespace['payment_view'] = None
@@ -258,7 +254,8 @@ class MyOrdersView(OrdersView):
         return Folder_BrowseContent.get_items(self, resource, context, args)
 
 
-class Order_Manage(STLForm):
+
+class Order_Manage(Payments_EditablePayment, STLForm):
 
     access = 'is_admin'
     title = MSG(u'Manage shipping')
@@ -323,32 +320,24 @@ class Order_Manage(STLForm):
         # Messages
         messages = resource.get_resource('messages')
         namespace['messages'] = messages.get_namespace_messages(context)
-        # Payments
+        # Payments (We show last payment)
         payments = shop.get_resource('payments')
         is_payed = resource.get_property('is_payed')
-        need_payment = resource.get_property('need_payment')
         payments_records = payments.get_payments_records(context, resource.name)
-        payment_way = resource.get_property('payment_mode')
-        payment_way_resource = shop.get_resource('payments/%s/' % payment_way)
-        if is_payed or not need_payment:
-            # We show last payment
-            last_payment = payments_records[0]
-            edit_record_view = payment_way_resource.order_edit_view
-            view = edit_record_view.GET(resource, payment_way_resource,
-                          last_payment, context)
-        else:
-            # We have to add a new payment
-            add_record_view = payment_way_resource.order_add_view
-            if add_record_view:
-                view = add_record_view.GET(resource, context)
-            else:
-                view = None
+        payment_way, payment_record = payments_records[0]
+        payment_table = payment_way.get_resource('payments').handler
+        view = payment_way.order_edit_view
+        view = view(
+                payment_way=payment_way,
+                payment_table=payment_table,
+                record=payment_record,
+                id_payment=payment_record.id)
+        view = view.GET(resource, context)
         namespace['payment_ways'] = SelectWidget('payment_way',
                 has_empty_option=False).to_html(PaymentWaysEnumerate,
-                                                payment_way)
+                                                resource.get_property('payment_way'))
         # XXX get_payments_items is useless since exist get_payments_records
         namespace['payment'] = {'is_payed': is_payed,
-                                'need_payment': need_payment,
                                 'history': payments.get_payments_items(context, resource.name),
                                 'view': view}
         # Shippings
@@ -404,11 +393,18 @@ class Order_Manage(STLForm):
         context.message = INFO(u'Your message has been sent')
 
 
-    action_change_payment_way_schema = {'payment_way': PaymentWaysEnumerate}
-    def action_change_payment_way(self, resource, context, form):
+    action_add_payment_way_schema = {'payment_way': PaymentWaysEnumerate}
+    def action_add_payment_way(self, resource, context, form):
         resource.set_property('payment_mode', form['payment_way'])
-        resource.set_property('need_payment', True)
-        context.message = INFO(u'Payment way has been changed')
+        # Add payment
+        shop = get_shop(resource)
+        payment_way = shop.get_resource('payments/%s' % form['payment_way'])
+        payments = payment_way.get_resource('payments').handler
+        payments.add_record({'ref': resource.name,
+                             'amount': resource.get_property('total_price'),
+                             'user': resource.get_property('customer_id')})
+        # Ok
+        context.message = INFO(u'Payment way has been added')
 
 
     action_change_shipping_way_schema = {'shipping_way': ShippingWaysEnumerate}
@@ -437,28 +433,4 @@ class Order_Manage(STLForm):
             return self.on_form_error(resource, context)
         # Do actions
         return add_record_view.add_shipping(resource, shipping_way,
-                    context, form)
-
-
-    ######################################
-    # Add payment way
-    ######################################
-
-    action_add_payment_schema = {'payment_way': String(mandatory=True)}
-    def action_add_payment(self, resource, context, form):
-        shop = get_shop(resource)
-        # We get shipping way
-        payment_way = shop.get_resource('payments/%s/' % form['payment_way'])
-        # We get add_record view
-        add_record_view = payment_way.order_add_view
-        # We get shipping way add form schema
-        schema = add_record_view.schema
-        # We get form
-        try:
-            form = process_form(context.get_form_value, schema)
-        except FormError, error:
-            context.form_error = error
-            return self.on_form_error(resource, context)
-        # Do actions
-        return add_record_view.add_payment(resource, payment_way,
                     context, form)

@@ -125,28 +125,15 @@
           </p>
         </td>
       </tr>
-      <stl:block stl:if="not payment/is_payed">
-      <tr stl:if="not payment/need_payment">
+      <tr>
         <td>
           <form method="post">
             Add a new payment way: ${payment_ways}
-            <input type="submit" name=";change_payment_way"
+            <input type="submit" name=";add_payment_way"
               value="Add"/>
           </form>
         </td>
       </tr>
-      </stl:block>
-      <stl:block stl:if="payment/need_payment">
-      <tr stl:if="not payment/is_payed">
-        <td style="background-color:#FFFBF2">
-          <form method="post">
-            Choose another payment way: ${payment_ways}
-            <input type="submit" name=";change_payment_way"
-              value="Change"/>
-          </form>
-        </td>
-      </tr>
-      </stl:block>
     </tbody>
   </table>
 

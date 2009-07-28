@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from operator import itemgetter
+
 # Import from itools
 from itools.gettext import MSG
 
@@ -54,14 +57,9 @@ class Payments(ShopFolder):
 
     def get_payments_items(self, context, ref=None):
         items = []
-        for payment_way in self.search_resources(cls=PaymentWay):
+        for payment_way, record in self.get_payments_records(context, ref):
             payments = payment_way.get_resource('payments')
-            if ref:
-                records = payments.handler.search(ref=ref)
-            else:
-                records = payments.handler.get_records()
-            for record in records:
-                items.append(payments.get_record_namespace(context, record))
+            items.append(payments.get_record_namespace(context, record))
         return items
 
 
@@ -70,10 +68,16 @@ class Payments(ShopFolder):
         for payment_way in self.search_resources(cls=PaymentWay):
             payments = payment_way.get_resource('payments')
             if ref:
-                records.extend(payments.handler.search(ref=ref))
+                for record in payments.handler.search(ref=ref):
+                    ts = payments.handler.get_record_value(record, 'ts')
+                    records.append((payment_way, record, ts))
             else:
-                records.extend(payments.handler.get_records())
-        records.reverse()
+                for record in payments.handler.get_records():
+                    records.append((payment_way, record))
+        if ref:
+            records.sort(key=itemgetter(2))
+            records.reverse()
+            records = [(x, y) for x, y, z in records]
         return records
 
 

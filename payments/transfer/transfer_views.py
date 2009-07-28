@@ -69,8 +69,7 @@ class TransferPayment_RecordEdit(STLForm):
     def action_edit_payment(self, resource, context, form):
         kw = {'state': form['state']}
         self.payment_table.update_record(self.id_payment, **kw)
-        return context.come_back(MSG_CHANGES_SAVED)
-
+        context.message = MSG_CHANGES_SAVED
 
 
 

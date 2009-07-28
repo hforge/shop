@@ -55,8 +55,38 @@ class Payments_ViewPayment(BaseView):
                     id_payment=query['id_payment']).GET(resource, context)
 
 
+class Payments_EditablePayment(object):
 
-class Payments_EditPayment(BaseForm):
+    action_edit_payment_schema = {'payment_way': PaymentWaysEnumerate(mandatory=True),
+                                  'id_payment': Integer(mandatory=True)}
+    def action_edit_payment(self, resource, context, form):
+        shop = get_shop(resource)
+        # We get shipping way
+        payment_way = shop.get_resource('payments/%s/' % form['payment_way'])
+        # We get order_edit_view
+        view = payment_way.order_edit_view
+        # We get schema
+        schema = view.schema
+        # We get form
+        try:
+            form = process_form(context.get_form_value, schema)
+        except FormError, error:
+            context.form_error = error
+            print error
+            return self.on_form_error(resource, context)
+        # Instanciate view
+        payment_table = payment_way.get_resource('payments').handler
+        record = payment_table.get_record(form['id_payment'])
+        view = view(payment_way=payment_way,
+                    payment_table=payment_table,
+                    record=record,
+                    id_payment=form['id_payment'])
+        # Do actions
+        return view.action_edit_payment(resource, context, form)
+
+
+
+class Payments_EditPayment(Payments_EditablePayment, BaseForm):
 
     access = 'is_admin'
 
@@ -76,33 +106,6 @@ class Payments_EditPayment(BaseForm):
                     payment_table=payment_table,
                     record=record,
                     id_payment=query['id_payment']).GET(resource, context)
-
-
-    action_edit_payment_schema = {'payment_way': PaymentWaysEnumerate(mandatory=True),
-                                  'id_payment': Integer(mandatory=True)}
-    def action_edit_payment(self, resource, context, form):
-        shop = get_shop(resource)
-        # We get shipping way
-        payment_way = shop.get_resource('payments/%s/' % form['payment_way'])
-        # We get order_edit_view
-        view = payment_way.order_edit_view
-        # We get schema
-        schema = view.schema
-        # We get form
-        try:
-            form = process_form(context.get_form_value, schema)
-        except FormError, error:
-            context.form_error = error
-            return self.on_form_error(resource, context)
-        # Instanciate view
-        payment_table = payment_way.get_resource('payments').handler
-        record = payment_table.get_record(form['id_payment'])
-        view = view(payment_way=payment_way,
-                    payment_table=payment_table,
-                    record=record,
-                    id_payment=form['id_payment'])
-        # Do actions
-        return view.action_edit_payment(resource, context, form)
 
 
 

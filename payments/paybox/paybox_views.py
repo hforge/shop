@@ -213,24 +213,15 @@ class Paybox_ConfirmPayment(BaseForm):
         response.set_header('Content-Type', 'text/plain')
 
 
-class Paybox_Record_Edit(STLForm):
+class Paybox_Record_Edit(STLView):
 
-    template = '/ui/shop/payments/paybox/paybox_record_edit.xml'
+    template = '/ui/shop/payments/paybox/record_edit.xml'
 
-    def GET(self, order, payment_way, record, context):
-        # Get the template
-        template = self.get_template(order, context)
-        # Get the namespace
-        namespace = self.get_namespace(order, payment_way, record, context)
-        # Ok
-        return stl(template, namespace)
-
-
-    def get_namespace(self, order, payment_way, record, context):
+    def get_namespace(self, resource, context):
         namespace = {}
-        get_val = payment_way.get_resource('payments').handler.get_record_value
-        for key in payment_way.get_resource('payments').handler.record_schema:
-            namespace[key] = get_val(record, key)
+        get_record_value = self.payment_table.get_record_value
+        for key in self.payment_table.record_schema:
+            namespace[key] = get_record_value(self.record, key)
         namespace['advance_state'] = PayboxStatus.get_value(
                                           namespace['advance_state'])
         return namespace

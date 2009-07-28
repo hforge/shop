@@ -172,7 +172,6 @@ class Order(AccessControl, WorkflowAware, ShopFolder):
         # States
         schema['is_payed'] = Boolean(default=False)
         schema['is_sent'] = Boolean(default=False)
-        schema['need_payment'] = Boolean(default=True)
         return schema
 
 
@@ -268,12 +267,10 @@ class Order(AccessControl, WorkflowAware, ShopFolder):
 
     def set_as_not_payed(self, context):
         self.set_property('is_payed', False)
-        self.set_property('need_payment', False)
 
 
     def set_as_payed(self, context):
         self.set_property('is_payed', True)
-        self.set_property('need_payment', False)
         self.generate_pdf_bill(context)
         try:
             self.make_transition('open_to_payment_ok')

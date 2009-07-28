@@ -8,7 +8,7 @@
     <input type="hidden" name="payment_way" value="${payment_way/value}"/>
     <input type="hidden" name="id_payment" value="${id_payment/value}"/>
 
-    <h2 class="${state/class}">Payment validated ?</h2>
+    <h2 class="${state/class}">Payment by transfer validated ?</h2>
     <label for="state-yes">Yes</label>
     <input id="state-yes" name="state" type="radio" value="1"
       checked="checked" stl:if="state/value"/>
