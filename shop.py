@@ -31,6 +31,7 @@ from payments import Payments
 from products import Products, Product, ProductModels
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
+from shop_payments import ShopPayments
 from shop_views import Shop_Addresses, Shop_ChooseAddress
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
@@ -56,6 +57,7 @@ class Shop(ShopFolder):
     ####################################
 
     product_class = Product
+    payments_class = ShopPayments
 
     ####################################
     ## Views
@@ -97,7 +99,8 @@ class Shop(ShopFolder):
         Categories._make_resource(Categories, folder, '%s/categories' % name,
                                 title={'en': u'Categories'})
         # Payments module
-        Payments._make_resource(Payments, folder, '%s/payments' % name,
+        cls.payments_class._make_resource(cls.payments_class, folder,
+                                '%s/payments' % name,
                                 title={'en': u'Payment module'})
         # Products
         Products._make_resource(Products, folder, '%s/products' % name,
