@@ -108,4 +108,31 @@ class Payments(ShopFolder):
         return payment_way._show_payment_form(context, payment)
 
 
+
+    ######################
+    # XXX Confirmation
+    ######################
+
+    mail_ok = MSG(u"""
+    Hi, a payment has been done on our website. \n\n
+    ------------------------
+    Id payment: {ref}
+    Amount: {amount} €
+    State: ${advance_state}
+    ------------------------
+    \n\n
+    """)
+
+    def send_confirmation_mail(self):
+        # TODO
+        pass
+
+
+    def update_payment_state(self, ref):
+        pass
+
+
+
+
+
 register_resource_class(Payments)
