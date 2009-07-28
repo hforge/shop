@@ -89,6 +89,21 @@
   </table>
 
 
+  <table cellpadding="0" cellspacing="0" class="order-browse" stl:if="payment_view">
+    <thead>
+      <tr>
+        <th colspan="2">Payments</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="width:200px;">
+          ${payment_view}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
   <table cellpadding="0" cellspacing="0" class="order-browse">
     <thead>
       <tr>
@@ -116,10 +131,6 @@
       </tr>
     </tbody>
   </table>
-
-  <stl:block stl:if="payment_view">
-    ${payment_view}
-  </stl:block>
 
   <stl:block stl:if="shipping_view">
     ${shipping_view}

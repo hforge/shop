@@ -140,10 +140,14 @@ class OrderView(STLForm):
         else:
             last_payment = None
         record_view = payment_way_resource.order_view
-        print 'ok', record_view
         if record_view:
-            namespace['payment_view'] = record_view.GET(resource,
-                payment_way_resource, last_payment, context)
+            payment_table = payment_way_resource.get_resource('payments').handler
+            record_view = record_view(
+                    payment_way=payment_way_resource,
+                    payment_table=payment_table,
+                    record=last_payment,
+                    id_payment=last_payment.id)
+            namespace['payment_view'] = record_view.GET(resource, context)
         else:
             namespace['payment_view'] = None
         # Shipping view
