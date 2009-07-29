@@ -17,6 +17,7 @@
 # Import from itools
 from itools.datatypes import Email, PathDataType, Unicode
 from itools.gettext import MSG
+from itools.stl import stl
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
@@ -148,6 +149,35 @@ class Shop(ShopFolder):
 
     def get_document_types(self):
         return []
+
+    ##############################
+    # API
+    ##############################
+
+    def send_email(self, context, to_addr, subject, from_addr=None, text=None,
+                   send_in_html=False, add_signature=True,
+                   encoding='utf-8', subject_with_host=True,
+                   return_receipt=False):
+        root = context.root
+        # From_addr
+        if from_addr is None:
+            from_addr = self.get_property('from_addr')
+        # Build HTML
+        html = None
+        if send_in_html is True:
+            resource = self.get_resource('/ui/shop/mail.xhtml')
+            namespace = {'website_uri': context.uri.authority,
+                         'subject': subject,
+                         'body': text,
+                         'signature': self.get_property('shop_signature')}
+            html = unicode(stl(resource, namespace, mode='xhtml'))
+        # Add signature
+        text += '\n\n-- \n%s' % self.get_property('shop_signature')
+        # Send mail
+        root.send_email(to_addr, subject, from_addr, text, html, encoding,
+                        subject_with_host, return_receipt)
+
+
 
     ##############################
     # XXX To deplace

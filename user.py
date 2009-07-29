@@ -71,11 +71,11 @@ class ShopUser(User):
 
     def send_register_confirmation(self, context):
         shop = get_shop(context.resource)
-        from_addr = shop.get_property('from_addr')
-        context.root.send_email(self.get_property('email'),
-                                subject=self.mail_subject_template.gettext(),
-                                from_addr=from_addr,
-                                text=self.mail_body_template.gettext())
+        shop.send_email(context,
+                        to_addr=self.get_property('email'),
+                        subject=self.mail_subject_template.gettext(),
+                        text=self.mail_body_template.gettext(),
+                        send_in_html=True)
 
 
 register_resource_class(ShopUser)
