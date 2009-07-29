@@ -48,6 +48,9 @@ from payments import PaymentWaysEnumerate
 from shop_utils_views import Cart_View, Shop_Progress
 
 
+CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
+
+
 class Shop_View(STLView):
     """ Administration view"""
 
@@ -518,6 +521,14 @@ class Shop_ShowRecapitulatif(STLForm):
     schema = {'payment': PaymentWaysEnumerate(mandatory=True),
               'cgv': Boolean(mandatory=True)}
 
+    def GET(self, resource, context):
+        cart = ProductCart(context)
+        # Check if cart is valid
+        if not cart.is_valid():
+            return context.come_back(CART_ERROR, goto='/')
+        return STLForm.GET(self, resource, context)
+
+
     def get_namespace(self, resource, context):
         abspath = resource.get_abspath()
         cart = ProductCart(context)
@@ -546,11 +557,10 @@ class Shop_ShowRecapitulatif(STLForm):
 
 
     def action(self, resource, context, form):
-        # Check if cart is valid
         cart = ProductCart(context)
+        # Check if cart is valid
         if not cart.is_valid():
-            msg = MSG(u'Invalid cart')
-            return context.come_back(msg, goto='/')
+            return context.come_back(CART_ERROR, goto='/')
         # Calcul total price
         products = resource.get_resource('products')
         total_price = decimal(0)

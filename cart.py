@@ -232,8 +232,9 @@ class ProductCart(object):
         To be valid a cart must contains:
           - shipping id, addresses id, products
         """
-        return (self.shipping['name'] is not None and
+        return (self.shipping and self.shipping['name'] is not None and
                 len(self.products) > 0 and
+                self.addresses and
                 self.addresses['delivery_address'] is not None)
 
 
