@@ -28,6 +28,7 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
+from payment_way_views import PaymentWay_RecordView
 from shop.editable import Editable
 from shop.utils import ShopFolder
 
@@ -58,8 +59,6 @@ class PaymentWayTable(Table):
     # Views
     add_record = None
     edit_record = None
-
-    record_order_view = None
 
 
     def get_record_namespace(self, context, record):
@@ -101,7 +100,8 @@ class PaymentWay(Editable, ShopFolder):
     payment_table = PaymentWayTable
 
     # Backoffice views
-    order_edit_view = None
+    order_view = PaymentWay_RecordView
+    order_edit_view = PaymentWay_RecordView
 
     @classmethod
     def get_metadata_schema(cls):

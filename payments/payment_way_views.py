@@ -18,6 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import Unicode, PathDataType, Boolean
 from itools.gettext import MSG
+from itools.web import STLView
 
 # Import from ikaaro
 from ikaaro import messages
@@ -66,3 +67,14 @@ class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
             resource.set_property(key, form[key], language=language)
         Editable_Edit.action(self, resource, context, form)
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
+
+
+
+class PaymentWay_RecordView(STLView):
+
+
+    template = '/ui/shop/payments/payment_way_record_view.xml'
+
+    def get_namespace(self, resource, context):
+        get_record_value = self.payment_table.get_record_value
+        return {'is_ok': get_record_value(self.record, 'state')}
