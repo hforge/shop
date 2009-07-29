@@ -5,7 +5,6 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <b>
-    Your order has been recorded !<br/>
     To finalize your purchase, you have to send a check. <br/>
     Here all details:
   </b>
@@ -20,11 +19,4 @@
     <dt>Address:</dt>
     <dd>${address}</dd>
   </dl>
-
-  <b>
-    You can see your order details
-    <a href="./orders/${ref}">here</a>
-  </b>
-
-
 </stl:block>
