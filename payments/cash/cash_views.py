@@ -37,7 +37,8 @@ class CashPayment_RecordView(STLView):
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
-        return {'amount': get_record_value(self.record, 'amount'),
+        return {'is_ok': get_record_value(self.record, 'state'),
+                'amount': get_record_value(self.record, 'amount'),
                 'ref': get_record_value(self.record, 'ref'),
                 'address': self.payment_way.get_property('address')}
 

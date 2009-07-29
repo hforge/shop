@@ -4,20 +4,27 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>To finalize your order you have to send a check</h1>
+  <stl:block stl:if="not is_ok">
+    <h1>To finalize your order you have to send a check</h1>
 
-  Please send a mail with this informations:
-  <p>
-    <dl>
-      <dt>Order reference:</dt>
-      <dd>${ref}</dd>
-      <dt>Total price:</dt>
-      <dd>${amount} €</dd>
-      <dt>A l'ordre de:</dt>
-      <dd>${to}</dd>
-      <dt>Address:</dt>
-      <dd>${address}</dd>
-    </dl>
+    Please send a mail with this informations:
+    <p>
+      <dl>
+        <dt>Order reference:</dt>
+        <dd>${ref}</dd>
+        <dt>Total price:</dt>
+        <dd>${amount} €</dd>
+        <dt>A l'ordre de:</dt>
+        <dd>${to}</dd>
+        <dt>Address:</dt>
+        <dd>${address}</dd>
+      </dl>
+    </p>
+  </stl:block>
+
+  <p stl:if="is_ok">
+    Your payment by check has been validated.<br/>
   </p>
+
 
 </stl:block>

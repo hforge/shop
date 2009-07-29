@@ -38,6 +38,7 @@ class TransferPayment_RecordView(STLView):
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
         return {'amount': get_record_value(self.record, 'amount'),
+                'is_ok': get_record_value(self.record, 'state'),
                 'ref': get_record_value(self.record, 'ref'),
                 'RIB': self.payment_way.get_property('RIB'),
                 'IBAN': self.payment_way.get_property('IBAN')}

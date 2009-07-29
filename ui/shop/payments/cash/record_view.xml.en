@@ -4,11 +4,17 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  To finalize your payment:<br/>
+  <stl:block stl:if="not is_ok">
+    To finalize your payment:<br/>
 
-  Ref payment: ${ref}<br/>
-  Amount: ${amount} €<br/>
-  Our address:<br/>
-  ${address}
+    Ref payment: ${ref}<br/>
+    Amount: ${amount} €<br/>
+    Our address:<br/>
+    ${address}
+  </stl:block>
+
+  <p stl:if="is_ok">
+    Your payment has been validated.<br/>
+  </p>
 
 </stl:block>
