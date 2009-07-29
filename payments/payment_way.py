@@ -78,13 +78,6 @@ class PaymentWayTable(Table):
         namespace['user_email'] = user.get_property('email')
         # State
         namespace['advance_state'] = None
-        # HTML
-        if self.record_order_view:
-            view = self.record_order_view()
-            view.record = record
-            namespace['html'] = view.GET(self, context)
-        else:
-            namespace['html'] = None
         # Timestamp
         accept = context.accept_language
         value = self.handler.get_record_value(record, 'ts')
