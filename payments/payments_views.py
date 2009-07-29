@@ -21,7 +21,7 @@ from operator import itemgetter
 from itools.datatypes import Integer
 from itools.gettext import MSG
 from itools.xml import XMLParser
-from itools.web import BaseView, BaseForm, ERROR, FormError
+from itools.web import BaseView, BaseForm, ERROR, FormError, STLForm
 from itools.web.views import process_form
 
 # Import from ikaaro
@@ -31,28 +31,6 @@ from ikaaro.views import BrowseForm
 from shop.utils import get_shop
 from enumerates import PaymentWaysEnumerate
 from payment_way import PaymentWay
-
-
-class Payments_ViewPayment(BaseView):
-
-    access = 'is_admin'
-
-    query_schema = {'payment_way': PaymentWaysEnumerate,
-                    'id_payment': Integer}
-
-    def GET(self, resource, context):
-        query = context.query
-        payment_way = resource.get_resource(query['payment_way'])
-        payment_way_table = payment_way.get_resource('payments')
-        view = payment_way.order_view
-        if view is None:
-            return context.come_back(ERROR(u'Unavailable view'))
-        payment_table = payment_way.get_resource('payments').handler
-        record = payment_table.get_record(query['id_payment'])
-        return view(payment_way=payment_way,
-                    payment_table=payment_table,
-                    record=record,
-                    id_payment=query['id_payment']).GET(resource, context)
 
 
 class Payments_EditablePayment(object):
@@ -86,26 +64,46 @@ class Payments_EditablePayment(object):
 
 
 
-class Payments_EditPayment(Payments_EditablePayment, BaseForm):
+class Payments_ManagePayment(Payments_EditablePayment, STLForm):
 
     access = 'is_admin'
 
     query_schema = {'payment_way': PaymentWaysEnumerate,
                     'id_payment': Integer}
 
-    def GET(self, resource, context):
+    template = '/ui/shop/payments/payment_manage.xml'
+
+    def get_namespace(self, resource, context):
+        root = context.root
         query = context.query
+        namespace = {}
+        # Record informations
         payment_way = resource.get_resource(query['payment_way'])
-        payment_way_table = payment_way.get_resource('payments')
-        view = payment_way.order_edit_view
-        if view is None:
-            return context.come_back(ERROR(u'Unavailable view'))
         payment_table = payment_way.get_resource('payments').handler
         record = payment_table.get_record(query['id_payment'])
-        return view(payment_way=payment_way,
-                    payment_table=payment_table,
-                    record=record,
-                    id_payment=query['id_payment']).GET(resource, context)
+        # Customer informations
+        users = root.get_resource('users')
+        user = payment_table.get_record_value(record, 'user')
+        customer = users.get_resource(user)
+        namespace['customer'] = {'id': user,
+                                 'title': customer.get_title(),
+                                 'email': customer.get_property('email'),
+                                 'href': resource.get_pathto(customer)}
+        # View
+        record_view = payment_way.order_view
+        namespace['record_view'] = record_view(
+            payment_way=payment_way,
+            payment_table=payment_table,
+            record=record,
+            id_payment=query['id_payment']).GET(resource, context)
+        # Edit
+        record_edit = payment_way.order_edit_view
+        namespace['record_edit'] = record_edit(
+            payment_way=payment_way,
+            payment_table=payment_table,
+            record=record,
+            id_payment=query['id_payment']).GET(resource, context)
+        return namespace
 
 
 
@@ -153,11 +151,8 @@ class Payments_History_View(BrowseForm):
 
 
     buttons_template = """
-              <a href=";view_payment?payment_way={way}&amp;id_payment={id}">
+              <a href=";manage_payment?payment_way={way}&amp;id_payment={id}">
                 <img src="/ui/icons/16x16/view.png"/>
-              </a>
-              <a href=";edit_payment?payment_way={way}&amp;id_payment={id}">
-                <img src="/ui/icons/16x16/edit.png"/>
               </a>
                        """
 
