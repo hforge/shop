@@ -5,7 +5,7 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <div id="products">
-    <form method="GET" action="./;comparator">
+    <form stl:if="products" method="GET" action="./;comparator">
       <table cellpadding="0" cellspacing="0">
         <tr>
           <td>
