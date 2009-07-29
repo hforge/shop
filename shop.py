@@ -155,7 +155,7 @@ class Shop(ShopFolder):
     ##############################
 
     def send_email(self, context, to_addr, subject, from_addr=None, text=None,
-                   send_in_html=False, add_signature=True,
+                   html=None, send_in_html=False, add_signature=True,
                    encoding='utf-8', subject_with_host=True,
                    return_receipt=False):
         root = context.root
@@ -168,7 +168,7 @@ class Shop(ShopFolder):
             resource = self.get_resource('/ui/shop/mail.xhtml')
             namespace = {'website_uri': context.uri.authority,
                          'subject': subject,
-                         'body': text,
+                         'body': html or text,
                          'signature': self.get_property('shop_signature')}
             html = unicode(stl(resource, namespace, mode='xhtml'))
         # Add signature
