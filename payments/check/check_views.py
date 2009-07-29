@@ -104,6 +104,8 @@ class CheckPayment_RecordEdit(STLForm):
             kw[key] = form[key]
         # Set payment as payed ?
         kw['state'] = form['advance_state'] == 'success'
+        if kw['state']:
+            self.payment_way.set_payment_as_ok(self.id_payment, context)
         # Update record
         self.payment_table.update_record(self.id_payment, **kw)
         context.message = MSG_CHANGES_SAVED

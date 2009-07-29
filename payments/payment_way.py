@@ -120,6 +120,10 @@ class PaymentWay(Editable, ShopFolder):
         return ShopFolder._get_catalog_values(self)
 
 
+    def set_payment_as_ok(self, id_record, context):
+        self.parent.set_payment_as_ok(self, id_record, context)
+
+
 
 register_resource_class(PaymentWay)
 register_resource_class(PaymentWayTable)

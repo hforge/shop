@@ -67,6 +67,8 @@ class CashPayment_RecordEdit(STLForm):
 
     def action_edit_payment(self, resource, context, form):
         kw = {'state': form['state']}
+        if kw['state']:
+            self.payment_way.set_payment_as_ok(self.id_payment, context)
         self.payment_table.update_record(self.id_payment, **kw)
         context.message = MSG_CHANGES_SAVED
 

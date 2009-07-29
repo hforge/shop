@@ -113,26 +113,37 @@ class Payments(ShopFolder):
 
 
     ######################
-    # XXX Confirmation
+    # Payment validation
     ######################
 
-    mail_ok = MSG(u"""
-    Hi, a payment has been done on our website. \n\n
-    ------------------------
-    Id payment: {ref}
-    Amount: {amount} €
-    State: ${advance_state}
-    ------------------------
-    \n\n
-    """)
+    mail_subject_template = MSG(u"Payment validated")
 
-    def send_confirmation_mail(self):
-        # TODO
-        pass
+    mail_body_template = MSG(u"Hi, your payment has been validated.\n\n"
+                             u"------------------------\n"
+                             u"Id payment: {payment_way}-{id}\n"
+                             u"Ref: {ref}\n"
+                             u"Amount: {amount} €\n"
+                             u"------------------------\n"
+                             u"\n\n")
 
 
-    def update_payment_state(self, ref):
-        pass
+    def set_payment_as_ok(self, payment_way, id_record, context):
+        self.send_confirmation_mail(payment_way, id_record, context)
+
+
+    def send_confirmation_mail(self, payment_way, id_record, context):
+        root = context.root
+        payments_table = payment_way.get_resource('payments').handler
+        record = payments_table.get_record(id_record)
+        user = payments_table.get_record_value(record, 'user')
+        user = root.get_resource('users/%s' % user)
+        recipient = user.get_property('email')
+        subject = self.mail_subject_template.gettext()
+        text = self.mail_body_template.gettext(id=id_record,
+            payment_way=payment_way.name,
+            ref=payments_table.get_record_value(record, 'ref'),
+            amount=payments_table.get_record_value(record, 'amount'))
+        root.send_email(recipient, subject, text=text)
 
 
 
