@@ -36,7 +36,7 @@ class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
 
     schema = merge_dicts(Editable_Edit.schema,
                          title=Unicode(mandatory=True),
-                         logo=PathDataType(mandatory=True),
+                         logo=PathDataType(mandatory=True, multilingual=True),
                          data=HTMLBody(mandatory=True),
                          enabled=Boolean(mandatory=True))
 
