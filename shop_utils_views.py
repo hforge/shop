@@ -60,9 +60,9 @@ class Cart_View(STLView):
                  'without_tax': decimal(0)}
         for product_cart in cart.products:
             # Get product
-            product = products.get_resource(product_cart['name'])
+            product = products.get_resource(product_cart['name'], soft=True)
             # Check product is buyable
-            if not product.is_buyable():
+            if not product or not product.is_buyable():
                 continue
             quantity = product_cart['quantity']
             # Weight
