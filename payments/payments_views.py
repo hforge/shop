@@ -171,7 +171,7 @@ class Payments_History_View(BrowseForm):
 
 class Payments_View(BrowseForm):
 
-    title = MSG(u'View')
+    title = MSG(u'Configure payment ways')
     access = 'is_admin'
 
     batch_msg1 = MSG(u"There is 1 payment mode.")
@@ -179,23 +179,15 @@ class Payments_View(BrowseForm):
 
 
     table_columns = [
-        ('logo', None),
-        ('name', MSG(u'Name')),
         ('title', MSG(u'Title')),
-        ('description', MSG(u'Description')),
         ('enabled', MSG(u'Enabled ?')),
         ]
 
     def get_items(self, resource, context):
-        """ Here we concatanate payments off all payment's mode """
         items = []
         for payment_way in resource.search_resources(cls=PaymentWay):
             name = payment_way.name
-            logo = payment_way.get_property('logo')
-            kw = {'name': (name, name),
-                  'title': (payment_way.get_title(), name),
-                  'description': payment_way.get_property('description'),
-                  'logo': XMLParser('<img src="%s"/>' % logo),
+            kw = {'title': (payment_way.get_title(), name),
                   'enabled': payment_way.get_property('enabled')}
             items.append(kw)
         return items
