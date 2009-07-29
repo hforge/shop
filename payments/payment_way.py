@@ -56,11 +56,9 @@ class PaymentWayTable(Table):
         TextWidget('description', title=MSG(u'Description'))]
 
     # Views
-    # XXX Sylvain
-    # add_record = None
+    add_record = None
     edit_record = None
 
-    # XXX Sylvain, to delete
     record_order_view = None
 
 
