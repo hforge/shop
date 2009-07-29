@@ -229,11 +229,8 @@ class Shop_Register(RegisterForm):
         # Set the role
         site_root.set_user_role(user.name, 'guests')
 
-        # TODO Send confirmation email
-        #subject = MSG(u"Inscription confirmation.")
-        #body = MSG(u"Inscription")
-        #context.root.send_email(email, subject.gettext(),
-        #                        text=body.gettext())
+        # Send confirmation email
+        user.send_register_confirmation(context)
 
         # Set cookie
         user.set_auth_cookie(context, form['password'])

@@ -24,9 +24,10 @@ from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.registry import register_resource_class
 from ikaaro.user import User
 
-# Import from project
+# Import from shop
 from datatypes import Civilite
 from user_views import SHOPUser_EditAccount
+from utils import get_shop
 
 
 class ShopUser(User):
@@ -63,6 +64,18 @@ class ShopUser(User):
                 value = value.strip()
             self.set_property(key, value)
 
+
+    mail_subject_template = MSG(u"Inscription confirmation.")
+    mail_body_template = MSG(u"Your inscription has been validated")
+
+
+    def send_register_confirmation(self, context):
+        shop = get_shop(context.resource)
+        from_addr = shop.get_property('from_addr')
+        context.root.send_email(self.get_property('email'),
+                                subject=self.mail_subject_template.gettext(),
+                                from_addr=from_addr,
+                                text=self.mail_body_template.gettext())
 
 
 register_resource_class(ShopUser)
