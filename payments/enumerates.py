@@ -46,7 +46,12 @@ class PaymentWaysEnumerate(Enumerate):
         shop = get_shop(context.resource)
         payments = shop.get_resource('payments')
         for mode in payments.search_resources(cls=PaymentWay):
+            logo = mode.get_resource(mode.get_property('logo'))
+            if logo:
+                logo = context.resource.get_pathto(logo)
             options.append({'name': mode.name,
                             'value': mode.get_title(),
+                            'description': mode.get_xhtml_data(),
+                            'logo': logo,
                             'enabled': mode.get_property('enabled')})
         return options

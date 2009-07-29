@@ -51,30 +51,35 @@
 
 
   <form id="form-order" name="form-order" method="POST">
-    <h1 class="payment-process">Terms of service</h1>
+    <h1 class="payment-process">
+      Terms of service
+    </h1>
 
     <p>
       <input type="checkbox" id="cgv" name="cgv" value="1"/>
-      <label for="cgv" class="${cgv/class}">
+      <label for="cgv">
         I agree with the terms of service and I adhere to them unconditionally.
       </label>
       <a href="./terms-and-conditions-of-use" target="blank">(Read)</a>
       <br/>
     </p>
 
-    <h1 class="payment-process">Payment</h1>
-
-    <p class="${payment/class}">Please choose a payment mode</p>
+    <h1 class="payment-process">
+      Please choose a payment mode
+    </h1>
 
     <table cellpadding="5px" cellspacing="0">
       <tr stl:repeat="option payment/value" stl:if="option/enabled">
-        <td>
+        <td valign="top">
           <input type="radio" name="${payment/name}"
             id="payment-${option/name}" value="${option/name}"/>
-          ${option/value}
         </td>
-        <td>
-          <img src="./payments/${option/name}/logo2.png/;download"/><br/>
+        <td valign="top">
+          ${option/value}<br/><br/>
+          <img stl:if="option/logo" src="${option/logo}/;download"/>
+        </td>
+        <td style="width:400px;vertical-align:top;">
+          ${option/description}
         </td>
       </tr>
     </table>
