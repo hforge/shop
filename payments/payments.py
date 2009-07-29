@@ -26,7 +26,7 @@ from ikaaro.registry import register_resource_class
 
 # Import from payments
 from payments_views import Payments_View, Payments_History_View
-from payments_views import Payments_ManagePayment
+from payments_views import Payments_ManagePayment, Payments_AddPayment
 
 # Import from shop
 from payment_way import PaymentWay
@@ -43,8 +43,8 @@ class Payments(ShopFolder):
     # Views
     view = Payments_View()
     history = Payments_History_View()
-
     manage_payment = Payments_ManagePayment()
+    add_payment = Payments_AddPayment()
 
 
     def get_document_types(self):

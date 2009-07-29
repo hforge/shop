@@ -6,6 +6,12 @@
 
   <h1>Search</h1>
 
+  <a href=";add_payment" style="float:right">
+    Add a new payment.
+    <img src="/ui/shop/images/plus.png"/>
+  </a>
+  <br/>
+
   <form method="GET">
     <table class="order-browse" cellpadding="5" cellspacing="0">
       <tbody>
@@ -52,7 +58,6 @@
       </tbody>
     </table>
   </form>
-
 
   <h1>Results</h1>
 

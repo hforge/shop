@@ -18,7 +18,7 @@
 from operator import itemgetter
 
 # Import from itools
-from itools.datatypes import String, Boolean, Integer
+from itools.datatypes import String, Boolean, Integer, Decimal, Unicode
 from itools.gettext import MSG
 from itools.xml import XMLParser
 from itools.web import BaseView, BaseForm, ERROR, FormError, STLForm
@@ -26,6 +26,8 @@ from itools.web.views import process_form
 from itools.xapian import PhraseQuery
 
 # Import from ikaaro
+from ikaaro.forms import AutoForm, SelectWidget
+from ikaaro.forms import BooleanCheckBox, TextWidget, MultilineWidget
 from ikaaro.views import BrowseForm, SearchForm
 
 # Import from shop
@@ -216,3 +218,40 @@ class Payments_View(BrowseForm):
 
     def get_item_value(self, resource, context, item, column):
         return item[column]
+
+
+
+class Payments_AddPayment(AutoForm):
+
+    access = 'is_admin'
+    title = MSG(u'Add a new payment')
+
+    schema = {
+        'payment_way': PaymentWaysEnumerate(mandatory=True),
+        'ref': String(mandatory=True),
+        'user': String,
+        'state': Boolean,
+        'amount': Decimal(mandatory=True),
+        'description': Unicode}
+
+    widgets = [
+        SelectWidget('payment_way', title=MSG(u'Payment way')),
+        TextWidget('ref', title=MSG(u'Reference')),
+        TextWidget('user', title=MSG(u'User Id')),
+        BooleanCheckBox('state', title=MSG(u'Payed ?')),
+        TextWidget('amount', title=MSG(u'Amount (€)')),
+        MultilineWidget('description', title=MSG(u'Description')),
+        ]
+
+    def action(self, resource, context, form):
+        root = context.root
+        if root.get_resource('users/%s' % form['user'], soft=True) is None:
+            context.message = ERROR(u'User do not exist')
+            return
+        shop = get_shop(resource)
+        payments_table = shop.get_resource(
+            'payments/%s/payments' % form['payment_way']).handler
+        del form['payment_way']
+        payments_table.add_record(form)
+        return context.come_back(MSG(u'New payment added !'), goto='./')
+
