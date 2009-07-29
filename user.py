@@ -51,7 +51,7 @@ class ShopUser(User):
 
     def save_form(self, schema, form):
         for key in schema:
-            if key.startswith(('password', 'email')):
+            if key.startswith('password'):
                 continue
             elif key not in self.get_metadata_schema():
                 continue
