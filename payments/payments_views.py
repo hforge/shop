@@ -18,14 +18,15 @@
 from operator import itemgetter
 
 # Import from itools
-from itools.datatypes import Integer
+from itools.datatypes import String, Boolean, Integer
 from itools.gettext import MSG
 from itools.xml import XMLParser
 from itools.web import BaseView, BaseForm, ERROR, FormError, STLForm
 from itools.web.views import process_form
+from itools.xapian import PhraseQuery
 
 # Import from ikaaro
-from ikaaro.views import BrowseForm
+from ikaaro.views import BrowseForm, SearchForm
 
 # Import from shop
 from shop.utils import get_shop
@@ -50,7 +51,6 @@ class Payments_EditablePayment(object):
             form = process_form(context.get_form_value, schema)
         except FormError, error:
             context.form_error = error
-            print error
             return self.on_form_error(resource, context)
         # Instanciate view
         payment_table = payment_way.get_resource('payments').handler
@@ -107,7 +107,7 @@ class Payments_ManagePayment(Payments_EditablePayment, STLForm):
 
 
 
-class Payments_History_View(BrowseForm):
+class Payments_History_View(SearchForm):
     """
     View that list history payments.
     """
@@ -117,6 +117,13 @@ class Payments_History_View(BrowseForm):
 
     batch_msg1 = MSG(u"There is 1 payment.")
     batch_msg2 = MSG(u"There are {n} payments.")
+
+    search_template = '/ui/shop/payments/history_view_search.xml'
+    search_schema = {
+        'ref': String,
+        'user': String,
+        'state': Boolean,
+    }
 
 
     table_columns = [
@@ -132,8 +139,20 @@ class Payments_History_View(BrowseForm):
         ('buttons', None),
         ]
 
+
+    def get_search_namespace(self, resource, context):
+        namespace = {}
+        for key in self.search_schema.keys():
+            namespace[key] = context.query[key]
+        return namespace
+
+
     def get_items(self, resource, context):
-        return resource.get_payments_items(context)
+        queries = []
+        for key in self.search_schema.keys():
+            if context.query[key]:
+                queries.append(PhraseQuery(key, context.query[key]))
+        return resource.get_payments_items(context, queries=queries)
 
 
     def sort_and_batch(self, resource, context, items):

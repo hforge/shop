@@ -36,8 +36,8 @@ class PaymentWayBaseTable(BaseTable):
 
     record_schema = {
         'ref': String(Unique=True, is_indexed=True),
-        'user': String,
-        'state': Boolean,
+        'user': String(is_indexed=True),
+        'state': Boolean(is_indexed=True),
         'amount': Decimal,
         'description': Unicode}
 

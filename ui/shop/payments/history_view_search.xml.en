@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h1>Search</h1>
+
+  <form method="GET">
+    <table class="order-browse" cellpadding="5" cellspacing="0">
+      <tbody>
+        <tr>
+          <th>
+            Payment validated ?
+          </th>
+          <td>
+            <label for="state-yes">Yes</label>
+            <input id="state-yes" name="state" type="radio" value="1"
+              checked="checked" stl:if="state"/>
+            <input id="state-yes" name="state" type="radio" value="1"
+              stl:if="not state"/>
+
+            <label for="state-no">No</label>
+            <input id="state-no" name="state" type="radio" value="0"
+              checked="checked" stl:if="not state"/>
+            <input id="state-no" name="state" type="radio" value="0"
+              stl:if="state"/>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Ref
+          </th>
+          <td>
+            <input type="text" name="ref" value="${ref}"/>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Customer Id
+          </th>
+          <td>
+            <input type="text" name="user" value="${user}" size="4"/>
+          </td>
+        </tr>
+        <tr>
+          <td/>
+          <td>
+            <input class="button_ok" type="submit" name="filter" value="Filter"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+
+  <h1>Results</h1>
+
+</stl:block>

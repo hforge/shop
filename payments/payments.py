@@ -19,6 +19,7 @@ from operator import itemgetter
 
 # Import from itools
 from itools.gettext import MSG
+from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
@@ -54,29 +55,32 @@ class Payments(ShopFolder):
     # Public API
     ######################
 
-    def get_payments_items(self, context, ref=None):
+    def get_payments_items(self, context, ref=None, queries=[]):
         items = []
-        for payment_way, record in self.get_payments_records(context, ref):
-            payments = payment_way.get_resource('payments')
+        for way, record in self.get_payments_records(context, ref, queries):
+            payments = way.get_resource('payments')
             items.append(payments.get_record_namespace(context, record))
         return items
 
 
-    def get_payments_records(self, context, ref=None):
+    def get_payments_records(self, context, ref=None, queries=[]):
         records = []
+        if ref:
+            queries.append(PhraseQuery('ref', ref))
         for payment_way in self.search_resources(cls=PaymentWay):
             payments = payment_way.get_resource('payments')
-            if ref:
-                for record in payments.handler.search(ref=ref):
+            if queries:
+                for record in payments.handler.search(AndQuery(*queries)):
                     ts = payments.handler.get_record_value(record, 'ts')
                     records.append((payment_way, record, ts))
             else:
                 for record in payments.handler.get_records():
-                    records.append((payment_way, record))
-        if ref:
-            records.sort(key=itemgetter(2))
-            records.reverse()
-            records = [(x, y) for x, y, z in records]
+                    ts = payments.handler.get_record_value(record, 'ts')
+                    records.append((payment_way, record, ts))
+        # Sort by ts
+        records.sort(key=itemgetter(2))
+        records.reverse()
+        records = [(x, y) for x, y, z in records]
         return records
 
 
