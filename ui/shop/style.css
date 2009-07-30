@@ -399,3 +399,17 @@ table.cart td{
   width: 17px;
   height: 27px;
 }
+
+/* Categories views */
+#list-products{
+  width: 100%;
+}
+
+.product-view-box{
+  float: left;
+  padding: 20px;
+  margin: 20px;
+  width: 200px;
+  height: 200px;
+  background: #FFF;
+}
