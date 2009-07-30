@@ -41,7 +41,7 @@ from shop.editable import Editable_View, Editable_Edit
 class Product_NewInstance(NewInstance):
 
     schema = {
-        'name': String(mandatory=True),
+        'name': String,
         'title': Unicode(mandatory=True),
         'product_model': ProductModelsEnumerate}
 
