@@ -29,20 +29,19 @@ from addresses_views import Addresses_Book
 from datatypes import Civilite
 from user_views import ShopUser_Manage, SHOPUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
+from user_views import ShopUser_OrdersView
 from utils import get_shop
 
 
 class ShopUser(User):
 
     class_views = ['manage', 'profile', 'addresses_book', 'edit_account',
-                   'my_orders', 'edit_preferences', 'edit_password']
+                   'orders_view', 'edit_preferences', 'edit_password']
 
     # Views
     manage = ShopUser_Manage()
     edit_account = SHOPUser_EditAccount()
-    my_orders = GoToSpecificDocument(specific_document='../../shop/orders',
-                     icon='tasks.png', title=MSG(u'My orders'),
-                     description=MSG(u'Orders history in the shop'))
+    orders_view = ShopUser_OrdersView()
 
     # Addresses views
     addresses_book = Addresses_Book()

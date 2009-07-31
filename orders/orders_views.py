@@ -204,7 +204,8 @@ class OrdersView(Folder_BrowseContent):
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
         if column == 'numero':
-            return (item_brain.name, item_brain.name)
+            href = context.resource.get_pathto(item_resource)
+            return (item_brain.name, href)
         elif column == 'payment_mode':
             payment_mode = item_resource.get_property('payment_mode')
             return PaymentWaysEnumerate.get_value(payment_mode)
@@ -235,23 +236,6 @@ class OrdersView(Folder_BrowseContent):
             return XMLParser(state.encode('utf-8'))
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
-
-
-class MyOrdersView(OrdersView):
-
-    access = 'is_authenticated'
-    title = MSG(u'Order history')
-
-    table_columns = [
-        ('numero', MSG(u'Order id')),
-        ('state', MSG(u'State')),
-        ('total_price', MSG(u'Total price')),
-        ('creation_datetime', MSG(u'Date and Time'))]
-
-
-    def get_items(self, resource, context, *args):
-        args = PhraseQuery('customer_id', str(context.user.name))
-        return Folder_BrowseContent.get_items(self, resource, context, args)
 
 
 

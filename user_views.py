@@ -32,6 +32,8 @@ from ikaaro.table_views import Table_EditRecord, Table_AddRecord
 from addresses_views import Addresses_EditAddress, Addresses_AddAddress
 from datatypes import Civilite
 from shop_utils_views import RealRessource_Form
+from orders.orders_views import OrdersView
+from utils import get_shop
 
 
 class ShopUser_Manage(STLView):
@@ -101,6 +103,29 @@ class SHOPUser_EditAccount(User_EditAccount):
         context.message = MSG_CHANGES_SAVED
 
 
+
+class ShopUser_OrdersView(OrdersView):
+
+    access = 'is_allowed_to_view'
+    title = MSG(u'Order history')
+
+    table_columns = [
+        ('numero', MSG(u'Order id')),
+        ('state', MSG(u'State')),
+        ('total_price', MSG(u'Total price')),
+        ('creation_datetime', MSG(u'Date and Time'))]
+
+
+    def get_items(self, resource, context, *args):
+        args = PhraseQuery('customer_id', resource.name)
+        orders = get_shop(resource).get_resource('orders')
+        return OrdersView.get_items(self, orders, context, args)
+
+
+
+####################################
+# XXX Hack to have good navigation
+####################################
 
 class ShopUser_AddAddress(Addresses_AddAddress, RealRessource_Form):
 

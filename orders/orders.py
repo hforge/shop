@@ -42,9 +42,8 @@ from shop.utils import get_shop
 
 # Import from shop.orders
 from messages import Messages_TableResource
-from orders_views import OrderView
-from orders_views import OrdersView, MyOrdersView, OrdersProductsView
-from orders_views import Order_Manage
+from orders_views import OrderView, Order_Manage
+from orders_views import OrdersView, OrdersProductsView
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
 from shop.utils import format_price, ShopFolder
@@ -340,11 +339,10 @@ class Orders(ShopFolder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')
-    class_views = ['view', 'my_orders']
+    class_views = ['view']
 
     # Views
     view = OrdersView()
-    my_orders = MyOrdersView()
 
     def get_document_types(self):
         return []
