@@ -119,14 +119,25 @@ class PaymentWay(Editable, ShopFolder):
         # XXX We do not index data from Editable
         return ShopFolder._get_catalog_values(self)
 
-
-    def set_payment_as_ok(self, id_record, context):
-        self.parent.set_payment_as_ok(self, id_record, context)
-
-
     ###################################################
     # Public API
     ###################################################
+
+    def set_payment_as_ok(self, id_record, context):
+        """ Overridable: for example to send a custom mail ..."""
+        self.parent.set_payment_as_ok(self, id_record, context)
+
+
+    def create_payment(self, context, payment):
+        """ We add payment in payments table. Overridable:
+        For example to auto-validate payment or to add additional informations
+        """
+        payments = self.get_resource('payments').handler
+        payments.add_record({'ref': payment['ref'],
+                             'amount': payment['amount'],
+                             'user': context.user.name})
+
+
     def get_payment_way_description(self, context):
         """ Overridable: for example to add available points... """
         return self.get_xhtml_data()

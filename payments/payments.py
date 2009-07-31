@@ -103,10 +103,7 @@ class Payments(ShopFolder):
         if not payment_way.get_property('enabled'):
             raise ValueError, u'Invalid payment mode (not enabled)'
         # Add payment in history
-        payments = payment_way.get_resource('payments').handler
-        payments.add_record({'ref': payment['ref'],
-                             'amount': payment['amount'],
-                             'user': context.user.name})
+        payment_way.create_payment(context, payment)
         # All is ok: We show the payment form
         return payment_way._show_payment_form(context, payment)
 
