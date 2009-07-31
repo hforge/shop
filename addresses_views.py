@@ -26,7 +26,7 @@ class Addresses_Book(STLView):
 
     access = 'is_authenticated'
     title = MSG(u'My address book')
-    template = '/ui/shop/shop_user_address_book.xml'
+    template = '/ui/shop/addresses_book.xml'
 
     def get_namespace(self, resource, context):
         namespace = {'addresses': []}
