@@ -403,10 +403,17 @@ class Product(Editable, DynamicFolder):
         links += DynamicFolder.get_links(self)
         real_resource = self.get_real_resource()
         shop = get_shop(real_resource)
+        # categories
         categories = shop.get_resource('categories')
         categories_path = categories.get_abspath()
         for categorie in self.get_property('categories'):
             links.append(str(categories_path.resolve2(categorie)))
+        # product model
+        product_model = self.get_property('product_model')
+        if product_model:
+            shop_path = shop.get_abspath()
+            full_path = shop_path.resolve2('products-models/%s' % product_model)
+            links.append(str(full_path))
         return links
 
 
