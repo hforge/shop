@@ -26,16 +26,17 @@ from ikaaro.user import User
 
 # Import from shop
 from datatypes import Civilite
-from user_views import SHOPUser_EditAccount
+from user_views import ShopUser_Manage, SHOPUser_EditAccount
 from utils import get_shop
 
 
 class ShopUser(User):
 
-    class_views = ['profile', 'edit_account', 'my_orders',
-                   'edit_preferences', 'edit_password']
+    class_views = ['manage', 'profile', 'edit_account',
+                   'my_orders', 'edit_preferences', 'edit_password']
 
     # Views
+    manage = ShopUser_Manage()
     edit_account = SHOPUser_EditAccount()
     my_orders = GoToSpecificDocument(specific_document='../../shop/orders',
                      icon='tasks.png', title=MSG(u'My orders'),

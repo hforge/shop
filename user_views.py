@@ -18,6 +18,8 @@
 from itools.core import merge_dicts
 from itools.datatypes import String
 from itools.gettext import MSG
+from itools.web import STLView
+from itools.xapian import PhraseQuery
 
 # Import from ikaaro
 from ikaaro.forms import SelectRadio, TextWidget
@@ -29,6 +31,38 @@ from ikaaro.website_views import RegisterForm
 from datatypes import Civilite
 
 
+class ShopUser_Manage(STLView):
+
+    access = 'is_admin'
+    title = MSG(u'Manage user')
+
+    template = '/ui/shop/shop_user_manage.xml'
+
+    def get_namespace(self, resource, context):
+        from user import ShopUser
+        root = context.root
+        namespace = {}
+        # Base schema
+        base_schema = [x for x in ShopUser.get_metadata_schema().keys()]
+        for key in base_schema:
+            namespace[key] = resource.get_property(key)
+        # Customer payments # TODO
+        namespace['payments'] = {'payed': 0}
+        # Customer orders
+        namespace['orders'] = []
+        query = PhraseQuery('customer_id', resource.name)
+        results = root.search(query)
+        nb_orders = 0
+        for brain in results.get_documents():
+            order = root.get_resource(brain.abspath)
+            nb_orders += 1
+            namespace['orders'].append(
+                  {'id': brain.name,
+                   'href': resource.get_pathto(order),
+                   'amount': order.get_property('total_price')})
+        namespace['nb_orders'] = nb_orders
+        # Customer addresses # TODO
+        return namespace
 
 
 class SHOPUser_EditAccount(User_EditAccount):

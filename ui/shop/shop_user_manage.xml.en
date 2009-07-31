@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <table class="order-browse" style="width:300px;float:left">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/view.png"/>
+          Customer general informations
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          Gender: ${gender}<br/>
+          Firstname: ${firstname}<br/>
+          Lastname: ${lastname}<br/>
+          Email: ${email}<br/>
+          User Language: ${user_language}<br/>
+          Phone2: ${phone2}<br/>
+          Phone1: ${phone1}<br/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="order-browse" style="width:300px;float:left">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/view.png"/>
+          Customer payments
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          Payed: ${payments/payed}€<br/>
+          Refund: 0€ <br/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="order-browse" style="width:100%">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/view.png"/>
+          Order history: ${nb_orders} order(s)
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          <p stl:if="not nb_orders">
+            No order
+          </p>
+
+          <table class="order-sub-browse" stl:if="nb_orders">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <stl:block stl:repeat="order orders">
+                <tr>
+                  <td>
+                    <a href="${order/href}">
+                      ${order/id}
+                    </a>
+                  </td>
+                  <td>${order/amount}€</td>
+                </tr>
+              </stl:block>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+</stl:block>
