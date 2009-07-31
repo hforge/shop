@@ -16,9 +16,10 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import String
+from itools.datatypes import String, Unicode
 from itools.gettext import MSG
-from itools.web import STLView
+from itools.i18n import format_datetime
+from itools.web import STLView, STLForm, INFO
 from itools.xapian import PhraseQuery
 
 # Import from ikaaro
@@ -96,6 +97,7 @@ class SHOPUser_EditAccount(User_EditAccount):
 
 
     def action(self, resource, context, form):
+        # XXX we have to check if mail is used
         # Save changes
         schema = self.get_schema(resource, context)
         resource.save_form(schema, form)
@@ -121,6 +123,120 @@ class ShopUser_OrdersView(OrdersView):
         orders = get_shop(resource).get_resource('orders')
         return OrdersView.get_items(self, orders, context, args)
 
+
+    def get_item_value(self, resource, context, item, column):
+        item_brain, item_resource = item
+        if column == 'numero':
+            return (item_brain.name, './;order_view?id=%s' % item_brain.name)
+        return OrdersView.get_item_value(self, resource,
+                                          context, item, column)
+
+
+
+class ShopUser_OrderView(STLForm):
+
+    access = 'is_allowed_to_view'
+
+    title = MSG(u'View')
+
+    query_schema = {'id': String(mandatory=True)}
+
+    template = '/ui/shop/orders/order_view.xml'
+
+    def get_namespace(self, resource, context):
+        root = context.root
+        shop = get_shop(resource)
+        order = shop.get_resource('orders/%s' % context.query['id'])
+        # Build namespace
+        namespace = {'order_id': order.name}
+        # General informations
+        namespace['order_number'] = order.name
+        # Bill
+        has_bill = order.get_resource('bill', soft=True) is not None
+        namespace['has_bill'] = has_bill
+        # Order creation date time
+        creation_datetime = order.get_property('creation_datetime')
+        namespace['creation_datetime'] = format_datetime(creation_datetime,
+                                              context.accept_language)
+        # Customer informations
+        users = root.get_resource('users')
+        customer_id = order.get_property('customer_id')
+        customer = users.get_resource(customer_id)
+        gender = customer.get_property('gender')
+        namespace['customer'] = {'gender': Civilite.get_value(gender),
+                                 'title': customer.get_title(),
+                                 'email': customer.get_property('email'),
+                                 'href': order.get_pathto(customer)}
+        # Order state
+        state = order.get_state()
+        if not state:
+            namespace['state'] = {'name': 'unknow',
+                                  'title': MSG(u'Unknow')}
+        else:
+            namespace['state'] = {'name': order.get_statename(),
+                                  'title': state['title']}
+        # Addresses
+        addresses = shop.get_resource('addresses').handler
+        get_address = addresses.get_record_namespace
+        bill_address = order.get_property('bill_address')
+        delivery_address = order.get_property('delivery_address')
+        namespace['delivery_address'] = get_address(delivery_address)
+        namespace['bill_address'] = get_address(bill_address)
+        # Products
+        products = order.get_resource('products')
+        namespace['products'] = products.get_namespace(context)
+        # Payments
+        payments = shop.get_resource('payments')
+        # Shipping
+        shippings = shop.get_resource('shippings')
+        # Prices
+        for key in ['shipping_price', 'total_price']:
+            namespace[key] = order.get_property(key)
+        # Messages
+        messages = order.get_resource('messages')
+        namespace['messages'] = messages.get_namespace_messages(context)
+        # Payment view
+        payments = shop.get_resource('payments')
+        payments_records = payments.get_payments_records(context, order.name)
+        payment_way, payment_record = payments_records[0]
+        record_view = payment_way.order_view
+        if record_view:
+            payment_table = payment_way.get_resource('payments').handler
+            record_view = record_view(
+                    payment_way=payment_way,
+                    payment_table=payment_table,
+                    record=payment_record,
+                    id_payment=payment_record.id)
+            namespace['payment_view'] = record_view.GET(order, context)
+        else:
+            namespace['payment_view'] = None
+        # Shipping view
+        shippings = shop.get_resource('shippings')
+        shipping_way = order.get_property('shipping')
+        shipping_way_resource = shop.get_resource('shippings/%s/' % shipping_way)
+        shippings_records = shippings.get_shippings_records(context, order.name)
+        if shippings_records:
+            last_delivery = shippings_records[0]
+            record_view = shipping_way_resource.order_view
+            view = record_view.GET(order, shipping_way_resource,
+                          last_delivery, context)
+            namespace['shipping_view'] = view
+        else:
+            namespace['shipping_view'] = None
+        return namespace
+
+
+    action_add_message_schema = {'id': String,
+                                 'message': Unicode}
+
+    def action_add_message(self, resource, context, form):
+        shop = get_shop(resource)
+        order = shop.get_resource('orders/%s' % form['id'])
+        messages = order.get_resource('messages').handler
+        messages.add_record({'author': context.user.name,
+                             'private': False,
+                             'message': form['message']})
+        context.message = INFO(u'Your message has been sended')
 
 
 ####################################

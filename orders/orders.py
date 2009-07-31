@@ -27,7 +27,6 @@ from itools.gettext import MSG
 from itools.pdf import stl_pmltopdf
 
 # Import from ikaaro
-from ikaaro.access import AccessControl
 from ikaaro.file import PDF
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class, register_field
@@ -42,7 +41,7 @@ from shop.utils import get_shop
 
 # Import from shop.orders
 from messages import Messages_TableResource
-from orders_views import OrderView, Order_Manage
+from orders_views import Order_Manage
 from orders_views import OrdersView, OrdersProductsView
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
@@ -139,7 +138,7 @@ class OrdersProducts(Table):
         return ns
 
 
-class Order(AccessControl, WorkflowAware, ShopFolder):
+class Order(WorkflowAware, ShopFolder):
 
     class_id = 'order'
     class_title = MSG(u'Order')
@@ -151,7 +150,6 @@ class Order(AccessControl, WorkflowAware, ShopFolder):
     workflow = order_workflow
 
     # Views
-    view = OrderView()
     manage = Order_Manage()
 
 
@@ -313,25 +311,6 @@ class Order(AccessControl, WorkflowAware, ShopFolder):
         pdf = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'}}
         PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
-
-
-    ########################################################################
-    # Access con#trol
-    ########################################################################
-
-    def is_allowed_to_view_order(self, user, resource):
-        # You are nobody here, ha ha ha
-        if user is None:
-            return False
-
-        # In my home I am the king
-        if self.get_property('customer_id') == user.name:
-            return True
-
-        # The all-powerfull
-        return self.is_admin(user, resource)
-
-
 
 
 

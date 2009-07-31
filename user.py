@@ -29,7 +29,7 @@ from addresses_views import Addresses_Book
 from datatypes import Civilite
 from user_views import ShopUser_Manage, SHOPUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
-from user_views import ShopUser_OrdersView
+from user_views import ShopUser_OrdersView, ShopUser_OrderView
 from utils import get_shop
 
 
@@ -41,7 +41,10 @@ class ShopUser(User):
     # Views
     manage = ShopUser_Manage()
     edit_account = SHOPUser_EditAccount()
+
+    # Orders views
     orders_view = ShopUser_OrdersView()
+    order_view = ShopUser_OrderView()
 
     # Addresses views
     addresses_book = Addresses_Book()

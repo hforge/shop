@@ -123,6 +123,7 @@
         <td colspan="2">
           <form method="post">
             <p>If you want to add a message:</p>
+            <input type="hidden" name="id" value="${order_id}"/>
             <textarea name="message" cols="80" rows="8"/><br/>
             <input type="submit" name=";add_message"
               class="button-ok" value="Send message"/>
