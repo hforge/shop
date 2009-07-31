@@ -124,6 +124,10 @@ class PaymentWay(Editable, ShopFolder):
         self.parent.set_payment_as_ok(self, id_record, context)
 
 
+    def is_enabled(self, context):
+        """ A payment way can be disabled according to context"""
+        return  self.get_property('enabled')
+
 
 register_resource_class(PaymentWay)
 register_resource_class(PaymentWayTable)

@@ -53,5 +53,5 @@ class PaymentWaysEnumerate(Enumerate):
                             'value': mode.get_title(),
                             'description': mode.get_xhtml_data(),
                             'logo': logo,
-                            'enabled': mode.get_property('enabled')})
+                            'enabled': mode.is_enabled(context)})
         return options
