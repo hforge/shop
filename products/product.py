@@ -129,8 +129,6 @@ class Product(Editable, DynamicFolder):
         order = self.get_resource('order-photos')
         ordered_names = list(order.get_ordered_names())
         values['has_images'] = (len(ordered_names) != 0)
-        # Product description
-        values['description'] = self.get_property('description')
         # Creation time
         ctime = self.get_property('ctime')
         values['ctime'] = ctime.strftime('%Y%m%d%H%M%S')
@@ -540,7 +538,6 @@ CrossSellingTable.orderable_classes = Product
 # Register fields
 register_field('product_model', String(is_indexed=True, is_stored=True))
 register_field('categories', String(is_indexed=True, multiple=True))
-register_field('description', Unicode(is_indexed=True))
 register_field('has_categories', Boolean(is_indexed=True))
 register_field('has_images', Boolean(is_indexed=True, is_stored=True))
 register_field('ctime', String(is_indexed=True, is_stored=True))
