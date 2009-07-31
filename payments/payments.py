@@ -64,8 +64,10 @@ class Payments(ShopFolder):
 
 
     def get_payments_records(self, context, ref=None, user=None,
-                             payment_way=None, state=None, queries=[]):
+                             payment_way=None, state=None,
+                             queries=None):
         records = []
+        queries = queries or []
         if ref:
             queries.append(PhraseQuery('ref', ref))
         if user:
