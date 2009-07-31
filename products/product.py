@@ -343,8 +343,8 @@ class Product(Editable, DynamicFolder):
         ac = self.get_access_control()
         user = context.user
         for name in ordered_names:
-            image = order.get_resource(name)
-            if ac.is_allowed_to_view(user, image):
+            image = order.get_resource(name, soft=True)
+            if image and ac.is_allowed_to_view(user, image):
                 images.append(image)
         return images
 
