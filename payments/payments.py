@@ -64,7 +64,7 @@ class Payments(ShopFolder):
 
 
     def get_payments_records(self, context, ref=None, user=None,
-                             state=None, queries=[]):
+                             payment_way=None, state=None, queries=[]):
         records = []
         if ref:
             queries.append(PhraseQuery('ref', ref))
@@ -72,7 +72,8 @@ class Payments(ShopFolder):
             queries.append(PhraseQuery('user', user))
         if (state is True) or (state is False):
             queries.append(PhraseQuery('state', state))
-        for payment_way in self.search_resources(cls=PaymentWay):
+        for payment_way in self.search_resources(cls=PaymentWay,
+                                                 format=payment_way):
             payments = payment_way.get_resource('payments')
             if queries:
                 for record in payments.handler.search(AndQuery(*queries)):
@@ -117,7 +118,7 @@ class Payments(ShopFolder):
         """Get payments general statistic concerning a user or a ref"""
         infos = {'total_payed': 0}
         for payment_way, record in self.get_payments_records(
-                                      context, ref, user, True):
+                                      context, ref=ref, user=user, state=True):
             payments = payment_way.get_resource('payments').handler
             infos['total_payed'] += payments.get_record_value(record, 'amount')
         return infos
