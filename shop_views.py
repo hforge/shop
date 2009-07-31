@@ -359,6 +359,8 @@ class Shop_AddAddress(AutoForm):
       Please give a name to your address.
       """)
 
+    address_tip = MSG(u"(Example: Home, Office)")
+
     schema = {
         'type': String(default='delivery'),
         'gender': Civilite(mandatory=True),
@@ -382,7 +384,7 @@ class Shop_AddAddress(AutoForm):
         TextWidget('zipcode', title=MSG(u'Zip Code')),
         TextWidget('town', title=MSG(u'Town')),
         SelectWidget('country', title=MSG(u'Country')),
-        TextWidget('title', title=address_title),
+        TextWidget('title', title=address_title, tip=address_tip),
         ]
 
 
