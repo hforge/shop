@@ -46,8 +46,10 @@ class ShopUser_Manage(STLView):
         base_schema = [x for x in ShopUser.get_metadata_schema().keys()]
         for key in base_schema:
             namespace[key] = resource.get_property(key)
-        # Customer payments # TODO
-        namespace['payments'] = {'payed': 0}
+        # Customer payments
+        payments = resource.get_resource('../../shop/payments')
+        namespace['payments'] = payments.get_payments_informations(
+                                    context, user=resource.name)
         # Customer orders
         namespace['orders'] = []
         query = PhraseQuery('customer_id', resource.name)

@@ -40,7 +40,7 @@
     <tbody>
       <tr style="height:50px">
         <td valign="top">
-          Payed: ${payments/payed}€<br/>
+          Payed: ${payments/total_payed}€<br/>
           Refund: 0€ <br/>
         </td>
       </tr>
