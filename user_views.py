@@ -26,9 +26,12 @@ from ikaaro.forms import SelectRadio, TextWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
+from ikaaro.table_views import Table_EditRecord, Table_AddRecord
 
 # Import from shop
+from addresses_views import Addresses_EditAddress, Addresses_AddAddress
 from datatypes import Civilite
+from shop_utils_views import RealRessource_Form
 
 
 class ShopUser_Manage(STLView):
@@ -96,3 +99,25 @@ class SHOPUser_EditAccount(User_EditAccount):
         resource.save_form(schema, form)
         # Message 
         context.message = MSG_CHANGES_SAVED
+
+
+
+class ShopUser_AddAddress(Addresses_AddAddress, RealRessource_Form):
+
+    def get_real_resource(self, resource, context):
+        return resource.get_resource('../../shop/addresses')
+
+
+
+class ShopUser_EditAddress(Addresses_EditAddress, RealRessource_Form):
+
+    def get_query(self, context):
+        return RealRessource_Form.get_query(self, context)
+
+
+    def get_schema(self, resource, context):
+        return resource.get_schema()
+
+
+    def get_real_resource(self, resource, context):
+        return resource.get_resource('../../shop/addresses')

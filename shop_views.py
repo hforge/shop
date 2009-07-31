@@ -35,17 +35,21 @@ from ikaaro.forms import HiddenWidget, TextWidget, PasswordWidget
 from ikaaro.forms import MultilineWidget, ImageSelectorWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.resource_views import LoginView, DBResource_Edit
+from ikaaro.table_views import Table_AddRecord, Table_EditRecord
 from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
 
+
 # Import from shop
+from addresses_views import Addresses_Book, Addresses_AddAddress
+from addresses_views import Addresses_EditAddress
 from utils import get_shop
 from cart import ProductCart
 from countries import CountriesEnumerate
 from datatypes import Civilite
 from orders import Order
 from payments import PaymentWaysEnumerate
-from shop_utils_views import Cart_View, Shop_Progress
+from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
 
 
 CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
@@ -283,36 +287,15 @@ class Shop_ChooseAddress(STLForm):
     def get_namespace(self, resource, context):
         # Build namespace
         namespace = {'addresses': [],
-                     'type': context.get_form_value('type'),
                      'progress': Shop_Progress(index=3).GET(resource, context)}
-        # GEt cart
-        cart = ProductCart(context)
-        if context.get_form_value('type') == 'delivery':
-            id_current_address = cart.addresses['delivery_address']
-            namespace['is_delivery_address'] = True
-        else:
-            id_current_address = cart.addresses['bill_address']
-            namespace['is_delivery_address'] = False
         # User address book
         addresses = resource.get_resource('addresses').handler
         for record in addresses.search(user=context.user.name):
-            is_selected = record.id==id_current_address
-            ns = {'id': record.id,
-                  'css': 'selected' if is_selected else None}
+            ns = {'id': record.id}
             ns.update(resource.get_user_address_namespace(record.id))
             namespace['addresses'].append(ns)
         return namespace
 
-
-    def action_select_address(self, resource, context, form):
-        cart = ProductCart(context)
-        if form['type'] == 'delivery':
-            cart.set_delivery_address(form['id_address'])
-        else:
-            cart.set_bill_address(form['id_address'])
-        # Come back
-        msg = MSG(u'Modification ok')
-        return context.come_back(msg, goto=';addresses')
 
 
 class Shop_Addresses(STLForm):
@@ -350,105 +333,6 @@ class Shop_Addresses(STLForm):
             ns['bill_address'] = resource.get_user_address_namespace(bill_address)
         return ns
 
-
-class Shop_AddAddress(AutoForm):
-
-    title = MSG(u'Fill a new address')
-
-    address_title = MSG(u"""
-      Please give a name to your address.
-      """)
-
-    address_tip = MSG(u"(Example: Home, Office)")
-
-    schema = {
-        'type': String(default='delivery'),
-        'gender': Civilite(mandatory=True),
-        'firstname': Unicode(mandatory=True),
-        'lastname': Unicode(mandatory=True),
-        'title': Unicode(mandatory=True),
-        'address_1': Unicode(mandatory=True),
-        'address_2': Unicode,
-        'zipcode': String(mandatory=True),
-        'town': Unicode(mandatory=True),
-        'country': CountriesEnumerate(mandatory=True),
-        }
-
-    widgets = [
-        HiddenWidget('type'),
-        SelectRadio('gender', title=MSG(u'Genre')),
-        TextWidget('firstname', title=MSG(u'Firstname')),
-        TextWidget('lastname', title=MSG(u'Lastname')),
-        TextWidget('address_1', title=MSG(u'Address')),
-        TextWidget('address_2', title=MSG(u'Address (next)')),
-        TextWidget('zipcode', title=MSG(u'Zip Code')),
-        TextWidget('town', title=MSG(u'Town')),
-        SelectWidget('country', title=MSG(u'Country')),
-        TextWidget('title', title=address_title, tip=address_tip),
-        ]
-
-
-    def get_value(self, resource, context, name, datatype):
-        if name=='type':
-            return context.get_form_value('type', datatype)
-        return AutoForm.get_value(self, resource, context, name, datatype)
-
-
-    def action(self, resource, context, form):
-        addresses = resource.get_resource('addresses').handler
-        # Add informations to form
-        form['user'] = context.user.name
-        # Add
-        record = addresses.add_record(form)
-        # We save address in cart
-        cart = ProductCart(context)
-        if form['type']=='delivery':
-            cart.set_delivery_address(record.id)
-        else:
-            cart.set_bill_address(record.id)
-        # Come back
-        msg = MSG(u'Address added')
-        return context.come_back(msg, goto=';addresses')
-
-
-class Shop_EditAddress(Shop_AddAddress):
-
-    access = 'is_authenticated'
-
-    title = MSG(u'Edit address')
-
-    schema = merge_dicts(
-              Shop_AddAddress.schema,
-              id=Integer)
-
-    widgets = [HiddenWidget('id')] + Shop_AddAddress.widgets
-
-
-    def get_value(self, resource, context, name, datatype):
-        if name=='type':
-            return context.get_form_value('type', datatype)
-        if not context.has_form_value('id'):
-            return AutoForm.get_value(self, resource, context, name, datatype)
-        id = context.get_form_value('id', type=Integer)
-        if name=='id':
-            return id
-        # Get user address
-        addresses = resource.get_resource('addresses').handler
-        record = addresses.get_record(id)
-        return addresses.get_record_value(record, name)
-
-
-    def action(self, resource, context, form):
-        id = form['id']
-        addresses = resource.get_resource('addresses').handler
-        # Add informations to form
-        form['user'] = context.user.name
-        # Edit informations
-        del form['id']
-        addresses.update_record(id, **form)
-        msg = MSG(u'Address modify')
-        return context.come_back(msg, goto=';choose_address',
-                                 keep=['type'])
 
 #-------------------------------------
 # Step4: Shipping
@@ -621,18 +505,44 @@ class Shop_RegisterProgress(CompositeForm):
                 Shop_Register()]
 
 
-class Shop_EditAddressProgress(CompositeForm):
+
+class Shop_AddressesBook(CompositeForm):
 
     access = 'is_authenticated'
 
     subviews = [Shop_Progress(index=3),
-                Shop_EditAddress()]
+                Addresses_Book()]
 
 
 
-class Shop_AddAddressProgress(CompositeForm):
+class Shop_EditAddressProgress(RealRessource_Form, CompositeForm):
 
     access = 'is_authenticated'
 
     subviews = [Shop_Progress(index=3),
-                Shop_AddAddress()]
+                Addresses_EditAddress()]
+
+
+    def get_schema(self, resource, context):
+        return resource.get_schema()
+
+
+    def get_real_resource(self, resource, context):
+        return resource.get_resource('addresses')
+
+
+
+class Shop_AddAddressProgress(RealRessource_Form, CompositeForm):
+
+    access = 'is_authenticated'
+
+    subviews = [Shop_Progress(index=3),
+                Addresses_AddAddress()]
+
+
+    def get_schema(self, resource, context):
+        return resource.get_schema()
+
+
+    def get_real_resource(self, resource, context):
+        return resource.get_resource('addresses')

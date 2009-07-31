@@ -4,10 +4,6 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1 class="payment-process">Your address book</h1>
-
-  ${progress}
-
   <form method="POST">
 
     <table id="cart">
@@ -43,6 +39,5 @@
       <a href=";add_address">click here.</a>
     </p>
   </form>
-
 
 </stl:block>

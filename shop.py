@@ -33,7 +33,7 @@ from products import Products, Product, ProductModels
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
 from shop_payments import ShopPayments
-from shop_views import Shop_Addresses, Shop_ChooseAddress
+from shop_views import Shop_Addresses, Shop_ChooseAddress, Shop_AddressesBook
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
@@ -81,6 +81,7 @@ class Shop(ShopFolder):
     # 3) Choose/edit/add addresses
     addresses = Shop_Addresses()
     choose_address= Shop_ChooseAddress()
+    addresses_book = Shop_AddressesBook()
     edit_address = Shop_EditAddressProgress()
     add_address = Shop_AddAddressProgress()
 

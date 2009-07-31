@@ -28,6 +28,8 @@ from ikaaro.table_views import Table_View
 # Import from shop
 from countries import CountriesEnumerate
 from datatypes import Civilite
+from addresses_views import Addresses_Book
+from addresses_views import Addresses_AddAddress, Addresses_EditAddress
 
 
 class BaseAddresses(BaseTable):
@@ -60,18 +62,31 @@ class BaseAddresses(BaseTable):
         return namespace
 
 
+
 class Addresses(Table):
 
     class_id = 'addresses'
     class_title = MSG(u'Adresse')
     class_handler = BaseAddresses
+    class_views = ['addresses_book']
+
+    # Views
+    addresses_book = Addresses_Book()
+    add_address = Addresses_AddAddress()
+    edit_address = Addresses_EditAddress()
 
     view = Table_View(access='is_admin')
     last_changes = None
+    add_record = None
+
+
+    address_title = MSG(u"""
+      Please give a name to your address.
+      """)
+
+    address_tip = MSG(u"(Example: Home, Office)")
 
     form = [
-        TextWidget('title', title=MSG(u'Title')),
-        TextWidget('user', title=MSG(u'User')),
         SelectRadio('gender', title=MSG(u'Genre')),
         TextWidget('firstname', title=MSG(u'Firstname')),
         TextWidget('lastname', title=MSG(u'Lastname')),
@@ -80,7 +95,7 @@ class Addresses(Table):
         TextWidget('zipcode', title=MSG(u'Zip Code')),
         TextWidget('town', title=MSG(u'Town')),
         SelectWidget('country', title=MSG(u'Country')),
+        TextWidget('title', title=address_title, tip=address_tip),
         ]
-
 
 register_resource_class(Addresses)

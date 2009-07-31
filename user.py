@@ -25,14 +25,16 @@ from ikaaro.registry import register_resource_class
 from ikaaro.user import User
 
 # Import from shop
+from addresses_views import Addresses_Book
 from datatypes import Civilite
 from user_views import ShopUser_Manage, SHOPUser_EditAccount
+from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from utils import get_shop
 
 
 class ShopUser(User):
 
-    class_views = ['manage', 'profile', 'edit_account',
+    class_views = ['manage', 'profile', 'addresses_book', 'edit_account',
                    'my_orders', 'edit_preferences', 'edit_password']
 
     # Views
@@ -41,6 +43,12 @@ class ShopUser(User):
     my_orders = GoToSpecificDocument(specific_document='../../shop/orders',
                      icon='tasks.png', title=MSG(u'My orders'),
                      description=MSG(u'Orders history in the shop'))
+
+    # Addresses views
+    addresses_book = Addresses_Book()
+    edit_address = ShopUser_EditAddress()
+    add_address = ShopUser_AddAddress()
+
 
     @classmethod
     def get_metadata_schema(cls):

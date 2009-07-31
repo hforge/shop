@@ -113,6 +113,23 @@ class Cart_View(STLView):
         return namespace
 
 
+class RealRessource_Form(STLForm):
+
+    def get_real_resource(self, resource, context):
+        raise NotImplementedError
+
+
+    def GET(self, resource, context):
+        real_resource = self.get_real_resource(resource, context)
+        return STLForm.GET(self, real_resource, context)
+
+
+    def POST(self, resource, context):
+        real_resource = self.get_real_resource(resource, context)
+        return STLForm.POST(self, real_resource, context)
+
+
+
 
 class Shop_PluginWay_Form(STLForm):
 

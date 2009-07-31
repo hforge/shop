@@ -31,7 +31,6 @@
           </stl:block>
           ${delivery_address/zipcode} ${delivery_address/town}<br/>
           ${delivery_address/country}<br/>
-          <a href=";choose_address?type=delivery">(Edit *)</a>
         </p>
       </td>
       <td>
@@ -47,10 +46,13 @@
           ${bill_address/zipcode} ${bill_address/town}<br/>
           ${bill_address/country}<br/>
         </p>
-        <a href=";choose_address?type=bill">(Edit *)</a>
       </td>
     </tr>
   </table>
+
+  <a href=";addresses_book">
+    See your address book here
+  </a>
 
   <br/><br/>
 
