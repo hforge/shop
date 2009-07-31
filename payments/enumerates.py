@@ -51,7 +51,7 @@ class PaymentWaysEnumerate(Enumerate):
                 logo = context.resource.get_pathto(logo)
             options.append({'name': mode.name,
                             'value': mode.get_title(),
-                            'description': mode.get_xhtml_data(),
+                            'description': mode.get_payment_way_description(context),
                             'logo': logo,
                             'enabled': mode.is_enabled(context)})
         return options

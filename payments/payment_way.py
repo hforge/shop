@@ -124,8 +124,16 @@ class PaymentWay(Editable, ShopFolder):
         self.parent.set_payment_as_ok(self, id_record, context)
 
 
+    ###################################################
+    # Public API
+    ###################################################
+    def get_payment_way_description(self, context):
+        """ Overridable: for example to add available points... """
+        return self.get_xhtml_data()
+
+
     def is_enabled(self, context):
-        """ A payment way can be disabled according to context"""
+        """ Overridable: A payment way can be disabled according to context"""
         return  self.get_property('enabled')
 
 
