@@ -7,7 +7,9 @@
   ${progress}
 
   <p>
-    You can see details about your order <a href="./orders/${ref}">here.</a><br/>
+    You can see details about your order
+      <a href="/users/${user_name}/;order_view?id=${ref}">here.</a>
+    <br/>
   </p>
   <br/>
 

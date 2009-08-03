@@ -226,7 +226,7 @@ class Order(WorkflowAware, ShopFolder):
                                 '%s/messages' % name,
                                 **{'title': {'en': u'Messages'}})
         # Send mail of confirmation / notification
-        cls.send_email_confirmation(shop, shop_uri, user_email, name)
+        cls.send_email_confirmation(shop, shop_uri, user, name)
 
 
     def _get_catalog_values(self):
@@ -239,14 +239,17 @@ class Order(WorkflowAware, ShopFolder):
     # E-Mail confirmation / notification -> Order creation
     #########################################################
     @classmethod
-    def send_email_confirmation(cls, shop, shop_uri, customer_email, order_name):
+    def send_email_confirmation(cls, shop, shop_uri, user, order_name):
         """ """
+        customer_email = user.get_property('email')
         root = shop.get_root()
         # Get configuration
         from_addr = shop.get_property('shop_from_addr')
+        # Order uri
+        order_uri = '/users/%s/;order_view?id=%s' % (user.name, order_name)
         # Build email informations
         kw = {'order_name': order_name,
-              'order_uri': shop_uri.resolve('/shop/orders/%s/' % order_name),
+              'order_uri': shop_uri.resolve(order_uri),
               'shop_signature': shop.get_property('shop_signature')}
         # Send confirmation to the shop
         subject = mail_notification_title.gettext()
