@@ -51,6 +51,14 @@ class Payments(ShopFolder):
         return payment_ways_registry.values()
 
 
+    @staticmethod
+    def _make_resource(cls, folder, name, *args, **kw):
+        # Init payment ways
+        for payment_way_name, payment_way_cls in payment_ways_registry.items():
+            payment_way_cls._make_resource(payment_way_cls, folder,
+                '%s/%s' % (name, payment_way_name))
+
+
     ######################
     # Public API
     ######################
