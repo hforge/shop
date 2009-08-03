@@ -39,7 +39,8 @@ class ShopUser(User):
                    'orders_view', 'edit_preferences', 'edit_password']
 
     # Views
-    manage = ShopUser_Manage()
+    # XXX Hide manage view
+    #manage = ShopUser_Manage()
     edit_account = SHOPUser_EditAccount()
 
     # Orders views
