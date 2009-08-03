@@ -73,7 +73,7 @@ class ShopUser_Manage(STLView):
         return namespace
 
 
-class SHOPUser_EditAccount(User_EditAccount):
+class ShopUser_EditAccount(User_EditAccount):
 
     def get_schema(self, resource, context):
         return merge_dicts(RegisterForm.schema,

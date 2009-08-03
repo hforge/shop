@@ -27,7 +27,7 @@ from ikaaro.user import User
 # Import from shop
 from addresses_views import Addresses_Book
 from datatypes import Civilite
-from user_views import ShopUser_Manage, SHOPUser_EditAccount
+from user_views import ShopUser_Manage, ShopUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView
 from utils import get_shop
@@ -41,7 +41,7 @@ class ShopUser(User):
     # Views
     # XXX Hide manage view
     #manage = ShopUser_Manage()
-    edit_account = SHOPUser_EditAccount()
+    edit_account = ShopUser_EditAccount()
 
     # Orders views
     orders_view = ShopUser_OrdersView()
