@@ -160,9 +160,9 @@ class ShopUser_OrderView(STLForm):
     def get_namespace(self, resource, context):
         root = context.root
         shop = get_shop(resource)
-        order = shop.get_resource('orders/%s' % context.query['id'])
+        order = shop.get_resource('orders/%s' % context.query['id'], soft=True)
         # ACL
-        if order.get_property('customer_id') != context.user.name:
+        if not order or order.get_property('customer_id') != context.user.name:
             msg = ERROR(u'Your are not authorized to view this ressource')
             return context.come_back(msg, goto='/')
         # Build namespace
