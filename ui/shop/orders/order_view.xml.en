@@ -14,7 +14,7 @@
       ${customer/gender} ${customer/title} (${customer/email})
       </a><br/>
       Order state: <i class="wf-order-${state/name}">${state/title}</i><br/>
-      <a href="./bill/;download" target="blank" stl:if="has_bill">
+      <a href="/shop/orders/${order_number}/bill/;download" target="blank" stl:if="has_bill">
         <img src="/ui/icons/16x16/pdf.png"/> Download bill
       </a><br/>
     </p>
