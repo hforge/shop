@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href=";edit_account"><img src="/ui/icons/48x48/card.png" alt=""/></a>
+      </td>
+
+      <td valign="middle">
+        <a href=";edit_account">Edit my account</a>
+      </td>
+    </tr>
+  </table>
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href=";edit_preferences"><img src="/ui/icons/48x48/preferences.png" alt=""/></a>
+
+      </td>
+      <td valign="middle">
+        <a href=";edit_preferences">Edit my preferences</a>
+      </td>
+    </tr>
+  </table>
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+
+        <a href=";edit_password"><img src="/ui/icons/48x48/lock.png" alt=""/></a>
+      </td>
+      <td valign="middle">
+        <a href=";edit_password">Edit my password</a>
+      </td>
+    </tr>
+  </table>
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href=";addresses_book"><img src="/ui/icons/48x48/tasks.png" alt=""/></a>
+      </td>
+      <td valign="middle">
+        <a href=";addresses_book">My addresses book</a>
+      </td>
+    </tr>
+  </table>
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href=";orders_view"><img src="/ui/shop/images/bag_green.png"/></a>
+      </td>
+      <td valign="middle">
+        <a href=";orders_view">Orders history</a>
+      </td>
+    </tr>
+  </table>
+
+
+
+</stl:block>

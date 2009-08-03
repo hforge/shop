@@ -37,6 +37,13 @@ from orders.orders_views import OrdersView
 from utils import get_shop
 
 
+class ShopUser_Profile(STLView):
+
+    access = 'is_allowed_to_view'
+    template = '/ui/shop/shop_user_profile.xml'
+    title = MSG(u'My profile')
+
+
 class ShopUser_Manage(STLView):
 
     access = 'is_admin'
