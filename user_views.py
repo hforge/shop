@@ -277,10 +277,6 @@ class ShopUser_EditAddress(Addresses_EditAddress, RealRessource_Form):
 
     access = 'is_allowed_to_edit'
 
-    def get_query(self, context):
-        return RealRessource_Form.get_query(self, context)
-
-
     def get_schema(self, resource, context):
         return resource.get_schema()
 

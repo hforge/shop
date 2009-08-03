@@ -15,11 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.web import STLView
+from itools.web import FormError, STLView
 from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.table_views import Table_EditRecord, Table_AddRecord
+from ikaaro.table_views import Table_AddEditRecord
+
+# Import from shop
+from utils import get_shop
 
 
 class Addresses_Book(STLView):
@@ -64,11 +68,37 @@ class Addresses_EditAddress(Table_EditRecord):
 
     title = MSG(u'Edit address')
 
-    # XXX Sylvain do in ikaaro SECURIY
-    # We have to check that user is authorized to edit
+    def is_allowed_to_edit_record(self, handler, context):
+        """ We check that user is allowed to edit record """
+        query = Table_AddEditRecord.get_query(self, context)
+        id_record =  query['id']
+        record = handler.get_record(id_record)
+        if handler.get_record_value(record, 'user') != context.user.name:
+            raise FormError, MSG(u'You are not authorized to do that !')
+        return True
+
+
+    def get_query(self, context):
+        shop = get_shop(context.resource)
+        query = Table_AddEditRecord.get_query(self, context)
+        # Test the id is valid
+        id = query['id']
+        resource = shop.get_resource('addresses')
+        handler = resource.get_handler()
+        record = handler.get_record(id)
+        if record is None:
+            context.query = query
+            raise FormError, MSG(u'The {id} record is missing.', id=id)
+        # Is authorized ?
+        self.is_allowed_to_edit_record(resource.handler, context)
+        # Ok
+        return query
+
 
 
     def action_add_or_edit(self, resource, context, record):
+        # Is authorized ?
+        self.is_allowed_to_edit_record(resource.handler, context)
         # We add current user
         record['user'] = context.user.name
         # Normal action
