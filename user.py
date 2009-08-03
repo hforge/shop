@@ -88,8 +88,7 @@ class ShopUser(User):
         shop.send_email(context,
                         to_addr=self.get_property('email'),
                         subject=self.mail_subject_template.gettext(),
-                        text=self.mail_body_template.gettext(),
-                        send_in_html=True)
+                        text=self.mail_body_template.gettext())
 
 
 register_resource_class(ShopUser)

@@ -33,6 +33,7 @@ from itools.xapian import PhraseQuery, AndQuery
 from ikaaro.forms import AutoForm, SelectRadio, SelectWidget
 from ikaaro.forms import HiddenWidget, TextWidget, PasswordWidget
 from ikaaro.forms import MultilineWidget, ImageSelectorWidget
+from ikaaro.forms import BooleanRadio
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.resource_views import LoginView, DBResource_Edit
 from ikaaro.table_views import Table_AddRecord, Table_EditRecord
@@ -72,6 +73,7 @@ class Shop_Configure(DBResource_Edit):
     schema = {'shop_from_addr': Email(mandatory=True),
               'order_notification_mails': MultiLinesTokens(mandatory=True),
               'shop_signature': Unicode(mandatory=True),
+              'activate_mail_html': Boolean(mandatory=True),
               'bill_logo': PathDataType}
 
     widgets = [
@@ -81,6 +83,8 @@ class Shop_Configure(DBResource_Edit):
             rows=8, cols=50),
         MultilineWidget('shop_signature',
             title=MSG(u'Shop signature'), rows=8, cols=50),
+        BooleanRadio('activate_mail_html',
+            title=MSG(u'Activate html mails')),
         ImageSelectorWidget('bill_logo', title=MSG(u'Bill logo'))
         ]
 

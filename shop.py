@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Email, PathDataType, Unicode
+from itools.datatypes import Email, PathDataType, Unicode, Boolean
 from itools.gettext import MSG
 from itools.stl import stl
 
@@ -59,6 +59,7 @@ class Shop(ShopFolder):
 
     product_class = Product
     payments_class = ShopPayments
+    mail_template = '/ui/shop/mail.xhtml'
 
     ####################################
     ## Views
@@ -144,6 +145,7 @@ class Shop(ShopFolder):
         schema['shop_signature'] = Unicode
         schema['shop_from_addr'] = Email
         schema['bill_logo'] = PathDataType
+        schema['activate_mail_html'] = Boolean
         return schema
 
 
@@ -155,17 +157,18 @@ class Shop(ShopFolder):
     ##############################
 
     def send_email(self, context, to_addr, subject, from_addr=None, text=None,
-                   html=None, send_in_html=False, add_signature=True,
+                   html=None, add_signature=True,
                    encoding='utf-8', subject_with_host=True,
                    return_receipt=False):
         root = context.root
         # From_addr
         if from_addr is None:
-            from_addr = self.get_property('from_addr')
+            from_addr = self.get_property('shop_from_addr')
         # Build HTML
+        send_in_html = self.get_property('activate_mail_html')
         html = None
-        if send_in_html is True:
-            resource = self.get_resource('/ui/shop/mail.xhtml')
+        if (send_in_html is True) or (html is not None):
+            resource = self.get_resource(self.mail_template)
             namespace = {'website_uri': context.uri.authority,
                          'subject': subject,
                          'body': html or text,
