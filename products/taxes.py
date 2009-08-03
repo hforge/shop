@@ -15,17 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.csv import Table as BaseTable
 from itools.datatypes import Enumerate, Decimal
 from itools.gettext import MSG
 from itools.web import get_context
-from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import stl_namespaces, SelectWidget, Widget
+from ikaaro.forms import SelectWidget, Widget
 from ikaaro.registry import register_resource_class
-from ikaaro.table import Table
-from ikaaro.table_views import Table_View
+from ikaaro.table import OrderedTableFile, OrderedTable
+from ikaaro.table_views import OrderedTable_View
+from ikaaro.buttons import OrderUpButton, OrderDownButton
+from ikaaro.buttons import OrderBottomButton, OrderTopButton
 
 # Import from shop
 from shop.utils import get_shop
@@ -40,23 +40,25 @@ class TaxesEnumerate(Enumerate):
         return [
             {'name': str(x.id),
              'value': taxes.get_record_value(x, 'value')}
-            for x in taxes.get_records()]
+            for x in taxes.get_records_in_order()]
 
 
 
-class Taxes_TableHandler(BaseTable):
+class Taxes_TableHandler(OrderedTableFile):
 
     record_schema = {'value': Decimal}
 
 
 
-class Taxes_TableResource(Table):
+class Taxes_TableResource(OrderedTable):
 
     class_id = 'shop-taxes'
     class_title = MSG(u'Taxes')
     class_handler = Taxes_TableHandler
 
-    view = Table_View(table_actions=[])
+    table_actions = [OrderUpButton, OrderDownButton, OrderTopButton,
+                     OrderBottomButton]
+    view = OrderedTable_View(table_actions=table_actions)
 
 
 class PriceWidget(Widget):
