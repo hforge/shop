@@ -4,44 +4,12 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1 class="payment-process">Your address book</h1>
-
-  ${progress}
-
+  <br/>
   <form method="POST">
-
-    <table id="cart">
-      <tr>
-        <th>Address title</th>
-        <th>Address</th>
-        <th/>
-      </tr>
-      <tr stl:repeat="address addresses">
-        <td>
-          ${address/title}
-        </td>
-        <td>
-          ${address/firstname} ${address/lastname}<br/>
-          ${address/address_1}<br/>
-          <stl:block stl:if="address/address_2">
-            ${address/address_2}<br/>
-          </stl:block>
-          ${address/zipcode} ${address/town}<br/>
-          ${address/country}<br/>
-        </td>
-        <td>
-          <a href=";edit_address?id=${address/id}">
-            <img src="/ui/icons/16x16/edit.png"
-                 title="Edit this address"/>
-            Edit address
-          </a>
-        </td>
-      </tr>
-    </table>
-    <p>
-      If you want to add an item in your address book,
-      <a href=";add_address">click here.</a>
-    </p>
+    <h1 class="payment-process"></h1>
+    Delivery address: ${delivery_address}<br/><br/>
+    Bill address: ${bill_address}<br/><br/>
+    <input type="submit" value="Validate"/>
   </form>
 
 

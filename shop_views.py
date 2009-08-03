@@ -41,6 +41,7 @@ from ikaaro.website_views import RegisterForm
 
 
 # Import from shop
+from addresses import Addresses_Enumerate
 from addresses_views import Addresses_Book, Addresses_AddAddress
 from addresses_views import Addresses_EditAddress
 from utils import get_shop
@@ -281,20 +282,26 @@ class Shop_ChooseAddress(STLForm):
     title = MSG(u'Order summary')
     template = '/ui/shop/shop_chooseaddress.xml'
 
-    schema = {'id_address': Integer(mandatory=True),
-              'type': String(mandatory=True, default='delivery')}
+    schema = {'delivery_address': Addresses_Enumerate(mandatory=True),
+              'bill_address': Addresses_Enumerate(mandatory=True)}
 
     def get_namespace(self, resource, context):
-        # Build namespace
-        namespace = {'addresses': [],
-                     'progress': Shop_Progress(index=3).GET(resource, context)}
-        # User address book
-        addresses = resource.get_resource('addresses').handler
-        for record in addresses.search(user=context.user.name):
-            ns = {'id': record.id}
-            ns.update(resource.get_user_address_namespace(record.id))
-            namespace['addresses'].append(ns)
+        namespace = {}
+        cart = ProductCart(context)
+        widget = SelectWidget('delivery_address', has_empty_option=False)
+        namespace['delivery_address'] = widget.to_html(Addresses_Enumerate,
+                                          cart.addresses['delivery_address'])
+        widget = SelectWidget('bill_address', has_empty_option=False)
+        namespace['bill_address'] = widget.to_html(Addresses_Enumerate,
+                                          cart.addresses['bill_address'])
         return namespace
+
+
+    def action(self, resource, context, form):
+        cart = ProductCart(context)
+        cart.set_delivery_address(form['delivery_address'])
+        cart.set_bill_address(form['bill_address'])
+        return context.come_back(MSG_CHANGES_SAVED, ';addresses')
 
 
 
@@ -510,8 +517,9 @@ class Shop_AddressesBook(CompositeForm):
 
     access = 'is_authenticated'
 
-    subviews = [Shop_Progress(index=3),
-                Addresses_Book()]
+    subviews = [Shop_Progress(index=3, title=MSG(u'My address book')),
+                Addresses_Book(),
+                Shop_ChooseAddress()]
 
 
 
@@ -519,7 +527,7 @@ class Shop_EditAddressProgress(RealRessource_Form, CompositeForm):
 
     access = 'is_authenticated'
 
-    subviews = [Shop_Progress(index=3),
+    subviews = [Shop_Progress(index=3, title=MSG(u'Edit address')),
                 Addresses_EditAddress()]
 
 
@@ -536,7 +544,8 @@ class Shop_AddAddressProgress(RealRessource_Form, CompositeForm):
 
     access = 'is_authenticated'
 
-    subviews = [Shop_Progress(index=3),
+    subviews = [Shop_Progress(index=3,
+                              title=MSG(u'Add an address in my address book')),
                 Addresses_AddAddress()]
 
 

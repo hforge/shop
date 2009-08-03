@@ -6,6 +6,8 @@
 
   <form method="POST">
 
+    <p>Here your address book</p>
+
     <table id="cart">
       <tr>
         <th>Address title</th>
@@ -35,7 +37,7 @@
       </tr>
     </table>
     <p>
-      If you want to add an item in your address book,
+      If you want to add an item in your address book
       <a href=";add_address">click here.</a>
     </p>
   </form>

@@ -31,10 +31,12 @@ class Shop_Progress(STLView):
     of payment progression (6 Steps)
     """
     access = True
+    title = None
     template = '/ui/shop/shop_progress.xml'
 
     def get_namespace(self, resource, context):
-        ns = {'progress': {}}
+        ns = {'title': self.title,
+              'progress': {}}
         for i in range(0, 7):
             css = 'active' if self.index == i else None
             ns['progress'][str(i)] = css

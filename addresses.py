@@ -16,8 +16,9 @@
 
 # Import from itools
 from itools.csv import Table as BaseTable
-from itools.datatypes import Unicode, String
+from itools.datatypes import Unicode, String, Enumerate
 from itools.gettext import MSG
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.forms import SelectRadio, TextWidget, SelectWidget
@@ -30,6 +31,23 @@ from countries import CountriesEnumerate
 from datatypes import Civilite
 from addresses_views import Addresses_Book
 from addresses_views import Addresses_AddAddress, Addresses_EditAddress
+from utils import get_shop
+
+
+class Addresses_Enumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        options = []
+        context = get_context()
+        shop = get_shop(context.resource)
+        addresses = shop.get_resource('addresses').handler
+        for address in addresses.search(user=context.user.name):
+            options.append(
+              {'name': str(address.id),
+               'value': addresses.get_record_value(address, 'title')})
+        return options
+
 
 
 class BaseAddresses(BaseTable):
