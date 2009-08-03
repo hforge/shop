@@ -28,7 +28,6 @@ from addresses import Addresses
 from categories import Categories
 from countries import Countries
 from orders import Orders
-from payments import Payments
 from products import Products, Product, ProductModels
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
@@ -198,51 +197,6 @@ class Shop(ShopFolder):
     def get_user_address_namespace(self, id):
         addresses = self.get_resource('addresses').handler
         return addresses.get_record_namespace(id)
-
-
-    ##############################
-    # Updates
-    ##############################
-
-    def update_20090430(self):
-        """ We add countries table """
-        if self.get_resource('countries') is None:
-            Countries._make_resource(Countries, self.handler, 'countries',
-                                     **{'title': {'en': u'countries'}})
-
-
-    def update_20090604(self):
-        self.del_resource('shippings')
-        self.del_resource('orders')
-        self.del_resource('payments')
-
-
-    def update_20090605(self):
-        Shippings._make_resource(Shippings, self.handler, 'shippings',
-                                  **{'title': {'en': u'Shippings'}})
-
-        Orders._make_resource(Orders, self.handler, 'orders',
-                                  **{'title': {'en': u'Orders'}})
-
-
-        Payments._make_resource(Payments, self.handler, 'payments',
-                                  **{'title': {'en': u'Payments'}})
-
-
-
-    def update_20090618(self):
-        WebPage._make_resource(WebPage, self.handler, 'terms-and-conditions-of-use',
-                                **{'title': {'fr': u'Conditions Générales de ventes',
-                                             'en': u'Terms and conditions of user'}})
-
-
-    def update_20090619(self):
-        Taxes_TableResource._make_resource(Taxes_TableResource, self.handler,
-                                'taxes', **{'title': {'fr': u'TVA',
-                                                      'en': u'Taxes'}})
-        table = Taxes_TableHandler()
-        table.add_record({'value': '19.6'})
-        self.handler.set_handler('taxes', table)
 
 
 
