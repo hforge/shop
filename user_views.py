@@ -19,7 +19,7 @@ from itools.core import merge_dicts
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
-from itools.web import STLView, STLForm, INFO
+from itools.web import STLView, STLForm, INFO, ERROR
 from itools.xapian import PhraseQuery
 
 # Import from ikaaro
@@ -39,7 +39,7 @@ from utils import get_shop
 
 class ShopUser_Profile(STLView):
 
-    access = 'is_allowed_to_view'
+    access = 'is_allowed_to_edit'
     template = '/ui/shop/shop_user_profile.xml'
     title = MSG(u'My profile')
 
@@ -115,7 +115,7 @@ class ShopUser_EditAccount(User_EditAccount):
 
 class ShopUser_OrdersView(OrdersView):
 
-    access = 'is_allowed_to_view'
+    access = 'is_allowed_to_edit'
     title = MSG(u'Order history')
 
     table_columns = [
@@ -142,7 +142,7 @@ class ShopUser_OrdersView(OrdersView):
 
 class ShopUser_OrderView(STLForm):
 
-    access = 'is_allowed_to_view'
+    access = 'is_allowed_to_edit'
 
     title = MSG(u'View')
 
@@ -154,6 +154,10 @@ class ShopUser_OrderView(STLForm):
         root = context.root
         shop = get_shop(resource)
         order = shop.get_resource('orders/%s' % context.query['id'])
+        # ACL
+        if order.get_property('customer_id') != context.user.name:
+            msg = ERROR(u'Your are not authorized to view this ressource')
+            return context.come_back(msg, goto='/')
         # Build namespace
         namespace = {'order_id': order.name}
         # General informations
@@ -255,12 +259,16 @@ class ShopUser_OrderView(STLForm):
 
 class ShopUser_AddAddress(Addresses_AddAddress, RealRessource_Form):
 
+    access = 'is_allowed_to_edit'
+
     def get_real_resource(self, resource, context):
         return resource.get_resource('../../shop/addresses')
 
 
 
 class ShopUser_EditAddress(Addresses_EditAddress, RealRessource_Form):
+
+    access = 'is_allowed_to_edit'
 
     def get_query(self, context):
         return RealRessource_Form.get_query(self, context)

@@ -50,7 +50,7 @@ class ShopUser(User):
     order_view = ShopUser_OrderView()
 
     # Addresses views
-    addresses_book = Addresses_Book()
+    addresses_book = Addresses_Book(access='is_allowed_to_edit')
     edit_address = ShopUser_EditAddress()
     add_address = ShopUser_AddAddress()
 
