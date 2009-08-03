@@ -91,7 +91,7 @@ class CashPayment_Pay(STLView):
 
     access = "is_authenticated"
 
-    template = '/ui/shop/payments/cash/cashpayment_pay.xml'
+    template = '/ui/shop/payments/cash/pay.xml'
 
     def get_namespace(self, resource, context):
         get = resource.get_property
