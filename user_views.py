@@ -104,7 +104,14 @@ class ShopUser_EditAccount(User_EditAccount):
 
 
     def action(self, resource, context, form):
-        # XXX we have to check if mail is used
+        # We check if mail is used
+        root = context.root
+        user_mail = context.user.get_property('email')
+        if user_mail != form['email']:
+            user = root.get_user_from_login(form['email'])
+            if user is not None:
+                context.message = ERROR(u'This email address is already used.')
+                return
         # Save changes
         schema = self.get_schema(resource, context)
         resource.save_form(schema, form)
