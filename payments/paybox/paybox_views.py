@@ -196,8 +196,8 @@ class Paybox_ConfirmPayment(BaseForm):
         payments.update_record(record.id, **infos)
         # XXX TODO Check signature
         # Confirm_payment
-        if bool(form['autorisation']):
-            self.payment_way.set_payment_as_ok(record.id, context)
+        if infos['state']:
+            resource.set_payment_as_ok(record.id, context)
         # Return a blank page to payment
         response = context.response
         response.set_header('Content-Type', 'text/plain')
