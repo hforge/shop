@@ -100,6 +100,7 @@ class PaymentWay(Editable, ShopFolder):
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
                            Editable.get_metadata_schema(),
+                           title=Unicode(multilingual=True),
                            enabled=Boolean(default=True),
                            logo=PathDataType(multilingual=True))
 

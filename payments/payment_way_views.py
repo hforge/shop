@@ -24,7 +24,7 @@ from itools.web import STLView
 from ikaaro import messages
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.forms import HTMLBody, ImageSelectorWidget, TextWidget, RTEWidget
-from ikaaro.forms import BooleanCheckBox
+from ikaaro.forms import BooleanRadio
 
 # Import from shop
 from shop.editable import Editable_Edit
@@ -36,16 +36,16 @@ class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
     access = 'is_admin'
 
     schema = merge_dicts(Editable_Edit.schema,
-                         title=Unicode(mandatory=True),
+                         title=Unicode(mandatory=True, multilingual=True),
                          logo=PathDataType(mandatory=True, multilingual=True),
-                         data=HTMLBody(mandatory=True),
+                         data=HTMLBody(mandatory=True, multilingual=True),
                          enabled=Boolean(mandatory=True))
 
 
     widgets = [
         TextWidget('title', title=MSG(u'Title')),
         ImageSelectorWidget('logo',  title=MSG(u'Logo')),
-        BooleanCheckBox('enabled', title=MSG(u'Enabled ?')),
+        BooleanRadio('enabled', title=MSG(u'Enabled ?')),
         RTEWidget('data', title=MSG(u"Description"))]
 
 
@@ -61,10 +61,13 @@ class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
 
     def action(self, resource, context, form):
         language = resource.get_content_language(context)
-        for key in self.schema.keys():
+        for key, datatype in self.schema.items():
             if key in ('data'):
                 continue
-            resource.set_property(key, form[key], language=language)
+            if getattr(datatype, 'multilingual', False):
+                resource.set_property(key, form[key], language=language)
+            else:
+                resource.set_property(key, form[key])
         Editable_Edit.action(self, resource, context, form)
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
 
