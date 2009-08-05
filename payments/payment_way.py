@@ -110,7 +110,6 @@ class PaymentWay(Editable, ShopFolder):
         # Create resource
         kw['title'] = {'en': cls.class_title.gettext()}
         kw['description'] = {'en': cls.class_description.gettext()}
-        kw['logo'] = cls.logo
         ShopFolder._make_resource(cls, folder, name, *args, **kw)
         cls.payment_table._make_resource(cls.payment_table, folder,
             '%s/payments' % name)
