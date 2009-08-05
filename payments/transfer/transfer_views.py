@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.datatypes import Boolean, Integer, Unicode
 from itools.datatypes import PathDataType, String
 from itools.gettext import MSG
@@ -29,6 +30,7 @@ from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
 from datatypes import RIB, IBAN
+from shop.payments.payment_way_views import PaymentWay_Configure
 
 
 class TransferPayment_RecordView(STLView):
@@ -77,32 +79,20 @@ class TransferPayment_RecordEdit(STLForm):
 
 
 
-class TransferPayment_Configure(DBResource_Edit):
+class TransferPayment_Configure(PaymentWay_Configure):
 
     title = MSG(u'Configure')
     access = 'is_admin'
 
-    schema = {'enabled': Boolean(mandatory=True),
-              'title': Unicode(mandatory=True),
-              'logo': PathDataType(mandatory=True),
-              'RIB': RIB(mandatory=True),
-              'IBAN': IBAN(mandatory=True)}
+    schema = merge_dicts(PaymentWay_Configure.schema,
+              RIB=RIB(mandatory=True),
+              IBAN=IBAN(mandatory=True))
 
 
-    widgets = [
-        BooleanCheckBox('enabled', title=MSG(u'Enabled ?')),
-        TextWidget('title', title=MSG(u'Title')),
-        ImageSelectorWidget('logo',  title=MSG(u'Logo')),
+    widgets = PaymentWay_Configure.widgets + [
         TextWidget('RIB', title=MSG(u'RIB')),
         TextWidget('IBAN', title=MSG(u'IBAN'))]
 
-    submit_value = MSG(u'Edit configuration')
-
-
-    def action(self, resource, context, form):
-        for key in self.schema.keys():
-            resource.set_property(key, form[key])
-        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
 
 
 
