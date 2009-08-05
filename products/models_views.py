@@ -28,6 +28,7 @@ from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, ImageSelectorWidget, SelectWidget
 from ikaaro.table_views import OrderedTable_View
 from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
+from ikaaro.utils import get_base_path_query
 from ikaaro.views import CompositeForm
 from ikaaro.views_new import NewInstance
 
@@ -147,8 +148,11 @@ class ProductModelSchema_View(OrderedTable_View):
             table_h.del_record(id)
         # Search products
         root = context.root
+        site_root = context.resource.get_site_root()
         product_model = resource.parent.name
-        query = PhraseQuery('product_model', product_model)
+        abspath = site_root.get_canonical_path()
+        query = AndQuery(get_base_path_query(str(abspath)),
+                         PhraseQuery('product_model', product_model))
         results = root.search(query)
         for doc in results.get_documents():
             product = root.get_resource(doc.abspath)
@@ -157,6 +161,7 @@ class ProductModelSchema_View(OrderedTable_View):
         # Reindex the resource
         context.server.change_resource(resource)
         context.message = INFO(u'Record deleted.')
+
 
 
 class ProductModelSchema_EditRecord(Table_EditRecord):
@@ -187,7 +192,6 @@ class ProductModelSchema_AddRecord(Table_AddRecord):
     def action_add_or_edit(self, resource, context, record):
         record['name'] = checkid(record['title'].value)
         resource.handler.add_record(record)
-
 
 
 
