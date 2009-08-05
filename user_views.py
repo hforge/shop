@@ -257,7 +257,7 @@ class ShopUser_OrderView(STLForm):
         messages.add_record({'author': context.user.name,
                              'private': False,
                              'message': form['message']})
-        context.message = INFO(u'Your message has been sended')
+        context.message = INFO(u'Your message has been sent')
 
 
 ####################################

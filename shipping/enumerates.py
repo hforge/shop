@@ -26,6 +26,6 @@ class ShippingStates(Enumerate):
     default = 'preparation'
 
     options = [{'name': 'preparation', 'value': MSG(u'In preparation')},
-               {'name': 'sended',      'value': MSG(u'Sended')},
+               {'name': 'sent',      'value': MSG(u'Sended')},
                {'name': 'cancel',      'value': MSG(u'Cancel')}]
 

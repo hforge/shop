@@ -1776,7 +1776,7 @@ msgid "Your inscription has been validated"
 msgstr ""
 
 #: ../user_views.py:260
-msgid "Your message has been sended"
+msgid "Your message has been sent"
 msgstr ""
 
 #: ../orders/orders_views.py:278

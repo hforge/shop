@@ -64,7 +64,7 @@ class Colissimo_RecordAdd(STLForm):
     def add_shipping(self, order, shipping_way, context, form):
         order.set_as_sent(context)
         kw = {'ref': order.name,
-              'state': 'sended',
+              'state': 'sent',
               'num_colissimo': form['num_colissimo']}
         history = shipping_way.get_resource('history')
         history.handler.add_record(kw)

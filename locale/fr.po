@@ -3452,7 +3452,7 @@ msgid "Your inscription has been validated"
 msgstr "Votre inscription a été validée"
 
 #: ../user_views.py:260
-msgid "Your message has been sended"
+msgid "Your message has been sent"
 msgstr "Votre message a été envoyé"
 
 #: ../orders/orders_views.py:278
