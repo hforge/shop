@@ -18,12 +18,13 @@
 from itools.core import merge_dicts
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
-from itools.web import INFO, STLView, STLForm
+from itools.web import INFO, ERROR, STLView, STLForm
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.buttons import RemoveButton
+from ikaaro.exceptions import ConsistencyError
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
@@ -36,6 +37,7 @@ from schema import product_schema
 from taxes import PriceWidget
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
+from shop.utils import get_shop
 
 
 class Product_NewInstance(NewInstance):
@@ -232,6 +234,21 @@ class Product_Edit(Editable_Edit, AutoForm):
         Editable_Edit.action(self, resource, context, form)
         return context.come_back(messages.MSG_CHANGES_SAVED)
 
+
+class Product_Delete(STLForm):
+
+    access = 'is_allowed_to_remove'
+    title = MSG(u'Delete product')
+    template = '/ui/shop/products/product_delete.xml'
+
+    def action(self, resource, context, form):
+        shop = get_shop(resource)
+        try:
+            shop.del_resource('products/%s' % resource.name)
+        except ConsistencyError:
+            context.messages = ERROR(u"You can't delete this product")
+            return
+        return context.come_back(INFO(u'Product deleted !'), goto='../')
 
 
 class Product_ViewBox(STLView):

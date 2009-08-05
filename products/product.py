@@ -35,6 +35,7 @@ from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewInstance, Products_View, Product_ViewBox
 from product_views import Product_View, Product_Edit, Product_EditModel
+from product_views import Product_Delete
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.editable import Editable
@@ -59,7 +60,7 @@ class Product(Editable, DynamicFolder):
     class_id = 'product'
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order',
-                   'edit_cross_selling']
+                   'edit_cross_selling', 'delete_product']
     class_description = MSG(u'A product')
     class_version = '20090619'
 
@@ -81,6 +82,8 @@ class Product(Editable, DynamicFolder):
             specific_document='cross-selling',
             title=MSG(u'Edit cross selling'),
             access='is_allowed_to_edit')
+    delete_product = Product_Delete()
+
     viewbox = Product_ViewBox()
 
 
