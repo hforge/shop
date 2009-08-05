@@ -953,7 +953,7 @@ msgctxt "b"
 msgid ""
 "<g id='1'> To finalize your purchase, you have to send a check. <x id='2'/> "
 "Here all details:"
-msgstr "Pour finaliser votre achat, vous devez envoyer un chéque. <x id='2'/> Here all details:"
+msgstr "<g id='1'> Pour finaliser votre achat, vous devez envoyer un chéque. <x id='2'/> Here all details:"
 
 #: ../ui/shop/products/addproduct_tree.xml.en:9
 msgctxt "link"
@@ -1031,7 +1031,7 @@ msgid ""
 "<g id='3'>${state/title}</g><x id='4'/>  <g id='5'>  <x id='6'/> Download "
 "bill </g>"
 msgstr ""
-"<g id='3'>${state/title}</g><x id='4'/>  <g id='5'>  <x id='6'/> Télécharger la facture"
+"<g id='3'>${state/title}</g><x id='4'/>  <g id='5'>  <x id='6'/> Télécharger la facture </g>"
 
 #: ../ui/shop/payments/cash/record_edit.xml.en:12
 #: ../ui/shop/payments/transfer/record_edit.xml.en:12
@@ -1072,7 +1072,7 @@ msgstr "<g id='7'> Identique à l'adresse de livraison."
 #: ../ui/shop/shop_addresses.xml.en:40
 msgctxt "link"
 msgid "<g id='9'>(Edit)</g>  </g>"
-msgstr "<g id='9'>(Editer)</g>  </g>"
+msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:70
 msgctxt "b"
