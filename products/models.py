@@ -33,6 +33,7 @@ from models_views import ProductModelSchema_AddRecord, ProductEnumAttribute_View
 from models_views import ProductModelSchema_EditRecord, ProductModel_View
 from models_views import ProductModel_NewInstance, ProductModelSchema_View
 from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
+from models_views import ProductEnumAttribute_EditRecord
 from shop.utils import ShopFolder
 
 
@@ -57,6 +58,7 @@ class ProductEnumAttribute(OrderedTable):
     view = ProductEnumAttribute_View()
     new_instance = ProductEnumAttribute_NewInstance()
     add_record = ProductEnumAttribute_AddRecord()
+    edit_record = ProductEnumAttribute_EditRecord()
 
     form = [
         TextWidget('title', title=MSG(u'Title')),
@@ -75,7 +77,7 @@ class ProductTypeTable(OrderedTableFile):
         'visible': Boolean,
         'is_purchase_option': Boolean,
         'datatype': Datatypes(mandatory=True, index='keyword'),
-        'enumerate': String
+        'enumerate': String(is_indexed=True, index='keyword')
         }
 
 

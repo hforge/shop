@@ -19,7 +19,7 @@ from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.web import ERROR, FormError, INFO, STLView
-from itools.xapian import OrQuery, PhraseQuery
+from itools.xapian import OrQuery, PhraseQuery, AndQuery
 
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton
@@ -206,10 +206,12 @@ class ProductEnumAttribute_View(Table_View):
         ids = form['ids']
         properties = []
         schema_handler = resource.parent.get_resource('schema').handler
+        handler = resource.handler
+        get_value = handler.get_record_value
         for id in ids:
             # Get value of record
-            record = resource.handler.get_record(id)
-            record_value = resource.handler.get_record_value(record, 'name')
+            record = handler.get_record(id)
+            record_value = get_value(record, 'name')
             # We search the names of the dynamic properties that
             # references to the current enumerate
             for record in schema_handler.search(
@@ -221,19 +223,23 @@ class ProductEnumAttribute_View(Table_View):
             resource.handler.del_record(id)
         # Search products
         root = context.root
+        site_root = resource.get_site_root()
+        abspath = site_root.get_canonical_path()
         product_model = resource.parent
-        query = PhraseQuery('product_model', product_model.name)
+        query = AndQuery(get_base_path_query(str(abspath)),
+                         PhraseQuery('product_model', product_model.name))
         results = root.search(query)
         for doc in results.get_documents():
             product = root.get_resource(doc.abspath)
             for name, value in properties:
                 # We delete properties if value is the same
                 # that the value we wants to remove
-                if value==product.get_property(name):
+                if value == product.get_property(name):
                     product.del_property(name)
         # Reindex the resource
         context.server.change_resource(resource)
         context.message = INFO(u'Record deleted.')
+
 
 
 class ProductEnumAttribute_AddRecord(Table_AddRecord):
@@ -245,6 +251,21 @@ class ProductEnumAttribute_AddRecord(Table_AddRecord):
     def action_add_or_edit(self, resource, context, record):
         record['name'] = checkid(record['title'].value)
         resource.handler.add_record(record)
+
+
+
+class ProductEnumAttribute_EditRecord(Table_EditRecord):
+
+
+    def action_add_or_edit(self, resource, context, record):
+        id = context.query['id']
+        handler = resource.handler
+        # Get the current record name to forward the name attribute
+        table_record = handler.get_record(id)
+        record['name'] = handler.get_record_value(table_record, 'name')
+        resource.handler.update_record(id, **record)
+        # Reindex the resource
+        context.server.change_resource(resource)
 
 
 
