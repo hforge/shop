@@ -3455,10 +3455,6 @@ msgstr "Votre inscription a été validée"
 msgid "Your message has been sent"
 msgstr "Votre message a été envoyé"
 
-#: ../orders/orders_views.py:278
-msgid "Your message has been sent"
-msgstr "Votre message a été envoyé"
-
 #: ../ui/shop/shop_view_cart.xml.en:7
 msgctxt "heading"
 msgid "Your order"
