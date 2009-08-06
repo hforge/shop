@@ -122,7 +122,7 @@ class VirtualCategories_View(VirtualCategory_View):
         query = [
             PhraseQuery('format', shop.product_class.class_id),
             PhraseQuery('workflow_state', 'public')]
-        return context.root.search(*query)
+        return context.root.search(AndQuery(*query))
 
 
 class VirtualCategory_ComparatorView(VirtualCategory_View):
