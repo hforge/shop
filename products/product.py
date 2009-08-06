@@ -358,6 +358,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     def is_buyable(self):
         return (self.get_property('pre-tax-price') != decimal(0) and
                 self.get_property('tax') is not None and
+                self.get_property('is_buyable') is True and
                 self.get_statename() == 'public')
 
 

@@ -26,7 +26,7 @@ from ikaaro import messages
 from ikaaro.buttons import RemoveButton
 from ikaaro.exceptions import ConsistencyError
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import AutoForm, SelectWidget, TextWidget
+from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.registry import get_resource_class
 from ikaaro.views_new import NewInstance
@@ -210,6 +210,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         # Categorie
         SelectWidget('categories', title=MSG(u'Categories')),
         # Price
+        BooleanRadio('is_buyable', title=MSG(u'Buyable by customer ?')),
         TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),
         PriceWidget('pre-tax-price', title=MSG(u'Selling price')),
         ] + Editable_Edit.widgets
@@ -224,7 +225,6 @@ class Product_Edit(Editable_Edit, AutoForm):
 
 
     def action(self, resource, context, form):
-        print form
         language = resource.get_content_language(context)
         for key, datatype in self.schema.iteritems():
             if key in ('data', 'ctime'):
