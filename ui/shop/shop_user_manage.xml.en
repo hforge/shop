@@ -9,24 +9,56 @@
       <tr>
         <th>
           <img src="/ui/icons/16x16/view.png"/>
-          Customer general informations
+          Public user informations
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr style="height:50px">
+      <tr>
         <td valign="top">
-          Gender: ${gender}<br/>
-          Firstname: ${firstname}<br/>
-          Lastname: ${lastname}<br/>
-          Email: ${email}<br/>
-          User Language: ${user_language}<br/>
-          Phone2: ${phone2}<br/>
-          Phone1: ${phone1}<br/>
+          Gender: ${user/base/gender}<br/>
+          Firstname: ${user/base/firstname}<br/>
+          Lastname: ${user/base/lastname}<br/>
+          Email: ${user/base/email}<br/>
+          User Language: ${user/base/user_language}<br/>
+          Phone2: ${user/base/phone2}<br/>
+          Phone1: ${user/base/phone1}<br/>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">
+          <stl:block stl:repeat="info user/public">
+            ${info/title}: ${info/value}<br/>
+          </stl:block>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <table class="order-browse" style="width:300px;float:left">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/view.png"/>
+          Private user informations
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td valign="top">
+          <table cellpadding="0" cellspacing="0">
+            <tr stl:repeat="info user/private">
+              <td>${info/title}</td>
+              <td>${info/value}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="clear"/>
 
   <table class="order-browse" style="width:300px;float:left">
     <thead>

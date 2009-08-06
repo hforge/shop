@@ -21,6 +21,7 @@ from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
+from ikaaro.forms import SelectRadio, TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.user import User
 
@@ -41,7 +42,7 @@ class ShopUser(User):
 
     # Views
     # XXX Hide manage view
-    #manage = ShopUser_Manage()
+    manage = ShopUser_Manage()
     profile = ShopUser_Profile()
     edit_account = ShopUser_EditAccount()
 
@@ -55,12 +56,34 @@ class ShopUser(User):
     add_address = ShopUser_AddAddress()
 
 
+    # Base schema / widgets
+    base_schema = merge_dicts(User.get_metadata_schema(),
+                              gender=Civilite,
+                              phone1=String,
+                              phone2=String)
+
+    base_widgets = [
+                TextWidget('email', title=MSG(u"Email")),
+                SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
+                TextWidget('lastname', title=MSG(u"Lastname")),
+                TextWidget('firstname', title=MSG(u"Firstname")),
+                TextWidget('phone1', title=MSG(u"Phone number")),
+                TextWidget('phone2', title=MSG(u"Mobile"))]
+
+
+    # Additional public schema / widgets
+    public_schema = {}
+    public_widgets = []
+
+    # Additional private schema / widgets
+    private_schema = {}
+    private_widgets = []
+
+
     @classmethod
     def get_metadata_schema(cls):
-        return merge_dicts(User.get_metadata_schema(),
-                           gender=Civilite,
-                           phone1=String,
-                           phone2=String)
+        return merge_dicts(cls.base_schema, cls.public_schema)
+
 
 
     def save_form(self, schema, form):
@@ -87,8 +110,8 @@ class ShopUser(User):
         shop = get_shop(context.resource)
         shop.send_email(context,
                         to_addr=self.get_property('email'),
-                        subject=self.mail_subject_template.gettext(),
-                        text=self.mail_body_template.gettext())
+                        subject=self.mail_subject_template,
+                        text=self.mail_body_template)
 
 
 register_resource_class(ShopUser)

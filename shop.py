@@ -36,6 +36,7 @@ from shop_views import Shop_Addresses, Shop_AddressesBook
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
+from user import ShopUser
 from utils import ShopFolder
 
 
@@ -56,6 +57,7 @@ class Shop(ShopFolder):
     # Shop configuration
     ####################################
 
+    user_class = ShopUser
     product_class = Product
     payments_class = ShopPayments
     mail_template = '/ui/shop/mail.xhtml'

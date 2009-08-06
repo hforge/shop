@@ -160,40 +160,56 @@ class Shop_ViewCart(STLForm):
 # Step2: Identification
 #    -> Registration or login
 #-------------------------------------
-from user import ShopUser
 
 class Shop_Register(RegisterForm):
 
     access = True
 
-    schema = {'email': Email(mandatory=True),
-              'lastname': Unicode(mandatory=True),
-              'firstname': Unicode(mandatory=True),
-              'gender': Civilite(mandatory=True),
-              'password': String(mandatory=True),
-              'password_check': String(mandatory=True),
-              'phone1': String,
-              'phone2': String,
-              'address_1': Unicode(mandatory=True),
-              'address_2': Unicode,
-              'zipcode': String(mandatory=True),
-              'town': Unicode(mandatory=True),
-              'country': CountriesEnumerate(mandatory=True)}
+    base_schema = {
+        'email': Email(mandatory=True),
+        'lastname': Unicode(mandatory=True),
+        'firstname': Unicode(mandatory=True),
+        'gender': Civilite(mandatory=True),
+        'password': String(mandatory=True),
+        'password_check': String(mandatory=True),
+        'phone1': String,
+        'phone2': String,
+        'address_1': Unicode(mandatory=True),
+        'address_2': Unicode,
+        'zipcode': String(mandatory=True),
+        'town': Unicode(mandatory=True),
+        'country': CountriesEnumerate(mandatory=True)}
+
+    base_widgets = [
+         TextWidget('email', title=MSG(u"Email")),
+         SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
+         TextWidget('lastname', title=MSG(u"Lastname")),
+         TextWidget('firstname', title=MSG(u"Firstname")),
+         PasswordWidget('password', title=MSG(u"Password")),
+         PasswordWidget('password_check', title=MSG(u"Repeat password")),
+         TextWidget('phone1', title=MSG(u"Phone number")),
+         TextWidget('phone2', title=MSG(u"Mobile"))]
+
+    address_widgets = [
+         TextWidget('address_1', title=MSG(u"Address")),
+         TextWidget('address_2', title=MSG(u"Address")),
+         TextWidget('zipcode', title=MSG(u"Zip code")),
+         TextWidget('town', title=MSG(u"Town")),
+         SelectWidget('country', title=MSG(u"Pays"))]
 
 
-    widgets = [TextWidget('email', title=MSG(u"Email")),
-               SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
-               TextWidget('lastname', title=MSG(u"Lastname")),
-               TextWidget('firstname', title=MSG(u"Firstname")),
-               PasswordWidget('password', title=MSG(u"Password")),
-               PasswordWidget('password_check', title=MSG(u"Repeat password")),
-               TextWidget('phone1', title=MSG(u"Phone number")),
-               TextWidget('phone2', title=MSG(u"Mobile")),
-               TextWidget('address_1', title=MSG(u"Address")),
-               TextWidget('address_2', title=MSG(u"Address")),
-               TextWidget('zipcode', title=MSG(u"Zip code")),
-               TextWidget('town', title=MSG(u"Town")),
-               SelectWidget('country', title=MSG(u"Pays"))]
+    def get_schema(self, resource, context):
+        shop = get_shop(resource)
+        return merge_dicts(self.base_schema,
+                           shop.user_class.public_schema)
+
+
+    def get_widgets(self, resource, context):
+        shop = get_shop(resource)
+        return self.base_widgets + \
+               shop.user_class.public_widgets + \
+               self.address_widgets
+
 
 
     def action(self, resource, context, form):
@@ -220,7 +236,7 @@ class Shop_Register(RegisterForm):
         user = users.set_user(email, password)
 
         # Save properties
-        user.save_form(self.schema, form)
+        user.save_form(self.get_schema(resource, context), form)
 
         # Save address in addresses table
         kw = {'user': user.name}

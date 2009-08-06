@@ -23,7 +23,6 @@ from itools.web import STLView, STLForm, INFO, ERROR
 from itools.xapian import PhraseQuery
 
 # Import from ikaaro
-from ikaaro.forms import SelectRadio, TextWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
@@ -51,14 +50,29 @@ class ShopUser_Manage(STLView):
 
     template = '/ui/shop/shop_user_manage.xml'
 
+    base_fields = ['gender', 'firstname', 'lastname', 'phone1',
+                  'phone2', 'user_language', 'email']
+
     def get_namespace(self, resource, context):
-        from user import ShopUser
         root = context.root
-        namespace = {}
+        shop = get_shop(resource)
+        user_class = shop.user_class
+        namespace = {'user': {'base': {},
+                              'public': [],
+                              'private': []}}
         # Base schema
-        base_schema = [x for x in ShopUser.get_metadata_schema().keys()]
-        for key in base_schema:
-            namespace[key] = resource.get_property(key)
+        for key in self.base_fields:
+            namespace['user']['base'][key] = resource.get_property(key)
+        # Additional public schema
+        for widget in user_class.public_widgets:
+            namespace['user']['public'].append(
+              {'title': widget.title,
+               'value': resource.get_property(widget.name)})
+        # Additional private schema
+        for widget in user_class.private_widgets:
+            namespace['user']['private'].append(
+              {'title': widget.title,
+               'value': resource.get_property(widget.name)})
         # Customer payments
         payments = resource.get_resource('../../shop/payments')
         namespace['payments'] = payments.get_payments_informations(
@@ -84,19 +98,15 @@ class ShopUser_EditAccount(User_EditAccount):
 
     def get_schema(self, resource, context):
         return merge_dicts(RegisterForm.schema,
+                           resource.public_schema,
                            gender=Civilite(mandatory=True),
                            phone1=String,
                            phone2=String)
 
 
-    def get_widgets(self, resource, context):
-        return [TextWidget('email', title=MSG(u"Email")),
-                SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
-                TextWidget('lastname', title=MSG(u"Lastname")),
-                TextWidget('firstname', title=MSG(u"Firstname")),
-                TextWidget('phone1', title=MSG(u"Phone number")),
-                TextWidget('phone2', title=MSG(u"Mobile"))]
 
+    def get_widgets(self, resource, context):
+        return resource.base_widgets + resource.public_widgets
 
 
     def get_value(self, resource, context, name, datatype):
@@ -104,6 +114,7 @@ class ShopUser_EditAccount(User_EditAccount):
 
 
     def action(self, resource, context, form):
+        # XXX If multilingual ?
         # We check if mail is used
         root = context.root
         user_mail = context.user.get_property('email')
