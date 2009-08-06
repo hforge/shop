@@ -281,6 +281,12 @@ class Shop_Login(LoginView):
 
     def get_namespace(self, resource, context):
         namespace = self.build_namespace(resource, context)
+        # Register link
+        if hasattr(resource, 'register'):
+            namespace['register_link'] = './;register'
+        else:
+            namespace['register_link'] = '/;register'
+        # Progress bar ?
         if context.resource.name=='shop':
             # If user is in shop, it's a payment process,
             # so we have to show a progress bar
