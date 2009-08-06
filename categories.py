@@ -27,7 +27,7 @@ from categories_views import VirtualCategory_BoxSubCategories
 from categories_views import VirtualCategory_Comparator, Categories_View
 from categories_views import VirtualCategory_View, VirtualCategory_ComparatorView
 from products import Product
-from utils import ShopFolder
+from utils import get_shop, ShopFolder
 
 
 class Category(ShopFolder):
@@ -71,13 +71,6 @@ class VirtualCategory(Category):
     class_title = MSG(u"Category")
     class_views = ['view', 'compare']
 
-    # Class to wrap subcategories into
-    # Default is ourself
-    virtual_category_class = None
-    # Class to wrap products into
-    # Default is the base shop Product
-    virtual_product_class = Product
-
     # Wrap products inside categories?
     # (the alternative is to wrap products in their own folder)
     wrap_products = True
@@ -100,6 +93,7 @@ class VirtualCategory(Category):
         """Get the virtual category.
         Or the virtual product if we expose products into categories.
         """
+        shop = get_shop(self)
         # Get the real category
         real_resource = self.get_real_resource()
         try:
@@ -107,16 +101,15 @@ class VirtualCategory(Category):
         except LookupError:
             resource = None
         else:
-            virtual_cls = self.virtual_category_class or self.__class__
+            virtual_cls = shop.virtual_category_class
         # Or maybe the name matches a product
         if resource is None and self.wrap_products:
-            site_root = self.get_site_root()
             try:
-                resource = site_root.get_resource('shop/products/%s' % name)
+                resource = shop.get_resource('products/%s' % name)
             except LookupError:
                 resource = None
             else:
-                virtual_cls = self.virtual_product_class
+                virtual_cls = shop.product_class
         if resource is None:
             return None
         # Return a copy of the resource wrapped into our virtual class
@@ -153,9 +146,6 @@ class VirtualCategories(ShopFolder):
     view = VirtualCategories_View()
     comparator = VirtualCategory_Comparator()
 
-    # Class to wrap categories into
-    virtual_category_class = VirtualCategory
-
     # Views
     # XXX Back-office views can't apply
     browse_content = None
@@ -175,14 +165,13 @@ class VirtualCategories(ShopFolder):
 
 
     def _get_resource(self, name):
-        site_root = self.get_site_root()
-        category = site_root.get_resource('shop/categories/%s' % name,
-                                          soft=True)
+        shop = get_shop(self)
+        category = shop.get_resource('categories/%s' % name, soft=True)
         if category is None:
             return None
         metadata = category.metadata
         # Build another instance with the same properties
-        return self.virtual_category_class(metadata)
+        return shop.virtual_category_class(metadata)
 
 
     def get_document_types(self):

@@ -25,7 +25,7 @@ from ikaaro.webpage import WebPage
 
 # Import from project
 from addresses import Addresses
-from categories import Categories
+from categories import Categories, VirtualCategory
 from countries import Countries
 from orders import Orders
 from products import Products, Product, ProductModels
@@ -60,6 +60,8 @@ class Shop(ShopFolder):
     user_class = ShopUser
     product_class = Product
     payments_class = ShopPayments
+    virtual_category_class = VirtualCategory
+
     mail_template = '/ui/shop/mail.xhtml'
 
     ####################################

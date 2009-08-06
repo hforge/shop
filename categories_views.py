@@ -43,6 +43,7 @@ class VirtualCategory_BoxSubCategories(STLView):
     def get_namespace(self, resource, context):
         root = context.root
         site_root = context.resource.get_site_root()
+        shop = get_shop(self)
 
         # get the category
         namespace = {'title': resource.get_title(),
@@ -53,7 +54,7 @@ class VirtualCategory_BoxSubCategories(STLView):
         abspath = site_root.get_canonical_path()
         base_query = [
             get_base_path_query(str(abspath)),
-            PhraseQuery('format', resource.virtual_product_class.class_id)]
+            PhraseQuery('format', shop.product_class.class_id)]
         for subcat in resource.search_resources(format='category'):
             subcat_path = '%s/%s' % (resource.name, subcat.name)
             query = base_query + [PhraseQuery('categories', subcat_path)]
@@ -104,8 +105,9 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
 
 
     def get_items(self, resource, context):
+        shop = get_shop(resource)
         query = [
-            PhraseQuery('format', resource.virtual_product_class.class_id),
+            PhraseQuery('format', shop.product_class.class_id),
             PhraseQuery('categories', resource.get_unique_id())]
         return context.root.search(AndQuery(*query))
 
