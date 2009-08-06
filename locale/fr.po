@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-05 08:08+CET\n"
+"POT-Creation-Date: 2009-08-06 09:08+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,6 +101,12 @@ msgctxt "dd"
 msgid "${address}"
 msgstr ""
 
+#: ../ui/shop/payments/cash/pay.xml.en:12
+#, fuzzy
+msgctxt "paragraph"
+msgid "${address}"
+msgstr "Adresse"
+
 #: ../ui/shop/payments/paybox/record_edit.xml.en:14
 msgctxt "b"
 msgid "${advance_state}"
@@ -111,6 +117,12 @@ msgstr ""
 msgctxt "dd"
 msgid "${amount} €"
 msgstr ""
+
+#: ../ui/shop/payments/cash/pay.xml.en:11
+#, fuzzy
+msgctxt "paragraph"
+msgid "${amount} €<x id='3'/> Address:"
+msgstr "${amount} €<x id='3'/> Notre adresse:"
 
 #: ../ui/shop/payments/cash/record_view.xml.en:11
 msgid "${amount} €<x id='3'/> Our address:"
@@ -171,6 +183,8 @@ msgid ""
 msgstr ""
 
 #: ../ui/shop/shop_addresses.xml.en:48
+#, fuzzy
+msgctxt "paragraph"
 msgid ""
 "${bill_address/zipcode} ${bill_address/town}<x id='13'/> ${bill_address/"
 "country}<x id='14'/>  <g id='15'>(Edit)</g>"
@@ -188,8 +202,10 @@ msgstr ""
 "country}"
 
 #: ../ui/shop/shop_chooseaddress.xml.en:11
+#, fuzzy
+msgctxt "form"
 msgid "${bill_address}"
-msgstr ""
+msgstr "Adresse de facturation"
 
 #: ../ui/shop/mail.xhtml.en:21
 msgctxt "table cell"
@@ -683,6 +699,12 @@ msgstr "${ref} (Veuillez écrire ce numéro dans votre courrier)"
 msgid "${ref}<x id='2'/> Amount:"
 msgstr "${ref}<x id='2'/> Montant:"
 
+#: ../ui/shop/payments/cash/pay.xml.en:10
+#, fuzzy
+msgctxt "paragraph"
+msgid "${ref}<x id='2'/> Amount:"
+msgstr "${ref}<x id='2'/> Montant:"
+
 #: ../ui/shop/payments/transfer/pay.xml.en:12
 msgctxt "paragraph"
 msgid "${ref}<x id='3'/> amount:"
@@ -877,7 +899,7 @@ msgstr ""
 msgid "(Example: Home, Office)"
 msgstr "(Exemple: Maison, Bureau)"
 
-#: ../products/product_views.py:284
+#: ../products/product_views.py:301
 msgid "-"
 msgstr ""
 
@@ -945,15 +967,17 @@ msgid ""
 "<g id='1'> To finalise the payment, you have to execute the bank transfer: </"
 "g>  <x id='2'/> Payment ref:"
 msgstr ""
-"<g id='1'> Pour finaliser le paiement, vous devez réaliser le virement bancaire: </"
-"g>  <x id='2'/> Paiement ref:"
+"<g id='1'> Pour finaliser le paiement, vous devez réaliser le virement "
+"bancaire: </g>  <x id='2'/> Paiement ref:"
 
 #: ../ui/shop/payments/check/pay.xml.en:7
 msgctxt "b"
 msgid ""
 "<g id='1'> To finalize your purchase, you have to send a check. <x id='2'/> "
 "Here all details:"
-msgstr "<g id='1'> Pour finaliser votre achat, vous devez envoyer un chéque. <x id='2'/> Here all details:"
+msgstr ""
+"<g id='1'> Pour finaliser votre achat, vous devez envoyer un chéque. <x "
+"id='2'/> Here all details:"
 
 #: ../ui/shop/products/addproduct_tree.xml.en:9
 msgctxt "link"
@@ -979,11 +1003,11 @@ msgid ""
 "${bill_address/zipcode} ${bill_address/town}<x id='19'/> ${bill_address/"
 "country}<x id='20'/>  </g>"
 msgstr ""
-"<g id='13'> Identique à l'adresse de livraison </g>  <g id='14'> ${bill_address/"
-"firstname} ${bill_address/lastname}<x id='15'/> ${bill_address/address_1}<x "
-"id='16'/>  <g id='17'> ${bill_address/address_2}<x id='18'/>  </g> "
-"${bill_address/zipcode} ${bill_address/town}<x id='19'/> ${bill_address/"
-"country}<x id='20'/>  </g>"
+"<g id='13'> Identique à l'adresse de livraison </g>  <g id='14'> "
+"${bill_address/firstname} ${bill_address/lastname}<x id='15'/> "
+"${bill_address/address_1}<x id='16'/>  <g id='17'> ${bill_address/address_2}"
+"<x id='18'/>  </g> ${bill_address/zipcode} ${bill_address/town}<x id='19'/> "
+"${bill_address/country}<x id='20'/>  </g>"
 
 #: ../ui/shop/shop_recapitulatif.xml.en:60
 msgctxt "label"
@@ -1023,7 +1047,8 @@ msgstr ""
 #: ../ui/shop/products/addproduct.xml.en:46
 msgctxt "abbr"
 msgid "<g id='3'>${item/short_title}</g><x id='4'/>  <g id='5'> Select </g>"
-msgstr "<g id='3'>${item/short_title}</g><x id='4'/>  <g id='5'> Sélectionner </g>"
+msgstr ""
+"<g id='3'>${item/short_title}</g><x id='4'/>  <g id='5'> Sélectionner </g>"
 
 #: ../ui/shop/orders/order_view.xml.en:16
 msgctxt "i"
@@ -1031,7 +1056,8 @@ msgid ""
 "<g id='3'>${state/title}</g><x id='4'/>  <g id='5'>  <x id='6'/> Download "
 "bill </g>"
 msgstr ""
-"<g id='3'>${state/title}</g><x id='4'/>  <g id='5'>  <x id='6'/> Télécharger la facture </g>"
+"<g id='3'>${state/title}</g><x id='4'/>  <g id='5'>  <x id='6'/> Télécharger "
+"la facture </g>"
 
 #: ../ui/shop/payments/cash/record_edit.xml.en:12
 #: ../ui/shop/payments/transfer/record_edit.xml.en:12
@@ -1095,7 +1121,7 @@ msgstr ""
 msgid "A mandatory variable is missing."
 msgstr "Une variable obligatoire est manquante"
 
-#: ../products/product.py:63
+#: ../products/product.py:64
 msgid "A product"
 msgstr "Un produit"
 
@@ -1133,7 +1159,7 @@ msgstr ""
 msgid "Activate html mails"
 msgstr "Activer les mails HTML"
 
-#: ../products/models_views.py:184 ../products/models_views.py:238
+#: ../products/models_views.py:189 ../products/models_views.py:242
 msgid "Add"
 msgstr "Ajouter"
 
@@ -1142,7 +1168,7 @@ msgctxt "button"
 msgid "Add"
 msgstr "Ajouter"
 
-#: ../products/models_views.py:183 ../products/models_views.py:237
+#: ../products/models_views.py:188 ../products/models_views.py:241
 msgid "Add Record"
 msgstr "Ajouter un nouveau enregistrement"
 
@@ -1244,6 +1270,11 @@ msgstr "Rendez-vous pris"
 #: ../payments/paybox/enumerates.py:128
 msgid "Approve after holder identification"
 msgstr "Approuver après identification du porteur"
+
+#: ../ui/shop/products/product_delete.xml.en:9
+msgctxt "paragraph"
+msgid "Are you sure you want to delete the product ?"
+msgstr ""
 
 #: ../orders/messages.py:44
 msgid "Author"
@@ -1350,7 +1381,7 @@ msgstr "Numéro du porteur ou cryptogramme visuel invalide"
 msgid "Carte"
 msgstr ""
 
-#: ../shop.py:101 ../products/product_views.py:207 ../categories.py:56
+#: ../shop.py:101 ../products/product_views.py:209 ../categories.py:56
 #: ../categories.py:150
 msgid "Categories"
 msgstr ""
@@ -1454,7 +1485,7 @@ msgstr ""
 msgid "Configuration ok"
 msgstr ""
 
-#: ../payments/transfer/transfer_views.py:82
+#: ../payments/transfer/transfer_views.py:84
 msgid "Configure"
 msgstr "Configurer"
 
@@ -1524,11 +1555,11 @@ msgstr "Pays"
 msgid "Country"
 msgstr "Pays"
 
-#: ../products/product_views.py:203 ../products/product_views.py:263
+#: ../products/product_views.py:205 ../products/product_views.py:280
 msgid "Cover"
 msgstr "Couverture"
 
-#: ../products/product.py:112
+#: ../products/product.py:115
 msgid "Cross selling"
 msgstr "Vente liée"
 
@@ -1610,13 +1641,24 @@ msgstr ""
 msgid "Decimal"
 msgstr ""
 
-#: ../products/models_views.py:263
+#: ../products/models_views.py:267
 msgid "Default cover"
 msgstr "Couverture par défaut"
 
-#: ../products/models_views.py:293
+#: ../products/models_views.py:297
 msgid "Default cover saved"
 msgstr "Couverture par défaut enregistrée"
+
+#: ../products/product_views.py:241
+#, fuzzy
+msgid "Delete product"
+msgstr "Voir le produit"
+
+#: ../ui/shop/products/product_delete.xml.en:12
+#, fuzzy
+msgctxt "button"
+msgid "Delete the product"
+msgstr "Voir le produit"
 
 #: ../ui/shop/cart_view.xml.en:74
 msgctxt "table cell"
@@ -1645,7 +1687,7 @@ msgstr "Livraison en cours"
 
 #: ../shipping/withdrawal.py:108 ../products/cross_selling_views.py:223
 #: ../payments/payment_way_views.py:49 ../payments/payments_views.py:243
-#: ../shipping/shippings_views.py:51 ../products/product_views.py:200
+#: ../shipping/shippings_views.py:51 ../products/product_views.py:202
 #: ../shipping/shipping_way_views.py:38 ../products/images_views.py:38
 #: ../payments/payment_way.py:57
 msgid "Description"
@@ -1691,12 +1733,12 @@ msgstr ""
 msgid "E_CARD"
 msgstr ""
 
-#: ../shipping/shipping_way_views.py:32 ../products/product_views.py:190
+#: ../shipping/shipping_way_views.py:32 ../products/product_views.py:192
 #: ../editable.py:48
 msgid "Edit"
 msgstr "Modifier"
 
-#: ../products/product_views.py:149
+#: ../products/product_views.py:151
 msgid "Edit Model"
 msgstr "Modifier le model"
 
@@ -1709,12 +1751,11 @@ msgctxt "link"
 msgid "Edit address"
 msgstr "Modifier l'adresse"
 
-#: ../payments/transfer/transfer_views.py:99 ../shop_views.py:91
-#: ../payments/payment_way_views.py:52
+#: ../shop_views.py:91 ../payments/payment_way_views.py:52
 msgid "Edit configuration"
 msgstr "Editer la configuration"
 
-#: ../products/product.py:82
+#: ../products/product.py:83
 msgid "Edit cross selling"
 msgstr "Modifier la vente liée"
 
@@ -1756,8 +1797,7 @@ msgstr ""
 msgid "Enabled"
 msgstr "Activer"
 
-#: ../shipping/shipping_way_views.py:39
-#: ../payments/transfer/transfer_views.py:93 ../payments/payments_views.py:199
+#: ../shipping/shipping_way_views.py:39 ../payments/payments_views.py:199
 #: ../payments/payment_way_views.py:48 ../shipping/shippings_views.py:52
 msgid "Enabled ?"
 msgstr "Actif ?"
@@ -1822,7 +1862,7 @@ msgstr ""
 msgid "Error, payment module can't be load"
 msgstr "Erreur, le module de payment ne peut pas être chargé"
 
-#: ../products/product_views.py:153
+#: ../products/product_views.py:155
 msgid "Error: No product type is selected."
 msgstr "Erreur: aucun type de produit n'est sélectionné."
 
@@ -1955,7 +1995,7 @@ msgctxt "heading"
 msgid "I'm already a customer"
 msgstr "Je suis déjà client"
 
-#: ../payments/transfer/transfer_views.py:97
+#: ../payments/transfer/transfer_views.py:94
 msgid "IBAN"
 msgstr ""
 
@@ -2110,7 +2150,7 @@ msgstr "Conserver la carte"
 msgid "Keep the card, special conditions."
 msgstr "Conserver la carte, conditions spéciales."
 
-#: ../products/product_views.py:201
+#: ../products/product_views.py:203
 msgid "Keywords"
 msgstr "Mots clés"
 
@@ -2121,7 +2161,7 @@ msgid ""
 "réserve des heures limites de dépôt"
 msgstr ""
 
-#: ../products/product_views.py:265
+#: ../products/product_views.py:282
 msgid "Last Modified"
 msgstr "Derniére modification"
 
@@ -2129,7 +2169,7 @@ msgstr "Derniére modification"
 msgid "Lastname"
 msgstr "Nom"
 
-#: ../products/models_views.py:80
+#: ../products/models_views.py:81
 msgid "List"
 msgstr ""
 
@@ -2138,7 +2178,6 @@ msgctxt "button"
 msgid "Log in"
 msgstr "Se connecter"
 
-#: ../payments/transfer/transfer_views.py:95
 #: ../payments/payment_way_views.py:47
 msgid "Logo"
 msgstr ""
@@ -2175,7 +2214,7 @@ msgctxt "link"
 msgid "Manage orders"
 msgstr "Gérer les commandes"
 
-#: ../products/product.py:78 ../products/images_views.py:105
+#: ../products/product.py:79 ../products/images_views.py:105
 msgid "Manage photos"
 msgstr "Gérer les photos"
 
@@ -2284,13 +2323,13 @@ msgstr "Mon carnet d'adresses"
 msgid "My profile"
 msgstr "Mon profil"
 
-#: ../categories_views.py:220 ../products/product_views.py:50
-#: ../products/images.py:72 ../products/models_views.py:78
-#: ../products/models_views.py:128
+#: ../categories_views.py:220 ../products/product_views.py:52
+#: ../products/images.py:72 ../products/models_views.py:79
+#: ../products/models_views.py:129
 msgid "Name"
 msgstr "Nom"
 
-#: ../products/models_views.py:254
+#: ../products/models_views.py:258
 msgid "Name already used"
 msgstr "Nom déjà utilisé"
 
@@ -2310,7 +2349,7 @@ msgstr "Adresses mail de notification de nouvelle commande (1 par ligne)"
 msgid "New payment added !"
 msgstr "Nouveau paiement ajouté !"
 
-#: ../products/models_views.py:40
+#: ../products/models_views.py:41
 msgid "New product model"
 msgstr "Nouveau model de produit"
 
@@ -2356,7 +2395,7 @@ msgstr ""
 msgid "Numéro de colissimo"
 msgstr ""
 
-#: ../products/models_views.py:264
+#: ../products/models_views.py:268
 msgid "OK"
 msgstr ""
 
@@ -2428,7 +2467,7 @@ msgctxt "heading"
 msgid "Order number:"
 msgstr "Commande numéro:"
 
-#: ../products/product.py:108 ../products/product.py:448
+#: ../products/product.py:111 ../products/product.py:451
 msgid "Order photos"
 msgstr "Ordonner les photos"
 
@@ -2706,7 +2745,7 @@ msgstr "Veuillez prendre un rendez vous avec nous"
 msgid "Pre-tax retail price:"
 msgstr "Prix de vente HT:"
 
-#: ../products/product_views.py:209
+#: ../products/product_views.py:211
 msgid "Pre-tax wholesale price"
 msgstr "Prix d'achat HT"
 
@@ -2731,7 +2770,7 @@ msgstr "Prix"
 msgid "Private ?"
 msgstr "Privé ?"
 
-#: ../products/product.py:60 ../orders/orders_views.py:47
+#: ../products/product.py:61 ../orders/orders_views.py:47
 #: ../products/cross_selling.py:67
 msgid "Product"
 msgstr "Produit"
@@ -2755,11 +2794,16 @@ msgstr ""
 msgid "Product Models"
 msgstr "Models de produits"
 
-#: ../products/product_views.py:142
+#: ../products/product_views.py:144
 msgid "Product added to cart !"
 msgstr "Produit ajouté au caddie !"
 
-#: ../products/product_views.py:51 ../products/product_views.py:266
+#: ../products/product_views.py:251
+#, fuzzy
+msgid "Product deleted !"
+msgstr "Model de produit"
+
+#: ../products/product_views.py:53 ../products/product_views.py:283
 msgid "Product model"
 msgstr "Model de produit"
 
@@ -2767,7 +2811,7 @@ msgstr "Model de produit"
 msgid "Product name"
 msgstr "Nom du produit"
 
-#: ../orders/orders.py:103 ../orders/orders.py:210 ../products/product.py:522
+#: ../orders/orders.py:103 ../orders/orders.py:210 ../products/product.py:525
 #: ../shop.py:108
 msgid "Products"
 msgstr "Produits"
@@ -2793,7 +2837,7 @@ msgctxt "table cell"
 msgid "Quantity"
 msgstr "Quantité"
 
-#: ../payments/transfer/transfer_views.py:96
+#: ../payments/transfer/transfer_views.py:93
 msgid "RIB"
 msgstr ""
 
@@ -2809,7 +2853,7 @@ msgstr "Choix aléatoire dans le shop"
 msgid "Re-open the order"
 msgstr "Ré-ouvrir la commande"
 
-#: ../products/models_views.py:159 ../products/models_views.py:232
+#: ../products/models_views.py:163 ../products/models_views.py:236
 msgid "Record deleted."
 msgstr "Enregistrement supprimé"
 
@@ -2830,7 +2874,13 @@ msgstr ""
 msgid "Ref payment:"
 msgstr ""
 
-#: ../products/product_views.py:198 ../payments/payments_views.py:239
+#: ../ui/shop/payments/cash/pay.xml.en:10
+#, fuzzy
+msgctxt "paragraph"
+msgid "Ref payment:"
+msgstr "Pas de paiement"
+
+#: ../products/product_views.py:200 ../payments/payments_views.py:239
 msgid "Reference"
 msgstr ""
 
@@ -2908,7 +2958,7 @@ msgctxt "table cell"
 msgid "Selection"
 msgstr "Sélection"
 
-#: ../products/product_views.py:210
+#: ../products/product_views.py:212
 msgid "Selling price"
 msgstr "Prix de vente"
 
@@ -3100,7 +3150,7 @@ msgctxt "heading"
 msgid "The end of your order ..."
 msgstr "La fin de votre commande ..."
 
-#: ../products/product_views.py:157
+#: ../products/product_views.py:159
 msgid "The model is empty, no informations to edit."
 msgstr "Le model est vide, aucune information à éditer"
 
@@ -3120,11 +3170,11 @@ msgstr ""
 msgid "There are {n} categories"
 msgstr "Il y a {n} categories"
 
-#: ../products/models_views.py:74
+#: ../products/models_views.py:75
 msgid "There are {n} enumerates."
 msgstr "Il y a {n} enumerates."
 
-#: ../products/models_views.py:121
+#: ../products/models_views.py:122
 msgid "There are {n} models."
 msgstr "Il y a {n} models"
 
@@ -3140,7 +3190,7 @@ msgstr "Il y a {n} modes de paiement"
 msgid "There are {n} payments."
 msgstr "Il y a {n} paiements"
 
-#: ../products/product_views.py:255
+#: ../products/product_views.py:272
 msgid "There are {n} products"
 msgstr "Il y a {n} produits"
 
@@ -3148,7 +3198,7 @@ msgstr "Il y a {n} produits"
 msgid "There is 1 category"
 msgstr "Il y a 1 catégorie"
 
-#: ../products/models_views.py:73
+#: ../products/models_views.py:74
 msgid "There is 1 enumerate"
 msgstr "Il y a 1 enumerate"
 
@@ -3160,11 +3210,11 @@ msgstr "Il y a un mode de paiement"
 msgid "There is 1 payment."
 msgstr "Il y a un paiement"
 
-#: ../products/product_views.py:254
+#: ../products/product_views.py:271
 msgid "There is 1 product"
 msgstr "Il y a un produit"
 
-#: ../products/models_views.py:120
+#: ../products/models_views.py:121
 msgid "There is 1 product model."
 msgstr "Il y a 1 model de produit"
 
@@ -3176,7 +3226,7 @@ msgstr "Il y a une commande."
 msgid "This email address is already used."
 msgstr "Cette adresse email est déjà utilisée"
 
-#: ../products/product_views.py:130
+#: ../products/product_views.py:132
 msgid "This product isn't buyable"
 msgstr "Ce produit n'est pas achetable"
 
@@ -3189,13 +3239,13 @@ msgid "Time-out > 15 mn before validation by the buyer"
 msgstr "Temps d'attente > 15 mn par l'acheteur"
 
 #: ../products/cross_selling_views.py:222 ../payments/payment_way_views.py:46
-#: ../products/models_views.py:79 ../products/models_views.py:129
+#: ../products/models_views.py:80 ../products/models_views.py:130
 #: ../orders/orders.py:112 ../orders/orders.py:114 ../categories_views.py:221
-#: ../payments/transfer/transfer_views.py:94 ../shipping/shippings_views.py:50
-#: ../countries.py:74 ../payments/payments_views.py:198
-#: ../products/product_views.py:199 ../products/product_views.py:264
-#: ../shipping/shipping_way_views.py:37 ../products/images_views.py:37
-#: ../products/models.py:62 ../products/models.py:96
+#: ../shipping/shippings_views.py:50 ../countries.py:74
+#: ../payments/payments_views.py:198 ../products/product_views.py:201
+#: ../products/product_views.py:281 ../shipping/shipping_way_views.py:37
+#: ../products/images_views.py:37 ../products/models.py:62
+#: ../products/models.py:96
 msgid "Title"
 msgstr "Titre"
 
@@ -3203,6 +3253,12 @@ msgstr "Titre"
 msgctxt "table cell"
 msgid "Title:"
 msgstr "Titre:"
+
+#: ../ui/shop/products/product_delete.xml.en:10
+#, fuzzy
+msgctxt "paragraph"
+msgid "To confirm the deletion, click here:"
+msgstr "Vous devez confirmer le retrait en magasin ! Pour cela, cliquez ici"
 
 #: ../shop_views.py:433
 msgid "To continue, you have to validate the terms of service !"
@@ -3217,6 +3273,12 @@ msgstr "Pour finaliser votre achat, vous devez effectuer un virement bancaire."
 msgctxt "heading"
 msgid "To finalize your order you have to send a check"
 msgstr "Pour finaliser votre achat, vous devez envoyer un chéque"
+
+#: ../ui/shop/payments/cash/pay.xml.en:8
+#, fuzzy
+msgctxt "paragraph"
+msgid "To finalize your payment you have to go in our shop:"
+msgstr "Pour finaliser votre achat, vous devez effectuer un virement bancaire."
 
 #: ../ui/shop/payments/cash/record_view.xml.en:8
 msgid "To finalize your payment:"
@@ -3350,13 +3412,13 @@ msgid "Validate the payment"
 msgstr "Valider le paiement"
 
 #: ../user_views.py:154 ../categories_views.py:80 ../categories_views.py:209
-#: ../products/product_views.py:76 ../products/product_views.py:252
-#: ../editable.py:37 ../products/models_views.py:105
-#: ../products/models_views.py:119
+#: ../products/product_views.py:78 ../products/product_views.py:269
+#: ../editable.py:37 ../products/models_views.py:106
+#: ../products/models_views.py:120
 msgid "View"
 msgstr "Voir"
 
-#: ../products/product_views.py:240
+#: ../products/product_views.py:257
 msgid "View Box"
 msgstr ""
 
@@ -3388,7 +3450,7 @@ msgid "We're waiting for customer payment"
 msgstr "En attente du paiement client"
 
 #: ../orders/orders.py:113 ../shipping/shipping_way.py:64
-#: ../products/product_views.py:205
+#: ../products/product_views.py:207
 msgid "Weight"
 msgstr "Poids"
 
@@ -3425,6 +3487,11 @@ msgstr "Vous pouvez voir les détails de la commande <g id='1'>ici</g>"
 
 #: ../categories_views.py:166
 msgid "You can't compare this products."
+msgstr "Vous ne pouvez pas comparer ces produits"
+
+#: ../products/product_views.py:249
+#, fuzzy
+msgid "You can't delete this product"
 msgstr "Vous ne pouvez pas comparer ces produits"
 
 #: ../ui/shop/shipping/withdrawal_record_order_add.xml.en:10
@@ -3468,7 +3535,7 @@ msgstr "Votre panier est invalide ou votre paiement a déjà été enregistrée.
 msgid "Your inscription has been validated"
 msgstr "Votre inscription a été validée"
 
-#: ../user_views.py:260
+#: ../user_views.py:260 ../orders/orders_views.py:278
 msgid "Your message has been sent"
 msgstr "Votre message a été envoyé"
 
