@@ -160,6 +160,9 @@ class Shop(ShopFolder):
                    encoding='utf-8', subject_with_host=True,
                    return_receipt=False):
         root = context.root
+        # Translation
+        subject = subject.gettext()
+        text = text.gettext()
         # From_addr
         if from_addr is None:
             from_addr = self.get_property('shop_from_addr')
