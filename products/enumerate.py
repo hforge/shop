@@ -78,6 +78,11 @@ class CategoriesEnumerate(Enumerate):
 
 
 
+class States(Enumerate):
+
+    options = [
+      {'name': 'public' , 'value': MSG(u'Public')},
+      {'name': 'private', 'value': MSG(u'Private')}]
 
 
 class Datatypes(Enumerate):

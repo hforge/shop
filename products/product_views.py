@@ -194,9 +194,11 @@ class Product_Edit(Editable_Edit, AutoForm):
     schema = merge_dicts(Editable_Edit.schema,
                          product_schema)
 
-
     widgets = [
         # General informations
+        SelectWidget('state',
+                     title=MSG(u'Publication state'),
+                     has_empty_option=False),
         TextWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
@@ -280,7 +282,8 @@ class Products_View(Folder_BrowseContent):
         ('cover', MSG(u'Cover')),
         ('title', MSG(u'Title')),
         ('mtime', MSG(u'Last Modified')),
-        ('product_model', MSG(u'Product model'))
+        ('product_model', MSG(u'Product model')),
+        ('workflow_state', MSG(u'State'))
         ]
 
 

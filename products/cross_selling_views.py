@@ -155,6 +155,7 @@ class AddProduct_View(STLForm):
         site_root = categories.get_site_root()
         abspath = site_root.get_canonical_path()
         query = [PhraseQuery('format', shop.product_class.class_id),
+                 PhraseQuery('workflow_state', 'public'),
                  PhraseQuery('has_categories', True),
                  get_base_path_query(str(abspath))]
         if current_category:

@@ -28,6 +28,7 @@ from itools.xml import TEXT
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.registry import register_resource_class, register_field
+from ikaaro.workflow import WorkflowAware
 
 # Import from shop
 from cross_selling import CrossSellingTable
@@ -55,14 +56,14 @@ from shop.utils import get_shop, format_price, ShopFolder
 #
 
 
-class Product(Editable, DynamicFolder):
+class Product(WorkflowAware, Editable, DynamicFolder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
     class_views = ['view', 'edit', 'edit_model', 'images', 'order',
                    'edit_cross_selling', 'delete_product']
     class_description = MSG(u'A product')
-    class_version = '20090619'
+    class_version = '20090806'
 
     __fixed_handlers__ = DynamicFolder.__fixed_handlers__ + ['images',
                                                       'order-photos',
@@ -91,6 +92,7 @@ class Product(Editable, DynamicFolder):
     def get_metadata_schema(cls):
         return merge_dicts(DynamicFolder.get_metadata_schema(),
                            Editable.get_metadata_schema(),
+                           WorkflowAware.get_metadata_schema(),
                            product_schema,
                            product_model=String)
 
@@ -355,7 +357,8 @@ class Product(Editable, DynamicFolder):
     #####################
     def is_buyable(self):
         return (self.get_property('pre-tax-price') != decimal(0) and
-                self.get_property('tax') is not None)
+                self.get_property('tax') is not None and
+                self.get_statename() == 'public')
 
 
     def get_price_without_tax(self):
@@ -516,6 +519,10 @@ class Product(Editable, DynamicFolder):
         real_image_path = order_path.resolve2(image_path)
         new_image_path = abspath.get_pathto(real_image_path)
         self.set_property('cover', new_image_path)
+
+
+    def update_20090806(self):
+        self.set_property('state', 'public')
 
 
 

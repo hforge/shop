@@ -54,7 +54,9 @@ class VirtualCategory_BoxSubCategories(STLView):
         abspath = site_root.get_canonical_path()
         base_query = [
             get_base_path_query(str(abspath)),
-            PhraseQuery('format', shop.product_class.class_id)]
+            PhraseQuery('format', shop.product_class.class_id),
+            PhraseQuery('workflow_state', 'public'),
+            ]
         for subcat in resource.search_resources(format='category'):
             subcat_path = '%s/%s' % (resource.name, subcat.name)
             query = base_query + [PhraseQuery('categories', subcat_path)]
@@ -108,6 +110,7 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
         shop = get_shop(resource)
         query = [
             PhraseQuery('format', shop.product_class.class_id),
+            PhraseQuery('workflow_state', 'public'),
             PhraseQuery('categories', resource.get_unique_id())]
         return context.root.search(AndQuery(*query))
 
@@ -116,8 +119,10 @@ class VirtualCategories_View(VirtualCategory_View):
 
     def get_items(self, resource, context):
         shop = get_shop(resource)
-        query = PhraseQuery('format', shop.product_class.class_id)
-        return context.root.search(query)
+        query = [
+            PhraseQuery('format', shop.product_class.class_id),
+            PhraseQuery('workflow_state', 'public')]
+        return context.root.search(*query)
 
 
 class VirtualCategory_ComparatorView(VirtualCategory_View):
