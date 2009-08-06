@@ -535,7 +535,7 @@ class Products(ShopFolder):
 
 
 
-# XXX Hack (Demander à henry ?)
+# Product class depents on CrossSellingTable class and vice versa
 CrossSellingTable.orderable_classes = Product
 
 # Register fields
