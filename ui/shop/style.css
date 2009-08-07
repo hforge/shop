@@ -413,3 +413,16 @@ table.cart td{
   height: 200px;
   background: #FFF;
 }
+
+/* Product images slider */
+
+#product-slider-box .product-slider-preview-img{
+  cursor: pointer;
+  padding: 3px;
+}
+
+#product-slider-box .product-slider-preview-img.selected{
+  border: 1px solid gray;
+  padding: 2px;
+}
+

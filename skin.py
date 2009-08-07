@@ -23,14 +23,20 @@ from ikaaro.skins import Skin, register_skin
 
 class ShopSkin(Skin):
 
+    base_styles = ['/ui/aruni/style.css', '/ui/bo.css']
+    base_scripts = ['/ui/shop/javascript.js']
 
     def get_styles(self, context):
         styles = Skin.get_styles(self, context)
-        #styles.append('/ui/shop/style.css')
-        base_styles = ['/ui/aruni/style.css', '/ui/bo.css']
+        #styles.append('/ui/shop/style.css') XXX
         styles.extend(base_styles)
         return styles
 
+
+    def get_scripts(self, context):
+        scripts = Skin.get_scripts(self, context)
+        scripts.extend(base_scripts)
+        return scripts
 
 
 ###########################################################################

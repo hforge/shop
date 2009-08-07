@@ -293,6 +293,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         # Images
         namespace['cover'] = self.get_cover_namespace(context)
         namespace['images'] = self.get_images_namespace(context)
+        namespace['has_more_than_one_image'] = len(namespace['images']) > 1
         # Product is buyable
         namespace['is_buyable'] = self.is_buyable()
         # Cross selling
