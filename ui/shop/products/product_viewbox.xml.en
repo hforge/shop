@@ -5,12 +5,14 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
   <div class="product-view-box">
     <div class="product-title">
-      <h2><a href="${name}">${title}</a></h2>
+      <h2><a href="${href}">${title}</a></h2>
     </div>
     <div class="description-wrapper">
-      <img class="cover"
-           src="${cover/href}/;thumb?width=90&amp;height=90"
-           stl:if="cover"/>
+      <a href="${href}">
+        <img class="cover"
+             src="${cover/href}/;thumb?width=90&amp;height=90"
+             stl:if="cover"/>
+      </a>
       <span class="price">
         ${price-with-tax} €
       </span>
