@@ -107,8 +107,11 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
 
 
     def get_items(self, resource, context):
+        site_root = context.resource.get_site_root()
         shop = get_shop(resource)
+        abspath = site_root.get_canonical_path()
         query = [
+            get_base_path_query(str(abspath)),
             PhraseQuery('format', shop.product_class.class_id),
             PhraseQuery('workflow_state', 'public'),
             PhraseQuery('categories', resource.get_unique_id())]
@@ -118,8 +121,11 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
 class VirtualCategories_View(VirtualCategory_View):
 
     def get_items(self, resource, context):
+        site_root = context.resource.get_site_root()
         shop = get_shop(resource)
+        abspath = site_root.get_canonical_path()
         query = [
+            get_base_path_query(str(abspath)),
             PhraseQuery('format', shop.product_class.class_id),
             PhraseQuery('workflow_state', 'public')]
         return context.root.search(AndQuery(*query))
