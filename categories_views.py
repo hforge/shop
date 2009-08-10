@@ -252,36 +252,30 @@ class Category_Edit(Editable_Edit, DBResource_Edit):
 
     access = 'is_allowed_to_edit'
 
-    schema = merge_dicts(Editable_Edit.schema,
+    schema = merge_dicts(DBResource_Edit.schema,
+                         Editable_Edit.schema,
                          image_category=PathDataType(multilingual=True))
 
 
-    widgets = [
+    widgets = DBResource_Edit.widgets + [
         ImageSelectorWidget('image_category',  title=MSG(u'Category image')),
         RTEWidget('data', title=MSG(u"Description"))]
 
-
-    def action(self, resource, context, form):
-        lang = resource.get_content_language(context)
-        resource.set_property('image_category', form['image_category'], lang)
 
 
     def get_value(self, resource, context, name, datatype):
         if name == 'data':
             return Editable_Edit.get_value(self, resource, context, name,
                                            datatype)
-        language = resource.get_content_language(context)
-        return resource.get_property(name, language=language)
+        return DBResource_Edit.get_value(self, resource, context, name,
+                                         datatype)
 
 
     def action(self, resource, context, form):
-        language = resource.get_content_language(context)
-        for key, datatype in self.schema.items():
-            if key in ('data'):
-                continue
-            if getattr(datatype, 'multilingual', False):
-                resource.set_property(key, form[key], language=language)
-            else:
-                resource.set_property(key, form[key])
+        DBResource_Edit.action(self, resource, context, form)
         Editable_Edit.action(self, resource, context, form)
+        # Image
+        lang = resource.get_content_language(context)
+        resource.set_property('image_category', form['image_category'], lang)
+        # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
