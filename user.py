@@ -90,7 +90,8 @@ class ShopUser(User):
         for key in schema:
             if key.startswith('password'):
                 continue
-            elif key not in self.get_metadata_schema():
+            elif (key not in self.get_metadata_schema() and
+                  key not in self.private_schema):
                 continue
             value = form[key]
             if value is None:
