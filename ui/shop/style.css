@@ -426,3 +426,40 @@ table.cart td{
   padding: 2px;
 }
 
+/* Product cart */
+#cart-box{
+  background-color: #FFF;
+}
+
+#cart-box h1{
+  padding: 0;
+  margin: 0;
+}
+
+#cart-box-title{
+  border-bottom: 1px solid black;
+}
+
+#cart-box-content ul{
+  border: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#cart-box-content ul a{
+  text-decoration: none;
+}
+
+#cart-box-order{
+  text-align: right;
+  border-top: 1px solid black;
+  padding: 5px;
+}
+
+#cart-box-order a{
+  color: #000;
+  text-decoration: none;
+}
+
+
+

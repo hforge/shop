@@ -121,49 +121,17 @@ class Cart_Viewbox(STLView):
 
     access = True
     template = '/ui/shop/cart_viewbox.xml'
-    product_limit = 5
+
+    def GET(self, resource, context):
+        cart = ProductCart(context)
+        if cart.get_nb_products() <= 0:
+            return
+        return STLView.GET(self, resource, context)
 
 
     def get_namespace(self, resource, context):
-        # Cart
-        abspath = resource.get_abspath()
-        product_cart = ProductCart(context)
-        namespace = product_cart.get_namespace()
-        # check if not cart is empty
-        if not namespace['nb_products']:
-            return namespace
-        # list of products
-        products_cart = product_cart.products
-        # Get products
-        shop = get_shop(resource)
-        products = shop.get_resource('products')
-        # products namespace
-        products_ns = []
-        total_with_tax = decimal(0)
-        for product_cart in products_cart:
-            # Get product
-            product = products.get_resource(product_cart['name'], soft=True)
-            # Check product is buyable
-            if not product or not product.is_buyable():
-                continue
-            quantity = product_cart['quantity']
-            unit_price_with_tax = decimal(product.get_price_with_tax())
-            total_with_tax += unit_price_with_tax * quantity
-
-            virtual_path = product.get_virtual_path()
-            product_ns = {'id': product_cart['id'],
-                          'name': product.name,
-                          'title': product.get_title(),
-                          'href': abspath.get_pathto(virtual_path),
-                          'quantity': quantity}
-            products_ns.append(product_ns)
-        namespace['overflow'] = (len(products_ns)>self.product_limit)
-        if namespace['overflow']:
-            products_ns = products_ns[:self.product_limit]
-        namespace['products'] = products_ns
-        namespace['title'] = MSG(u'Cart')
-        namespace['total_with_tax'] = format_price(total_with_tax)
-        return namespace
+        cart = ProductCart(context)
+        return cart.get_namespace(resource, context)
 
 
 

@@ -14,11 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from decimal import Decimal as decimal
+
 # Import from itools
 from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.datatypes import Password
+
+# Import from shop
+from utils import format_price, get_shop
 
 
 class ProductCart(object):
@@ -45,9 +51,36 @@ class ProductCart(object):
     # Namespace
     ######################
 
-    def get_namespace(self):
-        return {'nb_products': self.get_nb_products()}
+    def get_namespace(self, resource, context):
+        abspath = resource.get_abspath()
+        # Get products
+        shop = get_shop(resource)
+        products = shop.get_resource('products')
+        # products namespace
+        products_ns = []
+        total_with_tax = decimal(0)
+        for product_cart in self.products:
+            # Get product
+            product = products.get_resource(product_cart['name'], soft=True)
+            # Check product is buyable
+            if not product or not product.is_buyable():
+                continue
+            quantity = product_cart['quantity']
+            unit_price_with_tax = decimal(product.get_price_with_tax())
+            total_with_tax += unit_price_with_tax * quantity
 
+            virtual_path = product.get_virtual_path()
+            product_ns = {'id': product_cart['id'],
+                          'name': product.name,
+                          'title': product.get_title(),
+                          'href': abspath.get_pathto(virtual_path),
+                          'price': unit_price_with_tax * quantity,
+                          'quantity': quantity}
+            products_ns.append(product_ns)
+        # Build namespace
+        return {'nb_products': self.get_nb_products(),
+                'total_with_tax': format_price(total_with_tax),
+                'products': products_ns}
 
     #######################################
     ## Products

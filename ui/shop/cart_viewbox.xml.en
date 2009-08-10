@@ -4,25 +4,25 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
   xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <div stl:if="nb_products" id="cart_preview" class="box">
-    <div class="box-content">
+  <div id="cart-box" stl:if="nb_products">
+    <div id="cart-box-title">
       <a href="/shop/;view_cart">
-        <h3 stl:if="title" class="title">Cart</h3>
+        <h1>My cart</h1>
       </a>
-      <div class="content">
-        <h4>
-          <a href="/shop/;view_cart">
-              ${nb_products} produit(s).
+    </div>
+    <div id="cart-box-content">
+      <ul>
+        <li stl:repeat="product products">
+          <a href="${product/href}">
+            ${product/quantity} x ${product/title}
           </a>
-        </h4>
-        <ul>
-          <li stl:repeat="product products">
-            <a href="${product/href}">${product/title}(${product/quantity})</a>
-          </li>
-          <li stl:if="overflow">...</li>
-        </ul>
-        <p class="total"><strong>total:</strong>${total_with_tax}</p>
-      </div>
+        </li>
+      </ul>
+    </div>
+    <div id="cart-box-order">
+      <a href="/shop/;view_cart">
+        Order (Total ${total_with_tax} €)
+      </a>
     </div>
   </div>
 
