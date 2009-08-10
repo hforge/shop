@@ -22,6 +22,7 @@ from datetime import datetime
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate
 from itools.gettext import MSG
+from itools.uri import Path
 from itools.web import get_context
 from itools.xml import TEXT
 
@@ -420,6 +421,12 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             shop_path = shop.get_abspath()
             full_path = shop_path.resolve2('products-models/%s' % product_model)
             links.append(str(full_path))
+        # Cover
+        cover = self.get_property('cover')
+        if cover:
+            base = self.get_canonical_path()
+            links.append(str(base.resolve2(cover)))
+
         return links
 
 
@@ -443,6 +450,16 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             else:
                 new_categories.append(name)
         self.set_property('categories', new_categories)
+
+        # Cover
+        cover = self.get_property('cover')
+        if cover:
+            base = self.get_canonical_path()
+            if str(base.resolve2(cover)) == old_path:
+                # Hit the old name
+                new_path2 = base.get_pathto(Path(new_path))
+                self.set_property('cover', str(new_path2))
+
         get_context().server.change_resource(self)
 
 
