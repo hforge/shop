@@ -74,13 +74,16 @@
           title="${img/title}" alt="${img/title}" class="product-slider-preview-img"/>
       </stl:block>
     </stl:block>
-    <script type="text/javascript" stl:if="has_more_than_one_image">
-      $(document).ready(
-        function(){
-          init_product_gallery(91, 91, 500, 600);
-          }
-        );
-    </script>
+    <stl:block stl:if="has_more_than_one_image">
+      <script type="text/javascript" src="/ui/shop/product_gallery.js"/>
+      <script type="text/javascript">
+        $(document).ready(
+          function(){
+            init_product_gallery(91, 91, 500, 600);
+            }
+          );
+      </script>
+    </stl:block>
   </div>
 
   <br/>
