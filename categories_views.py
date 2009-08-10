@@ -18,18 +18,23 @@
 from operator import itemgetter
 
 # Import from itools
-from itools.datatypes import String
+from itools.core import merge_dicts
+from itools.datatypes import PathDataType, String
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import STLView
 from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
+from ikaaro import messages
 from ikaaro.buttons import RemoveButton, RenameButton
 from ikaaro.folder_views import Folder_BrowseContent
+from ikaaro.forms import ImageSelectorWidget, RTEWidget
 from ikaaro.utils import get_base_path_query
+from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
+from editable import Editable_Edit
 from utils import get_shop
 from views import BrowseFormBatchNumeric
 
@@ -240,3 +245,43 @@ class Categories_View(Folder_BrowseContent):
         # Override the default values
         schema['sort_by'] = String(default='title')
         return schema
+
+
+
+class Category_Edit(Editable_Edit, DBResource_Edit):
+
+    access = 'is_allowed_to_edit'
+
+    schema = merge_dicts(Editable_Edit.schema,
+                         image_category=PathDataType(multilingual=True))
+
+
+    widgets = [
+        ImageSelectorWidget('image_category',  title=MSG(u'Category image')),
+        RTEWidget('data', title=MSG(u"Description"))]
+
+
+    def action(self, resource, context, form):
+        lang = resource.get_content_language(context)
+        resource.set_property('image_category', form['image_category'], lang)
+
+
+    def get_value(self, resource, context, name, datatype):
+        if name == 'data':
+            return Editable_Edit.get_value(self, resource, context, name,
+                                           datatype)
+        language = resource.get_content_language(context)
+        return resource.get_property(name, language=language)
+
+
+    def action(self, resource, context, form):
+        language = resource.get_content_language(context)
+        for key, datatype in self.schema.items():
+            if key in ('data'):
+                continue
+            if getattr(datatype, 'multilingual', False):
+                resource.set_property(key, form[key], language=language)
+            else:
+                resource.set_property(key, form[key])
+        Editable_Edit.action(self, resource, context, form)
+        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')

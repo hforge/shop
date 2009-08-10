@@ -16,27 +16,44 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
+from itools.datatypes import PathDataType
 from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from categories_views import VirtualCategories_View
+from categories_views import VirtualCategories_View, Category_Edit
 from categories_views import VirtualCategory_BoxSubCategories
 from categories_views import VirtualCategory_Comparator, Categories_View
 from categories_views import VirtualCategory_View, VirtualCategory_ComparatorView
 from products import Product
 from utils import get_shop, ShopFolder
+from editable import Editable
 
 
-class Category(ShopFolder):
+class Category(Editable, ShopFolder):
 
     class_id = 'category'
     class_title = MSG(u'Category')
     class_views = ['view', 'new_resource?type=category', 'edit']
 
+    # Views
     view = Categories_View()
+    edit = Category_Edit()
+
+    @classmethod
+    def get_metadata_schema(cls):
+        return merge_dicts(ShopFolder.get_metadata_schema(),
+                           Editable.get_metadata_schema(),
+                           image_category=PathDataType(multilingual=True))
+
+
+    def _get_catalog_values(self):
+        return merge_dicts(ShopFolder._get_catalog_values(self),
+                           Editable._get_catalog_values(self))
+
 
     def get_unique_id(self):
         """Get the path to get from the categories container to this category.
@@ -47,6 +64,46 @@ class Category(ShopFolder):
 
     def get_document_types(self):
         return [Category]
+
+
+
+    def get_links(self):
+        # Use the canonical path instead of the abspath
+        # Warning multilingual property
+        site_root = self.get_site_root()
+        base = self.get_canonical_path()
+        links = []
+
+        available_languages = site_root.get_property('website_languages')
+        for lang in available_languages:
+            path = self.get_property('image_category', language=lang)
+            if path:
+                links.append(str(base.resolve2(path)))
+
+        return links
+
+
+    def change_link(self, old_path, new_path):
+        # Use the canonical path instead of the abspath
+        # Warning multilingual property
+        site_root = self.get_site_root()
+        base = self.get_canonical_path()
+
+        available_languages = site_root.get_property('website_languages')
+        for lang in available_languages:
+            path = self.get_property('image_category', language=lang)
+            if not path:
+                continue
+            current_path = base.resolve2(path)
+            if str(current_path) == old_path:
+                # Hit the old name
+                updated_path = base.get_pathto(Path(new_path))
+                self.set_property('image_category', str(updated_path),
+                                  language=lang)
+
+        get_context().server.change_resource(self)
+
+
 
 
 
