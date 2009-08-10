@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <div stl:if="nb_products" id="cart_preview" class="box">
+    <div class="box-content">
+      <a href="/shop/;view_cart">
+        <h3 stl:if="title" class="title">Cart</h3>
+      </a>
+      <div class="content">
+        <h4>
+          <a href="/shop/;view_cart">
+              ${nb_products} produit(s).
+          </a>
+        </h4>
+        <ul>
+          <li stl:repeat="product products">
+            <a href="${product/href}">${product/title}(${product/quantity})</a>
+          </li>
+          <li stl:if="overflow">...</li>
+        </ul>
+        <p class="total"><strong>total:</strong>${total_with_tax}</p>
+      </div>
+    </div>
+  </div>
+
+</stl:block>
