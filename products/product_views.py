@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import String, Unicode
+from itools.datatypes import Integer, String, Unicode
 from itools.gettext import MSG
 from itools.web import INFO, ERROR, STLView, STLForm
 from itools.xml import XMLParser
@@ -125,7 +125,8 @@ class Product_View(Editable_View, STLForm):
         return namespace
 
 
-    def action(self, resource, context, form):
+    action_add_to_cart_schema = {'quantity': Integer(default=1)}
+    def action_add_to_cart(self, resource, context, form):
         """ Add to cart """
         # Check if we can add to cart
         if not resource.is_buyable():
@@ -139,7 +140,7 @@ class Product_View(Editable_View, STLForm):
                 options[key] = form[key]
         # Add to cart
         cart = ProductCart(context)
-        cart.add_product(resource.name, 1, options)
+        cart.add_product(resource.name, form['quantity'], options)
         # Information message
         context.message = INFO(u'Product added to cart !')
 

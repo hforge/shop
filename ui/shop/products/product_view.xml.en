@@ -9,7 +9,9 @@
     <stl:block stl:repeat="widget purchase_options_widgets">
       ${widget/widget}
     </stl:block>
-    <input type="submit" class="button-ok" name="action_add_to_cart"
+    <br/>
+    <input type="text" name="quantity" value="1" size="3"/><br/>
+    <input type="submit" class="button-ok" name=";add_to_cart"
       value="Add to cart"/>
   </form>
 
