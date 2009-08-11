@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <div id="product-slider-box" stl:if="images">
+    <stl:block stl:repeat="img images">
+      <stl:block stl:if="repeat/img/start">
+        <img id="product-slider-big-img" src="${img/href}/;thumb?width=${img_width}&amp;height=${img_height}"
+             title="${img/title}" alt="${img/title}"/>
+        <div class="clear"/>
+      </stl:block>
+      <stl:block stl:if="has_more_than_one_image">
+        <img src="${img/href}/;thumb?width=${thumb_width}&amp;height=${thumb_height}"
+          title="${img/title}" alt="${img/title}" class="product-slider-preview-img"/>
+      </stl:block>
+    </stl:block>
+    <stl:block stl:if="has_more_than_one_image">
+      <script type="text/javascript" src="/ui/shop/product_gallery.js"/>
+      <script type="text/javascript">
+        $(document).ready(
+          function(){
+            init_product_gallery(${thumb_width}, ${thumb_height}, ${img_width}, ${img_height});
+            }
+          );
+      </script>
+    </stl:block>
+  </div>
+
+</stl:block>

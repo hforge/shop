@@ -37,7 +37,7 @@ from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewInstance, Products_View, Product_ViewBox
 from product_views import Product_View, Product_Edit, Product_EditModel
-from product_views import Product_Delete
+from product_views import Product_Delete, Product_ImagesSlider
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.editable import Editable
@@ -66,6 +66,15 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     class_description = MSG(u'A product')
     class_version = '20090806'
 
+    ##################
+    # Configuration
+    ##################
+    slider_view = Product_ImagesSlider()
+    viewbox = Product_ViewBox()
+    cross_selling_viewbox = Product_ViewBox()
+    ##################
+
+
     __fixed_handlers__ = DynamicFolder.__fixed_handlers__ + ['images',
                                                       'order-photos',
                                                       'cross-selling']
@@ -86,7 +95,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             access='is_allowed_to_edit')
     delete_product = Product_Delete()
 
-    viewbox = Product_ViewBox()
 
 
     @classmethod
@@ -252,7 +260,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         from shop.categories import Category
 
         table = self.get_resource('cross-selling')
-        viewbox = self.viewbox
+        viewbox = self.cross_selling_viewbox
         cross_selling = []
         real_resource = self.get_real_resource()
         abspath = real_resource.get_abspath()
@@ -295,6 +303,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         namespace['cover'] = self.get_cover_namespace(context)
         namespace['images'] = self.get_images_namespace(context)
         namespace['has_more_than_one_image'] = len(namespace['images']) > 1
+        # Slider
+        namespace['images-slider'] = self.slider_view.GET(self, context)
         # Product is buyable
         namespace['is_buyable'] = self.is_buyable()
         # Cross selling

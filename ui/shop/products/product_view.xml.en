@@ -62,29 +62,7 @@
 
   <br/>
 
-  <div id="product-slider-box" stl:if="images">
-    <stl:block stl:repeat="img images">
-      <stl:block stl:if="repeat/img/start">
-        <img id="product-slider-big-img" src="${img/href}/;thumb?width=500&amp;height=600"
-             title="${img/title}" alt="${img/title}"/>
-        <div class="clear"/>
-      </stl:block>
-      <stl:block stl:if="has_more_than_one_image">
-        <img src="${img/href}/;thumb?width=91&amp;height=91"
-          title="${img/title}" alt="${img/title}" class="product-slider-preview-img"/>
-      </stl:block>
-    </stl:block>
-    <stl:block stl:if="has_more_than_one_image">
-      <script type="text/javascript" src="/ui/shop/product_gallery.js"/>
-      <script type="text/javascript">
-        $(document).ready(
-          function(){
-            init_product_gallery(91, 91, 500, 600);
-            }
-          );
-      </script>
-    </stl:block>
-  </div>
+  ${images-slider}
 
   <br/>
 
