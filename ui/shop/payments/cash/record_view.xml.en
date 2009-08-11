@@ -4,13 +4,16 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h3>Amount: ${amount}</h3>
   <stl:block stl:if="not is_ok">
-    To finalize your payment:<br/>
-
-    Ref payment: ${ref}<br/>
-    Amount: ${amount} €<br/>
-    Our address:<br/>
-    ${address}
+    <h3>To finalize your payment, please come at our shop:</h3>
+    <div class="checkpayment-address">${address}</div>
+    <br/>
+    <h3>Do not forget to recall the information mentionned below in any
+      communications:</h3>
+    <ul>
+      <li><b>Order reference: ${ref}</b></li>
+    </ul>
   </stl:block>
 
   <p stl:if="is_ok">

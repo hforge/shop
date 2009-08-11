@@ -4,22 +4,17 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h3>Amount: ${amount}</h3>
   <stl:block stl:if="not is_ok">
-    <h1>To finalize your order you have to send a check</h1>
-
-    Please send a mail with this informations:
-    <p>
-      <dl>
-        <dt>Order reference:</dt>
-        <dd>${ref}</dd>
-        <dt>Total price:</dt>
-        <dd>${amount} €</dd>
-        <dt>A l'ordre de:</dt>
-        <dd>${to}</dd>
-        <dt>Address:</dt>
-        <dd>${address}</dd>
-      </dl>
-    </p>
+    <h3>To finalize your payment, please send us your check ordered to ${to}</h3>
+    <b>at the following address:</b>
+    <div class="checkpayment-address">${address}</div>
+    <br/>
+    <h3>Do not forget to recall the information mentionned below in any
+      communications:</h3>
+    <ul>
+      <li><b>Order reference: ${ref}</b></li>
+    </ul>
   </stl:block>
 
   <p stl:if="is_ok">

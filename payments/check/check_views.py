@@ -64,9 +64,10 @@ class CheckPayment_RecordView(STLView):
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
-        is_ok = get_record_value(self.record, 'advance_state')=='success'
-        return {'amount': get_record_value(self.record, 'amount'),
-                'is_ok': is_ok,
+        advance_state = get_record_value(self.record, 'advance_state')
+        amount = '%.2f €' % get_record_value(self.record, 'amount')
+        return {'amount': amount,
+                'is_ok': (advance_state == 'success'),
                 'ref': get_record_value(self.record, 'ref'),
                 'to': self.payment_way.get_property('to'),
                 'address': self.payment_way.get_property('address')}

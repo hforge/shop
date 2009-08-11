@@ -39,7 +39,8 @@ class TransferPayment_RecordView(STLView):
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
-        return {'amount': get_record_value(self.record, 'amount'),
+        amount = '%.2f €' % get_record_value(self.record, 'amount')
+        return {'amount': amount,
                 'is_ok': get_record_value(self.record, 'state'),
                 'ref': get_record_value(self.record, 'ref'),
                 'RIB': self.payment_way.get_property('RIB'),
@@ -103,8 +104,9 @@ class TransferPayment_Pay(STLView):
     template = '/ui/shop/payments/transfer/pay.xml'
 
     def get_namespace(self, resource, context):
+        amount = '%.2f €' % self.conf['amount']
         return {
             'RIB': resource.get_property('RIB'),
             'IBAN': resource.get_property('IBAN'),
             'ref': self.conf['ref'],
-            'amount': self.conf['amount']}
+            'amount': amount}

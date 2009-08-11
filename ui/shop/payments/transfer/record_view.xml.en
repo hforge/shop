@@ -4,14 +4,18 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h3>Amount: ${amount}</h3>
   <stl:block stl:if="not is_ok">
-    To finalise your payment you have to execute a bank transfer.<br/>
-
-    Payment id: ${ref}<br/>
-    Amount: ${amount} €<br/>
+    <h3>To finalize your payment, please execute the bank transfer to the
+      following account:</h3>
     RIB: ${RIB}<br/>
     IBAN: ${IBAN}<br/>
-
+    <br/>
+    <h3>Do not forget to recall the information mentionned below in any
+      communications:</h3>
+    <ul>
+      <li><b>Order reference: ${ref}</b></li>
+    </ul>
   </stl:block>
 
   <p stl:if="is_ok">

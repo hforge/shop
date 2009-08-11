@@ -4,19 +4,13 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <b>
-    To finalize your purchase, you have to send a check. <br/>
-    Here all details:
-  </b>
-
-  <dl>
-    <dt>Order reference:</dt>
-    <dd>${ref} (Please write this number in your mail)</dd>
-    <dt>Total price:</dt>
-    <dd>${amount} €</dd>
-    <dt>A l'ordre de:</dt>
-    <dd>${to}</dd>
-    <dt>Address:</dt>
-    <dd>${address}</dd>
-  </dl>
+  <b>To finalize your payment, please send us your check ordered to ${to}<br/>
+    at the following address:</b>
+  <div class="checkpayment-address">${address}</div>
+  <br/>
+  Don't forget to recall the information mentionned below<br/>
+  <ul>
+    <li><b>Order reference:</b> ${ref}</li>
+    <li><b>Total amount:</b> ${amount}</li>
+  </ul>
 </stl:block>
