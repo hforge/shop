@@ -280,7 +280,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def get_namespace(self, context):
-        namespace = {}
+        namespace = {'name': self.name}
         # Get basic informations
         abspath = context.resource.get_abspath()
         namespace['href'] = abspath.get_pathto(self.get_virtual_path())
