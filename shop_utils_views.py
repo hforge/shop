@@ -131,7 +131,7 @@ class Cart_Viewbox(STLView):
 
     def get_namespace(self, resource, context):
         cart = ProductCart(context)
-        return cart.get_namespace(resource, context)
+        return cart.get_namespace(resource)
 
 
 

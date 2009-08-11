@@ -51,7 +51,7 @@ class ProductCart(object):
     # Namespace
     ######################
 
-    def get_namespace(self, resource, context):
+    def get_namespace(self, resource):
         abspath = resource.get_abspath()
         # Get products
         shop = get_shop(resource)
