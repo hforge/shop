@@ -66,7 +66,7 @@ class Payments(ShopFolder):
 
     def get_payments_items(self, context, ref=None, queries=[]):
         items = []
-        for way, record in self.get_payments_records(context, ref, queries):
+        for way, record in self.get_payments_records(context, ref, queries=queries):
             payments = way.get_resource('payments')
             items.append(payments.get_record_namespace(context, record))
         return items
