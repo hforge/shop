@@ -110,10 +110,8 @@ class Payments_ManagePayment(Payments_EditablePayment, STLForm):
 
 
 class Payments_History_View(SearchForm):
+    """ Shows each payment in history, with a search form.
     """
-    View that list history payments.
-    """
-
     title = MSG(u'Payments history')
     access = 'is_admin'
 
@@ -124,22 +122,25 @@ class Payments_History_View(SearchForm):
     search_schema = {
         'ref': String,
         'user': String,
-        'state': Boolean,
-    }
-
+        'state': Boolean}
 
     table_columns = [
-        ('state', u' '),
         ('complete_id', MSG(u'Id')),
-        ('ts', MSG(u'Date')),
-        ('ref', MSG(u'Ref')),
+        ('state', u' '),
+        ('ts', MSG(u'Date and Time')),
         ('user_title', MSG(u'Customer')),
-        ('user_email', MSG(u'Customer email')),
-        ('payment_name', MSG(u'Payment mode')),
-        ('advance_state', MSG(u'State')),
+        ('ref', MSG(u'Ref')),
         ('amount', MSG(u'Amount')),
-        ('buttons', None),
-        ]
+        ('payment_mode', MSG(u'Payment mode')),
+        ('advance_state', MSG(u'State')),
+        ('buttons', None)]
+
+
+    buttons_template = """
+        <a href=";manage_payment?payment_way={way}&amp;id_payment={id}">
+          <img src="/ui/icons/16x16/view.png"/>
+        </a>
+        """
 
 
     def get_search_namespace(self, resource, context):
@@ -157,6 +158,21 @@ class Payments_History_View(SearchForm):
         return resource.get_payments_items(context, queries=queries)
 
 
+    def get_item_value(self, resource, context, item, column):
+        if column == 'buttons':
+            kw = {'id': item['id'], 'way': item['payment_mode']}
+            return XMLParser(self.buttons_template.format(**kw))
+
+        if column == 'payment_mode':
+            payment_mode = item['payment_mode']
+            return PaymentWaysEnumerate.get_value(payment_mode)
+        elif column == 'user_title':
+            return item['user_title'], '/users/%s' % item['username']
+        elif column == 'state':
+            return item[column] and MSG(u'OK') or ''
+        return item[column]
+
+
     def sort_and_batch(self, resource, context, items):
         # Sort
         sort_by = context.query['sort_by']
@@ -169,20 +185,6 @@ class Payments_History_View(SearchForm):
         size = context.query['batch_size']
         return items[start:start+size]
 
-
-
-    buttons_template = """
-              <a href=";manage_payment?payment_way={way}&amp;id_payment={id}">
-                <img src="/ui/icons/16x16/view.png"/>
-              </a>
-                       """
-
-    def get_item_value(self, resource, context, item, column):
-        if column == 'buttons':
-            kw = {'id': item['id'],
-                  'way': item['payment_name']}
-            return XMLParser(self.buttons_template.format(**kw))
-        return item[column]
 
 
 class Payments_View(BrowseForm):

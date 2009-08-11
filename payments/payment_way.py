@@ -65,7 +65,7 @@ class PaymentWayTable(Table):
         get_value = self.handler.get_record_value
         namespace = {'id': record.id,
                      'complete_id': '%s-%s' % (self.parent.name, record.id),
-                     'payment_name': self.parent.name}
+                     'payment_mode': self.parent.name}
         # Base namespace
         for key in self.handler.record_schema.keys():
             namespace[key] = get_value(record, key)
@@ -73,7 +73,9 @@ class PaymentWayTable(Table):
         namespace['amount'] = '%s €' % get_value(record, 'amount')
         # User
         users = context.root.get_resource('users')
-        user = users.get_resource(get_value(record, 'user') or '0')
+        username = get_value(record, 'user') or '0'
+        user = users.get_resource(username)
+        namespace['username'] = username
         namespace['user_title'] = user.get_title()
         namespace['user_email'] = user.get_property('email')
         # State
