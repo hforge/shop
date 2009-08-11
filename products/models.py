@@ -209,7 +209,8 @@ class ProductModel(ShopFolder):
                   'name': real_value,
                   'visible': info['visible']}
             ns['specific_dict'][name] = kw
-            ns['specific_list'].append(kw)
+            if kw['visible'] and kw['value']:
+                ns['specific_list'].append(kw)
         return ns
 
 

@@ -53,8 +53,11 @@
     <tr stl:if="specific_list">
       <th>Product model informations</th>
       <td>
-        <stl:block stl:repeat="property specific_list">
-          <b>${property/title}</b>: ${property/value}<br/>
+        <stl:block stl:repeat="property specific_list" stl:if="property/visible">
+          <b>${property/title}</b>:
+          <span stl:if="property/value">${property/value}</span>
+          <span stl:if="not property/value">Unknow</span>
+          <br/>
         </stl:block>
       </td>
     </tr>
