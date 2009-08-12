@@ -27,6 +27,7 @@ from ikaaro.webpage import WebPage
 from addresses import Addresses
 from categories import Categories, VirtualCategory
 from countries import Countries
+from enumerates import BarcodesFormat
 from orders import Orders
 from products import Products, Product, ProductModels
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
@@ -149,6 +150,7 @@ class Shop(ShopFolder):
         schema['shop_from_addr'] = Email
         schema['bill_logo'] = PathDataType
         schema['activate_mail_html'] = Boolean
+        schema['barcode_format'] = BarcodesFormat
         return schema
 
 

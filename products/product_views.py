@@ -14,11 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from cStringIO import StringIO
+
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Integer, String, Unicode
 from itools.gettext import MSG
-from itools.web import INFO, ERROR, STLView, STLForm
+from itools.web import INFO, ERROR, STLView, STLForm, BaseView
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -35,6 +38,7 @@ from ikaaro.views_new import NewInstance
 from enumerate import ProductModelsEnumerate
 from schema import product_schema
 from taxes import PriceWidget
+from widgets import BarcodeWidget
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.utils import get_shop
@@ -78,7 +82,6 @@ class Product_View(Editable_View, STLForm):
     title = MSG(u'View')
     template = '/ui/shop/products/product_view.xml'
     model_template = '/ui/shop/products/product_%s_view.xml'
-
 
     def get_template(self, resource, context):
         default = self.template
@@ -200,7 +203,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         SelectWidget('state',
                      title=MSG(u'Publication state'),
                      has_empty_option=False),
-        TextWidget('reference', title=MSG(u'Reference')),
+        BarcodeWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Keywords')),
@@ -235,6 +238,7 @@ class Product_Edit(Editable_Edit, AutoForm):
             else:
                 resource.set_property(key, form[key])
         Editable_Edit.action(self, resource, context, form)
+        # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED)
 
 
@@ -331,3 +335,40 @@ class Product_ImagesSlider(STLView):
         namespace['img_width'], namespace['img_height'] = self.img_size
         namespace['thumb_width'], namespace['thumb_height'] = self.thumb_size
         return namespace
+
+
+
+class Product_Barcode(BaseView):
+
+    access = 'is_allowed_to_edit'
+
+    def GET(self, resource, context):
+        response = context.response
+        shop = get_shop(resource)
+        format = shop.get_property('barcode_format')
+        if format == '0':
+            response.set_header('Content-Type', 'text/plain')
+            return
+        try:
+            img = self.get_barcode(format, resource)
+        except ImportError:
+            response.set_header('Content-Type', 'text/plain')
+            return
+        except Exception:
+            response.set_header('Content-Type', 'text/plain')
+            return
+        response.set_header('Content-Type', 'image/png')
+        return img
+
+
+    def get_barcode(self, format, resource):
+        # Try to import elaphe
+        from elaphe import barcode
+        # Generate barcode
+        reference = resource.get_property('reference').encode('utf-8')
+        img = barcode(format, reference)
+        # Format PNG
+        f = StringIO()
+        img.save(f, 'png')
+        f.seek(0)
+        return f.getvalue()

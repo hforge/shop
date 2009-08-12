@@ -14,25 +14,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from itools
+from itools.xml import XMLParser
+
 # Import from ikaaro
-from ikaaro.folder import Folder
-from ikaaro.folder_views import Folder_Orphans, Folder_BrowseContent
-from ikaaro.revisions_views import DBResource_LastChanges
+from ikaaro.forms import Widget, stl_namespaces
 
 
-def get_shop(resource):
-    return resource.get_site_root().get_resource('shop')
+
+class BarcodeWidget(Widget):
 
 
-def format_price(price):
-    if price._isinteger():
-        return str(int(price))
-    return '%.2f' % price
+    template = list(XMLParser(
+        """
+        <input type="${type}" name="${name}" value="${value}" size="${size}"
+        /><br/><br/>
+        <img src="./;barcode"/>
+        """,
+        stl_namespaces))
 
-
-class ShopFolder(Folder):
-    """Guest user cannot access to some views of ShopFolder
-    """
-    browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
-    orphans = Folder_Orphans(access='is_allowed_to_edit')
-    last_changes = DBResource_LastChanges(access='is_allowed_to_edit')

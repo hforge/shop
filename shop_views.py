@@ -45,6 +45,7 @@ from ikaaro.website_views import RegisterForm
 from addresses import Addresses_Enumerate
 from addresses_views import Addresses_Book, Addresses_AddAddress
 from addresses_views import Addresses_EditAddress
+from enumerates import BarcodesFormat
 from utils import get_shop
 from cart import ProductCart
 from countries import CountriesEnumerate
@@ -74,7 +75,8 @@ class Shop_Configure(DBResource_Edit):
               'order_notification_mails': MultiLinesTokens(mandatory=True),
               'shop_signature': Unicode(mandatory=True),
               'activate_mail_html': Boolean(mandatory=True),
-              'bill_logo': PathDataType}
+              'bill_logo': PathDataType,
+              'barcode_format': BarcodesFormat}
 
     widgets = [
         TextWidget('shop_from_addr', title=MSG(u'Shop from address')),
@@ -85,7 +87,9 @@ class Shop_Configure(DBResource_Edit):
             title=MSG(u'Shop signature'), rows=8, cols=50),
         BooleanRadio('activate_mail_html',
             title=MSG(u'Activate html mails')),
-        ImageSelectorWidget('bill_logo', title=MSG(u'Bill logo'))
+        ImageSelectorWidget('bill_logo', title=MSG(u'Bill logo')),
+        SelectWidget('barcode_format', title=MSG(u'Barcode format'),
+                     has_empty_option=False),
         ]
 
     submit_value = MSG(u'Edit configuration')

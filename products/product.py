@@ -37,7 +37,7 @@ from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewInstance, Products_View, Product_ViewBox
 from product_views import Product_View, Product_Edit, Product_EditModel
-from product_views import Product_Delete, Product_ImagesSlider
+from product_views import Product_Delete, Product_ImagesSlider, Product_Barcode
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.editable import Editable
@@ -86,6 +86,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     view = Product_View()
     edit = Product_Edit()
     edit_model = Product_EditModel()
+    barcode = Product_Barcode()
     order = GoToSpecificDocument(specific_document='order-photos',
                                  title=MSG(u'Manage photos'),
                                  access='is_allowed_to_edit')
