@@ -22,7 +22,7 @@ from itools.gettext import MSG
 from itools.web import get_context
 
 # Import from ikaaro
-from ikaaro.forms import SelectRadio, TextWidget
+from ikaaro.forms import BooleanRadio, TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
@@ -72,7 +72,7 @@ class Countries(Table):
 
     form = [
         TextWidget('title', title=MSG(u'Title')),
-        SelectRadio('enabled', title=MSG(u'Enabled')),
+        BooleanRadio('enabled', title=MSG(u'Enabled')),
         ]
 
 
