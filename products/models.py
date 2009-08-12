@@ -195,6 +195,8 @@ class ProductModel(ShopFolder):
         for info in self.get_model_informations():
             name = info['name']
             value = resource.get_property(name)
+            # Real value is used to keep the enumerate value
+            # corresponding to the options[{'name': xxx}]
             real_value = value
             datatype = info['datatype']
             if issubclass(datatype, Enumerate):
@@ -206,7 +208,8 @@ class ProductModel(ShopFolder):
             kw = {'title': info['title'],
                   'value': value,
                   'multiple': datatype.multiple,
-                  'name': real_value,
+                  'name': info['name'],
+                  'real_value': real_value,
                   'visible': info['visible']}
             ns['specific_dict'][name] = kw
             if kw['visible'] and kw['value']:
