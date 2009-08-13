@@ -326,11 +326,13 @@ class Product_ImagesSlider(STLView):
 
     img_size = (500, 600)
     thumb_size = (90, 90)
+    show_cover = True
 
     def get_namespace(self, resource, context):
         namespace = {}
-        namespace['images'] = resource.get_images_namespace(context)
         namespace['cover'] = resource.get_cover_namespace(context)
+        namespace['images'] = [namespace['cover']] if self.show_cover else []
+        namespace['images'] += resource.get_images_namespace(context)
         namespace['has_more_than_one_image'] = len(namespace['images']) > 1
         namespace['img_width'], namespace['img_height'] = self.img_size
         namespace['thumb_width'], namespace['thumb_height'] = self.thumb_size
