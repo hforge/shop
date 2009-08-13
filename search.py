@@ -71,8 +71,9 @@ class Shop_SearchBox(STLView):
                                     value=query['category'])
         # XXX Hack Nb results
         nb_results = None
-        if isinstance(context.view, Shop_SiteSearch):
+        if isinstance(context.view, Shop_ProductSearch):
             nb_results = str(context.view.nb_results)
+        # Return namespace
         return {'site_search_text': query['site_search_text'],
                 'show_list_categories': self.show_list_categories,
                 'widget_categories': widget,
@@ -80,7 +81,7 @@ class Shop_SearchBox(STLView):
 
 
 
-class Shop_SiteSearch(VirtualCategories_View):
+class Shop_ProductSearch(VirtualCategories_View):
 
     access = True
     title = MSG(u'Search')

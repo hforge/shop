@@ -9,7 +9,7 @@
       <h1>Search</h1>
     </div>
     <div id="search-box-content">
-      <form action="/;site_search" method="GET">
+      <form action="/;product_search" method="GET">
         <div id="search-box-nb-results" stl:if="nb_results">
           ${nb_results} results found.
         </div>
