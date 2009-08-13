@@ -90,6 +90,7 @@ class Shop_SiteSearch(VirtualCategories_View):
         'category': Shop_CategoriesEnumerate(default='*'),
     }
 
+    nb_results = 0
 
     def get_items(self, resource, context):
         site_root = resource.get_site_root()

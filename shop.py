@@ -58,12 +58,17 @@ class Shop(ShopFolder):
     # Shop configuration
     ####################################
 
+    # Class
     user_class = ShopUser
     product_class = Product
     payments_class = ShopPayments
     virtual_category_class = VirtualCategory
 
+    # Mail
     mail_template = '/ui/shop/mail.xhtml'
+
+    # Batch
+    categories_batch_size = 20
 
     ####################################
     ## Views

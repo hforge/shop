@@ -14,8 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from itools
+from itools.datatypes import Integer
+from itools.web import get_context
+
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
+
+# Import from shop
+from utils import get_shop
 
 
 class BrowseFormBatchNumeric(Folder_BrowseContent):
@@ -89,3 +96,12 @@ class BrowseFormBatchNumeric(Folder_BrowseContent):
                                           ellipsis)
 
         return namespace
+
+
+    def get_query_schema(self):
+        # We get batch size from shop configuration
+        context = get_context()
+        shop = get_shop(context.resource)
+        schema = Folder_BrowseContent.get_query_schema(self)
+        schema['batch_size'] = Integer(default=shop.categories_batch_size)
+        return schema
