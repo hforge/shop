@@ -132,7 +132,8 @@ class VirtualCategories_View(VirtualCategory_View):
         query = [
             get_base_path_query(str(abspath)),
             PhraseQuery('format', shop.product_class.class_id),
-            PhraseQuery('workflow_state', 'public')]
+            PhraseQuery('workflow_state', 'public'),
+            PhraseQuery('has_categories', True)]
         return context.root.search(AndQuery(*query))
 
 

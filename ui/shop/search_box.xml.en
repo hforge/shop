@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <div id="search-box">
+    <div id="search-box-title">
+      <h1>Search</h1>
+    </div>
+    <div id="search-box-content">
+      <form action="/;site_search" method="GET">
+        <div id="search-box-nb-results" stl:if="nb_results">
+          ${nb_results} results found.
+        </div>
+        <input type="text" size="15" value="${site_search_text}"
+               class="text" name="site_search_text"/>
+        <div id="search-box-widget" stl:if="show_list_categories">
+          ${widget_categories}
+        </div>
+        <input id="search-box-submit"
+          type="submit" value="ok" class="submit"/>
+      </form>
+    </div>
+    <div id="search-box-footer"/>
+  </div>
+
+</stl:block>
