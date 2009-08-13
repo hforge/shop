@@ -218,6 +218,8 @@ class VirtualCategory_Comparator(STLView):
                     keys.append(name)
             # sort informations
             namespace['comparator'] = [comparator[key] for key in keys]
+        else:
+            namespace['comparator'] = []
         return namespace
 
 
