@@ -54,7 +54,7 @@ class Shop_SearchBox(STLView):
     template = '/ui/shop/search_box.xml'
 
     query_schema = {
-        'site_search_text': Unicode,
+        'product_search_text': Unicode,
         'category': Shop_CategoriesEnumerate(default='*'),
     }
 
@@ -74,7 +74,7 @@ class Shop_SearchBox(STLView):
         if isinstance(context.view, Shop_ProductSearch):
             nb_results = str(context.view.nb_results)
         # Return namespace
-        return {'site_search_text': query['site_search_text'],
+        return {'product_search_text': query['product_search_text'],
                 'show_list_categories': self.show_list_categories,
                 'widget_categories': widget,
                 'nb_results': nb_results}
@@ -87,7 +87,7 @@ class Shop_ProductSearch(VirtualCategories_View):
     title = MSG(u'Search')
 
     search_schema = {
-        'site_search_text': Unicode,
+        'product_search_text': Unicode,
         'category': Shop_CategoriesEnumerate(default='*'),
     }
 
@@ -104,7 +104,7 @@ class Shop_ProductSearch(VirtualCategories_View):
         category = context.query['category']
         if category and category != '*':
             query.append(PhraseQuery('categories', category))
-        search_word = context.query['site_search_text']
+        search_word = context.query['product_search_text']
         if search_word:
             words = [word for word in split_unicode(search_word)]
             for word in split_unicode(search_word):
