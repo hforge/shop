@@ -20,7 +20,7 @@ from datetime import datetime
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Unicode, Enumerate
+from itools.datatypes import Boolean, String, Unicode, Enumerate, DateTime
 from itools.gettext import MSG
 from itools.uri import Path
 from itools.web import get_context
@@ -146,7 +146,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         values['has_images'] = (len(ordered_names) != 0)
         # Creation time
         ctime = self.get_property('ctime')
-        values['ctime'] = ctime.strftime('%Y%m%d%H%M%S')
+        values['ctime'] = ctime
 
         return values
 
@@ -577,10 +577,10 @@ CrossSellingTable.orderable_classes = Product
 
 # Register fields
 register_field('product_model', String(is_indexed=True, is_stored=True))
-register_field('categories', String(is_indexed=True, multiple=True))
+register_field('categories', String(is_indexed=True, multiple=True, is_stored=True))
 register_field('has_categories', Boolean(is_indexed=True))
 register_field('has_images', Boolean(is_indexed=True, is_stored=True))
-register_field('ctime', String(is_indexed=True, is_stored=True))
+register_field('ctime', DateTime(is_stored=True, is_indexed=True))
 
 # Register resources
 register_resource_class(Product)
