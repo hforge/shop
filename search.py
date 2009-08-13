@@ -86,7 +86,7 @@ class Shop_SiteSearch(VirtualCategories_View):
     title = MSG(u'Search')
 
     search_schema = {
-        'site_search_text': Unicode(mandatory=True),
+        'site_search_text': Unicode,
         'category': Shop_CategoriesEnumerate(default='*'),
     }
 
