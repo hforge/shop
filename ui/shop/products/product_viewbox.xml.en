@@ -11,7 +11,7 @@
       <a href="${href}">
         <img stl:if="cover" class="cover"
              src="${cover/href}/;thumb?width=90&amp;height=90"
-             alt="${title} />
+             alt="${title}" />
       </a>
       <span class="price">
         ${price-with-tax} €
