@@ -48,7 +48,7 @@ class VirtualCategory_BoxSubCategories(STLView):
     def get_namespace(self, resource, context):
         root = context.root
         site_root = context.resource.get_site_root()
-        shop = get_shop(self)
+        shop = get_shop(resource)
 
         # get the category
         namespace = {'title': resource.get_title(),
@@ -62,8 +62,9 @@ class VirtualCategory_BoxSubCategories(STLView):
             PhraseQuery('format', shop.product_class.class_id),
             PhraseQuery('workflow_state', 'public'),
             ]
+        category_path = resource.get_unique_id()
         for subcat in resource.search_resources(format='category'):
-            subcat_path = '%s/%s' % (resource.name, subcat.name)
+            subcat_path = '%s/%s' % (category_path, subcat.name)
             query = base_query + [PhraseQuery('categories', subcat_path)]
             query = AndQuery(*query)
             # Search inside the site_root
