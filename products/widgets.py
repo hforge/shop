@@ -39,14 +39,11 @@ class BarcodeWidget(Widget):
 class MiniProductWidget(Widget):
 
     template = list(XMLParser(
-        """
-        ${title} - ${price-with-tax} €<br/>
-        <img src="${cover/href}/;download" title="${cover/title}"/>
-        """,
+        """${viewbox}<div class="clear"/>""",
         stl_namespaces))
 
 
     def get_namespace(self, datatype, value):
         context = get_context()
-        return merge_dicts(Widget.get_namespace(self, datatype, value),
-                           context.resource.get_small_namespace(context))
+        viewbox = context.resource.viewbox
+        return {'viewbox': viewbox.GET(context.resource, context)}
