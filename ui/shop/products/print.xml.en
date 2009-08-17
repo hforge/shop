@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <head>
+    <title>${title}</title>
+    <link rel="stylesheet" href="${style}" stl:repeat="style styles" type="text/css"></link>
+  </head>
+
+  <body class="print">
+    <div id="print-wrapper">
+      <div id="header">
+        <h1>${website-title}</h1>
+        <h2>${title}</h2>
+      </div>
+      <div id="print-product-cover" stl:if="cover">
+          <img src="${cover/href}/;thumb?width=542&amp;height=400" id="cover" alt="${cover/title}"></img>
+      </div>
+      <table id="print-product-informations" cellpadding="0" cellspacing="0">
+        <tr>
+          <th>Reference</th>
+          <td>${reference}</td>
+        </tr>
+        <tr>
+          <th>URL</th>
+          <td>${url}</td>
+        </tr>
+        <tr>
+          <th>Product name</th>
+          <td>${title}</td>
+        </tr>
+        <tr>
+          <th>Price</th>
+          <td>${price-with-tax} €</td>
+        </tr>
+        <tr stl:if="data">
+          <th>Description</th>
+          <td>${data}</td>
+        </tr>
+      </table>
+    </div>
+    <script type="text/javascript">print();</script>
+  </body>
+
+</stl:block>

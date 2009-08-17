@@ -38,6 +38,7 @@ from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewInstance, Products_View, Product_ViewBox
 from product_views import Product_View, Product_Edit, Product_EditModel
 from product_views import Product_Delete, Product_ImagesSlider, Product_Barcode
+from product_views import Product_Print
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.editable import Editable
@@ -90,6 +91,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     order = GoToSpecificDocument(specific_document='order-photos',
                                  title=MSG(u'Manage photos'),
                                  access='is_allowed_to_edit')
+    print_product = Product_Print()
     edit_cross_selling = GoToSpecificDocument(
             specific_document='cross-selling',
             title=MSG(u'Edit cross selling'),

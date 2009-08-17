@@ -374,3 +374,28 @@ class Product_Barcode(BaseView):
         img.save(f, 'png')
         f.seek(0)
         return f.getvalue()
+
+
+
+class Product_Print(STLView):
+
+    access = True
+    template = '/ui/shop/products/print.xml'
+    title = MSG(u"Print product")
+
+    def get_namespace(self, resource, context):
+        site_root = resource.get_site_root()
+        skin = site_root.get_skin(context)
+        here = context.resource
+        namespace = resource.get_namespace(context)
+        namespace['website-title'] = site_root.get_title()
+        namespace['styles'] = skin.get_styles(context)
+        namespace['scripts'] = skin.get_scripts(context)
+        uri = str(context.uri)
+        namespace['url'] = uri.split('/;')[0]
+        namespace['cover'] = resource.get_cover_namespace(context)
+
+        # Avoid general template
+        response = context.response
+        response.set_header('Content-Type', 'text/html; charset=UTF-8')
+        return namespace

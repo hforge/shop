@@ -461,5 +461,44 @@ table.cart td{
   text-decoration: none;
 }
 
+/* Print webpages */
+.print{
+  background-color: #FFF;
+}
 
+#print-product-cover{
+  text-align: center;
+}
 
+#print-wrapper{
+  margin: auto;
+  padding: 10px;
+  width: 750px;
+  text-align: center;
+}
+
+#print-product-informations{
+  float: middle;
+  border: 1px solid black;
+}
+
+#print-product-informations th{
+  width: 200px;
+  background-color: #efefef;
+  padding: 5px;
+  border-bottom: 1px dashed gray;
+}
+
+#print-product-informations td{
+  padding: 5px;
+  border-bottom: 1px dashed gray;
+}
+
+#print-product-informations tr:last-child th,
+#print-product-informations tr:last-child td{
+  border-bottom: none;
+}
+
+.print h3{
+  border-bottom: 1px solid black;
+}
