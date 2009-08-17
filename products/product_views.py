@@ -19,7 +19,7 @@ from cStringIO import StringIO
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Integer, String, Unicode
+from itools.datatypes import Email, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.web import INFO, ERROR, STLView, STLForm, BaseView
 from itools.xml import XMLParser
@@ -38,7 +38,7 @@ from ikaaro.views_new import NewInstance
 from enumerate import ProductModelsEnumerate
 from schema import product_schema
 from taxes import PriceWidget
-from widgets import BarcodeWidget
+from widgets import BarcodeWidget, MiniProductWidget
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.utils import get_shop
@@ -399,3 +399,58 @@ class Product_Print(STLView):
         response = context.response
         response.set_header('Content-Type', 'text/html; charset=UTF-8')
         return namespace
+
+
+
+class Product_SendToFriend(AutoForm):
+
+    access = True
+    title = MSG(u'Send to a friend')
+    submit_value = MSG(u'Send to my friend')
+
+    schema = {
+        'widget': String, # XXX not used
+        'my_email': Email(mandatory=True),
+        'my_name': Unicode(mandatory=True),
+        'email': Email(mandatory=True),
+        'message': Unicode}
+
+    widgets = [MiniProductWidget('widget', title=MSG(u"Product")),
+               TextWidget('my_email', title=MSG(u"Your email")),
+               TextWidget('my_name', title=MSG(u"Your name")),
+               TextWidget('email', title=MSG(u"Email of your friend")),
+               MultilineWidget('message',
+                title=MSG(u"You can write a message for your friend"))]
+
+    mail_subject = MSG(u"{my_name} advice you this product: {product_title}")
+    mail_body = MSG(u"Your friend {my_name} advice you this product: \n\n"
+                    u" {product_title}\n\n"
+                    u"All details are here:\n\n"
+                    u" {product_uri}\n\n"
+                    u" {message}\n\n")
+
+
+    def get_value(self, resource, context, name, datatype):
+        if context.user:
+            if name == 'my_email':
+                return context.user.get_property('email')
+            elif name == 'my_name':
+                return context.user.get_title()
+        return AutoForm.get_value(self, resource, context, name,
+                 datatype)
+
+
+
+    def action(self, resource, context, form):
+        kw = {'product_uri': context.uri.resolve('./'),
+              'product_title': resource.get_title(),
+              'message': form['message'],
+              'my_name': form['my_name']}
+        subject = self.mail_subject.gettext(**kw)
+        body = self.mail_body.gettext(**kw)
+        context.root.send_email(form['email'], subject,
+              from_addr=form['my_email'], text=body)
+
+        msg = u'An email has been send to your friend'
+        return context.come_back(MSG(msg), goto='./')
+

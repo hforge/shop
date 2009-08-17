@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
+from itools.web import get_context
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -33,3 +35,18 @@ class BarcodeWidget(Widget):
         """,
         stl_namespaces))
 
+
+class MiniProductWidget(Widget):
+
+    template = list(XMLParser(
+        """
+        ${title} - ${price-with-tax} €<br/>
+        <img src="${cover/href}/;download" title="${cover/title}"/>
+        """,
+        stl_namespaces))
+
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        return merge_dicts(Widget.get_namespace(self, datatype, value),
+                           context.resource.get_small_namespace(context))
