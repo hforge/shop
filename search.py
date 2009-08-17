@@ -110,7 +110,9 @@ class Shop_ProductSearch(VirtualCategories_View):
             for word in split_unicode(search_word):
                 alternative = (word + u"s" if not word.endswith(u's')
                                             else word[:-1])
-                plain_text = OrQuery(PhraseQuery('title', word),
+                plain_text = OrQuery(PhraseQuery('reference', word),
+                                     # On product
+                                     PhraseQuery('title', word),
                                      PhraseQuery('description', word),
                                      PhraseQuery('html_description', word),
                                      # Alternative

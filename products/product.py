@@ -130,6 +130,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     def _get_catalog_values(self):
         values = merge_dicts(DynamicFolder._get_catalog_values(self),
                              Editable._get_catalog_values(self))
+        # Reference
+        values['reference'] = self.get_property('reference')
         # Product models
         values['product_model'] = self.get_property('product_model')
         # We index categories
@@ -576,6 +578,7 @@ class Products(ShopFolder):
 CrossSellingTable.orderable_classes = Product
 
 # Register fields
+register_field('reference', String(is_indexed=True))
 register_field('product_model', String(is_indexed=True, is_stored=True))
 register_field('categories', String(is_indexed=True, multiple=True, is_stored=True))
 register_field('has_categories', Boolean(is_indexed=True))
