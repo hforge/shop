@@ -73,7 +73,7 @@ class CrossSellingTable(ResourcesOrderedTable):
     back = GoToSpecificDocument(specific_document='..',
                                 title=MSG(u'See product'))
 
-    # TODO Add get_links, update_link
+    # TODO Add get_links, update_links
 
 
     @classmethod
@@ -127,10 +127,24 @@ class CrossSellingTable(ResourcesOrderedTable):
             handler = self.handler
             get_value = handler.get_record_value
             ids = list(handler.get_record_ids_in_order())
+            names = []
             for id in ids[:products_quantity]:
                 record = handler.get_record(id)
                 path = get_value(record, 'name')
+                names.append(path)
                 yield products_folder.get_resource(path)
+
+            if len(ids) < products_quantity:
+                not_query = NotQuery(OrQuery(*[ PhraseQuery('name', name)
+                                                for name in names ]))
+                # Complete with random selection
+                diff = products_quantity - len(ids)
+                results = root.search(AndQuery(query, not_query))
+                brains = list(results.get_documents())
+                shuffle(brains)
+                for brain in brains[:diff]:
+                    yield root.get_resource(brain.abspath)
+
 
 
 register_resource_class(CrossSellingTable)
