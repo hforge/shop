@@ -15,35 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import String, Unicode, Integer, Decimal, Boolean
-from itools.datatypes import Email, Enumerate, ISOCalendarDate
+from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.web import get_context
 
 # Import from shop
 from shop.utils import get_shop
-
-
-class TableEnumerate(Enumerate):
-
-    @classmethod
-    def get_options(cls):
-        context = get_context()
-        table = cls.model.get_resource(cls.enumerate).handler
-        get_value = table.get_record_value
-        if hasattr(cls, 'values'):
-            options = [{'name': str(get_value(record, 'name')),
-                     'value': get_value(record, 'title')}
-                    for record in table.get_records()
-                    if get_value(record, 'name') in cls.values]
-            options.insert(0, {'name': None, 'value': cls.title})
-            return options
-        return [{'name': str(get_value(record, 'name')),
-                 'value': get_value(record, 'title')}
-                for record in table.get_records()]
+from shop.enumerate_table import Enumerate_ListEnumerateTable
 
 
 class ProductModelsEnumerate(Enumerate):
+    """
+    List all product models existing.
+    Used to select the product model when we create a new product.
+    """
 
     @classmethod
     def get_options(cls):
@@ -59,6 +44,11 @@ class ProductModelsEnumerate(Enumerate):
 
 
 class CategoriesEnumerate(Enumerate):
+    """
+    Do a tree with all existing categories.
+    (Value is the path of categorie.)
+    Used to associate categorie(ys) to a a product.
+    """
 
     @classmethod
     def get_options(cls):
@@ -79,13 +69,38 @@ class CategoriesEnumerate(Enumerate):
 
 
 class States(Enumerate):
+    """
+    Product workflow: public or private ?
+    """
 
     options = [
       {'name': 'public' , 'value': MSG(u'Public')},
       {'name': 'private', 'value': MSG(u'Private')}]
 
 
+
+class DeclinationImpact(Enumerate):
+    """
+    Allow to define the product declination impact
+    on one of this 2 parameters:
+      - price of product
+      - weight of product
+    """
+
+    options = [
+      {'name': 'none' , 'value': MSG(u'None')},
+      {'name': 'increase', 'value': MSG(u'Increase')},
+      {'name': 'decrease', 'value': MSG(u'Decrease')}]
+
+
+
 class Datatypes(Enumerate):
+    """
+    List all available datatypes available for dynamic properties.
+    Contains generic itools datatypes and all the enumerate datatypes
+    from our Enumerates library (All EnumerateTable in /shop/enumerates/)
+    """
+
 
     base_options = [
       {'name': 'string' , 'value': MSG(u'String')},
@@ -96,27 +111,7 @@ class Datatypes(Enumerate):
       {'name': 'email',   'value': MSG(u'Email')},
       {'name': 'date', 'value': MSG(u'Date')}]
 
-    real_datatypes = {'string': String,
-                      'unicode': Unicode,
-                      'integer': Integer,
-                      'decimal': Decimal,
-                      'boolean': Boolean,
-                      'email': Email,
-                      'date': ISOCalendarDate}
-
 
     @classmethod
     def get_options(cls):
-        from models import ProductEnumAttribute
-        model = get_context().resource.parent
-        return cls.base_options + \
-               [{'name': res.name,
-                 'value': res.get_property('title'),
-                 'datatype': None}
-                for res in model.search_resources(cls=ProductEnumAttribute)]
-
-
-    @classmethod
-    def get_real_datatype(cls, name, model):
-        default = TableEnumerate(model=model, enumerate=name)
-        return cls.real_datatypes.get(name, default)
+        return cls.base_options + Enumerate_ListEnumerateTable.get_options()

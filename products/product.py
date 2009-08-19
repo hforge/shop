@@ -28,20 +28,25 @@ from itools.xml import TEXT
 
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
+from ikaaro.forms import SelectWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.workflow import WorkflowAware
 
 # Import from shop
 from cross_selling import CrossSellingTable
+from declination import Declination
 from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewInstance, Products_View, Product_ViewBox
-from product_views import Product_View, Product_Edit, Product_EditModel
+from product_views import Product_View, Product_Edit
 from product_views import Product_Delete, Product_ImagesSlider, Product_Barcode
 from product_views import Product_Print, Product_SendToFriend
+from product_views import Product_Declinations
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.editable import Editable
+from shop.enumerate_table import EnumerateTable_to_Enumerate
+from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
 from shop.utils import get_shop, format_price, ShopFolder
 
 
@@ -58,12 +63,13 @@ from shop.utils import get_shop, format_price, ShopFolder
 #
 
 
+
 class Product(WorkflowAware, Editable, DynamicFolder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
-    class_views = ['view', 'edit', 'edit_model', 'images', 'order',
-                   'edit_cross_selling', 'delete_product']
+    class_views = ['view', 'edit', 'declinations', 'images',
+                   'order', 'edit_cross_selling', 'delete_product']
     class_description = MSG(u'A product')
     class_version = '20090806'
 
@@ -86,8 +92,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     new_instance = Product_NewInstance()
     view = Product_View()
     edit = Product_Edit()
-    edit_model = Product_EditModel()
     barcode = Product_Barcode()
+    declinations = Product_Declinations()
     order = GoToSpecificDocument(specific_document='order-photos',
                                  title=MSG(u'Manage photos'),
                                  access='is_allowed_to_edit')
@@ -154,6 +160,14 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         values['ctime'] = ctime
 
         return values
+
+
+    def get_dynamic_schema(self):
+        product_model = self.get_product_model()
+        if not product_model:
+            return {}
+        return product_model.get_model_schema()
+
 
 
     def get_product_model(self):
@@ -247,6 +261,91 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         path = '../../categories/%s/%s' % (category, self.name)
         return self.get_abspath().resolve(path)
 
+
+    ##################################################
+    ## Purchase options
+    ##################################################
+
+    def get_purchase_options_names(self):
+        """
+        Return list of enumerates name corresponding to a purchase option
+        (from the enumerates library)
+        """
+        model = self.get_product_model()
+        if model is None:
+            return []
+        return model.get_property('declinations_enumerates')
+
+
+    def get_purchase_options_schema(self):
+        schema = {}
+        for name in self.get_purchase_options_names():
+            schema[name] = EnumerateTable_to_Enumerate(enumerate_name=name)
+        return schema
+
+
+    def get_purchase_options_namespace(self):
+        namespace = []
+        shop = get_shop(self)
+        purchase_options_names = self.get_purchase_options_names()
+        # Get declinations
+        declinations = list(self.search_resources(cls=Declination))
+        if not declinations:
+            return namespace
+        # Get uniques purchase option values
+        values = {}
+        for declination in declinations:
+            for name in purchase_options_names:
+                if not values.has_key(name):
+                    values[name] = set([])
+                values[name].add(declination.get_property(name))
+        # Build datatype / widget
+        enumerates_folder = shop.get_resource('enumerates')
+        for name in purchase_options_names:
+            enumerate_table = enumerates_folder.get_resource(name)
+            datatype = Restricted_EnumerateTable_to_Enumerate(
+                          enumerate_name=name, values=values[name])
+            widget = SelectWidget(name, has_empty_option=False)
+            namespace.append(
+                {'title': enumerate_table.get_title(),
+                 'widget': widget.to_html(datatype, None)})
+        return namespace
+
+
+    def get_declination(self, kw):
+        """
+        Return the name of declination corresponding to a
+        dict of purchase options
+        Example:
+        {'color': 'red',
+         'size': 'M'}
+        ==> Return name of declination if exist
+        ==> Return None if not exist
+        """
+        purchase_options_schema = self.get_purchase_options_schema()
+        for declination in self.search_resources(cls=Declination):
+            value = [kw[x] == declination.get_property(x)
+                        for x in purchase_options_schema]
+            if set(value) == set([True]):
+                return declination.name
+        return None
+
+
+    def get_declination_namespace(self, declination_name):
+        namespace = []
+        shop = get_shop(self)
+        declination = self.get_resource(declination_name)
+        enumerates_folder = shop.get_resource('enumerates')
+        for name in self.get_purchase_options_names():
+            value = declination.get_property(name)
+            enumerate_table = enumerates_folder.get_resource(name)
+            datatype = EnumerateTable_to_Enumerate(enumerate_name=name)
+            namespace.append({'title': enumerate_table.get_title(),
+                              'value': datatype.get_value(value)})
+        return namespace
+
+
+
     ##################################################
     ## Namespace
     ##################################################
@@ -301,7 +400,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         # Specific product informations
         model = self.get_product_model()
         if model:
-            namespace.update(model.get_model_ns(self))
+            namespace.update(model.get_model_namespace(self))
         else:
             namespace['specific_dict'] = {}
             namespace['specific_list'] = []
@@ -313,6 +412,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         namespace['images-slider'] = self.slider_view.GET(self, context)
         # Product is buyable
         namespace['is_buyable'] = self.is_buyable()
+        # Purchase options
+        namespace['purchase_options'] = self.get_purchase_options_namespace()
         # Cross selling
         namespace['cross_selling'] = self.get_cross_selling_namespace(context)
         # Authentificated ?
@@ -395,21 +496,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
     def get_weight(self):
         return self.get_property('weight')
-
-
-    def get_options_namespace(self, options):
-        """
-          Get:
-              options = {'color': 'red',
-                         'size': '1'}
-          Return:
-              namespace = [{'title': 'Color',
-                            'value': 'Red'},
-                           {'title': 'Size',
-                            'value': 'XL'}]
-        """
-        product_model = self.get_product_model()
-        return product_model.options_to_namespace(options)
 
 
     #########################################

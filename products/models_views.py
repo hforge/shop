@@ -15,99 +15,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import String, Unicode
+from itools.datatypes import PathDataType, Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
-from itools.web import ERROR, FormError, INFO, STLView
-from itools.xapian import OrQuery, PhraseQuery, AndQuery
+from itools.web import INFO
+from itools.xapian import PhraseQuery, AndQuery
+from itools.xml import XMLParser
 
 # Import from ikaaro
+from ikaaro import messages
 from ikaaro.buttons import RemoveButton
-from ikaaro.file import Image
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, ImageSelectorWidget, SelectWidget
+from ikaaro.forms import TextWidget
 from ikaaro.table_views import OrderedTable_View
-from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
+from ikaaro.table_views import Table_AddRecord, Table_EditRecord
 from ikaaro.utils import get_base_path_query
-from ikaaro.views import CompositeForm
-from ikaaro.views_new import NewInstance
 
-# Import from project
-from enumerate import TableEnumerate
-
-
-class ProductModel_NewInstance(NewInstance):
-
-    title = MSG(u'New product model')
-
-    query_schema = {
-        'type': String(default='product-model'),
-        }
-
-    schema = {
-        'name': String,
-        'title': Unicode(mandatory=True)}
-
-    context_menus = []
-
-
-
-class ProductModel_ViewTop(STLView):
-
-    access = 'is_allowed_to_edit'
-    template = '/ui/shop/products/model_view_top.xml'
-
-
-    def get_namespace(self, resource, context):
-        namespace = {'title': resource.get_title}
-        return namespace
-
-
-
-class ProductModel_ViewBottom(Folder_BrowseContent):
-
-    table_actions = []
-    search_template = None
-
-    access = 'is_allowed_to_edit'
-
-    batch_msg1 = MSG(u"There is 1 enumerate")
-    batch_msg2 = MSG(u"There are {n} enumerates.")
-
-    table_columns = [
-        ('checkbox', None),
-        ('name', MSG(u'Name')),
-        ('title', MSG(u'Title')),
-        ('list', MSG(u'List'))
-        ]
-
-
-    def get_items(self, resource, context, *args):
-        from models import ProductEnumAttribute
-        args = PhraseQuery('format', ProductEnumAttribute.class_id)
-        return Folder_BrowseContent.get_items(self, resource, context, args)
-
-
-    def get_item_value(self, resource, context, item, column):
-        if column=='list':
-            xapian_doc, enum_attribute = item
-            datatype = TableEnumerate(enumerate=enum_attribute.name,
-                                      model=resource)
-            return SelectWidget('html_list').to_html(datatype, None)
-        return Folder_BrowseContent.get_item_value(self, resource, context,
-            item, column)
-
-
-
-class ProductModel_View(CompositeForm):
-
-    access = 'is_allowed_to_edit'
-
-    title = MSG(u'View')
-
-    subviews = [ProductModel_ViewTop(),
-                ProductModel_ViewBottom()]
-
+# Import from shop
+from shop.enumerate_table import Enumerate_ListEnumerateTable
 
 
 class ProductModels_View(Folder_BrowseContent):
@@ -126,9 +52,23 @@ class ProductModels_View(Folder_BrowseContent):
 
     table_columns = [
         ('checkbox', None),
-        ('name', MSG(u'Name')),
+        ('img', MSG(u'Image')),
         ('title', MSG(u'Title'))
         ]
+
+
+    def get_item_value(self, resource, context, item, column):
+        item_brain, item_resource = item
+        if column == 'title':
+            return (item_resource.get_title(), item_brain.name)
+        elif column == 'img':
+            # XXX Sylvain
+            cover = item_resource.get_property('default_cover')
+            cover = item_resource.get_resource(cover)
+            cover = resource.get_pathto(cover)
+            return XMLParser('<img src="%s/;thumb?width=90&amp;height=90"/>' % cover)
+        return Folder_BrowseContent.get_item_value(self, resource, context,
+            item, column)
 
 
 
@@ -136,6 +76,7 @@ class ProductModelSchema_View(OrderedTable_View):
 
     search_template = None
 
+    # TODO Check
     def action_remove(self, resource, context, form):
         """When we delete an attribute we have to delete it in products"""
         ids = form['ids']
@@ -165,8 +106,7 @@ class ProductModelSchema_View(OrderedTable_View):
 
 
 class ProductModelSchema_EditRecord(Table_EditRecord):
-    """ We can't edit name, datatype nor enumerate
-    """
+
     cant_edit_fields = ['name', 'datatype', 'enumerate']
 
     def get_schema(self, resource, context):
@@ -195,124 +135,30 @@ class ProductModelSchema_AddRecord(Table_AddRecord):
 
 
 
-class ProductEnumAttribute_View(Table_View):
-
-
-    def action_remove(self, resource, context, form):
-        """If we delete an item in an Enumerate,
-           we have to delete the property of products that
-           value correspond to the enumerate value we delete.
-        """
-        ids = form['ids']
-        properties = []
-        schema_handler = resource.parent.get_resource('schema').handler
-        handler = resource.handler
-        get_value = handler.get_record_value
-        for id in ids:
-            # Get value of record
-            record = handler.get_record(id)
-            record_value = get_value(record, 'name')
-            # We search the names of the dynamic properties that
-            # references to the current enumerate
-            for record in schema_handler.search(
-                            PhraseQuery('enumerate', resource.name)):
-                property_name = schema_handler.get_record_value(records[0], 'name')
-                # We memorize the values we have to search in products
-                properties.append((property_name, record_value))
-            # We delete value in the table
-            resource.handler.del_record(id)
-        # Search products
-        root = context.root
-        site_root = resource.get_site_root()
-        abspath = site_root.get_canonical_path()
-        product_model = resource.parent
-        query = AndQuery(get_base_path_query(str(abspath)),
-                         PhraseQuery('product_model', product_model.name))
-        results = root.search(query)
-        for doc in results.get_documents():
-            product = root.get_resource(doc.abspath)
-            for name, value in properties:
-                # We delete properties if value is the same
-                # that the value we wants to remove
-                if value == product.get_property(name):
-                    product.del_property(name)
-        # Reindex the resource
-        context.server.change_resource(resource)
-        context.message = INFO(u'Record deleted.')
-
-
-
-class ProductEnumAttribute_AddRecord(Table_AddRecord):
-
-    title = MSG(u'Add Record')
-    submit_value = MSG(u'Add')
-
-
-    def action_add_or_edit(self, resource, context, record):
-        record['name'] = checkid(record['title'].value)
-        resource.handler.add_record(record)
-
-
-
-class ProductEnumAttribute_EditRecord(Table_EditRecord):
-
-
-    def action_add_or_edit(self, resource, context, record):
-        id = context.query['id']
-        handler = resource.handler
-        # Get the current record name to forward the name attribute
-        table_record = handler.get_record(id)
-        record['name'] = handler.get_record_value(table_record, 'name')
-        resource.handler.update_record(id, **record)
-        # Reindex the resource
-        context.server.change_resource(resource)
-
-
-
-class ProductEnumAttribute_NewInstance(NewInstance):
-
-
-    def action(self, resource, context, form):
-        from models import Datatypes
-        name = form['name']
-        if name in [x['name'] for x in Datatypes.get_options()]:
-            context.message = ERROR(u'Name already used')
-            return
-        return NewInstance.action(self, resource, context, form)
-
-
-
-class ProductModelDefaultCover_Edit(AutoForm):
+class ProductModel_Configure(AutoForm):
 
     access='is_allowed_to_edit'
-    title = MSG(u'Default cover')
-    submit_value = MSG(u'OK')
-    submit_class = 'button_ok'
-    schema = {'default_cover': String(default='')}
-    widgets = [ImageSelectorWidget('default_cover', title=title)]
+
+    title = MSG(u'Configure')
+
+    schema = {
+      'title': Unicode,
+      'default_cover': PathDataType,
+      'declinations_enumerates': Enumerate_ListEnumerateTable(multiple=True)}
+
+    widgets = [TextWidget('title', title=MSG(u'Title')),
+               ImageSelectorWidget('default_cover', title=MSG(u'Default cover')),
+               SelectWidget('declinations_enumerates',
+                            title=MSG(u'Declinations activated'))]
 
 
     def get_value(self, resource, context, name, datatype):
-       if name == 'default_cover':
-           return resource.get_property(name)
-
-
-    def _get_form(self, resource, context):
-        form = AutoForm._get_form(self, resource, context)
-
-        # Check cover
-        path = form['default_cover']
-        if path:
-            img_resource = resource.get_resource(str(path), soft=True)
-            if not img_resource or not isinstance(img_resource, Image):
-                raise FormError(invalid=['default_cover'])
-        return form
+        return resource.get_property(name)
 
 
     def action(self, resource, context, form):
-        # Check default cover image
-        path = form['default_cover']
         language = resource.get_content_language(context)
-        resource.set_property('default_cover', form['default_cover'],
-                              language=language)
-        return context.come_back(INFO(u'Default cover saved'))
+        language = None # XXX Sylvain
+        for key in self.schema:
+            resource.set_property(key, form[key], language=language)
+        context.message = messages.MSG_CHANGES_SAVED

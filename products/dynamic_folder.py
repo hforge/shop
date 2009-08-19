@@ -36,22 +36,20 @@ class DynamicFolder(ShopFolder):
             return value, language
 
         # Dynamic property?
-        product_model = self.get_product_model()
-        if product_model:
-            product_model_schema = product_model.get_model_schema()
-            if name in product_model_schema:
-                datatype = product_model_schema[name]
-                # Default value
-                if value is None:
-                    value = datatype.get_default()
-                elif getattr(datatype, 'multiple', False):
-                    if not isinstance(value, list):
-                        # Decode the property
-                        # Only support list of strings
-                        value = list(Tokens.decode(value))
-                    # Else a list was already set by "set_property"
-                else:
-                    value = datatype.decode(value)
+        dynamic_schema = self.get_dynamic_schema()
+        if name in dynamic_schema:
+            datatype = dynamic_schema[name]
+            # Default value
+            if value is None:
+                value = datatype.get_default()
+            elif getattr(datatype, 'multiple', False):
+                if not isinstance(value, list):
+                    # Decode the property
+                    # Only support list of strings
+                    value = list(Tokens.decode(value))
+                # Else a list was already set by "set_property"
+            else:
+                value = datatype.decode(value)
 
         return value, language
 
@@ -62,23 +60,22 @@ class DynamicFolder(ShopFolder):
         The multilingual status must be detected to give or not the
         "language" argument.
         """
+
         # Dynamic property?
-        product_model = self.get_product_model()
-        if product_model:
-            product_model_schema = product_model.get_model_schema()
-            if name in product_model_schema:
-                datatype = product_model_schema[name]
-                if getattr(datatype, 'multiple', False):
-                    return ShopFolder.set_property(self, name,
-                                                   Tokens.encode(value))
-                elif getattr(datatype, 'multilingual', False):
-                    return ShopFolder.set_property(self, name,
-                                                   datatype.encode(value),
-                                                   language)
-                # Even if the language was not None, this property is not
-                # multilingual so ignore it.
+        dynamic_schema = self.get_dynamic_schema()
+        if name in dynamic_schema:
+            datatype = dynamic_schema[name]
+            if getattr(datatype, 'multiple', False):
                 return ShopFolder.set_property(self, name,
-                                               datatype.encode(value))
+                                               Tokens.encode(value))
+            elif getattr(datatype, 'multilingual', False):
+                return ShopFolder.set_property(self, name,
+                                               datatype.encode(value),
+                                               language)
+            # Even if the language was not None, this property is not
+            # multilingual so ignore it.
+            return ShopFolder.set_property(self, name,
+                                           datatype.encode(value))
 
         # Standard property
         schema = self.get_metadata_schema()

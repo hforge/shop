@@ -30,7 +30,7 @@ from utils import format_price, get_shop
 class ProductCart(object):
     """
     A cart contains 3 informations
-      -> Products name / quantity / options
+      -> Products name / quantity / declination
       -> Delivery mode name
       -> Addresses id
     """
@@ -88,9 +88,9 @@ class ProductCart(object):
     def _get_products(self):
         """
         Format of cookie "products":
-          id|name|quantity|option:value#option:value
+          id|name|quantity|declination
         Example:
-          1|polo-red-ikaaro|2|color:rouge#size:M
+          1|polo-red-ikaaro|2|4
         """
         products = []
         cookie = self.context.get_cookie('products')
@@ -98,25 +98,19 @@ class ProductCart(object):
             return products
         cookie = Password.decode(cookie)
         for data in cookie.split('@'):
-            id, name, quantity, data_options = data.split('|')
-            options = {}
-            if data_options:
-                for option in data_options.split('#'):
-                    key, value = option.split(':')
-                    options[key] = value
+            id, name, quantity, declination = data.split('|')
             products.append({'id': id,
                              'name': name,
                              'quantity': int(quantity),
-                             'options': options})
+                             'declination': declination})
         return products
 
 
     def save_products(self):
         cookies = []
         for product in self.products:
-            options = '#'.join(['%s:%s' % (x, y)  for x, y in product['options'].items()])
             cookie = '%s|%s|%s|%s' % (product['id'], product['name'],
-                                      product['quantity'], options)
+                                      product['quantity'], product['declination'])
             cookies.append(cookie)
         products = Password.encode('@'.join(cookies))
         context = get_context()
@@ -124,10 +118,10 @@ class ProductCart(object):
 
 
 
-    def manage_product(self, id, quantity=0, options={}, name=None):
+    def manage_product(self, id, quantity=0, declination=None, name=None):
         for product in self.products:
             # Product already in cart
-            if(product['id']==id):
+            if(product['id'] == id):
                 product['quantity'] = int(product['quantity'])
                 new_quantity = product['quantity'] + quantity
                 if new_quantity == 0:
@@ -138,8 +132,8 @@ class ProductCart(object):
                 self.save_products()
                 return
             # Product not in cart
-            if(product['name']==name):
-                if product['options']==options:
+            if(product['name'] == name):
+                if product['declination'] == declination:
                     new_quantity = product['quantity'] + quantity
                     if new_quantity == 0:
                         # Remove the product
@@ -152,21 +146,21 @@ class ProductCart(object):
         self.products.append({'id': id,
                               'name': name,
                               'quantity': quantity,
-                              'options': options})
+                              'declination': declination})
         self.save_products()
         return
 
 
-    def add_product(self, name, quantity=1, options={}):
-        self.manage_product(None, quantity, options, name)
+    def add_product(self, name, quantity=1, declination=None):
+        self.manage_product(None, quantity, declination, name)
 
 
-    def add_a_product(self, id, quantity=1, options={}):
-        self.manage_product(id, quantity, options)
+    def add_a_product(self, id, quantity=1, declination=None):
+        self.manage_product(id, quantity, declination)
 
 
-    def remove_a_product(self, id, quantity=-1, options={}):
-        self.manage_product(id, quantity, options)
+    def remove_a_product(self, id, quantity=-1, declination=None):
+        self.manage_product(id, quantity, declination)
 
 
     def delete_a_product(self, id):

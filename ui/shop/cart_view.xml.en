@@ -36,8 +36,8 @@
             <a href="${p/href}">
               ${p/title}
             </a>
-            <stl:block stl:if="p/options">
-              <ul stl:repeat="option p/options">
+            <stl:block stl:if="p/declination">
+              <ul stl:repeat="option p/declination">
                 ${option/title}: ${option/value}
               </ul>
             </stl:block>

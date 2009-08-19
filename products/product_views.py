@@ -32,10 +32,12 @@ from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.registry import get_resource_class
+from ikaaro.views import BrowseForm, CompositeForm
 from ikaaro.views_new import NewInstance
 
 # Import from shop
 from enumerate import ProductModelsEnumerate
+from declination import Declination, Declination_NewInstance
 from schema import product_schema
 from taxes import PriceWidget
 from widgets import BarcodeWidget, MiniProductWidget
@@ -98,34 +100,12 @@ class Product_View(Editable_View, STLForm):
 
 
     def get_schema(self, resource, context):
-        # Base schema
-        base_schema = STLForm.get_schema(self, resource, context)
-        # Purchase options (example: color choice for product)
-        model = resource.get_product_model()
-        if model:
-            purchase_schema = model.get_purchase_options_schema(resource)
-        else:
-            purchase_schema = {}
-        # Merge
-        return merge_dicts(base_schema, purchase_schema)
+        return merge_dicts(STLForm.get_schema(self, resource, context),
+                           resource.get_purchase_options_schema())
 
 
     def get_namespace(self, resource, context):
-        # Method build namespace is used to
-        # build namespace (mandatory fields) for
-        # the puchase options
-        namespace = self.build_namespace(resource, context)
-        # Product namespace
-        namespace.update(resource.get_namespace(context))
-        # Purchase options widgets
-        model = resource.get_product_model()
-        if model:
-            widgets = model.get_purchase_options_widgets(resource, namespace)
-            namespace['purchase_options_widgets'] = widgets
-        else:
-            namespace['purchase_options_widgets'] = []
-        # Return namespace
-        return namespace
+        return resource.get_namespace(context)
 
 
     action_add_to_cart_schema = {'quantity': Integer(default=1)}
@@ -136,57 +116,22 @@ class Product_View(Editable_View, STLForm):
             msg = MSG(u"This product isn't buyable")
             return context.come_back(msg)
         # Get purchase options
-        options = {}
-        model = resource.get_product_model()
-        if model:
-            for key in model.get_purchase_options_schema(resource):
-                options[key] = form[key]
+        declination = None
+        kw = {}
+        for key in resource.get_purchase_options_schema():
+            if form[key] is not None:
+                kw[key] = form[key]
+        if kw:
+            declination = resource.get_declination(kw)
+            if declination is None:
+                context.message = ERROR(u'Declination not exist')
+                return
         # Add to cart
         cart = ProductCart(context)
-        cart.add_product(resource.name, form['quantity'], options)
+        cart.add_product(resource.name, form['quantity'], declination)
         # Information message
         context.message = INFO(u'Product added to cart !')
 
-
-
-class Product_EditModel(AutoForm):
-
-    access = 'is_allowed_to_edit'
-    title = MSG(u'Edit Model')
-
-    def GET(self, resource, context):
-        if not resource.get_property('product_model'):
-            msg = MSG(u'Error: No product type is selected.')
-            return context.come_back(msg, goto='./;edit')
-        # Check if schema is not empty
-        if not self.get_schema(resource, context):
-            msg = MSG(u'The model is empty, no informations to edit.')
-            return context.come_back(msg, goto='./;edit')
-        # Build form
-        return AutoForm.GET(self, resource, context)
-
-
-    def get_widgets(self, resource, context):
-        product_type = resource.get_product_model()
-        return product_type.get_model_widgets()
-
-
-    def get_schema(self, resource, context):
-        product_type = resource.get_product_model()
-        return product_type.get_model_schema()
-
-
-    def get_value(self, resource, context, name, datatype):
-        language = resource.get_content_language(context)
-        return resource.get_property(name, language=language)
-
-
-    def action(self, resource, context, form):
-        language = resource.get_content_language(context)
-        product_type = resource.get_product_model()
-        for key, datatype in product_type.get_model_schema().iteritems():
-            resource.set_property(key, form[key], language=language)
-        return context.come_back(messages.MSG_CHANGES_SAVED)
 
 
 
@@ -195,10 +140,7 @@ class Product_Edit(Editable_Edit, AutoForm):
     access = 'is_allowed_to_edit'
     title = MSG(u'Edit')
 
-    schema = merge_dicts(Editable_Edit.schema,
-                         product_schema)
-
-    widgets = [
+    base_widgets = [
         # General informations
         SelectWidget('state',
                      title=MSG(u'Publication state'),
@@ -217,7 +159,20 @@ class Product_Edit(Editable_Edit, AutoForm):
         BooleanRadio('is_buyable', title=MSG(u'Buyable by customer ?')),
         TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),
         PriceWidget('pre-tax-price', title=MSG(u'Selling price')),
-        ] + Editable_Edit.widgets
+        ]
+
+
+    def get_widgets(self, resource, context):
+        product_model = resource.get_product_model()
+        return (self.base_widgets + Editable_Edit.widgets +
+                (product_model.get_model_widgets() if product_model else []))
+
+
+    def get_schema(self, resource, context):
+        product_model = resource.get_product_model()
+        return merge_dicts(Editable_Edit.schema, product_schema,
+                  (product_model.get_model_schema() if product_model else {}))
+
 
 
     def get_value(self, resource, context, name, datatype):
@@ -230,7 +185,7 @@ class Product_Edit(Editable_Edit, AutoForm):
 
     def action(self, resource, context, form):
         language = resource.get_content_language(context)
-        for key, datatype in self.schema.iteritems():
+        for key, datatype in self.get_schema(resource, context).iteritems():
             if key in ('data', 'ctime'):
                 continue
             if issubclass(datatype, Unicode):
@@ -240,6 +195,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         Editable_Edit.action(self, resource, context, form)
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED)
+
 
 
 class Product_Delete(STLForm):
@@ -454,3 +410,69 @@ class Product_SendToFriend(AutoForm):
         msg = u'An email has been send to your friend'
         return context.come_back(MSG(msg), goto='./')
 
+
+
+class Product_DeclinationsView(BrowseForm):
+
+    title = MSG(u'Declinations')
+    access = 'is_allowed_to_edit'
+
+    batch_msg1 = MSG(u"There is 1 declination")
+    batch_msg2 = MSG(u"There are {n} declinations.")
+
+    base_columns = [
+            ('checkbox', None),
+            ('name', MSG(u'Name')),
+            ('default', MSG(u'Default ?')),
+            ('stock-quantity', MSG(u'Stock quantity'))]
+            #('price', MSG(u'Price variation (HT)')),
+            #('weight', MSG(u'Weigth variation'))]
+
+
+    def get_table_columns(self, resource, context):
+        columns = []
+        shop = get_shop(resource)
+        enumerates_folder = shop.get_resource('enumerates')
+        for name in resource.get_purchase_options_names():
+            title = enumerates_folder.get_resource(name).get_title()
+            columns.append((name, title))
+        return self.base_columns + columns
+
+
+    def get_items(self, resource, context):
+        items = []
+        for declination in resource.search_resources(cls=Declination):
+            name = declination.name
+            kw = {}
+            for key in declination.get_metadata_schema():
+                kw[key] = declination.get_property(key)
+            for key in declination.get_dynamic_schema():
+                kw[key] = declination.get_property(key)
+            items.append(kw)
+        return items
+
+
+    def sort_and_batch(self, resource, context, items):
+        # Batch
+        start = context.query['batch_start']
+        size = context.query['batch_size']
+        return items[start:start+size]
+
+
+    def get_item_value(self, resource, context, item, column):
+        return item[column]
+
+
+
+class Product_Declinations(CompositeForm):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Declinations')
+
+    subviews = [Declination_NewInstance(),
+                Product_DeclinationsView()]
+
+
+    def get_schema(self, resource, context):
+          # XXX Bug in compositeform
+        return self.subviews[0].get_schema(resource, context)

@@ -88,7 +88,7 @@ class BaseOrdersProducts(BaseTable):
     record_schema = {
       'name': String(mandatory=True),
       'title': Unicode,
-      'options': Unicode,
+      'declination': Unicode,
       'quantity': Integer,
       'weight': Decimal,
       'pre-tax-price': Decimal(mandatory=True),
@@ -111,7 +111,7 @@ class OrdersProducts(Table):
         TextWidget('name', title=MSG(u'Product name')),
         TextWidget('title', title=MSG(u'Title')),
         TextWidget('weight', title=MSG(u'Weight')),
-        TextWidget('options', title=MSG(u'Title')),
+        TextWidget('declination', title=MSG(u'Declination')),
         TextWidget('pre-tax-price', title=MSG(u'Unit price (pre-tax)')),
         TextWidget('tax', title=MSG(u'Tax')),
         TextWidget('quantity', title=MSG(u'Quantity'))]
@@ -197,12 +197,10 @@ class Order(WorkflowAware, ShopFolder):
         products = shop.get_resource('products')
         for product_cart in cart.products:
             product = products.get_resource(product_cart['name'])
-            options = '\n'.join(['%s: %s' % (x, y)
-                          for x, y in product_cart['options'].items()])
             handler.add_record(
               {'name': product.name,
                'title': product.get_title(),
-               'options': options,
+               'declination': product_cart['declination'],
                'pre-tax-price': decimal(product.get_price_without_tax()),
                'tax': TaxesEnumerate.get_value(product.get_property('tax')),
                'weight': product.get_weight(),

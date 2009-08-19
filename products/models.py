@@ -16,10 +16,13 @@
 
 
 # Import from itools
-from itools.datatypes import Boolean, Enumerate, String, Unicode
+from itools.core import merge_dicts
+from itools.datatypes import Boolean, Enumerate, String, Unicode, Integer
+from itools.datatypes import PathDataType, Decimal, Email, ISOCalendarDate
 from itools.gettext import MSG
 
 # Import from ikaaro
+from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import BooleanRadio, BooleanCheckBox, SelectWidget, TextWidget
 from ikaaro.forms import get_default_widget
 from ikaaro.registry import register_resource_class
@@ -27,57 +30,58 @@ from ikaaro.table import OrderedTable, OrderedTableFile
 
 # Import from shop
 from enumerate import Datatypes
-from models_views import ProductEnumAttribute_NewInstance
-from models_views import ProductModelDefaultCover_Edit
-from models_views import ProductModelSchema_AddRecord, ProductEnumAttribute_View
-from models_views import ProductModelSchema_EditRecord, ProductModel_View
-from models_views import ProductModel_NewInstance, ProductModelSchema_View
-from models_views import ProductModels_View, ProductEnumAttribute_AddRecord
-from models_views import ProductEnumAttribute_EditRecord
+from models_views import ProductModelSchema_AddRecord
+from models_views import ProductModelSchema_EditRecord
+from models_views import ProductModelSchema_View
+from models_views import ProductModels_View
+from models_views import ProductModel_Configure
 from shop.utils import ShopFolder
+from shop.enumerate_table import Enumerate_ListEnumerateTable
+from shop.enumerate_table import EnumerateTable_to_Enumerate
 
 
+real_datatypes = {'string': String,
+                  'unicode': Unicode,
+                  'integer': Integer,
+                  'decimal': Decimal,
+                  'boolean': Boolean,
+                  'email': Email,
+                  'date': ISOCalendarDate}
 
-class ProductEnumAttributeTable(OrderedTableFile):
 
-    record_schema = {
-        'name': String(Unique=True, is_indexed=True),
-        'title': Unicode(mandatory=True, multiple=True),
-        }
-
-
-
-class ProductEnumAttribute(OrderedTable):
-
-    class_id = 'product-enum-attribute'
-    class_title = MSG(u'Product Enumerate Attribute')
-    class_version = '20090408'
-    class_handler = ProductEnumAttributeTable
-    class_views = ['view', 'add_record']
-
-    view = ProductEnumAttribute_View()
-    new_instance = ProductEnumAttribute_NewInstance()
-    add_record = ProductEnumAttribute_AddRecord()
-    edit_record = ProductEnumAttribute_EditRecord()
-
-    form = [
-        TextWidget('title', title=MSG(u'Title')),
-        ]
+def get_real_datatype(model, record):
+    # If name not in real_datatypes dict ...
+    # It's an enumerate table from enumerates library
+    # that we transform in Enumerate
+    schema_resource = model.get_resource('schema').handler
+    get_value = schema_resource.get_record_value
+    datatype = get_value(record, 'datatype')
+    # Get properties
+    kw = {}
+    for key in ['mandatory', 'multiple', 'multilingual']:
+        kw[key] = get_value(record, key)
+    # Get real datatype from real_datatypes dict
+    if real_datatypes.has_key(datatype):
+        return real_datatypes[datatype](**kw)
+    # It's an TableEnumerate
+    kw['enumerate_name'] = get_value(record, 'datatype')
+    return EnumerateTable_to_Enumerate(**kw)
 
 
 
 class ProductTypeTable(OrderedTableFile):
 
     record_schema = {
+        # XXX To remove
         'name': String(Unique=True, is_indexed=True),
         'title': Unicode(mandatory=True, multiple=True),
         'mandatory': Boolean,
         'multiple': Boolean,
         'multilingual': Boolean,
         'visible': Boolean,
+        # XXX To remove
         'is_purchase_option': Boolean,
         'datatype': Datatypes(mandatory=True, index='keyword'),
-        'enumerate': String(is_indexed=True, index='keyword')
         }
 
 
@@ -100,7 +104,6 @@ class ProductModelSchema(OrderedTable):
         BooleanCheckBox('multiple', title=MSG(u'Multiple')),
         BooleanCheckBox('multilingual', title=MSG(u'Multilingual')),
         BooleanCheckBox('visible', title=MSG(u'Visible')),
-        BooleanCheckBox('is_purchase_option', title=MSG(u'Is purchase option ?')),
         SelectWidget('datatype', title=MSG(u'Data Type')),
         ]
 
@@ -127,13 +130,20 @@ class ProductModel(ShopFolder):
 
     class_id = 'product-model'
     class_title = MSG(u'Product Model')
-    class_views = ['view']
+    class_views = ['configure', 'view']
+
+    view = GoToSpecificDocument(specific_document='schema',
+                                title=MSG(u'View model details'))
+    configure = ProductModel_Configure()
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['schema']
 
 
-    view = ProductModel_View()
-    edit_default_cover = ProductModelDefaultCover_Edit()
+    @classmethod
+    def get_metadata_schema(cls):
+        return merge_dicts(ShopFolder.get_metadata_schema(),
+                default_cover=PathDataType,
+                declinations_enumerates=Enumerate_ListEnumerateTable(multiple=True))
 
 
     @staticmethod
@@ -146,146 +156,63 @@ class ProductModel(ShopFolder):
 
 
     def get_document_types(self):
-        return [ProductEnumAttribute]
-
-
-    def get_model_informations(self):
-        infos = []
-        schema_resource = self.get_resource('schema').handler
-        get_value = schema_resource.get_record_value
-        for record in schema_resource.get_records_in_order():
-            name = get_value(record, 'name')
-            title = get_value(record, 'title')
-            mandatory = get_value(record, 'mandatory')
-            multiple = get_value(record, 'multiple')
-            multilingual = get_value(record, 'multilingual')
-            datatype = get_value(record, 'datatype')
-            visible = get_value(record, 'visible')
-            is_purchase_option = get_value(record, 'is_purchase_option')
-            datatype = Datatypes.get_real_datatype(datatype, model=self)
-            datatype = datatype(mandatory=mandatory, multiple=multiple,
-                multilingual=multilingual)
-            widget = get_default_widget(datatype)
-            if widget is BooleanCheckBox:
-                widget = BooleanRadio
-            widget = widget(name, title=MSG(title), has_empty_option=False)
-            infos.append({'name': name,
-                          'title': title,
-                          'datatype': datatype,
-                          'is_purchase_option': is_purchase_option,
-                          'widget': widget,
-                          'visible': visible})
-        return infos
+        return []
 
 
     def get_model_schema(self):
         schema = {}
-        for info in self.get_model_informations():
-            schema[info['name']] = info['datatype']
+        schema_resource = self.get_resource('schema').handler
+        get_value = schema_resource.get_record_value
+        for record in schema_resource.get_records_in_order():
+            name = get_value(record, 'name')
+            schema[name] = get_real_datatype(self, record)
         return schema
 
 
     def get_model_widgets(self):
-        return [x['widget'] for x in self.get_model_informations()]
+        widgets = []
+        schema_resource = self.get_resource('schema').handler
+        get_value = schema_resource.get_record_value
+        for record in schema_resource.get_records_in_order():
+            name = get_value(record, 'name')
+            datatype = get_real_datatype(self, record)
+            widget = get_default_widget(datatype)
+            if widget is BooleanCheckBox:
+                widget = BooleanRadio
+            title = get_value(record, 'title')
+            widget = widget(name, title=title, has_empty_option=False)
+            widgets.append(widget)
+        return widgets
 
 
-    def get_model_ns(self, resource):
-        ns = {'specific_dict': {},
-              'specific_list': []}
-        for info in self.get_model_informations():
-            name = info['name']
-            value = resource.get_property(name)
+    def get_model_namespace(self, resource):
+        namespace = {'specific_dict': {},
+                     'specific_list': []}
+        schema_resource = self.get_resource('schema').handler
+        get_value = schema_resource.get_record_value
+        for record in schema_resource.get_records_in_order():
+            name = get_value(record, 'name')
+            value = real_value = resource.get_property(name)
             # Real value is used to keep the enumerate value
             # corresponding to the options[{'name': xxx}]
-            real_value = value
-            datatype = info['datatype']
+            datatype = get_real_datatype(self, record)
             if issubclass(datatype, Enumerate):
                 if datatype.multiple:
                     values = [datatype.get_value(x) for x in real_value]
                     value = ', '.join(values)
                 else:
                     value = datatype.get_value(real_value)
-            kw = {'title': info['title'],
-                  'value': value,
-                  'multiple': datatype.multiple,
-                  'name': info['name'],
-                  'real_value': real_value,
-                  'visible': info['visible']}
-            ns['specific_dict'][name] = kw
+            # Build kw
+            kw = {'value': value,
+                  'real_value': real_value}
+            for key in ['name', 'title', 'multiple', 'visible']:
+                kw[key] = get_value(record, key)
+            # Add to namespace
+            namespace['specific_dict'][name] = kw
             if kw['visible'] and kw['value']:
-                ns['specific_list'].append(kw)
-        return ns
-
-
-    def get_purchase_options_schema(self, resource):
-        schema = {}
-        for info in self.get_model_informations():
-            name = info['name']
-            datatype = info['datatype']
-            if (not info['is_purchase_option'] or
-                not issubclass(datatype, Enumerate)):
-                continue
-            datatype.title = info['title']
-            datatype.values = resource.get_property(name)
-            datatype.multiple = False
-            datatype.mandatory = True
-            schema[name] = datatype
-        return schema
-
-
-    def get_purchase_options_widgets(self, resource, namespace):
-        widgets = []
-        schema = self.get_purchase_options_schema(resource)
-        for info in self.get_model_informations():
-            name = info['name']
-            datatype = info['datatype']
-            if (not info['is_purchase_option'] or
-                not issubclass(datatype, Enumerate)):
-                continue
-            datatype.title = info['title']
-            datatype.values = resource.get_property(name)
-            datatype.multiple = False
-            widget_namespace = namespace[name]
-            value = widget_namespace['value']
-            widget_namespace['title'] = info['title']
-            widget = info['widget']
-            widget.css = widget_namespace['class']
-            widget_namespace['widget'] = widget.to_html(datatype, value)
-            widgets.append(widget_namespace)
-        return widgets
-
-
-    def options_to_namespace(self, options):
-        """
-          Get:
-              options = {'color': 'red',
-                         'size': '1'}
-          Return:
-              namespace = [{'title': 'Color',
-                            'value': 'Red'},
-                           {'title': 'Size',
-                            'value': 'XL'}]
-        """
-        schema_resource = self.get_resource('schema').handler
-        get_value = schema_resource.get_record_value
-        namespace = []
-        for name, value in options.items():
-            # Search option
-            records = schema_resource.search(name=name)
-            record = records[0]
-            # Get datatype
-            title = get_value(record, 'title')
-            datatype = get_value(record, 'datatype')
-            datatype = Datatypes.get_real_datatype(datatype, model=self)
-            # Namespace
-            namespace.append({'title': title,
-                              'value': datatype.get_value(value)})
-            #name = get_value(record, 'name')
-            #title = get_value(record, 'title')
-            #mandatory = get_value(record, 'mandatory')
-            #multiple = get_value(record, 'multiple')
-            #datatype = get_value(record, 'datatype')
+                namespace['specific_list'].append(kw)
         return namespace
+
 
 
 
@@ -293,11 +220,10 @@ class ProductModels(ShopFolder):
 
     class_id = 'product-models'
     class_title = MSG(u'Product Models')
-    class_views = ['view', 'new_instance']
+    class_views = ['view', 'new_resource?type=product-model']
 
     # Views
     view = ProductModels_View()
-    new_instance = ProductModel_NewInstance()
 
 
     def get_document_types(self):
@@ -308,4 +234,3 @@ class ProductModels(ShopFolder):
 register_resource_class(ProductModel)
 register_resource_class(ProductModelSchema)
 register_resource_class(ProductModels)
-register_resource_class(ProductEnumAttribute)

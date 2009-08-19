@@ -24,6 +24,7 @@ from ikaaro.registry import register_resource_class
 from ikaaro.webpage import WebPage
 
 # Import from project
+from enumerate_table import EnumeratesFolder
 from addresses import Addresses
 from categories import Categories, VirtualCategory
 from countries import Countries
@@ -46,7 +47,7 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20090619'
+    class_version = '20090819'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
@@ -128,6 +129,9 @@ class Shop(ShopFolder):
         # Countries
         Countries._make_resource(Countries, folder, '%s/countries' % name,
                                  title={'en': u'countries'})
+        # EnumeratesFolder
+        EnumeratesFolder._make_resource(EnumeratesFolder, folder,
+                                    '%s/enumerates' % name, title={'en': u'Enumerates'})
         # Shipping
         Shippings._make_resource(Shippings, folder, '%s/shippings' % name,
                                  title={'en': u'Shipping'})
@@ -212,6 +216,9 @@ class Shop(ShopFolder):
         addresses = self.get_resource('addresses').handler
         return addresses.get_record_namespace(id)
 
+
+    def update_20090819(self):
+        EnumeratesFolder.make_resource(EnumeratesFolder, self, 'enumerates')
 
 
 register_resource_class(Shop)

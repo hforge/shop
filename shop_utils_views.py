@@ -84,18 +84,18 @@ class Cart_View(STLView):
             total['without_tax'] += total_price_without_tax
             total['with_tax'] += total_price_with_tax
             # All
-            options = product_cart['options']
-            if options:
-                options = product.get_options_namespace(options)
-            ns = ({'id': product_cart['id'],
-                   'name': product.name,
-                   'img': product.get_cover_namespace(context),
-                   'title': product.get_title(),
-                   'href': abspath.get_pathto(product.get_virtual_path()),
-                   'quantity': quantity,
-                   'options': options,
-                   'price': price})
-            namespace['products'].append(ns)
+            declination = product_cart['declination']
+            if declination:
+                declination = product.get_declination_namespace(declination)
+            namespace['products'].append(
+              {'id': product_cart['id'],
+               'name': product.name,
+               'img': product.get_cover_namespace(context),
+               'title': product.get_title(),
+               'href': abspath.get_pathto(product.get_virtual_path()),
+               'quantity': quantity,
+               'declination': declination,
+               'price': price})
         namespace['total'] = total
         # Get shippings
         namespace['ship'] = None
