@@ -241,7 +241,6 @@ class EnumeratesFolder(Folder):
     # Views
     view = EnumeratesFolder_View()
     new_resource = Folder.new_resource
-    new_resource.title = MSG(u'Create a new enumerate table.')
 
     # Navigation
     context_menus = []

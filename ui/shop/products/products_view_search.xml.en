@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <form method="get">
+    <fieldset>
+      <legend>Search</legend>
+      <dl>
+        <stl:block stl:repeat="widget widgets">
+          <dt>${widget/title}</dt>
+          <dd>${widget/html}</dd>
+        </stl:block>
+        <p>
+          <input type="submit" class="button-ok" name="search" value="Search"/>
+        </p>
+      </dl>
+    </fieldset>
+  </form>
+
+</stl:block>

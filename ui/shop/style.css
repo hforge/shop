@@ -502,3 +502,10 @@ table.cart td{
 .print h3{
   border-bottom: 1px solid black;
 }
+
+/* Backoffice css */
+fieldset input,
+fieldset textarea,
+fieldset select{
+  border: 1px solid #CCCCCC;
+}

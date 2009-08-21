@@ -19,9 +19,10 @@ from cStringIO import StringIO
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Email, Integer, String, Unicode
+from itools.datatypes import Email, Integer, String, Unicode, Boolean
 from itools.gettext import MSG
 from itools.web import INFO, ERROR, STLView, STLForm, BaseView
+from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -31,12 +32,13 @@ from ikaaro.exceptions import ConsistencyError
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
+from ikaaro.forms import BooleanCheckBox, BooleanRadio, SelectRadio
 from ikaaro.registry import get_resource_class
 from ikaaro.views import BrowseForm, CompositeForm
 from ikaaro.views_new import NewInstance
 
 # Import from shop
-from enumerate import ProductModelsEnumerate
+from enumerate import ProductModelsEnumerate, CategoriesEnumerate, States
 from declination import Declination, Declination_NewInstance
 from schema import product_schema
 from taxes import PriceWidget
@@ -241,11 +243,41 @@ class Products_View(Folder_BrowseContent):
     table_columns = [
         ('checkbox', None),
         ('cover', MSG(u'Cover')),
+        ('reference', MSG(u'Reference')),
         ('title', MSG(u'Title')),
         ('mtime', MSG(u'Last Modified')),
         ('product_model', MSG(u'Product model')),
         ('workflow_state', MSG(u'State'))
         ]
+
+    search_template = '/ui/shop/products/products_view_search.xml'
+
+    search_schema = {
+        'reference': String,
+        'title': Unicode,
+        'workflow_state': States,
+        'product_model': ProductModelsEnumerate,
+        'categories': CategoriesEnumerate,
+        }
+
+    search_widgets = [
+        TextWidget('reference', title=MSG(u'Reference')),
+        TextWidget('title', title=MSG(u'Title')),
+        SelectWidget('workflow_state', title=MSG(u'State')),
+        SelectWidget('product_model', title=MSG(u'Product model')),
+        SelectWidget('categories', title=MSG(u'Categories')),
+        ]
+
+
+    def get_search_namespace(self, resource, context):
+        query = context.query
+        namespace = {'widgets': []}
+        for widget in self.search_widgets:
+            value = context.query[widget.name]
+            html = widget.to_html(self.search_schema[widget.name], value)
+            namespace['widgets'].append({'title': widget.title,
+                                         'html': html})
+        return namespace
 
 
     def get_query_schema(self):
@@ -255,9 +287,28 @@ class Products_View(Folder_BrowseContent):
         return schema
 
 
+    def get_items(self, resource, context, *args):
+        search_query = []
+        # Base query (search in folder)
+        abspath = str(resource.get_canonical_path())
+        search_query.append(PhraseQuery('parent_path', abspath))
+        # Search query
+        for key in self.search_schema.keys():
+            value = context.get_form_value(key)
+            if not value:
+                continue
+            search_query.append(PhraseQuery(key, value))
+
+        # Ok
+        return context.root.search(AndQuery(*search_query))
+
+
+
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
-        if column == 'cover':
+        if column == 'reference':
+            return item_resource.get_property('reference')
+        elif column == 'cover':
             cover = item_resource.get_cover_namespace(context)
             if cover:
                 uri = '%s/;thumb?width=48&amp;size=48' % cover['href']
@@ -272,7 +323,6 @@ class Products_View(Folder_BrowseContent):
             return ProductModelsEnumerate.get_value(product_model)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
-
 
 
 class Product_ImagesSlider(STLView):
