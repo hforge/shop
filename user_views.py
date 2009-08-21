@@ -43,57 +43,6 @@ class ShopUser_Profile(STLView):
     title = MSG(u'My profile')
 
 
-class ShopUser_Manage(STLView):
-
-    access = 'is_admin'
-    title = MSG(u'Manage user')
-
-    template = '/ui/shop/shop_user_manage.xml'
-
-    base_fields = ['gender', 'firstname', 'lastname', 'phone1',
-                  'phone2', 'user_language', 'email']
-
-    def get_namespace(self, resource, context):
-        root = context.root
-        shop = get_shop(resource)
-        user_class = shop.user_class
-        namespace = {'user': {'base': {},
-                              'public': [],
-                              'private': []}}
-        # Base schema
-        for key in self.base_fields:
-            namespace['user']['base'][key] = resource.get_property(key)
-        # Additional public schema
-        for widget in user_class.public_widgets:
-            namespace['user']['public'].append(
-              {'title': widget.title,
-               'value': resource.get_property(widget.name)})
-        # Additional private schema
-        for widget in user_class.private_widgets:
-            namespace['user']['private'].append(
-              {'title': widget.title,
-               'value': resource.get_property(widget.name)})
-        # Customer payments
-        payments = resource.get_resource('../../shop/payments')
-        namespace['payments'] = payments.get_payments_informations(
-                                    context, user=resource.name)
-        # Customer orders
-        namespace['orders'] = []
-        query = PhraseQuery('customer_id', resource.name)
-        results = root.search(query)
-        nb_orders = 0
-        for brain in results.get_documents():
-            order = root.get_resource(brain.abspath)
-            nb_orders += 1
-            namespace['orders'].append(
-                  {'id': brain.name,
-                   'href': resource.get_pathto(order),
-                   'amount': order.get_property('total_price')})
-        namespace['nb_orders'] = nb_orders
-        # Customer addresses # TODO
-        return namespace
-
-
 class ShopUser_EditAccount(User_EditAccount):
 
     def get_schema(self, resource, context):

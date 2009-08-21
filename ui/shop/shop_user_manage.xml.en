@@ -4,6 +4,9 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+
+  <a href="./;customers">« Go to the customers list</a>
+
   <table class="order-browse" style="width:300px;float:left">
     <thead>
       <tr>

@@ -34,6 +34,7 @@ from products import Products, Product, ProductModels
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
 from shop_payments import ShopPayments
+from shop_views import Shop_CustomersView, Shop_CustomerManage
 from shop_views import Shop_Addresses, Shop_AddressesBook
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
@@ -78,6 +79,8 @@ class Shop(ShopFolder):
     # Administrator shop views
     view = Shop_View()
     configure = Shop_Configure()
+    customers = Shop_CustomersView()
+    customer_manage = Shop_CustomerManage()
 
     #------------------------------
     # 6 Steps for payment process

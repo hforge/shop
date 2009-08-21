@@ -30,10 +30,16 @@
         <a href="./products/">Manage products</a>
       </li>
       <li>
+        <a href="./;customers">Manage customers</a>
+      </li>
+      <li>
         <a href="./orders/">Manage orders</a>
       </li>
       <li>
         <a href="./categories/">Manage categories</a>
+      </li>
+      <li>
+        <a href="./payments/">Manage payments</a>
       </li>
     </ul>
 
@@ -47,9 +53,6 @@
       </li>
       <li>
         <a href="./;configure">Configure shop</a>
-      </li>
-      <li>
-        <a href="./payments/">Configure payments</a>
       </li>
       <li>
         <a href="./taxes/">Edit/Add Taxes</a>
