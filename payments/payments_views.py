@@ -124,6 +124,22 @@ class Payments_History_View(SearchForm):
         'user': String,
         'state': Boolean}
 
+    search_widgets = [
+        TextWidget('ref', title=MSG(u'Reference')),
+        TextWidget('user', title=MSG(u'Customer')),
+        ]
+
+
+    def get_search_namespace(self, resource, context):
+        query = context.query
+        namespace = {'widgets': []}
+        for widget in self.search_widgets:
+            value = context.query[widget.name]
+            html = widget.to_html(self.search_schema[widget.name], value)
+            namespace['widgets'].append({'title': widget.title,
+                                         'html': html})
+        return namespace
+
     table_columns = [
         ('complete_id', MSG(u'Id')),
         ('state', u' '),
@@ -141,13 +157,6 @@ class Payments_History_View(SearchForm):
           <img src="/ui/icons/16x16/view.png"/>
         </a>
         """
-
-
-    def get_search_namespace(self, resource, context):
-        namespace = {}
-        for key in self.search_schema.keys():
-            namespace[key] = context.query[key]
-        return namespace
 
 
     def get_items(self, resource, context):

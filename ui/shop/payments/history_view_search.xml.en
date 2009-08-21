@@ -13,50 +13,18 @@
   <br/>
 
   <form method="GET">
-    <table class="order-browse" cellpadding="5" cellspacing="0">
-      <tbody>
-        <tr>
-          <th>
-            Payment validated ?
-          </th>
-          <td>
-            <label for="state-yes">Yes</label>
-            <input id="state-yes" name="state" type="radio" value="1"
-              checked="checked" stl:if="state"/>
-            <input id="state-yes" name="state" type="radio" value="1"
-              stl:if="not state"/>
-
-            <label for="state-no">No</label>
-            <input id="state-no" name="state" type="radio" value="0"
-              checked="checked" stl:if="not state"/>
-            <input id="state-no" name="state" type="radio" value="0"
-              stl:if="state"/>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            Ref
-          </th>
-          <td>
-            <input type="text" name="ref" value="${ref}"/>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            Customer Id
-          </th>
-          <td>
-            <input type="text" name="user" value="${user}" size="4"/>
-          </td>
-        </tr>
-        <tr>
-          <td/>
-          <td>
-            <input class="button_ok" type="submit" name="filter" value="Filter"/>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <fieldset>
+      <legend>Search</legend>
+      <dl>
+        <stl:block stl:repeat="widget widgets">
+          <dt>${widget/title}</dt>
+          <dd>${widget/html}</dd>
+        </stl:block>
+        <p>
+          <input type="submit" class="button-ok" name="search" value="Search"/>
+        </p>
+      </dl>
+    </fieldset>
   </form>
 
   <h1>Results</h1>
