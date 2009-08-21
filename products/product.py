@@ -651,10 +651,10 @@ class Products(ShopFolder):
 
     class_id = 'products'
     class_title = MSG(u'Products')
-    class_views = ['view']
+    class_views = ['browse_content']
 
     # Views
-    view = Products_View()
+    browse_content = Products_View()
 
 
     def get_document_types(self):

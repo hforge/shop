@@ -27,7 +27,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.buttons import RemoveButton
+from ikaaro.buttons import RemoveButton, RenameButton
 from ikaaro.exceptions import ConsistencyError
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
@@ -238,7 +238,7 @@ class Products_View(Folder_BrowseContent):
 
     context_menus = []
 
-    table_actions = [RemoveButton]
+    table_actions = [RemoveButton, RenameButton]
 
     table_columns = [
         ('checkbox', None),
