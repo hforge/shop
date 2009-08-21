@@ -241,8 +241,8 @@
             <tbody>
               <tr stl:repeat="product products">
                 <td>${product/title}
-                  <stl:block stl:if="product/options">
-                    <br/>${product/options}
+                  <stl:block stl:if="product/declination">
+                    <br/>${product/declination}
                   </stl:block>
                 </td>
                 <td>${product/price/unit/with_tax} €</td>
@@ -347,7 +347,7 @@
               <tr stl:repeat="payment payment/history">
                 <td>${payment/state}</td>
                 <td>${payment/complete_id}</td>
-                <td>${payment/payment_name}</td>
+                <td>-</td>
                 <td>${payment/ts}</td>
                 <td>${payment/amount}</td>
                 <td>${payment/advance_state}</td>
