@@ -355,7 +355,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                      'href': abspath.get_pathto(self.get_virtual_path()),
                      'price-with-tax': self.get_price_with_tax(),
                      'cover': self.get_cover_namespace(context)}
-        for key in ['title', 'description']:
+        for key in ['title', 'description', 'reference']:
             namespace[key] = self.get_property(key)
         return namespace
 
