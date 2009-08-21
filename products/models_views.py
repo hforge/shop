@@ -24,7 +24,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.buttons import RemoveButton
+from ikaaro.buttons import RemoveButton, RenameButton, CopyButton, PasteButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, ImageSelectorWidget, SelectWidget
 from ikaaro.forms import TextWidget
@@ -40,7 +40,7 @@ class ProductModels_View(Folder_BrowseContent):
 
     access = 'is_allowed_to_edit'
 
-    table_actions = [RemoveButton]
+    table_actions = [RemoveButton, RenameButton, CopyButton, PasteButton]
     search_template = None
 
     title = MSG(u'View')

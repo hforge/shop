@@ -220,10 +220,10 @@ class ProductModels(ShopFolder):
 
     class_id = 'product-models'
     class_title = MSG(u'Product Models')
-    class_views = ['view', 'new_resource?type=product-model']
+    class_views = ['browse_content', 'new_resource?type=product-model']
 
     # Views
-    view = ProductModels_View()
+    browse_content = ProductModels_View()
 
 
     def get_document_types(self):
