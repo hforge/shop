@@ -48,7 +48,9 @@ from shop.editable import Editable_View, Editable_Edit
 from shop.utils import get_shop
 
 
-class Product_NewInstance(NewInstance):
+class Product_NewProduct(NewInstance):
+
+    title = MSG(u'Create a new product')
 
     schema = {
         'name': String,
@@ -66,8 +68,8 @@ class Product_NewInstance(NewInstance):
         name = form['name']
         title = form['title']
         # Create the resource
-        class_id = context.query['type']
-        cls = get_resource_class(class_id)
+        shop = get_shop(resource)
+        cls = shop.product_class
         child = cls.make_resource(cls, resource, name)
         # The metadata
         metadata = child.metadata

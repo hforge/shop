@@ -37,7 +37,7 @@ from cross_selling import CrossSellingTable
 from declination import Declination
 from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
-from product_views import Product_NewInstance, Products_View, Product_ViewBox
+from product_views import Product_NewProduct, Products_View, Product_ViewBox
 from product_views import Product_View, Product_Edit
 from product_views import Product_Delete, Product_ImagesSlider, Product_Barcode
 from product_views import Product_Print, Product_SendToFriend
@@ -89,7 +89,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     #######################
     # Views
     #######################
-    new_instance = Product_NewInstance()
     view = Product_View()
     edit = Product_Edit()
     barcode = Product_Barcode()
@@ -651,17 +650,14 @@ class Products(ShopFolder):
 
     class_id = 'products'
     class_title = MSG(u'Products')
-    class_views = ['browse_content']
+    class_views = ['browse_content', 'new_product']
 
     # Views
     browse_content = Products_View()
-
+    new_product = Product_NewProduct()
 
     def get_document_types(self):
-        shop = get_shop(self)
-        return [shop.product_class]
-
-
+        return []
 
 # Product class depents on CrossSellingTable class and vice versa
 CrossSellingTable.orderable_classes = Product
