@@ -19,6 +19,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import DateTime, Decimal, PathDataType, Unicode, Boolean
+from itools.datatypes import String
 
 # Import from shop
 from enumerate import CategoriesEnumerate, States
@@ -33,7 +34,7 @@ from taxes import TaxesEnumerate
 
 product_schema = {# General informations
                   'state': States(mandatory=True, default='public'),
-                  'reference': Unicode,
+                  'reference': String,
                   'title': Unicode(multilingual=True),
                   'description': Unicode(multilingual=True),
                   'subject': Unicode(multilingual=True),
