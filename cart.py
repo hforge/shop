@@ -110,7 +110,7 @@ class ProductCart(object):
         cookies = []
         for product in self.products:
             cookie = '%s|%s|%s|%s' % (product['id'], product['name'],
-                                      product['quantity'], product['declination'])
+                                      product['quantity'], product['declination'] or '')
             cookies.append(cookie)
         products = Password.encode('@'.join(cookies))
         context = get_context()

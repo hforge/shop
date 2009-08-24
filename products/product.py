@@ -17,18 +17,20 @@
 # Import from standard library
 from decimal import Decimal as decimal
 from datetime import datetime
+from json import dumps
 
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate, DateTime
 from itools.gettext import MSG
+from itools.stl import stl
 from itools.uri import Path
 from itools.web import get_context
-from itools.xml import TEXT
+from itools.xml import TEXT, XMLParser
 
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import SelectWidget
+from ikaaro.forms import SelectWidget, stl_namespaces
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.workflow import WorkflowAware
 
@@ -283,8 +285,17 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         return schema
 
 
+
+    purchase_options_javascript = list(XMLParser("""
+        <script type="text/javascript">
+          var declinations = ${declinations}
+        </script>
+        <script type="text/javascript"
+          src="/ui/shop/js/declinations.js"/>""", stl_namespaces))
+
     def get_purchase_options_namespace(self):
-        namespace = []
+        namespace = {'widgets': [],
+                     'javascript': None}
         shop = get_shop(self)
         purchase_options_names = self.get_purchase_options_names()
         # Get declinations
@@ -293,11 +304,17 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             return namespace
         # Get uniques purchase option values
         values = {}
+        dict_declinations = {}
         for declination in declinations:
+            price = self.get_price_with_tax()
+            dict_declinations[declination.name] = {'price': price,
+                                                   'option': {}}
             for name in purchase_options_names:
+                value = declination.get_property(name)
+                dict_declinations[declination.name]['option'][name] = value
                 if not values.has_key(name):
                     values[name] = set([])
-                values[name].add(declination.get_property(name))
+                values[name].add(value)
         # Build datatype / widget
         enumerates_folder = shop.get_resource('enumerates')
         for name in purchase_options_names:
@@ -305,9 +322,11 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             datatype = Restricted_EnumerateTable_to_Enumerate(
                           enumerate_name=name, values=values[name])
             widget = SelectWidget(name, has_empty_option=False)
-            namespace.append(
+            namespace['widgets'].append(
                 {'title': enumerate_table.get_title(),
-                 'widget': widget.to_html(datatype, None)})
+                 'html': widget.to_html(datatype, None)})
+        namespace['javascript'] = stl(events=self.purchase_options_javascript,
+                          namespace={'declinations': dumps(dict_declinations)})
         return namespace
 
 

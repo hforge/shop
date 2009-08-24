@@ -509,3 +509,11 @@ fieldset textarea,
 fieldset select{
   border: 1px solid #CCCCCC;
 }
+
+#missing-declination{
+  display: none;
+  border: 1px solid black;
+  background-color: gray;
+  padding: 4px;
+  color: #FFF;
+}
