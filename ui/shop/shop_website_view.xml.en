@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Morbi enim justo, aliquam molestie convallis eu, rutrum et felis.
+    Suspendisse potenti.
+    Integer luctus sem vel nunc tincidunt lobortis. Cras adipiscing fermentum convallis.
+    Maecenas egestas congue congue.
+    Nullam porttitor leo non quam porta dignissim.
+    Phasellus in eros velit, id gravida urna.
+    Nulla eget semper purus.
+    Nulla faucibus scelerisque felis semper aliquam.
+    Etiam vulputate posuere nibh, eu venenatis velit lobortis ut.
+    Suspendisse orci lectus, ultricies sit amet volutpat quis, consequat et ante.
+    In neque eros, bibendum id auctor at, ultricies ut odio.
+    Nulla facilisi.
+    Integer rhoncus vehicula suscipit. Pellentesque suscipit interdum risus et tempor.
+    Morbi gravida fermentum odio, quis elementum tellus ultricies at.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Morbi enim justo, aliquam molestie convallis eu, rutrum et felis.
+    Suspendisse potenti.
+    Integer luctus sem vel nunc tincidunt lobortis. Cras adipiscing fermentum convallis.
+    Maecenas egestas congue congue.
+    Nullam porttitor leo non quam porta dignissim.
+    Phasellus in eros velit, id gravida urna.
+    Nulla eget semper purus.
+    Nulla faucibus scelerisque felis semper aliquam.
+    Etiam vulputate posuere nibh, eu venenatis velit lobortis ut.
+    Suspendisse orci lectus, ultricies sit amet volutpat quis, consequat et ante.
+    In neque eros, bibendum id auctor at, ultricies ut odio.
+    Nulla facilisi.
+    Integer rhoncus vehicula suscipit. Pellentesque suscipit interdum risus et tempor.
+    Morbi gravida fermentum odio, quis elementum tellus ultricies at.
+  </p>
+
+
+</stl:block>

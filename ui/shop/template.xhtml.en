@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="${language}"
+  xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+  <head>
+    <title>${title}</title>
+    <base href="${base_uri}" />
+    <!-- Meta -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta stl:repeat="meta meta_tags" name="${meta/name}" lang="${meta/lang}"
+      content="${meta/content}" />
+    <!-- Canonical URL for search engines -->
+    <link rel="canonical" href="${canonical_uri}" />
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" stl:repeat="style styles"
+      href="${style}" />
+    <!-- JavaScript -->
+    <script type="text/javascript" stl:repeat="script scripts"
+        src="${script}" />
+    <!-- Icon -->
+    <link rel="shortcut icon" href="${favicon_href}" type="${favicon_type}" />
+  </head>
+  <body>
+
+    <!-- Header -->
+    <div id="header">
+      ${languages}
+      <div class="clear"/>
+      <div id="top-menu">
+        <stl:block stl:if="not user/info">
+          <a href="${login}" id="top-menu-login">Log in</a>
+          <a href="/;register" id="top-menu-register"
+            stl:if="user/joinisopen">Register</a>
+        </stl:block>
+        <stl:block stl:if="user/info">
+          <a href="${user/info/home}" id="top-menu-profile">My Profile |</a>
+          <a href="${logout}" id="top-menu-logout">Log out</a>
+        </stl:block>
+        <div id="search">
+          <form action="/;product_search" method="GET">
+            <p>
+              <label for="search">Search</label>
+              <input id="search_query" name="product_search_text" type="text"
+                value="${product_search_text}"/>
+              <input type="submit" name="Submit" value="OK" class="button-ok"/>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu -->
+    <div id="menu">
+      <ul>
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/categories/">Categories</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Location & Views-->
+    ${location}
+
+    <!-- Body -->
+    <div id="body">
+      ${message}
+      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+          <td id="left">
+            ${cart_preview}
+            <br/>
+            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
+            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
+            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
+            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
+            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
+            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
+            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
+            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
+            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
+          </td>
+          <td id="content" valign="top">
+            ${body}
+          </td>
+          <td id="right" valign="top">
+            <stl:block stl:repeat="menu context_menus">${menu}<br/></stl:block>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer">
+      <a href="/;about">About</a> -
+      <a href="/;credits">Credits</a> -
+      <a href="/;license">License</a>
+    </div>
+  </body>
+</html>

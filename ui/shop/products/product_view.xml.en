@@ -4,8 +4,13 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h1>${title}</h1>
 
-  <form method="post" stl:if="is_buyable">
+  <div id="product-slider-area">
+    ${images-slider}
+  </div>
+
+  <form id="buy-form" method="post" stl:if="is_buyable">
     <ul>
       <li stl:repeat="widget purchase_options/widgets">
         ${widget/title}
@@ -16,7 +21,7 @@
     Prix : <span id="price">${price-with-tax}</span> € TTC<br/>
     Weight: <span id="weight">${weight}</span> kg
     <p id="quantity-area">
-      <input id="quantity" name="quantity" type="text" size="3" value="1" />
+      Quantity: <input id="quantity" name="quantity" type="text" size="3" value="1" />
     </p>
     <p id="add-to-cart">
     <input type="submit" class="button-ok" name=";add_to_cart"
@@ -26,10 +31,25 @@
       Missing declination, please select another options
     </p>
     ${purchase_options/javascript}
-
   </form>
 
-  <table cellpadding="0" cellspacing="0" class="order-browse">
+
+  <ul class="action-links">
+    <li>
+      <a href="./;send_to_friend">
+        > Send to a friend
+      </a>
+    </li>
+    <li>
+      <a href="./;print_product" onclick="javascript:popup(this.href, 800, 600); return false;">
+        > Print product
+      </a>
+    </li>
+  </ul>
+
+  <div class="clear"/>
+
+  <table cellpadding="0" cellspacing="0" id="product-details">
     <tr stl:if="cover">
       <th>Cover</th>
       <td>
@@ -79,9 +99,6 @@
     </tr>
   </table>
 
-  <br/>
-
-  ${images-slider}
 
   <br/>
 

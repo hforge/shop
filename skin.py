@@ -20,23 +20,38 @@ from itools.core import get_abspath
 # Import from ikaaro
 from ikaaro.skins import Skin, register_skin
 
+# Import from shop
+from shop_utils_views import Cart_Viewbox
 
 class ShopSkin(Skin):
 
-    base_styles = ['/ui/aruni/style.css', '/ui/bo.css']
-    base_scripts = ['/ui/shop/javascript.js']
+    base_styles = ['/ui/bo.css',
+                   '/ui/shop/perfect_sale_style.css',
+                   '/ui/shop/style.css']
+
+    base_scripts = []
 
     def get_styles(self, context):
         styles = Skin.get_styles(self, context)
-        #styles.append('/ui/shop/style.css') XXX
-        styles.extend(base_styles)
+        styles.extend(self.base_styles)
         return styles
 
 
     def get_scripts(self, context):
         scripts = Skin.get_scripts(self, context)
-        scripts.extend(base_scripts)
+        scripts.extend(self.base_scripts)
         return scripts
+
+
+    def build_namespace(self, context):
+        namespace = Skin.build_namespace(self, context)
+        # Search
+        namespace['product_search_text'] = context.get_query_value(
+                                                'product_search_text')
+        # Cart
+        namespace['cart_preview'] = Cart_Viewbox().GET(context.resource,
+                                                       context)
+        return namespace
 
 
 ###########################################################################
