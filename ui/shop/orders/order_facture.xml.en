@@ -1,11 +1,10 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:pml="http://www.hforge.org/xml-namespaces/pml"
-      xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+<pml:html xmlns:pml="http://www.hforge.org/xml-namespaces/pml"
+          xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <head>
-    <title>Bill</title>
+  <pml:head>
+    <pml:title>Bill</pml:title>
 
-    <style>
+    <pml:style>
       #articles{
         margin-top: 20px;
         border: 1px solid black;
@@ -26,82 +25,82 @@
         font-weight: normal;
         padding: 0;
       }
-    </style>
-  </head>
+    </pml:style>
+  </pml:head>
 
   <pml:header>
-    <img src="${logo}/;download"/>
+    <pml:img src="${logo}"/>
   </pml:header>
 
   <pml:footer>
-    <p class="page">Page <pml:pagenumber/> / <pml:pagetotal/></p>
+    <pml:p class="page">Page <pml:pagenumber/> / <pml:pagetotal/></pml:p>
   </pml:footer>
 
 
-  <body style="margin-left:0.5cm; margin-right:0.5cm; padding-left:0; padding-right:0;">
-    <table id="infos">
-      <tr>
-        <th>Order number</th>
-        <td>${num_cmd}</td>
-      </tr>
-      <tr>
-        <th>Date</th>
-        <td>${creation_date}</td>
-      </tr>
-    </table>
+  <pml:body style="margin-left:0.5cm; margin-right:0.5cm; padding-left:0; padding-right:0;">
+    <pml:table id="infos">
+      <pml:tr>
+        <pml:th>Order number</pml:th>
+        <pml:td>${num_cmd}</pml:td>
+      </pml:tr>
+      <pml:tr>
+        <pml:th>Date</pml:th>
+        <pml:td>${creation_date}</pml:td>
+      </pml:tr>
+    </pml:table>
 
-    <table id="addresses">
-      <tr>
-        <td>
-          <p>
-            <b>Delivery address</b><br/>
-            ${delivery_address/firstname} ${delivery_address/lastname}<br/>
+    <pml:table id="addresses">
+      <pml:tr>
+        <pml:td>
+          <pml:p>
+            <pml:b>Delivery address</pml:b><pml:br/>
+            ${delivery_address/firstname} ${delivery_address/lastname}<pml:br/>
             ${delivery_address/address_1}<br/>
             <stl:block stl:if="delivery_address/address_2">
               ${delivery_address/address_2}<br/>
             </stl:block>
-            ${delivery_address/zipcode} ${delivery_address/town}<br/>
-            ${delivery_address/country}<br/>
-          </p>
-        </td>
-        <td></td>
-        <td>
-          <p>
-            <b>Bill address</b><br/>
-            ${bill_address/firstname} ${bill_address/lastname}<br/>
-            ${bill_address/address_1}<br/>
+            ${delivery_address/zipcode} ${delivery_address/town}<pml:br/>
+            ${delivery_address/country}<pml:br/>
+          </pml:p>
+        </pml:td>
+        <pml:td></pml:td>
+        <pml:td>
+          <pml:p>
+            <pml:b>Bill address</pml:b><pml:br/>
+            ${bill_address/firstname} ${bill_address/lastname}<pml:br/>
+            ${bill_address/address_1}<pml:br/>
             <stl:block stl:if="bill_address/address_2">
               ${bill_address/address_2}<br/>
             </stl:block>
-            ${bill_address/zipcode} ${bill_address/town}<br/>
-            ${bill_address/country}<br/>
-          </p>
-        </td>
-      </tr>
-    </table>
+            ${bill_address/zipcode} ${bill_address/town}<pml:br/>
+            ${bill_address/country}<pml:br/>
+          </pml:p>
+        </pml:td>
+      </pml:tr>
+    </pml:table>
 
-    <table id="articles">
-      <tr>
-        <th>Product</th>
-        <th>Unit price HT</th>
-        <th>Quantity</th>
-        <th>Total price</th>
-      </tr>
-      <tr stl:repeat="product products">
-        <td>${product/title} XXX Add options</td>
-        <td>${product/price/unit/with_tax} €</td>
-        <td>${product/quantity}</td>
-        <td>${product/price/total/with_tax} €</td>
-      </tr>
-      <tr>
-        <td colspan="3" class="align-right">Shipping</td>
-        <td>${shipping_price} €</td>
-      </tr>
-      <tr>
-        <td colspan="3" class="align-right">Total Price</td>
-        <td>${total_price} €</td>
-      </tr>
-    </table>
+    <pml:table id="articles">
+      <pml:tr>
+        <pml:th>Product</pml:th>
+        <pml:th>Unit price HT</pml:th>
+        <pml:th>Quantity</pml:th>
+        <pml:th>Total price</pml:th>
+      </pml:tr>
+      <pml:tr stl:repeat="product products">
+        <pml:td>${product/title}</pml:td>
+        <pml:td>${product/price/unit/with_tax} €</pml:td>
+        <pml:td>${product/quantity}</pml:td>
+        <pml:td>${product/price/total/with_tax} €</pml:td>
+      </pml:tr>
+      <pml:tr>
+        <pml:td colspan="3" class="align-right">Shipping</pml:td>
+        <pml:td>${shipping_price} €</pml:td>
+      </pml:tr>
+      <pml:tr>
+        <pml:td colspan="3" class="align-right">Total Price</pml:td>
+        <pml:td>${total_price} €</pml:td>
+      </pml:tr>
+    </pml:table>
 
- </body>
-</html>
+ </pml:body>
+</pml:html>

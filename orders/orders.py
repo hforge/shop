@@ -20,11 +20,12 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.csv import Table as BaseTable
-from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
 from itools.datatypes import Boolean
-from itools.i18n import format_date
+from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
 from itools.gettext import MSG
+from itools.i18n import format_date
 from itools.pdf import stl_pmltopdf
+from itools.uri import get_uri_path
 
 # Import from ikaaro
 from ikaaro.file import PDF
@@ -292,9 +293,14 @@ class Order(WorkflowAware, ShopFolder):
         # Delete old bill
         if self.get_resource('bill', soft=True):
             self.del_resource('bill')
+        document = self.get_resource('/ui/shop/orders/order_facture.xml')
+        logo =  shop.get_resource(shop.get_property('bill_logo'), soft=True)
+        logo_uri = None
+        if logo:
+            logo_uri = logo.handler.uri
         # XXX Add addresses
         namespace =  {
-          'logo': shop.get_property('bill_logo'),
+          'logo': logo_uri,
           'num_cmd': self.name,
           'products': self.get_resource('products').get_namespace(context),
           'shipping_price': self.get_property('shipping_price'),
@@ -308,7 +314,7 @@ class Order(WorkflowAware, ShopFolder):
         namespace['delivery_address'] = get_address(delivery_address)
         namespace['bill_address'] = get_address(bill_address)
         # Build pdf
-        document = self.get_resource('/ui/shop/orders/order_facture.xml')
+        path = get_uri_path(shop.handler.uri)
         pdf = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'}}
         PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
