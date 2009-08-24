@@ -19,9 +19,11 @@
 from itools.core import merge_dicts
 from itools.datatypes import PathDataType
 from itools.gettext import MSG
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
+from itools.uri import Path
 
 # Import from shop
 from categories_views import VirtualCategories_View, Category_Edit
@@ -102,8 +104,6 @@ class Category(Editable, ShopFolder):
                                   language=lang)
 
         get_context().server.change_resource(self)
-
-
 
 
 
