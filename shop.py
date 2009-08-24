@@ -221,7 +221,7 @@ class Shop(ShopFolder):
 
 
     def update_20090819(self):
-        if self.has_resource('enumerates'):
+        if self.get_resource('enumerates', soft=True) is not None:
             return
         EnumeratesFolder.make_resource(EnumeratesFolder, self, 'enumerates')
 
