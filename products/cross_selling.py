@@ -19,7 +19,7 @@ from random import shuffle
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Integer, Boolean
+from itools.datatypes import Integer, Boolean, Unicode
 from itools.gettext import MSG
 from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery
 from itools.xml import XMLParser
@@ -82,6 +82,7 @@ class CrossSellingTable(ResourcesOrderedTable):
         schema['mode'] = CrossSelling_Modes
         schema['enabled'] = Boolean(default=False)
         schema['products_quantity'] = Integer(default=5)
+        schema['filter_text'] = Unicode
         return schema
 
 
@@ -102,6 +103,10 @@ class CrossSellingTable(ResourcesOrderedTable):
             exclude_query = OrQuery(*[ PhraseQuery('abspath', str(abspath))
                                        for abspath in excluded_products ])
             query = AndQuery(query, NotQuery(exclude_query))
+        # Filter on product title
+        filter_text = self.get_property('filter_text')
+        if filter_text:
+            query = AndQuery(query, PhraseQuery('title', filter_text))
         # Categories query
         if categories and mode.endswith('_category'):
             query_categorie = OrQuery(*[ PhraseQuery('categories', x)

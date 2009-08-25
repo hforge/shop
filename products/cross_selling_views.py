@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean, Enumerate, Integer
+from itools.datatypes import Boolean, Enumerate, Integer, Unicode
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import STLForm
@@ -24,6 +24,7 @@ from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
+from ikaaro import messages
 from ikaaro.forms import AutoForm, BooleanRadio, SelectRadio, TextWidget
 from ikaaro.future.order import ResourcesOrderedTable_Ordered
 from ikaaro.table_views import Table_AddRecord
@@ -61,13 +62,15 @@ class CrossSelling_Configure(AutoForm):
     schema = {
         'enabled': Boolean(mandatory=True, default=True),
         'mode': CrossSelling_Modes(mandatory=True),
-        'products_quantity': Integer(default=5, mandatory=True)
+        'products_quantity': Integer(default=5, mandatory=True),
+        'filter_text': Unicode,
         }
 
     widgets = [
         BooleanRadio('enabled', title=MSG(u'Enabled')),
         TextWidget('products_quantity', title=MSG(u'Numbers of products'),
                    size=3),
+        TextWidget('filter_text', title=MSG(u'Only products with this title')),
         SelectRadio('mode', title=MSG(u'Cross selling mode'),
             has_empty_option=False),
         ]
@@ -80,8 +83,7 @@ class CrossSelling_Configure(AutoForm):
     def action(self, resource, context, form):
         for key in self.schema.keys():
             resource.set_property(key, form[key])
-        msg = MSG(u'Configuration ok')
-        return context.come_back(msg)
+        return context.come_back(messages.MSG_CHANGES_SAVED)
 
 
 
