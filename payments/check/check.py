@@ -27,8 +27,8 @@ from ikaaro.registry import register_resource_class
 from shop.payments.payment_way import PaymentWay, PaymentWayBaseTable
 from shop.payments.payment_way import PaymentWayTable
 from shop.payments.registry import register_payment_way
-from check_views import CheckPayment_RecordEdit
-from check_views import CheckPayment_Pay, CheckPayment_Configure, CheckStates
+from check_views import CheckPayment_RecordEdit, CheckPayment_End
+from check_views import CheckPayment_Configure, CheckStates
 from check_views import CheckPayment_RecordView
 
 
@@ -79,6 +79,7 @@ class CheckPayment(PaymentWay):
 
     # Views
     configure = CheckPayment_Configure()
+    end = CheckPayment_End()
 
     # Order admin views
     order_view = CheckPayment_RecordView
@@ -89,11 +90,6 @@ class CheckPayment(PaymentWay):
         return merge_dicts(PaymentWay.get_metadata_schema(),
                            to=Unicode,
                            address=Unicode)
-
-
-    def _show_payment_form(self, context, payment):
-        return CheckPayment_Pay(conf=payment).GET(self, context)
-
 
 
 register_resource_class(CheckPayment)

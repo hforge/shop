@@ -16,18 +16,11 @@
 
 # Import from standard library
 from decimal import Decimal as decimal
-from os import popen
-from re import match, DOTALL
-from sys import prefix
 
 # Import from itools
-from itools.core import get_abspath, merge_dicts
-from itools.datatypes import Boolean, Decimal, Integer, Unicode, String
+from itools.core import merge_dicts
+from itools.datatypes import Boolean, Integer, Unicode, String, Decimal
 from itools.gettext import MSG
-from itools.handlers import ConfigFile
-from itools.html import HTMLFile
-from itools.stl import stl
-from itools.uri import get_reference, Path
 from itools.web import BaseView, BaseForm, STLView, STLForm, FormError
 
 # Import from ikaaro
@@ -38,9 +31,8 @@ from ikaaro.forms import BooleanRadio, TextWidget
 # Import from shop
 from enumerates import PBXState, PayboxStatus, PayboxCGIErrors
 from shop.payments.payment_way_views import PaymentWay_Configure
+from shop.payments.payment_way_views import PaymentWay_EndView
 from shop.datatypes import StringFixSize
-from shop.shop_utils_views import Shop_Progress
-from shop.utils import get_shop
 
 
 class Paybox_View(Table_View):
@@ -94,67 +86,6 @@ class Paybox_Configure(PaymentWay_Configure):
         TextWidget('PBX_DIFF', title=MSG(u'Diff days (On two digits ex: 04)'),
                    size=2),
         BooleanRadio('real_mode', title=MSG(u'Payments in real mode'))]
-
-
-
-class Paybox_Pay(BaseView):
-    """This view load the paybox cgi. That script redirect on paybox serveur
-       to show the payment form.
-       It must be call via the method show_payment_form() of payment resource.
-    """
-
-    test_configuration = {'PBX_SITE': 1999888,
-                          'PBX_RANG': 99,
-                          'PBX_IDENTIFIANT': 2}
-
-
-    def GET(self, resource, context):
-        conf = self.conf
-        # We get the paybox CGI path on serveur
-        cgi_path = Path(prefix).resolve2('bin/paybox.cgi')
-        # Get configuration
-        configuration_uri = get_abspath('paybox.cfg')
-        configuration = ConfigFile(configuration_uri)
-        # Configuration
-        kw = {}
-        kw['PBX_CMD'] = conf['ref']
-        kw['PBX_TOTAL'] = int(conf['amount'] * 100)
-        # Basic configuration
-        for key in configuration.values.keys():
-            kw[key] = configuration.get_value(key)
-        # PBX Retour uri
-        for option in PBXState.get_options():
-            key = option['pbx']
-            state = option['name']
-            base_uri = context.uri.resolve(context.get_link(resource))
-            uri = '%s/;end?state=%s' % (base_uri, state)
-            kw[key] = '"%s"' % uri
-        # Configuration
-        for key in ['PBX_SITE', 'PBX_IDENTIFIANT',
-                    'PBX_RANG', 'PBX_DIFF', 'PBX_AUTOSEULE']:
-            kw[key] = resource.get_property(key)
-        # XXX Euro par défaut
-        kw['PBX_DEVISE'] = '978'
-        # PBX_PORTEUR
-        kw['PBX_PORTEUR'] = context.user.get_property('email')
-        # En mode test:
-        if not resource.get_property('real_mode'):
-            kw.update(self.test_configuration)
-        # Attributes
-        attributes = ['%s=%s' % (x[0], x[1]) for x in kw.items()]
-        # Build cmd
-        cmd = '%s %s' % (cgi_path, ' '.join(attributes))
-        # Call the CGI
-        file = popen(cmd)
-        # Check if all is ok
-        result = file.read()
-        html = match ('.*?<HEAD>(.*?)</HTML>', result, DOTALL)
-        if html is None:
-            raise ValueError, u"Error, payment module can't be load"
-        # We return the payment widget
-        html = html.group(1)
-        return HTMLFile(string=html).events
-
 
 
 
@@ -217,18 +148,18 @@ class Paybox_Record_Edit(STLView):
         return namespace
 
 
-class Paybox_End(STLView):
+class Paybox_End(PaymentWay_EndView):
     """The customer is redirect on this page after payment"""
 
     access = "is_authenticated"
 
-    query_schema = {'state': Integer,
-                    'ref': String,
-                    'NUMERR': String}
+    query_schema = merge_dicts(PaymentWay_EndView.query_schema,
+                    state=Integer, NUMERR=String)
 
-    template = '/ui/shop/payments/paybox/paybox_end.xml'
+    template = '/ui/shop/payments/paybox/end.xml'
 
     def get_namespace(self, resource, context):
+        namespace = PaymentWay_EndView.get_namespace(self, resource, context)
         erreur = context.query['NUMERR']
         if erreur:
             # Send mail
@@ -238,9 +169,5 @@ class Paybox_End(STLView):
             subject = u'Paybox problem'
             body = 'Paybox error: %s' % PayboxCGIErrors.get_value(erreur)
             root.send_email(from_addr, subject, from_addr, body)
-        state = PBXState.get_value(context.query['state']).gettext()
-        ns = {
-          'progress': Shop_Progress(index=6).GET(resource, context),
-          'state': state,
-          'ref': context.query['ref']}
-        return ns
+        namespace['state'] = PBXState.get_value(context.query['state'])
+        return namespace

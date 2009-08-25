@@ -28,6 +28,7 @@ from ikaaro.messages import MSG_CHANGES_SAVED
 
 # Import from shop
 from shop.payments.payment_way_views import PaymentWay_Configure
+from shop.payments.payment_way_views import PaymentWay_EndView
 
 
 
@@ -88,17 +89,14 @@ class CashPayment_Configure(PaymentWay_Configure):
 
 
 
-class CashPayment_Pay(STLView):
+class CashPayment_End(PaymentWay_EndView):
 
     access = "is_authenticated"
 
-    template = '/ui/shop/payments/cash/pay.xml'
+    template = '/ui/shop/payments/cash/end.xml'
 
     def get_namespace(self, resource, context):
-        get = resource.get_property
-        address = get('address').encode('utf-8').replace('\n', '<br/>')
-        amount = '%.2f €' % self.conf['amount']
-        return {
-            'address': XMLParser(address),
-            'ref': self.conf['ref'],
-            'amount': amount}
+        address = resource.get_property('address').encode('utf-8')
+        return merge_dicts(
+            PaymentWay_EndView.get_namespace(self, resource, context),
+            address=XMLParser(address.replace('\n', '<br/>')))

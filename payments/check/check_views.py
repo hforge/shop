@@ -27,6 +27,7 @@ from ikaaro.forms import MultilineWidget, TextWidget
 
 # Import from shop
 from shop.payments.payment_way_views import PaymentWay_Configure
+from shop.payments.payment_way_views import PaymentWay_EndView
 
 
 class CheckStates(Enumerate):
@@ -41,20 +42,18 @@ class CheckStates(Enumerate):
 
 
 
-class CheckPayment_Pay(STLView):
+class CheckPayment_End(PaymentWay_EndView):
 
     access = "is_authenticated"
 
-    template = '/ui/shop/payments/check/pay.xml'
+    template = '/ui/shop/payments/check/end.xml'
 
     def get_namespace(self, resource, context):
-        namespace = {
-            'to': resource.get_property('to'),
-            'ref': self.conf['ref'],
-            'amount': self.conf['amount']}
         address = resource.get_property('address').encode('utf-8')
-        namespace['address'] = XMLParser(address.replace('\n', '<br/>'))
-        return namespace
+        return merge_dicts(
+            PaymentWay_EndView.get_namespace(self, resource, context),
+            to=resource.get_property('to'),
+            address=XMLParser(address.replace('\n', '<br/>')))
 
 
 

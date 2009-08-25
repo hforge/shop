@@ -4,6 +4,8 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  ${top_view}
+
   <b>To finalize your payment, please send us your check ordered to ${to}<br/>
     at the following address:</b>
   <div class="checkpayment-address">${address}</div>

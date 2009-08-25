@@ -16,9 +16,11 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Unicode, PathDataType, Boolean
+from itools.datatypes import Unicode, PathDataType, Boolean, String
 from itools.gettext import MSG
-from itools.web import STLView
+from itools.stl import stl
+from itools.web import STLView, STLForm, ERROR
+from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro import messages
@@ -28,6 +30,33 @@ from ikaaro.forms import BooleanRadio
 
 # Import from shop
 from shop.editable import Editable_Edit
+
+
+class PaymentWay_EndView(STLView):
+
+    access = "is_authenticated"
+
+    query_schema = {'ref': String}
+
+    def get_namespace(self, resource, context):
+        payments = resource.parent
+        ref = context.query['ref']
+        payment_handler = resource.get_resource('payments').handler
+        query = [PhraseQuery('ref', ref),
+                 PhraseQuery('user', context.user.name)]
+        results = payment_handler.search(AndQuery(*query))
+        if not results:
+            raise ValueError, u'Payment invalid'
+        record = results[0]
+        amount = payment_handler.get_record_value(record, 'amount')
+        # Top view
+        top_view = None
+        if payments.end_view_top:
+            top_view = payments.end_view_top.GET(resource, context)
+        return {'ref': context.query['ref'],
+                'amount': '%.2f €' % amount,
+                'top_view': top_view}
+
 
 
 

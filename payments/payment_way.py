@@ -94,6 +94,10 @@ class PaymentWay(Editable, ShopFolder):
     logo = None
     payment_table = PaymentWayTable
 
+    # Configure # TODO
+    pay_view = None
+    end_view_top = None
+
     # Backoffice views
     order_view = PaymentWay_RecordView
     order_edit_view = PaymentWay_RecordView
@@ -120,6 +124,12 @@ class PaymentWay(Editable, ShopFolder):
     def _get_catalog_values(self):
         # XXX We do not index data from Editable
         return ShopFolder._get_catalog_values(self)
+
+
+    def _show_payment_form(self, context, payment):
+        # By default we redirect on payment end
+        link = '%s/;end?ref=%s' % (context.get_link(self), payment['ref'])
+        return context.uri.resolve(link)
 
     ###################################################
     # Public API

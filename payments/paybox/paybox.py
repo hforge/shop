@@ -14,19 +14,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from os import popen
+from re import match, DOTALL
+from sys import prefix
+
 # Import from itools
-from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Decimal, Integer
+from itools.core import merge_dicts, get_abspath
+from itools.datatypes import Boolean, String, Integer
 from itools.gettext import MSG
+from itools.handlers import ConfigFile
+from itools.html import HTMLFile
+from itools.uri import Path
 
 # Import from ikaaro
-from ikaaro.folder import Folder
 from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from enumerates import PayboxStatus
-from paybox_views import Paybox_Configure, Paybox_Pay, Paybox_View
+from enumerates import PayboxStatus, PBXState
+from paybox_views import Paybox_Configure, Paybox_View
 from paybox_views import Paybox_End, Paybox_ConfirmPayment, Paybox_Record_Edit
 from shop.datatypes import StringFixSize
 from shop.payments.payment_way import PaymentWay, PaymentWayBaseTable
@@ -105,10 +112,63 @@ class Paybox(PaymentWay):
         return schema
 
 
+    test_configuration = {'PBX_SITE': 1999888,
+                          'PBX_RANG': 99,
+                          'PBX_IDENTIFIANT': 2}
+
 
     def _show_payment_form(self, context, payment):
-        # Show payment form
-        return Paybox_Pay(conf=payment).GET(self, context)
+        """This view load the paybox cgi. That script redirect on paybox serveur
+           to show the payment form.
+           It must be call via the method show_payment_form() of payment resource.
+        """
+        payments = self.parent
+        # We get the paybox CGI path on serveur
+        cgi_path = Path(prefix).resolve2('bin/paybox.cgi')
+        # Get configuration
+        configuration_uri = get_abspath('paybox.cfg')
+        configuration = ConfigFile(configuration_uri)
+        # Configuration
+        kw = {}
+        kw['PBX_CMD'] = payment['ref']
+        kw['PBX_TOTAL'] = int(payment['amount'] * 100)
+        # Basic configuration
+        for key in configuration.values.keys():
+            kw[key] = configuration.get_value(key)
+        # PBX Retour uri
+        for option in PBXState.get_options():
+            key = option['pbx']
+            state = option['name']
+            base_uri = context.uri.resolve(context.get_link(self))
+            uri = '%s/;end?state=%s' % (base_uri, state)
+            kw[key] = '"%s"' % uri
+        # Configuration
+        for key in ['PBX_SITE', 'PBX_IDENTIFIANT',
+                    'PBX_RANG', 'PBX_DIFF', 'PBX_AUTOSEULE']:
+            kw[key] = self.get_property(key)
+        # XXX Euro par défaut
+        kw['PBX_DEVISE'] = '978'
+        # PBX_PORTEUR
+        kw['PBX_PORTEUR'] = context.user.get_property('email')
+        # En mode test:
+        if not self.get_property('real_mode'):
+            kw.update(self.test_configuration)
+        # Attributes
+        attributes = ['%s=%s' % (x[0], x[1]) for x in kw.items()]
+        # Build cmd
+        cmd = '%s %s' % (cgi_path, ' '.join(attributes))
+        # Call the CGI
+        file = popen(cmd)
+        # Check if all is ok
+        result = file.read()
+        html = match ('.*?<HEAD>(.*?)</HTML>', result, DOTALL)
+        if html is None:
+            raise ValueError, u"Error, payment module can't be load"
+        # We return the payment widget
+        html = html.group(1)
+        # Encapsulate in pay view
+        view = payments.pay_view(body=HTMLFile(string=html).events)
+        return view.GET(self, context)
 
 
 

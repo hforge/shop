@@ -522,12 +522,7 @@ class Shop_ShowRecapitulatif(STLForm):
         # We show the payment form
         kw = {'ref': ref, 'amount': total_price, 'mode': form['payment']}
         payments = resource.get_resource('payments')
-        namespace = {'ref': ref,
-                     'user_name': context.user.name,
-                     'progress': Shop_Progress(index=6).GET(resource, context),
-                     'payment_form': payments.show_payment_form(context, kw)}
-        handler = resource.get_resource('/ui/shop/shop_payment_form.xml')
-        return stl(handler, namespace)
+        return payments.show_payment_form(context, kw)
 
 
 ##########################################################

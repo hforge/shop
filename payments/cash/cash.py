@@ -23,7 +23,7 @@ from itools.gettext import MSG
 from ikaaro.registry import register_resource_class
 
 # Import from shop.payments
-from cash_views import CashPayment_Pay, CashPayment_Configure
+from cash_views import CashPayment_Configure, CashPayment_End
 from cash_views import CashPayment_RecordView, CashPayment_RecordEdit
 from shop.payments.payment_way import PaymentWay
 from shop.payments.registry import register_payment_way
@@ -38,6 +38,7 @@ class CashPayment(PaymentWay):
 
     # Views
     configure = CashPayment_Configure()
+    end = CashPayment_End()
 
     # Order admin views
     order_view = CashPayment_RecordView
@@ -48,10 +49,6 @@ class CashPayment(PaymentWay):
     def get_metadata_schema(cls):
         return merge_dicts(PaymentWay.get_metadata_schema(),
                            address=Unicode)
-
-
-    def _show_payment_form(self, context, payment):
-        return CashPayment_Pay(conf=payment).GET(self, context)
 
 
 

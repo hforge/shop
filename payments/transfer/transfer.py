@@ -23,7 +23,7 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop.payments
 from datatypes import RIB, IBAN
-from transfer_views import TransferPayment_Configure, TransferPayment_Pay
+from transfer_views import TransferPayment_Configure, TransferPayment_End
 from transfer_views import TransferPayment_RecordView, TransferPayment_RecordEdit
 from shop.payments.payment_way import PaymentWay
 from shop.payments.registry import register_payment_way
@@ -41,6 +41,7 @@ class TransferPayment(PaymentWay):
 
     # Views
     configure = TransferPayment_Configure()
+    end = TransferPayment_End()
 
     # Order admin views
     order_view = TransferPayment_RecordView
@@ -51,11 +52,6 @@ class TransferPayment(PaymentWay):
         return merge_dicts(PaymentWay.get_metadata_schema(),
                            RIB=RIB,
                            IBAN=IBAN)
-
-
-    def _show_payment_form(self, context, payment):
-        return TransferPayment_Pay(conf=payment).GET(self, context)
-
 
 
 register_resource_class(TransferPayment)

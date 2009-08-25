@@ -31,6 +31,7 @@ from ikaaro.resource_views import DBResource_Edit
 # Import from shop
 from datatypes import RIB, IBAN
 from shop.payments.payment_way_views import PaymentWay_Configure
+from shop.payments.payment_way_views import PaymentWay_EndView
 
 
 class TransferPayment_RecordView(STLView):
@@ -95,18 +96,13 @@ class TransferPayment_Configure(PaymentWay_Configure):
         TextWidget('IBAN', title=MSG(u'IBAN'))]
 
 
-
-
-class TransferPayment_Pay(STLView):
+class TransferPayment_End(PaymentWay_EndView):
 
     access = "is_authenticated"
-
-    template = '/ui/shop/payments/transfer/pay.xml'
+    template = '/ui/shop/payments/transfer/end.xml'
 
     def get_namespace(self, resource, context):
-        amount = '%.2f €' % self.conf['amount']
-        return {
-            'RIB': resource.get_property('RIB'),
-            'IBAN': resource.get_property('IBAN'),
-            'ref': self.conf['ref'],
-            'amount': amount}
+        return merge_dicts(
+            PaymentWay_EndView.get_namespace(self, resource, context),
+            RIB=resource.get_property('RIB'),
+            IBAN=resource.get_property('IBAN'))

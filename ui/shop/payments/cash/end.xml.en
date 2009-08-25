@@ -4,6 +4,8 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  ${top_view}
+
   <h3>Amount: ${amount}</h3>
     <h3>To finalize your payment, please come at our shop:</h3>
     <div class="checkpayment-address">${address}</div>

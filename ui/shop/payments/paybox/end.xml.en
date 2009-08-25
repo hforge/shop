@@ -4,15 +4,12 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  ${progress}
+  ${top_view}
 
-  <p>
-    You can see details about your order
-      <a href="/users/${user_name}/;order_view?id=${ref}">here.</a>
-    <br/>
-  </p>
-  <br/>
-
-  ${payment_form}
+  <div id="payment-state">
+    Payment state:
+    <b stl:if="state">${state}</b>
+    <b stl:if="not state">Unknow state</b><br/><br/>
+  </div>
 
 </stl:block>
