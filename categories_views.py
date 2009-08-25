@@ -21,7 +21,7 @@ from operator import itemgetter
 from itools.core import merge_dicts
 from itools.datatypes import PathDataType, String
 from itools.gettext import MSG
-from itools.stl import stl
+from itools.stl import stl, set_prefix
 from itools.web import STLView
 from itools.xapian import PhraseQuery, AndQuery
 
@@ -113,7 +113,10 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
                                           'box': viewbox.GET(item_resource, context)})
         # Categorie description (not for categories folder)
         if isinstance(resource, Editable):
-            namespace['description'] = resource.get_xhtml_data()
+            real_category = resource.get_real_resource()
+            prefix = '%s/' % resource.get_pathto(real_category)
+            namespace['description'] = set_prefix(resource.get_xhtml_data(),
+                                                  prefix)
         return namespace
 
 
