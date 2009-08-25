@@ -55,6 +55,9 @@
         <a href="./;configure">Configure shop</a>
       </li>
       <li>
+        <a href="./cross-selling/">Configure cross selling</a>
+      </li>
+      <li>
         <a href="./taxes/">Edit/Add Taxes</a>
       </li>
       <li>

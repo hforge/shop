@@ -34,6 +34,7 @@ from ikaaro.registry import register_resource_class
 # Import from shop
 from cross_selling_views import AddProduct_View, CrossSelling_Modes
 from cross_selling_views import CrossSelling_Configure, CrossSelling_TableView
+from shop.utils import get_shop
 
 
 
@@ -80,7 +81,8 @@ class CrossSellingTable(ResourcesOrderedTable):
     def get_metadata_schema(cls):
         schema = ResourcesOrderedTable.get_metadata_schema()
         schema['mode'] = CrossSelling_Modes
-        schema['enabled'] = Boolean(default=False)
+        schema['enabled'] = Boolean
+        schema['use_shop_configuration'] = Boolean(default=True)
         schema['products_quantity'] = Integer(default=5)
         schema['filter_text'] = Unicode
         return schema
@@ -88,12 +90,17 @@ class CrossSellingTable(ResourcesOrderedTable):
 
     def get_products(self, context, product_format, products_folder,
                      categories=None, excluded_products=[]):
-        if self.get_property('enabled') is False:
+        shop = get_shop(self)
+        cross_selling_resource = self
+        if self.get_property('use_shop_configuration'):
+            cross_selling_resource = shop.get_resource('cross-selling')
+        if cross_selling_resource.get_property('enabled') is False:
             return
 
         root = context.root
-        mode = self.get_property('mode')
-        products_quantity = self.get_property('products_quantity')
+        mode = cross_selling_resource.get_property('mode')
+        products_quantity = cross_selling_resource.get_property(
+                                                      'products_quantity')
 
         # Base query
         query = AndQuery(PhraseQuery('format', product_format),
@@ -104,7 +111,7 @@ class CrossSellingTable(ResourcesOrderedTable):
                                        for abspath in excluded_products ])
             query = AndQuery(query, NotQuery(exclude_query))
         # Filter on product title
-        filter_text = self.get_property('filter_text')
+        filter_text = cross_selling_resource.get_property('filter_text')
         if filter_text:
             query = AndQuery(query, PhraseQuery('title', filter_text))
         # Categories query
@@ -129,7 +136,7 @@ class CrossSellingTable(ResourcesOrderedTable):
                 yield root.get_resource(brain.abspath)
         elif mode == 'table':
             # Selection in cross selling table
-            handler = self.handler
+            handler = cross_selling_resource.handler
             get_value = handler.get_record_value
             ids = list(handler.get_record_ids_in_order())
             names = []

@@ -31,6 +31,7 @@ from countries import Countries
 from enumerates import BarcodesFormat
 from orders import Orders
 from products import Products, Product, ProductModels
+from products.cross_selling import CrossSellingTable
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
 from shop_payments import ShopPayments
@@ -48,7 +49,7 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20090819'
+    class_version = '20090825'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
@@ -143,6 +144,10 @@ class Shop(ShopFolder):
                                 **{'title': {'fr': u'Conditions Générales de ventes',
                                              'en': u'Terms and conditions of user'},
                                    'state': 'public'})
+        # Default cross Selling configuration
+        CrossSellingTable._make_resource(CrossSellingTable, folder,
+                                         '%s/cross-selling' % name,
+                                         title={'en': u'Cross selling'})
         # Taxes
         Taxes_TableResource._make_resource(Taxes_TableResource, folder, '%s/taxes' % name,
                                 **{'title': {'fr': u'TVA',
@@ -224,6 +229,12 @@ class Shop(ShopFolder):
         if self.get_resource('enumerates', soft=True) is not None:
             return
         EnumeratesFolder.make_resource(EnumeratesFolder, self, 'enumerates')
+
+
+    def update_20090825(self):
+        # Default cross Selling configuration
+        CrossSellingTable.make_resource(CrossSellingTable, self,
+                              'cross-selling', title={'en': u'Cross selling'})
 
 
 register_resource_class(Shop)

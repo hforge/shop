@@ -60,11 +60,15 @@ class CrossSelling_Configure(AutoForm):
     title = MSG(u'Configure cross selling')
 
     schema = {
-        'enabled': Boolean(mandatory=True, default=True),
-        'mode': CrossSelling_Modes(mandatory=True),
+        'use_shop_configuration': Boolean,
+        'enabled': Boolean,
+        'mode': CrossSelling_Modes,
         'products_quantity': Integer(default=5, mandatory=True),
         'filter_text': Unicode,
         }
+
+    shop_configuration = BooleanRadio('use_shop_configuration',
+                              title=MSG(u'Use shop configuration'))
 
     widgets = [
         BooleanRadio('enabled', title=MSG(u'Enabled')),
@@ -74,6 +78,12 @@ class CrossSelling_Configure(AutoForm):
         SelectRadio('mode', title=MSG(u'Cross selling mode'),
             has_empty_option=False),
         ]
+
+
+    def get_widgets(self, resource, context):
+        if get_shop(resource) == resource.parent:
+            return self.widgets
+        return [self.shop_configuration] + self.widgets
 
 
     def get_value(self, resource, context, name, datatype):
