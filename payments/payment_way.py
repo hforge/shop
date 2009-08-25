@@ -94,10 +94,6 @@ class PaymentWay(Editable, ShopFolder):
     logo = None
     payment_table = PaymentWayTable
 
-    # Configure # TODO
-    pay_view = None
-    end_view_top = None
-
     # Backoffice views
     order_view = PaymentWay_RecordView
     order_edit_view = PaymentWay_RecordView

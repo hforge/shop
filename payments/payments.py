@@ -40,6 +40,10 @@ class Payments(ShopFolder):
     class_title = MSG(u'Payment Module')
     class_views = ['history', 'view']
 
+    # Configure # TODO
+    pay_view = None
+    end_view_top = None
+
     # Views
     view = Payments_View()
     history = Payments_History_View()
