@@ -88,11 +88,7 @@
         <th>Total price</th>
       </tr>
       <tr stl:repeat="product products">
-        <td>${product/title}
-          <stl:block stl:if="product/options">
-            <br/>${product/options}
-          </stl:block>
-        </td>
+        <td>${product/title} XXX Add options</td>
         <td>${product/price/unit/with_tax} €</td>
         <td>${product/quantity}</td>
         <td>${product/price/total/with_tax} €</td>
