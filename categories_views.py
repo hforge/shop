@@ -34,7 +34,7 @@ from ikaaro.utils import get_base_path_query
 from ikaaro.resource_views import DBResource_Edit
 
 # Import from shop
-from editable import Editable_Edit
+from editable import Editable, Editable_Edit
 from utils import get_shop
 from views import BrowseFormBatchNumeric
 
@@ -103,12 +103,17 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
         items = self.sort_and_batch(resource, context, items)
         # Build namespace
         namespace = {'batch': batch,
-                     'products': []}
+                     'products': [],
+                     'description': None}
+        # Get products view box
         product_models = []
         for item_brain, item_resource in items:
             viewbox = item_resource.viewbox
             namespace['products'].append({'name': item_resource.name,
                                           'box': viewbox.GET(item_resource, context)})
+        # Categorie description (not for categories folder)
+        if isinstance(resource, Editable):
+            namespace['description'] = resource.get_xhtml_data()
         return namespace
 
 
