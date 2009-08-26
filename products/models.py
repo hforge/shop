@@ -24,7 +24,7 @@ from itools.gettext import MSG
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import BooleanRadio, BooleanCheckBox, SelectWidget, TextWidget
-from ikaaro.forms import get_default_widget
+from ikaaro.forms import XHTMLBody, RTEWidget, get_default_widget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable, OrderedTableFile
 
@@ -46,7 +46,16 @@ real_datatypes = {'string': String,
                   'decimal': Decimal,
                   'boolean': Boolean,
                   'email': Email,
+                  'html': XHTMLBody,
                   'date': ISOCalendarDate}
+
+
+def get_default_widget_shop(datatype):
+    if issubclass(datatype, Boolean):
+        return BooleanRadio
+    elif issubclass(datatype, XHTMLBody):
+        return RTEWidget
+    return get_default_widget(datatype)
 
 
 def get_real_datatype(model, record):
@@ -176,9 +185,7 @@ class ProductModel(ShopFolder):
         for record in schema_resource.get_records_in_order():
             name = get_value(record, 'name')
             datatype = get_real_datatype(self, record)
-            widget = get_default_widget(datatype)
-            if widget is BooleanCheckBox:
-                widget = BooleanRadio
+            widget = get_default_widget_shop(datatype)
             title = get_value(record, 'title')
             widget = widget(name, title=title, has_empty_option=False)
             widgets.append(widget)

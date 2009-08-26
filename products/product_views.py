@@ -194,6 +194,8 @@ class Product_Edit(Editable_Edit, AutoForm):
                 continue
             if issubclass(datatype, Unicode):
                 resource.set_property(key, form[key], language)
+            elif getattr(datatype, 'multilingual', False):
+                resource.set_property(key, form[key], language)
             else:
                 resource.set_property(key, form[key])
         Editable_Edit.action(self, resource, context, form)
