@@ -41,7 +41,7 @@ product_schema = {# General informations
                   'cover': PathDataType(mandatory=True),
                   'weight': Decimal(default=decimal(0), mandatory=True),
                   # Categories
-                  'categories': CategoriesEnumerate(multiple=True),
+                  'categories': CategoriesEnumerate(multiple=True, mandatory=True),
                   # Price
                   'is_buyable': Boolean(default=True),
                   'purchase-price': Decimal,
