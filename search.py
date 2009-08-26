@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import String, Unicode, Enumerate
+from itools.datatypes import Boolean, String, Unicode, Enumerate
 from itools.gettext import MSG
 from itools.xapian import OrQuery, PhraseQuery, AndQuery, split_unicode
 from itools.web import STLView, get_context
@@ -92,6 +92,13 @@ class Shop_ProductSearch(VirtualCategories_View):
     }
 
     nb_results = 0
+
+    def get_query_schema(self):
+        schema = VirtualCategories_View.get_query_schema(self)
+        schema['sort_by'] = String(default='ctime')
+        schema['reverse'] = Boolean(default=True)
+        return schema
+
 
     def get_items(self, resource, context):
         site_root = resource.get_site_root()
