@@ -416,9 +416,6 @@ class Shop_Delivery(STLForm):
 
 
     def action(self, resource, context, form):
-        # We get shipping
-        shippings = resource.get_resource('shippings')
-        shipping = shippings.get_resource(form['shipping'])
         # We save option, if user choose it
         option = ''
         # We save shipping mode/option choosen by user
