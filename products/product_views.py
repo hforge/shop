@@ -89,21 +89,30 @@ class Product_View(Editable_View, STLForm):
 
     access = True
     title = MSG(u'View')
-    template = '/ui/shop/products/product_view.xml'
-    model_template = '/ui/shop/products/product_%s_view.xml'
+    template = None
+    model_template = None
 
     def get_template(self, resource, context):
-        default = self.template
         product_model = resource.get_property('product_model')
-        if product_model:
+        # No product model
+        if not product_model:
+            if self.template:
+                return self.template
+            return shop.shop_templates['product_view']
+        # If has a product model
+        if self.model_template:
             path = self.model_template % product_model
             try:
-                template = resource.get_resource(path)
+                return resource.get_resource(path)
             except LookupError:
-                template = resource.get_resource(default)
+                return resource.get_resource(self.template)
+        # Get from shop templates
+        shop = get_shop(resource)
+        if shop.shop_templates.has_key('product_view_%s' % product_model):
+            template = shop.hop_templates['product_view_%s' % product_model]
         else:
-            template = resource.get_resource(default)
-        return template
+            template = shop.shop_templates['product_view']
+        return resource.get_resource(template)
 
 
     def get_schema(self, resource, context):
@@ -227,7 +236,15 @@ class Product_ViewBox(STLView):
 
     access = True
     title = MSG(u'View Box')
-    template = '/ui/shop/products/product_viewbox.xml'
+    template = None
+
+    def get_template(self, resource, context):
+        if self.template:
+            template = self.template
+        else:
+            shop = get_shop(resource)
+            template = shop.shop_templates['product_viewbox']
+        return resource.get_resource(template)
 
 
     def get_namespace(self, resource, context):

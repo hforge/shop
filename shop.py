@@ -61,17 +61,27 @@ class Shop(ShopFolder):
     # Shop configuration
     ####################################
 
-    # Class
-    user_class = ShopUser
-    product_class = Product
-    payments_class = ShopPayments
-    virtual_category_class = VirtualCategory
-
     # Mail
     mail_template = '/ui/shop/mail.xhtml'
 
     # Batch
     categories_batch_size = 20
+
+    # Templates
+
+    shop_templates = {
+      'product_view': '/ui/shop/products/product_view.xml',
+      'product_viewbox': '/ui/shop/products/product_viewbox.xml',
+      }
+
+    ###############################
+    # Classes to override
+    # for specific needs
+    ###############################
+    user_class = ShopUser
+    product_class = Product
+    payments_class = ShopPayments
+    virtual_category_class = VirtualCategory
 
     ####################################
     ## Views
