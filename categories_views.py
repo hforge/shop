@@ -27,7 +27,6 @@ from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.buttons import RemoveButton, RenameButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import ImageSelectorWidget, RTEWidget
 from ikaaro.utils import get_base_path_query
@@ -264,8 +263,6 @@ class Categories_View(Folder_BrowseContent):
     batch_msg2 = MSG(u"There are {n} categories")
 
     context_menus = []
-
-    table_actions = [RemoveButton, RenameButton]
 
     table_columns = [
         ('checkbox', None),
