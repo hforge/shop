@@ -685,7 +685,7 @@ CrossSellingTable.orderable_classes = Product
 register_field('reference', Unicode(is_indexed=True))
 register_field('product_model', String(is_indexed=True, is_stored=True))
 register_field('categories', String(is_indexed=True, multiple=True, is_stored=True))
-register_field('has_categories', Boolean(is_indexed=True))
+register_field('has_categories', Boolean(is_indexed=True)) # XXX Obsolete
 register_field('has_images', Boolean(is_indexed=True, is_stored=True))
 register_field('ctime', DateTime(is_stored=True, is_indexed=True))
 

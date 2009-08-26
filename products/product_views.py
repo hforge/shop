@@ -55,13 +55,15 @@ class Product_NewProduct(NewInstance):
     schema = {
         'name': String,
         'title': Unicode(mandatory=True),
-        'product_model': ProductModelsEnumerate}
+        'product_model': ProductModelsEnumerate,
+        'categories': CategoriesEnumerate(mandatory=True, multiple=True)}
 
     widgets = [
         title_widget,
         TextWidget('name', title=MSG(u'Name'), default=''),
         SelectWidget('product_model', title=MSG(u'Product model'),
-            has_empty_option=False)]
+            has_empty_option=False),
+        SelectWidget('categories', title=MSG(u'Categories'))]
 
 
     def action(self, resource, context, form):
@@ -76,6 +78,7 @@ class Product_NewProduct(NewInstance):
         language = resource.get_content_language(context)
         metadata.set_property('title', title, language=language)
         metadata.set_property('product_model', form['product_model'])
+        metadata.set_property('categories', form['categories'])
 
         goto = './%s/' % name
         return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
