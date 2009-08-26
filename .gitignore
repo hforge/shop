@@ -2,6 +2,7 @@ Makefile
 *.patch
 dist/*
 MANIFEST
+*.*.new
 build/*
 *.swp
 version.txt
