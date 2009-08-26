@@ -74,6 +74,8 @@ class PhotoOrderedTable_TableView(OrderedTable_View):
 
 class PhotoOrderedTable_AddRecord(Table_AddRecord):
 
+    title = MSG(u'New photo')
+
     def _get_form(self, resource, context):
         form = Table_AddRecord._get_form(self, resource, context)
         # We check if the image path refer to an Image instance
@@ -88,6 +90,8 @@ class PhotoOrderedTable_AddRecord(Table_AddRecord):
 
 
 class PhotoOrderedTable_EditRecord(Table_EditRecord):
+
+    title = MSG(u'Change photo')
 
     def _get_form(self, resource, context):
         form = Table_EditRecord._get_form(self, resource, context)
