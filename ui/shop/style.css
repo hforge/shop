@@ -485,3 +485,8 @@ input[type="image"]{
 .wf-order-sent{
   color: blue;
 }
+
+.category-sub-categories{
+  float: left;
+  padding: 4px;
+}

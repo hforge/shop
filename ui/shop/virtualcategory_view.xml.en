@@ -4,9 +4,18 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <div id="categorie-description" stl:if="description">
+  <div id="category-description" stl:if="description">
     ${description}
   </div>
+
+  <div class="category-sub-categories ${category/css}"
+    stl:repeat="category sub_categories">
+    <stl:block stl:if="category/img">
+      <img src="${category/img}/;download"/><br/>
+    </stl:block>
+    <a href="${category/name}">${category/title}</a>
+  </div>
+  <div class="clear"/>
 
   <div id="list-products">
     <stl:block stl:repeat="product products">

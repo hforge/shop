@@ -168,6 +168,7 @@ class Shop(ShopFolder):
         schema['bill_logo'] = PathDataType
         schema['activate_mail_html'] = Boolean
         schema['barcode_format'] = BarcodesFormat
+        schema['show_sub_categories'] = Boolean
         return schema
 
 

@@ -77,6 +77,7 @@ class Shop_Configure(DBResource_Edit):
     schema = {'shop_from_addr': Email(mandatory=True),
               'order_notification_mails': MultiLinesTokens(mandatory=True),
               'shop_signature': Unicode(mandatory=True),
+              'show_sub_categories': Boolean,
               'activate_mail_html': Boolean(mandatory=True),
               'bill_logo': PathDataType,
               'barcode_format': BarcodesFormat}
@@ -90,6 +91,7 @@ class Shop_Configure(DBResource_Edit):
             title=MSG(u'Shop signature'), rows=8, cols=50),
         BooleanRadio('activate_mail_html',
             title=MSG(u'Activate html mails')),
+        BooleanRadio('show_sub_categories', title=MSG(u'Show sub categories ?')),
         ImageSelectorWidget('bill_logo', title=MSG(u'Bill logo')),
         SelectWidget('barcode_format', title=MSG(u'Barcode format'),
                      has_empty_option=False),

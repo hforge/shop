@@ -93,6 +93,9 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
 
 
     def get_namespace(self, resource, context):
+        from categories import Category
+        shop = get_shop(resource)
+        real_category = resource.get_real_resource()
         batch = None
         # Batch
         items = self.get_items(resource, context)
@@ -104,7 +107,8 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
         # Build namespace
         namespace = {'batch': batch,
                      'products': [],
-                     'description': None}
+                     'description': None,
+                     'sub_categories': []}
         # Get products view box
         product_models = []
         for item_brain, item_resource in items:
@@ -117,6 +121,24 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
             prefix = '%s/' % resource.get_pathto(real_category)
             namespace['description'] = set_prefix(resource.get_xhtml_data(),
                                                   prefix)
+        # Sub categories
+        if shop.get_property('show_sub_categories') is False:
+            return namespace
+        sub_categories = list(real_category.search_resources(cls=Category))
+        nb_categories = len(sub_categories)
+        for i, cat in enumerate(sub_categories):
+            css = None
+            if i==0:
+              css = 'start'
+            elif i==nb_categories-1:
+              css = 'end'
+            img = cat.get_property('image_category')
+            path_cat = resource.get_pathto(cat)
+            namespace['sub_categories'].append(
+                {'name': cat.name,
+                 'title': cat.get_title(),
+                 'img': str(path_cat.resolve2(img)) if img else None,
+                 'css': css})
         return namespace
 
 
