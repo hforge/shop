@@ -36,7 +36,7 @@ from shop.utils import ShopFolder
 class PaymentWayBaseTable(BaseTable):
 
     record_schema = {
-        'ref': String(is_indexed=True),
+        'ref': String(is_indexed=True, is_stored=True),
         'user': String(is_indexed=True),
         'state': Boolean(is_indexed=True),
         'amount': Decimal,
