@@ -233,7 +233,8 @@ class Shop(ShopFolder):
 
 
     def update_20090825(self):
-        # Default cross Selling configuration
+        if self.get_resource('cross-selling', soft=True) is not None:
+            return
         CrossSellingTable.make_resource(CrossSellingTable, self,
                               'cross-selling', title={'en': u'Cross selling'})
 
