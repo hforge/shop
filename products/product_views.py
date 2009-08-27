@@ -93,12 +93,15 @@ class Product_View(Editable_View, STLForm):
     model_template = None
 
     def get_template(self, resource, context):
+        shop = get_shop(resource)
         product_model = resource.get_property('product_model')
         # No product model
         if not product_model:
             if self.template:
-                return self.template
-            return shop.shop_templates['product_view']
+                template = self.template
+            else:
+                template = shop.shop_templates['product_view']
+            return resource.get_resource(template)
         # If has a product model
         if self.model_template:
             path = self.model_template % product_model
@@ -107,7 +110,6 @@ class Product_View(Editable_View, STLForm):
             except LookupError:
                 return resource.get_resource(self.template)
         # Get from shop templates
-        shop = get_shop(resource)
         if shop.shop_templates.has_key('product_view_%s' % product_model):
             template = shop.hop_templates['product_view_%s' % product_model]
         else:
