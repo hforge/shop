@@ -540,6 +540,10 @@ class Shop_RegisterProgress(CompositeForm):
                 Shop_Register()]
 
 
+    def get_schema(self, resource, context):
+        return self.subviews[1].get_schema(resource, context)
+
+
 
 class Shop_AddressesBook(CompositeForm):
 
