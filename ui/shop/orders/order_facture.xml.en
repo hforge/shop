@@ -3,27 +3,7 @@
 
   <pml:head>
     <pml:title>Bill</pml:title>
-
-    <pml:style>
-      #articles{
-        margin-top: 20px;
-        border: 1px solid black;
-      }
-      #articles th{
-        background-color: #E2E2E2;
-      }
-      .align-right{
-        text-align: right;
-      }
-
-      p.page {
-        font-family: sansserif;
-        text-align: right;
-        font-size: 6;
-        font-weight: normal;
-        padding: 0;
-      }
-    </pml:style>
+    <pml:link rel="stylesheet" type="text/css" href="../css/pdf-bill.css"/>
   </pml:head>
 
   <pml:header>

@@ -300,7 +300,6 @@ class Order(WorkflowAware, ShopFolder):
             resource = shop.get_resource(logo, soft=True)
             if resource:
                 logo_uri = resource.handler.uri
-        # XXX Add addresses
         namespace =  {
           'logo': logo_uri,
           'num_cmd': self.name,
