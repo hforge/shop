@@ -247,7 +247,10 @@
                     stl:if="product/reference"/>
                 </td>
                 <td>${product/reference}</td>
-                <td>${product/title}
+                <td>
+                  <a href="${product/uri}" stl:omit-tag="not product/uri">
+                    ${product/title}
+                  </a>
                   <stl:block stl:if="product/declination">
                     <br/>${product/declination}
                   </stl:block>

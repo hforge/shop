@@ -121,12 +121,19 @@ class OrdersProducts(Table):
 
 
     def get_namespace(self, context):
+        shop = get_shop(context.resource)
+        products = shop.get_resource('products')
         ns = []
         handler = self.handler
+        get_value = handler.get_record_value
         for record in handler.get_records():
-            kw = {}
+            kw = {'uri': None}
+            name = get_value(record, 'name')
+            product_resource = products.get_resource(name, soft=True)
+            if product_resource:
+                kw['uri'] = context.resource.get_pathto(product_resource)
             for key in BaseOrdersProducts.record_schema.keys():
-                kw[key] = handler.get_record_value(record, key)
+                kw[key] = get_value(record, key)
             # Get prices
             unit_price_with_tax = kw['pre-tax-price'] * ((kw['tax']/100)+1)
             unit_price_without_tax = kw['pre-tax-price']
