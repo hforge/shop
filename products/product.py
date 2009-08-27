@@ -284,33 +284,42 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         return schema
 
 
+    def get_javascript_namespace(self, declinations):
+        manage_stock = self.get_stock_option() != 'accept'
+        purchase_options_names = self.get_purchase_options_names()
+        # Base product
+        stock_quantity = self.get_property('stock-quantity')
+        products = {'base_product':
+            {'price': self.get_price_with_tax(),
+             'weight': str(self.get_weight()),
+             'option': {},
+             'stock': stock_quantity if manage_stock else None}}
+        # Other products (declinations)
+        for declination in declinations:
+            stock_quantity = declination.get_quantity_in_stock()
+            products[declination.name] = {
+              'price': declination.get_price_with_tax(),
+              'weight': str(declination.get_weight()),
+              'option': {},
+              'stock': stock_quantity if manage_stock else None}
+            for name in purchase_options_names:
+                value = declination.get_property(name)
+                products[declination.name]['option'][name] = value
+        return dumps(products)
 
-    purchase_options_javascript = list(XMLParser("""
-        <script type="text/javascript">
-          var declinations = ${declinations}
-        </script>
-        <script type="text/javascript"
-          src="/ui/shop/js/declinations.js"/>""", stl_namespaces))
 
-    def get_purchase_options_namespace(self):
-        namespace = {'widgets': [],
-                     'javascript': None}
+    def get_purchase_options_namespace(self, declinations):
+        namespace = []
         shop = get_shop(self)
         purchase_options_names = self.get_purchase_options_names()
-        # Get declinations
-        declinations = list(self.search_resources(cls=Declination))
+        values = {}
+        # Has declination ?
         if not declinations:
             return namespace
         # Get uniques purchase option values
-        values = {}
-        dict_declinations = {}
         for declination in declinations:
-            price = self.get_price_with_tax()
-            dict_declinations[declination.name] = {'price': price,
-                                                   'option': {}}
             for name in purchase_options_names:
                 value = declination.get_property(name)
-                dict_declinations[declination.name]['option'][name] = value
                 if not values.has_key(name):
                     values[name] = set([])
                 values[name].add(value)
@@ -321,11 +330,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             datatype = Restricted_EnumerateTable_to_Enumerate(
                           enumerate_name=name, values=values[name])
             widget = SelectWidget(name, has_empty_option=False)
-            namespace['widgets'].append(
+            namespace.append(
                 {'title': enumerate_table.get_title(),
                  'html': widget.to_html(datatype, None)})
-        namespace['javascript'] = stl(events=self.purchase_options_javascript,
-                          namespace={'declinations': dumps(dict_declinations)})
         return namespace
 
 
@@ -429,8 +436,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         namespace['images-slider'] = self.slider_view.GET(self, context)
         # Product is buyable
         namespace['is_buyable'] = self.is_buyable()
-        # Purchase options
-        namespace['purchase_options'] = self.get_purchase_options_namespace()
         # Cross selling
         namespace['cross_selling'] = self.get_cross_selling_namespace(context)
         # Authentificated ?
@@ -487,15 +492,40 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                 images.append(image)
         return images
 
+    #####################
+    ## Stock
+    #####################
+
+    def get_stock_option(self):
+        # XXX Get option from shop generatl configuration
+        return self.get_property('stock-option')
+
+
+    def is_in_stock_or_ignore_stock(self, quantity):
+        if self.get_stock_option() == 'accept':
+            return True
+        return self.get_property('stock-quantity') >= quantity
+
+
+    def remove_from_stock(self, quantity):
+        stock_option = self.get_stock_option()
+        new_quantity = self.get_property('stock-quantity') - quantity
+        if new_quantity <= 0 and stock_option == 'accept':
+            new_quantity = 0
+        if new_quantity == 0:
+            if stock_option == 'refuse_go_private':
+                self.set_property('state', 'private')
+        self.set_property('stock-quantity', new_quantity)
 
     #####################
     ## API
     #####################
-    def is_buyable(self):
+    def is_buyable(self, quantity=1):
         return (self.get_property('pre-tax-price') != decimal(0) and
                 self.get_property('tax') is not None and
                 self.get_property('is_buyable') is True and
-                self.get_statename() == 'public')
+                self.get_statename() == 'public' and
+                self.is_in_stock_or_ignore_stock(quantity))
 
 
     def get_price_without_tax(self):

@@ -177,6 +177,21 @@ class ProductCart(object):
             nb_products += product['quantity']
         return nb_products
 
+    #####################
+    # Stock / quantity
+    ######################
+    def get_product_name(self, id):
+        for p in self.products:
+            if p['id'] == id:
+                return p['name']
+        return None
+
+
+    def get_product_quantity_in_cart(self, product_name):
+        for p in self.products:
+            if p['name'] == product_name:
+                return p['quantity']
+        return 0
 
     ######################
     # Shipping

@@ -41,7 +41,8 @@ table.cart td{
 #cart td{
   border: 1px solid #B0B0B0;
   padding: 5px;
-  text-align:center;
+  text-align: center;
+  white-space: nowrap;
 }
 
 #cart .table-quantity td{
@@ -164,6 +165,10 @@ table.cart td{
 }
 
 #missing-declination{
+  display: none;
+}
+
+#out-of-stock{
   display: none;
 }
 

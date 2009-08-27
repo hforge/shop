@@ -116,3 +116,18 @@ class Datatypes(Enumerate):
     @classmethod
     def get_options(cls):
         return cls.base_options + Enumerate_ListEnumerateTable.get_options()
+
+
+class StockOptions(Enumerate):
+
+    options = [
+      {'name': 'refuse_remain_public' ,
+       'value': MSG(u'Refuse orders but product remain public')},
+      {'name': 'refuse_go_private' ,
+       'value': MSG(u'Refuse orders. Product becomes private')},
+      {'name': 'accept', 'value': MSG(u'Accept orders')}]
+      # TODO -> general configuration in shop
+      # {'name': 'default', 'value': MSG(u'Default')}]
+
+
+

@@ -154,7 +154,11 @@ class Shop_ViewCart(STLForm):
 
     def action_add(self, resource, context, form):
         cart = ProductCart(context)
-        cart.add_a_product(form['id'])
+        product_name = cart.get_product_name(form['id'])
+        quantity_in_cart = cart.get_product_quantity_in_cart(product_name)
+        product = resource.get_resource('products/%s' % product_name)
+        if product.is_in_stock_or_ignore_stock(quantity_in_cart+1):
+            cart.add_a_product(form['id'])
 
 
     def action_remove(self, resource, context, form):
@@ -490,9 +494,12 @@ class Shop_ShowRecapitulatif(STLForm):
         total_weight = decimal(0)
         for cart_elt in cart.products:
             product = products.get_resource(cart_elt['name'])
+            quantity = cart_elt['quantity']
             unit_price = decimal(product.get_price_with_tax())
-            total_price += unit_price * cart_elt['quantity']
-            total_weight += product.get_weight() * cart_elt['quantity']
+            total_price += unit_price * quantity
+            total_weight += product.get_weight() * quantity
+            # Stock
+            product.remove_from_stock(quantity)
         # XXX GEt Shipping price (Hardcoded, fix it)
         addresses = resource.get_resource('addresses').handler
         delivery_address = cart.addresses['delivery_address']

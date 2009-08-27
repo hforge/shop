@@ -87,12 +87,14 @@ class Cart_View(STLView):
             declination = product_cart['declination']
             if declination:
                 declination = product.get_declination_namespace(declination)
+            can_add_quantity = product.is_in_stock_or_ignore_stock(quantity+1)
             namespace['products'].append(
               {'id': product_cart['id'],
                'name': product.name,
                'img': product.get_cover_namespace(context),
                'title': product.get_title(),
                'href': abspath.get_pathto(product.get_virtual_path()),
+               'can_add_quantity': can_add_quantity,
                'quantity': quantity,
                'declination': declination,
                'price': price})

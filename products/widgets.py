@@ -20,9 +20,10 @@ from itools.web import get_context
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import Widget, stl_namespaces
+from ikaaro.forms import SelectRadio, Widget, stl_namespaces
 
 # Import from shop
+from enumerate import StockOptions
 from shop.utils import get_shop
 
 
@@ -59,3 +60,27 @@ class MiniProductWidget(Widget):
         context = get_context()
         viewbox = context.resource.viewbox
         return {'viewbox': viewbox.GET(context.resource, context)}
+
+
+
+class StockProductWidget(Widget):
+
+
+    template = list(XMLParser(
+        """
+        Quantity in stock:<br/>
+          <input type="text" name="${name}" value="${value}"/><br/>
+        If out of order:<br/>
+          ${widget}
+          <br/><br/>
+        """,
+        stl_namespaces))
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        here = context.resource
+        namespace = Widget.get_namespace(self, datatype, value)
+        stock_option = here.get_property('stock-option')
+        widget = SelectRadio('stock-option', has_empty_option=False)
+        namespace['widget'] = widget.to_html(StockOptions, stock_option)
+        return namespace

@@ -56,8 +56,13 @@
                     value="${p/quantity}" size="2" readonly="readonly"/>
                 </td>
                 <td>
-                  <input type="image" name=";add"
-                    src="/ui/shop/images/plus.png"/>
+                  <input id="add_quantity" type="image" name=";add"
+                    src="/ui/shop/images/plus.png"
+                    stl:if="p/can_add_quantity"/>
+                  <img id="add_quantity_disable"
+                    src="/ui/shop/images/plus_gris.png"
+                    title="Impossible to add product in cart"
+                    stl:if="not p/can_add_quantity"/>
                 </td>
               </tr>
             </table>

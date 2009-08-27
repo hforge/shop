@@ -39,7 +39,7 @@ from enumerate import ProductModelsEnumerate, CategoriesEnumerate, States
 from declination import Declination, Declination_NewInstance
 from schema import product_schema
 from taxes import PriceWidget
-from widgets import BarcodeWidget, MiniProductWidget
+from widgets import BarcodeWidget, MiniProductWidget, StockProductWidget
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.utils import get_shop
@@ -120,16 +120,29 @@ class Product_View(Editable_View, STLForm):
 
 
     def get_namespace(self, resource, context):
-        return resource.get_namespace(context)
+        context.scripts.append('/ui/shop/js/declinations.js')
+        declinations = list(resource.search_resources(cls=Declination))
+        javascript_products = resource.get_javascript_namespace(declinations)
+        purchase_options = resource.get_purchase_options_namespace(declinations)
+        return merge_dicts(resource.get_namespace(context),
+                           javascript_products=javascript_products,
+                           purchase_options=purchase_options)
 
 
     action_add_to_cart_schema = {'quantity': Integer(default=1)}
     def action_add_to_cart(self, resource, context, form):
         """ Add to cart """
+        cart = ProductCart(context)
         # Check if we can add to cart
         if not resource.is_buyable():
             msg = MSG(u"This product isn't buyable")
             return context.come_back(msg)
+        # Check if product is in stock
+        cart_quantity = cart.get_product_quantity_in_cart(resource.name)
+        total_quantity =  cart_quantity + form['quantity']
+        if not resource.is_in_stock_or_ignore_stock(total_quantity):
+            msg = u"Stock Invalid product quantity."
+            return context.come_back(MSG(msg))
         # Get purchase options
         declination = None
         kw = {}
@@ -142,7 +155,6 @@ class Product_View(Editable_View, STLForm):
                 context.message = ERROR(u'Declination not exist')
                 return
         # Add to cart
-        cart = ProductCart(context)
         cart.add_product(resource.name, form['quantity'], declination)
         # Information message
         context.message = INFO(u'Product added to cart !')
@@ -170,6 +182,8 @@ class Product_Edit(Editable_Edit, AutoForm):
         TextWidget('weight', title=MSG(u'Weight')),
         # Categorie
         SelectWidget('categories', title=MSG(u'Categories')),
+        # Stock
+        StockProductWidget('stock-quantity', title=MSG(u'Stock')),
         # Price
         BooleanRadio('is_buyable', title=MSG(u'Buyable by customer ?')),
         TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),
@@ -459,11 +473,12 @@ class Product_DeclinationsView(BrowseForm):
     base_columns = [
             ('checkbox', None),
             ('name', MSG(u'Name')),
-            ('default', MSG(u'Default ?')),
-            ('stock-quantity', MSG(u'Stock quantity'))]
-            #('price', MSG(u'Price variation (HT)')),
-            #('weight', MSG(u'Weigth variation'))]
+            ('reference', MSG(u'Reference')),
+            ('stock-quantity', MSG(u'Stock quantity')),
+            ('price', MSG(u'Price variation (HT)')),
+            ('weight', MSG(u'Weigth variation'))]
 
+    buttons = [RemoveButton]
 
     def get_table_columns(self, resource, context):
         columns = []
@@ -479,11 +494,36 @@ class Product_DeclinationsView(BrowseForm):
         items = []
         for declination in resource.search_resources(cls=Declination):
             name = declination.name
-            kw = {}
+            kw = {'checkbox': (name, False),
+                  'name': (name, name)}
             for key in declination.get_metadata_schema():
                 kw[key] = declination.get_property(key)
             for key in declination.get_dynamic_schema():
                 kw[key] = declination.get_property(key)
+            # Price
+            base_price = resource.get_property('pre-tax-price')
+            price_impact = declination.get_property('impact-on-price')
+            price_value = declination.get_property('price-impact-value')
+            if price_impact == 'none':
+                kw['price'] = u'%s HT' % base_price
+            elif price_impact == 'increase':
+                kw['price'] = u'%s HT' % (base_price + price_value)
+                kw['price'] += u' (+ %s €)' % price_value
+            elif price_impact == 'decrease':
+                kw['price'] = u'%s HT' % (base_price - price_value)
+                kw['price'] += u' (- %s €)' % price_value
+            # Weight
+            base_weight = resource.get_property('weight')
+            weight_impact = declination.get_property('impact-on-weight')
+            weight_value = declination.get_property('weight-impact-value')
+            if weight_impact == 'none':
+                kw['weight'] = u'%s ' % base_weight
+            elif weight_impact == 'increase':
+                kw['weight'] = u'%s kg' % (base_weight + weight_value)
+                kw['weight'] += u' (+ %s kg)' % (base_weight + weight_value)
+            elif weight_impact == 'decrease':
+                kw['weight'] = u'%s kg' % (base_weight - weight_value)
+                kw['weight'] += u' (- %s kg)' % (base_weight - weight_value)
             items.append(kw)
         return items
 

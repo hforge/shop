@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from decimal import Decimal as decimal
+
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import String, Boolean, Integer, Unicode
@@ -22,8 +25,9 @@ from itools.gettext import MSG
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.folder import Folder
-from ikaaro.forms import TextWidget, SelectWidget, BooleanRadio
+from ikaaro.forms import TextWidget, SelectWidget, BooleanRadio, AutoForm
 from ikaaro.registry import register_resource_class
+from ikaaro.resource_views import DBResource_Edit
 from ikaaro.views_new import NewInstance
 
 # Import from shop
@@ -31,12 +35,11 @@ from enumerate import DeclinationImpact
 from dynamic_folder import DynamicFolder
 from shop.utils import get_shop
 from shop.enumerate_table import EnumerateTable_to_Enumerate
+from taxes import TaxesEnumerate
+from shop.utils import format_price
 
 
-declination_schema = {'name': String,
-                      'title': Unicode(mandatory=True),
-                      'reference': String,
-                      'default': Boolean,
+declination_schema = {'reference': String,
                       'stock-quantity': Integer,
                       'impact-on-price': DeclinationImpact,
                       'price-impact-value': Integer,
@@ -45,15 +48,27 @@ declination_schema = {'name': String,
 
 
 declination_widgets = [
-    TextWidget('name', title=MSG(u'Name')),
-    TextWidget('title', title=MSG(u'Title')),
     TextWidget('reference', title=MSG(u'Reference')),
-    BooleanRadio('default', title=MSG(u'Default ?')),
     TextWidget('stock-quantity', title=MSG(u'Stock quantity')),
     SelectWidget('impact-on-price', has_empty_option=False, title=MSG(u'Impact on price')),
     TextWidget('price-impact-value', title=MSG(u'Price impact value')),
     SelectWidget('impact-on-weight', has_empty_option=False, title=MSG(u'Impact on weight')),
     TextWidget('weight-impact-value', title=MSG(u'Weight impact value'))]
+
+
+class Declination_Edit(DBResource_Edit):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Edit declination')
+
+    widgets = declination_widgets
+    schema = declination_schema
+
+    def action(self, resource, context, form):
+        for key in self.schema.keys():
+            resource.set_property(key, form[key])
+        context.message = messages.MSG_CHANGES_SAVED
+
 
 
 class Declination_NewInstance(NewInstance):
@@ -82,10 +97,11 @@ class Declination_NewInstance(NewInstance):
 
 
     def action(self, resource, context, form):
-        # XXX Check if combination exist
-        # XXX name OSEF
-        name = form['name']
-        title = u"form['title']"
+        i = 0
+        name = 'declination_0'
+        while resource.get_resource(name, soft=True) is not None:
+            name = 'declination_%s' % i
+            i += 1
 
         # Create the resource
         cls = Declination
@@ -93,7 +109,6 @@ class Declination_NewInstance(NewInstance):
         # The metadata
         metadata = child.metadata
         language = resource.get_content_language(context)
-        metadata.set_property('title', title, language=language)
 
         # Save schema
         for key in self.get_schema(resource, context):
@@ -107,8 +122,10 @@ class Declination(DynamicFolder):
 
     class_id = 'product-declination'
     class_title = MSG(u'Declination')
+    class_views = ['edit']
 
     new_instance = Declination_NewInstance()
+    edit = Declination_Edit()
 
     @classmethod
     def get_metadata_schema(cls):
@@ -121,6 +138,41 @@ class Declination(DynamicFolder):
         for name in self.parent.get_purchase_options_names():
             schema[name] = EnumerateTable_to_Enumerate(enumerate_name=name)
         return schema
+
+
+    def get_quantity_in_stock(self):
+        return self.get_property('stock-quantity')
+
+
+    def get_price_with_tax(self):
+        # Get base price
+        base_price = self.parent.get_property('pre-tax-price')
+        tax = self.parent.get_property('tax')
+        if self.parent.is_buyable() is False:
+            return 0
+        # Get declination price
+        price_impact = self.get_property('impact-on-price')
+        price_value = self.get_property('price-impact-value')
+        if price_impact == 'none':
+            price = base_price
+        elif price_impact == 'increase':
+            price = base_price + price_value
+        elif price_impact == 'decrease':
+            price = base_price - price_value
+        price = price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
+        return format_price(price)
+
+
+    def get_weight(self):
+        base_weight = self.parent.get_property('weight')
+        weight_impact = self.get_property('impact-on-weight')
+        weight_value = self.get_property('weight-impact-value')
+        if weight_impact == 'none':
+            return base_weight
+        elif weight_impact == 'increase':
+            return base_weight + weight_value
+        elif weight_impact == 'decrease':
+            return base_weight - weight_value
 
 
 

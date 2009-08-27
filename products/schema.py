@@ -19,11 +19,11 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import DateTime, Decimal, Unicode, Boolean
-from itools.datatypes import String
+from itools.datatypes import String, Integer
 
 # Import from shop
+from enumerate import CategoriesEnumerate, States, StockOptions
 from shop.datatypes import ImagePathDataType
-from enumerate import CategoriesEnumerate, States
 from taxes import TaxesEnumerate
 
 
@@ -43,6 +43,9 @@ product_schema = {# General informations
                   'weight': Decimal(default=decimal(0), mandatory=True),
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True, mandatory=True),
+                  # Stock
+                  'stock-quantity': Integer(default=0, mandatory=True),
+                  'stock-option': StockOptions(mandatory=True),
                   # Price
                   'is_buyable': Boolean(default=True),
                   'purchase-price': Decimal,

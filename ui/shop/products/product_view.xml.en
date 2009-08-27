@@ -12,9 +12,9 @@
 
   <form id="buy-form" method="post" stl:if="is_buyable">
     <ul>
-      <li stl:repeat="widget purchase_options/widgets">
+      <li stl:repeat="widget purchase_options">
         ${widget/title}
-        ${widget/widget}
+        ${widget/html}
       </li>
     </ul>
     <br/>
@@ -30,7 +30,9 @@
     <p id="missing-declination">
       Missing declination, please select another options
     </p>
-    ${purchase_options/javascript}
+    <p id="out-of-stock">
+     Out of stock. (Only <span id="quantity-in-stock">X</span> products in stock)
+    </p>
   </form>
 
 
@@ -111,5 +113,11 @@
       </stl:block>
     </div>
   </stl:block>
+
+  <script type="text/javascript">
+    var products = ${javascript_products}
+  </script>
+
+
 
 </stl:block>
