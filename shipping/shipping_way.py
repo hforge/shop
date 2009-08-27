@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from decimal import Decimal as decimal
+
 # Import from itools
 from itools import vfs
 from itools.core import get_abspath, merge_dicts
@@ -165,16 +168,20 @@ class ShippingWay(ShopFolder):
 
     def get_price(self, country, purchase_price, purchase_weight):
         list_price_ok = {}
+        max_price = decimal(0)
         prices = self.get_resource('prices').handler
         # Get corresponding weight in table of price
         query = PhraseQuery('countries', country)
         for record in prices.search(query):
             max_weight = prices.get_record_value(record, 'max-weight')
+            price = prices.get_record_value(record, 'price')
+            if price > max_price:
+                max_price = price
             if purchase_weight < max_weight:
                 list_price_ok[max_weight] = record
         if not list_price_ok:
-            return None
-        record = list_price_ok[max(list_price_ok.keys())]
+            return max_price
+        record = list_price_ok[min(list_price_ok.keys())]
         return prices.get_record_value(record, 'price')
 
 
