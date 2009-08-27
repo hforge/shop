@@ -31,6 +31,11 @@
       </dd>
     </dl>
     <input type="submit" value="Log in" class="button-ok"/>
+
+    <script language="javascript">
+      <stl:inline stl:if="not username/value">$("#username").focus();</stl:inline>
+      <stl:inline stl:if="username/value">$("#password").focus();</stl:inline>
+    </script>
   </form>
 
 </stl:block>
