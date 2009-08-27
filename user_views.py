@@ -176,10 +176,8 @@ class ShopUser_OrderView(STLForm):
         # Payment view
         payments = shop.get_resource('payments')
         payments_records = payments.get_payments_records(context, order.name)
-        if len(payments_records) == 0:
-            namespace['payment_view'] = u'No payment'
-        else:
-            payment_way, payment_record = payments_records[0]
+        namespace['payments_view'] = []
+        for payment_way, payment_record in payments_records:
             record_view = payment_way.order_view
             if record_view:
                 payment_table = payment_way.get_resource('payments').handler
@@ -188,9 +186,8 @@ class ShopUser_OrderView(STLForm):
                         payment_table=payment_table,
                         record=payment_record,
                         id_payment=payment_record.id)
-                namespace['payment_view'] = record_view.GET(order, context)
-            else:
-                namespace['payment_view'] = None
+                view = record_view.GET(order, context)
+                namespace['payments_view'].append(view)
         # Shipping view
         shippings = shop.get_resource('shippings')
         shipping_way = order.get_property('shipping')

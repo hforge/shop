@@ -409,7 +409,7 @@ input[type="image"]{
  * Backoffice order view
  ****************************/
 .order-browse{
-  width: 100%;
+  width: 90%;
   border: 1px solid #dfd5c3;
   border-collapse:collapse;
   padding: 0;

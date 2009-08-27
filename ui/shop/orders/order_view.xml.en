@@ -89,14 +89,14 @@
   </table>
 
 
-  <table cellpadding="0" cellspacing="0" class="order-browse" stl:if="payment_view">
+  <table cellpadding="0" cellspacing="0" class="order-browse" stl:if="payments_view">
     <thead>
       <tr>
         <th colspan="2">Payments</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr stl:repeat="payment_view payments_view">
         <td style="width:200px;">
           ${payment_view}
         </td>
@@ -124,7 +124,7 @@
           <form method="post">
             <p>If you want to add a message:</p>
             <input type="hidden" name="id" value="${order_id}"/>
-            <textarea name="message" cols="80" rows="8"/><br/>
+            <textarea name="message" cols="60" rows="8"/><br/>
             <input type="submit" name=";add_message"
               class="button-ok" value="Send message"/>
           </form>
