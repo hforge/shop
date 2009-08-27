@@ -22,7 +22,7 @@ from decimal import Decimal as decimal
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Integer, Email, String, Unicode
-from itools.datatypes import Boolean, MultiLinesTokens, PathDataType
+from itools.datatypes import Boolean, MultiLinesTokens
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.uri import get_reference
@@ -47,7 +47,7 @@ from ikaaro.website_views import RegisterForm
 from addresses import Addresses_Enumerate
 from addresses_views import Addresses_Book, Addresses_AddAddress
 from addresses_views import Addresses_EditAddress
-from datatypes import Civilite
+from datatypes import Civilite, ImagePathDataType
 from enumerates import BarcodesFormat
 from utils import get_shop
 from cart import ProductCart
@@ -79,7 +79,7 @@ class Shop_Configure(DBResource_Edit):
               'shop_signature': Unicode(mandatory=True),
               'show_sub_categories': Boolean,
               'activate_mail_html': Boolean(mandatory=True),
-              'bill_logo': PathDataType,
+              'bill_logo': ImagePathDataType,
               'barcode_format': BarcodesFormat}
 
     widgets = [

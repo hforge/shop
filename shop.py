@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Email, PathDataType, Unicode, Boolean
+from itools.datatypes import Email, Unicode, Boolean
 from itools.gettext import MSG
 from itools.stl import stl
 
@@ -28,6 +28,7 @@ from enumerate_table import EnumeratesFolder
 from addresses import Addresses
 from categories import Categories, VirtualCategory
 from countries import Countries
+from datatypes import ImagePathDataType
 from enumerates import BarcodesFormat
 from orders import Orders
 from products import Products, Product, ProductModels
@@ -175,7 +176,7 @@ class Shop(ShopFolder):
         schema['order_notification_mails'] = Email(multiple=True)
         schema['shop_signature'] = Unicode
         schema['shop_from_addr'] = Email
-        schema['bill_logo'] = PathDataType
+        schema['bill_logo'] = ImagePathDataType
         schema['activate_mail_html'] = Boolean
         schema['barcode_format'] = BarcodesFormat
         schema['show_sub_categories'] = Boolean
@@ -221,7 +222,6 @@ class Shop(ShopFolder):
     ##############################
     # XXX To deplace
     ##############################
-
     def get_user_main_address(self, user_name):
         # TODO: user can define his default address
         ns_addresses = []

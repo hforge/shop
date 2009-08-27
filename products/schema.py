@@ -18,10 +18,11 @@
 from decimal import Decimal as decimal
 
 # Import from itools
-from itools.datatypes import DateTime, Decimal, PathDataType, Unicode, Boolean
+from itools.datatypes import DateTime, Decimal, Unicode, Boolean
 from itools.datatypes import String
 
 # Import from shop
+from shop.datatypes import ImagePathDataType
 from enumerate import CategoriesEnumerate, States
 from taxes import TaxesEnumerate
 
@@ -38,7 +39,7 @@ product_schema = {# General informations
                   'title': Unicode(multilingual=True),
                   'description': Unicode(multilingual=True),
                   'subject': Unicode(multilingual=True),
-                  'cover': PathDataType(mandatory=True),
+                  'cover': ImagePathDataType(mandatory=True),
                   'weight': Decimal(default=decimal(0), mandatory=True),
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True, mandatory=True),

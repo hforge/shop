@@ -15,8 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Enumerate, String
+from itools.datatypes import Enumerate, PathDataType, String
 from itools.gettext import MSG
+from itools.web import get_context
+
+# Import from ikaaro
+from ikaaro.file import Image
 
 
 class StringFixSize(String):
@@ -34,3 +38,20 @@ class Civilite(Enumerate):
         {'name': 'mister', 'value': MSG(u"M.")},
         {'name': 'madam', 'value': MSG(u"Mme")},
         {'name': 'miss', 'value': MSG(u"Mlle")}]
+
+
+
+class ImagePathDataType(PathDataType):
+
+    default = ''
+
+    @staticmethod
+    def is_valid(value):
+        context = get_context()
+        resource = context.resource
+        image = resource.get_resource(value, soft=True)
+        if image is None:
+            return False
+        if not isinstance(image, Image):
+            return False
+        return True

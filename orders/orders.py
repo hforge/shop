@@ -294,10 +294,12 @@ class Order(WorkflowAware, ShopFolder):
         if self.get_resource('bill', soft=True):
             self.del_resource('bill')
         document = self.get_resource('/ui/shop/orders/order_facture.xml')
-        logo =  shop.get_resource(shop.get_property('bill_logo'), soft=True)
         logo_uri = None
+        logo = shop.get_property('bill_logo')
         if logo:
-            logo_uri = logo.handler.uri
+            resource = shop.get_resource(logo, soft=True)
+            if resource:
+                logo_uri = resource.handler.uri
         # XXX Add addresses
         namespace =  {
           'logo': logo_uri,

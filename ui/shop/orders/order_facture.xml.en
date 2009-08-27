@@ -16,8 +16,6 @@
         text-align: right;
       }
 
-      /* FOOTER */
-
       p.page {
         font-family: sansserif;
         text-align: right;
@@ -29,7 +27,7 @@
   </pml:head>
 
   <pml:header>
-    <pml:img src="${logo}"/>
+    <pml:img src="${logo}" stl:if="logo"/>
   </pml:header>
 
   <pml:footer>
