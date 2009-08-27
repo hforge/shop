@@ -46,7 +46,7 @@ class OrdersProductsView(Table_View):
         ('checkbox', None),
         ('name', MSG(u'Product')),
         ('options', MSG(u'Options')),
-        ('unit_price', MSG(u'Unit price')),
+        ('pre-tax-price', MSG(u'Unit price')),
         ('quantity', MSG(u'Quantity')),
         ('total_price', MSG(u'Total price')),
         ]
@@ -64,10 +64,11 @@ class OrdersProductsView(Table_View):
             if not produit:
                 return ref
             return (produit.name, resource.get_pathto(produit))
-        elif column == 'unit_price':
+        elif column == 'pre-tax-price':
             return u'%s €' % value
         elif column == 'total_price':
-            total_price = item.get_value('quantity') * item.get_value('unit_price')
+            price = item.get_value('pre-tax-price')
+            total_price = item.get_value('quantity') * price
             return u'%s €' % total_price
         return value
 

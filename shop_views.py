@@ -18,6 +18,7 @@
 from copy import deepcopy
 from datetime import datetime
 from decimal import Decimal as decimal
+from cStringIO import StringIO
 
 # Import from itools
 from itools.core import merge_dicts
@@ -731,3 +732,42 @@ class Shop_CustomersView(Folder_BrowseContent):
         elif column == 'gender':
             return Civilite.get_value(item_resource.get_property('gender'))
         return item_resource.get_property(column)
+
+
+
+class Barcode(BaseView):
+
+    access = 'is_allowed_to_edit'
+
+    query_schema = {'reference': String}
+
+    def GET(self, resource, context):
+        shop = resource
+        response = context.response
+        format = shop.get_property('barcode_format')
+        if format == '0':
+            response.set_header('Content-Type', 'text/plain')
+            return
+        try:
+            img = self.get_barcode(format, context)
+        except ImportError:
+            response.set_header('Content-Type', 'text/plain')
+            return
+        except Exception:
+            response.set_header('Content-Type', 'text/plain')
+            return
+        response.set_header('Content-Type', 'image/png')
+        return img
+
+
+    def get_barcode(self, format, context):
+        # Try to import elaphe
+        from elaphe import barcode
+        # Generate barcode
+        reference = context.query['reference']
+        img = barcode(format, reference)
+        # Format PNG
+        f = StringIO()
+        img.save(f, 'png')
+        f.seek(0)
+        return f.getvalue()

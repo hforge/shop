@@ -101,7 +101,7 @@
   </table>
 
   <!-- Payment -->
-  <table class="order-browse" style="width:500px;float:left;">
+  <table class="order-browse" style="width:400px;float:left;">
     <thead>
       <tr>
         <th>
@@ -232,6 +232,8 @@
           <table class="order-sub-browse">
             <thead>
               <tr>
+                <th></th>
+                <th>Reference</th>
                 <th>Product</th>
                 <th>Unit price HT</th>
                 <th>Quantity</th>
@@ -240,6 +242,11 @@
             </thead>
             <tbody>
               <tr stl:repeat="product products">
+                <td>
+                  <img src="../../;barcode?reference=${product/reference}"
+                    stl:if="product/reference"/>
+                </td>
+                <td>${product/reference}</td>
                 <td>${product/title}
                   <stl:block stl:if="product/declination">
                     <br/>${product/declination}
@@ -250,11 +257,11 @@
                 <td>${product/price/total/with_tax} €</td>
               </tr>
               <tr>
-                <td colspan="3" style="text-align:right">Shipping</td>
+                <td colspan="5" style="text-align:right">Shipping</td>
                 <td>${shipping_price} €</td>
               </tr>
               <tr>
-                <td colspan="3" style="text-align:right">Total Price</td>
+                <td colspan="5" style="text-align:right">Total Price</td>
                 <td>${total_price} €</td>
               </tr>
             </tbody>

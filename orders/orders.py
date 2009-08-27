@@ -88,6 +88,7 @@ class BaseOrdersProducts(BaseTable):
 
     record_schema = {
       'name': String(mandatory=True),
+      'reference': String,
       'title': Unicode,
       'declination': Unicode,
       'quantity': Integer,
@@ -110,6 +111,7 @@ class OrdersProducts(Table):
 
     form = [
         TextWidget('name', title=MSG(u'Product name')),
+        TextWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
         TextWidget('weight', title=MSG(u'Weight')),
         TextWidget('declination', title=MSG(u'Declination')),
@@ -200,6 +202,7 @@ class Order(WorkflowAware, ShopFolder):
             product = products.get_resource(product_cart['name'])
             handler.add_record(
               {'name': product.name,
+               'reference': product.get_property('reference'),
                'title': product.get_title(),
                'declination': product_cart['declination'],
                'pre-tax-price': decimal(product.get_price_without_tax()),

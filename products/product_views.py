@@ -14,9 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from standard library
-from cStringIO import StringIO
-
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Email, Integer, String, Unicode, Boolean
@@ -369,43 +366,6 @@ class Product_ImagesSlider(STLView):
         namespace['img_width'], namespace['img_height'] = self.img_size
         namespace['thumb_width'], namespace['thumb_height'] = self.thumb_size
         return namespace
-
-
-
-class Product_Barcode(BaseView):
-
-    access = 'is_allowed_to_edit'
-
-    def GET(self, resource, context):
-        response = context.response
-        shop = get_shop(resource)
-        format = shop.get_property('barcode_format')
-        if format == '0':
-            response.set_header('Content-Type', 'text/plain')
-            return
-        try:
-            img = self.get_barcode(format, resource)
-        except ImportError:
-            response.set_header('Content-Type', 'text/plain')
-            return
-        except Exception:
-            response.set_header('Content-Type', 'text/plain')
-            return
-        response.set_header('Content-Type', 'image/png')
-        return img
-
-
-    def get_barcode(self, format, resource):
-        # Try to import elaphe
-        from elaphe import barcode
-        # Generate barcode
-        reference = resource.get_property('reference').encode('utf-8')
-        img = barcode(format, reference)
-        # Format PNG
-        f = StringIO()
-        img.save(f, 'png')
-        f.seek(0)
-        return f.getvalue()
 
 
 

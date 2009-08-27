@@ -41,6 +41,7 @@ from shop_views import Shop_Addresses, Shop_AddressesBook
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
+from shop_views import Barcode
 from user import ShopUser
 from utils import ShopFolder
 
@@ -90,6 +91,7 @@ class Shop(ShopFolder):
 
     # Administrator shop views
     view = Shop_View()
+    barcode = Barcode()
     configure = Shop_Configure()
     customers = Shop_CustomersView()
     customer_manage = Shop_CustomerManage()

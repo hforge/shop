@@ -22,6 +22,8 @@ from itools.xml import XMLParser
 # Import from ikaaro
 from ikaaro.forms import Widget, stl_namespaces
 
+# Import from shop
+from shop.utils import get_shop
 
 
 class BarcodeWidget(Widget):
@@ -31,9 +33,19 @@ class BarcodeWidget(Widget):
         """
         <input type="${type}" name="${name}" value="${value}" size="${size}"
         /><br/><br/>
-        <img src="./;barcode"/>
+        <img src="${shop_uri}/;barcode?reference=${reference}"/>
         """,
         stl_namespaces))
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        product = context.resource
+        shop = get_shop(product)
+        return merge_dicts(
+            Widget.get_namespace(self, datatype, value),
+            shop_uri=product.get_pathto(shop),
+            reference=product.get_property('reference'))
+
 
 
 class MiniProductWidget(Widget):
