@@ -139,6 +139,11 @@ class Declination(DynamicFolder):
         return schema
 
 
+    def remove_from_stock(self, quantity):
+        new_quantity = self.get_property('stock-quantity') - quantity
+        self.set_property('stock-quantity', new_quantity)
+
+
     def get_quantity_in_stock(self):
         return self.get_property('stock-quantity')
 

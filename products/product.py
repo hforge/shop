@@ -507,15 +507,19 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         return self.get_property('stock-quantity') >= quantity
 
 
-    def remove_from_stock(self, quantity):
-        stock_option = self.get_stock_option()
-        new_quantity = self.get_property('stock-quantity') - quantity
-        if new_quantity <= 0 and stock_option == 'accept':
-            new_quantity = 0
-        if new_quantity == 0:
-            if stock_option == 'refuse_go_private':
-                self.set_property('state', 'private')
-        self.set_property('stock-quantity', new_quantity)
+    def remove_from_stock(self, quantity, id_declination=None):
+        if id_declination:
+            declination = self.get_resource(id_declination)
+            declination.remove_from_stock(quantity)
+        else:
+            stock_option = self.get_stock_option()
+            new_quantity = self.get_property('stock-quantity') - quantity
+            if new_quantity <= 0 and stock_option == 'accept':
+                new_quantity = 0
+            if new_quantity <= 0:
+                if stock_option == 'refuse_go_private':
+                    self.set_property('state', 'private')
+            self.set_property('stock-quantity', new_quantity)
 
     #####################
     ## API
