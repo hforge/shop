@@ -143,7 +143,7 @@ class Product_View(Editable_View, STLForm):
         cart_quantity = cart.get_product_quantity_in_cart(resource.name)
         total_quantity =  cart_quantity + form['quantity']
         if not resource.is_in_stock_or_ignore_stock(total_quantity):
-            msg = u"Stock Invalid product quantity."
+            msg = u"Quantity in stock insufficient."
             return context.come_back(MSG(msg))
         # Get purchase options
         declination = None
