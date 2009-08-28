@@ -45,7 +45,7 @@ product_schema = {# General informations
                   'categories': CategoriesEnumerate(multiple=True, mandatory=True),
                   # Stock
                   'stock-quantity': Integer(default=0, mandatory=True),
-                  'stock-option': StockOptions(mandatory=True),
+                  'stock-option': StockOptions(mandatory=True, default='accept'),
                   # Price
                   'is_buyable': Boolean(default=True),
                   'purchase-price': Decimal,
