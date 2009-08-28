@@ -475,6 +475,7 @@ class Product_DeclinationsView(BrowseForm):
     base_columns = [
             ('checkbox', None),
             ('name', MSG(u'Name')),
+            ('barcode', None),
             ('reference', MSG(u'Reference')),
             ('stock-quantity', MSG(u'Stock quantity')),
             ('price', MSG(u'Price variation (HT)')),
@@ -493,6 +494,7 @@ class Product_DeclinationsView(BrowseForm):
 
 
     def get_items(self, resource, context):
+        shop = get_shop(resource)
         items = []
         for declination in resource.search_resources(cls=Declination):
             name = declination.name
@@ -502,7 +504,12 @@ class Product_DeclinationsView(BrowseForm):
                 kw[key] = declination.get_property(key)
             for key in declination.get_dynamic_schema():
                 kw[key] = declination.get_property(key)
-            # Price
+            # Barcode
+            shop_uri = context.resource.get_pathto(shop)
+            reference = declination.get_property('reference')
+            kw['barcode'] = XMLParser('<img src="%s/;barcode?reference=%s"/>' %
+                                      (shop_uri, reference))
+            # Price XXX To simplify (use declination API)
             base_price = resource.get_property('pre-tax-price')
             price_impact = declination.get_property('impact-on-price')
             price_value = declination.get_property('price-impact-value')

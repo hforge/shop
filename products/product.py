@@ -528,6 +528,16 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                 self.is_in_stock_or_ignore_stock(quantity))
 
 
+    def get_reference(self, id_declination=None):
+        if id_declination:
+            declination = self.get_resource(id_declination, soft=True)
+            if declination:
+                reference = declination.get_property('reference')
+                if reference:
+                    return reference
+        return self.get_property('reference')
+
+
     def get_price_without_tax(self, id_declination=None, pretty=False):
         if self.is_buyable() is False:
             return decimal(0)

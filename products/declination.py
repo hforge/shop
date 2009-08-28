@@ -143,6 +143,10 @@ class Declination(DynamicFolder):
         return self.get_property('stock-quantity')
 
 
+    def get_reference(self):
+        return self.get_property('reference')
+
+
     def get_price_without_tax(self):
         if self.parent.is_buyable() is False:
             return 0

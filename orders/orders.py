@@ -209,7 +209,7 @@ class Order(WorkflowAware, ShopFolder):
             declination = product_cart['declination']
             handler.add_record(
               {'name': product.name,
-               'reference': product.get_property('reference'),
+               'reference': product.get_reference(declination),
                'title': product.get_title(),
                'declination': declination,
                'pre-tax-price': product.get_price_without_tax(declination),
