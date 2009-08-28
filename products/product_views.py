@@ -110,7 +110,7 @@ class Product_View(Editable_View, STLForm):
             return resource.get_resource(self.template)
         # Get from shop templates
         if shop.shop_templates.has_key('product_view_%s' % product_model):
-            template = shop.hop_templates['product_view_%s' % product_model]
+            template = shop.shop_templates['product_view_%s' % product_model]
         else:
             template = shop.shop_templates['product_view']
         return resource.get_resource(template)

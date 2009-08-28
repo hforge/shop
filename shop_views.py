@@ -225,7 +225,6 @@ class Shop_Register(RegisterForm):
                self.address_widgets
 
 
-
     def action(self, resource, context, form):
         shop = get_shop(resource)
         root = context.root
@@ -291,22 +290,26 @@ class Shop_Login(LoginView):
 
     access = True
 
-    template = '/ui/shop/shop_login.xml'
+    def get_template(self, resource, context):
+        shop = get_shop(resource)
+        template = shop.shop_templates['shop_login']
+        return resource.get_resource(template)
+
 
     def get_namespace(self, resource, context):
         namespace = self.build_namespace(resource, context)
         # Register link
-        if hasattr(resource, 'register'):
-            namespace['register_link'] = './;register'
-        else:
-            namespace['register_link'] = '/;register'
+        register_link = '/;register'
+        if getattr(resource, 'register'):
+            register_link = './;register'
+        namespace['register_link'] = register_link
         # Progress bar ?
-        if context.resource.name=='shop':
+        progress = None
+        if context.resource.name == 'shop':
             # If user is in shop, it's a payment process,
             # so we have to show a progress bar
-            namespace['progress'] = Shop_Progress(index=2).GET(resource, context)
-        else:
-            namespace['progress'] = None
+            progress = Shop_Progress(index=2).GET(resource, context)
+        namespace['progress'] = progress
         return namespace
 
 

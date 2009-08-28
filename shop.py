@@ -72,6 +72,7 @@ class Shop(ShopFolder):
     # Templates
 
     shop_templates = {
+      'shop_login': '/ui/shop/shop_login.xml',
       'product_view': '/ui/shop/products/product_view.xml',
       'product_viewbox': '/ui/shop/products/product_viewbox.xml',
       }
