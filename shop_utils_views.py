@@ -69,11 +69,13 @@ class Cart_View(STLView):
             if not product or not product.is_buyable():
                 continue
             quantity = product_cart['quantity']
+            declination = product_cart['declination']
             # Weight
-            total_weight +=  product.get_weight()
+            total_weight +=  product.get_weight(declination)
             # Prices
-            unit_price_with_tax = decimal(product.get_price_with_tax())
-            unit_price_without_tax = decimal(product.get_price_without_tax())
+            declination = product_cart['declination']
+            unit_price_with_tax = product.get_price_with_tax(declination)
+            unit_price_without_tax = product.get_price_without_tax(declination)
             total_price_with_tax = unit_price_with_tax * quantity
             total_price_without_tax = unit_price_without_tax * quantity
             price = {

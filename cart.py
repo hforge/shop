@@ -66,7 +66,9 @@ class ProductCart(object):
             if not product or not product.is_buyable():
                 continue
             quantity = product_cart['quantity']
-            unit_price_with_tax = decimal(product.get_price_with_tax())
+            id_declination = product_cart['declination']
+            unit_price_with_tax = product.get_price_with_tax(id_declination)
+            unit_price_with_tax = decimal(unit_price_with_tax)
             total_with_tax += unit_price_with_tax * quantity
 
             virtual_path = product.get_virtual_path()

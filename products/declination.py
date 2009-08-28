@@ -36,7 +36,6 @@ from dynamic_folder import DynamicFolder
 from shop.utils import get_shop
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from taxes import TaxesEnumerate
-from shop.utils import format_price
 
 
 declination_schema = {'reference': String,
@@ -144,12 +143,11 @@ class Declination(DynamicFolder):
         return self.get_property('stock-quantity')
 
 
-    def get_price_with_tax(self):
-        # Get base price
-        base_price = self.parent.get_property('pre-tax-price')
-        tax = self.parent.get_property('tax')
+    def get_price_without_tax(self):
         if self.parent.is_buyable() is False:
             return 0
+        # Get base price
+        base_price = self.parent.get_property('pre-tax-price')
         # Get declination price
         price_impact = self.get_property('impact-on-price')
         price_value = self.get_property('price-impact-value')
@@ -159,8 +157,13 @@ class Declination(DynamicFolder):
             price = base_price + price_value
         elif price_impact == 'decrease':
             price = base_price - price_value
-        price = price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
-        return format_price(price)
+        return price
+
+
+    def get_price_with_tax(self):
+        tax = self.parent.get_property('tax')
+        price = self.get_price_without_tax()
+        return price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
 
 
     def get_weight(self):

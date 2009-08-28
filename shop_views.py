@@ -405,9 +405,10 @@ class Shop_Delivery(STLForm):
         total_weight = decimal(0)
         for cart_elt in cart.products:
             product = products.get_resource(cart_elt['name'])
-            unit_price = decimal(product.get_price_with_tax())
+            declination = cart_elt['declination']
+            unit_price = product.get_price_with_tax(declination)
             total_price += unit_price * cart_elt['quantity']
-            total_weight += product.get_weight() * cart_elt['quantity']
+            total_weight += product.get_weight(declination) * cart_elt['quantity']
         # Get user delivery country
         addresses = resource.get_resource('addresses').handler
         delivery_address = cart.addresses['delivery_address']
@@ -495,9 +496,10 @@ class Shop_ShowRecapitulatif(STLForm):
         for cart_elt in cart.products:
             product = products.get_resource(cart_elt['name'])
             quantity = cart_elt['quantity']
-            unit_price = decimal(product.get_price_with_tax())
+            declination = cart_elt['declination']
+            unit_price = product.get_price_with_tax(declination)
             total_price += unit_price * quantity
-            total_weight += product.get_weight() * quantity
+            total_weight += product.get_weight(declination) * quantity
             # Stock
             product.remove_from_stock(quantity)
         # XXX GEt Shipping price (Hardcoded, fix it)

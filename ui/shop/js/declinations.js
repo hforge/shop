@@ -40,9 +40,20 @@ function get_product(options){
   }
 }
 
+function get_dict_size(dict){
+  var count = 0;
+  for (k in dict) count++;
+  return count;
+}
+
 function check_products(){
   options = get_selected_purchase_options();
-  id_product = get_product(options)
+  dict_size = get_dict_size(options);
+  if(dict_size==0){
+    id_product = 'base_product';
+  }else{
+    id_product = get_product(options);
+  }
   if(id_product){
     product = products[id_product];
     $("#quantity-area").show('slow');

@@ -16,7 +16,6 @@
 
 # Import from standard library
 from datetime import datetime
-from decimal import Decimal as decimal
 
 # Import from itools
 from itools.csv import Table as BaseTable
@@ -207,14 +206,15 @@ class Order(WorkflowAware, ShopFolder):
         products = shop.get_resource('products')
         for product_cart in cart.products:
             product = products.get_resource(product_cart['name'])
+            declination = product_cart['declination']
             handler.add_record(
               {'name': product.name,
                'reference': product.get_property('reference'),
                'title': product.get_title(),
-               'declination': product_cart['declination'],
-               'pre-tax-price': decimal(product.get_price_without_tax()),
+               'declination': declination,
+               'pre-tax-price': product.get_price_without_tax(declination),
                'tax': TaxesEnumerate.get_value(product.get_property('tax')),
-               'weight': product.get_weight(),
+               'weight': product.get_weight(declination),
                'quantity': product_cart['quantity']})
         metadata = OrdersProducts.build_metadata(title={'en': u'Products'})
         folder.set_handler('%s/products.metadata' % name, metadata)

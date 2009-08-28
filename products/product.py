@@ -290,7 +290,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         # Base product
         stock_quantity = self.get_property('stock-quantity')
         products = {'base_product':
-            {'price': self.get_price_with_tax(),
+            {'price': format_price(self.get_price_with_tax()),
              'weight': str(self.get_weight()),
              'option': {},
              'stock': stock_quantity if manage_stock else None}}
@@ -298,7 +298,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         for declination in declinations:
             stock_quantity = declination.get_quantity_in_stock()
             products[declination.name] = {
-              'price': declination.get_price_with_tax(),
+              'price': format_price(declination.get_price_with_tax()),
               'weight': str(declination.get_weight()),
               'option': {},
               'stock': stock_quantity if manage_stock else None}
@@ -418,7 +418,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                 continue
             namespace[key] = self.get_property(key)
         # Price
-        namespace['price-with-tax'] = self.get_price_with_tax()
+        namespace['price-with-tax'] = self.get_price_with_tax(pretty=True)
         # Data
         namespace['data'] = self.get_xhtml_data()
         # Specific product informations
@@ -528,20 +528,35 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                 self.is_in_stock_or_ignore_stock(quantity))
 
 
-    def get_price_without_tax(self):
-        return format_price(self.get_property('pre-tax-price'))
-
-
-    def get_price_with_tax(self):
-        price = self.get_property('pre-tax-price')
-        tax = self.get_property('tax')
+    def get_price_without_tax(self, id_declination=None, pretty=False):
         if self.is_buyable() is False:
-            return 0
+            return decimal(0)
+        if id_declination:
+            declination = self.get_resource(id_declination, soft=True)
+            if declination:
+                return declination.get_price_without_tax()
+        price = self.get_property('pre-tax-price')
+        if pretty is True:
+            return format_price(price)
+        return price
+
+
+    def get_price_with_tax(self, id_declination=None, pretty=False):
+        if self.is_buyable() is False:
+            return decimal(0)
+        price = self.get_price_without_tax(id_declination)
+        tax = self.get_property('tax')
         price = price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
-        return format_price(price)
+        if pretty is True:
+            return format_price(price)
+        return price
 
 
-    def get_weight(self):
+    def get_weight(self, id_declination=None):
+        if id_declination:
+            declination = self.get_resource(id_declination, soft=True)
+            if declination:
+                return declination.get_weight()
         return self.get_property('weight')
 
 
