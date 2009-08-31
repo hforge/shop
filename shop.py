@@ -199,8 +199,10 @@ class Shop(ShopFolder):
                    return_receipt=False):
         root = context.root
         # Translation
-        subject = subject.gettext()
-        text = text.gettext()
+        if isinstance(subject, MSG):
+            subject = subject.gettext()
+        if isinstance(text, MSG):
+            text = text.gettext()
         # From_addr
         if from_addr is None:
             from_addr = self.get_property('shop_from_addr')
