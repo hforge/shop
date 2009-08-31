@@ -111,12 +111,6 @@ class PhotoOrderedTable_View(CompositeForm):
     subviews = [PhotoOrderedTable_AddRecord(),
                 PhotoOrderedTable_TableView()]
 
-    def get_schema(self, resource, context):
-        if 'name' in context.get_form_keys():
-            return self.subviews[0].get_schema(resource, context)
-        return self.subviews[1].get_schema(resource, context)
-
-
     def _get_form(self, resource, context):
         form = CompositeForm._get_form(self, resource, context)
         if 'name' in form:

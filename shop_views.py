@@ -300,7 +300,7 @@ class Shop_Login(LoginView):
         namespace = self.build_namespace(resource, context)
         # Register link
         register_link = '/;register'
-        if getattr(resource, 'register'):
+        if getattr(resource, 'register', None):
             register_link = './;register'
         namespace['register_link'] = register_link
         # Progress bar ?
