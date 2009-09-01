@@ -196,7 +196,7 @@ class Shop(ShopFolder):
     def send_email(self, context, to_addr, subject, from_addr=None, text=None,
                    html=None, add_signature=True,
                    encoding='utf-8', subject_with_host=True,
-                   return_receipt=False):
+                   return_receipt=False, attachment=None):
         root = context.root
         # Translation
         if isinstance(subject, MSG):
@@ -220,7 +220,7 @@ class Shop(ShopFolder):
         text += '\n\n-- \n%s' % self.get_property('shop_signature')
         # Send mail
         root.send_email(to_addr, subject, from_addr, text, html, encoding,
-                        subject_with_host, return_receipt)
+                        subject_with_host, return_receipt, attachment)
 
 
 
