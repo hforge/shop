@@ -343,6 +343,10 @@ input[type="image"]{
   border-bottom: 1px solid black;
 }
 
+#cart-box-title a {
+  text-decoration: none;
+}
+
 #cart-box-content ul{
   border: 0;
   padding: 0;

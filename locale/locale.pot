@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-09-01 08:09+CET\n"
+"POT-Creation-Date: 2009-09-01 13:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3018,6 +3018,11 @@ msgstr ""
 #: ../ui/shop/shop_user_profile.xml.en:47
 msgctxt "link"
 msgid "My addresses book"
+msgstr ""
+
+#: ../ui/shop/cart_viewbox.xml.en:10
+msgctxt "link"
+msgid "My cart"
 msgstr ""
 
 #: ../ui/shop/browse_batch.xml.en:23

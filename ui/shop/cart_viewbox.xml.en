@@ -6,9 +6,9 @@
 
   <div id="cart-box" stl:if="nb_products">
     <div id="cart-box-title">
-      <a href="/shop/;view_cart">
-        <h1>My cart</h1>
-      </a>
+      <h1>
+        <a href="/shop/;view_cart">My cart</a>
+      </h1>
     </div>
     <div id="cart-box-content">
       <ul>

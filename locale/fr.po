@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-09-01 08:09+CET\n"
+"POT-Creation-Date: 2009-09-01 13:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2669,6 +2669,11 @@ msgctxt "link"
 msgid "My addresses book"
 msgstr "Mon carnet d'adresses"
 
+#: ../ui/shop/cart_viewbox.xml.en:10
+msgctxt "link"
+msgid "My cart"
+msgstr "Mon panier"
+
 #: ../user_views.py:43
 msgid "My profile"
 msgstr "Mon profil"
@@ -4190,7 +4195,7 @@ msgstr "« Précédent"
 #: ../ui/shop/cart_viewbox.xml.en:24
 msgctxt "link"
 msgid "» Order (Total ${total_with_tax} €)"
-msgstr ""
+msgstr "» Commander (Total ${total_with_tax} €)"
 
 #: ../views.py:89
 msgid "…"
