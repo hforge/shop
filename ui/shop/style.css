@@ -42,7 +42,6 @@ table.cart td{
   border: 1px solid #B0B0B0;
   padding: 5px;
   text-align: center;
-  white-space: nowrap;
 }
 
 #cart .table-quantity td{
