@@ -131,7 +131,7 @@ class Withdrawal(ShippingWay):
     order_edit_view = Withdrawal_RecordEdit()
 
 
-    html_form = list(XMLParser("""
+    html_form = list(XMLParser(u"""
         <form method="POST">
           Withdrawal to the store
           <input type="submit" id="button-order" value="Ok"/>

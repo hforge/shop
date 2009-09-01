@@ -6,13 +6,31 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-09-01 13:09+CET\n"
+"POT-Creation-Date: 2009-09-01 17:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../shipping/withdrawal.py:140
+msgid ""
+"\n"
+"        <form method=\"POST\">\n"
+"          Withdrawal to the store\n"
+"          <input type=\"submit\" id=\"button-order\" value=\"Ok\"/>\n"
+"          <input type=\"hidden\" name=\"shipping\" value=\"${name}\"/>\n"
+"        </form>\n"
+"        "
+msgstr ""
+"\n"
+"        <form method=\"POST\">\n"
+"          Retrait au magasin\n"
+"          <input type=\"submit\" id=\"button-order\" value=\"Ok\"/>\n"
+"          <input type=\"hidden\" name=\"shipping\" value=\"${name}\"/>\n"
+"        </form>\n"
+"        "
 
 #: ../addresses.py:103
 msgid ""
@@ -482,7 +500,7 @@ msgstr "${nb_orders} commande(s)"
 #: ../ui/shop/search_box.xml.en:14
 msgctxt "div"
 msgid "${nb_results} results found."
-msgstr ""
+msgstr "${nb_results} résultats."
 
 #: ../ui/shop/orders/order_facture.xml.en:22
 msgid "${num_cmd}"
@@ -496,7 +514,7 @@ msgstr ""
 #: ../ui/shop/cart_view.xml.en:41
 msgctxt "ul"
 msgid "${option/title}:"
-msgstr ""
+msgstr "${option/title} :"
 
 #: ../ui/shop/payments/check/record_edit.xml.en:56
 msgctxt "option"
@@ -1082,7 +1100,7 @@ msgstr "(Exemple: Maison, Bureau)"
 #: ../ui/shop/products/product_view.xml.en:34
 msgctxt "paragraph"
 msgid "(Only <g id='7'>X</g> products in stock)"
-msgstr ""
+msgstr "(Seulement <g id='7'>X</g> produits en stock)"
 
 #: ../products/product_views.py:355
 msgid "-"
@@ -2786,11 +2804,11 @@ msgstr ""
 
 #: ../payments/paybox/enumerates.py:38
 msgid "One of the PBX_RETOUR variable is too long"
-msgstr ""
+msgstr "Une des variables PBX_RETOUR est trop longue"
 
 #: ../products/cross_selling_views.py:77
 msgid "Only products with this title"
-msgstr ""
+msgstr "Seulement les produits avec ce titre"
 
 #: ../orders/workflow.py:50
 msgid "Open"
@@ -2849,7 +2867,7 @@ msgctxt "heading"
 msgid "Order number:"
 msgstr "Commande numéro:"
 
-#: ../products/product.py:132 ../products/product.py:651
+#: ../products/product.py:132 ../products/product.py:650
 msgid "Order photos"
 msgstr "Ordonner les photos"
 
@@ -2879,7 +2897,7 @@ msgstr "Historique des commandes"
 #: ../ui/shop/products/product_view.xml.en:34
 msgctxt "paragraph"
 msgid "Out of stock."
-msgstr ""
+msgstr "En rupture de stock."
 
 #: ../payments/paybox/enumerates.py:62
 msgid "PAYBOX DIRECT"
@@ -2944,11 +2962,11 @@ msgstr "Mot de passe"
 
 #: ../payments/paybox/enumerates.py:103
 msgid "Paybox IP address invalid"
-msgstr ""
+msgstr "Adresse IP Paybox invalide"
 
 #: ../payments/paybox/paybox_views.py:85
 msgid "Paybox Identifiant"
-msgstr ""
+msgstr "Identifiant Paybox"
 
 #: ../payments/paybox/paybox_views.py:84
 msgid "Paybox Rang"
@@ -2973,7 +2991,7 @@ msgstr ""
 
 #: ../payments/paybox/paybox_views.py:169
 msgid "Paybox problem"
-msgstr ""
+msgstr "Problème Paybox"
 
 #: ../payments/payments_views.py:252
 msgid "Payed ?"
@@ -3166,7 +3184,7 @@ msgstr "Impact sur le prix"
 
 #: ../products/product_views.py:481
 msgid "Price variation (HT)"
-msgstr ""
+msgstr "Variation du prix (HT)"
 
 #: ../shipping/shipping_way.py:137
 msgid "Prices"
@@ -3241,7 +3259,7 @@ msgctxt "table cell"
 msgid "Product name"
 msgstr "Nom du produit"
 
-#: ../orders/orders.py:104 ../orders/orders.py:219 ../products/product.py:729
+#: ../orders/orders.py:104 ../orders/orders.py:219 ../products/product.py:728
 #: ../shop.py:137
 msgid "Products"
 msgstr "Produits"
@@ -3267,7 +3285,7 @@ msgstr "Informations publiques sur l'utilisateur"
 
 #: ../products/product_views.py:175
 msgid "Publication state"
-msgstr ""
+msgstr "Etat de publication"
 
 #: ../orders/orders.py:119 ../orders/orders_views.py:50
 #: ../ui/shop/orders/order_facture.xml.en:64
@@ -3282,7 +3300,7 @@ msgstr "Quantité"
 
 #: ../products/product_views.py:146
 msgid "Quantity in stock insufficient."
-msgstr ""
+msgstr "Stock insuffisant."
 
 #: ../ui/shop/products/product_view.xml.en:24
 msgctxt "paragraph"
@@ -3338,11 +3356,11 @@ msgstr "Référence"
 
 #: ../products/enumerate.py:125
 msgid "Refuse orders but product remain public"
-msgstr ""
+msgstr "Refuser les commandes mais garder le produit \"public\""
 
 #: ../products/enumerate.py:127
 msgid "Refuse orders. Product becomes private"
-msgstr ""
+msgstr "Refuser les commandes. Le produit devient privé."
 
 #: ../ui/shop/shop_login.xml.en:13
 msgctxt "link"
@@ -3452,11 +3470,11 @@ msgstr "Envoyer le message"
 
 #: ../products/product_views.py:416
 msgid "Send to a friend"
-msgstr ""
+msgstr "Envoyer à un(e) ami(e)"
 
 #: ../products/product_views.py:417
 msgid "Send to my friend"
-msgstr ""
+msgstr "Envoyer à mon ami(e)"
 
 #: ../shipping/enumerates.py:29
 msgid "Sended"
@@ -3633,7 +3651,7 @@ msgstr ""
 
 #: ../orders/orders.py:118
 msgid "Tax"
-msgstr ""
+msgstr "Taxe"
 
 #: ../products/taxes.py:56 ../shop.py:168
 msgid "Taxes"
@@ -3645,7 +3663,7 @@ msgstr "Arrêt momentané du système"
 
 #: ../shop.py:159
 msgid "Terms and conditions of user"
-msgstr ""
+msgstr "Conditions d'utilisations"
 
 #: ../ui/shop/shop_recapitulatif.xml.en:55
 msgctxt "heading"
@@ -4026,7 +4044,7 @@ msgstr "Impact sur le poids"
 
 #: ../products/product_views.py:482
 msgid "Weigth variation"
-msgstr ""
+msgstr "Variation de poids"
 
 #: ../ui/shop/shop_view.xml.en:21
 msgctxt "paragraph"
@@ -4120,6 +4138,16 @@ msgid ""
 " {message}\n"
 "\n"
 msgstr ""
+"Votre ami(e) {my_name} vous conseille ce produit :\n"
+"\n"
+" {product_title}\n"
+"\n"
+"Tous les détails ici :\n"
+"\n"
+" {product_uri}\n"
+"\n"
+" {message}\n"
+"\n"
 
 #: ../user.py:105
 msgid "Your inscription has been validated"
@@ -4180,12 +4208,12 @@ msgstr ""
 
 #: ../products/product_views.py:433
 msgid "{my_name} advice you this product: {product_title}"
-msgstr ""
+msgstr "{my_name} vous conseille ce produit : {product_title}"
 
 #: ../ui/shop/shop_user_manage.xml.en:8
 msgctxt "link"
 msgid "« Go to the customers list"
-msgstr ""
+msgstr "« Aller à la liste des clients"
 
 #: ../ui/shop/browse_batch.xml.en:13
 msgctxt "link"
