@@ -188,10 +188,10 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             schema = product_model.get_model_schema()
 
         for language in languages:
+            texts = result.setdefault(language, [])
             for key in ('title', 'description'):
                 value = self.get_property(key, language=language)
                 if value:
-                    texts = result.setdefault(language, [])
                     texts.append(value)
 
             # data (html)
@@ -199,7 +199,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             text = [ unicode(value, 'utf-8') for event, value, line in events
                      if event == TEXT ]
             if text:
-                texts = result.setdefault(language, [])
                 texts.append(u' '.join(text))
 
             # Dynamic properties
