@@ -284,6 +284,7 @@ class Products_View(Folder_BrowseContent):
         ('cover', MSG(u'Cover')),
         ('reference', MSG(u'Reference')),
         ('title', MSG(u'Title')),
+        ('price', MSG(u'Price')),
         ('mtime', MSG(u'Last Modified')),
         ('product_model', MSG(u'Product model')),
         ('workflow_state', MSG(u'State'))
@@ -357,6 +358,8 @@ class Products_View(Folder_BrowseContent):
             abspath = context.resource.get_abspath()
             path = abspath.get_pathto(item_resource.get_virtual_path())
             return item_resource.get_title(), path
+        elif column == 'price':
+            return '%s €' % item_resource.get_price_with_tax(pretty=True)
         elif column == 'product_model':
             product_model = item_resource.get_property('product_model')
             return ProductModelsEnumerate.get_value(product_model)
