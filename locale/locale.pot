@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-09-03 09:09+CET\n"
+"POT-Creation-Date: 2009-09-03 14:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../addresses.py:103
+#: ../addresses.py:104
 msgid "\n      Please give a name to your address.\n      "
 msgstr ""
 
@@ -23,19 +23,19 @@ msgstr ""
 msgid "\nHi,\nA new order has been done in your shop.\nYou can found details here:\n\n  {order_uri}\n\n\n-- \n{shop_signature}\n"
 msgstr ""
 
-#: ../products/product_views.py:532
+#: ../products/product_views.py:535
 msgid " (+ %s kg)"
 msgstr ""
 
-#: ../products/product_views.py:520
+#: ../products/product_views.py:523
 msgid " (+ %s €)"
 msgstr ""
 
-#: ../products/product_views.py:535
+#: ../products/product_views.py:538
 msgid " (- %s kg)"
 msgstr ""
 
-#: ../products/product_views.py:523
+#: ../products/product_views.py:526
 msgid " (- %s €)"
 msgstr ""
 
@@ -181,18 +181,18 @@ msgstr ""
 msgid "${transaction}<x id='1'/> Id payment:"
 msgstr ""
 
-#: ../products/product_views.py:529
+#: ../products/product_views.py:532
 msgid "%s "
 msgstr ""
 
-#: ../products/product_views.py:517
-#: ../products/product_views.py:519
+#: ../products/product_views.py:520
 #: ../products/product_views.py:522
+#: ../products/product_views.py:525
 msgid "%s HT"
 msgstr ""
 
-#: ../products/product_views.py:531
 #: ../products/product_views.py:534
+#: ../products/product_views.py:537
 msgid "%s kg"
 msgstr ""
 
@@ -201,11 +201,11 @@ msgstr ""
 msgid "%s €"
 msgstr ""
 
-#: ../addresses.py:105
+#: ../addresses.py:106
 msgid "(Example: Home, Office)"
 msgstr ""
 
-#: ../products/product_views.py:355
+#: ../products/product_views.py:356
 msgid "-"
 msgstr ""
 
@@ -279,11 +279,11 @@ msgstr ""
 #: ../shop_views.py:209
 #: ../payments/check/check_views.py:126
 #: ../payments/cash/cash_views.py:88
-#: ../addresses.py:111
+#: ../addresses.py:112
 msgid "Address"
 msgstr ""
 
-#: ../addresses.py:112
+#: ../addresses.py:113
 msgid "Address (next)"
 msgstr ""
 
@@ -296,7 +296,7 @@ msgstr ""
 msgid "Addresses"
 msgstr ""
 
-#: ../addresses.py:87
+#: ../addresses.py:88
 msgid "Adresse"
 msgstr ""
 
@@ -329,7 +329,7 @@ msgstr ""
 msgid "Amount of withdrawal past the limit"
 msgstr ""
 
-#: ../products/product_views.py:462
+#: ../products/product_views.py:465
 msgid "An email has been send to your friend"
 msgstr ""
 
@@ -422,7 +422,7 @@ msgstr ""
 #: ../shop.py:130
 #: ../products/product_views.py:63
 #: ../products/product_views.py:186
-#: ../products/product_views.py:307
+#: ../products/product_views.py:308
 #: ../website.py:34
 #: ../categories.py:113
 #: ../categories.py:200
@@ -523,7 +523,7 @@ msgstr ""
 msgid "Countries"
 msgstr ""
 
-#: ../addresses.py:115
+#: ../addresses.py:116
 msgid "Country"
 msgstr ""
 
@@ -598,8 +598,8 @@ msgstr ""
 msgid "Declination not exist"
 msgstr ""
 
-#: ../products/product_views.py:469
-#: ../products/product_views.py:555
+#: ../products/product_views.py:472
+#: ../products/product_views.py:558
 msgid "Declinations"
 msgstr ""
 
@@ -694,13 +694,13 @@ msgstr ""
 
 #: ../user.py:64
 #: ../shop_views.py:198
-#: ../shop_views.py:684
-#: ../shop_views.py:700
+#: ../shop_views.py:690
+#: ../shop_views.py:706
 #: ../products/enumerate.py:111
 msgid "Email"
 msgstr ""
 
-#: ../products/product_views.py:429
+#: ../products/product_views.py:432
 msgid "Email of your friend"
 msgstr ""
 
@@ -830,17 +830,17 @@ msgstr ""
 
 #: ../user.py:67
 #: ../shop_views.py:201
-#: ../shop_views.py:682
-#: ../shop_views.py:698
-#: ../addresses.py:109
+#: ../shop_views.py:688
+#: ../shop_views.py:704
+#: ../addresses.py:110
 msgid "Firstname"
 msgstr ""
 
-#: ../shop_views.py:681
+#: ../shop_views.py:687
 msgid "Gender"
 msgstr ""
 
-#: ../addresses.py:108
+#: ../addresses.py:109
 msgid "Genre"
 msgstr ""
 
@@ -871,8 +871,8 @@ msgstr ""
 #: ../shipping/shippings_views.py:78
 #: ../payments/paybox/paybox_views.py:48
 #: ../payments/payments_views.py:144
-#: ../shop_views.py:680
-#: ../shop_views.py:697
+#: ../shop_views.py:686
+#: ../shop_views.py:703
 msgid "Id"
 msgstr ""
 
@@ -993,15 +993,15 @@ msgstr ""
 msgid "La livraison de votre commande est assurée en Colissimo. A compter de la prise en charge par La Poste, vous êtes livré à domicile en 48 h(1)sous réserve des heures limites de dépôt."
 msgstr ""
 
-#: ../products/product_views.py:287
+#: ../products/product_views.py:288
 msgid "Last Modified"
 msgstr ""
 
 #: ../user.py:66
 #: ../shop_views.py:200
-#: ../shop_views.py:683
-#: ../shop_views.py:699
-#: ../addresses.py:110
+#: ../shop_views.py:689
+#: ../shop_views.py:705
+#: ../addresses.py:111
 msgid "Lastname"
 msgstr ""
 
@@ -1103,7 +1103,7 @@ msgstr ""
 
 #: ../categories_views.py:269
 #: ../products/product_views.py:60
-#: ../products/product_views.py:477
+#: ../products/product_views.py:480
 #: ../products/images.py:72
 msgid "Name"
 msgstr ""
@@ -1430,6 +1430,7 @@ msgstr ""
 
 #: ../shipping/shipping_way.py:64
 #: ../shipping/shipping_way.py:116
+#: ../products/product_views.py:287
 msgid "Price"
 msgstr ""
 
@@ -1437,7 +1438,7 @@ msgstr ""
 msgid "Price impact value"
 msgstr ""
 
-#: ../products/product_views.py:481
+#: ../products/product_views.py:484
 msgid "Price variation (HT)"
 msgstr ""
 
@@ -1445,7 +1446,7 @@ msgstr ""
 msgid "Prices"
 msgstr ""
 
-#: ../products/product_views.py:392
+#: ../products/product_views.py:395
 msgid "Print product"
 msgstr ""
 
@@ -1458,7 +1459,7 @@ msgid "Private ?"
 msgstr ""
 
 #: ../products/product.py:72
-#: ../products/product_views.py:426
+#: ../products/product_views.py:429
 #: ../orders/orders_views.py:47
 #: ../ui/shop/orders/order_facture.xml.en:62
 #: ../products/cross_selling.py:68
@@ -1483,8 +1484,8 @@ msgid "Product deleted !"
 msgstr ""
 
 #: ../products/product_views.py:61
-#: ../products/product_views.py:288
-#: ../products/product_views.py:306
+#: ../products/product_views.py:289
+#: ../products/product_views.py:307
 msgid "Product model"
 msgstr ""
 
@@ -1558,8 +1559,8 @@ msgstr ""
 #: ../products/declination.py:50
 #: ../products/product_views.py:177
 #: ../products/product_views.py:285
-#: ../products/product_views.py:303
-#: ../products/product_views.py:479
+#: ../products/product_views.py:304
+#: ../products/product_views.py:482
 msgid "Reference"
 msgstr ""
 
@@ -1624,11 +1625,11 @@ msgstr ""
 msgid "Selling price"
 msgstr ""
 
-#: ../products/product_views.py:416
+#: ../products/product_views.py:419
 msgid "Send to a friend"
 msgstr ""
 
-#: ../products/product_views.py:417
+#: ../products/product_views.py:420
 msgid "Send to my friend"
 msgstr ""
 
@@ -1708,8 +1709,8 @@ msgstr ""
 #: ../user_views.py:90
 #: ../payments/payments_views.py:151
 #: ../shipping/shippings_views.py:82
-#: ../products/product_views.py:289
-#: ../products/product_views.py:305
+#: ../products/product_views.py:290
+#: ../products/product_views.py:306
 #: ../shipping/shipping_way.py:63
 #: ../orders/orders_views.py:91
 #: ../payments/payment_way.py:55
@@ -1724,7 +1725,7 @@ msgstr ""
 msgid "Stock"
 msgstr ""
 
-#: ../products/product_views.py:480
+#: ../products/product_views.py:483
 #: ../products/declination.py:51
 msgid "Stock quantity"
 msgstr ""
@@ -1795,11 +1796,11 @@ msgstr ""
 msgid "There are {n} categories"
 msgstr ""
 
-#: ../shop_views.py:673
+#: ../shop_views.py:679
 msgid "There are {n} customers"
 msgstr ""
 
-#: ../products/product_views.py:473
+#: ../products/product_views.py:476
 msgid "There are {n} declinations."
 msgstr ""
 
@@ -1835,11 +1836,11 @@ msgstr ""
 msgid "There is 1 category"
 msgstr ""
 
-#: ../shop_views.py:672
+#: ../shop_views.py:678
 msgid "There is 1 customer"
 msgstr ""
 
-#: ../products/product_views.py:472
+#: ../products/product_views.py:475
 msgid "There is 1 declination"
 msgstr ""
 
@@ -1902,7 +1903,7 @@ msgstr ""
 #: ../enumerate_table.py:227
 #: ../products/product_views.py:178
 #: ../products/product_views.py:286
-#: ../products/product_views.py:304
+#: ../products/product_views.py:305
 #: ../shipping/shipping_way_views.py:37
 #: ../products/images_views.py:37
 #: ../products/models.py:111
@@ -1937,7 +1938,7 @@ msgid "Total price"
 msgstr ""
 
 #: ../shop_views.py:211
-#: ../addresses.py:114
+#: ../addresses.py:115
 msgid "Town"
 msgstr ""
 
@@ -2008,7 +2009,7 @@ msgid "Validate the payment"
 msgstr ""
 
 #: ../products/models_views.py:46
-#: ../shop_views.py:670
+#: ../shop_views.py:676
 #: ../user_views.py:114
 #: ../categories_views.py:88
 #: ../categories_views.py:260
@@ -2050,7 +2051,7 @@ msgstr ""
 msgid "Weight impact value"
 msgstr ""
 
-#: ../products/product_views.py:482
+#: ../products/product_views.py:485
 msgid "Weigth variation"
 msgstr ""
 
@@ -2071,7 +2072,7 @@ msgstr ""
 msgid "You are not authorized to do that !"
 msgstr ""
 
-#: ../products/product_views.py:431
+#: ../products/product_views.py:434
 msgid "You can write a message for your friend"
 msgstr ""
 
@@ -2095,11 +2096,11 @@ msgstr ""
 msgid "Your cart is invalid or your payment has been recorded."
 msgstr ""
 
-#: ../products/product_views.py:427
+#: ../products/product_views.py:430
 msgid "Your email"
 msgstr ""
 
-#: ../products/product_views.py:434
+#: ../products/product_views.py:437
 msgid "Your friend {my_name} advice you this product: \n\n {product_title}\n\nAll details are here:\n\n {product_uri}\n\n {message}\n\n"
 msgstr ""
 
@@ -2112,7 +2113,7 @@ msgstr ""
 msgid "Your message has been sent"
 msgstr ""
 
-#: ../products/product_views.py:428
+#: ../products/product_views.py:431
 msgid "Your name"
 msgstr ""
 
@@ -2120,7 +2121,7 @@ msgstr ""
 msgid "Your order has been send."
 msgstr ""
 
-#: ../addresses.py:113
+#: ../addresses.py:114
 msgid "Zip Code"
 msgstr ""
 
@@ -2137,7 +2138,7 @@ msgstr ""
 msgid "s"
 msgstr ""
 
-#: ../products/product_views.py:433
+#: ../products/product_views.py:436
 msgid "{my_name} advice you this product: {product_title}"
 msgstr ""
 
@@ -2444,6 +2445,11 @@ msgstr ""
 #: ../ui/shop/payments/paybox/end.xml.en:10
 msgctxt "div"
 msgid "Payment state:"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:39
+msgctxt "div"
+msgid "Same that delivery address."
 msgstr ""
 
 #: ../ui/shop/shop_view_cart.xml.en:12
@@ -2855,6 +2861,11 @@ msgctxt "link"
 msgid "${title}"
 msgstr ""
 
+#: ../ui/shop/shop_addresses.xml.en:40
+msgctxt "link"
+msgid "(Edit)"
+msgstr ""
+
 #: ../ui/shop/orders/order_view.xml.en:13
 msgctxt "link"
 msgid "<g id='1'> ${customer/gender} ${customer/title} (${customer/email}) </g><x id='2'/> Order state:"
@@ -2873,11 +2884,6 @@ msgstr ""
 #: ../ui/shop/template.xhtml.en:98
 msgctxt "link"
 msgid "<g id='30'>About</g> - <g id='31'>Credits</g> - <g id='32'>License</g>"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:40
-msgctxt "link"
-msgid "<g id='9'>(Edit)</g>  </g>"
 msgstr ""
 
 #: ../ui/shop/template.xhtml.en:32
@@ -3071,14 +3077,14 @@ msgctxt "paragraph"
 msgid "${bill_address/address_2}"
 msgstr ""
 
-#: ../ui/shop/shop_addresses.xml.en:43
-msgctxt "paragraph"
-msgid "${bill_address/firstname} ${bill_address/lastname}<x id='10'/> ${bill_address/address_1}"
-msgstr ""
-
 #: ../ui/shop/shop_recapitulatif.xml.en:37
 msgctxt "paragraph"
 msgid "${bill_address/firstname} ${bill_address/lastname}<x id='8'/> ${bill_address/address_1}"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:43
+msgctxt "paragraph"
+msgid "${bill_address/firstname} ${bill_address/lastname}<x id='9'/> ${bill_address/address_1}"
 msgstr ""
 
 #: ../ui/shop/shop_recapitulatif.xml.en:42
@@ -3088,7 +3094,7 @@ msgstr ""
 
 #: ../ui/shop/shop_addresses.xml.en:48
 msgctxt "paragraph"
-msgid "${bill_address/zipcode} ${bill_address/town}<x id='13'/> ${bill_address/country}<x id='14'/>  <g id='15'>(Edit)</g>"
+msgid "${bill_address/zipcode} ${bill_address/town}<x id='12'/> ${bill_address/country}<x id='13'/>  <g id='14'>(Edit)</g>"
 msgstr ""
 
 #: ../ui/shop/shop_addresses.xml.en:30
@@ -3387,9 +3393,9 @@ msgctxt "span"
 msgid "<g id='6'> Same that delivery address."
 msgstr ""
 
-#: ../ui/shop/shop_addresses.xml.en:38
-msgctxt "span"
-msgid "<g id='7'> Same that delivery address."
+#: ../ui/shop/shop_user_manage.xml.en:140
+msgctxt "table cell"
+msgid "${address/address_1}<x id='18'/> ${address/address_2}"
 msgstr ""
 
 #: ../ui/shop/addresses_book.xml.en:25
@@ -3397,14 +3403,34 @@ msgctxt "table cell"
 msgid "${address/address_2}"
 msgstr ""
 
+#: ../ui/shop/shop_user_manage.xml.en:145
+msgctxt "table cell"
+msgid "${address/country}"
+msgstr ""
+
 #: ../ui/shop/addresses_book.xml.en:22
 msgctxt "table cell"
 msgid "${address/firstname} ${address/lastname}<x id='1'/> ${address/address_1}"
 msgstr ""
 
+#: ../ui/shop/shop_user_manage.xml.en:138
+msgctxt "table cell"
+msgid "${address/gender} ${address/lastname} ${address/firstname}"
+msgstr ""
+
 #: ../ui/shop/addresses_book.xml.en:19
 msgctxt "table cell"
 msgid "${address/title}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:144
+msgctxt "table cell"
+msgid "${address/town}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:143
+msgctxt "table cell"
+msgid "${address/zipcode}"
 msgstr ""
 
 #: ../ui/shop/addresses_book.xml.en:27
@@ -4133,6 +4159,11 @@ msgstr ""
 #: ../ui/shop/orders/order_manage.xml.en:238
 msgctxt "table cell"
 msgid "Unit price HT"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:132
+msgctxt "table cell"
+msgid "User addresses"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:88

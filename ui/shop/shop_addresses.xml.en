@@ -35,10 +35,10 @@
         </p>
       </td>
       <td>
-        <span stl:if="not bill_address">
+        <div stl:if="not bill_address">
           Same that delivery address.<br/>
           <a href=";addresses_book">(Edit)</a>
-        </span>
+        </div>
         <p stl:if="bill_address">
           ${bill_address/firstname} ${bill_address/lastname}<br/>
           ${bill_address/address_1}<br/>
