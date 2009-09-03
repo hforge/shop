@@ -122,10 +122,12 @@ class Shop_ProductSearch(VirtualCategories_View):
                                      PhraseQuery('title', word),
                                      PhraseQuery('description', word),
                                      PhraseQuery('data', word),
+                                     PhraseQuery('text', word),
                                      # Alternative
                                      PhraseQuery('title', alternative),
                                      PhraseQuery('description', alternative),
-                                     PhraseQuery('data', alternative))
+                                     PhraseQuery('data', alternative),
+                                     PhraseQuery('text', alternative))
                 query.append(plain_text)
         results = context.root.search(AndQuery(*query))
         # XXX Hack results
