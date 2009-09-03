@@ -77,6 +77,7 @@ class BaseAddresses(BaseTable):
         namespace = self.get_record_kw(id)
         namespace['country'] = CountriesEnumerate.get_value(
                                   namespace['country'])
+        namespace['gender'] = Civilite.get_value(namespace['gender'])
         return namespace
 
 

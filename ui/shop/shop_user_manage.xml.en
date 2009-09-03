@@ -82,7 +82,7 @@
     </tbody>
   </table>
 
-  <table class="order-browse" style="width:100%">
+  <table class="order-browse">
     <thead>
       <tr>
         <th>
@@ -122,6 +122,39 @@
       </tr>
     </tbody>
   </table>
+
+
+  <table class="order-browse">
+    <thead>
+      <tr>
+        <th colspan="5">
+          <img src="/ui/icons/16x16/view.png"/>
+          User addresses
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px" stl:repeat="address addresses">
+        <td>${address/gender} ${address/lastname} ${address/firstname}</td>
+        <td>
+          ${address/address_1}<br/>
+          ${address/address_2}
+        </td>
+        <td>${address/zipcode}</td>
+        <td>${address/town}</td>
+        <td>${address/country}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+
+
+
+
+
+
 
 
 </stl:block>

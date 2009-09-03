@@ -660,7 +660,13 @@ class Shop_CustomerManage(STLView):
                    'href': resource.get_pathto(order),
                    'amount': order.get_property('total_price')})
         namespace['nb_orders'] = nb_orders
-        # Customer addresses # TODO
+        # Customer addresses
+        namespace['addresses'] = []
+        addresses = shop.get_resource('addresses').handler
+        for record in addresses.search(user=user.name):
+            namespace['addresses'].append(
+                addresses.get_record_namespace(record.id))
+
         return namespace
 
 
