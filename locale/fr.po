@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-09-01 17:09+CET\n"
+"POT-Creation-Date: 2009-09-02 09:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1477,7 +1477,7 @@ msgstr "Montant :"
 msgid "An email has been send to your friend"
 msgstr "Un email a été envoyé à votre ami"
 
-#: ../shipping/withdrawal.py:87
+#: ../shipping/withdrawal.py:83
 msgid "Appointment taken"
 msgstr "Rendez-vous pris"
 
@@ -1778,7 +1778,7 @@ msgstr "Continuer"
 msgid "Corps de l'article"
 msgstr ""
 
-#: ../countries.py:70 ../shipping/shipping_way.py:118
+#: ../countries.py:70 ../shipping/shipping_way.py:114
 msgid "Countries"
 msgstr "Pays"
 
@@ -1946,7 +1946,7 @@ msgstr "Livraison réalisée"
 msgid "Delivery ongoing"
 msgstr "Livraison en cours"
 
-#: ../shipping/withdrawal.py:108 ../products/cross_selling_views.py:236
+#: ../shipping/withdrawal.py:102 ../products/cross_selling_views.py:236
 #: ../payments/payment_way_views.py:78 ../products/product_views.py:179
 #: ../categories_views.py:293 ../shipping/shippings_views.py:51
 #: ../payments/payments_views.py:254 ../shipping/shipping_way_views.py:38
@@ -2081,7 +2081,7 @@ msgstr "Activer"
 msgid "Enabled ?"
 msgstr "Actif ?"
 
-#: ../shipping/withdrawal.py:88
+#: ../shipping/withdrawal.py:84
 msgid "End"
 msgstr "Fin"
 
@@ -2183,7 +2183,7 @@ msgstr "Date de fin de validité incorrecte"
 msgid "Expiry date of the card passed"
 msgstr "Date d'expiration de la carte dépassée"
 
-#: ../shipping/shipping_way.py:64
+#: ../shipping/shipping_way.py:62
 msgid "Facture number"
 msgstr "Numéro de facture"
 
@@ -2273,7 +2273,7 @@ msgstr ""
 "\n"
 "\n"
 
-#: ../shipping/shipping_way.py:135
+#: ../shipping/shipping_way.py:227
 msgid "History"
 msgstr "Historique"
 
@@ -2591,7 +2591,7 @@ msgstr "Gérer/Modifier le paiement"
 msgid "Mandatory"
 msgstr "Obligatoire"
 
-#: ../shipping/shipping_way.py:119
+#: ../shipping/shipping_way.py:115
 msgid "Max Weight (Kg)"
 msgstr "Poids maximal (Kg)"
 
@@ -2654,7 +2654,7 @@ msgstr "Schéma du modèle"
 msgid "Model schema"
 msgstr "Schéma du modèle"
 
-#: ../shipping/withdrawal.py:78
+#: ../shipping/withdrawal.py:74
 msgid "Modifications ok"
 msgstr ""
 
@@ -3168,7 +3168,7 @@ msgstr "Prix d'achat HT"
 msgid "Preview"
 msgstr "Aperçu"
 
-#: ../shipping/shipping_way.py:66 ../shipping/shipping_way.py:120
+#: ../shipping/shipping_way.py:64 ../shipping/shipping_way.py:116
 msgid "Price"
 msgstr "Prix"
 
@@ -3186,7 +3186,7 @@ msgstr "Impact sur le prix"
 msgid "Price variation (HT)"
 msgstr "Variation du prix (HT)"
 
-#: ../shipping/shipping_way.py:137
+#: ../shipping/shipping_way.py:229
 msgid "Prices"
 msgstr "Prix"
 
@@ -3484,7 +3484,7 @@ msgstr "Envoyé"
 msgid "Server inaccessible (set by the server)"
 msgstr "Serveur inaccessible (positionné par le serveur)"
 
-#: ../shop.py:155 ../shipping/shipping_way.py:127 ../shipping/shippings.py:35
+#: ../shop.py:155 ../shipping/shipping_way.py:123 ../shipping/shippings.py:35
 #: ../ui/shop/orders/order_facture.xml.en:74
 msgid "Shipping"
 msgstr "Livraison"
@@ -3495,7 +3495,7 @@ msgctxt "table cell"
 msgid "Shipping"
 msgstr "Livraison"
 
-#: ../shipping/shipping_way.py:112
+#: ../shipping/shipping_way.py:108
 msgid "Shipping Prices"
 msgstr "Prix de la livraison"
 
@@ -3573,7 +3573,7 @@ msgstr "Modèle standard"
 
 #: ../user_views.py:90 ../payments/payments_views.py:151
 #: ../shipping/shippings_views.py:82 ../products/product_views.py:289
-#: ../products/product_views.py:305 ../shipping/shipping_way.py:65
+#: ../products/product_views.py:305 ../shipping/shipping_way.py:63
 #: ../orders/orders_views.py:91 ../payments/payment_way.py:55
 msgid "State"
 msgstr "État"
@@ -4009,7 +4009,7 @@ msgstr "Voir les détails du modèle"
 msgid "Visible"
 msgstr ""
 
-#: ../shipping/withdrawal.py:86
+#: ../shipping/withdrawal.py:82
 msgid "Waiting for an appointment"
 msgstr "En attente de prise de RDV"
 
@@ -4028,7 +4028,7 @@ msgctxt "paragraph"
 msgid "We're waiting for customer payment"
 msgstr "En attente du paiement client"
 
-#: ../orders/orders.py:115 ../shipping/shipping_way.py:67
+#: ../orders/orders.py:115 ../shipping/shipping_way.py:65
 #: ../products/product_views.py:184
 msgid "Weight"
 msgstr "Poids"
@@ -4051,17 +4051,13 @@ msgctxt "paragraph"
 msgid "Welcome in your shop control panel !"
 msgstr "Bienvenue dans le panneau d'administration de votre boutique"
 
-#: ../shipping/withdrawal.py:103 ../shipping/withdrawal.py:123
+#: ../shipping/withdrawal.py:98 ../shipping/withdrawal.py:115
 msgid "Withdrawal"
 msgstr "Retrait au magasin"
 
 #: ../ui/shop/shipping/withdrawal_record_order_view.xml.en:7
 msgctxt "heading"
 msgid "Withdrawal to the shop"
-msgstr "Retrait au magasin"
-
-#: ../shipping/withdrawal.py:124
-msgid "Withdrawal to the store."
 msgstr "Retrait au magasin"
 
 #: ../shipping/shippings_views.py:63
@@ -4248,6 +4244,23 @@ msgstr "€<x id='14'/> Prix de vente final:"
 #: ../ui/shop/widgets/taxes.xml.en:11
 msgid "€<x id='6'/> Tax:"
 msgstr "€<x id='6'/> TVA:"
+
+#~ msgid ""
+#~ "\n"
+#~ "        <form method=\"POST\">\n"
+#~ "          Withdrawal to the store\n"
+#~ "          <input type=\"submit\" id=\"button-order\" value=\"Ok\"/>\n"
+#~ "          <input type=\"hidden\" name=\"shipping\" value=\"${name}\"/>\n"
+#~ "        </form>\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "        <form method=\"POST\">\n"
+#~ "          Retrait au magasin\n"
+#~ "          <input type=\"submit\" id=\"button-order\" value=\"Ok\"/>\n"
+#~ "          <input type=\"hidden\" name=\"shipping\" value=\"${name}\"/>\n"
+#~ "        </form>\n"
+#~ "        "
 
 #, fuzzy
 #~ msgctxt "paragraph"
@@ -4455,6 +4468,9 @@ msgstr "€<x id='6'/> TVA:"
 
 #~ msgid "User"
 #~ msgstr "Utilisateur"
+
+#~ msgid "Withdrawal to the store."
+#~ msgstr "Retrait au magasin"
 
 #~ msgctxt "link"
 #~ msgid "Your can see order details here."

@@ -46,15 +46,13 @@ from schema import delivery_schema
 from shipping_way_views import ShippingWay_Configure
 
 
-
 class ShippingWayBaseTable(BaseTable):
 
     record_schema = {
         'ref': String(Unique=True, is_indexed=True),
         'state': ShippingStates,
         'price': Decimal,
-        'weight': Decimal
-        }
+        'weight': Decimal }
 
 
 
@@ -64,8 +62,7 @@ class ShippingWayTable(Table):
         TextWidget('ref', title=MSG(u'Facture number')),
         SelectWidget('state', title=MSG(u'State')),
         TextWidget('price', title=MSG(u'Price')),
-        TextWidget('weight', title=MSG(u'Weight')),
-        ]
+        TextWidget('weight', title=MSG(u'Weight'))]
 
     def get_record_namespace(self, context, record):
         namespace = {}
@@ -101,8 +98,7 @@ class ShippingPricesTable(BaseTable):
       'countries': CountriesEnumerate(mandatory=True, multiple=True,
                                       is_indexed=True),
       'max-weight': Decimal(mandatory=True, is_indexed=True),
-      'price': Decimal(mandatory=True),
-      }
+      'price': Decimal(mandatory=True)}
 
 
 
@@ -129,15 +125,6 @@ class ShippingWay(ShopFolder):
 
     img = 'ui/shop/images/shipping.png'
 
-    # Views
-    configure = ShippingWay_Configure()
-    history = GoToSpecificDocument(specific_document='history',
-                                  title=MSG(u'History'))
-    prices = GoToSpecificDocument(specific_document='prices',
-                                  title=MSG(u'Prices'))
-
-    # Backoffice order views
-    order_add_view = None
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
@@ -151,9 +138,9 @@ class ShippingWay(ShopFolder):
         # Import CSV with prices
         ShippingPrices._make_resource(ShippingPrices, folder,
                                       '%s/prices' % name)
-        if kw.has_key('csv'):
+        if getattr(cls, 'csv', None):
             table = ShippingPricesTable()
-            csv = ShippingPricesCSV(kw['csv'])
+            csv = ShippingPricesCSV(get_abspath(cls.csv))
             for row in csv.get_rows():
                 table.add_record({'countries': row.get_value('countries').split('@'),
                                   'max-weight': row.get_value('max-weight'),
@@ -194,12 +181,16 @@ class ShippingWay(ShopFolder):
         return '%s/;download' % uri
 
 
-    def get_namespace(self, context):
-        return  {'name': self.name,
-                 'description': self.get_property('description'),
-                 'logo': self.get_logo(context),
-                 'title': self.get_title()}
+    def get_shipping_option(self, context):
+        return None
 
+
+    def get_namespace(self, context):
+        language = self.get_content_language(context)
+        return  {'name': self.name,
+                 'description': self.get_property('description', language),
+                 'logo': self.get_logo(context),
+                 'title': self.get_title(language)}
 
 
     html_form = list(XMLParser("""
@@ -219,18 +210,26 @@ class ShippingWay(ShopFolder):
         ns = {'name': self.name,
               'price': price}
         html_form = stl(events=self.html_form, namespace=ns)
+        language = self.get_content_language(context)
         ns = {'name': self.name,
               'img': self.get_logo(context),
-              'title': self.get_title(),
+              'title': self.get_title(language),
               'price': price,
               'html_form': html_form}
         for key in ['description', 'enabled']:
-            ns[key] = self.get_property(key)
+            ns[key] = self.get_property(key, language)
         return ns
 
 
-    def get_shipping_option(self, context):
-        return None
+    # Views
+    configure = ShippingWay_Configure()
+    history = GoToSpecificDocument(specific_document='history',
+                                  title=MSG(u'History'))
+    prices = GoToSpecificDocument(specific_document='prices',
+                                  title=MSG(u'Prices'))
+
+    # Backoffice order views
+    order_add_view = None
 
 
 

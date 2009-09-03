@@ -51,11 +51,11 @@ class Colissimo_RecordEdit(Colissimo_RecordView):
 
 class Colissimo_RecordAdd(STLForm):
 
+    access = 'is_admin'
     template = '/ui/shop/shipping/colissimo_add_record.xml'
 
-    access = 'is_admin'
-
     schema = {'num_colissimo': String(mandatory=True)}
+
 
     def get_namespace(self, resource, context):
         return self.build_namespace(resource, context)
@@ -88,36 +88,34 @@ class ColissimoTable(ShippingWayTable):
     class_handler = ColissimoBaseTable
 
     form = ShippingWayTable.form + [
-        TextWidget('num_colissimo', title=MSG(u'Numéro de colissimo')),
-        ]
-
+        TextWidget('num_colissimo', title=MSG(u'Numéro de colissimo')) ]
 
 
 
 class Colissimo(ShippingWay):
 
     class_id = 'colissimo'
-    class_title = MSG(u'Colissimo Suivi')
-
-    class_description = MSG(u"La livraison de votre commande est assurée en Colissimo."
-                            u"A compter de la prise en charge par La Poste,"
-                            u"vous êtes livré à domicile en 48 h(1)"
-                            u"sous réserve des heures limites de dépôt")
-
+    class_title = MSG(u'Colissimo suivi')
+    class_description = MSG(u"La livraison de votre commande est assurée en "
+        u"Colissimo. A compter de la prise en charge par La Poste, vous "
+        u"êtes livré à domicile en 48 h(1)" u"sous réserve des heures "
+        u"limites de dépôt.")
     img = '../ui/shop/images/colissimo.png'
-
-
-    order_view = Colissimo_RecordView()
-    order_add_view = Colissimo_RecordAdd()
-    order_edit_view = Colissimo_RecordEdit()
+    csv = '../data/colissimo.csv'
 
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        kw['csv'] = get_abspath('../data/colissimo.csv')
+        kw['title'] = {'fr': cls.class_title.gettext()}
+        kw['description'] = {'fr': cls.class_description.gettext()}
         ShippingWay._make_resource(cls, folder, name, *args, **kw)
         ColissimoTable._make_resource(ColissimoTable, folder,
             '%s/history' % name)
+
+    # User inteface
+    order_view = Colissimo_RecordView()
+    order_add_view = Colissimo_RecordAdd()
+    order_edit_view = Colissimo_RecordEdit()
 
 
 register_resource_class(Colissimo)

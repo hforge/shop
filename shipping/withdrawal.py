@@ -19,14 +19,13 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, Enumerate, String, Unicode
+from itools.datatypes import Boolean, Enumerate, Unicode
 from itools.gettext import MSG
-from itools.stl import stl
-from itools.web import STLForm, STLView
+from itools.web import STLForm
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import SelectWidget, TextWidget, MultilineWidget
+from ikaaro.forms import MultilineWidget
 from ikaaro.forms import stl_namespaces
 from ikaaro.registry import register_resource_class
 
@@ -35,16 +34,13 @@ from shipping_way import ShippingWay, ShippingWayBaseTable, ShippingWayTable
 from shop.shop_utils_views import Shop_PluginWay_Form
 
 
-#####################################################
-## Withdrawal
-#####################################################
 class Withdrawal_RecordView(Shop_PluginWay_Form):
 
     template = '/ui/shop/shipping/withdrawal_record_order_view.xml'
 
-
     def get_namespace(self, order, shipping_way, record, context):
         return Shop_PluginWay_Form().get_namespace(shipping_way, context)
+
 
 
 class Withdrawal_RecordEdit(Shop_PluginWay_Form):
@@ -60,10 +56,10 @@ class Withdrawal_RecordEdit(Shop_PluginWay_Form):
 class Withdrawal_RecordAdd(STLForm):
 
     access = 'is_admin'
-
     template = '/ui/shop/shipping/withdrawal_record_order_add.xml'
 
     schema = {'state': Boolean}
+
 
     def get_namespace(self, resource, context):
         return self.build_namespace(resource, context)
@@ -85,8 +81,7 @@ class WithdrawalStates(Enumerate):
     options = [
       {'name': 'appointment',    'value': MSG(u'Waiting for an appointment')},
       {'name': 'appointment_ok', 'value': MSG(u'Appointment taken')},
-      {'name': 'end', 'value': MSG(u'End')},
-      ]
+      {'name': 'end', 'value': MSG(u'End')} ]
 
 
 class WithdrawalBaseTable(ShippingWayBaseTable):
@@ -103,12 +98,8 @@ class WithdrawalTable(ShippingWayTable):
     class_title = MSG(u'Withdrawal')
     class_handler = WithdrawalBaseTable
 
-
     form = ShippingWayTable.form + [
-        MultilineWidget('description', title=MSG(u'Description')),
-        ]
-
-
+        MultilineWidget('description', title=MSG(u'Description')) ]
 
     def get_record_namespace(self, context, record):
         ns = ShippingWayTable.get_record_namespace(self, context, record)
@@ -118,22 +109,16 @@ class WithdrawalTable(ShippingWayTable):
 
 
 class Withdrawal(ShippingWay):
-
+    """Withdrawal to the store.
+    """
     class_id = 'withdrawal'
     class_title = MSG(u'Withdrawal')
-    class_description = MSG(u'Withdrawal to the store.')
+    class_description = MSG(u'Withdrawal at the store')
 
     img = '../ui/shop/images/noship.png'
 
-    # Admin views
-    order_view = Withdrawal_RecordView()
-    order_add_view = Withdrawal_RecordAdd()
-    order_edit_view = Withdrawal_RecordEdit()
-
-
-    html_form = list(XMLParser(u"""
+    html_form = list(XMLParser("""
         <form method="POST">
-          Withdrawal to the store
           <input type="submit" id="button-order" value="Ok"/>
           <input type="hidden" name="shipping" value="${name}"/>
         </form>
@@ -142,6 +127,8 @@ class Withdrawal(ShippingWay):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
+        kw['title'] = {'en': cls.class_title.gettext()}
+        kw['description'] = {'en': cls.class_description.gettext()}
         ShippingWay._make_resource(cls, folder, name, *args, **kw)
         WithdrawalTable._make_resource(WithdrawalTable, folder,
             '%s/history' % name)
@@ -149,6 +136,12 @@ class Withdrawal(ShippingWay):
 
     def get_price(self, country, purchase_price, purchase_weight):
         return decimal(0)
+
+
+    # Admin views
+    order_view = Withdrawal_RecordView()
+    order_add_view = Withdrawal_RecordAdd()
+    order_edit_view = Withdrawal_RecordEdit()
 
 
 register_resource_class(Withdrawal)
