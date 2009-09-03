@@ -7,24 +7,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-09-02 09:09+CET\n"
+"POT-Creation-Date: 2009-09-03 09:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: ../shipping/withdrawal.py:140
-msgid ""
-"\n"
-"        <form method=\"POST\">\n"
-"          Withdrawal to the store\n"
-"          <input type=\"submit\" id=\"button-order\" value=\"Ok\"/>\n"
-"          <input type=\"hidden\" name=\"shipping\" value=\"${name}\"/>\n"
-"        </form>\n"
-"        "
-msgstr ""
 
 #: ../addresses.py:103
 msgid ""
@@ -1634,8 +1623,8 @@ msgstr ""
 msgid "Colissimo"
 msgstr ""
 
-#: ../shipping/colissimo.py:100
-msgid "Colissimo Suivi"
+#: ../shipping/colissimo.py:98
+msgid "Colissimo suivi"
 msgstr ""
 
 #: ../ui/shop/virtualcategory_comparator.xml.en:24
@@ -2421,11 +2410,11 @@ msgctxt "table cell"
 msgid "Keywords"
 msgstr ""
 
-#: ../shipping/colissimo.py:102
+#: ../shipping/colissimo.py:99
 msgid ""
-"La livraison de votre commande est assurée en Colissimo.A compter de la "
-"prise en charge par La Poste,vous êtes livré à domicile en 48 h(1)sous "
-"réserve des heures limites de dépôt"
+"La livraison de votre commande est assurée en Colissimo. A compter de la "
+"prise en charge par La Poste, vous êtes livré à domicile en 48 h(1)sous "
+"réserve des heures limites de dépôt."
 msgstr ""
 
 #: ../products/product_views.py:287
@@ -3983,6 +3972,10 @@ msgstr ""
 
 #: ../shipping/withdrawal.py:98 ../shipping/withdrawal.py:115
 msgid "Withdrawal"
+msgstr ""
+
+#: ../shipping/withdrawal.py:116
+msgid "Withdrawal at the store"
 msgstr ""
 
 #: ../ui/shop/shipping/withdrawal_record_order_view.xml.en:7
