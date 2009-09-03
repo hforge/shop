@@ -50,7 +50,7 @@ from addresses_views import Addresses_Book, Addresses_AddAddress
 from addresses_views import Addresses_EditAddress
 from datatypes import Civilite, ImagePathDataType
 from enumerates import BarcodesFormat
-from utils import get_shop
+from utils import get_shop, format_price
 from cart import ProductCart
 from countries import CountriesEnumerate
 from datatypes import Civilite
@@ -515,6 +515,8 @@ class Shop_ShowRecapitulatif(STLForm):
         shipping_price = shippings.get_namespace_shipping_way(context,
                   shipping_mode, country, total_price, total_weight)['price']
         total_price += shipping_price
+        # Format total_price
+        total_price = decimal(format_price(total_price))
         # We create a new order
         ref = datetime.now().strftime('%y%m%d%M%S')
         kw = {'user': context.user,
