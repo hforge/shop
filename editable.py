@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import String
+from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.web import STLView, get_context
 
@@ -120,4 +120,4 @@ class Editable(object):
 
 
 
-register_field('data', String(is_indexed=True))
+register_field('data', Unicode(is_indexed=True))
