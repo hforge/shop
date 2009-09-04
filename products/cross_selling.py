@@ -21,6 +21,7 @@ from random import shuffle
 from itools.core import merge_dicts
 from itools.datatypes import Integer, Boolean, Unicode
 from itools.gettext import MSG
+from itools.uri import resolve_uri2, Path
 from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery
 from itools.xml import XMLParser
 
@@ -156,6 +157,35 @@ class CrossSellingTable(ResourcesOrderedTable):
                 shuffle(brains)
                 for brain in brains[:diff]:
                     yield root.get_resource(brain.abspath)
+
+
+    def get_links(self):
+        shop = get_shop(self)
+        base = shop.get_canonical_path()
+        links = []
+
+        handler = self.handler
+        get_value = handler.get_record_value
+        for record in handler.get_records_in_order():
+            name = get_value(record, 'name')
+            links.append(str(resolve_uri2(base, 'products/%s' % name)))
+
+        return links
+
+
+    def update_links(self, source, target):
+        shop = get_shop(self)
+        base = shop.get_canonical_path()
+        target_name = Path(target).get_name()
+        links = []
+
+        handler = self.handler
+        get_value = handler.get_record_value
+        for record in handler.get_records_in_order():
+            name = get_value(record, 'name')
+            path = str(resolve_uri2(base, 'products/%s' % name))
+            if path == source:
+                handler.update_record(record.id, **{'name': target_name})
 
 
 
