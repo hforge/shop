@@ -732,8 +732,15 @@ class Products(ShopFolder):
     browse_content = Products_View()
     new_product = Product_NewProduct()
 
+
+    def can_paste(self, source):
+        return isinstance(source, Product)
+
+
     def get_document_types(self):
         return []
+
+
 
 # Product class depents on CrossSellingTable class and vice versa
 CrossSellingTable.orderable_classes = Product
