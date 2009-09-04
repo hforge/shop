@@ -367,6 +367,7 @@ class Products_View(Folder_BrowseContent):
                                                    item, column)
 
 
+
 class Product_ImagesSlider(STLView):
 
     access = True

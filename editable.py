@@ -18,7 +18,7 @@
 # Import from itools
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
-from itools.web import STLView, get_context
+from itools.web import STLView
 
 # Import from ikaaro
 from ikaaro.forms import RTEWidget
@@ -115,7 +115,6 @@ class Editable(object):
             # Save as XHTML
             data = XHTMLBody.encode(events)
             self.set_property('data', data, language=language)
-        get_context().server.change_resource(self)
 
 
 
