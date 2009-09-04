@@ -239,16 +239,25 @@ class ProductsOrderedTable_Ordered(ResourcesOrderedTable_Ordered):
 
 
     def get_item_value(self, resource, context, item, column):
-        if column == 'description':
-            order_root = resource.get_order_root()
-            try:
-                product = order_root.get_resource(item.name)
-            except LookupError:
+        if column in ('title', 'description'):
+            shop = get_shop(resource)
+            product = shop.get_resource('products/%s' % item.name, soft=True)
+            if column == 'title':
+                if product:
+                    title = product.get_title()
+                    return title, context.get_link(product)
+                # Miss
+                return item.name
+            else:
+                if product:
+                    return product.get_property('description')
+                # Miss
                 return None
-            return product.get_property('description')
         return ResourcesOrderedTable_Ordered.get_item_value(self, resource,
                                                             context, item,
                                                             column)
+
+
 
 #####################################
 # XXX HACK utilisation CompositeForm
