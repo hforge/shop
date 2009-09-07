@@ -25,6 +25,7 @@ from itools.web import get_context
 from ikaaro.forms import BooleanRadio, TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
+from ikaaro.table_views import Table_AddRecord
 
 # Import from shop
 from utils import get_shop
@@ -69,9 +70,12 @@ class Countries(Table):
     class_id = 'countries'
     class_title = MSG(u'Countries')
     class_handler = BaseCountries
+    class_views = ['view', 'add_record']
+
+    add_record = Table_AddRecord(title=MSG(u'Add a new country'))
 
     form = [
-        TextWidget('title', title=MSG(u'Title')),
+        TextWidget('title', title=MSG(u'Country title')),
         BooleanRadio('enabled', title=MSG(u'Enabled')),
         ]
 

@@ -167,9 +167,15 @@ class ShippingWay(ShopFolder):
             if purchase_weight < max_weight:
                 list_price_ok[max_weight] = record
         if not list_price_ok:
-            return max_price
-        record = list_price_ok[min(list_price_ok.keys())]
-        return prices.get_record_value(record, 'price')
+            price = max_price
+        else:
+            record = list_price_ok[min(list_price_ok.keys())]
+            price = prices.get_record_value(record, 'price')
+        # We have a minimum price
+        min_price = self.parent.get_property('min_price')
+        if price < min_price:
+            return min_price
+        return price
 
 
     def get_logo(self, context):

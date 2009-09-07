@@ -35,6 +35,29 @@ from shipping_way import ShippingWay
 from schema import delivery_schema
 
 
+class Shippings_Configure(AutoForm):
+
+    access = 'is_admin'
+    title = MSG(u'Configure')
+
+    schema = {'min_price': Decimal}
+
+    widgets = [
+        TextWidget('min_price', title=MSG(u'Minimum price €')),
+        ]
+
+
+    def get_value(self, resource, context, name, datatype):
+        return resource.get_property(name)
+
+
+    def action(self, resource, context, form):
+        resource.set_property('min_price', form['min_price'])
+        # Come back
+        return context.come_back(messages.MSG_CHANGES_SAVED)
+
+
+
 class ShippingsView(Folder_BrowseContent):
 
     access = 'is_admin'

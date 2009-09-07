@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
+from itools.datatypes import Decimal
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -24,6 +26,7 @@ from ikaaro.registry import register_resource_class
 from colissimo import Colissimo
 from withdrawal import Withdrawal
 from shippings_views import ShippingsView, Shippings_History
+from shippings_views import Shippings_Configure
 from shipping_way import ShippingWay
 from shop.utils import ShopFolder
 
@@ -33,11 +36,12 @@ class Shippings(ShopFolder):
 
     class_id = 'shippings'
     class_title = MSG(u'Shipping')
-    class_views = ['view', 'history']
+    class_views = ['view', 'configure', 'history']
 
 
     # Views
     view = ShippingsView()
+    configure = Shippings_Configure()
     history = Shippings_History()
 
 
@@ -51,6 +55,11 @@ class Shippings(ShopFolder):
             c._make_resource(c, folder, '%s/%s' % (name, c.class_id), **kw)
 
 
+    @classmethod
+    def get_metadata_schema(cls):
+        return merge_dicts(ShopFolder.get_metadata_schema(),
+                           min_price=Decimal)
+
 
     def get_document_types(self):
         return []
@@ -59,8 +68,8 @@ class Shippings(ShopFolder):
     def get_price(self, shipping_way, country, purchase_price,
                   purchase_weight):
         shipping_way = self.get_resource(shipping_way)
-        return shipping_way.get_price(country, purchase_price, purchase_weight)
-
+        return shipping_way.get_price(country, purchase_price,
+                                        purchase_weight)
 
     #def get_shipping_ways(self, country, purchase_price, purchase_weight):
     #    ways = []
