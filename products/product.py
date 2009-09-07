@@ -22,6 +22,7 @@ from json import dumps
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate, DateTime
+from itools.datatypes import Integer
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.uri import Path
@@ -155,6 +156,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         order = self.get_resource('order-photos')
         ordered_names = list(order.get_ordered_names())
         values['has_images'] = (len(ordered_names) != 0)
+        # Price # XXX We can't sort decimal, so transform to int
+        values['stored_price'] = int(self.get_property('pre-tax-price') * 100)
         # Creation time
         ctime = self.get_property('ctime')
         values['ctime'] = ctime
@@ -542,8 +545,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def get_price_without_tax(self, id_declination=None, pretty=False):
-        if self.is_buyable() is False:
-            return decimal(0)
         if id_declination:
             declination = self.get_resource(id_declination, soft=True)
             if declination:
@@ -555,11 +556,10 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def get_price_with_tax(self, id_declination=None, pretty=False):
-        if self.is_buyable() is False:
-            return decimal(0)
         price = self.get_price_without_tax(id_declination)
         tax = self.get_property('tax')
-        price = price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
+        tax_value = TaxesEnumerate.get_value(tax) or decimal(0)
+        price = price * (tax_value/decimal(100) + 1)
         if pretty is True:
             return format_price(price)
         return price
@@ -750,6 +750,8 @@ register_field('categories', String(is_indexed=True, multiple=True, is_stored=Tr
 register_field('has_categories', Boolean(is_indexed=True)) # XXX Obsolete
 register_field('has_images', Boolean(is_indexed=True, is_stored=True))
 register_field('ctime', DateTime(is_stored=True, is_indexed=True))
+# XXX xapian can't sort decimal
+register_field('stored_price', Integer(is_indexed=False, is_stored=True))
 
 # Register resources
 register_resource_class(Product)

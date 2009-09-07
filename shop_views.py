@@ -49,7 +49,7 @@ from addresses import Addresses_Enumerate
 from addresses_views import Addresses_Book, Addresses_AddAddress
 from addresses_views import Addresses_EditAddress
 from datatypes import Civilite, ImagePathDataType
-from enumerates import BarcodesFormat
+from enumerates import BarcodesFormat, SortBy_Enumerate
 from utils import get_shop, format_price
 from cart import ProductCart
 from countries import CountriesEnumerate
@@ -78,6 +78,8 @@ class Shop_Configure(DBResource_Edit):
     schema = {'shop_from_addr': Email(mandatory=True),
               'order_notification_mails': MultiLinesTokens(mandatory=True),
               'shop_signature': Unicode(mandatory=True),
+              'shop_sort_by': SortBy_Enumerate(mandatory=True),
+              'shop_sort_reverse': Boolean(mandatory=True),
               'show_sub_categories': Boolean,
               'activate_mail_html': Boolean(mandatory=True),
               'bill_logo': ImagePathDataType,
@@ -92,6 +94,9 @@ class Shop_Configure(DBResource_Edit):
             title=MSG(u'Shop signature'), rows=8, cols=50),
         BooleanRadio('activate_mail_html',
             title=MSG(u'Activate html mails')),
+        SelectWidget('shop_sort_by', title=MSG(u'Sort products by ...'),
+                     has_empty_option=False),
+        BooleanRadio('shop_sort_reverse', title=MSG(u'Reverse sort ?')),
         BooleanRadio('show_sub_categories', title=MSG(u'Show sub categories ?')),
         ImageSelectorWidget('bill_logo', title=MSG(u'Bill logo')),
         SelectWidget('barcode_format', title=MSG(u'Barcode format'),

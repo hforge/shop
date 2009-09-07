@@ -153,8 +153,6 @@ class Declination(DynamicFolder):
 
 
     def get_price_without_tax(self):
-        if self.parent.is_buyable() is False:
-            return 0
         # Get base price
         base_price = self.parent.get_property('pre-tax-price')
         # Get declination price

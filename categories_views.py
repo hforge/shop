@@ -19,10 +19,10 @@ from operator import itemgetter
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import PathDataType, String
+from itools.datatypes import Boolean, PathDataType, String
 from itools.gettext import MSG
 from itools.stl import stl, set_prefix
-from itools.web import STLView
+from itools.web import STLView, get_context
 from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
@@ -153,6 +153,15 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
         return context.root.search(AndQuery(*query))
 
 
+    def get_query_schema(self):
+        shop = get_shop(get_context().resource)
+        return merge_dicts(Folder_BrowseContent.get_query_schema(self),
+                sort_by=String(default=shop.get_property('shop_sort_by')),
+                reverse=Boolean(default=shop.get_property('shop_sort_reverse')))
+
+
+
+
 class VirtualCategories_View(VirtualCategory_View):
 
     def get_items(self, resource, context):
@@ -269,13 +278,6 @@ class Categories_View(Folder_BrowseContent):
         ('name', MSG(u'Name')),
         ('title', MSG(u'Title')),
         ]
-
-
-    def get_query_schema(self):
-        schema = Folder_BrowseContent.get_query_schema(self)
-        # Override the default values
-        schema['sort_by'] = String(default='title')
-        return schema
 
 
 

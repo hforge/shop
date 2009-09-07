@@ -29,7 +29,7 @@ from addresses import Addresses
 from categories import Categories, VirtualCategory
 from countries import Countries
 from datatypes import ImagePathDataType
-from enumerates import BarcodesFormat
+from enumerates import BarcodesFormat, SortBy_Enumerate
 from orders import Orders
 from products import Products, Product, ProductModels
 from products.cross_selling import CrossSellingTable
@@ -178,6 +178,8 @@ class Shop(ShopFolder):
         schema = ShopFolder.get_metadata_schema()
         schema['order_notification_mails'] = Email(multiple=True)
         schema['shop_signature'] = Unicode
+        schema['shop_sort_by'] = SortBy_Enumerate
+        schema['shop_sort_reverse'] = Boolean
         schema['shop_from_addr'] = Email
         schema['bill_logo'] = ImagePathDataType
         schema['activate_mail_html'] = Boolean
