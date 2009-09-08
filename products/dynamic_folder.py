@@ -20,6 +20,7 @@
 
 # Import from itools
 from itools.datatypes import Tokens
+from itools.web import get_context
 
 # Import from Shop
 from shop.utils import ShopFolder
@@ -69,9 +70,16 @@ class DynamicFolder(ShopFolder):
                 return ShopFolder.set_property(self, name,
                                                Tokens.encode(value))
             elif getattr(datatype, 'multilingual', False):
-                return ShopFolder.set_property(self, name,
-                                               datatype.encode(value),
-                                               language)
+                # If the value equals the default value
+                # set the property to None (String's default value)
+                # to avoid problems during the language negociation
+                if value == datatype.get_default():
+                    # XXX Should not be hardcoded
+                    # Default value for String datatype is None
+                    value = None
+                else:
+                    value = datatype.encode(value)
+                return ShopFolder.set_property(self, name, value, language)
             # Even if the language was not None, this property is not
             # multilingual so ignore it.
             return ShopFolder.set_property(self, name,
