@@ -21,155 +21,184 @@ from itools.datatypes.primitive import enumerate_get_value, enumerate_is_valid
 
 
 class PBXState(Enumerate):
-
     options = [
-      {'name': 1, 'value': MSG(u'Paiement effectué'), 'pbx': 'PBX_EFFECTUE'},
-      {'name': 2, 'value': MSG(u'Paiement refusé'), 'pbx': 'PBX_REFUSE'},
-      {'name': 3, 'value': MSG(u'Erreur de paiement'), 'pbx': 'PBX_ERREUR'},
-      {'name': 4, 'value': MSG(u'Paiement annulé'), 'pbx': 'PBX_ANNULE'}]
+        {'name': 1,
+         'value': MSG(u'Paiement effectué'), 'pbx': 'PBX_EFFECTUE'},
+        {'name': 2,
+         'value': MSG(u'Paiement refusé'), 'pbx': 'PBX_REFUSE'},
+        {'name': 3,
+         'value': MSG(u'Erreur de paiement'), 'pbx': 'PBX_ERREUR'},
+        {'name': 4,
+         'value': MSG(u'Paiement annulé'), 'pbx': 'PBX_ANNULE'},
+        ]
+
 
 
 class PayboxCGIErrors(Enumerate):
+    options = [
+        {'name': '-1',
+         'value': u'Error in reading the parameters via stdin'},
+        {'name': '-2', 'value': u'Error in memory allocation'},
+        {'name': '-3', 'value': u'Error in the parameters (Http Error)'},
+        {'name': '-4',
+         'value': u'One of the PBX_RETOUR variable is too long'},
+        {'name': '-5', 'value': u'Error in opening the file'},
+        {'name': '-6', 'value': u'Error in file format'},
+        {'name': '-7', 'value': u'A mandatory variable is missing.'},
+        {'name': '-8',
+         'value': u'Numerical variables contains a non-numerical character'},
+        {'name': '-9', 'value': u'PBX_SITE value is invalid.'},
+        {'name': '-10', 'value': u'PBX_RANG value is invalid'},
+        {'name': '-11', 'value': u'PBX_TOTAL value is invalid'},
+        {'name': '-12', 'value': u'PBX_LANGUE or PBX_DEVISE is invalid'},
+        {'name': '-13', 'value': u'PBX_CMD is empty or invalid'},
+        {'name': '-14', 'value': u'Unknow error'},
+        {'name': '-15', 'value': u'Unknow error'},
+        {'name': '-16', 'value': u'PBX_PORTEUR is invalid'},
+        {'name': '-17', 'value': u'Error of coherence'},
+        ]
 
-    codes = {}
-    codes['-1'] = u'Error in reading the parameters via stdin'
-    codes['-2'] = u'Error in memory allocation'
-    codes['-3'] = u'Error in the parameters (Http Error)'
-    codes['-4'] = u'One of the PBX_RETOUR variable is too long'
-    codes['-5'] = u'Error in opening the file'
-    codes['-6'] = u'Error in file format'
-    codes['-7'] = u'A mandatory variable is missing.'
-    codes['-8'] = u'Numerical variables contains a non-numerical character'
-    codes['-9'] = u'PBX_SITE value is invalid.'
-    codes['-10'] = u'PBX_RANG value is invalid'
-    codes['-11'] = u'PBX_TOTAL value is invalid'
-    codes['-12'] = u'PBX_LANGUE or PBX_DEVISE is invalid'
-    codes['-13'] = u'PBX_CMD is empty or invalid'
-    codes['-14'] = u'Unknow error'
-    codes['-15'] = u'Unknow error'
-    codes['-16'] = u'PBX_PORTEUR is invalid'
-    codes['-17'] = u'Error of coherence'
-
-    @classmethod
-    def get_options(cls):
-        return [{'name': x, 'value': y} for x, y in cls.codes.items()]
 
 
 class PayboxAccount(Enumerate):
-
     options = [
-      {'name': 'paybox_system', 'value': u'PAYBOX SYSTEM'},
-      {'name': 'paybox_direct', 'value': u'PAYBOX DIRECT'},
-      ]
+        {'name': 'paybox_system', 'value': u'PAYBOX SYSTEM'},
+        {'name': 'paybox_direct', 'value': u'PAYBOX DIRECT'},
+        ]
+
 
 
 class TypePayment(Enumerate):
 
     options = [
-      {'name': 'carte', 'value': u'Carte'},
-      ]
+        {'name': 'carte', 'value': u'Carte'},
+        ]
+
 
 
 class TypeCarte(Enumerate):
 
     options = [
-      {'name': 'CB', 'value': u'CB'},
-      {'name': 'VISA', 'value': u'VISA'},
-      {'name': 'EUROCARD_MASTERCARD', 'value': u'EUROCARD_MASTERCARD'},
-      {'name': 'E_CARD', 'value': u'E_CARD'},
-      {'name': 'AMEX', 'value': u'AMEX'},
-      {'name': 'DINERS', 'value': u'DINERS'},
-      {'name': 'JCB', 'value': u'JCB'},
-      {'name': 'COFINOGA', 'value': u'COFINOGA'},
-      {'name': 'SOFINCO', 'value': u'SOFINCO'},
-      {'name': 'AURORE', 'value': u'AURORE'},
-      {'name': 'CDGP', 'value': u'CDGP'},
-      {'name': '24h00', 'value': u'24H00'},
-      ]
+        {'name': 'CB', 'value': u'CB'},
+        {'name': 'VISA', 'value': u'VISA'},
+        {'name': 'EUROCARD_MASTERCARD', 'value': u'EUROCARD_MASTERCARD'},
+        {'name': 'E_CARD', 'value': u'E_CARD'},
+        {'name': 'AMEX', 'value': u'AMEX'},
+        {'name': 'DINERS', 'value': u'DINERS'},
+        {'name': 'JCB', 'value': u'JCB'},
+        {'name': 'COFINOGA', 'value': u'COFINOGA'},
+        {'name': 'SOFINCO', 'value': u'SOFINCO'},
+        {'name': 'AURORE', 'value': u'AURORE'},
+        {'name': 'CDGP', 'value': u'CDGP'},
+        {'name': '24h00', 'value': u'24H00'},
+        ]
 
 
 class ModeAutorisation(Enumerate):
 
     options = [
-      {'name': 'N', 'value': MSG(u'Mode autorisation + télécollecte.')},
-      {'name': 'O', 'value': MSG(u'Mode autorisation uniquement.')},
-      ]
+        {'name': 'N', 'value': MSG(u'Mode autorisation + télécollecte.')},
+        {'name': 'O', 'value': MSG(u'Mode autorisation uniquement.')},
+        ]
 
 
 class PayboxStatus(Enumerate):
 
-    info = {}
-    # Our states
-    info['ip_not_authorized'] = MSG(u"Paybox IP address invalid")
-    info['amount_invalid'] = MSG(u"Invalid payment amount")
-    # Paybox states
-    info['00000'] = MSG(u"Operation successful")
-    info['00001'] = MSG(u"The connection to the authorization centre has failed")
-    info['00003'] = MSG(u"Paybox error")
-    info['00004'] = MSG(u"Cardholder's number or visual cryptogram invalid")
-    info['00006'] = MSG(u"Access refused or site/rank/identifier incorrect")
-    info['00008'] = MSG(u"Expiry date incorrect")
-    info['00009'] = MSG(u"Error during the creation of the subscription")
-    info['00010'] = MSG(u"Currency unknown")
-    info['00011'] = MSG(u"Amount incorrect")
-    info['00015'] = MSG(u"Payment already made.")
-    info['00016'] = MSG(u"Subscriber already exists")
-    info['00021'] = MSG(u"Not authorized bin card")
-    info['00029'] = MSG(u"Not the same card used for the first payment")
-    info['00030'] = MSG(u"Time-out > 15 mn before validation by the buyer")
-    info['00031'] = MSG(u"Reserved")
-    # Paybox error states: Payment refused by the authorization center
-    info['00100'] = MSG(u"Transaction approved or successfully processed.")
-    info['00102'] = MSG(u"Contact the card issuer")
-    info['00103'] = MSG(u"Invalid retailer")
-    info['00104'] = MSG(u"Keep the card")
-    info['00105'] = MSG(u"Do not honour")
-    info['00107'] = MSG(u"Keep the card, special conditions.")
-    info['00108'] = MSG(u"Approve after holder identification")
-    info['00112'] = MSG(u"Invalid transaction")
-    info['00113'] = MSG(u"Invalid amoint")
-    info['00114'] = MSG(u"Invalid holder number")
-    info['00115'] = MSG(u"Card issuer unknown")
-    info['00117'] = MSG(u"Client cancellation")
-    info['00119'] = MSG(u"Repeat the transaction later")
-    info['00120'] = MSG(u"Error in reply (error in ther server's domain)")
-    info['00124'] = MSG(u"File update not withstood")
-    info['00125'] = MSG(u"Impossible to situate the record in the file")
-    info['00126'] = MSG(u"Record duplicated, former record replaced")
-    info['00127'] = MSG(u"Error in 'edit' in file up-date field")
-    info['00128'] = MSG(u"Access to file denied")
-    info['00129'] = MSG(u"File up-date impossible")
-    info['00130'] = MSG(u"Error in format")
-    info['00131'] = MSG(u"Identifier of purchasing body unknown")
-    info['00133'] = MSG(u"Expired card")
-    info['00134'] = MSG(u"Suspicion of fraud")
-    info['00138'] = MSG(u"Too many attemps at secret code")
-    info['00141'] = MSG(u"Lost card")
-    info['00143'] = MSG(u"Stolen card")
-    info['00151'] = MSG(u"Insufficient funds or over credit limit")
-    info['00154'] = MSG(u"Expiry date of the card passed")
-    info['00155'] = MSG(u"Error in secret code")
-    info['00156'] = MSG(u"Card absent from file")
-    info['00157'] = MSG(u"Transaction not permitted for this holder")
-    info['00158'] = MSG(u"Transaction forbidden at this terminal")
-    info['00159'] = MSG(u"Suspicion of fraud")
-    info['00160'] = MSG(u"Card accepter must contact purchaser")
-    info['00161'] = MSG(u"Amount of withdrawal past the limit")
-    info['00163'] = MSG(u"Security regulations not respected")
-    info['00168'] = MSG(u"Reply not forthcoming or received too late")
-    info['00175'] = MSG(u"Too many attempts at secret card")
-    info['00176'] = MSG(u"Holder already on stop, former record kept")
-    info['00190'] = MSG(u"Temporary halt of the system")
-    info['00191'] = MSG(u"Card issuer not accessible")
-    info['00194'] = MSG(u"Request duplicated")
-    info['00196'] = MSG(u"System malfunctioning")
-    info['00197'] = MSG(u"Time of global surveillance has expired")
-    info['00198'] = MSG(u"Server inaccessible (set by the server)")
-    info['00199'] = MSG(u"Incident in the initiating domain")
-
-    @classmethod
-    def get_options(cls):
-        return [{'name': x, 'value': y} for x, y in cls.info.items()]
+    options = [
+        # Our states
+        {'name': 'ip_not_authorized',
+         'value': MSG(u"Paybox IP address invalid")},
+        {'name': 'amount_invalid', 'value': MSG(u"Invalid payment amount")},
+        # Paybox states
+        {'name': '00000', 'value': MSG(u"Operation successful")},
+        {'name': '00001',
+         'value': MSG(u"The connection to the authorization centre failed")},
+        {'name': '00003', 'value': MSG(u"Paybox error")},
+        {'name': '00004',
+         'value': MSG(u"Cardholder's number or visual cryptogram invalid")},
+        {'name': '00006',
+         'value': MSG(u"Access refused or site/rank/identifier incorrect")},
+        {'name': '00008', 'value': MSG(u"Expiry date incorrect")},
+        {'name': '00009',
+         'value': MSG(u"Error during the creation of the subscription")},
+        {'name': '00010', 'value': MSG(u"Currency unknown")},
+        {'name': '00011', 'value': MSG(u"Amount incorrect")},
+        {'name': '00015', 'value': MSG(u"Payment already made.")},
+        {'name': '00016', 'value': MSG(u"Subscriber already exists")},
+        {'name': '00021', 'value': MSG(u"Not authorized bin card")},
+        {'name': '00029',
+         'value': MSG(u"Not the same card used for the first payment")},
+        {'name': '00030',
+         'value': MSG(u"Time-out > 15 mn before validation by the buyer")},
+        {'name': '00031', 'value': MSG(u"Reserved")},
+        # Paybox error states: Payment refused by the authorization center
+        {'name': '00100',
+         'value': MSG(u"Transaction approved or successfully processed.")},
+        {'name': '00102', 'value': MSG(u"Contact the card issuer")},
+        {'name': '00103', 'value': MSG(u"Invalid retailer")},
+        {'name': '00104', 'value': MSG(u"Keep the card")},
+        {'name': '00105', 'value': MSG(u"Do not honour")},
+        {'name': '00107',
+         'value': MSG(u"Keep the card, special conditions.")},
+        {'name': '00108',
+         'value': MSG(u"Approve after holder identification")},
+        {'name': '00112', 'value': MSG(u"Invalid transaction")},
+        {'name': '00113', 'value': MSG(u"Invalid amoint")},
+        {'name': '00114', 'value': MSG(u"Invalid holder number")},
+        {'name': '00115', 'value': MSG(u"Card issuer unknown")},
+        {'name': '00117', 'value': MSG(u"Client cancellation")},
+        {'name': '00119', 'value': MSG(u"Repeat the transaction later")},
+        {'name': '00120',
+         'value': MSG(u"Error in reply (error in ther server's domain)")},
+        {'name': '00124', 'value': MSG(u"File update not withstood")},
+        {'name': '00125',
+         'value': MSG(u"Impossible to situate the record in the file")},
+        {'name': '00126',
+         'value': MSG(u"Record duplicated, former record replaced")},
+        {'name': '00127',
+         'value': MSG(u"Error in 'edit' in file up-date field")},
+        {'name': '00128', 'value': MSG(u"Access to file denied")},
+        {'name': '00129', 'value': MSG(u"File up-date impossible")},
+        {'name': '00130', 'value': MSG(u"Error in format")},
+        {'name': '00131',
+         'value': MSG(u"Identifier of purchasing body unknown")},
+        {'name': '00133', 'value': MSG(u"Expired card")},
+        {'name': '00134', 'value': MSG(u"Suspicion of fraud")},
+        {'name': '00138', 'value': MSG(u"Too many attemps at secret code")},
+        {'name': '00141', 'value': MSG(u"Lost card")},
+        {'name': '00143', 'value': MSG(u"Stolen card")},
+        {'name': '00151',
+         'value': MSG(u"Insufficient funds or over credit limit")},
+        {'name': '00154', 'value': MSG(u"Expiry date of the card passed")},
+        {'name': '00155', 'value': MSG(u"Error in secret code")},
+        {'name': '00156', 'value': MSG(u"Card absent from file")},
+        {'name': '00157',
+         'value': MSG(u"Transaction not permitted for this holder")},
+        {'name': '00158',
+         'value': MSG(u"Transaction forbidden at this terminal")},
+        {'name': '00159', 'value': MSG(u"Suspicion of fraud")},
+        {'name': '00160',
+         'value': MSG(u"Card accepter must contact purchaser")},
+        {'name': '00161',
+         'value': MSG(u"Amount of withdrawal past the limit")},
+        {'name': '00163',
+         'value': MSG(u"Security regulations not respected")},
+        {'name': '00168',
+         'value': MSG(u"Reply not forthcoming or received too late")},
+        {'name': '00175', 'value': MSG(u"Too many attempts at secret card")},
+        {'name': '00176',
+         'value': MSG(u"Holder already on stop, former record kept")},
+        {'name': '00190', 'value': MSG(u"Temporary halt of the system")},
+        {'name': '00191', 'value': MSG(u"Card issuer not accessible")},
+        {'name': '00194', 'value': MSG(u"Request duplicated")},
+        {'name': '00196', 'value': MSG(u"System malfunctioning")},
+        {'name': '00197',
+         'value': MSG(u"Time of global surveillance has expired")},
+        {'name': '00198',
+         'value': MSG(u"Server inaccessible (set by the server)")},
+        {'name': '00199',
+         'value': MSG(u"Incident in the initiating domain")},
+        ]
 
 
     @classmethod
