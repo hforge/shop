@@ -52,11 +52,18 @@ real_datatypes = {'string': String,
                   'date': ISOCalendarDate}
 
 
+
+class ProductPathSelectorWidget(PathSelectorWidget):
+
+    action = 'add_link_file'
+
+
+
 def get_default_widget_shop(datatype):
     if issubclass(datatype, Boolean):
         return BooleanRadio
     elif issubclass(datatype, PathDataType):
-        return PathSelectorWidget
+        return ProductPathSelectorWidget
     elif issubclass(datatype, XHTMLBody):
         return RTEWidget
     return get_default_widget(datatype)

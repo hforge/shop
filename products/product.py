@@ -39,7 +39,7 @@ from declination import Declination
 from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewProduct, Products_View, Product_ViewBox
-from product_views import Product_View, Product_Edit
+from product_views import Product_View, Product_Edit, Product_AddLinkFile
 from product_views import Product_Delete, Product_ImagesSlider
 from product_views import Product_Print, Product_SendToFriend
 from product_views import Product_Declinations
@@ -92,6 +92,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     #######################
     view = Product_View()
     edit = Product_Edit()
+    add_link_file = Product_AddLinkFile()
     declinations = Product_Declinations()
     order = GoToSpecificDocument(specific_document='order-photos',
                                  title=MSG(u'Manage photos'),

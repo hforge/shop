@@ -18,7 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import Email, Integer, String, Unicode, Boolean
 from itools.gettext import MSG
-from itools.web import INFO, ERROR, STLView, STLForm, BaseView
+from itools.web import INFO, ERROR, STLView, STLForm, BaseView, get_context
 from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
 
@@ -28,9 +28,10 @@ from ikaaro.buttons import RemoveButton, RenameButton
 from ikaaro.exceptions import ConsistencyError
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
-from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.forms import BooleanCheckBox, BooleanRadio, SelectRadio
+from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.registry import get_resource_class
+from ikaaro.resource_views import DBResource_AddLink
 from ikaaro.views import BrowseForm, CompositeForm
 from ikaaro.views_new import NewInstance
 
@@ -228,6 +229,26 @@ class Product_Edit(Editable_Edit, AutoForm):
         Editable_Edit.action(self, resource, context, form)
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED)
+
+
+
+class Product_AddLinkFile(DBResource_AddLink):
+
+    def get_configuration(self):
+        return {
+            'show_browse': True,
+            'show_external': True,
+            'show_insert': False,
+            'show_upload': True}
+
+
+    def get_root(self, context):
+        return context.resource
+
+
+    def get_start(self, resource):
+        context = get_context()
+        return context.resource
 
 
 
