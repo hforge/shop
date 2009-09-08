@@ -24,7 +24,8 @@ from itools.gettext import MSG
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import BooleanRadio, BooleanCheckBox, SelectWidget, TextWidget
-from ikaaro.forms import XHTMLBody, RTEWidget, get_default_widget
+from ikaaro.forms import XHTMLBody, RTEWidget, FileWidget, get_default_widget
+from ikaaro.forms import PathSelectorWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable, OrderedTableFile
 
@@ -35,9 +36,9 @@ from models_views import ProductModelSchema_EditRecord
 from models_views import ProductModelSchema_View
 from models_views import ProductModels_View
 from models_views import ProductModel_Configure
-from shop.utils import ShopFolder
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
+from shop.utils import ShopFolder
 
 
 real_datatypes = {'string': String,
@@ -45,6 +46,7 @@ real_datatypes = {'string': String,
                   'integer': Integer,
                   'decimal': Decimal,
                   'boolean': Boolean,
+                  'path': PathDataType,
                   'email': Email,
                   'html': XHTMLBody,
                   'date': ISOCalendarDate}
@@ -53,6 +55,8 @@ real_datatypes = {'string': String,
 def get_default_widget_shop(datatype):
     if issubclass(datatype, Boolean):
         return BooleanRadio
+    elif issubclass(datatype, PathDataType):
+        return PathSelectorWidget
     elif issubclass(datatype, XHTMLBody):
         return RTEWidget
     return get_default_widget(datatype)

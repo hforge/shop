@@ -108,6 +108,7 @@ class Datatypes(Enumerate):
       {'name': 'integer', 'value': MSG(u'Integer')},
       {'name': 'decimal', 'value': MSG(u'Decimal')},
       {'name': 'boolean', 'value': MSG(u'Boolean')},
+      {'name': 'path', 'value': MSG(u'File')},
       {'name': 'email',   'value': MSG(u'Email')},
       {'name': 'html',   'value': MSG(u'HTML')},
       {'name': 'date', 'value': MSG(u'Date')}]
