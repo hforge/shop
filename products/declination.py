@@ -164,6 +164,8 @@ class Declination(DynamicFolder):
             price = base_price + price_value
         elif price_impact == 'decrease':
             price = base_price - price_value
+        else:
+            price = base_price
         return price
 
 
