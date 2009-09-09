@@ -25,6 +25,10 @@
           Total price: ${order/total_price} €<br/>
           Shipping: ${order/shipping_way} - ${order/shipping_price} €<br/>
           Payment: ${order/payment_way}<br/>
+          <a href="/shop/orders/${order/id}/bill/;download"
+            target="blank" stl:if="has_bill">
+            <img src="/ui/icons/16x16/pdf.png"/> Download bill
+          </a><br/>
         </td>
       </tr>
     </tbody>

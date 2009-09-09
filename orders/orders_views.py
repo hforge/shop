@@ -152,7 +152,6 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         from ikaaro.workflow import parse_git_message
         history = []
         for revision in resource.get_revisions():
-            print revision
             transition, comment = parse_git_message(revision['message'])
             if transition is not None:
                 history.append(
@@ -175,6 +174,9 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         # States
         namespace['states_history'] = self.get_states_history(resource, context)
         namespace['transitions'] = SelectWidget('transition').to_html(Order_Transitions, None)
+        # Bill
+        has_bill = resource.get_resource('bill', soft=True) is not None
+        namespace['has_bill'] = has_bill
         # Order
         creation_datetime = resource.get_property('creation_datetime')
         namespace['order'] = {
