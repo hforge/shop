@@ -60,9 +60,9 @@
     <pml:table id="articles">
       <pml:tr>
         <pml:th>Product</pml:th>
-        <pml:th>Unit price HT</pml:th>
+        <pml:th>Unit price (With tax)</pml:th>
         <pml:th>Quantity</pml:th>
-        <pml:th>Total price</pml:th>
+        <pml:th>Total price (With tax)</pml:th>
       </pml:tr>
       <pml:tr stl:repeat="product products">
         <pml:td>${product/title}</pml:td>
