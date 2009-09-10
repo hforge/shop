@@ -18,6 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import Email, Integer, String, Unicode, Boolean
 from itools.gettext import MSG
+from itools.uri import get_reference
 from itools.web import INFO, ERROR, STLView, STLForm, BaseView, get_context
 from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
@@ -43,7 +44,7 @@ from taxes import PriceWidget
 from widgets import BarcodeWidget, MiniProductWidget, StockProductWidget
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
-from shop.utils import get_shop
+from shop.utils import get_shop, ChangeCategoryButton
 
 
 class Product_NewProduct(NewInstance):
@@ -298,7 +299,7 @@ class Products_View(Folder_BrowseContent):
 
     context_menus = []
 
-    table_actions = [RemoveButton, RenameButton]
+    table_actions = [RemoveButton, RenameButton, ChangeCategoryButton]
 
     table_columns = [
         ('checkbox', None),
@@ -386,6 +387,20 @@ class Products_View(Folder_BrowseContent):
             return ProductModelsEnumerate.get_value(product_model)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
+
+
+
+    def action_change_category(self, resource, context, form):
+        ids = form['ids']
+        if not ids:
+            context.message = messages.MSG_NONE_SELECTED
+            return
+
+        # FIXME Hack (see ikaaro)
+        ids_list = '&'.join([ 'ids=%s' % x for x in ids ])
+        uri = '%s/;change_category?%s' % (context.get_link(resource), ids_list)
+        return get_reference(uri)
+
 
 
 
@@ -586,3 +601,31 @@ class Product_Declinations(CompositeForm):
     def get_schema(self, resource, context):
           # XXX Bug in compositeform
         return self.subviews[0].get_schema(resource, context)
+
+
+
+class Products_ChangeCategory(AutoForm):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Change category')
+    submit_value = MSG(u'Do changes')
+
+    schema = {'categories': CategoriesEnumerate(multiple=True),
+              'ids': String(multiple=True)}
+
+    widgets =[SelectRadio('ids', title=MSG(u'Products name')),
+              SelectWidget('categories',
+                has_empty_option=False, title=MSG(u'New category'))]
+
+
+    def get_value(self, resource, context, name, datatype):
+        if name == 'ids':
+            ids = context.get_query_value('ids', type=String(multiple=True))
+            return [{'name': x, 'value': x, 'selected': True} for x in ids]
+
+
+    def action(self, resource, context, form):
+        for id in form['ids']:
+            product =resource.get_resource(id)
+            product.set_property('categories', form['categories'])
+        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')

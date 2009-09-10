@@ -14,7 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from itools
+from itools.gettext import MSG
+
 # Import from ikaaro
+from ikaaro.buttons import Button
 from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_Orphans, Folder_BrowseContent
 from ikaaro.revisions_views import DBResource_LastChanges
@@ -36,3 +40,11 @@ class ShopFolder(Folder):
     browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
     orphans = Folder_Orphans(access='is_allowed_to_edit')
     last_changes = DBResource_LastChanges(access='is_allowed_to_edit')
+
+
+class ChangeCategoryButton(Button):
+
+    access = 'is_allowed_to_edit'
+    css = 'button-compare'
+    name = 'change_category'
+    title = MSG(u'Change category')

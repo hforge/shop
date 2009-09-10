@@ -44,7 +44,7 @@ from product_views import Product_NewProduct, Products_View, Product_ViewBox
 from product_views import Product_View, Product_Edit, Product_AddLinkFile
 from product_views import Product_Delete, Product_ImagesSlider
 from product_views import Product_Print, Product_SendToFriend
-from product_views import Product_Declinations
+from product_views import Product_Declinations, Products_ChangeCategory
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.editable import Editable
@@ -734,6 +734,7 @@ class Products(ShopFolder):
     # Views
     browse_content = Products_View()
     new_product = Product_NewProduct()
+    change_category = Products_ChangeCategory()
 
 
     def can_paste(self, source):
