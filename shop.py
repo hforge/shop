@@ -69,6 +69,9 @@ class Shop(ShopFolder):
     # Batch
     categories_batch_size = 20
 
+    # Reduce string (for product mini-title)
+    product_title_word_treshold = 50
+
     # Templates
 
     shop_templates = {

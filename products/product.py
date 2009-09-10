@@ -32,6 +32,7 @@ from itools.xml import TEXT, XMLParser
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import SelectWidget, stl_namespaces
 from ikaaro.registry import register_resource_class, register_field
+from ikaaro.utils import reduce_string
 from ikaaro.workflow import WorkflowAware
 
 # Import from shop
@@ -376,13 +377,17 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     ## Namespace
     ##################################################
     def get_small_namespace(self, context):
-        # get namespace
+        shop = get_shop(self)
         abspath = context.resource.get_abspath()
-        namespace = {'name': self.name,
-                     'href': abspath.get_pathto(self.get_virtual_path()),
-                     'price-with-tax': self.get_price_with_tax(pretty=True),
-                     'cover': self.get_cover_namespace(context)}
-        for key in ['title', 'description', 'reference']:
+        title = self.get_property('title')
+        namespace = {
+          'name': self.name,
+          'title': title,
+          'mini-title': reduce_string(title, shop.product_title_word_treshold),
+          'href': abspath.get_pathto(self.get_virtual_path()),
+          'price-with-tax': self.get_price_with_tax(pretty=True),
+          'cover': self.get_cover_namespace(context)}
+        for key in ['description', 'reference']:
             namespace[key] = self.get_property(key)
         return namespace
 
