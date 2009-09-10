@@ -21,9 +21,11 @@ from itools.datatypes import PathDataType
 from itools.gettext import MSG
 from itools.uri import Path
 from itools.web import get_context
+from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
+from ikaaro.utils import get_base_path_query
 
 # Import from shop
 from categories_views import VirtualCategories_View, Category_Edit
@@ -66,6 +68,20 @@ class Category(Editable, ShopFolder):
 
     def get_document_types(self):
         return [Category]
+
+
+    def get_nb_products(self):
+        root = self.get_root()
+        site_root = self.get_site_root()
+        shop = get_shop(self)
+        abspath = site_root.get_canonical_path()
+        base_path_query = get_base_path_query(str(abspath))
+        query = AndQuery(
+            base_path_query,
+            PhraseQuery('format', shop.product_class.class_id),
+            PhraseQuery('has_categories', True),
+            PhraseQuery('categories', self.get_unique_id()))
+        return root.search(query).get_n_documents()
 
 
 

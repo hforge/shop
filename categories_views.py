@@ -120,24 +120,27 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
             prefix = '%s/' % resource.get_pathto(real_category)
             namespace['description'] = set_prefix(resource.get_xhtml_data(),
                                                   prefix)
-        # Sub categories
+        # Do not show subcategories
         if shop.get_property('show_sub_categories') is False:
             return namespace
-        sub_categories = list(real_category.search_resources(cls=Category))
-        nb_categories = len(sub_categories)
-        for i, cat in enumerate(sub_categories):
-            css = None
-            if i==0:
-              css = 'start'
-            elif i==nb_categories-1:
-              css = 'end'
+        # Show subcategories
+        product_query = AndQuery(PhraseQuery('format', shop.product_class.class_id),
+                                 PhraseQuery('has_categories', True))
+        for cat in real_category.search_resources(cls=Category):
+            nb_products = cat.get_nb_products()
+            if nb_products == 0:
+                continue
             img = cat.get_property('image_category')
             path_cat = resource.get_pathto(cat)
             namespace['sub_categories'].append(
                 {'name': cat.name,
                  'title': cat.get_title(),
-                 'img': str(path_cat.resolve2(img)) if img else None,
-                 'css': css})
+                 'css': None,
+                 'nb_products': nb_products,
+                 'img': str(path_cat.resolve2(img)) if img else None})
+        if namespace['sub_categories']:
+            namespace['sub_categories'][0]['css'] = 'start'
+            namespace['sub_categories'][-1]['css'] = 'end'
         return namespace
 
 
