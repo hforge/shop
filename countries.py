@@ -22,7 +22,7 @@ from itools.gettext import MSG
 from itools.web import get_context
 
 # Import from ikaaro
-from ikaaro.forms import BooleanRadio, TextWidget
+from ikaaro.forms import BooleanRadio, SelectWidget, TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 from ikaaro.table_views import Table_AddRecord
@@ -39,6 +39,59 @@ from utils import get_shop
 # Shipping module allow to configure the price of delivery
 # for each countries.
 ###########################################################
+
+
+class CountriesZonesEnumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        # Search shop
+        shop = get_shop(context.resource)
+        # Get options
+        resource = shop.get_resource('countries-zones').handler
+        return [{'name': str(record.id),
+                 'value': resource.get_record_value(record, 'title')}
+                    for record in resource.get_records()]
+
+
+class BaseCountriesZones(BaseTable):
+
+    record_schema = {
+      'title': Unicode(mandatory=True),
+      }
+
+
+
+class CountriesZones(Table):
+
+
+    class_id = 'countries-zones'
+    class_title = MSG(u'Countries Zones')
+    class_handler = BaseCountriesZones
+    class_views = ['view', 'add_record']
+
+    add_record = Table_AddRecord(title=MSG(u'Add a new zone'))
+
+    form = [
+        TextWidget('title', title=MSG(u'Country title')),
+        ]
+
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args, **kw):
+        Table._make_resource(cls, folder, name)
+        table = BaseCountriesZones()
+        zones = []
+        csv = CSVFile(get_abspath('data/countries.csv'))
+        for line in csv.get_rows():
+            zone = unicode(line[1], 'utf-8')
+            if zone not in zones:
+                zones.append(zone)
+                table.add_record({'title': Property(zone, language='fr')})
+        folder.set_handler(name, table)
+
+
 
 
 class CountriesEnumerate(Enumerate):
@@ -60,6 +113,7 @@ class BaseCountries(BaseTable):
 
     record_schema = {
       'title': Unicode(mandatory=True, multiple=True),
+      'zone': CountriesZonesEnumerate(mandatory=True),
       'enabled': Boolean,
       }
 
@@ -76,6 +130,7 @@ class Countries(Table):
 
     form = [
         TextWidget('title', title=MSG(u'Country title')),
+        SelectWidget('zone', title=MSG(u'Zone')),
         BooleanRadio('enabled', title=MSG(u'Enabled')),
         ]
 
@@ -84,14 +139,20 @@ class Countries(Table):
     def _make_resource(cls, folder, name, *args, **kw):
         Table._make_resource(cls, folder, name)
         # Import CSV with list of countries
+        zones = []
         table = BaseCountries()
         csv = CSVFile(get_abspath('data/countries.csv'))
         for line in csv.get_rows():
             country = unicode(line[0], 'utf-8')
-            country = Property(country, language='fr')
-            table.add_record({'title': country, 'enabled': True})
+            zone = unicode(line[1], 'utf-8')
+            if zone not in zones:
+                zones.append(zone)
+            table.add_record({'title': Property(country, language='fr'),
+                              'zone': str(zones.index(zone)),
+                              'enabled': True})
         folder.set_handler(name, table)
 
 
 
 register_resource_class(Countries)
+register_resource_class(CountriesZones)

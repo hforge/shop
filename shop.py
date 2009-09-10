@@ -27,7 +27,7 @@ from ikaaro.webpage import WebPage
 from enumerate_table import EnumeratesFolder
 from addresses import Addresses
 from categories import Categories, VirtualCategory
-from countries import Countries
+from countries import Countries, CountriesZones
 from datatypes import ImagePathDataType
 from enumerates import BarcodesFormat, SortBy_Enumerate
 from orders import Orders
@@ -51,7 +51,7 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20090825'
+    class_version = '20090910'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
@@ -150,6 +150,9 @@ class Shop(ShopFolder):
         # Countries
         Countries._make_resource(Countries, folder, '%s/countries' % name,
                                  title={'en': u'countries'})
+        # Countries zone
+        CountriesZones._make_resource(CountriesZones, folder,
+                '%s/countries-zones' % name, title={'en': u'Countries Zones'})
         # EnumeratesFolder
         EnumeratesFolder._make_resource(EnumeratesFolder, folder,
                                     '%s/enumerates' % name, title={'en': u'Enumerates'})
@@ -257,6 +260,41 @@ class Shop(ShopFolder):
             return
         CrossSellingTable.make_resource(CrossSellingTable, self,
                               'cross-selling', title={'en': u'Cross selling'})
+
+
+    def update_20090910(self):
+        """ Add zones to countries
+        """
+        from itools.csv import CSVFile, Property
+        from itools.core import get_abspath
+        if self.get_resource('countries-zones', soft=True) is not None:
+            return
+        CountriesZones.make_resource(CountriesZones, self,
+                          'countries-zones', title={'en': u'Countries Zones'})
+        # Get list of countries
+        countries = []
+        handler = self.get_resource('countries').handler
+        for record in handler.get_records():
+            countries.append(handler.get_record_value(record, 'title'))
+        # Do update
+        zones = []
+        csv = CSVFile(get_abspath('data/countries.csv'))
+        for line in csv.get_rows():
+            country = unicode(line[0], 'utf-8')
+            zone = unicode(line[1], 'utf-8')
+            if zone not in zones:
+                zones.append(zone)
+            if country in countries:
+                # Update zone
+                for record in handler.get_records():
+                    if handler.get_record_value(record, 'title') == country:
+                          handler.update_record(record.id,
+                                **{'zone': str(zones.index(zone))})
+            else:
+                # Add new country
+                handler.add_record({'title': Property(country, language='fr'),
+                                    'zone': str(zones.index(zone)),
+                                    'enabled': True})
 
 
 register_resource_class(Shop)
