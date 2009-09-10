@@ -280,7 +280,15 @@ class Categories_View(Folder_BrowseContent):
         ('checkbox', None),
         ('name', MSG(u'Name')),
         ('title', MSG(u'Title')),
+        ('nb_products', MSG(u'Nb products')),
         ]
+
+    def get_item_value(self, resource, context, item, column):
+        if column == 'nb_products':
+            brain, item_resource = item
+            return item_resource.get_nb_products()
+        return Folder_BrowseContent.get_item_value(self,
+                 resource, context, item, column)
 
 
 
