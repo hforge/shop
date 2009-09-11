@@ -26,6 +26,7 @@ from itools.web import STLView
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.forms import AutoForm, TextWidget, BooleanCheckBox, MultilineWidget
+from ikaaro.forms import RTEWidget, XHTMLBody
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.table_views import Table_View
 from ikaaro.views import BrowseForm
@@ -40,10 +41,11 @@ class Shippings_Configure(AutoForm):
     access = 'is_admin'
     title = MSG(u'Configure')
 
-    schema = {'min_price': Decimal}
+    schema = {'msg_if_no_shipping': XHTMLBody(mandatory=True)}
 
     widgets = [
-        TextWidget('min_price', title=MSG(u'Minimum price €')),
+        RTEWidget('msg_if_no_shipping',
+                  title=MSG(u'Message if no shipping available')),
         ]
 
 
@@ -52,7 +54,8 @@ class Shippings_Configure(AutoForm):
 
 
     def action(self, resource, context, form):
-        resource.set_property('min_price', form['min_price'])
+        resource.set_property('msg_if_no_shipping',
+                              form['msg_if_no_shipping'])
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED)
 

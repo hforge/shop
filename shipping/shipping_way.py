@@ -21,7 +21,7 @@ from decimal import Decimal as decimal
 from itools import vfs
 from itools.core import get_abspath, merge_dicts
 from itools.csv import Table as BaseTable, CSVFile
-from itools.datatypes import Decimal, Enumerate, String
+from itools.datatypes import Decimal, Enumerate, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.stl import stl
@@ -37,7 +37,7 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
-from shop.countries import CountriesEnumerate
+from shop.countries import CountriesZonesEnumerate
 from shop.utils import get_shop, ShopFolder
 
 # Import from shipping
@@ -85,9 +85,9 @@ class ShippingWayTable(Table):
 
 class ShippingPricesCSV(CSVFile):
 
-    columns = ['countries', 'max-weight', 'price']
+    columns = ['zone', 'max-weight', 'price']
 
-    schema = {'countries': String,
+    schema = {'zone': Unicode,
               'max-weight': Decimal,
               'price': Decimal}
 
@@ -95,8 +95,7 @@ class ShippingPricesCSV(CSVFile):
 class ShippingPricesTable(BaseTable):
 
     record_schema = {
-      'countries': CountriesEnumerate(mandatory=True, multiple=True,
-                                      is_indexed=True),
+      'zone': CountriesZonesEnumerate(mandatory=True, is_indexed=True),
       'max-weight': Decimal(mandatory=True, is_indexed=True),
       'price': Decimal(mandatory=True)}
 
@@ -111,7 +110,7 @@ class ShippingPrices(Table):
     class_views = ['view', 'add_record']
 
     form = [
-        SelectWidget('countries', title=MSG(u'Countries')),
+        SelectWidget('zone', title=MSG(u'Zone')),
         TextWidget('max-weight', title=MSG(u'Max Weight (Kg)')),
         TextWidget('price', title=MSG(u'Price'))]
 
@@ -134,7 +133,12 @@ class ShippingWay(ShopFolder):
         img = Image._make_resource(Image, folder,
                                    '%s/logo.png' % name, body=body,
                                    **{'state': 'public'})
-
+        # Load zones
+        shop = get_context().resource.parent
+        zones = []
+        handler = shop.get_resource('countries-zones').handler
+        for record in handler.get_records():
+            zones.append(handler.get_record_value(record, 'title'))
         # Import CSV with prices
         ShippingPrices._make_resource(ShippingPrices, folder,
                                       '%s/prices' % name)
@@ -142,9 +146,10 @@ class ShippingWay(ShopFolder):
             table = ShippingPricesTable()
             csv = ShippingPricesCSV(get_abspath(cls.csv))
             for row in csv.get_rows():
-                table.add_record({'countries': row.get_value('countries').split('@'),
-                                  'max-weight': row.get_value('max-weight'),
-                                  'price': row.get_value('price')})
+                table.add_record(
+                  {'zone': str(zones.index(row.get_value('zone'))),
+                   'max-weight': row.get_value('max-weight'),
+                   'price': row.get_value('price')})
             folder.set_handler('%s/prices' % name, table)
 
 
@@ -153,29 +158,29 @@ class ShippingWay(ShopFolder):
         return merge_dicts(ShopFolder.get_metadata_schema(), delivery_schema)
 
 
-    def get_price(self, country, purchase_price, purchase_weight):
+    def get_price(self, country, purchase_weight):
+        shop = get_shop(self)
+        # Is Free ?
+        if self.get_property('is_free'):
+            return decimal(0)
+        # Transform country to zone
+        countries = shop.get_resource('countries').handler
+        country_record = countries.get_record(int(country))
+        zone = countries.get_record_value(country_record, 'zone')
+        # Calcul price
         list_price_ok = {}
-        max_price = decimal(0)
         prices = self.get_resource('prices').handler
         # Get corresponding weight in table of price
-        query = PhraseQuery('countries', country)
-        for record in prices.search(query):
+        for record in prices.search(PhraseQuery('zone', zone)):
             max_weight = prices.get_record_value(record, 'max-weight')
             price = prices.get_record_value(record, 'price')
-            if price > max_price:
-                max_price = price
             if purchase_weight < max_weight:
                 list_price_ok[max_weight] = record
+        # No price, we return None
         if not list_price_ok:
-            price = max_price
-        else:
-            record = list_price_ok[min(list_price_ok.keys())]
-            price = prices.get_record_value(record, 'price')
-        # We have a minimum price
-        min_price = self.parent.get_property('min_price')
-        if price < min_price:
-            return min_price
-        return price
+            return None
+        record = list_price_ok[min(list_price_ok.keys())]
+        return prices.get_record_value(record, 'price')
 
 
     def get_logo(self, context):
@@ -209,8 +214,8 @@ class ShippingWay(ShopFolder):
         """,
         stl_namespaces))
 
-    def get_widget_namespace(self, context, country, price, weight):
-        price = self.get_price(country, price, weight)
+    def get_widget_namespace(self, context, country, weight):
+        price = self.get_price(country, weight)
         if price is None:
             return None
         ns = {'name': self.name,

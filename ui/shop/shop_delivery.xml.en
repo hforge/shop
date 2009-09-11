@@ -38,8 +38,7 @@
   </stl:block>
 
   <p stl:if="not shipping">
-    The delivery is not available for your region.
-    Please contact the administrator.
+    ${msg_if_no_shipping}
   </p>
 
 

@@ -37,6 +37,7 @@ class ShippingWay_Configure(AutoForm):
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
         BooleanCheckBox('enabled', title=MSG(u'Enabled ?')),
+        BooleanCheckBox('is_free', title=MSG(u'Shipping way is free ?')),
         ]
 
 

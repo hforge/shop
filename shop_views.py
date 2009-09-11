@@ -409,13 +409,11 @@ class Shop_Delivery(STLForm):
         # Get total price and weight
         products = resource.get_resource('products')
         cart = ProductCart(context)
-        total_price = decimal(0)
         total_weight = decimal(0)
         for cart_elt in cart.products:
             product = products.get_resource(cart_elt['name'])
             declination = cart_elt['declination']
             unit_price = product.get_price_with_tax(declination)
-            total_price += unit_price * cart_elt['quantity']
             total_weight += product.get_weight(declination) * cart_elt['quantity']
         # Get user delivery country
         addresses = resource.get_resource('addresses').handler
@@ -425,7 +423,9 @@ class Shop_Delivery(STLForm):
         # Guess shipping posibilities
         shippings = resource.get_resource('shippings')
         ns['shipping'] = shippings.get_namespace_shipping_ways(context,
-                                            country, total_price, total_weight)
+                                            country, total_weight)
+        # If no shipping
+        ns['msg_if_no_shipping'] = shippings.get_property('msg_if_no_shipping')
         return ns
 
 
@@ -518,7 +518,7 @@ class Shop_ShowRecapitulatif(STLForm):
         shippings = resource.get_resource('shippings')
         shipping_mode = cart.shipping['name']
         shipping_price = shippings.get_namespace_shipping_way(context,
-                  shipping_mode, country, total_price, total_weight)['price']
+                  shipping_mode, country, total_weight)['price']
         total_price += shipping_price
         # Format total_price
         total_price = decimal(format_price(total_price))

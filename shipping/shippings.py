@@ -20,6 +20,7 @@ from itools.datatypes import Decimal
 from itools.gettext import MSG
 
 # Import from ikaaro
+from ikaaro.forms import XHTMLBody
 from ikaaro.registry import register_resource_class
 
 # Import from shop.shipping
@@ -58,42 +59,34 @@ class Shippings(ShopFolder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
-                           min_price=Decimal)
+                           msg_if_no_shipping=XHTMLBody)
 
 
     def get_document_types(self):
         return []
 
 
-    def get_price(self, shipping_way, country, purchase_price,
-                  purchase_weight):
+    def get_price(self, shipping_way, country, purchase_weight):
         shipping_way = self.get_resource(shipping_way)
-        return shipping_way.get_price(country, purchase_price,
-                                        purchase_weight)
-
-    #def get_shipping_ways(self, country, purchase_price, purchase_weight):
-    #    ways = []
-    #    for mode in self.search_resources(cls=ShippingWay):
+        return shipping_way.get_price(country, purchase_weight)
 
 
-    def get_namespace_shipping_ways(self, context, country, price, weight):
+    def get_namespace_shipping_ways(self, context, country, weight):
         namespace = []
         for mode in self.search_resources(cls=ShippingWay):
             if not mode.get_property('enabled'):
                 continue
-            widget = mode.get_widget_namespace(context, country, price, weight)
+            widget = mode.get_widget_namespace(context, country, weight)
             if widget:
                 namespace.append(widget)
-        # XXX If no price corresponding to options,
-        # we should set a default price.
         return namespace
 
 
-    def get_namespace_shipping_way(self, context, name, country, price, weight):
+    def get_namespace_shipping_way(self, context, name, country, weight):
         shipping = self.get_resource(name)
         if not shipping.get_property('enabled'):
             return None
-        return shipping.get_widget_namespace(context, country, price, weight)
+        return shipping.get_widget_namespace(context, country, weight)
 
 
     def get_shippings_items(self, context, ref=None):

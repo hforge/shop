@@ -14,9 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from standard library
-from decimal import Decimal as decimal
-
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, Enumerate, Unicode
@@ -113,6 +110,7 @@ class Withdrawal(ShippingWay):
     """
     class_id = 'withdrawal'
     class_title = MSG(u'Withdrawal')
+    class_version = '20090910'
     class_description = MSG(u'Withdrawal at the store')
 
     img = '../ui/shop/images/noship.png'
@@ -129,19 +127,20 @@ class Withdrawal(ShippingWay):
     def _make_resource(cls, folder, name, *args, **kw):
         kw['title'] = {'en': cls.class_title.gettext()}
         kw['description'] = {'en': cls.class_description.gettext()}
+        kw['is_free'] = True
         ShippingWay._make_resource(cls, folder, name, *args, **kw)
         WithdrawalTable._make_resource(WithdrawalTable, folder,
             '%s/history' % name)
-
-
-    def get_price(self, country, purchase_price, purchase_weight):
-        return decimal(0)
 
 
     # Admin views
     order_view = Withdrawal_RecordView()
     order_add_view = Withdrawal_RecordAdd()
     order_edit_view = Withdrawal_RecordEdit()
+
+
+    def update_20090910(self):
+        self.set_property('is_free', True)
 
 
 register_resource_class(Withdrawal)

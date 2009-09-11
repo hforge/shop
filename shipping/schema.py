@@ -20,4 +20,5 @@ from itools.datatypes import Boolean, Unicode
 
 delivery_schema = {'title': Unicode,
                    'description': Unicode,
-                   'enabled': Boolean(default=True)}
+                   'enabled': Boolean(default=True),
+                   'is_free': Boolean}
