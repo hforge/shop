@@ -71,7 +71,7 @@ class Cart_View(STLView):
             quantity = product_cart['quantity']
             declination = product_cart['declination']
             # Weight
-            total_weight +=  product.get_weight(declination)
+            total_weight += product.get_weight(declination) * quantity
             # Prices
             declination = product_cart['declination']
             unit_price_with_tax = product.get_price_with_tax(declination)
