@@ -142,7 +142,9 @@ class Shop_ViewCart(STLForm):
     schema = {'id': String}
 
     def get_namespace(self, resource, context):
-        cart_is_empty = ProductCart(context).products == []
+        cart = ProductCart(context)
+        cart.clean()
+        cart_is_empty = cart.products == []
         if cart_is_empty:
             cart = None
         else:
