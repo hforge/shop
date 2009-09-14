@@ -32,7 +32,7 @@ from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
 from ikaaro.forms import BooleanCheckBox, BooleanRadio, SelectRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.registry import get_resource_class
-from ikaaro.resource_views import DBResource_AddLink
+from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
 from ikaaro.views import BrowseForm, CompositeForm
 from ikaaro.views_new import NewInstance
 
@@ -170,6 +170,7 @@ class Product_Edit(Editable_Edit, AutoForm):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'Edit')
+    context_menus = [EditLanguageMenu()]
 
     base_widgets = [
         # General informations
