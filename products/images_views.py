@@ -34,8 +34,6 @@ class PhotoOrderedTable_TableView(OrderedTable_View):
         columns = OrderedTable_View.get_table_columns(self, resource, context)
         columns = columns[:2]
         columns.append(('image', MSG(u'Image')))
-        columns.append(('title', MSG(u'Title')))
-        columns.append(('description', MSG(u'Description')))
         columns.append(('order', MSG(u'Order')))
 
         return columns
@@ -44,29 +42,15 @@ class PhotoOrderedTable_TableView(OrderedTable_View):
     def get_item_value(self, resource, context, item, column):
         gallery = resource.parent
         if column == 'image':
-            image = None
-            try:
-                image = resource.get_resource(item.name)
-            except LookupError:
-                # XXX fallback
-                try:
-                    image = gallery.get_resource(item.name)
-                except LookupError:
-                    return None
+            image = resource.get_resource(item.name, soft=True)
+            if image is None:
+                image = gallery.get_resource(item.name, soft=True)
+            if image is None:
+                return None
             link = context.get_link(image)
             src = '%s/;thumb?width=%s&amp;height=%s' % (link, 50, 50)
             preview = '<img src="%s" />' % src
             return XMLParser(preview)
-        elif column in ('description', 'title'):
-            try:
-                image = resource.get_resource(item.name)
-            except LookupError:
-                # XXX fallback
-                try:
-                    image = gallery.get_resource(item.name)
-                except LookupError:
-                    return None
-            return image.get_property(column)
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
 
