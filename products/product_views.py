@@ -410,18 +410,19 @@ class Product_ImagesSlider(STLView):
     access = True
     template = '/ui/shop/products/product_images_slider.xml'
 
-    img_size = (500, 600)
-    thumb_size = (90, 90)
-    show_cover = True
-
     def get_namespace(self, resource, context):
         namespace = {}
+        shop = get_shop(resource)
+        img_size = getattr(self, 'img_size', shop.slider_img_size)
+        thumb_size = getattr(self, 'thumb_size', shop.slider_thumb_size)
+        show_cover = getattr(self, 'show_cover', shop.slider_show_cover)
+
         namespace['cover'] = resource.get_cover_namespace(context)
-        namespace['images'] = [namespace['cover']] if self.show_cover else []
+        namespace['images'] = [namespace['cover']] if show_cover else []
         namespace['images'] += resource.get_images_namespace(context)
         namespace['has_more_than_one_image'] = len(namespace['images']) > 1
-        namespace['img_width'], namespace['img_height'] = self.img_size
-        namespace['thumb_width'], namespace['thumb_height'] = self.thumb_size
+        namespace['img_width'], namespace['img_height'] = img_size
+        namespace['thumb_width'], namespace['thumb_height'] = thumb_size
         return namespace
 
 

@@ -72,6 +72,11 @@ class Shop(ShopFolder):
     # Reduce string (for product mini-title)
     product_title_word_treshold = 50
 
+    # Slider
+    slider_img_size = (500, 600)
+    slider_thumb_size = (90, 90)
+    slider_show_cover = True
+
     # Templates
 
     shop_templates = {
