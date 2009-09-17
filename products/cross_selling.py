@@ -22,6 +22,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Integer, Boolean, Unicode
 from itools.gettext import MSG
 from itools.uri import resolve_uri2, Path
+from itools.web import get_context
 from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery
 from itools.xml import XMLParser
 
@@ -186,6 +187,7 @@ class CrossSellingTable(ResourcesOrderedTable):
             path = str(resolve_uri2(base, 'products/%s' % name))
             if path == source:
                 handler.update_record(record.id, **{'name': target_name})
+        get_context().database.change_resource(self)
 
 
 

@@ -26,6 +26,7 @@ from itools.datatypes import Integer
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.uri import Path
+from itools.web import get_context
 from itools.xml import TEXT, XMLParser
 
 # Import from ikaaro
@@ -641,6 +642,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                 # Hit the old name
                 new_path2 = base.get_pathto(Path(new_path))
                 self.set_property('cover', str(new_path2))
+        get_context().database.change_resource(self)
 
 
     #######################
