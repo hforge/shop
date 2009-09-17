@@ -59,6 +59,7 @@ class ProductCart(object):
         # products namespace
         products_ns = []
         total_with_tax = decimal(0)
+        total_pre_tax = decimal(0)
         for product_cart in self.products:
             # Get product
             product = products.get_resource(product_cart['name'], soft=True)
@@ -70,6 +71,9 @@ class ProductCart(object):
             unit_price_with_tax = product.get_price_with_tax(id_declination)
             unit_price_with_tax = decimal(unit_price_with_tax)
             total_with_tax += unit_price_with_tax * quantity
+            unit_price_pre_tax = product.get_price_without_tax(id_declination)
+            unit_price_pre_tax = decimal(unit_price_pre_tax)
+            total_pre_tax += unit_price_pre_tax * quantity
 
             virtual_path = product.get_virtual_path()
             product_ns = {'id': product_cart['id'],
@@ -82,6 +86,7 @@ class ProductCart(object):
         # Build namespace
         return {'nb_products': self.get_nb_products(),
                 'total_with_tax': format_price(total_with_tax),
+                'total_pre_tax': format_price(total_pre_tax),
                 'products': products_ns}
 
     #######################################
