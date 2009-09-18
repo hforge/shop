@@ -15,10 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean, Unicode
+from itools.datatypes import Boolean, Unicode, PathDataType
 
 
 delivery_schema = {'title': Unicode,
+                   'logo': PathDataType,
                    'description': Unicode,
                    'enabled': Boolean(default=True),
                    'is_free': Boolean}

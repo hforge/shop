@@ -20,7 +20,8 @@ from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import AutoForm, TextWidget, BooleanCheckBox, MultilineWidget
+from ikaaro.forms import AutoForm, TextWidget, BooleanRadio, MultilineWidget
+from ikaaro.forms import ImageSelectorWidget
 
 # Import from shop
 from schema import delivery_schema
@@ -35,9 +36,10 @@ class ShippingWay_Configure(AutoForm):
 
     widgets = [
         TextWidget('title', title=MSG(u'Title')),
+        ImageSelectorWidget('logo', title=MSG(u'Logo')),
         MultilineWidget('description', title=MSG(u'Description')),
-        BooleanCheckBox('enabled', title=MSG(u'Enabled ?')),
-        BooleanCheckBox('is_free', title=MSG(u'Shipping way is free ?')),
+        BooleanRadio('enabled', title=MSG(u'Enabled ?')),
+        BooleanRadio('is_free', title=MSG(u'Shipping way is free ?')),
         ]
 
 

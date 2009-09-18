@@ -122,6 +122,7 @@ class ShippingWay(ShopFolder):
     class_title = MSG(u'Shipping')
     class_description = MSG(u'Allow to define your own shipping way')
     class_views = ['view', 'configure', 'history', 'prices']
+    class_version = '20090918'
 
     img = '../ui/shop/images/shipping.png'
 
@@ -185,12 +186,11 @@ class ShippingWay(ShopFolder):
 
 
     def get_logo(self, context):
-        logo = self.get_resource('logo.png', soft=True)
-        if logo:
-            uri = context.get_link(logo)
-        else:
-            uri = '/ui/icons/48x48/text.png'
-        return '%s/;download' % uri
+        logo = self.get_property('logo')
+        resource = self.get_resource(logo, soft=True)
+        if resource is None:
+            return
+        return '%s/;download' % context.get_link(resource)
 
 
     def get_shipping_option(self, context):
@@ -231,6 +231,10 @@ class ShippingWay(ShopFolder):
         for key in ['description', 'enabled']:
             ns[key] = self.get_property(key, language)
         return ns
+
+
+    def update_20090918(self):
+        self.set_property('logo', 'logo.png')
 
 
     # Views
