@@ -120,9 +120,10 @@ class ShippingWay(ShopFolder):
 
     class_id = 'shipping'
     class_title = MSG(u'Shipping')
+    class_description = MSG(u'Allow to define your own shipping way')
     class_views = ['view', 'configure', 'history', 'prices']
 
-    img = 'ui/shop/images/shipping.png'
+    img = '../ui/shop/images/shipping.png'
 
 
     @staticmethod

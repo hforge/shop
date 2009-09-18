@@ -52,7 +52,7 @@ class Shippings(ShopFolder):
 
 
     def get_document_types(self):
-        return []
+        return [ShippingWay, Colissimo, Withdrawal]
 
 
     def get_price(self, shipping_way, country, purchase_weight):
