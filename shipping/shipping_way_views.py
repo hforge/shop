@@ -16,7 +16,9 @@
 
 
 # Import from itools
+from itools.datatypes import String, Unicode
 from itools.gettext import MSG
+from itools.web import STLForm
 
 # Import from ikaaro
 from ikaaro import messages
@@ -25,6 +27,7 @@ from ikaaro.forms import ImageSelectorWidget
 
 # Import from shop
 from schema import delivery_schema
+from shop.shop_utils_views import Shop_PluginWay_Form
 
 
 class ShippingWay_Configure(AutoForm):
@@ -51,3 +54,49 @@ class ShippingWay_Configure(AutoForm):
         for key in self.schema.keys():
             resource.set_property(key, form[key])
         return context.come_back(messages.MSG_CHANGES_SAVED)
+
+
+
+class ShippingWay_RecordView(Shop_PluginWay_Form):
+
+    template = '/ui/shop/shipping/shippingway_order_view.xml'
+
+    def get_namespace(self, order, shipping_way, record, context):
+        history = shipping_way.get_resource('history').handler
+        get_value = history.get_record_value
+        return {'number': get_value(record, 'number'),
+                'description': get_value(record, 'description')}
+
+
+
+class ShippingWay_RecordEdit(ShippingWay_RecordView):
+
+    # TODO Edit can do more things
+    pass
+
+
+
+class ShippingWay_RecordAdd(STLForm):
+
+    access = 'is_admin'
+    template = '/ui/shop/shipping/shippingway_add_record.xml'
+
+    schema = {'number': String(mandatory=True),
+              'description': Unicode}
+
+
+    def get_namespace(self, resource, context):
+        namespace = self.build_namespace(resource, context)
+        namespace['name'] = resource.name
+        return namespace
+
+
+    def add_shipping(self, order, shipping_way, context, form):
+        order.set_as_sent(context)
+        kw = {'ref': order.name,
+              'state': 'sent',
+              'number': form['number'],
+              'description': form['description']}
+        history = shipping_way.get_resource('history')
+        history.handler.add_record(kw)
+        return context.come_back(MSG(u'Shipping added'))

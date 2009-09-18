@@ -244,7 +244,7 @@ class Order_Manage(Payments_EditablePayment, STLForm):
             # We have to add delivery
             add_record_view = shipping_way_resource.order_add_view
             if add_record_view:
-                view = add_record_view.GET(resource, context)
+                view = add_record_view.GET(shipping_way_resource, context)
             else:
                 view = None
         namespace['shipping_ways'] = SelectWidget('shipping_way',

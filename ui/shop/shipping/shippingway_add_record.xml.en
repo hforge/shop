@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <form method="POST">
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td>
+          <label class="${number/class}">
+            To send the packages please fill the colissimo number:<br/><br/>
+          </label>
+          <input type="hidden" name="shipping_way" value="${name}"/>
+          Number:<br/>
+          <input type="text" size="30" name="number" value="${number/value}"/><br/>
+          Details about shipping way:<br/>
+          <textarea name="description" cols="50">${description/value}</textarea><br/>
+          <input name=";add_shipping" type="submit" class="button-ok" value="Ok"/>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+</stl:block>

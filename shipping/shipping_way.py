@@ -43,7 +43,8 @@ from shop.utils import get_shop, ShopFolder
 # Import from shipping
 from enumerates import ShippingStates
 from schema import delivery_schema
-from shipping_way_views import ShippingWay_Configure
+from shipping_way_views import ShippingWay_Configure, ShippingWay_RecordAdd
+from shipping_way_views import ShippingWay_RecordEdit, ShippingWay_RecordView
 
 
 class ShippingWayBaseTable(BaseTable):
@@ -52,17 +53,25 @@ class ShippingWayBaseTable(BaseTable):
         'ref': String(Unique=True, is_indexed=True),
         'state': ShippingStates,
         'price': Decimal,
-        'weight': Decimal }
+        'weight': Decimal,
+        'number': String,
+        'description': Unicode}
 
 
 
 class ShippingWayTable(Table):
 
+    class_id = 'shipping-way-table'
+    class_handler = ShippingWayBaseTable
+
     form = [
         TextWidget('ref', title=MSG(u'Facture number')),
         SelectWidget('state', title=MSG(u'State')),
         TextWidget('price', title=MSG(u'Price')),
-        TextWidget('weight', title=MSG(u'Weight'))]
+        TextWidget('weight', title=MSG(u'Weight')),
+        TextWidget('number', title=MSG(u'Numéro')),
+        TextWidget('description', title=MSG(u'Description')),
+        ]
 
     def get_record_namespace(self, context, record):
         namespace = {}
@@ -245,7 +254,9 @@ class ShippingWay(ShopFolder):
                                   title=MSG(u'Prices'))
 
     # Backoffice order views
-    order_add_view = None
+    order_view = ShippingWay_RecordView()
+    order_add_view = ShippingWay_RecordAdd()
+    order_edit_view = ShippingWay_RecordEdit()
 
 
 
@@ -265,4 +276,5 @@ class ShippingWaysEnumerate(Enumerate):
 
 
 register_resource_class(ShippingWay)
+register_resource_class(ShippingWayTable)
 register_resource_class(ShippingPrices)
