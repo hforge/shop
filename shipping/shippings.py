@@ -45,17 +45,6 @@ class Shippings(ShopFolder):
     configure = Shippings_Configure()
     history = Shippings_History()
 
-
-    @staticmethod
-    def _make_resource(cls, folder, name, *args, **kw):
-        ShopFolder._make_resource(cls, folder, name, *args, **kw)
-        # Init with some shippings mode
-        for c in [Colissimo, Withdrawal]:
-            kw = {'title': {'en': c.class_title.gettext()},
-                  'description': {'en': c.class_description.gettext()}}
-            c._make_resource(c, folder, '%s/%s' % (name, c.class_id), **kw)
-
-
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
