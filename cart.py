@@ -29,10 +29,11 @@ from utils import format_price, get_shop
 
 class ProductCart(object):
     """
-    A cart contains 3 informations
+    A cart contains 4 informations
       -> Products name / quantity / declination
       -> Delivery mode name
       -> Addresses id
+      -> Delivery zone ID
     """
 
     def __init__(self, context):
@@ -45,6 +46,7 @@ class ProductCart(object):
         self.products = self._get_products()
         self.addresses = self._get_addresses()
         self.shipping = self._get_shipping()
+        self.id_zone = self._get_id_zone()
 
 
     ######################
@@ -223,13 +225,20 @@ class ProductCart(object):
         value = Password.encode('%s|%s' % (shipping_name, shipping_option))
         cookie = self.context.set_cookie('shipping', value)
 
+    ########################
+    # Id zone
+    ########################
 
-#    def get_shipping(self):
-#        return self.shipping['name']
-#
-#
-#    def get_shipping_option(self):
-#        return self.shipping['option']
+    def _get_id_zone(self):
+        cookie = self.context.get_cookie('id_zone')
+        if not cookie:
+            return None
+        return Password.decode(cookie)
+
+
+    def set_id_zone(self, id_zone):
+        value = Password.encode(id_zone)
+        cookie = self.context.set_cookie('id_zone', value)
 
     ######################
     # Addresses

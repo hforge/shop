@@ -59,6 +59,7 @@ class BaseCountriesZones(BaseTable):
 
     record_schema = {
       'title': Unicode(mandatory=True),
+      'has_tax': Boolean
       }
 
 
@@ -70,11 +71,13 @@ class CountriesZones(Table):
     class_title = MSG(u'Countries Zones')
     class_handler = BaseCountriesZones
     class_views = ['view', 'add_record']
+    class_version = '20090923'
 
     add_record = Table_AddRecord(title=MSG(u'Add a new zone'))
 
     form = [
         TextWidget('title', title=MSG(u'Country title')),
+        BooleanRadio('has_tax', title=MSG(u'Has TAX ?'))
         ]
 
 
@@ -91,6 +94,10 @@ class CountriesZones(Table):
                 table.add_record({'title': Property(zone, language='fr')})
         folder.set_handler(name, table)
 
+
+    def update_20090923(self):
+        for record in self.handler.get_records():
+            self.handler.update_record(record.id, **{'has_tax': True})
 
 
 

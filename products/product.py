@@ -48,6 +48,7 @@ from product_views import Product_Print, Product_SendToFriend
 from product_views import Product_Declinations, Products_ChangeCategory
 from schema import product_schema
 from taxes import TaxesEnumerate
+from shop.cart import ProductCart
 from shop.editable import Editable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
@@ -562,10 +563,20 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def get_price_with_tax(self, id_declination=None, pretty=False):
+        shop = get_shop(self)
         price = self.get_price_without_tax(id_declination)
-        tax = self.get_property('tax')
-        tax_value = TaxesEnumerate.get_value(tax) or decimal(0)
-        price = price * (tax_value/decimal(100) + 1)
+        # Get zone from cookie
+        id_zone = ProductCart(get_context()).id_zone
+        # If not define... get default zone
+        if id_zone is None:
+            id_zone = shop.get_property('shop_default_zone')
+        # Check if zone has tax ?
+        zones = shop.get_resource('countries-zones').handler
+        zone_record = zones.get_record(int(id_zone))
+        if zones.get_record_value(zone_record, 'has_tax') is True:
+            tax = self.get_property('tax')
+            tax_value = TaxesEnumerate.get_value(tax) or decimal(0)
+            price = price * (tax_value/decimal(100) + 1)
         if pretty is True:
             return format_price(price)
         return price

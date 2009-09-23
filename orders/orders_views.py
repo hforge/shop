@@ -39,42 +39,6 @@ from shop.datatypes import Civilite
 from shop.utils import get_shop
 
 
-
-class OrdersProductsView(Table_View):
-
-    columns = [
-        ('checkbox', None),
-        ('name', MSG(u'Product')),
-        ('options', MSG(u'Options')),
-        ('pre-tax-price', MSG(u'Unit price')),
-        ('quantity', MSG(u'Quantity')),
-        ('total_price', MSG(u'Total price')),
-        ]
-
-    def get_table_columns(self, resource, context):
-        return self.columns
-
-
-    def get_item_value(self, resource, context, item, column):
-        value = Table_View.get_item_value(self, resource, context, item, column)
-        if column == 'name':
-            shop = get_shop(resource)
-            ref = item.get_value('name')
-            produit = shop.get_resource('products/%s' % ref, soft=True)
-            if not produit:
-                return ref
-            return (produit.name, resource.get_pathto(produit))
-        elif column == 'pre-tax-price':
-            return u'%s €' % value
-        elif column == 'total_price':
-            price = item.get_value('pre-tax-price')
-            total_price = item.get_value('quantity') * price
-            return u'%s €' % total_price
-        return value
-
-
-
-
 class OrdersView(Folder_BrowseContent):
 
     access = 'is_admin'

@@ -16,6 +16,7 @@
 
 # Import from standard library
 from datetime import datetime
+from decimal import Decimal as decimal
 
 # Import from itools
 from itools.csv import Table as BaseTable
@@ -42,7 +43,7 @@ from shop.utils import get_shop
 # Import from shop.orders
 from messages import Messages_TableResource
 from orders_views import Order_Manage
-from orders_views import OrdersView, OrdersProductsView
+from orders_views import OrdersView
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
 from shop.utils import format_price, ShopFolder
@@ -105,8 +106,6 @@ class OrdersProducts(Table):
     class_handler = BaseOrdersProducts
 
     class_views = ['view']
-
-    view = OrdersProductsView()
 
     form = [
         TextWidget('name', title=MSG(u'Product name')),
@@ -193,6 +192,11 @@ class Order(WorkflowAware, ShopFolder):
         metadata = {}
         for key in ['payment_mode', 'shipping_price', 'total_price', 'total_weight']:
             metadata[key] = kw[key]
+        # Has tax ?
+        id_zone = cart.id_zone
+        zones = shop.get_resource('countries-zones').handler
+        zone_record = zones.get_record(int(id_zone))
+        has_tax = zones.get_record_value(zone_record, 'has_tax')
         # Addresses
         metadata['delivery_address'] = cart.addresses['delivery_address']
         metadata['bill_address'] = cart.addresses['bill_address'] or \
@@ -207,13 +211,17 @@ class Order(WorkflowAware, ShopFolder):
         for product_cart in cart.products:
             product = products.get_resource(product_cart['name'])
             declination = product_cart['declination']
+            if has_tax:
+                tax = TaxesEnumerate.get_value(product.get_property('tax'))
+            else:
+                tax = decimal(0)
             handler.add_record(
               {'name': product.name,
                'reference': product.get_reference(declination),
                'title': product.get_title(),
                'declination': declination,
                'pre-tax-price': product.get_price_without_tax(declination),
-               'tax': TaxesEnumerate.get_value(product.get_property('tax')),
+               'tax': tax,
                'weight': product.get_weight(declination),
                'quantity': product_cart['quantity']})
         metadata = OrdersProducts.build_metadata(title={'en': u'Products'})

@@ -351,8 +351,17 @@ class Shop_ChooseAddress(STLForm):
 
     def action(self, resource, context, form):
         cart = ProductCart(context)
-        cart.set_delivery_address(form['delivery_address'])
+        # Set bill address
         cart.set_bill_address(form['bill_address'])
+        # Set delivery address
+        cart.set_delivery_address(form['delivery_address'])
+        # Set delivery zone
+        addresses = resource.get_resource('addresses').handler
+        delivery_address = addresses.get_record(int(form['delivery_address']))
+        country_id = addresses.get_record_value(delivery_address, 'country')
+        countries = resource.get_resource('countries').handler
+        country_record = countries.get_record(int(country_id))
+        cart.set_id_zone(countries.get_record_value(country_record, 'zone'))
         return context.come_back(MSG_CHANGES_SAVED, ';addresses')
 
 
@@ -371,7 +380,16 @@ class Shop_Addresses(STLForm):
             if not delivery_address:
                 return context.uri.resolve(';add_address')
             else:
+                # Set delivery address
                 cart.set_delivery_address(delivery_address.id)
+                # Set delivery zone
+                addresses = resource.get_resource('addresses').handler
+                country_id = addresses.get_record_value(delivery_address,
+                                                        'country')
+                countries = resource.get_resource('countries').handler
+                country_record = countries.get_record(int(country_id))
+                cart.set_id_zone(
+                    countries.get_record_value(country_record, 'zone'))
         # Normal
         return STLView.GET(self, resource, context)
 
@@ -799,4 +817,3 @@ class Barcode(BaseView):
         f = StringIO()
         img.save(f, 'png')
         f.seek(0)
-        return f.getvalue()
