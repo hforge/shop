@@ -817,3 +817,4 @@ class Barcode(BaseView):
         f = StringIO()
         img.save(f, 'png')
         f.seek(0)
+        return f.getvalue()
