@@ -304,6 +304,7 @@ class Products_View(Folder_BrowseContent):
 
     table_columns = [
         ('checkbox', None),
+        ('barcode', None),
         ('cover', MSG(u'Cover')),
         ('reference', MSG(u'Reference')),
         ('title', MSG(u'Title')),
@@ -371,6 +372,10 @@ class Products_View(Folder_BrowseContent):
         item_brain, item_resource = item
         if column == 'reference':
             return item_resource.get_property('reference')
+        elif column == 'barcode':
+            reference = item_resource.get_property('reference')
+            return XMLParser(
+                  '<img src="../;barcode?reference=%s"/>' % reference)
         elif column == 'cover':
             cover = item_resource.get_cover_namespace(context)
             if cover:
