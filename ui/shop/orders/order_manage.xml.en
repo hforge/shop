@@ -48,8 +48,10 @@
     <tbody>
       <tr style="height:80px">
         <td valign="top">
+          <a target="_blank" href="../../;customer_manage?name=${customer/id}">
           ${customer/title}<br/>
           ${customer/email}
+          </a>
         </td>
       </tr>
     </tbody>
