@@ -576,10 +576,10 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
     def get_price_without_tax(self, id_declination=None, pretty=False):
         if id_declination:
-            declination = self.get_resource(id_declination, soft=True)
-            if declination:
-                return declination.get_price_without_tax()
-        price = self.get_property('pre-tax-price')
+            declination = self.get_resource(id_declination)
+            price = declination.get_price_without_tax()
+        else:
+            price = self.get_property('pre-tax-price')
         if pretty is True:
             return format_price(price)
         return price
