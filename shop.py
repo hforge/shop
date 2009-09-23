@@ -27,7 +27,7 @@ from ikaaro.webpage import WebPage
 from enumerate_table import EnumeratesFolder
 from addresses import Addresses
 from categories import Categories, VirtualCategory
-from countries import Countries, CountriesZones
+from countries import Countries, CountriesZones, CountriesZonesEnumerate
 from datatypes import ImagePathDataType
 from enumerates import BarcodesFormat, SortBy_Enumerate
 from orders import Orders
@@ -188,6 +188,7 @@ class Shop(ShopFolder):
     def get_metadata_schema(cls):
         schema = ShopFolder.get_metadata_schema()
         schema['order_notification_mails'] = Email(multiple=True)
+        schema['shop_default_zone'] = CountriesZonesEnumerate
         schema['shop_signature'] = Unicode
         schema['shop_sort_by'] = SortBy_Enumerate
         schema['shop_sort_reverse'] = Boolean

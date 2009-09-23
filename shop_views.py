@@ -52,7 +52,7 @@ from datatypes import Civilite, ImagePathDataType
 from enumerates import BarcodesFormat, SortBy_Enumerate
 from utils import get_shop, format_price
 from cart import ProductCart
-from countries import CountriesEnumerate
+from countries import CountriesEnumerate, CountriesZonesEnumerate
 from datatypes import Civilite
 from orders import Order
 from payments import PaymentWaysEnumerate
@@ -77,6 +77,7 @@ class Shop_Configure(DBResource_Edit):
 
     schema = {'shop_from_addr': Email(mandatory=True),
               'order_notification_mails': MultiLinesTokens(mandatory=True),
+              'shop_default_zone': CountriesZonesEnumerate(mandatory=True),
               'shop_signature': Unicode(mandatory=True),
               'shop_sort_by': SortBy_Enumerate(mandatory=True),
               'shop_sort_reverse': Boolean(mandatory=True),
@@ -94,6 +95,7 @@ class Shop_Configure(DBResource_Edit):
             title=MSG(u'Shop signature'), rows=8, cols=50),
         BooleanRadio('activate_mail_html',
             title=MSG(u'Activate html mails')),
+        SelectWidget('shop_default_zone', title=MSG(u'Shop default zone')),
         SelectWidget('shop_sort_by', title=MSG(u'Sort products by ...'),
                      has_empty_option=False),
         BooleanRadio('shop_sort_reverse', title=MSG(u'Reverse sort ?')),
