@@ -68,6 +68,14 @@ from shop.utils import get_shop, format_price, ShopFolder
 #
 
 
+mail_stock_subject_template = MSG(u'Product out of stock')
+
+mail_stock_body_template = MSG(u"""Hi,
+The product {product_title} is out of stock\n
+  {product_uri}\n
+""")
+
+
 
 class Product(WorkflowAware, Editable, DynamicFolder):
 
@@ -516,18 +524,33 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         return self.get_property('stock-quantity') >= quantity
 
 
+    def send_alert_stock(self):
+        shop = get_shop(self)
+        context = get_context()
+        product_uri = context.uri.resolve('/shop/products/%s/' % self.name)
+        kw = {'product_title': self.get_title(), 'product_uri': product_uri}
+        body = mail_stock_body_template.gettext(**kw)
+        for to_addr in shop.get_property('order_notification_mails'):
+            shop.send_email(context,
+                            to_addr=to_addr,
+                            subject=mail_stock_subject_template,
+                            text=body)
+
+
     def remove_from_stock(self, quantity, id_declination=None):
         if id_declination:
             declination = self.get_resource(id_declination)
             declination.remove_from_stock(quantity)
         else:
             stock_option = self.get_stock_option()
-            new_quantity = self.get_property('stock-quantity') - quantity
+            old_quantity = self.get_property('stock-quantity')
+            new_quantity = old_quantity - quantity
             if new_quantity <= 0 and stock_option == 'accept':
                 new_quantity = 0
-            if new_quantity <= 0:
-                if stock_option == 'refuse_go_private':
-                    self.set_property('state', 'private')
+            if new_quantity <= 0 and stock_option == 'refuse_go_private':
+                self.set_property('state', 'private')
+            if old_quantity > 0 and new_quantity == 0:
+                self.send_alert_stock()
             self.set_property('stock-quantity', new_quantity)
 
     #####################

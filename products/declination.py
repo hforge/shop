@@ -140,7 +140,10 @@ class Declination(DynamicFolder):
 
 
     def remove_from_stock(self, quantity):
-        new_quantity = self.get_property('stock-quantity') - quantity
+        old_quantity = self.get_property('stock-quantity')
+        new_quantity = old_quantity - quantity
+        if old_quantity > 0 and new_quantity == 0:
+            self.parent.send_alert_stock()
         self.set_property('stock-quantity', new_quantity)
 
 
