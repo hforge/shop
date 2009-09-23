@@ -5,7 +5,7 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   Your order has been send.<br/>
-  <span stl:if="numero">Package number: ${number}</span>
+  <span stl:if="number">Package number: ${number}</span>
   <p stl:if="description">
     ${description}
   </p>
