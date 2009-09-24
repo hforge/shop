@@ -383,7 +383,7 @@ msgstr ""
 #: ../ui/shop/shop_chooseaddress.xml.en:10
 msgctxt "form"
 msgid "${delivery_address}<x id='2'/><x id='3'/> Bill address:"
-msgstr "${delivery_address}<x id='2'/><x id='3'/> Adresse de livraison :"
+msgstr "${delivery_address}<x id='2'/><x id='3'/> Adresse de facturation :"
 
 #: ../ui/shop/virtualcategory_view.xml.en:8
 msgctxt "div"
