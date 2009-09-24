@@ -87,6 +87,8 @@ class DeclinationImpact(Enumerate):
       - weight of product
     """
 
+    default = 'none'
+
     options = [
       {'name': 'none' , 'value': MSG(u'None')},
       {'name': 'increase', 'value': MSG(u'Increase')},

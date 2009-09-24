@@ -67,7 +67,8 @@ class EnumerateTable_View(OrderedTable_View):
     def get_item_value(self, resource, context, item, column):
         if column == 'title':
             get_value = resource.handler.get_record_value
-            return (get_value(item, 'title'), item.name)
+            return (get_value(item, 'title'),
+                    ';edit_record?id=%s' % item.id)
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
 
