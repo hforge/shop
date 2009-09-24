@@ -239,26 +239,26 @@ class VirtualCategory_Comparator(STLView):
         # Comporator model schema
         model = products_to_compare[0].get_product_model()
         if model:
-            model_ns = model.get_model_ns(products_to_compare[0])
-            comparator = {}
-            for key in model_ns['specific_dict'].keys():
-                title = model_ns['specific_dict'][key]['title']
-                comparator[key] = {'name': key,
-                                   'title': title,
-                                   'values': []}
-            for product in products_to_compare:
-                model_ns = model.get_model_ns(product)
-                kw = []
-                for key in model_ns['specific_dict'].keys():
-                    value = model_ns['specific_dict'][key]['value']
-                    comparator[key]['values'].append(value)
-            # fetch info keys in order
+            # Get model schema
             keys = []
-            for info in model.get_model_informations():
-                name = info['name']
-                if info['visible']:
-                    keys.append(name)
-            # sort informations
+            comparator = {}
+            schema_resource = model.get_resource('schema').handler
+            get_value = schema_resource.get_record_value
+            for record in schema_resource.get_records_in_order():
+                if get_value(record, 'visible') is False:
+                    continue
+                name = get_value(record, 'name')
+                title = get_value(record, 'title')
+                keys.append(name)
+                comparator[name] = {'name': name,
+                                    'title': title,
+                                    'values': []}
+            for product in products_to_compare:
+                model_ns = model.get_model_namespace(product)
+                kw = []
+                for d in model_ns['specific_list']:
+                    comparator[d['name']]['values'].append(d['value'])
+            # fetch info keys in order
             namespace['comparator'] = [comparator[key] for key in keys]
         else:
             namespace['comparator'] = []
