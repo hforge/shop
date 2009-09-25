@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
+from itools.datatypes import Boolean, Integer, String
 from itools.gettext import MSG
 from itools.web import INFO, ERROR
 
@@ -24,6 +26,51 @@ from ikaaro.table_views import Table_View
 
 # Import from shop
 from utils import bool_to_img
+
+
+class Countries_View(Table_View):
+
+    columns = [
+        ('checkbox', None),
+        ('title', MSG(u'Country title')),
+        ('zone', MSG(u'Zone title')),
+        ('enabled', MSG(u'Is enabled ?')),
+        ]
+
+    # XXX Can't delete country
+    # We have to check -> User addresses ...
+    table_actions = []
+
+    def get_table_columns(self, resource, context):
+        return self.columns
+
+
+    def get_query_schema(self):
+        return merge_dicts(Table_View.get_query_schema(self),
+                           batch_size=Integer(default=500),
+                           reverse=Boolean(default=False),
+                           sort_by=String(default='title'))
+
+
+
+    def get_item_value(self, resource, context, item, column):
+        handler = resource.handler
+        if column == 'checkbox':
+            return item.id, False
+        elif column == 'title':
+            id = item.id
+            title = handler.get_record_value(item, 'title')
+            link = context.get_link(resource)
+            return title, '%s/;edit_record?id=%s' % (link, id)
+        elif column == 'zone':
+            from countries import CountriesZonesEnumerate
+            zone = handler.get_record_value(item, 'zone')
+            return CountriesZonesEnumerate.get_value(zone)
+        elif column == 'enabled':
+            enabled = handler.get_record_value(item, 'enabled')
+            return bool_to_img(enabled)
+
+
 
 
 class CountriesZones_View(Table_View):

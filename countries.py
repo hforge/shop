@@ -31,7 +31,7 @@ from ikaaro.table import Table
 from ikaaro.table_views import Table_AddRecord
 
 # Import from shop
-from countries_views import CountriesZones_View
+from countries_views import Countries_View, CountriesZones_View
 from utils import get_shop
 
 ###########################################################
@@ -144,6 +144,7 @@ class Countries(Table):
     class_handler = BaseCountries
     class_views = ['view', 'add_record']
 
+    view = Countries_View()
     add_record = Table_AddRecord(title=MSG(u'Add a new country'))
 
     form = [
