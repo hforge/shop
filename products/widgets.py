@@ -23,7 +23,7 @@ from itools.xml import XMLParser
 from ikaaro.forms import SelectRadio, Widget, stl_namespaces
 
 # Import from shop
-from enumerate import StockOptions
+from enumerate import StockOptions, ProductModelsEnumerate
 from shop.utils import get_shop
 
 
@@ -61,6 +61,28 @@ class MiniProductWidget(Widget):
         viewbox = context.resource.viewbox
         return {'viewbox': viewbox.GET(context.resource, context)}
 
+
+class ProductModelWidget(Widget):
+
+    template = list(XMLParser(
+        """
+        <input type="hidden" name="product_model" value="${product_model}"/>
+        ${product_model_title}
+        <a href=";change_product_model" stl:if="can_change_product_model">
+          [Change product model]
+        </a>
+        """,
+        stl_namespaces))
+
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        here = context.resource
+        product_model = here.get_property('product_model')
+        return {'can_change_product_model': not product_model,
+                'product_model': product_model,
+                'product_model_title': ProductModelsEnumerate.get_value(
+                                              product_model)}
 
 
 class StockProductWidget(Widget):

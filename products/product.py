@@ -46,6 +46,7 @@ from product_views import Product_View, Product_Edit, Product_AddLinkFile
 from product_views import Product_Delete, Product_ImagesSlider
 from product_views import Product_Print, Product_SendToFriend
 from product_views import Product_Declinations, Products_ChangeCategory
+from product_views import Product_ChangeProductModel
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
@@ -105,6 +106,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     view = Product_View()
     edit = Product_Edit()
     add_link_file = Product_AddLinkFile()
+    change_product_model = Product_ChangeProductModel()
     declinations = Product_Declinations()
     order = GoToSpecificDocument(specific_document='order-photos',
                                  title=MSG(u'Manage photos'),
@@ -124,8 +126,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         return merge_dicts(DynamicFolder.get_metadata_schema(),
                            Editable.get_metadata_schema(),
                            WorkflowAware.get_metadata_schema(),
-                           product_schema,
-                           product_model=String)
+                           product_schema)
 
 
     @staticmethod

@@ -36,6 +36,7 @@ from taxes import TaxesEnumerate
 product_schema = {# General informations
                   'state': States(mandatory=True, default='public'),
                   'reference': String,
+                  'product_model': String,
                   'title': Unicode(multilingual=True),
                   'description': Unicode(multilingual=True),
                   'subject': Unicode(multilingual=True),

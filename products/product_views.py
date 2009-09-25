@@ -42,6 +42,7 @@ from declination import Declination, Declination_NewInstance
 from schema import product_schema
 from taxes import PriceWidget
 from widgets import BarcodeWidget, MiniProductWidget, StockProductWidget
+from widgets import ProductModelWidget
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.utils import get_shop, ChangeCategoryButton
@@ -177,6 +178,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         SelectWidget('state',
                      title=MSG(u'Publication state'),
                      has_empty_option=False),
+        ProductModelWidget('product_model', title=MSG(u'Product model')),
         BarcodeWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
@@ -431,6 +433,35 @@ class Product_ImagesSlider(STLView):
         return namespace
 
 
+class Product_ChangeProductModel(AutoForm):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Change product model')
+
+    schema = {'product_model': ProductModelsEnumerate}
+
+    widgets = [
+      SelectWidget('product_model', has_empty_option=False,
+        title=MSG(u'Product model'))
+      ]
+
+    def get_value(self, resource, context, name, datatype):
+        if name == 'product_model':
+            return resource.get_property('product_model')
+
+
+    def action(self, resource, context, form):
+        product_model = resource.get_property('product_model')
+        if product_model == form['product_model']:
+            msg = INFO(u'Product model has not been changed !')
+            return context.come_back(msg, goto='./;edit')
+        if not product_model:
+            resource.set_property('product_model', form['product_model'])
+            msg = INFO(u'Product model changed !')
+            return context.come_back(msg, goto='./;edit')
+        context.message = ERROR(u"You can't change product model")
+
+
 
 class Product_Print(STLView):
 
@@ -636,3 +667,4 @@ class Products_ChangeCategory(AutoForm):
             product =resource.get_resource(id)
             product.set_property('categories', form['categories'])
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
+
