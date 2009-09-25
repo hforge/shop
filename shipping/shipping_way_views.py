@@ -24,6 +24,7 @@ from itools.web import STLForm
 from ikaaro import messages
 from ikaaro.forms import AutoForm, TextWidget, BooleanRadio, MultilineWidget
 from ikaaro.forms import ImageSelectorWidget
+from ikaaro.resource_views import EditLanguageMenu
 
 # Import from shop
 from schema import delivery_schema
@@ -36,6 +37,8 @@ class ShippingWay_Configure(AutoForm):
     title = MSG(u'Edit')
 
     schema = delivery_schema
+
+    context_menus = [EditLanguageMenu()]
 
     widgets = [
         TextWidget('title', title=MSG(u'Title')),
