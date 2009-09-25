@@ -72,6 +72,9 @@
       <li>
         <a href="./countries/">Configure authorized countries</a>
       </li>
+      <li>
+        <a href="./countries-zones/">Configure authorized countries zones</a>
+      </li>
     </ul>
 
 </stl:block>
