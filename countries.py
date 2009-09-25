@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from operator import itemgetter
+
 # Import from itools
 from itools.core import get_abspath
 from itools.csv import Table as BaseTable, CSVFile, Property
@@ -28,6 +31,7 @@ from ikaaro.table import Table
 from ikaaro.table_views import Table_AddRecord
 
 # Import from shop
+from countries_views import CountriesZones_View
 from utils import get_shop
 
 ###########################################################
@@ -73,6 +77,7 @@ class CountriesZones(Table):
     class_views = ['view', 'add_record']
     class_version = '20090923'
 
+    view = CountriesZones_View()
     add_record = Table_AddRecord(title=MSG(u'Add a new zone'))
 
     form = [
@@ -110,9 +115,15 @@ class CountriesEnumerate(Enumerate):
         shop = get_shop(context.resource)
         # Get options
         countries = shop.get_resource('countries').handler
-        return [{'name': str(record.id),
-                 'value': countries.get_record_value(record, 'title')}
-                    for record in countries.get_records()]
+        if hasattr(cls, 'zone'):
+            records = countries.search(zone=str(cls.zone))
+        else:
+            records = countries.get_records()
+        options = [{'name': str(record.id),
+                    'value': countries.get_record_value(record, 'title')}
+                        for record in records]
+        options.sort(key=itemgetter('value'))
+        return options
 
 
 
@@ -120,7 +131,7 @@ class BaseCountries(BaseTable):
 
     record_schema = {
       'title': Unicode(mandatory=True, multiple=True),
-      'zone': CountriesZonesEnumerate(mandatory=True),
+      'zone': CountriesZonesEnumerate(is_indexed=True, mandatory=True),
       'enabled': Boolean,
       }
 

@@ -16,12 +16,21 @@
 
 # Import from itools
 from itools.gettext import MSG
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.buttons import Button
 from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_Orphans, Folder_BrowseContent
 from ikaaro.revisions_views import DBResource_LastChanges
+
+
+def bool_to_img(value):
+    if value is True:
+        img = '/ui/shop/images/yes.png'
+    else:
+        img = '/ui/shop/images/no.png'
+    return XMLParser('<img src="%s"/>' % img)
 
 
 def get_shop(resource):
