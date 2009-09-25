@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-09-03 14:09+CET\n"
+"POT-Creation-Date: 2009-09-25 15:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "      Veuillez donner un nom à votre adresse.\n"
 "      "
 
-#: ../orders/orders.py:78
+#: ../orders/orders.py:79
 msgid ""
 "\n"
 "Hi,\n"
@@ -48,23 +48,23 @@ msgstr ""
 "-- \n"
 "{shop_signature}\n"
 
-#: ../products/product_views.py:535
+#: ../products/product_views.py:579
 msgid " (+ %s kg)"
 msgstr ""
 
-#: ../products/product_views.py:523
+#: ../products/product_views.py:567
 msgid " (+ %s €)"
 msgstr ""
 
-#: ../products/product_views.py:538
+#: ../products/product_views.py:582
 msgid " (- %s kg)"
 msgstr ""
 
-#: ../products/product_views.py:526
+#: ../products/product_views.py:570
 msgid " (- %s €)"
 msgstr ""
 
-#: ../shop_views.py:530
+#: ../shop_views.py:559
 msgid "#%s"
 msgstr ""
 
@@ -159,7 +159,7 @@ msgstr "${amount} €<x id='4'/> État :"
 msgid "${autorisation}<x id='3'/> Amount:"
 msgstr "${autorisation}<x id='3'/> Montant :"
 
-#: ../ui/shop/virtualcategory_view.xml.en:28
+#: ../ui/shop/virtualcategory_view.xml.en:30
 msgid "${batch}"
 msgstr ""
 
@@ -253,9 +253,9 @@ msgctxt "link"
 msgid "${cat/title} (${cat/nb_items})"
 msgstr ""
 
-#: ../ui/shop/virtualcategory_view.xml.en:16
+#: ../ui/shop/virtualcategory_view.xml.en:17
 msgctxt "link"
-msgid "${category/title}"
+msgid "${category/title} (${category/nb_products})"
 msgstr ""
 
 #: ../ui/shop/virtualcategory_comparator.xml.en:18
@@ -282,15 +282,15 @@ msgctxt "table cell"
 msgid "${customer/email}"
 msgstr ""
 
+#: ../ui/shop/orders/order_manage.xml.en:52
+msgctxt "link"
+msgid "${customer/title}<x id='13'/> ${customer/email}"
+msgstr ""
+
 #: ../ui/shop/payments/payment_manage.xml.en:21
 msgctxt "table cell"
 msgid "${customer/title}<x id='2'/> Email:"
 msgstr "${customer/title}<x id='2'/> E-mail:"
-
-#: ../ui/shop/orders/order_manage.xml.en:47
-msgctxt "table cell"
-msgid "${customer/title}<x id='9'/> ${customer/email}"
-msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:77
 #: ../ui/shop/products/print.xml.en:40
@@ -312,7 +312,7 @@ msgid "${delivery_address/address_2}"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:35
-#: ../ui/shop/orders/order_manage.xml.en:210
+#: ../ui/shop/orders/order_manage.xml.en:216
 msgctxt "table cell"
 msgid "${delivery_address/address_2}"
 msgstr ""
@@ -332,10 +332,10 @@ msgid ""
 "${delivery_address/address_1}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:207
+#: ../ui/shop/orders/order_manage.xml.en:213
 msgctxt "table cell"
 msgid ""
-"${delivery_address/firstname} ${delivery_address/lastname}<x id='31'/> "
+"${delivery_address/firstname} ${delivery_address/lastname}<x id='35'/> "
 "${delivery_address/address_1}"
 msgstr ""
 
@@ -357,10 +357,10 @@ msgid ""
 "${delivery_address/country}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:212
+#: ../ui/shop/orders/order_manage.xml.en:218
 msgctxt "table cell"
 msgid ""
-"${delivery_address/zipcode} ${delivery_address/town}<x id='34'/> "
+"${delivery_address/zipcode} ${delivery_address/town}<x id='38'/> "
 "${delivery_address/country}"
 msgstr ""
 
@@ -385,12 +385,18 @@ msgctxt "form"
 msgid "${delivery_address}<x id='2'/><x id='3'/> Bill address:"
 msgstr "${delivery_address}<x id='2'/><x id='3'/> Adresse de facturation :"
 
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:18
+msgctxt "textarea"
+msgid "${description/value}"
+msgstr ""
+
 #: ../ui/shop/virtualcategory_view.xml.en:8
 msgctxt "div"
 msgid "${description}"
 msgstr ""
 
 #: ../ui/shop/products/product_viewbox.xml.en:20
+#: ../ui/shop/shipping/shippingway_order_view.xml.en:10
 #: ../ui/shop/virtualcategory_boxsubcategories.xml.en:10
 msgctxt "paragraph"
 msgid "${description}"
@@ -468,18 +474,18 @@ msgctxt "table cell"
 msgid "${menu}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:298
+#: ../ui/shop/orders/order_manage.xml.en:304
 msgctxt "table cell"
 msgid "${message/author}"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:119
-#: ../ui/shop/orders/order_manage.xml.en:309
+#: ../ui/shop/orders/order_manage.xml.en:315
 msgctxt "table cell"
 msgid "${message/message}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:295
+#: ../ui/shop/orders/order_manage.xml.en:301
 msgctxt "b"
 msgid "${message/ts}"
 msgstr ""
@@ -492,6 +498,11 @@ msgstr "${message/ts} - ${message/author} :"
 #: ../ui/shop/products/addproduct.xml.en:21 ../ui/shop/template.xhtml.en:70
 msgctxt "div"
 msgid "${message}"
+msgstr ""
+
+#: ../ui/shop/shop_delivery.xml.en:41
+msgctxt "paragraph"
+msgid "${msg_if_no_shipping}"
 msgstr ""
 
 #: ../ui/shop/browse_batch.xml.en:8
@@ -511,6 +522,11 @@ msgstr "${nb_results} résultats."
 
 #: ../ui/shop/orders/order_facture.xml.en:22
 msgid "${num_cmd}"
+msgstr ""
+
+#: ../ui/shop/shipping/shippingway_order_view.xml.en:8
+msgctxt "span"
+msgid "${number}"
 msgstr ""
 
 #: ../ui/shop/shop_recapitulatif.xml.en:82
@@ -558,15 +574,18 @@ msgctxt "table cell"
 msgid "${order/id}<x id='2'/> Date:"
 msgstr "${order/id}<x id='2'/> Date :"
 
-#: ../ui/shop/orders/order_manage.xml.en:27
-msgctxt "table cell"
-msgid "${order/payment_way}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:123
+#: ../ui/shop/orders/order_manage.xml.en:129
 msgctxt "emphasis"
 msgid "${order/payment_way}:"
 msgstr "${order/payment_way} :"
+
+#: ../ui/shop/orders/order_manage.xml.en:27
+msgctxt "table cell"
+msgid ""
+"${order/payment_way}<x id='7'/>  <g id='8'>  <x id='9'/> Download bill </g>"
+msgstr ""
+"${order/payment_way}<x id='7'/>  <g id='8'>  <x id='9'/> Télécharger la "
+"facture </g>"
 
 #: ../ui/shop/orders/order_manage.xml.en:26
 msgctxt "table cell"
@@ -619,32 +638,32 @@ msgctxt "link"
 msgid "${page/number}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:363
+#: ../ui/shop/orders/order_manage.xml.en:369
 msgctxt "table cell"
 msgid "${payment/advance_state}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:362
+#: ../ui/shop/orders/order_manage.xml.en:368
 msgctxt "table cell"
 msgid "${payment/amount}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:359
+#: ../ui/shop/orders/order_manage.xml.en:365
 msgctxt "table cell"
 msgid "${payment/complete_id}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:358
+#: ../ui/shop/orders/order_manage.xml.en:364
 msgctxt "table cell"
 msgid "${payment/state}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:361
+#: ../ui/shop/orders/order_manage.xml.en:367
 msgctxt "table cell"
 msgid "${payment/ts}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:121
+#: ../ui/shop/orders/order_manage.xml.en:127
 msgctxt "paragraph"
 msgid "${payment/view}"
 msgstr ""
@@ -654,7 +673,7 @@ msgctxt "table cell"
 msgid "${payment_view}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:131
+#: ../ui/shop/orders/order_manage.xml.en:137
 msgctxt "form"
 msgid "${payment_ways}"
 msgstr ""
@@ -670,7 +689,7 @@ msgctxt "table cell"
 msgid "${price-with-tax} €"
 msgstr ""
 
-#: ../ui/shop/virtualcategory_view.xml.en:22
+#: ../ui/shop/virtualcategory_view.xml.en:24
 msgctxt "div"
 msgid "${product/box}"
 msgstr ""
@@ -686,7 +705,7 @@ msgid "${product/cover/title}"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:73
-#: ../ui/shop/orders/order_manage.xml.en:255
+#: ../ui/shop/orders/order_manage.xml.en:261
 msgctxt "table cell"
 msgid "${product/declination}"
 msgstr ""
@@ -701,7 +720,7 @@ msgid "${product/price/total/with_tax} €"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:78
-#: ../ui/shop/orders/order_manage.xml.en:260
+#: ../ui/shop/orders/order_manage.xml.en:266
 msgctxt "table cell"
 msgid "${product/price/total/with_tax} €"
 msgstr ""
@@ -711,7 +730,7 @@ msgid "${product/price/unit/with_tax} €"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:76
-#: ../ui/shop/orders/order_manage.xml.en:258
+#: ../ui/shop/orders/order_manage.xml.en:264
 msgctxt "table cell"
 msgid "${product/price/unit/with_tax} €"
 msgstr ""
@@ -721,7 +740,7 @@ msgid "${product/quantity}"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:77
-#: ../ui/shop/orders/order_manage.xml.en:259
+#: ../ui/shop/orders/order_manage.xml.en:265
 msgctxt "table cell"
 msgid "${product/quantity}"
 msgstr ""
@@ -731,7 +750,7 @@ msgctxt "link"
 msgid "${product/quantity} x ${product/title}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:249
+#: ../ui/shop/orders/order_manage.xml.en:255
 msgctxt "table cell"
 msgid "${product/reference}"
 msgstr ""
@@ -741,7 +760,7 @@ msgid "${product/title}"
 msgstr ""
 
 #: ../ui/shop/virtualcategory_comparator.xml.en:28
-#: ../ui/shop/orders/order_manage.xml.en:252
+#: ../ui/shop/orders/order_manage.xml.en:258
 msgctxt "link"
 msgid "${product/title}"
 msgstr ""
@@ -816,47 +835,47 @@ msgctxt "table cell"
 msgid "${ship/title}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:397
+#: ../ui/shop/orders/order_manage.xml.en:403
 msgctxt "table cell"
 msgid "${shipping/complete_id}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:399
+#: ../ui/shop/orders/order_manage.xml.en:405
 msgctxt "table cell"
 msgid "${shipping/shipping_mode}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:400
+#: ../ui/shop/orders/order_manage.xml.en:406
 msgctxt "table cell"
 msgid "${shipping/state}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:398
+#: ../ui/shop/orders/order_manage.xml.en:404
 msgctxt "table cell"
 msgid "${shipping/ts}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:179
+#: ../ui/shop/orders/order_manage.xml.en:185
 msgctxt "table cell"
 msgid "${shipping/view}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:155
+#: ../ui/shop/orders/order_manage.xml.en:161
 msgctxt "table cell"
 msgid "${shipping_address/address_2}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:152
+#: ../ui/shop/orders/order_manage.xml.en:158
 msgctxt "table cell"
 msgid ""
-"${shipping_address/firstname} ${shipping_address/lastname}<x id='23'/> "
+"${shipping_address/firstname} ${shipping_address/lastname}<x id='27'/> "
 "${shipping_address/address_1}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:157
+#: ../ui/shop/orders/order_manage.xml.en:163
 msgctxt "table cell"
 msgid ""
-"${shipping_address/zipcode} ${shipping_address/town}<x id='26'/> "
+"${shipping_address/zipcode} ${shipping_address/town}<x id='30'/> "
 "${shipping_address/country}"
 msgstr ""
 
@@ -865,7 +884,7 @@ msgid "${shipping_price} €"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:82
-#: ../ui/shop/orders/order_manage.xml.en:264
+#: ../ui/shop/orders/order_manage.xml.en:270
 msgctxt "table cell"
 msgid "${shipping_price} €"
 msgstr ""
@@ -874,32 +893,32 @@ msgstr ""
 msgid "${shipping_view}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:185
+#: ../ui/shop/orders/order_manage.xml.en:191
 msgctxt "form"
 msgid "${shipping_ways}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:85
+#: ../ui/shop/orders/order_manage.xml.en:91
 msgctxt "table cell"
 msgid "${state/comments}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:79
+#: ../ui/shop/orders/order_manage.xml.en:85
 msgctxt "title attribute"
 msgid "${state/comments}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:73
+#: ../ui/shop/orders/order_manage.xml.en:79
 msgctxt "table cell"
 msgid "${state/date}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:81
+#: ../ui/shop/orders/order_manage.xml.en:87
 msgctxt "i"
 msgid "${state/title}"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:76
+#: ../ui/shop/orders/order_manage.xml.en:82
 msgctxt "table cell"
 msgid "${state/user}"
 msgstr ""
@@ -987,7 +1006,7 @@ msgid "${total_price} €"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:86
-#: ../ui/shop/orders/order_manage.xml.en:268
+#: ../ui/shop/orders/order_manage.xml.en:274
 msgctxt "table cell"
 msgid "${total_price} €"
 msgstr ""
@@ -1078,21 +1097,17 @@ msgctxt "div"
 msgid "${widget_categories}"
 msgstr ""
 
-#: ../products/product_views.py:532
+#: ../products/product_views.py:576
 msgid "%s "
 msgstr ""
 
-#: ../products/product_views.py:520 ../products/product_views.py:522
-#: ../products/product_views.py:525
+#: ../products/product_views.py:564 ../products/product_views.py:566
+#: ../products/product_views.py:569
 msgid "%s HT"
 msgstr ""
 
-#: ../products/product_views.py:534 ../products/product_views.py:537
+#: ../products/product_views.py:578 ../products/product_views.py:581
 msgid "%s kg"
-msgstr ""
-
-#: ../orders/orders_views.py:68 ../orders/orders_views.py:72
-msgid "%s €"
 msgstr ""
 
 #: ../ui/shop/products/product_viewbox.xml.en:9
@@ -1114,11 +1129,11 @@ msgctxt "paragraph"
 msgid "(Only <g id='7'>X</g> products in stock)"
 msgstr "(Seulement <g id='7'>X</g> produits en stock)"
 
-#: ../products/product_views.py:356
+#: ../products/product_views.py:384
 msgid "-"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:360
+#: ../ui/shop/orders/order_manage.xml.en:366
 msgctxt "table cell"
 msgid "-"
 msgstr ""
@@ -1142,7 +1157,7 @@ msgctxt "div"
 msgid "1<g id='1'>Cart</g>"
 msgstr "1<g id='1'>Panier</g>"
 
-#: ../payments/paybox/enumerates.py:87
+#: ../payments/paybox/enumerates.py:93
 msgid "24H00"
 msgstr ""
 
@@ -1171,6 +1186,11 @@ msgctxt "div"
 msgid "6<g id='6'>Confirmation</g>"
 msgstr "6<g id='6'>Confirmation</g>"
 
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:13
+msgctxt "table cell"
+msgid "</g>  <x id='4'/> Number:"
+msgstr ""
+
 #: ../ui/shop/orders/order_view.xml.en:13
 msgctxt "link"
 msgid ""
@@ -1179,6 +1199,13 @@ msgid ""
 msgstr ""
 "<g id='1'> ${customer/gender} ${customer/title} (${customer/email}) </g><x "
 "id='2'/> État de la commande:"
+
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:11
+msgctxt "label"
+msgid "<g id='1'> To send the packages please fill the colissimo number:"
+msgstr ""
+"<g id='1'> Pour envoyer le colis par colissimo, veuillez saisir le numéro de "
+"colissimo :"
 
 #: ../ui/shop/products/addproduct_tree.xml.en:9
 msgctxt "link"
@@ -1199,11 +1226,6 @@ msgstr "<g id='11'>Mon profil |</g>  <g id='12'>Déconnexion</g>"
 msgctxt "b"
 msgid "<g id='12'>${property/title}</g>:"
 msgstr "<g id='12'>${property/title}</g> :"
-
-#: ../ui/shop/orders/order_manage.xml.en:94
-msgctxt "b"
-msgid "<g id='12'>Update order state:</g>${transitions}"
-msgstr "<g id='12'>Mettre à jour l'état de la commande :</g>${transitions}"
 
 #: ../ui/shop/orders/order_view.xml.en:41
 msgctxt "span"
@@ -1229,18 +1251,15 @@ msgstr "<g id='13'>${property/value}</g>  <g id='14'>Inconnu</g>"
 msgctxt "label"
 msgid ""
 "<g id='16'> I agree with the terms of service and I adhere to them "
-"unconditionally. </g>  <g id='17'>(Read)</g>"
+"unconditionally. </g>  <g id='17'><g id='18'>(</g>Read<g id='19'>)</g></g>"
 msgstr ""
-"<g id='16'> Je suis d'accord avec les conditions d'utilisation et j'y adhére "
-"sans condition. </g>  <g id='17'>(Lire)</g>"
+"<g id='16'> Je suis d'accord avec les conditions d'utilisation et j'y adhère "
+"sans condition. </g>  <g id='17'><g id='18'>(</g>Lire<g id='19'>)</g></g>"
 
-#: ../ui/shop/orders/order_manage.xml.en:109
-msgctxt "span"
-msgid ""
-"<g id='18'> We're waiting for payment </g>  <g id='19'> Last payment </g>"
-msgstr ""
-"<g id='18'> Nous attendons le paiement </g>  <g id='19'> Dernier paiement </"
-"g>"
+#: ../ui/shop/orders/order_manage.xml.en:100
+msgctxt "b"
+msgid "<g id='16'>Update order state:</g>${transitions}"
+msgstr "<g id='16'>Mettre à jour l'état de la commande :</g>${transitions}"
 
 #: ../ui/shop/shipping/colissimo_add_record.xml.en:14
 msgctxt "label"
@@ -1255,6 +1274,14 @@ msgstr ""
 msgctxt "span"
 msgid "<g id='2'>${price-with-tax}</g> € TTC<x id='3'/> Weight:"
 msgstr "<g id='2'>${price-with-tax}</g> € TTC<x id='3'/> Poids :"
+
+#: ../ui/shop/orders/order_manage.xml.en:115
+msgctxt "span"
+msgid ""
+"<g id='22'> We're waiting for payment </g>  <g id='23'> Last payment </g>"
+msgstr ""
+"<g id='22'> Nous attendons le paiement </g>  <g id='23'> Dernier paiement </"
+"g>"
 
 #: ../ui/shop/products/addproduct.xml.en:46
 msgctxt "abbr"
@@ -1288,15 +1315,15 @@ msgctxt "span"
 msgid "<g id='4'>${weight}</g> kg"
 msgstr ""
 
-#: ../ui/shop/orders/order_manage.xml.en:301
+#: ../ui/shop/orders/order_manage.xml.en:307
 msgctxt "span"
-msgid "<g id='42'> Public </g>  <g id='43'> Private </g>"
-msgstr "<g id='42'> Public </g>  <g id='43'> Privé </g>"
+msgid "<g id='46'> Public </g>  <g id='47'> Private </g>"
+msgstr "<g id='46'> Public </g>  <g id='47'> Privé </g>"
 
-#: ../ui/shop/orders/order_manage.xml.en:319
+#: ../ui/shop/orders/order_manage.xml.en:325
 msgctxt "label"
-msgid "<g id='46'>Public</g>  <x id='47'/>  <g id='48'>Private</g>"
-msgstr "<g id='46'>Public</g>  <x id='47'/>  <g id='48'>Privé</g>"
+msgid "<g id='50'>Public</g>  <x id='51'/>  <g id='52'>Private</g>"
+msgstr "<g id='50'>Public</g>  <x id='51'/>  <g id='52'>Privé</g>"
 
 #: ../ui/shop/shop_recapitulatif.xml.en:33
 msgctxt "span"
@@ -1322,31 +1349,31 @@ msgstr "> Envoyer à un ami"
 msgid "A l'ordre de"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:41
+#: ../payments/paybox/enumerates.py:47
 msgid "A mandatory variable is missing."
 msgstr "Une variable obligatoire manque."
 
-#: ../products/product.py:75
+#: ../products/product.py:86
 msgid "A product"
 msgstr "Un produit"
 
-#: ../payments/paybox/enumerates.py:80
+#: ../payments/paybox/enumerates.py:86
 msgid "AMEX"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:85
+#: ../payments/paybox/enumerates.py:91
 msgid "AURORE"
 msgstr ""
 
-#: ../products/enumerate.py:128
+#: ../products/enumerate.py:131
 msgid "Accept orders"
 msgstr "Accepte les commandes"
 
-#: ../payments/paybox/enumerates.py:110
+#: ../payments/paybox/enumerates.py:120
 msgid "Access refused or site/rank/identifier incorrect"
 msgstr "Accès refusé ou site/rang/identifiant incorrect"
 
-#: ../payments/paybox/enumerates.py:140
+#: ../payments/paybox/enumerates.py:160
 msgid "Access to file denied"
 msgstr "Accès interdit au fichier"
 
@@ -1359,28 +1386,32 @@ msgstr "Titulaire du compte :"
 msgid "Account holder"
 msgstr "Titulaire du compte"
 
-#: ../shop_views.py:94
+#: ../shop_views.py:97
 msgid "Activate html mails"
 msgstr "Activer les mails HTML"
 
-#: ../products/models_views.py:129 ../enumerate_table.py:145
+#: ../products/models_views.py:129 ../enumerate_table.py:146
 msgid "Add"
 msgstr "Ajouter"
 
-#: ../ui/shop/orders/order_manage.xml.en:132
+#: ../ui/shop/orders/order_manage.xml.en:138
 msgctxt "button"
 msgid "Add"
 msgstr "Ajouter"
 
-#: ../products/models_views.py:128 ../enumerate_table.py:144
+#: ../products/models_views.py:128 ../enumerate_table.py:145
 msgid "Add Record"
 msgstr "Ajouter un nouveau enregistrement"
+
+#: ../countries.py:136
+msgid "Add a new country"
+msgstr "Ajouter un nouveau pays"
 
 #: ../payments/payments_views.py:238
 msgid "Add a new payment"
 msgstr "Ajouter un nouveau paiement"
 
-#: ../ui/shop/orders/order_manage.xml.en:131
+#: ../ui/shop/orders/order_manage.xml.en:137
 msgctxt "form"
 msgid "Add a new payment way:"
 msgstr "Ajouter un nouveau mode de paiement"
@@ -1390,7 +1421,11 @@ msgctxt "link"
 msgid "Add a new payment."
 msgstr "Ajouter un nouveau paiement"
 
-#: ../shop_views.py:593
+#: ../countries.py:76
+msgid "Add a new zone"
+msgstr "Ajouter une nouvelle zone"
+
+#: ../shop_views.py:622
 msgid "Add an address in my address book"
 msgstr "Ajouter une adresse dans mon carnet d'adresses"
 
@@ -1399,7 +1434,7 @@ msgctxt "button"
 msgid "Add to cart"
 msgstr "Ajouter au panier"
 
-#: ../shop_views.py:208 ../shop_views.py:209
+#: ../shop_views.py:217 ../shop_views.py:218
 #: ../payments/check/check_views.py:126 ../payments/cash/cash_views.py:88
 #: ../addresses.py:112
 msgid "Address"
@@ -1423,7 +1458,7 @@ msgctxt "table cell"
 msgid "Address title"
 msgstr "Nom de l'adresse"
 
-#: ../orders/orders.py:230 ../shop.py:146
+#: ../orders/orders.py:238 ../shop.py:154
 msgid "Addresses"
 msgstr "Adresses"
 
@@ -1443,12 +1478,16 @@ msgstr "État avancé"
 msgid "All the site"
 msgstr "Tout le site"
 
+#: ../shipping/shipping_way.py:132
+msgid "Allow to define your own shipping way"
+msgstr ""
+
 #: ../payments/payments_views.py:149 ../payments/payment_way.py:56
 msgid "Amount"
 msgstr "Montant"
 
 #: ../ui/shop/shop_user_manage.xml.en:105
-#: ../ui/shop/orders/order_manage.xml.en:352
+#: ../ui/shop/orders/order_manage.xml.en:358
 msgctxt "table cell"
 msgid "Amount"
 msgstr "Montant"
@@ -1457,11 +1496,11 @@ msgstr "Montant"
 msgid "Amount (€)"
 msgstr "Montant (€)"
 
-#: ../payments/paybox/enumerates.py:114
+#: ../payments/paybox/enumerates.py:125
 msgid "Amount incorrect"
 msgstr "Montant incorrect"
 
-#: ../payments/paybox/enumerates.py:157
+#: ../payments/paybox/enumerates.py:183
 msgid "Amount of withdrawal past the limit"
 msgstr "Dépasse la limite du montant de retrait"
 
@@ -1474,15 +1513,15 @@ msgctxt "heading"
 msgid "Amount:"
 msgstr "Montant :"
 
-#: ../products/product_views.py:465
+#: ../products/product_views.py:509
 msgid "An email has been send to your friend"
 msgstr "Un email a été envoyé à votre ami"
 
-#: ../shipping/withdrawal.py:83
+#: ../shipping/withdrawal.py:80
 msgid "Appointment taken"
 msgstr "Rendez-vous pris"
 
-#: ../payments/paybox/enumerates.py:128
+#: ../payments/paybox/enumerates.py:144
 msgid "Approve after holder identification"
 msgstr "Approuver après identification du porteur"
 
@@ -1504,11 +1543,11 @@ msgctxt "label"
 msgid "Bank:"
 msgstr "Banque :"
 
-#: ../shop_views.py:97
+#: ../shop_views.py:104
 msgid "Barcode format"
 msgstr "Format du code barre"
 
-#: ../orders/orders.py:330 ../ui/shop/orders/order_facture.xml.en:5
+#: ../orders/orders.py:339 ../ui/shop/orders/order_facture.xml.en:5
 msgid "Bill"
 msgstr "Facture"
 
@@ -1527,11 +1566,11 @@ msgctxt "heading"
 msgid "Bill and delivery addresses"
 msgstr "Adresses de facturation et de livraison"
 
-#: ../shop_views.py:96
+#: ../shop_views.py:103
 msgid "Bill logo"
 msgstr "Logo de la facture"
 
-#: ../products/enumerate.py:110
+#: ../products/enumerate.py:112
 msgid "Boolean"
 msgstr "Booléen"
 
@@ -1550,19 +1589,19 @@ msgctxt "button"
 msgid "Buy"
 msgstr "Acheter"
 
-#: ../products/product_views.py:190
+#: ../products/product_views.py:193
 msgid "Buyable by customer ?"
 msgstr "Achetable par le client ?"
 
-#: ../payments/paybox/enumerates.py:76
+#: ../payments/paybox/enumerates.py:82
 msgid "CB"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:86
+#: ../payments/paybox/enumerates.py:92
 msgid "CDGP"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:83
+#: ../payments/paybox/enumerates.py:89
 msgid "COFINOGA"
 msgstr ""
 
@@ -1574,33 +1613,33 @@ msgstr "Annuler"
 msgid "Cancel the order"
 msgstr "Annuler la commande"
 
-#: ../payments/paybox/enumerates.py:152
+#: ../payments/paybox/enumerates.py:174
 msgid "Card absent from file"
 msgstr "Carte absente du fichier"
 
-#: ../payments/paybox/enumerates.py:156
+#: ../payments/paybox/enumerates.py:181
 msgid "Card accepter must contact purchaser"
 msgstr "L'accepteur de carte doit contacter l'acquéreur"
 
-#: ../payments/paybox/enumerates.py:163
+#: ../payments/paybox/enumerates.py:192
 msgid "Card issuer not accessible"
 msgstr "Emetteur de cartes inaccessible"
 
-#: ../payments/paybox/enumerates.py:132
+#: ../payments/paybox/enumerates.py:148
 msgid "Card issuer unknown"
 msgstr "Émetteur de carte inconnu"
 
-#: ../payments/paybox/enumerates.py:109
+#: ../payments/paybox/enumerates.py:118
 msgid "Cardholder's number or visual cryptogram invalid"
 msgstr "Numéro du porteur ou cryptogramme visuel invalide"
 
-#: ../payments/paybox/enumerates.py:69
+#: ../payments/paybox/enumerates.py:74
 msgid "Carte"
 msgstr ""
 
-#: ../shop.py:130 ../products/product_views.py:63
-#: ../products/product_views.py:186 ../products/product_views.py:308
-#: ../website.py:34 ../categories.py:113 ../categories.py:200
+#: ../shop.py:138 ../products/product_views.py:65
+#: ../products/product_views.py:189 ../products/product_views.py:332
+#: ../website.py:34 ../categories.py:129 ../categories.py:216
 msgid "Categories"
 msgstr "Catégories"
 
@@ -1609,20 +1648,24 @@ msgctxt "link"
 msgid "Categories"
 msgstr "Catégories"
 
-#: ../categories.py:41 ../categories.py:128
+#: ../categories.py:43 ../categories.py:144
 msgid "Category"
 msgstr "Catégorie"
 
-#: ../categories_views.py:292
+#: ../categories_views.py:305
 msgid "Category image"
 msgstr "Image de la catégorie"
 
-#: ../ui/shop/orders/order_manage.xml.en:186
+#: ../ui/shop/orders/order_manage.xml.en:192
 msgctxt "button"
 msgid "Change"
 msgstr "Modifier"
 
-#: ../products/images_views.py:94
+#: ../products/product_views.py:617 ../utils.py:50
+msgid "Change category"
+msgstr "Changer la catégorie"
+
+#: ../products/images_views.py:78
 msgid "Change photo"
 msgstr "Changer la photo"
 
@@ -1643,7 +1686,7 @@ msgstr "Module de paiement par chèque"
 msgid "Check refused by the bank"
 msgstr "Chèque refusé par la banque"
 
-#: ../ui/shop/orders/order_manage.xml.en:185
+#: ../ui/shop/orders/order_manage.xml.en:191
 msgctxt "form"
 msgid "Choose another shipping way:"
 msgstr "Choisir un autre mode de livraison :"
@@ -1653,7 +1696,7 @@ msgctxt "heading"
 msgid "Choose delivery"
 msgstr "Choisir le mode de livraison"
 
-#: ../user.py:65 ../shop_views.py:199
+#: ../user.py:65 ../shop_views.py:208
 msgid "Civility"
 msgstr "Civilité"
 
@@ -1667,7 +1710,7 @@ msgctxt "link"
 msgid "Click here to get more informations."
 msgstr "Cliquez ici pour avoir plus d'informations"
 
-#: ../payments/paybox/enumerates.py:133
+#: ../payments/paybox/enumerates.py:149
 msgid "Client cancellation"
 msgstr "Annulation client"
 
@@ -1688,7 +1731,7 @@ msgctxt "link"
 msgid "Come back to the product list"
 msgstr "Revenir à la liste des produits"
 
-#: ../categories_views.py:172
+#: ../categories_views.py:184
 msgid "Compare"
 msgstr "Comparer"
 
@@ -1703,7 +1746,7 @@ msgctxt "table cell"
 msgid "Compare the selected products"
 msgstr "Comparer les produits séléctionnés"
 
-#: ../shop.py:158
+#: ../shop.py:169
 msgid "Conditions Générales de ventes"
 msgstr ""
 
@@ -1713,6 +1756,7 @@ msgid "Configuration"
 msgstr ""
 
 #: ../products/models_views.py:142 ../payments/transfer/transfer_views.py:86
+#: ../shipping/shippings_views.py:42
 msgid "Configure"
 msgstr "Configurer"
 
@@ -1766,7 +1810,7 @@ msgctxt "link"
 msgid "Configure shop"
 msgstr "Configurer le shop"
 
-#: ../payments/paybox/enumerates.py:123
+#: ../payments/paybox/enumerates.py:137
 msgid "Contact the card issuer"
 msgstr "Contacter l'émetteur de carte"
 
@@ -1779,15 +1823,23 @@ msgstr "Continuer"
 msgid "Corps de l'article"
 msgstr ""
 
-#: ../countries.py:70 ../shipping/shipping_way.py:114
+#: ../countries.py:132
 msgid "Countries"
 msgstr "Pays"
+
+#: ../shop.py:160 ../shop.py:279 ../countries.py:71
+msgid "Countries Zones"
+msgstr "Zones Pays"
 
 #: ../addresses.py:116
 msgid "Country"
 msgstr "Pays"
 
-#: ../products/product_views.py:182 ../products/product_views.py:284
+#: ../countries.py:79 ../countries.py:139
+msgid "Country title"
+msgstr "Titre du pays"
+
+#: ../products/product_views.py:185 ../products/product_views.py:308
 msgid "Cover"
 msgstr "Couverture"
 
@@ -1806,11 +1858,15 @@ msgstr ""
 msgid "Create a new declination"
 msgstr "Créer une nouvelle déclinaison"
 
-#: ../products/product_views.py:50
+#: ../products/product_views.py:52
 msgid "Create a new product"
 msgstr "Créer un nouveau produit"
 
-#: ../products/product.py:136 ../shop.py:164 ../shop.py:254
+#: ../enumerates.py:72
+msgid "Creation date"
+msgstr "Date de création"
+
+#: ../products/product.py:148 ../shop.py:175 ../shop.py:268
 msgid "Cross selling"
 msgstr "Vente liée"
 
@@ -1823,21 +1879,21 @@ msgstr "Vente liée"
 msgid "Cross selling mode"
 msgstr "Mode de la vente liée"
 
-#: ../products/cross_selling.py:64
+#: ../products/cross_selling.py:66
 msgid "Cross-Selling Table"
 msgstr "Table de vente liée"
 
-#: ../payments/paybox/enumerates.py:113
+#: ../payments/paybox/enumerates.py:124
 msgid "Currency unknown"
 msgstr "Devise inconnue"
 
 #: ../payments/payments_views.py:129 ../payments/payments_views.py:147
-#: ../orders/orders_views.py:90
+#: ../orders/orders_views.py:54
 msgid "Customer"
 msgstr "Client"
 
 #: ../ui/shop/payments/payment_manage.xml.en:14
-#: ../ui/shop/orders/order_manage.xml.en:40
+#: ../ui/shop/orders/order_manage.xml.en:44
 msgctxt "table cell"
 msgid "Customer [Id n°${customer/id}]"
 msgstr "Client [Id n°${customer/id}]"
@@ -1852,7 +1908,7 @@ msgctxt "table cell"
 msgid "Customer payments"
 msgstr "Paiements du client"
 
-#: ../payments/paybox/enumerates.py:81
+#: ../payments/paybox/enumerates.py:87
 msgid "DINERS"
 msgstr ""
 
@@ -1861,39 +1917,39 @@ msgctxt "table cell"
 msgid "Data"
 msgstr "Donnée"
 
-#: ../products/models.py:116
+#: ../products/models.py:127
 msgid "Data Type"
 msgstr "Type de donnée"
 
-#: ../payments/paybox/paybox_views.py:49 ../shipping/shippings_views.py:80
-#: ../ui/shop/orders/order_facture.xml.en:25 ../products/enumerate.py:113
+#: ../payments/paybox/paybox_views.py:49 ../shipping/shippings_views.py:106
+#: ../ui/shop/orders/order_facture.xml.en:25 ../products/enumerate.py:116
 msgid "Date"
 msgstr ""
 
 #: ../user_views.py:92 ../payments/payments_views.py:146
-#: ../orders/orders_views.py:95
+#: ../orders/orders_views.py:59
 msgid "Date and Time"
 msgstr "Date et heure"
 
-#: ../ui/shop/orders/order_manage.xml.en:351
-#: ../ui/shop/orders/order_manage.xml.en:389
+#: ../ui/shop/orders/order_manage.xml.en:357
+#: ../ui/shop/orders/order_manage.xml.en:395
 msgctxt "table cell"
 msgid "Datetime"
 msgstr ""
 
-#: ../products/enumerate.py:109
+#: ../products/enumerate.py:111
 msgid "Decimal"
 msgstr ""
 
-#: ../orders/orders.py:116 ../products/declination.py:123
+#: ../orders/orders.py:115 ../products/declination.py:123
 msgid "Declination"
 msgstr "Déclinaison"
 
-#: ../products/product_views.py:157
+#: ../products/product_views.py:159
 msgid "Declination not exist"
 msgstr "La déclinaison n'existe pas"
 
-#: ../products/product_views.py:472 ../products/product_views.py:558
+#: ../products/product_views.py:516 ../products/product_views.py:602
 msgid "Declinations"
 msgstr "Déclinaisons"
 
@@ -1901,7 +1957,7 @@ msgstr "Déclinaisons"
 msgid "Declinations activated"
 msgstr "Déclinaisons activées"
 
-#: ../products/enumerate.py:93
+#: ../products/enumerate.py:95
 msgid "Decrease"
 msgstr "Diminuer"
 
@@ -1909,7 +1965,7 @@ msgstr "Diminuer"
 msgid "Default cover"
 msgstr "Couverture par défaut"
 
-#: ../products/product_views.py:237
+#: ../products/product_views.py:260
 msgid "Delete product"
 msgstr "Supprimer le produit"
 
@@ -1928,7 +1984,7 @@ msgid "Delivery address"
 msgstr "Adresse de livraison"
 
 #: ../ui/shop/orders/order_view.xml.en:25 ../ui/shop/shop_addresses.xml.en:18
-#: ../ui/shop/orders/order_manage.xml.en:200
+#: ../ui/shop/orders/order_manage.xml.en:206
 #: ../ui/shop/shop_recapitulatif.xml.en:14
 msgctxt "table cell"
 msgid "Delivery address"
@@ -1947,11 +2003,11 @@ msgstr "Livraison réalisée"
 msgid "Delivery ongoing"
 msgstr "Livraison en cours"
 
-#: ../shipping/withdrawal.py:102 ../products/cross_selling_views.py:236
-#: ../payments/payment_way_views.py:78 ../products/product_views.py:179
-#: ../categories_views.py:293 ../shipping/shippings_views.py:51
-#: ../payments/payments_views.py:254 ../shipping/shipping_way_views.py:38
-#: ../products/images_views.py:38 ../payments/payment_way.py:57
+#: ../products/cross_selling_views.py:236 ../payments/payment_way_views.py:78
+#: ../categories_views.py:306 ../shipping/shippings_views.py:77
+#: ../payments/payments_views.py:254 ../products/product_views.py:182
+#: ../shipping/withdrawal.py:99 ../shipping/shipping_way_views.py:43
+#: ../shipping/shipping_way.py:73 ../payments/payment_way.py:57
 msgid "Description"
 msgstr ""
 
@@ -1966,9 +2022,18 @@ msgctxt "heading"
 msgid "Details about colissimo"
 msgstr "Détails concernant le colissimo"
 
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:17
+msgctxt "table cell"
+msgid "Details about shipping way:"
+msgstr "Détails de livraison :"
+
 #: ../payments/paybox/paybox_views.py:86
 msgid "Diff days (On two digits ex: 04)"
 msgstr "Jours de différés (Sur deux digits ex: 04)"
+
+#: ../products/product_views.py:618
+msgid "Do changes"
+msgstr "Appliquer les modifications"
 
 #: ../ui/shop/payments/check/record_view.xml.en:13
 #: ../ui/shop/payments/transfer/end.xml.en:15
@@ -1983,7 +2048,7 @@ msgstr ""
 "N'oubliez pas de rappeler les informations ci-dessous dans toutes vos "
 "communications :"
 
-#: ../payments/paybox/enumerates.py:126
+#: ../payments/paybox/enumerates.py:140
 msgid "Do not honour"
 msgstr "Ne pas honorer"
 
@@ -2000,20 +2065,20 @@ msgctxt "label"
 msgid "E-mail Address"
 msgstr "Adresse mail"
 
-#: ../payments/paybox/enumerates.py:78
+#: ../payments/paybox/enumerates.py:84
 msgid "EUROCARD_MASTERCARD"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:79
+#: ../payments/paybox/enumerates.py:85
 msgid "E_CARD"
 msgstr ""
 
-#: ../shipping/shipping_way_views.py:32 ../products/product_views.py:170
+#: ../shipping/shipping_way_views.py:36 ../products/product_views.py:172
 #: ../editable.py:48
 msgid "Edit"
 msgstr "Modifier"
 
-#: ../shop_views.py:575 ../addresses_views.py:69
+#: ../shop_views.py:604 ../addresses_views.py:69
 msgid "Edit address"
 msgstr "Modifier l'adresse"
 
@@ -2022,11 +2087,11 @@ msgctxt "link"
 msgid "Edit address"
 msgstr "Modifier l'adresse"
 
-#: ../shop_views.py:101 ../payments/payment_way_views.py:81
+#: ../shop_views.py:108 ../payments/payment_way_views.py:81
 msgid "Edit configuration"
 msgstr "Editer la configuration"
 
-#: ../products/product.py:104
+#: ../products/product.py:116
 msgid "Edit cross selling"
 msgstr "Modifier la vente liée"
 
@@ -2064,93 +2129,93 @@ msgctxt "link"
 msgid "Edit/Add Taxes"
 msgstr "Modifier/Ajouter TVA"
 
-#: ../user.py:64 ../shop_views.py:198 ../shop_views.py:690
-#: ../shop_views.py:706 ../products/enumerate.py:111
+#: ../user.py:64 ../shop_views.py:207 ../shop_views.py:719
+#: ../shop_views.py:735 ../products/enumerate.py:114
 msgid "Email"
 msgstr ""
 
-#: ../products/product_views.py:432
+#: ../products/product_views.py:476
 msgid "Email of your friend"
 msgstr "Adresse mail du destinataire"
 
-#: ../countries.py:75 ../products/cross_selling_views.py:74
+#: ../countries.py:141 ../products/cross_selling_views.py:74
 msgid "Enabled"
 msgstr "Activer"
 
-#: ../shipping/shipping_way_views.py:39 ../payments/payments_views.py:210
-#: ../payments/payment_way_views.py:77 ../shipping/shippings_views.py:52
+#: ../shipping/shipping_way_views.py:44 ../payments/payments_views.py:210
+#: ../payments/payment_way_views.py:77 ../shipping/shippings_views.py:78
 msgid "Enabled ?"
 msgstr "Actif ?"
 
-#: ../shipping/withdrawal.py:84
+#: ../shipping/withdrawal.py:81
 msgid "End"
 msgstr "Fin"
 
-#: ../enumerate_table.py:215
+#: ../enumerate_table.py:216
 msgid "Enumerate Table"
 msgstr "Table des énumérations"
 
-#: ../enumerate_table.py:183
+#: ../enumerate_table.py:184
 msgid "Enumerate preview"
 msgstr "Aperçu de l'énumération"
 
-#: ../shop.py:152
+#: ../shop.py:163
 msgid "Enumerates"
 msgstr "Enumérations"
 
-#: ../enumerate_table.py:238
+#: ../enumerate_table.py:239
 msgid "Enumerates folder"
 msgstr "Dossier énumérations"
 
-#: ../payments/paybox/enumerates.py:28
+#: ../payments/paybox/enumerates.py:30
 msgid "Erreur de paiement"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:185
+#: ../payments/paybox/enumerates.py:214
 msgid "Erreur inconnue (code %s)"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:112
+#: ../payments/paybox/enumerates.py:123
 msgid "Error during the creation of the subscription"
 msgstr "Erreur de création d'un abonnement"
 
-#: ../payments/paybox/enumerates.py:139
+#: ../payments/paybox/enumerates.py:159
 msgid "Error in 'edit' in file up-date field"
 msgstr "Erreur en 'edit' sur champ de mise à jour fichier"
 
-#: ../payments/paybox/enumerates.py:40
+#: ../payments/paybox/enumerates.py:46
 msgid "Error in file format"
 msgstr "Erreur dans le format du fichier"
 
-#: ../payments/paybox/enumerates.py:142
+#: ../payments/paybox/enumerates.py:162
 msgid "Error in format"
 msgstr "Erreur de format"
 
-#: ../payments/paybox/enumerates.py:36
+#: ../payments/paybox/enumerates.py:41
 msgid "Error in memory allocation"
 msgstr "Erreur d'allocation mémoire"
 
-#: ../payments/paybox/enumerates.py:39
+#: ../payments/paybox/enumerates.py:45
 msgid "Error in opening the file"
 msgstr "Erreur lors de l'ouverture du fichier"
 
-#: ../payments/paybox/enumerates.py:35
+#: ../payments/paybox/enumerates.py:40
 msgid "Error in reading the parameters via stdin"
 msgstr "Error lors de la lecture des paramètres via stdin"
 
-#: ../payments/paybox/enumerates.py:135
+#: ../payments/paybox/enumerates.py:152
 msgid "Error in reply (error in ther server's domain)"
 msgstr "Réponse erronée (erreur dans le domaine serveur)"
 
-#: ../payments/paybox/enumerates.py:151
+#: ../payments/paybox/enumerates.py:173
 msgid "Error in secret code"
 msgstr "Code confidentiel erroné"
 
-#: ../payments/paybox/enumerates.py:37
+#: ../payments/paybox/enumerates.py:42
 msgid "Error in the parameters (Http Error)"
 msgstr "Erreur de paramètres (Erreur Http)"
 
-#: ../payments/paybox/enumerates.py:51
+#: ../payments/paybox/enumerates.py:58
 msgid "Error of coherence"
 msgstr "Erreur de cohérence"
 
@@ -2158,7 +2223,7 @@ msgstr "Erreur de cohérence"
 msgid "Error, payment module can't be load"
 msgstr "Erreur, le module de payment ne peut pas être chargé"
 
-#: ../categories_views.py:209
+#: ../categories_views.py:221
 msgid "Error: product invalid"
 msgstr "Erreur : produit invalide"
 
@@ -2172,27 +2237,31 @@ msgstr ""
 msgid "Euro"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:144
+#: ../payments/paybox/enumerates.py:165
 msgid "Expired card"
 msgstr "Date de validité de la carte dépassée"
 
-#: ../payments/paybox/enumerates.py:111
+#: ../payments/paybox/enumerates.py:121
 msgid "Expiry date incorrect"
 msgstr "Date de fin de validité incorrecte"
 
-#: ../payments/paybox/enumerates.py:150
+#: ../payments/paybox/enumerates.py:172
 msgid "Expiry date of the card passed"
 msgstr "Date d'expiration de la carte dépassée"
 
-#: ../shipping/shipping_way.py:62
+#: ../shipping/shipping_way.py:68
 msgid "Facture number"
 msgstr "Numéro de facture"
 
-#: ../payments/paybox/enumerates.py:141
+#: ../products/enumerate.py:113
+msgid "File"
+msgstr "Fichier"
+
+#: ../payments/paybox/enumerates.py:161
 msgid "File up-date impossible"
 msgstr "Mise à jour de fichier impossible"
 
-#: ../payments/paybox/enumerates.py:136
+#: ../payments/paybox/enumerates.py:153
 msgid "File update not withstood"
 msgstr "Mise à jour de fichier non supportée"
 
@@ -2200,12 +2269,12 @@ msgstr "Mise à jour de fichier non supportée"
 msgid "Fill a new address"
 msgstr "Remplir une nouvelle adresse"
 
-#: ../user.py:67 ../shop_views.py:201 ../shop_views.py:688
-#: ../shop_views.py:704 ../addresses.py:110
+#: ../user.py:67 ../shop_views.py:210 ../shop_views.py:717
+#: ../shop_views.py:733 ../addresses.py:110
 msgid "Firstname"
 msgstr "Prénom"
 
-#: ../shop_views.py:687
+#: ../shop_views.py:716
 msgid "Gender"
 msgstr "Genre"
 
@@ -2218,8 +2287,12 @@ msgstr "Genre :"
 msgid "Genre"
 msgstr ""
 
-#: ../products/enumerate.py:112
+#: ../products/enumerate.py:115
 msgid "HTML"
+msgstr ""
+
+#: ../countries.py:80
+msgid "Has TAX ?"
 msgstr ""
 
 #: ../ui/shop/shop_addresses.xml.en:12
@@ -2232,7 +2305,16 @@ msgctxt "paragraph"
 msgid "Here your address book"
 msgstr "Voici votre carnet d'adresses"
 
-#: ../orders/orders.py:62
+#: ../products/product.py:76
+msgid ""
+"Hi,\n"
+"The product {product_title} is out of stock\n"
+"\n"
+"  {product_uri}\n"
+"\n"
+msgstr ""
+
+#: ../orders/orders.py:63
 msgid ""
 "Hi,\n"
 "Your order number {order_name} in our shop has been recorded.\n"
@@ -2274,11 +2356,11 @@ msgstr ""
 "\n"
 "\n"
 
-#: ../shipping/shipping_way.py:227
+#: ../shipping/shipping_way.py:252
 msgid "History"
 msgstr "Historique"
 
-#: ../payments/paybox/enumerates.py:161
+#: ../payments/paybox/enumerates.py:190
 msgid "Holder already on stop, former record kept"
 msgstr "Porteur déjà en opposition, ancien enregistrement conservé"
 
@@ -2306,14 +2388,14 @@ msgstr "Je suis déjà client"
 msgid "IBAN"
 msgstr ""
 
-#: ../shipping/shippings_views.py:78 ../payments/paybox/paybox_views.py:48
-#: ../payments/payments_views.py:144 ../shop_views.py:686 ../shop_views.py:703
+#: ../shipping/shippings_views.py:104 ../payments/paybox/paybox_views.py:48
+#: ../payments/payments_views.py:144 ../shop_views.py:715 ../shop_views.py:732
 msgid "Id"
 msgstr ""
 
 #: ../ui/shop/shop_user_manage.xml.en:104
-#: ../ui/shop/orders/order_manage.xml.en:349
-#: ../ui/shop/orders/order_manage.xml.en:388
+#: ../ui/shop/orders/order_manage.xml.en:355
+#: ../ui/shop/orders/order_manage.xml.en:394
 msgctxt "table cell"
 msgid "Id"
 msgstr ""
@@ -2340,12 +2422,12 @@ msgctxt "heading"
 msgid "Identification"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:143
+#: ../payments/paybox/enumerates.py:164
 msgid "Identifier of purchasing body unknown"
 msgstr "Identifiant de l'organisme acquéreur inconnu"
 
 #: ../ui/shop/orders/order_view.xml.en:125
-#: ../ui/shop/orders/order_manage.xml.en:316
+#: ../ui/shop/orders/order_manage.xml.en:322
 msgctxt "paragraph"
 msgid "If you want to add a message:"
 msgstr "Si vous voulez ajouter un message:"
@@ -2379,7 +2461,7 @@ msgctxt "title attribute"
 msgid "Impossible to add product in cart"
 msgstr "Impossible d'ajouter le produit dans le panier"
 
-#: ../payments/paybox/enumerates.py:137
+#: ../payments/paybox/enumerates.py:155
 msgid "Impossible to situate the record in the file"
 msgstr "Impossible de localiser l'enregistrement dans le fichier"
 
@@ -2393,11 +2475,11 @@ msgstr ""
 msgid "In preparation"
 msgstr "En préparation"
 
-#: ../payments/paybox/enumerates.py:168
+#: ../payments/paybox/enumerates.py:200
 msgid "Incident in the initiating domain"
 msgstr "Incident domaine initiateur"
 
-#: ../products/enumerate.py:92
+#: ../products/enumerate.py:94
 msgid "Increase"
 msgstr "Augmenter"
 
@@ -2405,7 +2487,7 @@ msgstr "Augmenter"
 msgid "Inscription confirmation."
 msgstr "Confirmation d'inscription"
 
-#: ../shop_views.py:280
+#: ../shop_views.py:289
 msgid "Inscription ok"
 msgstr ""
 
@@ -2414,11 +2496,11 @@ msgctxt "title"
 msgid "Insert link"
 msgstr "Ajouter un lien"
 
-#: ../payments/paybox/enumerates.py:149
+#: ../payments/paybox/enumerates.py:171
 msgid "Insufficient funds or over credit limit"
 msgstr "Provision insuffisante ou crédit dépassé"
 
-#: ../products/enumerate.py:108
+#: ../products/enumerate.py:110
 msgid "Integer"
 msgstr "Entier"
 
@@ -2434,7 +2516,7 @@ msgctxt "paragraph"
 msgid "Integer rhoncus vehicula suscipit."
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:130
+#: ../payments/paybox/enumerates.py:146
 msgid "Invalid amoint"
 msgstr "Montant invalide"
 
@@ -2442,7 +2524,7 @@ msgstr "Montant invalide"
 msgid "Invalid amount"
 msgstr "Montant invalide"
 
-#: ../payments/paybox/enumerates.py:131
+#: ../payments/paybox/enumerates.py:147
 msgid "Invalid holder number"
 msgstr "Numéro de porteur invalide"
 
@@ -2450,7 +2532,7 @@ msgstr "Numéro de porteur invalide"
 msgid "Invalid order"
 msgstr "Commande invalide"
 
-#: ../payments/paybox/enumerates.py:104
+#: ../payments/paybox/enumerates.py:111
 msgid "Invalid payment amount"
 msgstr "Montant de paiement invalide"
 
@@ -2458,27 +2540,27 @@ msgstr "Montant de paiement invalide"
 msgid "Invalid payment mode (not enabled)"
 msgstr "Mode de payment invalide (pas actif)"
 
-#: ../payments/paybox/enumerates.py:124
+#: ../payments/paybox/enumerates.py:138
 msgid "Invalid retailer"
 msgstr "Commerçant invalide"
 
-#: ../payments/paybox/enumerates.py:129
+#: ../payments/paybox/enumerates.py:145
 msgid "Invalid transaction"
 msgstr "Transaction invalide"
 
-#: ../payments/paybox/enumerates.py:82
+#: ../payments/paybox/enumerates.py:88
 msgid "JCB"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:125
+#: ../payments/paybox/enumerates.py:139
 msgid "Keep the card"
 msgstr "Conserver la carte"
 
-#: ../payments/paybox/enumerates.py:127
+#: ../payments/paybox/enumerates.py:142
 msgid "Keep the card, special conditions."
 msgstr "Conserver la carte, conditions spéciales."
 
-#: ../products/product_views.py:180
+#: ../products/product_views.py:183
 msgid "Keywords"
 msgstr "Mots clés"
 
@@ -2494,12 +2576,12 @@ msgid ""
 "réserve des heures limites de dépôt."
 msgstr ""
 
-#: ../products/product_views.py:288
+#: ../products/product_views.py:312
 msgid "Last Modified"
 msgstr "Derniére modification"
 
-#: ../user.py:66 ../shop_views.py:200 ../shop_views.py:689
-#: ../shop_views.py:705 ../addresses.py:111
+#: ../user.py:66 ../shop_views.py:209 ../shop_views.py:718
+#: ../shop_views.py:734 ../addresses.py:111
 msgid "Lastname"
 msgstr "Nom"
 
@@ -2508,7 +2590,7 @@ msgctxt "button"
 msgid "Log in"
 msgstr "Se connecter"
 
-#: ../payments/payment_way_views.py:76
+#: ../shipping/shipping_way_views.py:42 ../payments/payment_way_views.py:76
 msgid "Logo"
 msgstr ""
 
@@ -2518,7 +2600,7 @@ msgctxt "paragraph"
 msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:147
+#: ../payments/paybox/enumerates.py:168
 msgid "Lost card"
 msgstr "Carte perdue"
 
@@ -2537,7 +2619,7 @@ msgctxt "heading"
 msgid "Manage Order"
 msgstr "Gérer la commande"
 
-#: ../orders/orders_views.py:81
+#: ../orders/orders_views.py:45
 msgid "Manage Orders"
 msgstr "Gérer les commandes"
 
@@ -2551,7 +2633,7 @@ msgctxt "link"
 msgid "Manage categories"
 msgstr "Gérer les catégories"
 
-#: ../shop_views.py:612
+#: ../shop_views.py:641
 msgid "Manage customer"
 msgstr "Gérer l'utilisateur"
 
@@ -2570,7 +2652,7 @@ msgctxt "link"
 msgid "Manage payments"
 msgstr "Gérer les paiements"
 
-#: ../products/product.py:98 ../products/images_views.py:109
+#: ../products/product.py:110 ../products/images_views.py:93
 msgid "Manage photos"
 msgstr "Gérer les photos"
 
@@ -2579,7 +2661,7 @@ msgctxt "link"
 msgid "Manage products"
 msgstr "Gérer les produits"
 
-#: ../orders/orders_views.py:147
+#: ../orders/orders_views.py:111
 msgid "Manage shipping"
 msgstr "Gérer les livraisons"
 
@@ -2588,11 +2670,11 @@ msgctxt "table cell"
 msgid "Manage/Edit payment"
 msgstr "Gérer/Modifier le paiement"
 
-#: ../products/models.py:112
+#: ../products/models.py:123
 msgid "Mandatory"
 msgstr "Obligatoire"
 
-#: ../shipping/shipping_way.py:115
+#: ../shipping/shipping_way.py:123
 msgid "Max Weight (Kg)"
 msgstr "Poids maximal (Kg)"
 
@@ -2600,17 +2682,21 @@ msgstr "Poids maximal (Kg)"
 msgid "Message"
 msgstr ""
 
+#: ../shipping/shippings_views.py:48
+msgid "Message if no shipping available"
+msgstr ""
+
 #: ../ui/shop/products/addproduct.xml.en:21
 msgctxt "div"
 msgid "Message:"
 msgstr "Message :"
 
-#: ../orders/orders.py:236 ../orders/messages.py:41
+#: ../orders/orders.py:244 ../orders/messages.py:41
 msgid "Messages"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:110
-#: ../ui/shop/orders/order_manage.xml.en:284
+#: ../ui/shop/orders/order_manage.xml.en:290
 msgctxt "table cell"
 msgid "Messages"
 msgstr ""
@@ -2628,34 +2714,38 @@ msgstr ""
 msgid "Mme"
 msgstr ""
 
-#: ../user.py:69 ../shop_views.py:205
+#: ../user.py:69 ../shop_views.py:214
 msgid "Mobile"
 msgstr ""
 
 #: ../ui/shop/shop_delivery.xml.en:19
-#: ../ui/shop/orders/order_manage.xml.en:350
-#: ../ui/shop/orders/order_manage.xml.en:390
+#: ../ui/shop/orders/order_manage.xml.en:356
+#: ../ui/shop/orders/order_manage.xml.en:396
 msgctxt "table cell"
 msgid "Mode"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:94
+#: ../payments/paybox/enumerates.py:100
 msgid "Mode autorisation + télécollecte."
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:95
+#: ../payments/paybox/enumerates.py:101
 msgid "Mode autorisation uniquement."
 msgstr ""
 
-#: ../products/models.py:101
+#: ../products/models.py:112
 msgid "Model Schema"
 msgstr "Schéma du modèle"
 
-#: ../products/models.py:164
+#: ../products/models.py:175
 msgid "Model schema"
 msgstr "Schéma du modèle"
 
-#: ../shipping/withdrawal.py:74
+#: ../enumerates.py:71
+msgid "Modification date"
+msgstr "Date de modification"
+
+#: ../shipping/withdrawal.py:71
 msgid "Modifications ok"
 msgstr ""
 
@@ -2671,15 +2761,15 @@ msgctxt "paragraph"
 msgid "Morbi gravida fermentum odio, quis elementum tellus ultricies at."
 msgstr ""
 
-#: ../products/models.py:114
+#: ../products/models.py:125
 msgid "Multilingual"
 msgstr "Multilingue"
 
-#: ../products/models.py:113
+#: ../products/models.py:124
 msgid "Multiple"
 msgstr ""
 
-#: ../shop_views.py:565 ../addresses_views.py:32
+#: ../shop_views.py:594 ../addresses_views.py:32
 msgid "My address book"
 msgstr "Mon carnet d'adresses"
 
@@ -2697,20 +2787,28 @@ msgstr "Mon panier"
 msgid "My profile"
 msgstr "Mon profil"
 
-#: ../categories_views.py:269 ../products/product_views.py:60
-#: ../products/product_views.py:480 ../products/images.py:72
+#: ../categories_views.py:281 ../products/product_views.py:62
+#: ../products/product_views.py:524 ../products/images.py:72
 msgid "Name"
 msgstr "Nom"
+
+#: ../categories_views.py:283
+msgid "Nb products"
+msgstr "Nb produits"
 
 #: ../addresses_views.py:60
 msgid "New address added."
 msgstr "Nouvelle adresse ajoutée."
 
-#: ../orders/orders.py:68
+#: ../products/product_views.py:625
+msgid "New category"
+msgstr "Nouvelle catégorie"
+
+#: ../orders/orders.py:69
 msgid "New order in your shop"
 msgstr "Nouvelle commande dans votre boutique en ligne"
 
-#: ../shop_views.py:89
+#: ../shop_views.py:92
 msgid "New order notification emails (1 per line)"
 msgstr "Adresses mail de notification de nouvelle commande (1 par ligne)"
 
@@ -2718,11 +2816,11 @@ msgstr "Adresses mail de notification de nouvelle commande (1 par ligne)"
 msgid "New payment added !"
 msgstr "Nouveau paiement ajouté !"
 
-#: ../products/images_views.py:77
+#: ../products/images_views.py:61
 msgid "New photo"
 msgstr "Nouvelle photo"
 
-#: ../products/cross_selling_views.py:261 ../products/images_views.py:88
+#: ../products/cross_selling_views.py:270 ../products/images_views.py:72
 msgid "New record added."
 msgstr "Nouveau enregistrement ajouté."
 
@@ -2731,7 +2829,7 @@ msgctxt "link"
 msgid "Next »"
 msgstr "Suivant »"
 
-#: ../shipping/shippings_views.py:63
+#: ../shipping/shippings_views.py:89
 msgid "No"
 msgstr "Non"
 
@@ -2740,15 +2838,15 @@ msgctxt "paragraph"
 msgid "No order"
 msgstr "Pas de commande"
 
-#: ../enumerates.py:24 ../products/enumerate.py:91
+#: ../enumerates.py:24 ../products/enumerate.py:93
 msgid "None"
 msgstr "Aucun"
 
-#: ../payments/paybox/enumerates.py:117
+#: ../payments/paybox/enumerates.py:128
 msgid "Not authorized bin card"
 msgstr "Carte non autorisée"
 
-#: ../payments/paybox/enumerates.py:118
+#: ../payments/paybox/enumerates.py:130
 msgid "Not the same card used for the first payment"
 msgstr ""
 
@@ -2780,8 +2878,12 @@ msgstr ""
 msgid "Numbers of products"
 msgstr "Nombre de produits"
 
-#: ../payments/paybox/enumerates.py:42
+#: ../payments/paybox/enumerates.py:49
 msgid "Numerical variables contains a non-numerical character"
+msgstr ""
+
+#: ../shipping/shipping_way.py:72
+msgid "Numéro"
 msgstr ""
 
 #: ../shipping/colissimo.py:91
@@ -2797,13 +2899,14 @@ msgctxt "button"
 msgid "OK"
 msgstr ""
 
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:19
 #: ../ui/shop/shipping/colissimo_add_record.xml.en:19
-#: ../ui/shop/orders/order_manage.xml.en:95
+#: ../ui/shop/orders/order_manage.xml.en:101
 msgctxt "button"
 msgid "Ok"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:38
+#: ../payments/paybox/enumerates.py:44
 msgid "One of the PBX_RETOUR variable is too long"
 msgstr "Une des variables PBX_RETOUR est trop longue"
 
@@ -2815,16 +2918,12 @@ msgstr "Seulement les produits avec ce titre"
 msgid "Open"
 msgstr "Ouvert"
 
-#: ../payments/paybox/enumerates.py:106
+#: ../payments/paybox/enumerates.py:113
 msgid "Operation successful"
 msgstr "Opération réussie"
 
-#: ../orders/orders_views.py:48
-msgid "Options"
-msgstr ""
-
-#: ../orders/orders.py:153 ../products/cross_selling_views.py:237
-#: ../enumerate_table.py:55 ../products/images_views.py:39
+#: ../orders/orders.py:152 ../products/cross_selling_views.py:237
+#: ../enumerate_table.py:55 ../products/images_views.py:37
 msgid "Order"
 msgstr "Position"
 
@@ -2833,7 +2932,7 @@ msgctxt "link"
 msgid "Order"
 msgstr "Commander"
 
-#: ../orders/orders.py:54
+#: ../orders/orders.py:55
 msgid "Order confirmation"
 msgstr "Confirmation de commande"
 
@@ -2846,7 +2945,7 @@ msgctxt "table cell"
 msgid "Order history:"
 msgstr "Historique des commandes:"
 
-#: ../user_views.py:89 ../orders/orders_views.py:89
+#: ../user_views.py:89 ../orders/orders_views.py:53
 msgid "Order id"
 msgstr "Id commande"
 
@@ -2868,7 +2967,7 @@ msgctxt "heading"
 msgid "Order number:"
 msgstr "Commande numéro:"
 
-#: ../products/product.py:132 ../products/product.py:650
+#: ../products/product.py:144 ../products/product.py:689
 msgid "Order photos"
 msgstr "Ordonner les photos"
 
@@ -2882,11 +2981,11 @@ msgctxt "b"
 msgid "Order reference:"
 msgstr "Référence de la commande :"
 
-#: ../shop_views.py:325 ../shop_views.py:449
+#: ../shop_views.py:334 ../shop_views.py:476
 msgid "Order summary"
 msgstr "Information générales sur la commande"
 
-#: ../orders/orders.py:338 ../shop.py:143
+#: ../orders/orders.py:347 ../shop.py:151
 msgid "Orders"
 msgstr "Commandes"
 
@@ -2900,47 +2999,52 @@ msgctxt "paragraph"
 msgid "Out of stock."
 msgstr "En rupture de stock."
 
-#: ../payments/paybox/enumerates.py:62
+#: ../payments/paybox/enumerates.py:66
 msgid "PAYBOX DIRECT"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:61
+#: ../payments/paybox/enumerates.py:65
 msgid "PAYBOX SYSTEM"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:47
+#: ../payments/paybox/enumerates.py:54
 msgid "PBX_CMD is empty or invalid"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:46
+#: ../payments/paybox/enumerates.py:53
 msgid "PBX_LANGUE or PBX_DEVISE is invalid"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:50
+#: ../payments/paybox/enumerates.py:57
 msgid "PBX_PORTEUR is invalid"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:44
+#: ../payments/paybox/enumerates.py:51
 msgid "PBX_RANG value is invalid"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:43
+#: ../payments/paybox/enumerates.py:50
 msgid "PBX_SITE value is invalid."
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:45
+#: ../payments/paybox/enumerates.py:52
 msgid "PBX_TOTAL value is invalid"
 msgstr ""
+
+#: ../ui/shop/shipping/shippingway_order_view.xml.en:8
+msgctxt "span"
+msgid "Package number:"
+msgstr "Numéro de paquet :"
 
 #: ../ui/shop/orders/order_facture.xml.en:14
 msgid "Page"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:184
+#: ../payments/paybox/enumerates.py:213
 msgid "Paiement Refusé (code %s)"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:29
+#: ../payments/paybox/enumerates.py:32
 msgid "Paiement annulé"
 msgstr ""
 
@@ -2948,11 +3052,11 @@ msgstr ""
 msgid "Paiement effectué"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:27
+#: ../payments/paybox/enumerates.py:28
 msgid "Paiement refusé"
 msgstr ""
 
-#: ../shop_views.py:202
+#: ../shop_views.py:211
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -2961,7 +3065,7 @@ msgctxt "label"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: ../payments/paybox/enumerates.py:103
+#: ../payments/paybox/enumerates.py:110
 msgid "Paybox IP address invalid"
 msgstr "Adresse IP Paybox invalide"
 
@@ -2977,7 +3081,7 @@ msgstr ""
 msgid "Paybox Site"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:108
+#: ../payments/paybox/enumerates.py:116
 msgid "Paybox error"
 msgstr "Erreur paybox"
 
@@ -3007,7 +3111,7 @@ msgstr "Payé:"
 msgid "Payment Module"
 msgstr "Module de paiement"
 
-#: ../payments/paybox/enumerates.py:115
+#: ../payments/paybox/enumerates.py:126
 msgid "Payment already made."
 msgstr "Paiement déjà effectué"
 
@@ -3040,7 +3144,7 @@ msgstr "Fin de paiement"
 msgid "Payment error"
 msgstr "Erreur de payment"
 
-#: ../ui/shop/orders/order_manage.xml.en:172
+#: ../ui/shop/orders/order_manage.xml.en:178
 msgctxt "table cell"
 msgid "Payment has been validated, preparation of order"
 msgstr "Le paiement a été validé, préparation de la commande"
@@ -3054,11 +3158,11 @@ msgctxt "paragraph"
 msgid "Payment is ok."
 msgstr "Le paiement est validé."
 
-#: ../payments/payments_views.py:150 ../orders/orders_views.py:92
+#: ../payments/payments_views.py:150 ../orders/orders_views.py:56
 msgid "Payment mode"
 msgstr "Mode de paiement"
 
-#: ../shop.py:134
+#: ../shop.py:142
 msgid "Payment module"
 msgstr "Module de paiement"
 
@@ -3088,7 +3192,7 @@ msgstr "Paiement validé ?"
 msgid "Payment way"
 msgstr "Mode de paiement"
 
-#: ../orders/orders_views.py:293
+#: ../orders/orders_views.py:259
 msgid "Payment way has been added"
 msgstr "Le mode de paiement a été ajouté"
 
@@ -3101,7 +3205,7 @@ msgstr "Paiements"
 msgid "Payments history"
 msgstr "Historique des paiements"
 
-#: ../ui/shop/orders/order_manage.xml.en:338
+#: ../ui/shop/orders/order_manage.xml.en:344
 msgctxt "table cell"
 msgid "Payments history"
 msgstr "Historique des paiements"
@@ -3110,7 +3214,7 @@ msgstr "Historique des paiements"
 msgid "Payments in real mode"
 msgstr "Paiements en mode réel"
 
-#: ../shop_views.py:212
+#: ../shop_views.py:221
 msgid "Pays"
 msgstr ""
 
@@ -3126,7 +3230,7 @@ msgctxt "paragraph"
 msgid "Phasellus in eros velit, id gravida urna."
 msgstr ""
 
-#: ../user.py:68 ../shop_views.py:204
+#: ../user.py:68 ../shop_views.py:213
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
@@ -3144,12 +3248,7 @@ msgctxt "paragraph"
 msgid "Please choose your delivery preferences."
 msgstr "Veuillez choisir vos préférences de livraison."
 
-#: ../ui/shop/shop_delivery.xml.en:42
-msgctxt "paragraph"
-msgid "Please contact the administrator."
-msgstr "Veuillez contacter l'administrateur."
-
-#: ../categories_views.py:198
+#: ../categories_views.py:210
 msgid "Please select products to compare"
 msgstr "Veuillez sélectionner les produits à comparer"
 
@@ -3161,7 +3260,7 @@ msgstr "Veuillez prendre un rendez vous avec nous"
 msgid "Pre-tax retail price:"
 msgstr "Prix de vente HT:"
 
-#: ../products/product_views.py:191
+#: ../products/product_views.py:194
 msgid "Pre-tax wholesale price"
 msgstr "Prix d'achat HT"
 
@@ -3169,8 +3268,8 @@ msgstr "Prix d'achat HT"
 msgid "Preview"
 msgstr "Aperçu"
 
-#: ../shipping/shipping_way.py:64 ../shipping/shipping_way.py:116
-#: ../products/product_views.py:287
+#: ../enumerates.py:73 ../shipping/shipping_way.py:70
+#: ../shipping/shipping_way.py:124
 msgid "Price"
 msgstr "Prix"
 
@@ -3180,19 +3279,23 @@ msgctxt "table cell"
 msgid "Price"
 msgstr "Prix"
 
+#: ../products/product_views.py:528
+msgid "Price (HT)"
+msgstr "Prix (HT)"
+
+#: ../products/product_views.py:311
+msgid "Price (included VAT)"
+msgstr ""
+
 #: ../products/declination.py:53
 msgid "Price impact value"
 msgstr "Impact sur le prix"
 
-#: ../products/product_views.py:484
-msgid "Price variation (HT)"
-msgstr "Variation du prix (HT)"
-
-#: ../shipping/shipping_way.py:229
+#: ../shipping/shipping_way.py:254
 msgid "Prices"
 msgstr "Prix"
 
-#: ../products/product_views.py:395
+#: ../products/product_views.py:439
 msgid "Print product"
 msgstr "Imprimer"
 
@@ -3214,36 +3317,35 @@ msgctxt "form"
 msgid "Prix :"
 msgstr ""
 
-#: ../products/product.py:72 ../products/product_views.py:429
-#: ../orders/orders_views.py:47 ../ui/shop/orders/order_facture.xml.en:62
-#: ../products/cross_selling.py:68
+#: ../products/product.py:83 ../products/product_views.py:473
+#: ../ui/shop/orders/order_facture.xml.en:62 ../products/cross_selling.py:70
 msgid "Product"
 msgstr "Produit"
 
 #: ../ui/shop/orders/order_view.xml.en:63
-#: ../ui/shop/orders/order_manage.xml.en:237 ../ui/shop/cart_view.xml.en:19
+#: ../ui/shop/orders/order_manage.xml.en:243 ../ui/shop/cart_view.xml.en:19
 msgctxt "table cell"
 msgid "Product"
 msgstr "Produit"
 
-#: ../products/models.py:141
+#: ../products/models.py:152
 msgid "Product Model"
 msgstr "Modèle de produit"
 
-#: ../shop.py:140 ../products/models.py:229
+#: ../shop.py:148 ../products/models.py:240
 msgid "Product Models"
 msgstr "Modèles de produits"
 
-#: ../products/product_views.py:162
+#: ../products/product_views.py:164
 msgid "Product added to cart !"
 msgstr "Produit ajouté au panier !"
 
-#: ../products/product_views.py:247
+#: ../products/product_views.py:270
 msgid "Product deleted !"
 msgstr "Produit supprimé !"
 
-#: ../products/product_views.py:61 ../products/product_views.py:289
-#: ../products/product_views.py:307
+#: ../products/product_views.py:63 ../products/product_views.py:313
+#: ../products/product_views.py:331
 msgid "Product model"
 msgstr "Modèle de produit"
 
@@ -3252,7 +3354,7 @@ msgctxt "table cell"
 msgid "Product model informations"
 msgstr "Informations sur le modèle du produit"
 
-#: ../orders/orders.py:112
+#: ../orders/orders.py:111
 msgid "Product name"
 msgstr "Nom du produit"
 
@@ -3261,12 +3363,20 @@ msgctxt "table cell"
 msgid "Product name"
 msgstr "Nom du produit"
 
-#: ../orders/orders.py:104 ../orders/orders.py:219 ../products/product.py:728
-#: ../shop.py:137
+#: ../products/product.py:71
+msgid "Product out of stock"
+msgstr "En rupture de stock."
+
+#: ../enumerates.py:70
+msgid "Product title"
+msgstr "Nom du produit"
+
+#: ../orders/orders.py:105 ../orders/orders.py:227 ../products/product.py:767
+#: ../shop.py:145
 msgid "Products"
 msgstr "Produits"
 
-#: ../ui/shop/orders/order_manage.xml.en:225
+#: ../ui/shop/orders/order_manage.xml.en:231
 msgctxt "table cell"
 msgid "Products"
 msgstr "Produits"
@@ -3275,6 +3385,10 @@ msgstr "Produits"
 msgctxt "heading"
 msgid "Products comparator"
 msgstr "Comparateur de produits"
+
+#: ../products/product_views.py:623
+msgid "Products name"
+msgstr "Nom du produit"
 
 #: ../products/enumerate.py:77
 msgid "Public"
@@ -3285,22 +3399,21 @@ msgctxt "table cell"
 msgid "Public user informations"
 msgstr "Informations publiques sur l'utilisateur"
 
-#: ../products/product_views.py:175
+#: ../products/product_views.py:178
 msgid "Publication state"
 msgstr "Etat de publication"
 
-#: ../orders/orders.py:119 ../orders/orders_views.py:50
-#: ../ui/shop/orders/order_facture.xml.en:64
+#: ../orders/orders.py:118 ../ui/shop/orders/order_facture.xml.en:64
 msgid "Quantity"
 msgstr "Quantité"
 
 #: ../ui/shop/orders/order_view.xml.en:65
-#: ../ui/shop/orders/order_manage.xml.en:239 ../ui/shop/cart_view.xml.en:21
+#: ../ui/shop/orders/order_manage.xml.en:245 ../ui/shop/cart_view.xml.en:21
 msgctxt "table cell"
 msgid "Quantity"
 msgstr "Quantité"
 
-#: ../products/product_views.py:146
+#: ../products/product_views.py:148
 msgid "Quantity in stock insufficient."
 msgstr "Stock insuffisant."
 
@@ -3334,33 +3447,33 @@ msgstr "Ré-ouvrir la commande"
 msgid "Record deleted."
 msgstr "Enregistrement supprimé."
 
-#: ../payments/paybox/enumerates.py:138
+#: ../payments/paybox/enumerates.py:157
 msgid "Record duplicated, former record replaced"
 msgstr "Enregistrement dupliqué, ancien enregistrement remplacé"
 
-#: ../shipping/shippings_views.py:79 ../payments/payments_views.py:148
+#: ../shipping/shippings_views.py:105 ../payments/payments_views.py:148
 msgid "Ref"
 msgstr ""
 
-#: ../orders/orders.py:113 ../payments/payments_views.py:128
+#: ../orders/orders.py:112 ../payments/payments_views.py:128
 #: ../payments/payments_views.py:250 ../products/declination.py:50
-#: ../products/product_views.py:177 ../products/product_views.py:285
-#: ../products/product_views.py:304 ../products/product_views.py:482
+#: ../products/product_views.py:180 ../products/product_views.py:309
+#: ../products/product_views.py:328 ../products/product_views.py:526
 msgid "Reference"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:64
 #: ../ui/shop/products/print.xml.en:23
-#: ../ui/shop/orders/order_manage.xml.en:236
+#: ../ui/shop/orders/order_manage.xml.en:242
 msgctxt "table cell"
 msgid "Reference"
 msgstr "Référence"
 
-#: ../products/enumerate.py:125
+#: ../products/enumerate.py:128
 msgid "Refuse orders but product remain public"
 msgstr "Refuser les commandes mais garder le produit \"public\""
 
-#: ../products/enumerate.py:127
+#: ../products/enumerate.py:130
 msgid "Refuse orders. Product becomes private"
 msgstr "Refuser les commandes. Le produit devient privé."
 
@@ -3374,23 +3487,23 @@ msgctxt "table cell"
 msgid "Remove"
 msgstr "Enlever"
 
-#: ../shop_views.py:203
+#: ../shop_views.py:212
 msgid "Repeat password"
 msgstr "Répéter le mot de passe"
 
-#: ../payments/paybox/enumerates.py:134
+#: ../payments/paybox/enumerates.py:150
 msgid "Repeat the transaction later"
 msgstr "Répéter la transaction ultérieurement"
 
-#: ../payments/paybox/enumerates.py:159
+#: ../payments/paybox/enumerates.py:187
 msgid "Reply not forthcoming or received too late"
 msgstr "Réponse non parvenue ou reçue trop tard"
 
-#: ../payments/paybox/enumerates.py:164
+#: ../payments/paybox/enumerates.py:193
 msgid "Request duplicated"
 msgstr "Demande dupliquée"
 
-#: ../payments/paybox/enumerates.py:120
+#: ../payments/paybox/enumerates.py:133
 msgid "Reserved"
 msgstr "Réservé"
 
@@ -3399,7 +3512,11 @@ msgctxt "heading"
 msgid "Results"
 msgstr "Résultats"
 
-#: ../payments/paybox/enumerates.py:84
+#: ../shop_views.py:101
+msgid "Reverse sort ?"
+msgstr ""
+
+#: ../payments/paybox/enumerates.py:90
 msgid "SOFINCO"
 msgstr ""
 
@@ -3439,11 +3556,11 @@ msgstr "Rechercher"
 msgid "Secured payment paybox"
 msgstr "Paiement sécurisé paybox"
 
-#: ../payments/paybox/enumerates.py:158
+#: ../payments/paybox/enumerates.py:185
 msgid "Security regulations not respected"
 msgstr "Règles de sécurité non respectées"
 
-#: ../products/images.py:80 ../products/cross_selling.py:75
+#: ../products/images.py:80 ../products/cross_selling.py:77
 msgid "See product"
 msgstr "Voir le produit"
 
@@ -3465,21 +3582,21 @@ msgctxt "table cell"
 msgid "Selection"
 msgstr "Sélection"
 
-#: ../products/product_views.py:192
+#: ../products/product_views.py:195
 msgid "Selling price"
 msgstr "Prix de vente"
 
 #: ../ui/shop/orders/order_view.xml.en:128
-#: ../ui/shop/orders/order_manage.xml.en:324
+#: ../ui/shop/orders/order_manage.xml.en:330
 msgctxt "button"
 msgid "Send message"
 msgstr "Envoyer le message"
 
-#: ../products/product_views.py:419
+#: ../products/product_views.py:463
 msgid "Send to a friend"
 msgstr "Envoyer à un(e) ami(e)"
 
-#: ../products/product_views.py:420
+#: ../products/product_views.py:464
 msgid "Send to my friend"
 msgstr "Envoyer à mon ami(e)"
 
@@ -3487,48 +3604,56 @@ msgstr "Envoyer à mon ami(e)"
 msgid "Sended"
 msgstr "Envoyé"
 
-#: ../payments/paybox/enumerates.py:167
+#: ../payments/paybox/enumerates.py:198
 msgid "Server inaccessible (set by the server)"
 msgstr "Serveur inaccessible (positionné par le serveur)"
 
-#: ../shop.py:155 ../shipping/shipping_way.py:123 ../shipping/shippings.py:35
+#: ../shop.py:166 ../shipping/shipping_way.py:131 ../shipping/shippings.py:39
 #: ../ui/shop/orders/order_facture.xml.en:74
 msgid "Shipping"
 msgstr "Livraison"
 
 #: ../ui/shop/orders/order_view.xml.en:81
-#: ../ui/shop/orders/order_manage.xml.en:263
+#: ../ui/shop/orders/order_manage.xml.en:269
 msgctxt "table cell"
 msgid "Shipping"
 msgstr "Livraison"
 
-#: ../shipping/shipping_way.py:108
+#: ../shipping/shipping_way.py:116
 msgid "Shipping Prices"
 msgstr "Prix de la livraison"
 
-#: ../ui/shop/orders/order_manage.xml.en:145
+#: ../shipping/shipping_way_views.py:102
+msgid "Shipping added"
+msgstr "Livraison ajoutée"
+
+#: ../ui/shop/orders/order_manage.xml.en:151
 msgctxt "table cell"
 msgid "Shipping address"
 msgstr "Adresses de livraison"
 
-#: ../ui/shop/orders/order_manage.xml.en:378
+#: ../ui/shop/orders/order_manage.xml.en:384
 msgctxt "table cell"
 msgid "Shipping history"
 msgstr "Historique des livraisons"
 
-#: ../shipping/shippings_views.py:81 ../orders/orders_views.py:93
+#: ../shipping/shippings_views.py:107 ../orders/orders_views.py:57
 msgid "Shipping mode"
 msgstr "Mode de livraison"
 
-#: ../orders/orders_views.py:299
+#: ../orders/orders_views.py:265
 msgid "Shipping way has been changed"
 msgstr "Le mode de livraison a été changé"
 
-#: ../shipping/shippings_views.py:41
+#: ../shipping/shipping_way_views.py:45
+msgid "Shipping way is free ?"
+msgstr "Mode de livraison gratuit ?"
+
+#: ../shipping/shippings_views.py:67
 msgid "Shippings"
 msgstr "Livraisons"
 
-#: ../shipping/shippings_views.py:74
+#: ../shipping/shippings_views.py:100
 msgid "Shippings history"
 msgstr "Historique des livraisons"
 
@@ -3545,7 +3670,11 @@ msgctxt "heading"
 msgid "Shop control panel"
 msgstr "Panneau d'administration de la boutique"
 
-#: ../shop_views.py:87
+#: ../shop_views.py:98
+msgid "Shop default zone"
+msgstr "Zone par défaut"
+
+#: ../shop_views.py:90
 msgid "Shop from address"
 msgstr "Adresse email d'éxpéditeur des e-mails du shop"
 
@@ -3558,7 +3687,7 @@ msgstr "Management de la boutique"
 msgid "Shop payment Module"
 msgstr "Module de paiement du shop"
 
-#: ../shop_views.py:92
+#: ../shop_views.py:95
 msgid "Shop signature"
 msgstr "Signature du shop"
 
@@ -3566,7 +3695,7 @@ msgstr "Signature du shop"
 msgid "Shop website"
 msgstr "Boutique en ligne"
 
-#: ../shop_views.py:95
+#: ../shop_views.py:102
 msgid "Show sub categories ?"
 msgstr "Montrer les sous-catégories ?"
 
@@ -3574,14 +3703,18 @@ msgstr "Montrer les sous-catégories ?"
 msgid "Signal a payment error"
 msgstr "Signaler une erreur de paiement"
 
+#: ../shop_views.py:99
+msgid "Sort products by ..."
+msgstr "Trier les produits par ..."
+
 #: ../products/enumerate.py:41
 msgid "Standard Model"
 msgstr "Modèle standard"
 
 #: ../user_views.py:90 ../payments/payments_views.py:151
-#: ../shipping/shippings_views.py:82 ../products/product_views.py:290
-#: ../products/product_views.py:306 ../shipping/shipping_way.py:63
-#: ../orders/orders_views.py:91 ../payments/payment_way.py:55
+#: ../shipping/shippings_views.py:108 ../products/product_views.py:314
+#: ../products/product_views.py:330 ../shipping/shipping_way.py:69
+#: ../orders/orders_views.py:55 ../payments/payment_way.py:55
 msgid "State"
 msgstr "État"
 
@@ -3590,39 +3723,39 @@ msgctxt "label"
 msgid "State"
 msgstr "État"
 
-#: ../ui/shop/orders/order_manage.xml.en:348
-#: ../ui/shop/orders/order_manage.xml.en:353
-#: ../ui/shop/orders/order_manage.xml.en:391
+#: ../ui/shop/orders/order_manage.xml.en:354
+#: ../ui/shop/orders/order_manage.xml.en:359
+#: ../ui/shop/orders/order_manage.xml.en:397
 msgctxt "table cell"
 msgid "State"
 msgstr "État"
 
-#: ../ui/shop/orders/order_manage.xml.en:63
+#: ../ui/shop/orders/order_manage.xml.en:69
 msgctxt "table cell"
 msgid "States history"
 msgstr "Historique des états"
 
-#: ../payments/paybox/enumerates.py:178
+#: ../payments/paybox/enumerates.py:207
 msgid "Status inconnu."
 msgstr "Statut inconnu."
 
-#: ../products/product_views.py:188
+#: ../products/product_views.py:191
 msgid "Stock"
 msgstr ""
 
-#: ../products/product_views.py:483 ../products/declination.py:51
+#: ../products/product_views.py:527 ../products/declination.py:51
 msgid "Stock quantity"
 msgstr "Quantité en stock"
 
-#: ../payments/paybox/enumerates.py:148
+#: ../payments/paybox/enumerates.py:169
 msgid "Stolen card"
 msgstr "Carte volée"
 
-#: ../products/enumerate.py:106
+#: ../products/enumerate.py:108
 msgid "String"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:116
+#: ../payments/paybox/enumerates.py:127
 msgid "Subscriber already exists"
 msgstr "Abonné déjà enregistré"
 
@@ -3644,31 +3777,31 @@ msgctxt "paragraph"
 msgid "Suspendisse potenti."
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:145 ../payments/paybox/enumerates.py:155
+#: ../payments/paybox/enumerates.py:166 ../payments/paybox/enumerates.py:179
 msgid "Suspicion of fraud"
 msgstr "Suspicion de fraude"
 
-#: ../payments/paybox/enumerates.py:165
+#: ../payments/paybox/enumerates.py:194
 msgid "System malfunctioning"
 msgstr "Mauvais fonctionnement du système"
 
-#: ../shop.py:167
+#: ../shop.py:178
 msgid "TVA"
 msgstr ""
 
-#: ../orders/orders.py:118
+#: ../orders/orders.py:117
 msgid "Tax"
 msgstr "Taxe"
 
-#: ../products/taxes.py:56 ../shop.py:168
+#: ../products/taxes.py:56 ../shop.py:179
 msgid "Taxes"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:162
+#: ../payments/paybox/enumerates.py:191
 msgid "Temporary halt of the system"
 msgstr "Arrêt momentané du système"
 
-#: ../shop.py:159
+#: ../shop.py:170
 msgid "Terms and conditions of user"
 msgstr "Conditions d'utilisations"
 
@@ -3681,20 +3814,15 @@ msgstr "Conditions d'utilisations"
 msgid "The colissimo has been added"
 msgstr "Le colissimo a été ajouté"
 
-#: ../payments/paybox/enumerates.py:107
-msgid "The connection to the authorization centre has failed"
-msgstr "La connection au centre d'autorisation a échouée"
-
-#: ../ui/shop/shop_delivery.xml.en:41
-msgctxt "paragraph"
-msgid "The delivery is not available for your region."
-msgstr "La livraison n'est pas possible pour votre région"
+#: ../payments/paybox/enumerates.py:115
+msgid "The connection to the authorization centre failed"
+msgstr "La connection au centre d'autorisation a échoué"
 
 #: ../orders/workflow.py:62
 msgid "The order is in preparation"
 msgstr "La commande est en préparation"
 
-#: ../shop_views.py:237
+#: ../shop_views.py:246
 msgid "The two passwords are different."
 msgstr "Les deux mots de passe sont différents."
 
@@ -3702,19 +3830,19 @@ msgstr "Les deux mots de passe sont différents."
 msgid "The {id} record is missing."
 msgstr "L'enregistrement {id} manque."
 
-#: ../categories_views.py:263
+#: ../categories_views.py:275
 msgid "There are {n} categories"
 msgstr "Il y a {n} categories"
 
-#: ../shop_views.py:679
+#: ../shop_views.py:708
 msgid "There are {n} customers"
 msgstr "Il y a {n} clients"
 
-#: ../products/product_views.py:476
+#: ../products/product_views.py:520
 msgid "There are {n} declinations."
 msgstr "Il y a {n} déclinaisons."
 
-#: ../enumerate_table.py:178
+#: ../enumerate_table.py:179
 msgid "There are {n} enumerates in your enumrates library"
 msgstr "Il y a {n} énumérations dans votre bibliothèque"
 
@@ -3726,7 +3854,7 @@ msgstr "Il y a {n} éléments dans votre énumération dynamique."
 msgid "There are {n} models."
 msgstr "Il y a {n} modèles."
 
-#: ../orders/orders_views.py:103
+#: ../orders/orders_views.py:67
 msgid "There are {n} orders."
 msgstr "Il y a {n} commandes."
 
@@ -3738,23 +3866,23 @@ msgstr "Il y a {n} modes de paiement."
 msgid "There are {n} payments."
 msgstr "Il y a {n} paiements."
 
-#: ../products/product_views.py:276
+#: ../products/product_views.py:299
 msgid "There are {n} products"
 msgstr "Il y a {n} produits"
 
-#: ../categories_views.py:262
+#: ../categories_views.py:274
 msgid "There is 1 category"
 msgstr "Il y a 1 catégorie"
 
-#: ../shop_views.py:678
+#: ../shop_views.py:707
 msgid "There is 1 customer"
 msgstr "Il y a 1 client"
 
-#: ../products/product_views.py:475
+#: ../products/product_views.py:519
 msgid "There is 1 declination"
 msgstr "Il y a 1 déclinaison"
 
-#: ../enumerate_table.py:177
+#: ../enumerate_table.py:178
 msgid "There is 1 enumerate in your enumerates library"
 msgstr "Il y a 1 énumération dans votre bibliothèque"
 
@@ -3770,7 +3898,7 @@ msgstr "Il y a un mode de paiement."
 msgid "There is 1 payment."
 msgstr "Il y a un paiement."
 
-#: ../products/product_views.py:275
+#: ../products/product_views.py:298
 msgid "There is 1 product"
 msgstr "Il y a un produit"
 
@@ -3778,35 +3906,34 @@ msgstr "Il y a un produit"
 msgid "There is 1 product model."
 msgstr "Il y a 1 modèle de produit."
 
-#: ../orders/orders_views.py:102
+#: ../orders/orders_views.py:66
 msgid "There's one order."
 msgstr "Il y a une commande."
 
-#: ../user_views.py:73 ../shop_views.py:244
+#: ../user_views.py:73 ../shop_views.py:253
 msgid "This email address is already used."
 msgstr "Cette adresse email est déjà utilisée."
 
-#: ../products/product_views.py:140
+#: ../products/product_views.py:142
 msgid "This product isn't buyable"
 msgstr "Ce produit n'est pas achetable"
 
-#: ../payments/paybox/enumerates.py:166
+#: ../payments/paybox/enumerates.py:196
 msgid "Time of global surveillance has expired"
 msgstr "Expiration du temps de surveillance globale"
 
-#: ../payments/paybox/enumerates.py:119
+#: ../payments/paybox/enumerates.py:132
 msgid "Time-out > 15 mn before validation by the buyer"
 msgstr "Temps d'attente > 15 mn par l'acheteur"
 
 #: ../products/cross_selling_views.py:235 ../payments/payment_way_views.py:75
 #: ../products/models_views.py:56 ../products/models_views.py:149
-#: ../orders/orders.py:114 ../categories_views.py:270
-#: ../shipping/shippings_views.py:50 ../countries.py:74
-#: ../payments/payments_views.py:209 ../enumerate_table.py:54
-#: ../enumerate_table.py:182 ../enumerate_table.py:227
-#: ../products/product_views.py:178 ../products/product_views.py:286
-#: ../products/product_views.py:305 ../shipping/shipping_way_views.py:37
-#: ../products/images_views.py:37 ../products/models.py:111
+#: ../orders/orders.py:113 ../categories_views.py:282
+#: ../shipping/shippings_views.py:76 ../payments/payments_views.py:209
+#: ../enumerate_table.py:54 ../enumerate_table.py:183
+#: ../enumerate_table.py:228 ../products/product_views.py:181
+#: ../products/product_views.py:310 ../products/product_views.py:329
+#: ../shipping/shipping_way_views.py:41 ../products/models.py:122
 msgid "Title"
 msgstr "Titre"
 
@@ -3825,7 +3952,7 @@ msgctxt "paragraph"
 msgid "To confirm the deletion, click here:"
 msgstr "Pour confirmer la suppression, cliquez ici :"
 
-#: ../shop_views.py:470
+#: ../shop_views.py:497
 msgid "To continue, you have to validate the terms of service !"
 msgstr ""
 "Pour continuer, vous devez accepter les conditions générales de ventes !"
@@ -3853,15 +3980,15 @@ msgstr ""
 "Pour finaliser votre règlement, veuillez nous envoyer votre chèque libellé à "
 "l'ordre de"
 
-#: ../payments/paybox/enumerates.py:146
+#: ../payments/paybox/enumerates.py:167
 msgid "Too many attemps at secret code"
 msgstr "Nombre d'essai code confidentiel dépassé"
 
-#: ../payments/paybox/enumerates.py:160
+#: ../payments/paybox/enumerates.py:188
 msgid "Too many attempts at secret card"
 msgstr "Nombre d'essais code confidentiel dépassé"
 
-#: ../categories_views.py:196
+#: ../categories_views.py:208
 msgid "Too many products to compare"
 msgstr "Trop de produits à comparer"
 
@@ -3870,7 +3997,7 @@ msgid "Total Price"
 msgstr "Prix total"
 
 #: ../ui/shop/orders/order_view.xml.en:85
-#: ../ui/shop/orders/order_manage.xml.en:267 ../ui/shop/cart_view.xml.en:22
+#: ../ui/shop/orders/order_manage.xml.en:273 ../ui/shop/cart_view.xml.en:22
 msgctxt "table cell"
 msgid "Total Price"
 msgstr "Prix total"
@@ -3880,16 +4007,19 @@ msgctxt "b"
 msgid "Total amount:"
 msgstr "Montant total"
 
-#: ../user_views.py:91 ../orders/orders_views.py:51
-#: ../orders/orders_views.py:94 ../ui/shop/orders/order_facture.xml.en:65
+#: ../user_views.py:91 ../orders/orders_views.py:58
 msgid "Total price"
 msgstr "Prix total"
 
 #: ../ui/shop/orders/order_view.xml.en:66
-#: ../ui/shop/orders/order_manage.xml.en:240
+#: ../ui/shop/orders/order_manage.xml.en:246
 msgctxt "table cell"
 msgid "Total price"
 msgstr "Prix total"
+
+#: ../ui/shop/orders/order_facture.xml.en:65
+msgid "Total price (With tax)"
+msgstr "Prix total (TTC)"
 
 #: ../ui/shop/cart_view.xml.en:93
 msgctxt "b"
@@ -3901,23 +4031,23 @@ msgctxt "b"
 msgid "Total price without tax"
 msgstr "Prix total HT"
 
-#: ../shop_views.py:211 ../addresses.py:115
+#: ../shop_views.py:220 ../addresses.py:115
 msgid "Town"
 msgstr "Ville"
 
-#: ../payments/paybox/enumerates.py:122
+#: ../payments/paybox/enumerates.py:136
 msgid "Transaction approved or successfully processed."
 msgstr "Transaction approuvée ou traitée avec succès."
 
-#: ../payments/paybox/enumerates.py:154
+#: ../payments/paybox/enumerates.py:178
 msgid "Transaction forbidden at this terminal"
 msgstr "Transaction interdite au terminal"
 
-#: ../payments/paybox/enumerates.py:153
+#: ../payments/paybox/enumerates.py:176
 msgid "Transaction not permitted for this holder"
 msgstr "Transaction non permise à ce porteur"
 
-#: ../orders/orders_views.py:268
+#: ../orders/orders_views.py:234
 msgid "Transition done."
 msgstr "Transition effectuée."
 
@@ -3926,7 +4056,7 @@ msgctxt "table cell"
 msgid "URL"
 msgstr ""
 
-#: ../products/enumerate.py:107
+#: ../products/enumerate.py:109
 msgid "Unicode"
 msgstr ""
 
@@ -3935,29 +4065,25 @@ msgctxt "table cell"
 msgid "Unit Price with tax"
 msgstr "Prix unitaire TTC"
 
-#: ../orders/orders_views.py:49
-msgid "Unit price"
-msgstr "Prix unitaire"
+#: ../ui/shop/orders/order_facture.xml.en:63
+msgid "Unit price (With tax)"
+msgstr "Prix unitaire (TTC)"
 
-#: ../orders/orders.py:117
+#: ../orders/orders.py:116
 msgid "Unit price (pre-tax)"
 msgstr "Prix unitaire (HT)"
 
-#: ../ui/shop/orders/order_facture.xml.en:63
-msgid "Unit price HT"
-msgstr "Prix unitaire HT"
-
 #: ../ui/shop/orders/order_view.xml.en:64
-#: ../ui/shop/orders/order_manage.xml.en:238
+#: ../ui/shop/orders/order_manage.xml.en:244
 msgctxt "table cell"
 msgid "Unit price HT"
 msgstr "Prix unitaire HT"
 
-#: ../user_views.py:152 ../orders/orders_views.py:134
+#: ../user_views.py:152 ../orders/orders_views.py:98
 msgid "Unknow"
 msgstr "Inconnu"
 
-#: ../payments/paybox/enumerates.py:48 ../payments/paybox/enumerates.py:49
+#: ../payments/paybox/enumerates.py:55 ../payments/paybox/enumerates.py:56
 msgid "Unknow error"
 msgstr "Erreur inconnue"
 
@@ -3982,7 +4108,7 @@ msgstr "L'utilisateur n'existe pas"
 msgid "User id"
 msgstr "ID utilisateur"
 
-#: ../payments/paybox/enumerates.py:77
+#: ../payments/paybox/enumerates.py:83
 msgid "VISA"
 msgstr ""
 
@@ -3998,30 +4124,30 @@ msgstr "Valider"
 msgid "Validate the payment"
 msgstr "Valider le paiement"
 
-#: ../products/models_views.py:46 ../shop_views.py:676 ../user_views.py:114
-#: ../categories_views.py:88 ../categories_views.py:260 ../editable.py:37
-#: ../products/product_views.py:88 ../products/product_views.py:273
-#: ../enumerate_table.py:170 ../website.py:41
+#: ../products/models_views.py:46 ../shop_views.py:705 ../user_views.py:114
+#: ../categories_views.py:88 ../categories_views.py:272 ../editable.py:37
+#: ../products/product_views.py:90 ../products/product_views.py:296
+#: ../enumerate_table.py:171 ../website.py:41
 msgid "View"
 msgstr "Voir"
 
-#: ../products/product_views.py:253
+#: ../products/product_views.py:276
 msgid "View Box"
 msgstr "Voir la boîte"
 
-#: ../shop_views.py:133
+#: ../shop_views.py:140
 msgid "View Cart"
 msgstr "Voir le panier"
 
-#: ../products/models.py:145
+#: ../products/models.py:156
 msgid "View model details"
 msgstr "Voir les détails du modèle"
 
-#: ../products/models.py:115
+#: ../products/models.py:126
 msgid "Visible"
 msgstr ""
 
-#: ../shipping/withdrawal.py:82
+#: ../shipping/withdrawal.py:79
 msgid "Waiting for an appointment"
 msgstr "En attente de prise de RDV"
 
@@ -4035,13 +4161,13 @@ msgctxt "form"
 msgid "We are waiting for the customer check."
 msgstr "Nous attendons le chèque du client"
 
-#: ../ui/shop/orders/order_manage.xml.en:124
+#: ../ui/shop/orders/order_manage.xml.en:130
 msgctxt "paragraph"
 msgid "We're waiting for customer payment"
 msgstr "En attente du paiement client"
 
-#: ../orders/orders.py:115 ../shipping/shipping_way.py:65
-#: ../products/product_views.py:184
+#: ../orders/orders.py:114 ../shipping/shipping_way.py:71
+#: ../products/product_views.py:187 ../products/product_views.py:529
 msgid "Weight"
 msgstr "Poids"
 
@@ -4054,20 +4180,16 @@ msgstr "Poids"
 msgid "Weight impact value"
 msgstr "Impact sur le poids"
 
-#: ../products/product_views.py:485
-msgid "Weigth variation"
-msgstr "Variation de poids"
-
 #: ../ui/shop/shop_view.xml.en:21
 msgctxt "paragraph"
 msgid "Welcome in your shop control panel !"
 msgstr "Bienvenue dans le panneau d'administration de votre boutique"
 
-#: ../shipping/withdrawal.py:98 ../shipping/withdrawal.py:115
+#: ../shipping/withdrawal.py:95 ../shipping/withdrawal.py:112
 msgid "Withdrawal"
 msgstr "Retrait au magasin"
 
-#: ../shipping/withdrawal.py:116
+#: ../shipping/withdrawal.py:114
 msgid "Withdrawal at the store"
 msgstr "Retrait au magasin"
 
@@ -4076,7 +4198,7 @@ msgctxt "heading"
 msgid "Withdrawal to the shop"
 msgstr "Retrait au magasin"
 
-#: ../shipping/shippings_views.py:63
+#: ../shipping/shippings_views.py:89
 msgid "Yes"
 msgstr "Oui"
 
@@ -4089,15 +4211,15 @@ msgctxt "paragraph"
 msgid "You can see details about your order <g id='1'>here.</g>"
 msgstr "Vous pouvez voir les détails de la commande <g id='1'>ici.</g>"
 
-#: ../products/product_views.py:434
+#: ../products/product_views.py:478
 msgid "You can write a message for your friend"
 msgstr "Vous pouvez adresser un message :"
 
-#: ../categories_views.py:215
+#: ../categories_views.py:227
 msgid "You can't compare this products."
 msgstr "Vous ne pouvez pas comparer ces produits."
 
-#: ../products/product_views.py:245
+#: ../products/product_views.py:268
 msgid "You can't delete this product"
 msgstr "Vous ne pouvez pas supprimer ce produit"
 
@@ -4106,7 +4228,7 @@ msgctxt "button"
 msgid "You must confirm the 'Withdrawal' ! So click here"
 msgstr "Vous devez confirmer le retrait en magasin ! Pour cela, cliquez ici"
 
-#: ../shop_views.py:260
+#: ../shop_views.py:269
 msgid "Your address"
 msgstr "Votre adresse"
 
@@ -4133,11 +4255,11 @@ msgstr "Votre panier est vide !"
 msgid "Your cart is invalid or your payment has been recorded."
 msgstr "Votre panier est invalide ou votre paiement a déjà été enregistrée."
 
-#: ../products/product_views.py:430
+#: ../products/product_views.py:474
 msgid "Your email"
 msgstr "Votre adresse mail"
 
-#: ../products/product_views.py:437
+#: ../products/product_views.py:481
 msgid ""
 "Your friend {my_name} advice you this product: \n"
 "\n"
@@ -4165,11 +4287,11 @@ msgstr ""
 msgid "Your inscription has been validated"
 msgstr "Votre inscription a été validée"
 
-#: ../user_views.py:217 ../orders/orders_views.py:279
+#: ../user_views.py:217 ../orders/orders_views.py:245
 msgid "Your message has been sent"
 msgstr "Votre message a été envoyé"
 
-#: ../products/product_views.py:431
+#: ../products/product_views.py:475
 msgid "Your name"
 msgstr "Votre nom"
 
@@ -4179,6 +4301,7 @@ msgid "Your order"
 msgstr "Votre commande"
 
 #: ../ui/shop/shipping/colissimo_record_order_view.xml.en:9
+#: ../ui/shop/shipping/shippingway_order_view.xml.en:7
 msgid "Your order has been send."
 msgstr "Votre commande a été envoyée."
 
@@ -4196,16 +4319,20 @@ msgstr "Votre paiement a été validé."
 msgid "Zip Code"
 msgstr "Code postal"
 
-#: ../shop_views.py:210
+#: ../shop_views.py:219
 msgid "Zip code"
 msgstr "Code postal"
+
+#: ../countries.py:140 ../shipping/shipping_way.py:122
+msgid "Zone"
+msgstr "Zone"
 
 #: ../ui/shop/payments/check/record_view.xml.en:10
 msgctxt "b"
 msgid "at the following address:"
 msgstr "à l'adresse suivante :"
 
-#: ../shop.py:149
+#: ../shop.py:157
 msgid "countries"
 msgstr "pays"
 
@@ -4218,7 +4345,7 @@ msgstr ""
 msgid "s"
 msgstr ""
 
-#: ../products/product_views.py:436
+#: ../products/product_views.py:480
 msgid "{my_name} advice you this product: {product_title}"
 msgstr "{my_name} vous conseille ce produit : {product_title}"
 
@@ -4401,10 +4528,6 @@ msgstr "€<x id='6'/> TVA:"
 #~ msgid "Error: No product type is selected."
 #~ msgstr "Erreur: aucun type de produit n'est sélectionné."
 
-#~ msgctxt "button"
-#~ msgid "Filter"
-#~ msgstr "Trier"
-
 #~ msgid "Impossible: this model is used by a product"
 #~ msgstr "Impossible: ce model est utilisé par un produit"
 
@@ -4451,12 +4574,19 @@ msgstr "€<x id='6'/> TVA:"
 #~ "Veuillez choisir l'adresse à laquelle vous souhaitez recevoir votre "
 #~ "facture dans votre carnet d'adresses."
 
+#~ msgctxt "paragraph"
+#~ msgid "Please contact the administrator."
+#~ msgstr "Veuillez contacter l'administrateur."
+
 #~ msgid "Please send a mail with this informations:"
 #~ msgstr "Veuillez envoyer un courrier avec ces informations:"
 
 #~ msgctxt "heading"
 #~ msgid "Price / weight"
 #~ msgstr "Prix / poids"
+
+#~ msgid "Price variation (HT)"
+#~ msgstr "Variation du prix (HT)"
 
 #, fuzzy
 #~ msgctxt "paragraph"
@@ -4466,6 +4596,10 @@ msgstr "€<x id='6'/> TVA:"
 #~ msgctxt "button"
 #~ msgid "Select this address"
 #~ msgstr "Séléctionner cette adresse"
+
+#~ msgctxt "paragraph"
+#~ msgid "The delivery is not available for your region."
+#~ msgstr "La livraison n'est pas possible pour votre région"
 
 #~ msgctxt "heading"
 #~ msgid "The end of your order ..."
@@ -4489,12 +4623,24 @@ msgstr "€<x id='6'/> TVA:"
 #~ msgid "Total:"
 #~ msgstr "Total:"
 
+#~ msgid "Unit price"
+#~ msgstr "Prix unitaire"
+
 #~ msgctxt "table cell"
 #~ msgid "Unit price"
 #~ msgstr "Prix unitaire"
 
+#~ msgid "Unit price HT"
+#~ msgstr "Prix unitaire HT"
+
 #~ msgid "User"
 #~ msgstr "Utilisateur"
+
+#~ msgid "Weigth"
+#~ msgstr "Poids"
+
+#~ msgid "Weigth variation"
+#~ msgstr "Variation de poids"
 
 #~ msgctxt "link"
 #~ msgid "Your can see order details here."

@@ -526,7 +526,7 @@ class Product_DeclinationsView(BrowseForm):
             ('reference', MSG(u'Reference')),
             ('stock-quantity', MSG(u'Stock quantity')),
             ('price', MSG(u'Price (HT)')),
-            ('weight', MSG(u'Weigth'))]
+            ('weight', MSG(u'Weight'))]
 
     buttons = [RemoveButton]
 
