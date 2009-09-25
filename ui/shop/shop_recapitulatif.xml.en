@@ -55,12 +55,12 @@
       Terms of service
     </h1>
 
-    <p>
+    <p id="cgv">
       <input type="checkbox" id="cgv" name="cgv" value="1"/>
       <label for="cgv">
         I agree with the terms of service and I adhere to them unconditionally.
       </label>
-      <a href="./terms-and-conditions-of-use" target="blank">(Read)</a>
+      <a href="./terms-and-conditions-of-use" target="blank"><span>(</span>Read<span>)</span></a>
       <br/>
     </p>
 
