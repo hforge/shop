@@ -42,7 +42,7 @@ from declination import Declination, Declination_NewInstance
 from schema import product_schema
 from taxes import PriceWidget
 from widgets import BarcodeWidget, MiniProductWidget, StockProductWidget
-from widgets import ProductModelWidget
+from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.utils import get_shop, ChangeCategoryButton
@@ -438,11 +438,14 @@ class Product_ChangeProductModel(AutoForm):
     access = 'is_allowed_to_edit'
     title = MSG(u'Change product model')
 
-    schema = {'product_model': ProductModelsEnumerate}
+    schema = {'product_model': ProductModelsEnumerate,
+              'changes': String} # XXX not used
 
     widgets = [
       SelectWidget('product_model', has_empty_option=False,
-        title=MSG(u'Product model'))
+        title=MSG(u'Product model')),
+      ProductModel_DeletedInformations('changes',
+        title=MSG(u'List of changes'))
       ]
 
     def get_value(self, resource, context, name, datatype):
@@ -451,15 +454,22 @@ class Product_ChangeProductModel(AutoForm):
 
 
     def action(self, resource, context, form):
+        from declination import Declination
         product_model = resource.get_property('product_model')
         if product_model == form['product_model']:
             msg = INFO(u'Product model has not been changed !')
             return context.come_back(msg, goto='./;edit')
-        if not product_model:
-            resource.set_property('product_model', form['product_model'])
-            msg = INFO(u'Product model changed !')
-            return context.come_back(msg, goto='./;edit')
-        context.message = ERROR(u"You can't change product model")
+        if product_model:
+            # Delete schema
+            product_model = resource.get_product_model()
+            for key in product_model.get_model_schema():
+                resource.del_property(key)
+            # Delete declinations
+            for declination in resource.search_resources(cls=Declination):
+                resource.del_resource(declination.name)
+        resource.set_property('product_model', form['product_model'])
+        msg = INFO(u'Product model changed !')
+        return context.come_back(msg, goto='./;edit')
 
 
 

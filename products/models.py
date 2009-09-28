@@ -205,7 +205,8 @@ class ProductModel(ShopFolder):
 
     def get_model_namespace(self, resource):
         namespace = {'specific_dict': {},
-                     'specific_list': []}
+                     'specific_list': [],
+                     'specific_list_complete': []}
         schema_resource = self.get_resource('schema').handler
         get_value = schema_resource.get_record_value
         for record in schema_resource.get_records_in_order():
@@ -227,6 +228,7 @@ class ProductModel(ShopFolder):
                 kw[key] = get_value(record, key)
             # Add to namespace
             namespace['specific_dict'][name] = kw
+            namespace['specific_list_complete'].append(kw)
             if kw['visible'] and kw['value']:
                 namespace['specific_list'].append(kw)
         return namespace

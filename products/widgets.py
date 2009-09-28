@@ -23,6 +23,7 @@ from itools.xml import XMLParser
 from ikaaro.forms import SelectRadio, Widget, stl_namespaces
 
 # Import from shop
+from declination import Declination
 from enumerate import StockOptions, ProductModelsEnumerate
 from shop.utils import get_shop
 
@@ -68,7 +69,7 @@ class ProductModelWidget(Widget):
         """
         <input type="hidden" name="product_model" value="${product_model}"/>
         ${product_model_title}
-        <a href=";change_product_model" stl:if="can_change_product_model">
+        <a href=";change_product_model">
           [Change product model]
         </a>
         """,
@@ -79,10 +80,58 @@ class ProductModelWidget(Widget):
         context = get_context()
         here = context.resource
         product_model = here.get_property('product_model')
-        return {'can_change_product_model': not product_model,
-                'product_model': product_model,
+        return {'product_model': product_model,
                 'product_model_title': ProductModelsEnumerate.get_value(
                                               product_model)}
+
+
+class ProductModel_DeletedInformations(Widget):
+
+    template = list(XMLParser(
+        """
+        <b style="color:red">
+        Be careful !!<br/>
+        </b>
+        <stl:block stl:if="specific_list_complete">
+          <b style="color:red">
+          If you change product model, all this informations will be lost...<br/>
+          </b>
+          <br/>
+          <ul>
+            <li stl:repeat="info specific_list_complete">
+              ${info/title}:
+              <span stl:if="not info/value">-</span>
+              ${info/value}
+            </li>
+          </ul>
+          <br/>
+        </stl:block>
+        <stl:block stl:if="declinations">
+          <b style="color:red">... and all this declinations will be deleted:</b>
+          <br/><br/>
+          <ul>
+            <li stl:repeat="declination declinations">
+              <a href="${declination}">
+                ${declination}
+              </a>
+            </li>
+          </ul>
+        </stl:block>
+        """,
+        stl_namespaces))
+
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        here = context.resource
+        product_model = here.get_product_model()
+        namespace = product_model.get_model_namespace(here)
+        namespace['declinations'] = []
+        for declination in here.search_resources(cls=Declination):
+            namespace['declinations'].append(declination.name)
+        return namespace
+
+
 
 
 class StockProductWidget(Widget):
