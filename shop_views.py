@@ -290,7 +290,7 @@ class Shop_Register(RegisterForm):
         if resource==get_shop(resource):
             goto = './;addresses'
         else:
-            goto = './'
+            goto = '/users/%s' % user.name
         return context.come_back(msg, goto)
 
 
