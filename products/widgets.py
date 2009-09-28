@@ -122,11 +122,14 @@ class ProductModel_DeletedInformations(Widget):
 
 
     def get_namespace(self, datatype, value):
+        namespace = {'declinations': [],
+                     'specific_list_complete': []}
         context = get_context()
         here = context.resource
         product_model = here.get_product_model()
-        namespace = product_model.get_model_namespace(here)
-        namespace['declinations'] = []
+        if not product_model:
+            return namespace
+        product_model.get_model_namespace(here)
         for declination in here.search_resources(cls=Declination):
             namespace['declinations'].append(declination.name)
         return namespace
