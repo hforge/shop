@@ -221,6 +221,11 @@ class ProductModel(ShopFolder):
                     value = ', '.join(values)
                 else:
                     value = datatype.get_value(real_value)
+            if issubclass(datatype, Boolean):
+                if value:
+                    value = MSG(u'Yes')
+                else:
+                    value = MSG(u'No')
             # Build kw
             kw = {'value': value,
                   'real_value': real_value}
