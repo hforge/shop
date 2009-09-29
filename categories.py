@@ -247,6 +247,14 @@ class VirtualCategories(ShopFolder):
         return shop.virtual_category_class(metadata)
 
 
+    def search_resources(self, cls=None, format=None, state=None):
+        # We implement search_resources to show virtual categories
+        # XXX Show compatibility in 0.70
+        real_category = self.get_real_resource()
+        return real_category.search_resources(cls=Category)
+
+
+
     def get_document_types(self):
         return []
 
