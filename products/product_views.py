@@ -33,7 +33,7 @@ from ikaaro.forms import BooleanCheckBox, BooleanRadio, SelectRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.registry import get_resource_class
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
-from ikaaro.views import BrowseForm, CompositeForm
+from ikaaro.views import CompositeForm
 from ikaaro.views_new import NewInstance
 
 # Import from shop
@@ -552,13 +552,15 @@ class Product_SendToFriend(AutoForm):
 
 
 
-class Product_DeclinationsView(BrowseForm):
+class Product_DeclinationsView(Folder_BrowseContent):
 
     title = MSG(u'Declinations')
     access = 'is_allowed_to_edit'
 
     batch_msg1 = MSG(u"There is 1 declination")
     batch_msg2 = MSG(u"There are {n} declinations.")
+
+    search_template = None
 
     base_columns = [
             ('checkbox', None),
@@ -569,7 +571,7 @@ class Product_DeclinationsView(BrowseForm):
             ('price', MSG(u'Price (HT)')),
             ('weight', MSG(u'Weight'))]
 
-    buttons = [RemoveButton]
+    table_actions = [RemoveButton]
 
     def get_table_columns(self, resource, context):
         columns = []
@@ -586,7 +588,7 @@ class Product_DeclinationsView(BrowseForm):
         items = []
         for declination in resource.search_resources(cls=Declination):
             name = declination.name
-            kw = {'checkbox': (name, False),
+            kw = {'checkbox': (name, True),
                   'name': (name, name)}
             for key in declination.get_metadata_schema():
                 kw[key] = declination.get_property(key)
@@ -644,11 +646,6 @@ class Product_Declinations(CompositeForm):
 
     subviews = [Declination_NewInstance(),
                 Product_DeclinationsView()]
-
-
-    def get_schema(self, resource, context):
-          # XXX Bug in compositeform
-        return self.subviews[0].get_schema(resource, context)
 
 
 
