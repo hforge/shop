@@ -283,6 +283,12 @@ class Categories_View(Folder_BrowseContent):
         ('nb_products', MSG(u'Nb products')),
         ]
 
+    def get_items(self, resource, context, *args):
+        args = list(args)
+        args.append(PhraseQuery('format', 'category'))
+        return Folder_BrowseContent.get_items(self, resource, context, *args)
+
+
     def get_item_value(self, resource, context, item, column):
         if column == 'nb_products':
             brain, item_resource = item
