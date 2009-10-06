@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-10-05 09:10+CET\n"
+"POT-Creation-Date: 2009-10-06 14:10+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2603,9 +2603,8 @@ msgid "Lastname"
 msgstr "Nom"
 
 #: ../products/product_views.py:448
-#, fuzzy
 msgid "List of changes"
-msgstr "Appliquer les modifications"
+msgstr "Liste des modifications"
 
 #: ../ui/shop/shop_login.xml.en:33
 msgctxt "button"
@@ -3838,8 +3837,8 @@ msgstr "Conditions d'utilisations"
 
 #: ../ui/shop/shop_recapitulatif.xml.en:55
 msgctxt "heading"
-msgid "Terms of service"
-msgstr "Conditions d'utilisations"
+msgid "Terms of sales"
+msgstr "Conditions de vente"
 
 #: ../shipping/colissimo.py:71
 msgid "The colissimo has been added"
@@ -3984,9 +3983,9 @@ msgid "To confirm the deletion, click here:"
 msgstr "Pour confirmer la suppression, cliquez ici :"
 
 #: ../shop_views.py:497
-msgid "To continue, you have to validate the terms of service !"
+msgid "To continue, you have to validate the terms of sales!"
 msgstr ""
-"Pour continuer, vous devez accepter les conditions générales de ventes !"
+"Pour continuer, vous devez accepter les conditions générales de vente !"
 
 #: ../ui/shop/payments/cash/end.xml.en:10
 #: ../ui/shop/payments/cash/record_view.xml.en:9

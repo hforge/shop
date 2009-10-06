@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-10-05 09:10+CET\n"
+"POT-Creation-Date: 2009-10-06 14:10+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../addresses.py:104
-msgid "\n      Please give a name to your address.\n      "
+msgid ""
+"\n"
+"      Please give a name to your address.\n"
+"      "
 msgstr ""
 
 #: ../orders/orders.py:79
-msgid "\nHi,\nA new order has been done in your shop.\nYou can found details here:\n\n  {order_uri}\n\n\n-- \n{shop_signature}\n"
+msgid ""
+"\n"
+"Hi,\n"
+"A new order has been done in your shop.\n"
+"You can found details here:\n"
+"\n"
+"  {order_uri}\n"
+"\n"
+"\n"
+"-- \n"
+"{shop_signature}\n"
 msgstr ""
 
 #: ../products/product_views.py:622
@@ -53,6 +66,79 @@ msgstr ""
 msgid "${RIB}<x id='1'/> IBAN:"
 msgstr ""
 
+#: ../ui/shop/shop_user_manage.xml.en:140
+msgctxt "table cell"
+msgid "${address/address_1}<x id='18'/> ${address/address_2}"
+msgstr ""
+
+#: ../ui/shop/addresses_book.xml.en:25
+msgctxt "table cell"
+msgid "${address/address_2}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:145
+msgctxt "table cell"
+msgid "${address/country}"
+msgstr ""
+
+#: ../ui/shop/addresses_book.xml.en:22
+msgctxt "table cell"
+msgid ""
+"${address/firstname} ${address/lastname}<x id='1'/> ${address/address_1}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:138
+msgctxt "table cell"
+msgid "${address/gender} ${address/lastname} ${address/firstname}"
+msgstr ""
+
+#: ../ui/shop/addresses_book.xml.en:19
+msgctxt "table cell"
+msgid "${address/title}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:144
+msgctxt "table cell"
+msgid "${address/town}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:143
+msgctxt "table cell"
+msgid "${address/zipcode}"
+msgstr ""
+
+#: ../ui/shop/addresses_book.xml.en:27
+msgctxt "table cell"
+msgid "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
+msgstr ""
+
+#: ../ui/shop/payments/check/record_view.xml.en:11
+#: ../ui/shop/payments/check/end.xml.en:11
+#: ../ui/shop/payments/cash/end.xml.en:11
+#: ../ui/shop/payments/cash/record_view.xml.en:10
+msgctxt "div"
+msgid "${address}"
+msgstr ""
+
+#: ../ui/shop/payments/paybox/record_edit.xml.en:14
+msgctxt "b"
+msgid "${advance_state}"
+msgstr ""
+
+#: ../ui/shop/payments/check/record_view.xml.en:7
+#: ../ui/shop/payments/transfer/end.xml.en:9
+#: ../ui/shop/payments/transfer/record_view.xml.en:7
+#: ../ui/shop/payments/cash/end.xml.en:9
+#: ../ui/shop/payments/cash/record_view.xml.en:7
+msgctxt "heading"
+msgid "${amount}"
+msgstr ""
+
+#: ../ui/shop/payments/check/end.xml.en:16
+msgctxt "li"
+msgid "${amount}"
+msgstr ""
+
 #: ../ui/shop/payments/paybox/record_edit.xml.en:12
 msgid "${amount} €<x id='4'/> State:"
 msgstr ""
@@ -65,11 +151,21 @@ msgstr ""
 msgid "${batch}"
 msgstr ""
 
+#: ../ui/shop/virtualcategory_comparator_view.xml.en:38
+msgctxt "div"
+msgid "${batch}"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:49
 msgid "${bill_address/address_1}"
 msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:51
+msgid "${bill_address/address_2}"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:46 ../ui/shop/shop_recapitulatif.xml.en:40
+msgctxt "paragraph"
 msgid "${bill_address/address_2}"
 msgstr ""
 
@@ -81,17 +177,111 @@ msgstr ""
 msgid "${bill_address/firstname} ${bill_address/lastname}"
 msgstr ""
 
+#: ../ui/shop/shop_recapitulatif.xml.en:37
+msgctxt "paragraph"
+msgid ""
+"${bill_address/firstname} ${bill_address/lastname}<x id='8'/> ${bill_address/"
+"address_1}"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:43
+msgctxt "paragraph"
+msgid ""
+"${bill_address/firstname} ${bill_address/lastname}<x id='9'/> ${bill_address/"
+"address_1}"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:53
 msgid "${bill_address/zipcode} ${bill_address/town}"
 msgstr ""
 
-#: ../ui/shop/shop_view_cart.xml.en:16
-#: ../ui/shop/shop_recapitulatif.xml.en:50
+#: ../ui/shop/shop_recapitulatif.xml.en:42
+msgctxt "paragraph"
+msgid ""
+"${bill_address/zipcode} ${bill_address/town}<x id='11'/> ${bill_address/"
+"country}"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:48
+msgctxt "paragraph"
+msgid ""
+"${bill_address/zipcode} ${bill_address/town}<x id='12'/> ${bill_address/"
+"country}<x id='13'/>  <g id='14'>(Edit)</g>"
+msgstr ""
+
+#: ../ui/shop/shop_chooseaddress.xml.en:11
+msgctxt "form"
+msgid "${bill_address}"
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:87 ../ui/shop/mail.xhtml.en:21
+msgctxt "table cell"
+msgid "${body}"
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:74
+msgctxt "table cell"
+msgid ""
+"${cart_preview} <x id='19'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='20'/> XXX "
+"XXX XXX XXX XXX XXX XXX XXX<x id='21'/> XXX XXX XXX XXX XXX XXX XXX XXX<x "
+"id='22'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='23'/> XXX XXX XXX XXX XXX "
+"XXX XXX XXX<x id='24'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='25'/> XXX XXX "
+"XXX XXX XXX XXX XXX XXX<x id='26'/> XXX XXX XXX XXX XXX XXX XXX XXX<x "
+"id='27'/> XXX XXX XXX XXX XXX XXX XXX XXX"
+msgstr ""
+
+#: ../ui/shop/shop_view_cart.xml.en:16 ../ui/shop/shop_recapitulatif.xml.en:50
 msgid "${cart}"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_boxsubcategories.xml.en:14
+msgctxt "link"
+msgid "${cat/title} (${cat/nb_items})"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_view.xml.en:17
+msgctxt "link"
+msgid "${category/title} (${category/nb_products})"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator.xml.en:18
+msgctxt "b"
+msgid "${category}:"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator.xml.en:47
+msgctxt "table cell"
+msgid "${compare/title}"
+msgstr ""
+
+#: ../ui/shop/products/print.xml.en:19
+msgctxt "img[alt]"
+msgid "${cover/title}"
 msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:26
 msgid "${creation_date}"
+msgstr ""
+
+#: ../ui/shop/payments/payment_manage.xml.en:22
+msgctxt "table cell"
+msgid "${customer/email}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:52
+msgctxt "link"
+msgid "${customer/title}<x id='13'/> ${customer/email}"
+msgstr ""
+
+#: ../ui/shop/payments/payment_manage.xml.en:21
+msgctxt "table cell"
+msgid "${customer/title}<x id='2'/> Email:"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:77
+#: ../ui/shop/products/print.xml.en:40
+msgctxt "table cell"
+msgid "${data}"
 msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:36
@@ -99,6 +289,17 @@ msgid "${delivery_address/address_1}"
 msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:38
+msgid "${delivery_address/address_2}"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:30 ../ui/shop/shop_recapitulatif.xml.en:26
+msgctxt "paragraph"
+msgid "${delivery_address/address_2}"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:35
+#: ../ui/shop/orders/order_manage.xml.en:216
+msgctxt "table cell"
 msgid "${delivery_address/address_2}"
 msgstr ""
 
@@ -110,19 +311,398 @@ msgstr ""
 msgid "${delivery_address/firstname} ${delivery_address/lastname}"
 msgstr ""
 
+#: ../ui/shop/shop_addresses.xml.en:27 ../ui/shop/shop_recapitulatif.xml.en:23
+msgctxt "paragraph"
+msgid ""
+"${delivery_address/firstname} ${delivery_address/lastname}<x id='1'/> "
+"${delivery_address/address_1}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:213
+msgctxt "table cell"
+msgid ""
+"${delivery_address/firstname} ${delivery_address/lastname}<x id='35'/> "
+"${delivery_address/address_1}"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:32
+msgctxt "table cell"
+msgid ""
+"${delivery_address/firstname} ${delivery_address/lastname}<x id='8'/> "
+"${delivery_address/address_1}"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:40
 msgid "${delivery_address/zipcode} ${delivery_address/town}"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:37
+msgctxt "table cell"
+msgid ""
+"${delivery_address/zipcode} ${delivery_address/town}<x id='11'/> "
+"${delivery_address/country}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:218
+msgctxt "table cell"
+msgid ""
+"${delivery_address/zipcode} ${delivery_address/town}<x id='38'/> "
+"${delivery_address/country}"
+msgstr ""
+
+#: ../ui/shop/shop_recapitulatif.xml.en:28
+msgctxt "paragraph"
+msgid ""
+"${delivery_address/zipcode} ${delivery_address/town}<x id='4'/> "
+"${delivery_address/country}"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:32
+msgctxt "paragraph"
+msgid ""
+"${delivery_address/zipcode} ${delivery_address/town}<x id='4'/> "
+"${delivery_address/country}<x id='5'/>  <g id='6'>(Edit)</g>"
+msgstr ""
+
+#: ../ui/shop/shop_chooseaddress.xml.en:10
+msgctxt "form"
+msgid "${delivery_address}<x id='2'/><x id='3'/> Bill address:"
+msgstr ""
+
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:18
+msgctxt "textarea"
+msgid "${description/value}"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_view.xml.en:8
+msgctxt "div"
+msgid "${description}"
+msgstr ""
+
+#: ../ui/shop/products/product_viewbox.xml.en:20
+#: ../ui/shop/shipping/shippingway_order_view.xml.en:10
+#: ../ui/shop/virtualcategory_boxsubcategories.xml.en:10
+msgctxt "paragraph"
+msgid "${description}"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:73
+msgctxt "table cell"
+msgid "${description}"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator.xml.en:11
+msgctxt "div"
+msgid "${error}"
 msgstr ""
 
 #: ../ui/shop/payments/paybox/record_edit.xml.en:10
 msgid "${id_payment}<x id='2'/> Autorisation:"
 msgstr ""
 
+#: ../ui/shop/products/product_view.xml.en:10
+msgctxt "div"
+msgid "${images-slider}"
+msgstr ""
+
+#: ../ui/shop/products/product_images_slider.xml.en:10
+#: ../ui/shop/products/product_images_slider.xml.en:15
+msgctxt "img[alt]"
+msgid "${img/title}"
+msgstr ""
+
+#: ../ui/shop/products/product_images_slider.xml.en:10
+#: ../ui/shop/products/product_images_slider.xml.en:15
+msgctxt "title attribute"
+msgid "${img/title}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:55
+msgctxt "table cell"
+msgid "${info/title}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:34
+msgctxt "table cell"
+msgid "${info/title}:"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:34 ../ui/shop/shop_user_manage.xml.en:56
+msgctxt "table cell"
+msgid "${info/value}"
+msgstr ""
+
+#: ../ui/shop/products/addproduct.xml.en:42
+msgctxt "img[alt]"
+msgid "${item/title}"
+msgstr ""
+
+#: ../ui/shop/products/addproduct.xml.en:46
+#: ../ui/shop/products/addproduct_tree.xml.en:9
+msgctxt "title attribute"
+msgid "${item/title}"
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:28
+msgctxt "div"
+msgid "${languages}"
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:66
+msgctxt "body"
+msgid "${location}"
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:90
+msgctxt "table cell"
+msgid "${menu}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:304
+msgctxt "table cell"
+msgid "${message/author}"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:119
+#: ../ui/shop/orders/order_manage.xml.en:315
+msgctxt "table cell"
+msgid "${message/message}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:301
+msgctxt "b"
+msgid "${message/ts}"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:116
+msgctxt "b"
+msgid "${message/ts} - ${message/author}:"
+msgstr ""
+
+#: ../ui/shop/products/addproduct.xml.en:21 ../ui/shop/template.xhtml.en:70
+msgctxt "div"
+msgid "${message}"
+msgstr ""
+
+#: ../ui/shop/shop_delivery.xml.en:41
+msgctxt "paragraph"
+msgid "${msg_if_no_shipping}"
+msgstr ""
+
+#: ../ui/shop/browse_batch.xml.en:8
+msgctxt "paragraph"
+msgid "${msg} (View from ${start} to ${end})"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:90
+msgctxt "table cell"
+msgid "${nb_orders} order(s)"
+msgstr ""
+
+#: ../ui/shop/search_box.xml.en:14
+msgctxt "div"
+msgid "${nb_results} results found."
+msgstr "共有 ${nb_results} 幅画"
+
 #: ../ui/shop/orders/order_facture.xml.en:22
 msgid "${num_cmd}"
 msgstr ""
 
+#: ../ui/shop/shipping/shippingway_order_view.xml.en:8
+msgctxt "span"
+msgid "${number}"
+msgstr ""
+
+#: ../ui/shop/shop_recapitulatif.xml.en:82
+msgctxt "table cell"
+msgid "${option/description}"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:41
+msgctxt "ul"
+msgid "${option/title}:"
+msgstr ""
+
+#: ../ui/shop/payments/check/record_edit.xml.en:56
+msgctxt "option"
+msgid "${option/value}"
+msgstr ""
+
+#: ../ui/shop/shop_recapitulatif.xml.en:78
+msgctxt "table cell"
+msgid "${option/value}"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:41
+msgctxt "ul"
+msgid "${option/value}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:116
+msgctxt "table cell"
+msgid "${order/amount}€"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:23
+msgctxt "table cell"
+msgid "${order/date}<x id='3'/> Total weight:"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:113
+msgctxt "link"
+msgid "${order/id}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:22
+msgctxt "table cell"
+msgid "${order/id}<x id='2'/> Date:"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:129
+msgctxt "emphasis"
+msgid "${order/payment_way}:"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:27
+msgctxt "table cell"
+msgid ""
+"${order/payment_way}<x id='7'/>  <g id='8'>  <x id='9'/> Download bill </g>"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:26
+msgctxt "table cell"
+msgid "${order/shipping_way} - ${order/shipping_price} €<x id='6'/> Payment:"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:25
+msgctxt "table cell"
+msgid "${order/total_price} €<x id='5'/> Shipping:"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:24
+msgctxt "table cell"
+msgid "${order/total_weight} kg<x id='4'/> Total price:"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:9
+msgctxt "heading"
+msgid "${order_number}, registered the ${creation_datetime}"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:31
+msgctxt "title attribute"
+msgid "${p/img/title}"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:70
+msgctxt "table cell"
+msgid "${p/price/total/with_tax} €"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:45
+msgctxt "table cell"
+msgid "${p/price/unit/with_tax} €"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:47
+msgctxt "paragraph"
+msgid "${p/quantity}"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:37
+msgctxt "link"
+msgid "${p/title}"
+msgstr ""
+
+#: ../ui/shop/browse_batch.xml.en:18
+msgctxt "link"
+msgid "${page/number}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:369
+msgctxt "table cell"
+msgid "${payment/advance_state}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:368
+msgctxt "table cell"
+msgid "${payment/amount}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:365
+msgctxt "table cell"
+msgid "${payment/complete_id}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:364
+msgctxt "table cell"
+msgid "${payment/state}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:367
+msgctxt "table cell"
+msgid "${payment/ts}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:127
+msgctxt "paragraph"
+msgid "${payment/view}"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:101
+msgctxt "table cell"
+msgid "${payment_view}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:137
+msgctxt "form"
+msgid "${payment_ways}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:78
+msgctxt "table cell"
+msgid "${payments/total_payed}€<x id='13'/> Refund:"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:85
+#: ../ui/shop/products/print.xml.en:36
+msgctxt "table cell"
+msgid "${price-with-tax} €"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_view.xml.en:24
+msgctxt "div"
+msgid "${product/box}"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator_view.xml.en:24
+msgctxt "table cell"
+msgid "${product/box}"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator.xml.en:39
+msgctxt "title attribute"
+msgid "${product/cover/title}"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:73
+#: ../ui/shop/orders/order_manage.xml.en:261
+msgctxt "table cell"
+msgid "${product/declination}"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator.xml.en:34
+msgctxt "table cell"
+msgid "${product/price-with-tax} €"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:71
+msgid "${product/price/total/with_tax} €"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:78
+#: ../ui/shop/orders/order_manage.xml.en:266
+msgctxt "table cell"
 msgid "${product/price/total/with_tax} €"
 msgstr ""
 
@@ -130,20 +710,55 @@ msgstr ""
 msgid "${product/price/unit/with_tax} €"
 msgstr ""
 
+#: ../ui/shop/orders/order_view.xml.en:76
+#: ../ui/shop/orders/order_manage.xml.en:264
+msgctxt "table cell"
+msgid "${product/price/unit/with_tax} €"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:70
 msgid "${product/quantity}"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:77
+#: ../ui/shop/orders/order_manage.xml.en:265
+msgctxt "table cell"
+msgid "${product/quantity}"
+msgstr ""
+
+#: ../ui/shop/cart_viewbox.xml.en:17
+msgctxt "link"
+msgid "${product/quantity} x ${product/title}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:255
+msgctxt "table cell"
+msgid "${product/reference}"
 msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:68
 msgid "${product/title}"
 msgstr ""
 
-#: ../ui/shop/shop_login.xml.en:9
-#: ../ui/shop/payments_end.xml.en:7
-#: ../ui/shop/shop_view_cart.xml.en:9
-#: ../ui/shop/shop_recapitulatif.xml.en:9
-#: ../ui/shop/shop_delivery.xml.en:9
-#: ../ui/shop/shop_addresses.xml.en:9
+#: ../ui/shop/virtualcategory_comparator.xml.en:28
+#: ../ui/shop/orders/order_manage.xml.en:258
+msgctxt "link"
+msgid "${product/title}"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:71
+msgctxt "table cell"
+msgid "${product/title}"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:112
+msgctxt "div"
+msgid "${product}"
+msgstr ""
+
+#: ../ui/shop/shop_login.xml.en:9 ../ui/shop/payments_end.xml.en:7
+#: ../ui/shop/shop_view_cart.xml.en:9 ../ui/shop/shop_recapitulatif.xml.en:9
+#: ../ui/shop/shop_delivery.xml.en:9 ../ui/shop/shop_addresses.xml.en:9
 msgid "${progress}"
 msgstr ""
 
@@ -151,7 +766,107 @@ msgstr ""
 msgid "${progress} ${body}"
 msgstr ""
 
+#: ../ui/shop/payments/payment_manage.xml.en:40
+msgctxt "table cell"
+msgid "${record_edit}"
+msgstr ""
+
+#: ../ui/shop/payments/payment_manage.xml.en:58
+msgctxt "table cell"
+msgid "${record_view}"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:65
+#: ../ui/shop/products/print.xml.en:24
+msgctxt "table cell"
+msgid "${reference}"
+msgstr ""
+
+#: ../ui/shop/payments/check/record_view.xml.en:16
+#: ../ui/shop/payments/transfer/end.xml.en:18
+#: ../ui/shop/payments/transfer/record_view.xml.en:17
+#: ../ui/shop/payments/cash/end.xml.en:16
+#: ../ui/shop/payments/cash/record_view.xml.en:15
+msgctxt "b"
+msgid "${ref}"
+msgstr ""
+
+#: ../ui/shop/payments/check/end.xml.en:15
+msgctxt "li"
+msgid "${ref}"
+msgstr ""
+
+#: ../ui/shop/shop_delivery.xml.en:31
+msgctxt "table cell"
+msgid "${ship/description}"
+msgstr ""
+
+#: ../ui/shop/shop_delivery.xml.en:34
+msgctxt "table cell"
+msgid "${ship/html_form}"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:82
+msgctxt "table cell"
+msgid "${ship/price} €"
+msgstr ""
+
+#: ../ui/shop/shop_delivery.xml.en:28
+msgctxt "table cell"
+msgid "${ship/title}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:403
+msgctxt "table cell"
+msgid "${shipping/complete_id}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:405
+msgctxt "table cell"
+msgid "${shipping/shipping_mode}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:406
+msgctxt "table cell"
+msgid "${shipping/state}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:404
+msgctxt "table cell"
+msgid "${shipping/ts}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:185
+msgctxt "table cell"
+msgid "${shipping/view}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:161
+msgctxt "table cell"
+msgid "${shipping_address/address_2}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:158
+msgctxt "table cell"
+msgid ""
+"${shipping_address/firstname} ${shipping_address/lastname}<x id='27'/> "
+"${shipping_address/address_1}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:163
+msgctxt "table cell"
+msgid ""
+"${shipping_address/zipcode} ${shipping_address/town}<x id='30'/> "
+"${shipping_address/country}"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:75
+msgid "${shipping_price} €"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:82
+#: ../ui/shop/orders/order_manage.xml.en:270
+msgctxt "table cell"
 msgid "${shipping_price} €"
 msgstr ""
 
@@ -159,12 +874,87 @@ msgstr ""
 msgid "${shipping_view}"
 msgstr ""
 
+#: ../ui/shop/orders/order_manage.xml.en:191
+msgctxt "form"
+msgid "${shipping_ways}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:91
+msgctxt "table cell"
+msgid "${state/comments}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:85
+msgctxt "title attribute"
+msgid "${state/comments}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:79
+msgctxt "table cell"
+msgid "${state/date}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:87
+msgctxt "i"
+msgid "${state/title}"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:82
+msgctxt "table cell"
+msgid "${state/user}"
+msgstr ""
+
 #: ../ui/shop/payments/paybox/record_edit.xml.en:13
 msgid "${state}<x id='5'/> Advance state:"
 msgstr ""
 
+#: ../ui/shop/mail.xhtml.en:14
+msgctxt "font"
+msgid "${subject}"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:81
+msgctxt "table cell"
+msgid "${subject}"
+msgstr ""
+
 #: ../ui/shop/widgets/taxes.xml.en:13
 msgid "${taxes} <x id='8'/> Tax value:"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:7
+#: ../ui/shop/virtualcategory_boxsubcategories.xml.en:9
+#: ../ui/shop/products/print.xml.en:16 ../ui/shop/shop_progress.xml.en:7
+msgctxt "heading"
+msgid "${title}"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:58
+#: ../ui/shop/products/product_viewbox.xml.en:15
+msgctxt "img[alt]"
+msgid "${title}"
+msgstr ""
+
+#: ../ui/shop/products/product_viewbox.xml.en:11
+msgctxt "link"
+msgid "${title}"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:69
+#: ../ui/shop/products/print.xml.en:32
+msgctxt "table cell"
+msgid "${title}"
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:7 ../ui/shop/products/print.xml.en:8
+msgctxt "title"
+msgid "${title}"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:58
+#: ../ui/shop/products/product_viewbox.xml.en:11
+msgctxt "title attribute"
+msgid "${title}"
 msgstr ""
 
 #: ../ui/shop/payments/transfer/end.xml.en:7
@@ -173,7 +963,30 @@ msgstr ""
 msgid "${top_view}"
 msgstr ""
 
+#: ../ui/shop/payments/check/end.xml.en:7
+msgctxt "b"
+msgid ""
+"${top_view} <g id='1'>To finalize your payment, please send us your check "
+"ordered to ${to}<x id='2'/> at the following address:</g>"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:95
+msgctxt "table cell"
+msgid "${total/with_tax} €"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:89
+msgctxt "table cell"
+msgid "${total/without_tax} €"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:79
+msgid "${total_price} €"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:86
+#: ../ui/shop/orders/order_manage.xml.en:274
+msgctxt "table cell"
 msgid "${total_price} €"
 msgstr ""
 
@@ -181,35 +994,315 @@ msgstr ""
 msgid "${transaction}<x id='1'/> Id payment:"
 msgstr ""
 
+#: ../ui/shop/products/addproduct.xml.en:35
+msgctxt "table cell"
+msgid "${tree}"
+msgstr ""
+
+#: ../ui/shop/products/print.xml.en:28
+msgctxt "table cell"
+msgid "${url}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:25
+msgctxt "table cell"
+msgid "${user/base/email}<x id='6'/> User Language:"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:23
+msgctxt "table cell"
+msgid "${user/base/firstname}<x id='4'/> Lastname:"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:22
+msgctxt "table cell"
+msgid "${user/base/gender}<x id='3'/> Firstname:"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:24
+msgctxt "table cell"
+msgid "${user/base/lastname}<x id='5'/> Email:"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:28
+msgctxt "table cell"
+msgid "${user/base/phone1}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:27
+msgctxt "table cell"
+msgid "${user/base/phone2}<x id='8'/> Phone1:"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:26
+msgctxt "table cell"
+msgid "${user/base/user_language}<x id='7'/> Phone2:"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator.xml.en:49
+msgctxt "table cell"
+msgid "${value}"
+msgstr ""
+
+#: ../ui/shop/products/print.xml.en:15
+msgctxt "heading"
+msgid "${website-title}"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:89
+msgctxt "table cell"
+msgid "${weight} Kg"
+msgstr ""
+
+#: ../ui/shop/products/products_view_search.xml.en:13
+#: ../ui/shop/payments/history_view_search.xml.en:21
+msgctxt "dd"
+msgid "${widget/html}"
+msgstr ""
+
+#: ../ui/shop/products/products_view_search.xml.en:12
+#: ../ui/shop/payments/history_view_search.xml.en:20
+msgctxt "dt"
+msgid "${widget/title}"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:16
+msgctxt "li"
+msgid "${widget/title} ${widget/html}"
+msgstr ""
+
+#: ../ui/shop/search_box.xml.en:19
+msgctxt "div"
+msgid "${widget_categories}"
+msgstr ""
+
 #: ../products/product_views.py:619
 msgid "%s "
 msgstr ""
 
-#: ../products/product_views.py:607
-#: ../products/product_views.py:609
+#: ../products/product_views.py:607 ../products/product_views.py:609
 #: ../products/product_views.py:612
 msgid "%s HT"
 msgstr ""
 
-#: ../products/product_views.py:621
-#: ../products/product_views.py:624
+#: ../products/product_views.py:621 ../products/product_views.py:624
 msgid "%s kg"
+msgstr ""
+
+#: ../ui/shop/products/product_viewbox.xml.en:9
+msgctxt "span"
+msgid "(${price-with-tax} €)"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:40
+msgctxt "link"
+msgid "(Edit)"
 msgstr ""
 
 #: ../addresses.py:106
 msgid "(Example: Home, Office)"
 msgstr ""
 
+#: ../ui/shop/products/product_view.xml.en:34
+msgctxt "paragraph"
+msgid "(Only <g id='7'>X</g> products in stock)"
+msgstr ""
+
 #: ../products/product_views.py:386
 msgid "-"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:366
+msgctxt "table cell"
+msgid "-"
+msgstr ""
+
+#: ../ui/shop/mail.xhtml.en:33
+msgctxt "body"
+msgid "-- <x id='8'/> ${signature}"
 msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:14
 msgid "/"
 msgstr ""
 
+#: ../ui/shop/shop_user_manage.xml.en:79
+msgctxt "table cell"
+msgid "0€"
+msgstr ""
+
+#: ../ui/shop/shop_progress.xml.en:12
+msgctxt "div"
+msgid "1<g id='1'>Cart</g>"
+msgstr ""
+
 #: ../payments/paybox/enumerates.py:93
 msgid "24H00"
+msgstr ""
+
+#: ../ui/shop/shop_progress.xml.en:15
+msgctxt "div"
+msgid "2<g id='2'>Identification</g>"
+msgstr ""
+
+#: ../ui/shop/shop_progress.xml.en:18
+msgctxt "div"
+msgid "3<g id='3'>Addresses</g>"
+msgstr ""
+
+#: ../ui/shop/shop_progress.xml.en:21
+msgctxt "div"
+msgid "4<g id='4'>Shipping</g>"
+msgstr ""
+
+#: ../ui/shop/shop_progress.xml.en:24
+msgctxt "div"
+msgid "5<g id='5'>Payment</g>"
+msgstr ""
+
+#: ../ui/shop/shop_progress.xml.en:27
+msgctxt "div"
+msgid "6<g id='6'>Confirmation</g>"
+msgstr ""
+
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:13
+msgctxt "table cell"
+msgid "</g>  <x id='4'/> Number:"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:13
+msgctxt "link"
+msgid ""
+"<g id='1'> ${customer/gender} ${customer/title} (${customer/email}) </g><x "
+"id='2'/> Order state:"
+msgstr ""
+
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:11
+msgctxt "label"
+msgid "<g id='1'> To send the packages please fill the colissimo number:"
+msgstr ""
+
+#: ../ui/shop/products/addproduct_tree.xml.en:9
+msgctxt "link"
+msgid "<g id='1'>${item/title}</g> ${item/sub_tree}"
+msgstr ""
+
+#: ../ui/shop/payments/paybox/end.xml.en:11
+msgctxt "b"
+msgid "<g id='1'>${state}</g>  <g id='2'>Unknow state</g>"
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:37
+msgctxt "link"
+msgid "<g id='11'>My Profile |</g>  <g id='12'>Log out</g>"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:95
+msgctxt "b"
+msgid "<g id='12'>${property/title}</g>:"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:41
+msgctxt "span"
+msgid ""
+"<g id='13'> Same that delivery address </g>  <g id='14'> ${bill_address/"
+"firstname} ${bill_address/lastname}<x id='15'/> ${bill_address/address_1}<x "
+"id='16'/>  <g id='17'> ${bill_address/address_2}<x id='18'/>  </g> "
+"${bill_address/zipcode} ${bill_address/town}<x id='19'/> ${bill_address/"
+"country}<x id='20'/>  </g>"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:96
+msgctxt "span"
+msgid "<g id='13'>${property/value}</g>  <g id='14'>Unknow</g>"
+msgstr ""
+
+#: ../ui/shop/shop_recapitulatif.xml.en:60
+msgctxt "label"
+msgid ""
+"<g id='16'> I agree with the general sales conditions and hereby certified "
+"having read them. </g>  <g id='17'><g id='18'>(</g>Read<g id='19'>)</g></g>"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:100
+msgctxt "b"
+msgid "<g id='16'>Update order state:</g>${transitions}"
+msgstr ""
+
+#: ../ui/shop/shipping/colissimo_add_record.xml.en:14
+msgctxt "label"
+msgid ""
+"<g id='2'> To send the packages by colissimo, please fill the colissimo "
+"number:"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:21
+msgctxt "span"
+msgid "<g id='2'>${price-with-tax}</g> € TTC<x id='3'/> Weight:"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:115
+msgctxt "span"
+msgid ""
+"<g id='22'> We're waiting for payment </g>  <g id='23'> Last payment </g>"
+msgstr ""
+
+#: ../ui/shop/products/addproduct.xml.en:46
+msgctxt "abbr"
+msgid "<g id='3'>${item/short_title}</g><x id='4'/>  <g id='5'> Select </g>"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:16
+msgctxt "i"
+msgid ""
+"<g id='3'>${state/title}</g><x id='4'/>  <g id='5'>  <x id='6'/> Download "
+"bill </g>"
+msgstr ""
+
+#: ../ui/shop/payments/cash/record_edit.xml.en:12
+#: ../ui/shop/payments/transfer/record_edit.xml.en:12
+msgctxt "label"
+msgid "<g id='3'>Yes</g>  <x id='4'/>  <x id='5'/>  <g id='6'>No</g>"
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:98
+msgctxt "link"
+msgid "<g id='30'>About</g> - <g id='31'>Credits</g> - <g id='32'>License</g>"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:22
+msgctxt "span"
+msgid "<g id='4'>${weight}</g> kg"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:307
+msgctxt "span"
+msgid "<g id='46'> Public </g>  <g id='47'> Private </g>"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:325
+msgctxt "label"
+msgid "<g id='50'>Public</g>  <x id='51'/>  <g id='52'>Private</g>"
+msgstr ""
+
+#: ../ui/shop/shop_recapitulatif.xml.en:33
+msgctxt "span"
+msgid "<g id='6'> Same that delivery address."
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:32
+msgctxt "link"
+msgid "<g id='9'>Log in</g>  <g id='10'>Register</g>"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:47
+msgctxt "link"
+msgid "> Print product"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:42
+msgctxt "link"
+msgid "> Send to a friend"
 msgstr ""
 
 #: ../payments/check/check_views.py:125
@@ -244,6 +1337,11 @@ msgstr ""
 msgid "Access to file denied"
 msgstr ""
 
+#: ../ui/shop/payments/check/record_edit.xml.en:38
+msgctxt "label"
+msgid "Account Holder:"
+msgstr ""
+
 #: ../payments/check/check.py:56
 msgid "Account holder"
 msgstr ""
@@ -252,13 +1350,16 @@ msgstr ""
 msgid "Activate html mails"
 msgstr ""
 
-#: ../products/models_views.py:129
-#: ../enumerate_table.py:146
+#: ../products/models_views.py:129 ../enumerate_table.py:146
 msgid "Add"
 msgstr ""
 
-#: ../products/models_views.py:128
-#: ../enumerate_table.py:145
+#: ../ui/shop/orders/order_manage.xml.en:138
+msgctxt "button"
+msgid "Add"
+msgstr ""
+
+#: ../products/models_views.py:128 ../enumerate_table.py:145
 msgid "Add Record"
 msgstr ""
 
@@ -270,6 +1371,16 @@ msgstr ""
 msgid "Add a new payment"
 msgstr ""
 
+#: ../ui/shop/orders/order_manage.xml.en:137
+msgctxt "form"
+msgid "Add a new payment way:"
+msgstr ""
+
+#: ../ui/shop/payments/history_view_search.xml.en:10
+msgctxt "link"
+msgid "Add a new payment."
+msgstr ""
+
 #: ../countries.py:81
 msgid "Add a new zone"
 msgstr ""
@@ -278,11 +1389,19 @@ msgstr ""
 msgid "Add an address in my address book"
 msgstr ""
 
-#: ../shop_views.py:217
-#: ../shop_views.py:218
-#: ../payments/check/check_views.py:126
-#: ../payments/cash/cash_views.py:88
+#: ../ui/shop/products/product_view.xml.en:27
+msgctxt "button"
+msgid "Add to cart"
+msgstr ""
+
+#: ../shop_views.py:217 ../shop_views.py:218
+#: ../payments/check/check_views.py:126 ../payments/cash/cash_views.py:88
 #: ../addresses.py:112
+msgid "Address"
+msgstr ""
+
+#: ../ui/shop/addresses_book.xml.en:14
+msgctxt "table cell"
 msgid "Address"
 msgstr ""
 
@@ -294,8 +1413,12 @@ msgstr ""
 msgid "Address modified"
 msgstr ""
 
-#: ../orders/orders.py:238
-#: ../shop.py:154
+#: ../ui/shop/addresses_book.xml.en:13
+msgctxt "table cell"
+msgid "Address title"
+msgstr ""
+
+#: ../orders/orders.py:238 ../shop.py:154
 msgid "Addresses"
 msgstr ""
 
@@ -319,8 +1442,13 @@ msgstr ""
 msgid "Allow to define your own shipping way"
 msgstr ""
 
-#: ../payments/payments_views.py:149
-#: ../payments/payment_way.py:56
+#: ../payments/payments_views.py:149 ../payments/payment_way.py:56
+msgid "Amount"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:105
+#: ../ui/shop/orders/order_manage.xml.en:358
+msgctxt "table cell"
 msgid "Amount"
 msgstr ""
 
@@ -336,6 +1464,15 @@ msgstr ""
 msgid "Amount of withdrawal past the limit"
 msgstr ""
 
+#: ../ui/shop/payments/check/record_view.xml.en:7
+#: ../ui/shop/payments/transfer/end.xml.en:9
+#: ../ui/shop/payments/transfer/record_view.xml.en:7
+#: ../ui/shop/payments/cash/end.xml.en:9
+#: ../ui/shop/payments/cash/record_view.xml.en:7
+msgctxt "heading"
+msgid "Amount:"
+msgstr ""
+
 #: ../products/product_views.py:550
 msgid "An email has been send to your friend"
 msgstr ""
@@ -346,6 +1483,11 @@ msgstr ""
 
 #: ../payments/paybox/enumerates.py:144
 msgid "Approve after holder identification"
+msgstr ""
+
+#: ../ui/shop/products/product_delete.xml.en:9
+msgctxt "paragraph"
+msgid "Are you sure you want to delete the product ?"
 msgstr ""
 
 #: ../countries_views.py:81
@@ -360,17 +1502,32 @@ msgstr ""
 msgid "Bank"
 msgstr ""
 
+#: ../ui/shop/payments/check/record_edit.xml.en:27
+msgctxt "label"
+msgid "Bank:"
+msgstr ""
+
 #: ../shop_views.py:104
 msgid "Barcode format"
 msgstr ""
 
-#: ../orders/orders.py:339
-#: ../ui/shop/orders/order_facture.xml.en:5
+#: ../orders/orders.py:339 ../ui/shop/orders/order_facture.xml.en:5
 msgid "Bill"
 msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:47
 msgid "Bill address"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:26 ../ui/shop/shop_addresses.xml.en:21
+#: ../ui/shop/shop_recapitulatif.xml.en:17
+msgctxt "table cell"
+msgid "Bill address"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:7
+msgctxt "heading"
+msgid "Bill and delivery addresses"
 msgstr ""
 
 #: ../shop_views.py:103
@@ -380,6 +1537,21 @@ msgstr ""
 #: ../products/enumerate.py:112
 msgid "Boolean"
 msgstr ""
+
+#: ../ui/shop/products/addproduct.xml.en:29
+msgctxt "table cell"
+msgid "Browse Categories"
+msgstr ""
+
+#: ../ui/shop/products/addproduct.xml.en:25
+msgctxt "heading"
+msgid "Browse and link to a Product"
+msgstr ""
+
+#: ../ui/shop/shop_recapitulatif.xml.en:86
+msgctxt "button"
+msgid "Buy"
+msgstr "购买"
 
 #: ../products/product_views.py:195
 msgid "Buyable by customer ?"
@@ -397,8 +1569,7 @@ msgstr ""
 msgid "COFINOGA"
 msgstr ""
 
-#: ../orders/workflow.py:55
-#: ../shipping/enumerates.py:30
+#: ../orders/workflow.py:55 ../shipping/enumerates.py:30
 msgid "Cancel"
 msgstr ""
 
@@ -430,18 +1601,18 @@ msgstr ""
 msgid "Carte"
 msgstr ""
 
-#: ../shop.py:138
-#: ../products/product_views.py:66
-#: ../products/product_views.py:191
-#: ../products/product_views.py:334
-#: ../website.py:34
-#: ../categories.py:129
-#: ../categories.py:216
+#: ../shop.py:138 ../products/product_views.py:66
+#: ../products/product_views.py:191 ../products/product_views.py:334
+#: ../website.py:34 ../categories.py:129 ../categories.py:216
 msgid "Categories"
 msgstr ""
 
-#: ../categories.py:43
-#: ../categories.py:144
+#: ../ui/shop/template.xhtml.en:60
+msgctxt "link"
+msgid "Categories"
+msgstr ""
+
+#: ../categories.py:43 ../categories.py:144
 msgid "Category"
 msgstr ""
 
@@ -449,8 +1620,12 @@ msgstr ""
 msgid "Category image"
 msgstr ""
 
-#: ../products/product_views.py:655
-#: ../utils.py:59
+#: ../ui/shop/orders/order_manage.xml.en:192
+msgctxt "button"
+msgid "Change"
+msgstr ""
+
+#: ../products/product_views.py:655 ../utils.py:59
 msgid "Change category"
 msgstr ""
 
@@ -466,6 +1641,11 @@ msgstr ""
 msgid "Check number"
 msgstr ""
 
+#: ../ui/shop/payments/check/record_edit.xml.en:16
+msgctxt "label"
+msgid "Check number:"
+msgstr ""
+
 #: ../payments/check/check.py:48
 msgid "Check payment Module"
 msgstr ""
@@ -474,17 +1654,35 @@ msgstr ""
 msgid "Check refused by the bank"
 msgstr ""
 
-#: ../user.py:65
-#: ../shop_views.py:208
+#: ../ui/shop/orders/order_manage.xml.en:191
+msgctxt "form"
+msgid "Choose another shipping way:"
+msgstr ""
+
+#: ../ui/shop/shop_delivery.xml.en:7
+msgctxt "heading"
+msgid "Choose delivery"
+msgstr ""
+
+#: ../user.py:65 ../shop_views.py:208
 msgid "Civility"
+msgstr ""
+
+#: ../ui/shop/shop_view_cart.xml.en:19
+msgctxt "button"
+msgid "Clear the cart"
+msgstr ""
+
+#: ../ui/shop/shipping/colissimo_record_order_view.xml.en:12
+msgctxt "link"
+msgid "Click here to get more informations."
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:149
 msgid "Client cancellation"
 msgstr ""
 
-#: ../orders/workflow.py:56
-#: ../orders/workflow.py:64
+#: ../orders/workflow.py:56 ../orders/workflow.py:64
 msgid "Closed"
 msgstr ""
 
@@ -496,16 +1694,36 @@ msgstr ""
 msgid "Colissimo suivi"
 msgstr ""
 
+#: ../ui/shop/virtualcategory_comparator.xml.en:24
+msgctxt "link"
+msgid "Come back to the product list"
+msgstr ""
+
 #: ../categories_views.py:184
 msgid "Compare"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator_view.xml.en:15
+#: ../ui/shop/virtualcategory_comparator_view.xml.en:32
+msgctxt "button"
+msgid "Compare the selected products"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator.xml.en:18
+msgctxt "table cell"
+msgid "Compare the selected products"
 msgstr ""
 
 #: ../shop.py:169
 msgid "Conditions Générales de ventes"
 msgstr ""
 
-#: ../products/models_views.py:142
-#: ../payments/transfer/transfer_views.py:86
+#: ../ui/shop/shop_view.xml.en:48
+msgctxt "heading"
+msgid "Configuration"
+msgstr ""
+
+#: ../products/models_views.py:142 ../payments/transfer/transfer_views.py:86
 #: ../shipping/shippings_views.py:42
 msgid "Configure"
 msgstr ""
@@ -514,8 +1732,17 @@ msgstr ""
 msgid "Configure Paybox"
 msgstr ""
 
-#: ../payments/check/check_views.py:117
-#: ../payments/cash/cash_views.py:81
+#: ../ui/shop/shop_view.xml.en:73
+msgctxt "link"
+msgid "Configure authorized countries"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:76
+msgctxt "link"
+msgid "Configure authorized countries zones"
+msgstr ""
+
+#: ../payments/check/check_views.py:117 ../payments/cash/cash_views.py:81
 msgid "Configure checkpayment module"
 msgstr ""
 
@@ -523,16 +1750,46 @@ msgstr ""
 msgid "Configure cross selling"
 msgstr ""
 
+#: ../ui/shop/shop_view.xml.en:58
+msgctxt "link"
+msgid "Configure cross selling"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:67
+msgctxt "link"
+msgid "Configure enumerates"
+msgstr ""
+
 #: ../payments/payments_views.py:201
 msgid "Configure payment ways"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:64
+msgctxt "link"
+msgid "Configure products models"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:70
+msgctxt "link"
+msgid "Configure shippings way"
 msgstr ""
 
 #: ../shop_views.py:76
 msgid "Configure shop"
 msgstr ""
 
+#: ../ui/shop/shop_view.xml.en:55
+msgctxt "link"
+msgid "Configure shop"
+msgstr ""
+
 #: ../payments/paybox/enumerates.py:137
 msgid "Contact the card issuer"
+msgstr ""
+
+#: ../ui/shop/shop_addresses.xml.en:59
+msgctxt "link"
+msgid "Continue"
 msgstr ""
 
 #: ../editable.py:52
@@ -543,9 +1800,7 @@ msgstr ""
 msgid "Countries"
 msgstr ""
 
-#: ../shop.py:160
-#: ../shop.py:279
-#: ../countries.py:75
+#: ../shop.py:160 ../shop.py:279 ../countries.py:75
 msgid "Countries Zones"
 msgstr ""
 
@@ -553,15 +1808,23 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: ../countries.py:84
-#: ../countries.py:151
-#: ../countries_views.py:35
+#: ../countries.py:84 ../countries.py:151 ../countries_views.py:35
 msgid "Country title"
 msgstr ""
 
-#: ../products/product_views.py:187
-#: ../products/product_views.py:310
+#: ../products/product_views.py:187 ../products/product_views.py:310
 msgid "Cover"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:56
+msgctxt "table cell"
+msgid "Cover"
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:11
+#: ../ui/shop/shop_website_view.xml.en:26
+msgctxt "paragraph"
+msgid "Cras adipiscing fermentum convallis."
 msgstr ""
 
 #: ../products/declination.py:75
@@ -576,9 +1839,12 @@ msgstr ""
 msgid "Creation date"
 msgstr ""
 
-#: ../products/product.py:149
-#: ../shop.py:175
-#: ../shop.py:268
+#: ../products/product.py:149 ../shop.py:175 ../shop.py:268
+msgid "Cross selling"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:109
+msgctxt "heading"
 msgid "Cross selling"
 msgstr ""
 
@@ -594,39 +1860,61 @@ msgstr ""
 msgid "Currency unknown"
 msgstr ""
 
-#: ../payments/payments_views.py:129
-#: ../payments/payments_views.py:147
+#: ../payments/payments_views.py:129 ../payments/payments_views.py:147
 #: ../orders/orders_views.py:54
 msgid "Customer"
+msgstr ""
+
+#: ../ui/shop/payments/payment_manage.xml.en:14
+#: ../ui/shop/orders/order_manage.xml.en:44
+msgctxt "table cell"
+msgid "Customer [Id n°${customer/id}]"
+msgstr ""
+
+#: ../ui/shop/payments/payment_manage.xml.en:51
+msgctxt "table cell"
+msgid "Customer payment view"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:71
+msgctxt "table cell"
+msgid "Customer payments"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:87
 msgid "DINERS"
 msgstr ""
 
+#: ../ui/shop/products/product_view.xml.en:76
+msgctxt "table cell"
+msgid "Data"
+msgstr ""
+
 #: ../products/models.py:127
 msgid "Data Type"
 msgstr ""
 
-#: ../payments/paybox/paybox_views.py:49
-#: ../shipping/shippings_views.py:106
-#: ../ui/shop/orders/order_facture.xml.en:25
-#: ../products/enumerate.py:116
+#: ../payments/paybox/paybox_views.py:49 ../shipping/shippings_views.py:106
+#: ../ui/shop/orders/order_facture.xml.en:25 ../products/enumerate.py:116
 msgid "Date"
 msgstr ""
 
-#: ../user_views.py:92
-#: ../payments/payments_views.py:146
+#: ../user_views.py:92 ../payments/payments_views.py:146
 #: ../orders/orders_views.py:59
 msgid "Date and Time"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:357
+#: ../ui/shop/orders/order_manage.xml.en:395
+msgctxt "table cell"
+msgid "Datetime"
 msgstr ""
 
 #: ../products/enumerate.py:111
 msgid "Decimal"
 msgstr ""
 
-#: ../orders/orders.py:115
-#: ../products/declination.py:123
+#: ../orders/orders.py:115 ../products/declination.py:123
 msgid "Declination"
 msgstr ""
 
@@ -634,8 +1922,7 @@ msgstr ""
 msgid "Declination not exist"
 msgstr ""
 
-#: ../products/product_views.py:557
-#: ../products/product_views.py:645
+#: ../products/product_views.py:557 ../products/product_views.py:645
 msgid "Declinations"
 msgstr ""
 
@@ -655,8 +1942,30 @@ msgstr ""
 msgid "Delete product"
 msgstr ""
 
+#: ../ui/shop/products/product_delete.xml.en:12
+msgctxt "button"
+msgid "Delete the product"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:79
+msgctxt "table cell"
+msgid "Delivery (${ship/title}):"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:34
 msgid "Delivery address"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:25 ../ui/shop/shop_addresses.xml.en:18
+#: ../ui/shop/orders/order_manage.xml.en:206
+#: ../ui/shop/shop_recapitulatif.xml.en:14
+msgctxt "table cell"
+msgid "Delivery address"
+msgstr ""
+
+#: ../ui/shop/shop_chooseaddress.xml.en:10
+msgctxt "form"
+msgid "Delivery address:"
 msgstr ""
 
 #: ../orders/workflow.py:53
@@ -667,17 +1976,28 @@ msgstr ""
 msgid "Delivery ongoing"
 msgstr ""
 
-#: ../products/cross_selling_views.py:236
-#: ../payments/payment_way_views.py:78
-#: ../categories_views.py:312
-#: ../shipping/shippings_views.py:77
-#: ../payments/payments_views.py:254
-#: ../products/product_views.py:184
-#: ../shipping/withdrawal.py:99
-#: ../shipping/shipping_way_views.py:46
-#: ../shipping/shipping_way.py:73
-#: ../payments/payment_way.py:57
+#: ../products/cross_selling_views.py:236 ../payments/payment_way_views.py:78
+#: ../categories_views.py:312 ../shipping/shippings_views.py:77
+#: ../payments/payments_views.py:254 ../products/product_views.py:184
+#: ../shipping/withdrawal.py:99 ../shipping/shipping_way_views.py:46
+#: ../shipping/shipping_way.py:73 ../payments/payment_way.py:57
 msgid "Description"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:72
+#: ../ui/shop/shop_delivery.xml.en:20 ../ui/shop/products/print.xml.en:39
+msgctxt "table cell"
+msgid "Description"
+msgstr ""
+
+#: ../ui/shop/shipping/colissimo_record_order_view.xml.en:7
+msgctxt "heading"
+msgid "Details about colissimo"
+msgstr ""
+
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:17
+msgctxt "table cell"
+msgid "Details about shipping way:"
 msgstr ""
 
 #: ../payments/paybox/paybox_views.py:86
@@ -686,6 +2006,17 @@ msgstr ""
 
 #: ../products/product_views.py:656
 msgid "Do changes"
+msgstr ""
+
+#: ../ui/shop/payments/check/record_view.xml.en:13
+#: ../ui/shop/payments/transfer/end.xml.en:15
+#: ../ui/shop/payments/transfer/record_view.xml.en:14
+#: ../ui/shop/payments/cash/end.xml.en:13
+#: ../ui/shop/payments/cash/record_view.xml.en:12
+msgctxt "heading"
+msgid ""
+"Do not forget to recall the information mentionned below in any "
+"communications:"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:140
@@ -700,6 +2031,11 @@ msgstr ""
 msgid "Don't forget to recall the information mentionned below"
 msgstr ""
 
+#: ../ui/shop/shop_login.xml.en:20
+msgctxt "label"
+msgid "E-mail Address"
+msgstr ""
+
 #: ../payments/paybox/enumerates.py:84
 msgid "EUROCARD_MASTERCARD"
 msgstr ""
@@ -708,19 +2044,21 @@ msgstr ""
 msgid "E_CARD"
 msgstr ""
 
-#: ../shipping/shipping_way_views.py:37
-#: ../products/product_views.py:173
+#: ../shipping/shipping_way_views.py:37 ../products/product_views.py:173
 #: ../editable.py:48
 msgid "Edit"
 msgstr ""
 
-#: ../shop_views.py:604
-#: ../addresses_views.py:69
+#: ../shop_views.py:604 ../addresses_views.py:69
 msgid "Edit address"
 msgstr ""
 
-#: ../shop_views.py:108
-#: ../payments/payment_way_views.py:81
+#: ../ui/shop/addresses_book.xml.en:34
+msgctxt "link"
+msgid "Edit address"
+msgstr ""
+
+#: ../shop_views.py:108 ../payments/payment_way_views.py:81
 msgid "Edit configuration"
 msgstr ""
 
@@ -732,11 +2070,38 @@ msgstr ""
 msgid "Edit declination"
 msgstr ""
 
-#: ../user.py:64
-#: ../shop_views.py:207
-#: ../shop_views.py:719
-#: ../shop_views.py:735
-#: ../products/enumerate.py:114
+#: ../ui/shop/shop_user_profile.xml.en:15
+msgctxt "link"
+msgid "Edit my account"
+msgstr ""
+
+#: ../ui/shop/shop_user_profile.xml.en:37
+msgctxt "link"
+msgid "Edit my password"
+msgstr ""
+
+#: ../ui/shop/shop_user_profile.xml.en:26
+msgctxt "link"
+msgid "Edit my preferences"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:52
+msgctxt "link"
+msgid "Edit terms and conditions of use"
+msgstr ""
+
+#: ../ui/shop/addresses_book.xml.en:32
+msgctxt "title attribute"
+msgid "Edit this address"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:61
+msgctxt "link"
+msgid "Edit/Add Taxes"
+msgstr ""
+
+#: ../user.py:64 ../shop_views.py:207 ../shop_views.py:719
+#: ../shop_views.py:735 ../products/enumerate.py:114
 msgid "Email"
 msgstr ""
 
@@ -744,15 +2109,12 @@ msgstr ""
 msgid "Email of your friend"
 msgstr ""
 
-#: ../countries.py:153
-#: ../products/cross_selling_views.py:74
+#: ../countries.py:153 ../products/cross_selling_views.py:74
 msgid "Enabled"
 msgstr ""
 
-#: ../shipping/shipping_way_views.py:47
-#: ../payments/payments_views.py:210
-#: ../payments/payment_way_views.py:77
-#: ../shipping/shippings_views.py:78
+#: ../shipping/shipping_way_views.py:47 ../payments/payments_views.py:210
+#: ../payments/payment_way_views.py:77 ../shipping/shippings_views.py:78
 msgid "Enabled ?"
 msgstr ""
 
@@ -836,6 +2198,12 @@ msgstr ""
 msgid "Error: product invalid"
 msgstr ""
 
+#: ../ui/shop/shop_website_view.xml.en:17
+#: ../ui/shop/shop_website_view.xml.en:32
+msgctxt "paragraph"
+msgid "Etiam vulputate posuere nibh, eu venenatis velit lobortis ut."
+msgstr ""
+
 #: ../payments/enumerates.py:35
 msgid "Euro"
 msgstr ""
@@ -872,16 +2240,18 @@ msgstr ""
 msgid "Fill a new address"
 msgstr ""
 
-#: ../user.py:67
-#: ../shop_views.py:210
-#: ../shop_views.py:717
-#: ../shop_views.py:733
-#: ../addresses.py:110
+#: ../user.py:67 ../shop_views.py:210 ../shop_views.py:717
+#: ../shop_views.py:733 ../addresses.py:110
 msgid "Firstname"
 msgstr ""
 
 #: ../shop_views.py:716
 msgid "Gender"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:22
+msgctxt "table cell"
+msgid "Gender:"
 msgstr ""
 
 #: ../addresses.py:109
@@ -892,21 +2262,52 @@ msgstr ""
 msgid "HTML"
 msgstr ""
 
-#: ../countries.py:85
-#: ../countries_views.py:82
+#: ../countries.py:85 ../countries_views.py:82
 msgid "Has TAX ?"
 msgstr ""
 
+#: ../ui/shop/shop_addresses.xml.en:12
+msgctxt "paragraph"
+msgid "Here you can select your delivery and bill addresses."
+msgstr ""
+
+#: ../ui/shop/addresses_book.xml.en:9
+msgctxt "paragraph"
+msgid "Here your address book"
+msgstr ""
+
 #: ../products/product.py:77
-msgid "Hi,\nThe product {product_title} is out of stock\n\n  {product_uri}\n\n"
+msgid ""
+"Hi,\n"
+"The product {product_title} is out of stock\n"
+"\n"
+"  {product_uri}\n"
+"\n"
 msgstr ""
 
 #: ../orders/orders.py:63
-msgid "Hi,\nYour order number {order_name} in our shop has been recorded.\nYou can found details on our website:\n\n  {order_uri}\n\n-- \n{shop_signature}\n"
+msgid ""
+"Hi,\n"
+"Your order number {order_name} in our shop has been recorded.\n"
+"You can found details on our website:\n"
+"\n"
+"  {order_uri}\n"
+"\n"
+"-- \n"
+"{shop_signature}\n"
 msgstr ""
 
 #: ../payments/payments.py:148
-msgid "Hi, your payment has been validated.\n\n------------------------\nId payment: {payment_way}-{id}\nRef: {ref}\nAmount: {amount} €\n------------------------\n\n\n"
+msgid ""
+"Hi, your payment has been validated.\n"
+"\n"
+"------------------------\n"
+"Id payment: {payment_way}-{id}\n"
+"Ref: {ref}\n"
+"Amount: {amount} €\n"
+"------------------------\n"
+"\n"
+"\n"
 msgstr ""
 
 #: ../shipping/shipping_way.py:252
@@ -917,15 +2318,39 @@ msgstr ""
 msgid "Holder already on stop, former record kept"
 msgstr ""
 
+#: ../ui/shop/template.xhtml.en:57
+msgctxt "link"
+msgid "Home"
+msgstr ""
+
+#: ../ui/shop/shop_login.xml.en:30
+msgctxt "link"
+msgid "I forgot my password"
+msgstr ""
+
+#: ../ui/shop/shop_login.xml.en:11
+msgctxt "heading"
+msgid "I'm a new customer"
+msgstr ""
+
+#: ../ui/shop/shop_login.xml.en:15
+msgctxt "heading"
+msgid "I'm already a customer"
+msgstr ""
+
 #: ../payments/transfer/transfer_views.py:96
 msgid "IBAN"
 msgstr ""
 
-#: ../shipping/shippings_views.py:104
-#: ../payments/paybox/paybox_views.py:48
-#: ../payments/payments_views.py:144
-#: ../shop_views.py:715
-#: ../shop_views.py:732
+#: ../shipping/shippings_views.py:104 ../payments/paybox/paybox_views.py:48
+#: ../payments/payments_views.py:144 ../shop_views.py:715 ../shop_views.py:732
+msgid "Id"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:104
+#: ../ui/shop/orders/order_manage.xml.en:355
+#: ../ui/shop/orders/order_manage.xml.en:394
+msgctxt "table cell"
 msgid "Id"
 msgstr ""
 
@@ -941,12 +2366,33 @@ msgstr ""
 msgid "Id transaction:"
 msgstr ""
 
+#: ../ui/shop/orders/order_manage.xml.en:22
+msgctxt "table cell"
+msgid "Id:"
+msgstr ""
+
+#: ../ui/shop/shop_login.xml.en:7
+msgctxt "heading"
+msgid "Identification"
+msgstr ""
+
 #: ../payments/paybox/enumerates.py:164
 msgid "Identifier of purchasing body unknown"
 msgstr ""
 
-#: ../products/images_views.py:36
-#: ../products/models_views.py:55
+#: ../ui/shop/orders/order_view.xml.en:125
+#: ../ui/shop/orders/order_manage.xml.en:322
+msgctxt "paragraph"
+msgid "If you want to add a message:"
+msgstr ""
+
+#: ../ui/shop/addresses_book.xml.en:40
+msgctxt "paragraph"
+msgid ""
+"If you want to add an item in your address book <g id='8'>click here.</g>"
+msgstr ""
+
+#: ../products/images_views.py:36 ../products/models_views.py:55
 msgid "Image"
 msgstr ""
 
@@ -962,8 +2408,19 @@ msgstr ""
 msgid "Impact on weight"
 msgstr ""
 
+#: ../ui/shop/cart_view.xml.en:62
+msgctxt "title attribute"
+msgid "Impossible to add product in cart"
+msgstr ""
+
 #: ../payments/paybox/enumerates.py:155
 msgid "Impossible to situate the record in the file"
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:19
+#: ../ui/shop/shop_website_view.xml.en:34
+msgctxt "paragraph"
+msgid "In neque eros, bibendum id auctor at, ultricies ut odio."
 msgstr ""
 
 #: ../shipping/enumerates.py:28
@@ -986,12 +2443,29 @@ msgstr ""
 msgid "Inscription ok"
 msgstr ""
 
+#: ../ui/shop/products/addproduct.xml.en:7
+msgctxt "title"
+msgid "Insert link"
+msgstr ""
+
 #: ../payments/paybox/enumerates.py:171
 msgid "Insufficient funds or over credit limit"
 msgstr ""
 
 #: ../products/enumerate.py:110
 msgid "Integer"
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:11
+#: ../ui/shop/shop_website_view.xml.en:26
+msgctxt "paragraph"
+msgid "Integer luctus sem vel nunc tincidunt lobortis."
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:21
+#: ../ui/shop/shop_website_view.xml.en:36
+msgctxt "paragraph"
+msgid "Integer rhoncus vehicula suscipit."
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:146
@@ -1046,19 +2520,24 @@ msgstr ""
 msgid "Keywords"
 msgstr ""
 
+#: ../ui/shop/products/product_view.xml.en:80
+msgctxt "table cell"
+msgid "Keywords"
+msgstr ""
+
 #: ../shipping/colissimo.py:99
-msgid "La livraison de votre commande est assurée en Colissimo. A compter de la prise en charge par La Poste, vous êtes livré à domicile en 48 h(1)sous réserve des heures limites de dépôt."
+msgid ""
+"La livraison de votre commande est assurée en Colissimo. A compter de la "
+"prise en charge par La Poste, vous êtes livré à domicile en 48 h(1)sous "
+"réserve des heures limites de dépôt."
 msgstr ""
 
 #: ../products/product_views.py:314
 msgid "Last Modified"
 msgstr ""
 
-#: ../user.py:66
-#: ../shop_views.py:209
-#: ../shop_views.py:718
-#: ../shop_views.py:734
-#: ../addresses.py:111
+#: ../user.py:66 ../shop_views.py:209 ../shop_views.py:718
+#: ../shop_views.py:734 ../addresses.py:111
 msgid "Lastname"
 msgstr ""
 
@@ -1066,9 +2545,19 @@ msgstr ""
 msgid "List of changes"
 msgstr ""
 
-#: ../shipping/shipping_way_views.py:45
-#: ../payments/payment_way_views.py:76
+#: ../ui/shop/shop_login.xml.en:33
+msgctxt "button"
+msgid "Log in"
+msgstr ""
+
+#: ../shipping/shipping_way_views.py:45 ../payments/payment_way_views.py:76
 msgid "Logo"
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:8
+#: ../ui/shop/shop_website_view.xml.en:23
+msgctxt "paragraph"
+msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:168
@@ -1079,21 +2568,66 @@ msgstr ""
 msgid "M."
 msgstr ""
 
+#: ../ui/shop/shop_website_view.xml.en:12
+#: ../ui/shop/shop_website_view.xml.en:27
+msgctxt "paragraph"
+msgid "Maecenas egestas congue congue."
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:7
+msgctxt "heading"
+msgid "Manage Order"
+msgstr ""
+
 #: ../orders/orders_views.py:45
 msgid "Manage Orders"
+msgstr ""
+
+#: ../ui/shop/payments/payment_manage.xml.en:7
+msgctxt "heading"
+msgid "Manage Payment"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:39
+msgctxt "link"
+msgid "Manage categories"
 msgstr ""
 
 #: ../shop_views.py:641
 msgid "Manage customer"
 msgstr ""
 
-#: ../products/product.py:112
-#: ../products/images_views.py:93
+#: ../ui/shop/shop_view.xml.en:33
+msgctxt "link"
+msgid "Manage customers"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:36
+msgctxt "link"
+msgid "Manage orders"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:42
+msgctxt "link"
+msgid "Manage payments"
+msgstr ""
+
+#: ../products/product.py:112 ../products/images_views.py:93
 msgid "Manage photos"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:30
+msgctxt "link"
+msgid "Manage products"
 msgstr ""
 
 #: ../orders/orders_views.py:111
 msgid "Manage shipping"
+msgstr ""
+
+#: ../ui/shop/payments/payment_manage.xml.en:33
+msgctxt "table cell"
+msgid "Manage/Edit payment"
 msgstr ""
 
 #: ../products/models.py:123
@@ -1112,9 +2646,24 @@ msgstr ""
 msgid "Message if no shipping available"
 msgstr ""
 
-#: ../orders/orders.py:244
-#: ../orders/messages.py:41
+#: ../ui/shop/products/addproduct.xml.en:21
+msgctxt "div"
+msgid "Message:"
+msgstr ""
+
+#: ../orders/orders.py:244 ../orders/messages.py:41
 msgid "Messages"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:110
+#: ../ui/shop/orders/order_manage.xml.en:290
+msgctxt "table cell"
+msgid "Messages"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:31
+msgctxt "paragraph"
+msgid "Missing declination, please select another options"
 msgstr ""
 
 #: ../datatypes.py:40
@@ -1125,9 +2674,15 @@ msgstr ""
 msgid "Mme"
 msgstr ""
 
-#: ../user.py:69
-#: ../shop_views.py:214
+#: ../user.py:69 ../shop_views.py:214
 msgid "Mobile"
+msgstr ""
+
+#: ../ui/shop/shop_delivery.xml.en:19
+#: ../ui/shop/orders/order_manage.xml.en:356
+#: ../ui/shop/orders/order_manage.xml.en:396
+msgctxt "table cell"
+msgid "Mode"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:100
@@ -1154,6 +2709,18 @@ msgstr ""
 msgid "Modifications ok"
 msgstr ""
 
+#: ../ui/shop/shop_website_view.xml.en:9
+#: ../ui/shop/shop_website_view.xml.en:24
+msgctxt "paragraph"
+msgid "Morbi enim justo, aliquam molestie convallis eu, rutrum et felis."
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:22
+#: ../ui/shop/shop_website_view.xml.en:37
+msgctxt "paragraph"
+msgid "Morbi gravida fermentum odio, quis elementum tellus ultricies at."
+msgstr ""
+
 #: ../products/models.py:125
 msgid "Multilingual"
 msgstr ""
@@ -1162,19 +2729,26 @@ msgstr ""
 msgid "Multiple"
 msgstr ""
 
-#: ../shop_views.py:594
-#: ../addresses_views.py:32
+#: ../shop_views.py:594 ../addresses_views.py:32
 msgid "My address book"
+msgstr ""
+
+#: ../ui/shop/shop_user_profile.xml.en:47
+msgctxt "link"
+msgid "My addresses book"
+msgstr ""
+
+#: ../ui/shop/cart_viewbox.xml.en:10
+msgctxt "link"
+msgid "My cart"
 msgstr ""
 
 #: ../user_views.py:43
 msgid "My profile"
 msgstr ""
 
-#: ../categories_views.py:281
-#: ../products/product_views.py:63
-#: ../products/product_views.py:567
-#: ../products/images.py:72
+#: ../categories_views.py:281 ../products/product_views.py:63
+#: ../products/product_views.py:567 ../products/images.py:72
 msgid "Name"
 msgstr ""
 
@@ -1206,18 +2780,25 @@ msgstr ""
 msgid "New photo"
 msgstr ""
 
-#: ../products/cross_selling_views.py:270
-#: ../products/images_views.py:72
+#: ../products/cross_selling_views.py:270 ../products/images_views.py:72
 msgid "New record added."
 msgstr ""
 
-#: ../shipping/shippings_views.py:89
-#: ../products/models.py:228
+#: ../ui/shop/browse_batch.xml.en:23
+msgctxt "link"
+msgid "Next »"
+msgstr "下一页 »"
+
+#: ../shipping/shippings_views.py:89 ../products/models.py:228
 msgid "No"
 msgstr ""
 
-#: ../enumerates.py:24
-#: ../products/enumerate.py:93
+#: ../ui/shop/shop_user_manage.xml.en:98
+msgctxt "paragraph"
+msgid "No order"
+msgstr ""
+
+#: ../enumerates.py:24 ../products/enumerate.py:93
 msgid "None"
 msgstr ""
 
@@ -1227,6 +2808,30 @@ msgstr ""
 
 #: ../payments/paybox/enumerates.py:130
 msgid "Not the same card used for the first payment"
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:15
+#: ../ui/shop/shop_website_view.xml.en:30
+msgctxt "paragraph"
+msgid "Nulla eget semper purus."
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:20
+#: ../ui/shop/shop_website_view.xml.en:35
+msgctxt "paragraph"
+msgid "Nulla facilisi."
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:16
+#: ../ui/shop/shop_website_view.xml.en:31
+msgctxt "paragraph"
+msgid "Nulla faucibus scelerisque felis semper aliquam."
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:13
+#: ../ui/shop/shop_website_view.xml.en:28
+msgctxt "paragraph"
+msgid "Nullam porttitor leo non quam porta dignissim."
 msgstr ""
 
 #: ../products/cross_selling_views.py:75
@@ -1249,6 +2854,18 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
+#: ../ui/shop/template.xhtml.en:46
+msgctxt "button"
+msgid "OK"
+msgstr ""
+
+#: ../ui/shop/shipping/shippingway_add_record.xml.en:19
+#: ../ui/shop/shipping/colissimo_add_record.xml.en:19
+#: ../ui/shop/orders/order_manage.xml.en:101
+msgctxt "button"
+msgid "Ok"
+msgstr ""
+
 #: ../payments/paybox/enumerates.py:44
 msgid "One of the PBX_RETOUR variable is too long"
 msgstr ""
@@ -1265,10 +2882,13 @@ msgstr ""
 msgid "Operation successful"
 msgstr ""
 
-#: ../orders/orders.py:152
-#: ../products/cross_selling_views.py:237
-#: ../enumerate_table.py:55
-#: ../products/images_views.py:37
+#: ../orders/orders.py:152 ../products/cross_selling_views.py:237
+#: ../enumerate_table.py:55 ../products/images_views.py:37
+msgid "Order"
+msgstr ""
+
+#: ../ui/shop/shop_view_cart.xml.en:23
+msgctxt "link"
 msgid "Order"
 msgstr ""
 
@@ -1280,8 +2900,12 @@ msgstr ""
 msgid "Order history"
 msgstr ""
 
-#: ../user_views.py:89
-#: ../orders/orders_views.py:53
+#: ../ui/shop/shop_user_manage.xml.en:90
+msgctxt "table cell"
+msgid "Order history:"
+msgstr ""
+
+#: ../user_views.py:89 ../orders/orders_views.py:53
 msgid "Order id"
 msgstr ""
 
@@ -1289,23 +2913,50 @@ msgstr ""
 msgid "Order in preparation"
 msgstr ""
 
+#: ../ui/shop/orders/order_manage.xml.en:15
+msgctxt "table cell"
+msgid "Order informations"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:21
 msgid "Order number"
 msgstr ""
 
-#: ../products/product.py:145
-#: ../products/product.py:690
+#: ../ui/shop/orders/order_view.xml.en:9
+msgctxt "heading"
+msgid "Order number:"
+msgstr ""
+
+#: ../products/product.py:145 ../products/product.py:690
 msgid "Order photos"
 msgstr ""
 
-#: ../shop_views.py:334
-#: ../shop_views.py:476
+#: ../ui/shop/payments/transfer/record_view.xml.en:17
+#: ../ui/shop/payments/check/record_view.xml.en:16
+#: ../ui/shop/payments/cash/record_view.xml.en:15
+#: ../ui/shop/payments/transfer/end.xml.en:18
+#: ../ui/shop/payments/cash/end.xml.en:16
+#: ../ui/shop/payments/check/end.xml.en:15
+msgctxt "b"
+msgid "Order reference:"
+msgstr ""
+
+#: ../shop_views.py:334 ../shop_views.py:476
 msgid "Order summary"
 msgstr ""
 
-#: ../orders/orders.py:347
-#: ../shop.py:151
+#: ../orders/orders.py:347 ../shop.py:151
 msgid "Orders"
+msgstr ""
+
+#: ../ui/shop/shop_user_profile.xml.en:57
+msgctxt "link"
+msgid "Orders history"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:34
+msgctxt "paragraph"
+msgid "Out of stock."
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:66
@@ -1340,6 +2991,11 @@ msgstr ""
 msgid "PBX_TOTAL value is invalid"
 msgstr ""
 
+#: ../ui/shop/shipping/shippingway_order_view.xml.en:8
+msgctxt "span"
+msgid "Package number:"
+msgstr ""
+
 #: ../ui/shop/orders/order_facture.xml.en:14
 msgid "Page"
 msgstr ""
@@ -1361,6 +3017,11 @@ msgid "Paiement refusé"
 msgstr ""
 
 #: ../shop_views.py:211
+msgid "Password"
+msgstr ""
+
+#: ../ui/shop/shop_login.xml.en:26
+msgctxt "label"
 msgid "Password"
 msgstr ""
 
@@ -1388,12 +3049,22 @@ msgstr ""
 msgid "Paybox payment Module"
 msgstr ""
 
+#: ../ui/shop/payments/paybox/record_edit.xml.en:7
+msgctxt "heading"
+msgid "Paybox payment description"
+msgstr ""
+
 #: ../payments/paybox/paybox_views.py:169
 msgid "Paybox problem"
 msgstr ""
 
 #: ../payments/payments_views.py:252
 msgid "Payed ?"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:78
+msgctxt "table cell"
+msgid "Payed:"
 msgstr ""
 
 #: ../payments/payments.py:40
@@ -1408,23 +3079,24 @@ msgstr ""
 msgid "Payment by CB (Paybox)"
 msgstr ""
 
-#: ../payments/cash/cash.py:35
-#: ../payments/cash/cash.py:36
+#: ../payments/cash/cash.py:35 ../payments/cash/cash.py:36
 msgid "Payment by cash"
 msgstr ""
 
-#: ../payments/check/check.py:72
-#: ../payments/check/check.py:73
+#: ../payments/check/check.py:72 ../payments/check/check.py:73
 msgid "Payment by check"
 msgstr ""
 
-#: ../payments/transfer/transfer.py:36
-#: ../payments/transfer/transfer.py:37
+#: ../payments/transfer/transfer.py:36 ../payments/transfer/transfer.py:37
 msgid "Payment by transfer"
 msgstr ""
 
-#: ../shop_payments.py:35
-#: ../shop_payments.py:46
+#: ../ui/shop/payments/transfer/record_edit.xml.en:11
+msgctxt "heading"
+msgid "Payment by transfer validated ?"
+msgstr ""
+
+#: ../shop_payments.py:35 ../shop_payments.py:46
 msgid "Payment end"
 msgstr ""
 
@@ -1432,12 +3104,21 @@ msgstr ""
 msgid "Payment error"
 msgstr ""
 
+#: ../ui/shop/orders/order_manage.xml.en:178
+msgctxt "table cell"
+msgid "Payment has been validated, preparation of order"
+msgstr ""
+
 #: ../payments/payment_way_views.py:49
 msgid "Payment invalid"
 msgstr ""
 
-#: ../payments/payments_views.py:150
-#: ../orders/orders_views.py:56
+#: ../ui/shop/payments/payment_way_record_view.xml.en:12
+msgctxt "paragraph"
+msgid "Payment is ok."
+msgstr ""
+
+#: ../payments/payments_views.py:150 ../orders/orders_views.py:56
 msgid "Payment mode"
 msgstr ""
 
@@ -1449,13 +3130,22 @@ msgstr ""
 msgid "Payment number"
 msgstr ""
 
+#: ../ui/shop/payments/paybox/end.xml.en:10
+msgctxt "div"
+msgid "Payment state:"
+msgstr ""
+
 #: ../payments/check/check_views.py:40
 msgid "Payment successful"
 msgstr ""
 
-#: ../payments/payments.py:146
-#: ../orders/workflow.py:51
+#: ../payments/payments.py:146 ../orders/workflow.py:51
 msgid "Payment validated"
+msgstr ""
+
+#: ../ui/shop/payments/cash/record_edit.xml.en:11
+msgctxt "heading"
+msgid "Payment validated ?"
 msgstr ""
 
 #: ../payments/payments_views.py:249
@@ -1466,7 +3156,17 @@ msgstr ""
 msgid "Payment way has been added"
 msgstr ""
 
+#: ../ui/shop/orders/order_view.xml.en:95
+msgctxt "table cell"
+msgid "Payments"
+msgstr ""
+
 #: ../payments/payments_views.py:115
+msgid "Payments history"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:344
+msgctxt "table cell"
 msgid "Payments history"
 msgstr ""
 
@@ -1478,13 +3178,34 @@ msgstr ""
 msgid "Pays"
 msgstr ""
 
-#: ../user.py:68
-#: ../shop_views.py:213
+#: ../ui/shop/shop_website_view.xml.en:21
+#: ../ui/shop/shop_website_view.xml.en:36
+msgctxt "paragraph"
+msgid "Pellentesque suscipit interdum risus et tempor."
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:14
+#: ../ui/shop/shop_website_view.xml.en:29
+msgctxt "paragraph"
+msgid "Phasellus in eros velit, id gravida urna."
+msgstr ""
+
+#: ../user.py:68 ../shop_views.py:213
 msgid "Phone number"
 msgstr ""
 
 #: ../products/images.py:65
 msgid "Photo Ordered Table"
+msgstr ""
+
+#: ../ui/shop/shop_recapitulatif.xml.en:68
+msgctxt "heading"
+msgid "Please choose a payment mode"
+msgstr ""
+
+#: ../ui/shop/shop_delivery.xml.en:13
+msgctxt "paragraph"
+msgid "Please choose your delivery preferences."
 msgstr ""
 
 #: ../categories_views.py:210
@@ -1507,9 +3228,14 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: ../enumerates.py:73
-#: ../shipping/shipping_way.py:70
+#: ../enumerates.py:73 ../shipping/shipping_way.py:70
 #: ../shipping/shipping_way.py:124
+msgid "Price"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:84
+#: ../ui/shop/products/print.xml.en:35
+msgctxt "table cell"
 msgid "Price"
 msgstr ""
 
@@ -1541,10 +3267,24 @@ msgstr ""
 msgid "Private ?"
 msgstr ""
 
-#: ../products/product.py:84
-#: ../products/product_views.py:514
-#: ../ui/shop/orders/order_facture.xml.en:62
-#: ../products/cross_selling.py:70
+#: ../ui/shop/shop_user_manage.xml.en:46
+msgctxt "table cell"
+msgid "Private user informations"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:21
+msgctxt "form"
+msgid "Prix :"
+msgstr ""
+
+#: ../products/product.py:84 ../products/product_views.py:514
+#: ../ui/shop/orders/order_facture.xml.en:62 ../products/cross_selling.py:70
+msgid "Product"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:63
+#: ../ui/shop/orders/order_manage.xml.en:243 ../ui/shop/cart_view.xml.en:19
+msgctxt "table cell"
 msgid "Product"
 msgstr ""
 
@@ -1552,8 +3292,7 @@ msgstr ""
 msgid "Product Model"
 msgstr ""
 
-#: ../shop.py:148
-#: ../products/models.py:247
+#: ../shop.py:148 ../products/models.py:247
 msgid "Product Models"
 msgstr ""
 
@@ -1565,10 +3304,8 @@ msgstr ""
 msgid "Product deleted !"
 msgstr ""
 
-#: ../products/product_views.py:64
-#: ../products/product_views.py:181
-#: ../products/product_views.py:315
-#: ../products/product_views.py:333
+#: ../products/product_views.py:64 ../products/product_views.py:181
+#: ../products/product_views.py:315 ../products/product_views.py:333
 #: ../products/product_views.py:446
 msgid "Product model"
 msgstr ""
@@ -1581,7 +3318,17 @@ msgstr ""
 msgid "Product model has not been changed !"
 msgstr ""
 
+#: ../ui/shop/products/product_view.xml.en:92
+msgctxt "table cell"
+msgid "Product model informations"
+msgstr ""
+
 #: ../orders/orders.py:111
+msgid "Product name"
+msgstr ""
+
+#: ../ui/shop/products/print.xml.en:31
+msgctxt "table cell"
 msgid "Product name"
 msgstr ""
 
@@ -1593,11 +3340,19 @@ msgstr ""
 msgid "Product title"
 msgstr ""
 
-#: ../orders/orders.py:105
-#: ../orders/orders.py:227
-#: ../products/product.py:768
+#: ../orders/orders.py:105 ../orders/orders.py:227 ../products/product.py:768
 #: ../shop.py:145
 msgid "Products"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:231
+msgctxt "table cell"
+msgid "Products"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator.xml.en:7
+msgctxt "heading"
+msgid "Products comparator"
 msgstr ""
 
 #: ../products/product_views.py:661
@@ -1608,17 +3363,32 @@ msgstr ""
 msgid "Public"
 msgstr ""
 
+#: ../ui/shop/shop_user_manage.xml.en:15
+msgctxt "table cell"
+msgid "Public user informations"
+msgstr ""
+
 #: ../products/product_views.py:179
 msgid "Publication state"
 msgstr ""
 
-#: ../orders/orders.py:118
-#: ../ui/shop/orders/order_facture.xml.en:64
+#: ../orders/orders.py:118 ../ui/shop/orders/order_facture.xml.en:64
+msgid "Quantity"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:65
+#: ../ui/shop/orders/order_manage.xml.en:245 ../ui/shop/cart_view.xml.en:21
+msgctxt "table cell"
 msgid "Quantity"
 msgstr ""
 
 #: ../products/product_views.py:149
 msgid "Quantity in stock insufficient."
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:24
+msgctxt "paragraph"
+msgid "Quantity:"
 msgstr ""
 
 #: ../payments/transfer/transfer_views.py:95
@@ -1638,8 +3408,7 @@ msgstr ""
 msgid "Random choice from shop"
 msgstr ""
 
-#: ../orders/workflow.py:67
-#: ../orders/workflow.py:68
+#: ../orders/workflow.py:67 ../orders/workflow.py:68
 msgid "Re-open the order"
 msgstr ""
 
@@ -1651,19 +3420,21 @@ msgstr ""
 msgid "Record duplicated, former record replaced"
 msgstr ""
 
-#: ../shipping/shippings_views.py:105
-#: ../payments/payments_views.py:148
+#: ../shipping/shippings_views.py:105 ../payments/payments_views.py:148
 msgid "Ref"
 msgstr ""
 
-#: ../orders/orders.py:112
-#: ../payments/payments_views.py:128
-#: ../payments/payments_views.py:250
-#: ../products/declination.py:50
-#: ../products/product_views.py:182
-#: ../products/product_views.py:311
-#: ../products/product_views.py:330
-#: ../products/product_views.py:569
+#: ../orders/orders.py:112 ../payments/payments_views.py:128
+#: ../payments/payments_views.py:250 ../products/declination.py:50
+#: ../products/product_views.py:182 ../products/product_views.py:311
+#: ../products/product_views.py:330 ../products/product_views.py:569
+msgid "Reference"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:64
+#: ../ui/shop/products/print.xml.en:23
+#: ../ui/shop/orders/order_manage.xml.en:242
+msgctxt "table cell"
 msgid "Reference"
 msgstr ""
 
@@ -1673,6 +3444,16 @@ msgstr ""
 
 #: ../products/enumerate.py:130
 msgid "Refuse orders. Product becomes private"
+msgstr ""
+
+#: ../ui/shop/shop_login.xml.en:13
+msgctxt "link"
+msgid "Register"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:23
+msgctxt "table cell"
+msgid "Remove"
 msgstr ""
 
 #: ../shop_views.py:212
@@ -1695,6 +3476,11 @@ msgstr ""
 msgid "Reserved"
 msgstr ""
 
+#: ../ui/shop/payments/history_view_search.xml.en:30
+msgctxt "heading"
+msgid "Results"
+msgstr ""
+
 #: ../shop_views.py:101
 msgid "Reverse sort ?"
 msgstr ""
@@ -1703,7 +3489,35 @@ msgstr ""
 msgid "SOFINCO"
 msgstr ""
 
+#: ../ui/shop/shop_addresses.xml.en:39
+msgctxt "div"
+msgid "Same that delivery address."
+msgstr ""
+
 #: ../search.py:87
+msgid "Search"
+msgstr ""
+
+#: ../ui/shop/products/products_view_search.xml.en:16
+#: ../ui/shop/payments/history_view_search.xml.en:24
+msgctxt "button"
+msgid "Search"
+msgstr ""
+
+#: ../ui/shop/payments/history_view_search.xml.en:7
+#: ../ui/shop/search_box.xml.en:9
+msgctxt "heading"
+msgid "Search"
+msgstr ""
+
+#: ../ui/shop/template.xhtml.en:43
+msgctxt "label"
+msgid "Search"
+msgstr ""
+
+#: ../ui/shop/products/products_view_search.xml.en:9
+#: ../ui/shop/payments/history_view_search.xml.en:17
+msgctxt "legend"
 msgid "Search"
 msgstr ""
 
@@ -1715,9 +3529,13 @@ msgstr ""
 msgid "Security regulations not respected"
 msgstr ""
 
-#: ../products/images.py:80
-#: ../products/cross_selling.py:77
+#: ../products/images.py:80 ../products/cross_selling.py:77
 msgid "See product"
+msgstr ""
+
+#: ../ui/shop/products/addproduct.xml.en:30
+msgctxt "table cell"
+msgid "Select Product"
 msgstr ""
 
 #: ../products/cross_selling_views.py:50
@@ -1728,8 +3546,19 @@ msgstr ""
 msgid "Select last products from shop"
 msgstr ""
 
+#: ../ui/shop/shop_delivery.xml.en:21
+msgctxt "table cell"
+msgid "Selection"
+msgstr ""
+
 #: ../products/product_views.py:197
 msgid "Selling price"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:128
+#: ../ui/shop/orders/order_manage.xml.en:330
+msgctxt "button"
+msgid "Send message"
 msgstr ""
 
 #: ../products/product_views.py:504
@@ -1748,10 +3577,14 @@ msgstr ""
 msgid "Server inaccessible (set by the server)"
 msgstr ""
 
-#: ../shop.py:166
-#: ../shipping/shipping_way.py:131
-#: ../shipping/shippings.py:39
+#: ../shop.py:166 ../shipping/shipping_way.py:131 ../shipping/shippings.py:39
 #: ../ui/shop/orders/order_facture.xml.en:74
+msgid "Shipping"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:81
+#: ../ui/shop/orders/order_manage.xml.en:269
+msgctxt "table cell"
 msgid "Shipping"
 msgstr ""
 
@@ -1763,8 +3596,17 @@ msgstr ""
 msgid "Shipping added"
 msgstr ""
 
-#: ../shipping/shippings_views.py:107
-#: ../orders/orders_views.py:57
+#: ../ui/shop/orders/order_manage.xml.en:151
+msgctxt "table cell"
+msgid "Shipping address"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:384
+msgctxt "table cell"
+msgid "Shipping history"
+msgstr ""
+
+#: ../shipping/shippings_views.py:107 ../orders/orders_views.py:57
 msgid "Shipping mode"
 msgstr ""
 
@@ -1784,12 +3626,16 @@ msgstr ""
 msgid "Shippings history"
 msgstr ""
 
-#: ../shop.py:52
-#: ../website.py:33
+#: ../shop.py:52 ../website.py:33
 msgid "Shop"
 msgstr ""
 
 #: ../shop_views.py:69
+msgid "Shop control panel"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:14
+msgctxt "heading"
 msgid "Shop control panel"
 msgstr ""
 
@@ -1799,6 +3645,11 @@ msgstr ""
 
 #: ../shop_views.py:90
 msgid "Shop from address"
+msgstr ""
+
+#: ../ui/shop/shop_view.xml.en:26
+msgctxt "heading"
+msgid "Shop management"
 msgstr ""
 
 #: ../shop_payments.py:55
@@ -1829,15 +3680,28 @@ msgstr ""
 msgid "Standard Model"
 msgstr ""
 
-#: ../user_views.py:90
-#: ../payments/payments_views.py:151
-#: ../shipping/shippings_views.py:108
-#: ../products/product_views.py:316
-#: ../products/product_views.py:332
-#: ../shipping/shipping_way.py:69
-#: ../orders/orders_views.py:55
-#: ../payments/payment_way.py:55
+#: ../user_views.py:90 ../payments/payments_views.py:151
+#: ../shipping/shippings_views.py:108 ../products/product_views.py:316
+#: ../products/product_views.py:332 ../shipping/shipping_way.py:69
+#: ../orders/orders_views.py:55 ../payments/payment_way.py:55
 msgid "State"
+msgstr ""
+
+#: ../ui/shop/payments/check/record_edit.xml.en:49
+msgctxt "label"
+msgid "State"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:354
+#: ../ui/shop/orders/order_manage.xml.en:359
+#: ../ui/shop/orders/order_manage.xml.en:397
+msgctxt "table cell"
+msgid "State"
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:69
+msgctxt "table cell"
+msgid "States history"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:207
@@ -1848,8 +3712,7 @@ msgstr ""
 msgid "Stock"
 msgstr ""
 
-#: ../products/product_views.py:570
-#: ../products/declination.py:51
+#: ../products/product_views.py:570 ../products/declination.py:51
 msgid "Stock quantity"
 msgstr ""
 
@@ -1865,8 +3728,25 @@ msgstr ""
 msgid "Subscriber already exists"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:166
-#: ../payments/paybox/enumerates.py:179
+#: ../ui/shop/shop_recapitulatif.xml.en:7
+msgctxt "heading"
+msgid "Summary"
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:18
+#: ../ui/shop/shop_website_view.xml.en:33
+msgctxt "paragraph"
+msgid ""
+"Suspendisse orci lectus, ultricies sit amet volutpat quis, consequat et ante."
+msgstr ""
+
+#: ../ui/shop/shop_website_view.xml.en:10
+#: ../ui/shop/shop_website_view.xml.en:25
+msgctxt "paragraph"
+msgid "Suspendisse potenti."
+msgstr ""
+
+#: ../payments/paybox/enumerates.py:166 ../payments/paybox/enumerates.py:179
 msgid "Suspicion of fraud"
 msgstr ""
 
@@ -1882,8 +3762,7 @@ msgstr ""
 msgid "Tax"
 msgstr ""
 
-#: ../products/taxes.py:56
-#: ../shop.py:179
+#: ../products/taxes.py:56 ../shop.py:179
 msgid "Taxes"
 msgstr ""
 
@@ -1893,6 +3772,11 @@ msgstr ""
 
 #: ../shop.py:170
 msgid "Terms and conditions of user"
+msgstr ""
+
+#: ../ui/shop/shop_recapitulatif.xml.en:55
+msgctxt "heading"
+msgid "Terms of sales"
 msgstr ""
 
 #: ../shipping/colissimo.py:71
@@ -1995,8 +3879,7 @@ msgstr ""
 msgid "There's one order."
 msgstr ""
 
-#: ../user_views.py:73
-#: ../shop_views.py:253
+#: ../user_views.py:73 ../shop_views.py:253
 msgid "This email address is already used."
 msgstr ""
 
@@ -2012,27 +3895,53 @@ msgstr ""
 msgid "Time-out > 15 mn before validation by the buyer"
 msgstr ""
 
-#: ../products/cross_selling_views.py:235
-#: ../payments/payment_way_views.py:75
-#: ../products/models_views.py:56
-#: ../products/models_views.py:149
-#: ../orders/orders.py:113
-#: ../categories_views.py:282
-#: ../shipping/shippings_views.py:76
-#: ../payments/payments_views.py:209
-#: ../enumerate_table.py:54
-#: ../enumerate_table.py:183
-#: ../enumerate_table.py:228
-#: ../products/product_views.py:183
-#: ../products/product_views.py:312
-#: ../products/product_views.py:331
-#: ../shipping/shipping_way_views.py:44
-#: ../products/models.py:122
+#: ../products/cross_selling_views.py:235 ../payments/payment_way_views.py:75
+#: ../products/models_views.py:56 ../products/models_views.py:149
+#: ../orders/orders.py:113 ../categories_views.py:282
+#: ../shipping/shippings_views.py:76 ../payments/payments_views.py:209
+#: ../enumerate_table.py:54 ../enumerate_table.py:183
+#: ../enumerate_table.py:228 ../products/product_views.py:183
+#: ../products/product_views.py:312 ../products/product_views.py:331
+#: ../shipping/shipping_way_views.py:44 ../products/models.py:122
 msgid "Title"
 msgstr ""
 
+#: ../ui/shop/products/product_view.xml.en:68
+msgctxt "table cell"
+msgid "Title"
+msgstr ""
+
+#: ../ui/shop/payments/payment_manage.xml.en:21
+msgctxt "table cell"
+msgid "Title:"
+msgstr ""
+
+#: ../ui/shop/products/product_delete.xml.en:10
+msgctxt "paragraph"
+msgid "To confirm the deletion, click here:"
+msgstr ""
+
 #: ../shop_views.py:497
-msgid "To continue, you have to validate the terms of service !"
+msgid "To continue, you have to validate the terms of sales!"
+msgstr ""
+
+#: ../ui/shop/payments/cash/end.xml.en:10
+#: ../ui/shop/payments/cash/record_view.xml.en:9
+msgctxt "heading"
+msgid "To finalize your payment, please come at our shop:"
+msgstr ""
+
+#: ../ui/shop/payments/transfer/end.xml.en:10
+#: ../ui/shop/payments/transfer/record_view.xml.en:9
+msgctxt "heading"
+msgid ""
+"To finalize your payment, please execute the bank transfer to the following "
+"account:"
+msgstr ""
+
+#: ../ui/shop/payments/check/record_view.xml.en:9
+msgctxt "heading"
+msgid "To finalize your payment, please send us your check ordered to ${to}"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:167
@@ -2051,8 +3960,24 @@ msgstr ""
 msgid "Total Price"
 msgstr ""
 
-#: ../user_views.py:91
-#: ../orders/orders_views.py:58
+#: ../ui/shop/orders/order_view.xml.en:85
+#: ../ui/shop/orders/order_manage.xml.en:273 ../ui/shop/cart_view.xml.en:22
+msgctxt "table cell"
+msgid "Total Price"
+msgstr ""
+
+#: ../ui/shop/payments/check/end.xml.en:16
+msgctxt "b"
+msgid "Total amount:"
+msgstr ""
+
+#: ../user_views.py:91 ../orders/orders_views.py:58
+msgid "Total price"
+msgstr ""
+
+#: ../ui/shop/orders/order_view.xml.en:66
+#: ../ui/shop/orders/order_manage.xml.en:246
+msgctxt "table cell"
 msgid "Total price"
 msgstr ""
 
@@ -2060,8 +3985,17 @@ msgstr ""
 msgid "Total price (With tax)"
 msgstr ""
 
-#: ../shop_views.py:220
-#: ../addresses.py:115
+#: ../ui/shop/cart_view.xml.en:93
+msgctxt "b"
+msgid "Total price (with tax)"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:87
+msgctxt "b"
+msgid "Total price without tax"
+msgstr ""
+
+#: ../shop_views.py:220 ../addresses.py:115
 msgid "Town"
 msgstr ""
 
@@ -2081,8 +4015,18 @@ msgstr ""
 msgid "Transition done."
 msgstr ""
 
+#: ../ui/shop/products/print.xml.en:27
+msgctxt "table cell"
+msgid "URL"
+msgstr ""
+
 #: ../products/enumerate.py:109
 msgid "Unicode"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:20
+msgctxt "table cell"
+msgid "Unit Price with tax"
 msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:63
@@ -2093,13 +4037,17 @@ msgstr ""
 msgid "Unit price (pre-tax)"
 msgstr ""
 
-#: ../user_views.py:152
-#: ../orders/orders_views.py:98
+#: ../ui/shop/orders/order_view.xml.en:64
+#: ../ui/shop/orders/order_manage.xml.en:244
+msgctxt "table cell"
+msgid "Unit price HT"
+msgstr ""
+
+#: ../user_views.py:152 ../orders/orders_views.py:98
 msgid "Unknow"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:55
-#: ../payments/paybox/enumerates.py:56
+#: ../payments/paybox/enumerates.py:55 ../payments/paybox/enumerates.py:56
 msgid "Unknow error"
 msgstr ""
 
@@ -2109,6 +4057,11 @@ msgstr ""
 
 #: ../payments/payments_views.py:251
 msgid "User Id"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:132
+msgctxt "table cell"
+msgid "User addresses"
 msgstr ""
 
 #: ../payments/payments_views.py:260
@@ -2123,20 +4076,22 @@ msgstr ""
 msgid "VISA"
 msgstr ""
 
+#: ../ui/shop/shop_chooseaddress.xml.en:12
+#: ../ui/shop/payments/cash/record_edit.xml.en:25
+#: ../ui/shop/payments/check/record_edit.xml.en:63
+#: ../ui/shop/payments/transfer/record_edit.xml.en:25
+msgctxt "button"
+msgid "Validate"
+msgstr ""
+
 #: ../orders/workflow.py:61
 msgid "Validate the payment"
 msgstr ""
 
-#: ../products/models_views.py:46
-#: ../shop_views.py:705
-#: ../user_views.py:114
-#: ../categories_views.py:88
-#: ../categories_views.py:272
-#: ../editable.py:37
-#: ../products/product_views.py:91
-#: ../products/product_views.py:298
-#: ../enumerate_table.py:171
-#: ../website.py:41
+#: ../products/models_views.py:46 ../shop_views.py:705 ../user_views.py:114
+#: ../categories_views.py:88 ../categories_views.py:272 ../editable.py:37
+#: ../products/product_views.py:91 ../products/product_views.py:298
+#: ../enumerate_table.py:171 ../website.py:41
 msgid "View"
 msgstr ""
 
@@ -2160,10 +4115,28 @@ msgstr ""
 msgid "Waiting for an appointment"
 msgstr ""
 
-#: ../orders/orders.py:114
-#: ../shipping/shipping_way.py:71
-#: ../products/product_views.py:189
-#: ../products/product_views.py:572
+#: ../ui/shop/payments/payment_way_record_view.xml.en:8
+msgctxt "paragraph"
+msgid "We are waiting for payment."
+msgstr ""
+
+#: ../ui/shop/payments/check/record_edit.xml.en:10
+msgctxt "form"
+msgid "We are waiting for the customer check."
+msgstr ""
+
+#: ../ui/shop/orders/order_manage.xml.en:130
+msgctxt "paragraph"
+msgid "We're waiting for customer payment"
+msgstr ""
+
+#: ../orders/orders.py:114 ../shipping/shipping_way.py:71
+#: ../products/product_views.py:189 ../products/product_views.py:572
+msgid "Weight"
+msgstr ""
+
+#: ../ui/shop/products/product_view.xml.en:88
+msgctxt "table cell"
 msgid "Weight"
 msgstr ""
 
@@ -2171,8 +4144,12 @@ msgstr ""
 msgid "Weight impact value"
 msgstr ""
 
-#: ../shipping/withdrawal.py:95
-#: ../shipping/withdrawal.py:112
+#: ../ui/shop/shop_view.xml.en:21
+msgctxt "paragraph"
+msgid "Welcome in your shop control panel !"
+msgstr ""
+
+#: ../shipping/withdrawal.py:95 ../shipping/withdrawal.py:112
 msgid "Withdrawal"
 msgstr ""
 
@@ -2180,13 +4157,22 @@ msgstr ""
 msgid "Withdrawal at the store"
 msgstr ""
 
-#: ../shipping/shippings_views.py:89
-#: ../products/models.py:226
+#: ../ui/shop/shipping/withdrawal_record_order_view.xml.en:7
+msgctxt "heading"
+msgid "Withdrawal to the shop"
+msgstr ""
+
+#: ../shipping/shippings_views.py:89 ../products/models.py:226
 msgid "Yes"
 msgstr ""
 
 #: ../addresses_views.py:77
 msgid "You are not authorized to do that !"
+msgstr ""
+
+#: ../ui/shop/payments_end.xml.en:10
+msgctxt "paragraph"
+msgid "You can see details about your order <g id='1'>here.</g>"
 msgstr ""
 
 #: ../products/product_views.py:519
@@ -2205,12 +4191,32 @@ msgstr ""
 msgid "You can't delete zone %s. It's associated to %s countries."
 msgstr ""
 
+#: ../ui/shop/shipping/withdrawal_record_order_add.xml.en:10
+msgctxt "button"
+msgid "You must confirm the 'Withdrawal' ! So click here"
+msgstr ""
+
 #: ../shop_views.py:269
 msgid "Your address"
 msgstr ""
 
 #: ../user_views.py:126
 msgid "Your are not authorized to view this ressource"
+msgstr ""
+
+#: ../ui/shop/payments/transfer/record_view.xml.en:22
+msgctxt "paragraph"
+msgid "Your bank transfer has been validated."
+msgstr ""
+
+#: ../ui/shop/shop_view_cart.xml.en:12
+msgctxt "div"
+msgid "Your cart is empty"
+msgstr ""
+
+#: ../ui/shop/cart_view.xml.en:9
+msgctxt "div"
+msgid "Your cart is empty !"
 msgstr ""
 
 #: ../shop_views.py:62
@@ -2222,15 +4228,24 @@ msgid "Your email"
 msgstr ""
 
 #: ../products/product_views.py:522
-msgid "Your friend {my_name} advice you this product: \n\n {product_title}\n\nAll details are here:\n\n {product_uri}\n\n {message}\n\n"
+msgid ""
+"Your friend {my_name} advice you this product: \n"
+"\n"
+" {product_title}\n"
+"\n"
+"All details are here:\n"
+"\n"
+" {product_uri}\n"
+"\n"
+" {message}\n"
+"\n"
 msgstr ""
 
 #: ../user.py:105
 msgid "Your inscription has been validated"
 msgstr ""
 
-#: ../user_views.py:217
-#: ../orders/orders_views.py:245
+#: ../user_views.py:217 ../orders/orders_views.py:245
 msgid "Your message has been sent"
 msgstr ""
 
@@ -2238,9 +4253,24 @@ msgstr ""
 msgid "Your name"
 msgstr ""
 
+#: ../ui/shop/shop_view_cart.xml.en:7
+msgctxt "heading"
+msgid "Your order"
+msgstr ""
+
 #: ../ui/shop/shipping/colissimo_record_order_view.xml.en:9
 #: ../ui/shop/shipping/shippingway_order_view.xml.en:7
 msgid "Your order has been send."
+msgstr ""
+
+#: ../ui/shop/payments/check/record_view.xml.en:21
+msgctxt "paragraph"
+msgid "Your payment by check has been validated."
+msgstr ""
+
+#: ../ui/shop/payments/cash/record_view.xml.en:20
+msgctxt "paragraph"
+msgid "Your payment has been validated."
 msgstr ""
 
 #: ../addresses.py:114
@@ -2251,13 +4281,11 @@ msgstr ""
 msgid "Zip code"
 msgstr ""
 
-#: ../countries.py:152
-#: ../shipping/shipping_way.py:122
+#: ../countries.py:152 ../shipping/shipping_way.py:122
 msgid "Zone"
 msgstr ""
 
-#: ../countries_views.py:36
-#: ../countries_views.py:80
+#: ../countries_views.py:36 ../countries_views.py:80
 msgid "Zone title"
 msgstr ""
 
@@ -2265,17 +4293,41 @@ msgstr ""
 msgid "Zone(s) deleted"
 msgstr ""
 
+#: ../ui/shop/payments/check/record_view.xml.en:10
+msgctxt "b"
+msgid "at the following address:"
+msgstr ""
+
 #: ../shop.py:157
 msgid "countries"
 msgstr ""
 
-#: ../search.py:118
+#: ../ui/shop/search_box.xml.en:21
+msgctxt "button"
+msgid "ok"
+msgstr ""
+
 #: ../search.py:118
 msgid "s"
 msgstr ""
 
 #: ../products/product_views.py:521
 msgid "{my_name} advice you this product: {product_title}"
+msgstr ""
+
+#: ../ui/shop/shop_user_manage.xml.en:8
+msgctxt "link"
+msgid "« Go to the customers list"
+msgstr ""
+
+#: ../ui/shop/browse_batch.xml.en:13
+msgctxt "link"
+msgid "« Previous"
+msgstr "« 上一页"
+
+#: ../ui/shop/cart_viewbox.xml.en:24
+msgctxt "link"
+msgid "» Order (Total ${total_with_tax} €)"
 msgstr ""
 
 #: ../views.py:89
@@ -2300,2105 +4352,4 @@ msgstr ""
 
 #: ../ui/shop/widgets/taxes.xml.en:11
 msgid "€<x id='6'/> Tax:"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:46
-msgctxt "abbr"
-msgid "<g id='3'>${item/short_title}</g><x id='4'/>  <g id='5'> Select </g>"
-msgstr ""
-
-#: ../ui/shop/payments/paybox/record_edit.xml.en:14
-msgctxt "b"
-msgid "${advance_state}"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:18
-msgctxt "b"
-msgid "${category}:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:301
-msgctxt "b"
-msgid "${message/ts}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:116
-msgctxt "b"
-msgid "${message/ts} - ${message/author}:"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_view.xml.en:16
-#: ../ui/shop/payments/transfer/end.xml.en:18
-#: ../ui/shop/payments/transfer/record_view.xml.en:17
-#: ../ui/shop/payments/cash/end.xml.en:16
-#: ../ui/shop/payments/cash/record_view.xml.en:15
-msgctxt "b"
-msgid "${ref}"
-msgstr ""
-
-#: ../ui/shop/payments/check/end.xml.en:7
-msgctxt "b"
-msgid "${top_view} <g id='1'>To finalize your payment, please send us your check ordered to ${to}<x id='2'/> at the following address:</g>"
-msgstr ""
-
-#: ../ui/shop/payments/paybox/end.xml.en:11
-msgctxt "b"
-msgid "<g id='1'>${state}</g>  <g id='2'>Unknow state</g>"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:95
-msgctxt "b"
-msgid "<g id='12'>${property/title}</g>:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:100
-msgctxt "b"
-msgid "<g id='16'>Update order state:</g>${transitions}"
-msgstr ""
-
-#: ../ui/shop/payments/transfer/record_view.xml.en:17
-#: ../ui/shop/payments/check/record_view.xml.en:16
-#: ../ui/shop/payments/cash/record_view.xml.en:15
-#: ../ui/shop/payments/transfer/end.xml.en:18
-#: ../ui/shop/payments/cash/end.xml.en:16
-#: ../ui/shop/payments/check/end.xml.en:15
-msgctxt "b"
-msgid "Order reference:"
-msgstr ""
-
-#: ../ui/shop/payments/check/end.xml.en:16
-msgctxt "b"
-msgid "Total amount:"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:93
-msgctxt "b"
-msgid "Total price (with tax)"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:87
-msgctxt "b"
-msgid "Total price without tax"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_view.xml.en:10
-msgctxt "b"
-msgid "at the following address:"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:66
-msgctxt "body"
-msgid "${location}"
-msgstr ""
-
-#: ../ui/shop/mail.xhtml.en:33
-msgctxt "body"
-msgid "-- <x id='8'/> ${signature}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:138
-msgctxt "button"
-msgid "Add"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:27
-msgctxt "button"
-msgid "Add to cart"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:86
-msgctxt "button"
-msgid "Buy"
-msgstr "购买"
-
-#: ../ui/shop/orders/order_manage.xml.en:192
-msgctxt "button"
-msgid "Change"
-msgstr ""
-
-#: ../ui/shop/shop_view_cart.xml.en:19
-msgctxt "button"
-msgid "Clear the cart"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator_view.xml.en:15
-#: ../ui/shop/virtualcategory_comparator_view.xml.en:32
-msgctxt "button"
-msgid "Compare the selected products"
-msgstr ""
-
-#: ../ui/shop/products/product_delete.xml.en:12
-msgctxt "button"
-msgid "Delete the product"
-msgstr ""
-
-#: ../ui/shop/shop_login.xml.en:33
-msgctxt "button"
-msgid "Log in"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:46
-msgctxt "button"
-msgid "OK"
-msgstr ""
-
-#: ../ui/shop/shipping/shippingway_add_record.xml.en:19
-#: ../ui/shop/shipping/colissimo_add_record.xml.en:19
-#: ../ui/shop/orders/order_manage.xml.en:101
-msgctxt "button"
-msgid "Ok"
-msgstr ""
-
-#: ../ui/shop/products/products_view_search.xml.en:16
-#: ../ui/shop/payments/history_view_search.xml.en:24
-msgctxt "button"
-msgid "Search"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:128
-#: ../ui/shop/orders/order_manage.xml.en:330
-msgctxt "button"
-msgid "Send message"
-msgstr ""
-
-#: ../ui/shop/shop_chooseaddress.xml.en:12
-#: ../ui/shop/payments/cash/record_edit.xml.en:25
-#: ../ui/shop/payments/check/record_edit.xml.en:63
-#: ../ui/shop/payments/transfer/record_edit.xml.en:25
-msgctxt "button"
-msgid "Validate"
-msgstr ""
-
-#: ../ui/shop/shipping/withdrawal_record_order_add.xml.en:10
-msgctxt "button"
-msgid "You must confirm the 'Withdrawal' ! So click here"
-msgstr ""
-
-#: ../ui/shop/search_box.xml.en:21
-msgctxt "button"
-msgid "ok"
-msgstr ""
-
-#: ../ui/shop/products/products_view_search.xml.en:13
-#: ../ui/shop/payments/history_view_search.xml.en:21
-msgctxt "dd"
-msgid "${widget/html}"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_view.xml.en:11
-#: ../ui/shop/payments/check/end.xml.en:11
-#: ../ui/shop/payments/cash/end.xml.en:11
-#: ../ui/shop/payments/cash/record_view.xml.en:10
-msgctxt "div"
-msgid "${address}"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator_view.xml.en:38
-msgctxt "div"
-msgid "${batch}"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_view.xml.en:8
-msgctxt "div"
-msgid "${description}"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:11
-msgctxt "div"
-msgid "${error}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:10
-msgctxt "div"
-msgid "${images-slider}"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:28
-msgctxt "div"
-msgid "${languages}"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:21
-#: ../ui/shop/template.xhtml.en:70
-msgctxt "div"
-msgid "${message}"
-msgstr ""
-
-#: ../ui/shop/search_box.xml.en:14
-msgctxt "div"
-msgid "${nb_results} results found."
-msgstr "共有 ${nb_results} 幅画"
-
-#: ../ui/shop/virtualcategory_view.xml.en:24
-msgctxt "div"
-msgid "${product/box}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:112
-msgctxt "div"
-msgid "${product}"
-msgstr ""
-
-#: ../ui/shop/search_box.xml.en:19
-msgctxt "div"
-msgid "${widget_categories}"
-msgstr ""
-
-#: ../ui/shop/shop_progress.xml.en:12
-msgctxt "div"
-msgid "1<g id='1'>Cart</g>"
-msgstr ""
-
-#: ../ui/shop/shop_progress.xml.en:15
-msgctxt "div"
-msgid "2<g id='2'>Identification</g>"
-msgstr ""
-
-#: ../ui/shop/shop_progress.xml.en:18
-msgctxt "div"
-msgid "3<g id='3'>Addresses</g>"
-msgstr ""
-
-#: ../ui/shop/shop_progress.xml.en:21
-msgctxt "div"
-msgid "4<g id='4'>Shipping</g>"
-msgstr ""
-
-#: ../ui/shop/shop_progress.xml.en:24
-msgctxt "div"
-msgid "5<g id='5'>Payment</g>"
-msgstr ""
-
-#: ../ui/shop/shop_progress.xml.en:27
-msgctxt "div"
-msgid "6<g id='6'>Confirmation</g>"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:21
-msgctxt "div"
-msgid "Message:"
-msgstr ""
-
-#: ../ui/shop/payments/paybox/end.xml.en:10
-msgctxt "div"
-msgid "Payment state:"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:39
-msgctxt "div"
-msgid "Same that delivery address."
-msgstr ""
-
-#: ../ui/shop/shop_view_cart.xml.en:12
-msgctxt "div"
-msgid "Your cart is empty"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:9
-msgctxt "div"
-msgid "Your cart is empty !"
-msgstr ""
-
-#: ../ui/shop/products/products_view_search.xml.en:12
-#: ../ui/shop/payments/history_view_search.xml.en:20
-msgctxt "dt"
-msgid "${widget/title}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:129
-msgctxt "emphasis"
-msgid "${order/payment_way}:"
-msgstr ""
-
-#: ../ui/shop/mail.xhtml.en:14
-msgctxt "font"
-msgid "${subject}"
-msgstr ""
-
-#: ../ui/shop/shop_chooseaddress.xml.en:11
-msgctxt "form"
-msgid "${bill_address}"
-msgstr ""
-
-#: ../ui/shop/shop_chooseaddress.xml.en:10
-msgctxt "form"
-msgid "${delivery_address}<x id='2'/><x id='3'/> Bill address:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:137
-msgctxt "form"
-msgid "${payment_ways}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:191
-msgctxt "form"
-msgid "${shipping_ways}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:137
-msgctxt "form"
-msgid "Add a new payment way:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:191
-msgctxt "form"
-msgid "Choose another shipping way:"
-msgstr ""
-
-#: ../ui/shop/shop_chooseaddress.xml.en:10
-msgctxt "form"
-msgid "Delivery address:"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:21
-msgctxt "form"
-msgid "Prix :"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_edit.xml.en:10
-msgctxt "form"
-msgid "We are waiting for the customer check."
-msgstr ""
-
-#: ../ui/shop/payments/check/record_view.xml.en:7
-#: ../ui/shop/payments/transfer/end.xml.en:9
-#: ../ui/shop/payments/transfer/record_view.xml.en:7
-#: ../ui/shop/payments/cash/end.xml.en:9
-#: ../ui/shop/payments/cash/record_view.xml.en:7
-msgctxt "heading"
-msgid "${amount}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:9
-msgctxt "heading"
-msgid "${order_number}, registered the ${creation_datetime}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:7
-#: ../ui/shop/virtualcategory_boxsubcategories.xml.en:9
-#: ../ui/shop/products/print.xml.en:16
-#: ../ui/shop/shop_progress.xml.en:7
-msgctxt "heading"
-msgid "${title}"
-msgstr ""
-
-#: ../ui/shop/products/print.xml.en:15
-msgctxt "heading"
-msgid "${website-title}"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_view.xml.en:7
-#: ../ui/shop/payments/transfer/end.xml.en:9
-#: ../ui/shop/payments/transfer/record_view.xml.en:7
-#: ../ui/shop/payments/cash/end.xml.en:9
-#: ../ui/shop/payments/cash/record_view.xml.en:7
-msgctxt "heading"
-msgid "Amount:"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:7
-msgctxt "heading"
-msgid "Bill and delivery addresses"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:25
-msgctxt "heading"
-msgid "Browse and link to a Product"
-msgstr ""
-
-#: ../ui/shop/shop_delivery.xml.en:7
-msgctxt "heading"
-msgid "Choose delivery"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:48
-msgctxt "heading"
-msgid "Configuration"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:109
-msgctxt "heading"
-msgid "Cross selling"
-msgstr ""
-
-#: ../ui/shop/shipping/colissimo_record_order_view.xml.en:7
-msgctxt "heading"
-msgid "Details about colissimo"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_view.xml.en:13
-#: ../ui/shop/payments/transfer/end.xml.en:15
-#: ../ui/shop/payments/transfer/record_view.xml.en:14
-#: ../ui/shop/payments/cash/end.xml.en:13
-#: ../ui/shop/payments/cash/record_view.xml.en:12
-msgctxt "heading"
-msgid "Do not forget to recall the information mentionned below in any communications:"
-msgstr ""
-
-#: ../ui/shop/shop_login.xml.en:11
-msgctxt "heading"
-msgid "I'm a new customer"
-msgstr ""
-
-#: ../ui/shop/shop_login.xml.en:15
-msgctxt "heading"
-msgid "I'm already a customer"
-msgstr ""
-
-#: ../ui/shop/shop_login.xml.en:7
-msgctxt "heading"
-msgid "Identification"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:7
-msgctxt "heading"
-msgid "Manage Order"
-msgstr ""
-
-#: ../ui/shop/payments/payment_manage.xml.en:7
-msgctxt "heading"
-msgid "Manage Payment"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:9
-msgctxt "heading"
-msgid "Order number:"
-msgstr ""
-
-#: ../ui/shop/payments/paybox/record_edit.xml.en:7
-msgctxt "heading"
-msgid "Paybox payment description"
-msgstr ""
-
-#: ../ui/shop/payments/transfer/record_edit.xml.en:11
-msgctxt "heading"
-msgid "Payment by transfer validated ?"
-msgstr ""
-
-#: ../ui/shop/payments/cash/record_edit.xml.en:11
-msgctxt "heading"
-msgid "Payment validated ?"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:68
-msgctxt "heading"
-msgid "Please choose a payment mode"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:7
-msgctxt "heading"
-msgid "Products comparator"
-msgstr ""
-
-#: ../ui/shop/payments/history_view_search.xml.en:30
-msgctxt "heading"
-msgid "Results"
-msgstr ""
-
-#: ../ui/shop/payments/history_view_search.xml.en:7
-#: ../ui/shop/search_box.xml.en:9
-msgctxt "heading"
-msgid "Search"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:14
-msgctxt "heading"
-msgid "Shop control panel"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:26
-msgctxt "heading"
-msgid "Shop management"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:7
-msgctxt "heading"
-msgid "Summary"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:55
-msgctxt "heading"
-msgid "Terms of service"
-msgstr ""
-
-#: ../ui/shop/payments/cash/end.xml.en:10
-#: ../ui/shop/payments/cash/record_view.xml.en:9
-msgctxt "heading"
-msgid "To finalize your payment, please come at our shop:"
-msgstr ""
-
-#: ../ui/shop/payments/transfer/end.xml.en:10
-#: ../ui/shop/payments/transfer/record_view.xml.en:9
-msgctxt "heading"
-msgid "To finalize your payment, please execute the bank transfer to the following account:"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_view.xml.en:9
-msgctxt "heading"
-msgid "To finalize your payment, please send us your check ordered to ${to}"
-msgstr ""
-
-#: ../ui/shop/shipping/withdrawal_record_order_view.xml.en:7
-msgctxt "heading"
-msgid "Withdrawal to the shop"
-msgstr ""
-
-#: ../ui/shop/shop_view_cart.xml.en:7
-msgctxt "heading"
-msgid "Your order"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:87
-msgctxt "i"
-msgid "${state/title}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:16
-msgctxt "i"
-msgid "<g id='3'>${state/title}</g><x id='4'/>  <g id='5'>  <x id='6'/> Download bill </g>"
-msgstr ""
-
-#: ../ui/shop/products/print.xml.en:19
-msgctxt "img[alt]"
-msgid "${cover/title}"
-msgstr ""
-
-#: ../ui/shop/products/product_images_slider.xml.en:10
-#: ../ui/shop/products/product_images_slider.xml.en:15
-msgctxt "img[alt]"
-msgid "${img/title}"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:42
-msgctxt "img[alt]"
-msgid "${item/title}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:58
-#: ../ui/shop/products/product_viewbox.xml.en:15
-msgctxt "img[alt]"
-msgid "${title}"
-msgstr ""
-
-#: ../ui/shop/shipping/shippingway_add_record.xml.en:11
-msgctxt "label"
-msgid "<g id='1'> To send the packages please fill the colissimo number:"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:60
-msgctxt "label"
-msgid "<g id='16'> I agree with the general sales conditions and hereby certified having read them. </g>  <g id='17'><g id='18'>(</g>Read<g id='19'>)</g></g>"
-msgstr ""
-
-#: ../ui/shop/shipping/colissimo_add_record.xml.en:14
-msgctxt "label"
-msgid "<g id='2'> To send the packages by colissimo, please fill the colissimo number:"
-msgstr ""
-
-#: ../ui/shop/payments/cash/record_edit.xml.en:12
-#: ../ui/shop/payments/transfer/record_edit.xml.en:12
-msgctxt "label"
-msgid "<g id='3'>Yes</g>  <x id='4'/>  <x id='5'/>  <g id='6'>No</g>"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:325
-msgctxt "label"
-msgid "<g id='50'>Public</g>  <x id='51'/>  <g id='52'>Private</g>"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_edit.xml.en:38
-msgctxt "label"
-msgid "Account Holder:"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_edit.xml.en:27
-msgctxt "label"
-msgid "Bank:"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_edit.xml.en:16
-msgctxt "label"
-msgid "Check number:"
-msgstr ""
-
-#: ../ui/shop/shop_login.xml.en:20
-msgctxt "label"
-msgid "E-mail Address"
-msgstr ""
-
-#: ../ui/shop/shop_login.xml.en:26
-msgctxt "label"
-msgid "Password"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:43
-msgctxt "label"
-msgid "Search"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_edit.xml.en:49
-msgctxt "label"
-msgid "State"
-msgstr ""
-
-#: ../ui/shop/products/products_view_search.xml.en:9
-#: ../ui/shop/payments/history_view_search.xml.en:17
-msgctxt "legend"
-msgid "Search"
-msgstr ""
-
-#: ../ui/shop/payments/check/end.xml.en:16
-msgctxt "li"
-msgid "${amount}"
-msgstr ""
-
-#: ../ui/shop/payments/check/end.xml.en:15
-msgctxt "li"
-msgid "${ref}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:16
-msgctxt "li"
-msgid "${widget/title} ${widget/html}"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_boxsubcategories.xml.en:14
-msgctxt "link"
-msgid "${cat/title} (${cat/nb_items})"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_view.xml.en:17
-msgctxt "link"
-msgid "${category/title} (${category/nb_products})"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:52
-msgctxt "link"
-msgid "${customer/title}<x id='13'/> ${customer/email}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:113
-msgctxt "link"
-msgid "${order/id}"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:37
-msgctxt "link"
-msgid "${p/title}"
-msgstr ""
-
-#: ../ui/shop/browse_batch.xml.en:18
-msgctxt "link"
-msgid "${page/number}"
-msgstr ""
-
-#: ../ui/shop/cart_viewbox.xml.en:17
-msgctxt "link"
-msgid "${product/quantity} x ${product/title}"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:28
-#: ../ui/shop/orders/order_manage.xml.en:258
-msgctxt "link"
-msgid "${product/title}"
-msgstr ""
-
-#: ../ui/shop/products/product_viewbox.xml.en:11
-msgctxt "link"
-msgid "${title}"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:40
-msgctxt "link"
-msgid "(Edit)"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:13
-msgctxt "link"
-msgid "<g id='1'> ${customer/gender} ${customer/title} (${customer/email}) </g><x id='2'/> Order state:"
-msgstr ""
-
-#: ../ui/shop/products/addproduct_tree.xml.en:9
-msgctxt "link"
-msgid "<g id='1'>${item/title}</g> ${item/sub_tree}"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:37
-msgctxt "link"
-msgid "<g id='11'>My Profile |</g>  <g id='12'>Log out</g>"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:98
-msgctxt "link"
-msgid "<g id='30'>About</g> - <g id='31'>Credits</g> - <g id='32'>License</g>"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:32
-msgctxt "link"
-msgid "<g id='9'>Log in</g>  <g id='10'>Register</g>"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:47
-msgctxt "link"
-msgid "> Print product"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:42
-msgctxt "link"
-msgid "> Send to a friend"
-msgstr ""
-
-#: ../ui/shop/payments/history_view_search.xml.en:10
-msgctxt "link"
-msgid "Add a new payment."
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:60
-msgctxt "link"
-msgid "Categories"
-msgstr ""
-
-#: ../ui/shop/shipping/colissimo_record_order_view.xml.en:12
-msgctxt "link"
-msgid "Click here to get more informations."
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:24
-msgctxt "link"
-msgid "Come back to the product list"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:73
-msgctxt "link"
-msgid "Configure authorized countries"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:76
-msgctxt "link"
-msgid "Configure authorized countries zones"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:58
-msgctxt "link"
-msgid "Configure cross selling"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:67
-msgctxt "link"
-msgid "Configure enumerates"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:64
-msgctxt "link"
-msgid "Configure products models"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:70
-msgctxt "link"
-msgid "Configure shippings way"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:55
-msgctxt "link"
-msgid "Configure shop"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:59
-msgctxt "link"
-msgid "Continue"
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:34
-msgctxt "link"
-msgid "Edit address"
-msgstr ""
-
-#: ../ui/shop/shop_user_profile.xml.en:15
-msgctxt "link"
-msgid "Edit my account"
-msgstr ""
-
-#: ../ui/shop/shop_user_profile.xml.en:37
-msgctxt "link"
-msgid "Edit my password"
-msgstr ""
-
-#: ../ui/shop/shop_user_profile.xml.en:26
-msgctxt "link"
-msgid "Edit my preferences"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:52
-msgctxt "link"
-msgid "Edit terms and conditions of use"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:61
-msgctxt "link"
-msgid "Edit/Add Taxes"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:57
-msgctxt "link"
-msgid "Home"
-msgstr ""
-
-#: ../ui/shop/shop_login.xml.en:30
-msgctxt "link"
-msgid "I forgot my password"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:39
-msgctxt "link"
-msgid "Manage categories"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:33
-msgctxt "link"
-msgid "Manage customers"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:36
-msgctxt "link"
-msgid "Manage orders"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:42
-msgctxt "link"
-msgid "Manage payments"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:30
-msgctxt "link"
-msgid "Manage products"
-msgstr ""
-
-#: ../ui/shop/shop_user_profile.xml.en:47
-msgctxt "link"
-msgid "My addresses book"
-msgstr ""
-
-#: ../ui/shop/cart_viewbox.xml.en:10
-msgctxt "link"
-msgid "My cart"
-msgstr ""
-
-#: ../ui/shop/browse_batch.xml.en:23
-msgctxt "link"
-msgid "Next »"
-msgstr "下一页 »"
-
-#: ../ui/shop/shop_view_cart.xml.en:23
-msgctxt "link"
-msgid "Order"
-msgstr ""
-
-#: ../ui/shop/shop_user_profile.xml.en:57
-msgctxt "link"
-msgid "Orders history"
-msgstr ""
-
-#: ../ui/shop/shop_login.xml.en:13
-msgctxt "link"
-msgid "Register"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:8
-msgctxt "link"
-msgid "« Go to the customers list"
-msgstr ""
-
-#: ../ui/shop/browse_batch.xml.en:13
-msgctxt "link"
-msgid "« Previous"
-msgstr "« 上一页"
-
-#: ../ui/shop/cart_viewbox.xml.en:24
-msgctxt "link"
-msgid "» Order (Total ${total_with_tax} €)"
-msgstr ""
-
-#: ../ui/shop/payments/check/record_edit.xml.en:56
-msgctxt "option"
-msgid "${option/value}"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:46
-#: ../ui/shop/shop_recapitulatif.xml.en:40
-msgctxt "paragraph"
-msgid "${bill_address/address_2}"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:37
-msgctxt "paragraph"
-msgid "${bill_address/firstname} ${bill_address/lastname}<x id='8'/> ${bill_address/address_1}"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:43
-msgctxt "paragraph"
-msgid "${bill_address/firstname} ${bill_address/lastname}<x id='9'/> ${bill_address/address_1}"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:42
-msgctxt "paragraph"
-msgid "${bill_address/zipcode} ${bill_address/town}<x id='11'/> ${bill_address/country}"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:48
-msgctxt "paragraph"
-msgid "${bill_address/zipcode} ${bill_address/town}<x id='12'/> ${bill_address/country}<x id='13'/>  <g id='14'>(Edit)</g>"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:30
-#: ../ui/shop/shop_recapitulatif.xml.en:26
-msgctxt "paragraph"
-msgid "${delivery_address/address_2}"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:27
-#: ../ui/shop/shop_recapitulatif.xml.en:23
-msgctxt "paragraph"
-msgid "${delivery_address/firstname} ${delivery_address/lastname}<x id='1'/> ${delivery_address/address_1}"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:28
-msgctxt "paragraph"
-msgid "${delivery_address/zipcode} ${delivery_address/town}<x id='4'/> ${delivery_address/country}"
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:32
-msgctxt "paragraph"
-msgid "${delivery_address/zipcode} ${delivery_address/town}<x id='4'/> ${delivery_address/country}<x id='5'/>  <g id='6'>(Edit)</g>"
-msgstr ""
-
-#: ../ui/shop/products/product_viewbox.xml.en:20
-#: ../ui/shop/shipping/shippingway_order_view.xml.en:10
-#: ../ui/shop/virtualcategory_boxsubcategories.xml.en:10
-msgctxt "paragraph"
-msgid "${description}"
-msgstr ""
-
-#: ../ui/shop/shop_delivery.xml.en:41
-msgctxt "paragraph"
-msgid "${msg_if_no_shipping}"
-msgstr ""
-
-#: ../ui/shop/browse_batch.xml.en:8
-msgctxt "paragraph"
-msgid "${msg} (View from ${start} to ${end})"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:47
-msgctxt "paragraph"
-msgid "${p/quantity}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:127
-msgctxt "paragraph"
-msgid "${payment/view}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:34
-msgctxt "paragraph"
-msgid "(Only <g id='7'>X</g> products in stock)"
-msgstr ""
-
-#: ../ui/shop/products/product_delete.xml.en:9
-msgctxt "paragraph"
-msgid "Are you sure you want to delete the product ?"
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:11
-#: ../ui/shop/shop_website_view.xml.en:26
-msgctxt "paragraph"
-msgid "Cras adipiscing fermentum convallis."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:17
-#: ../ui/shop/shop_website_view.xml.en:32
-msgctxt "paragraph"
-msgid "Etiam vulputate posuere nibh, eu venenatis velit lobortis ut."
-msgstr ""
-
-#: ../ui/shop/shop_addresses.xml.en:12
-msgctxt "paragraph"
-msgid "Here you can select your delivery and bill addresses."
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:9
-msgctxt "paragraph"
-msgid "Here your address book"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:125
-#: ../ui/shop/orders/order_manage.xml.en:322
-msgctxt "paragraph"
-msgid "If you want to add a message:"
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:40
-msgctxt "paragraph"
-msgid "If you want to add an item in your address book <g id='8'>click here.</g>"
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:19
-#: ../ui/shop/shop_website_view.xml.en:34
-msgctxt "paragraph"
-msgid "In neque eros, bibendum id auctor at, ultricies ut odio."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:11
-#: ../ui/shop/shop_website_view.xml.en:26
-msgctxt "paragraph"
-msgid "Integer luctus sem vel nunc tincidunt lobortis."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:21
-#: ../ui/shop/shop_website_view.xml.en:36
-msgctxt "paragraph"
-msgid "Integer rhoncus vehicula suscipit."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:8
-#: ../ui/shop/shop_website_view.xml.en:23
-msgctxt "paragraph"
-msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:12
-#: ../ui/shop/shop_website_view.xml.en:27
-msgctxt "paragraph"
-msgid "Maecenas egestas congue congue."
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:31
-msgctxt "paragraph"
-msgid "Missing declination, please select another options"
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:9
-#: ../ui/shop/shop_website_view.xml.en:24
-msgctxt "paragraph"
-msgid "Morbi enim justo, aliquam molestie convallis eu, rutrum et felis."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:22
-#: ../ui/shop/shop_website_view.xml.en:37
-msgctxt "paragraph"
-msgid "Morbi gravida fermentum odio, quis elementum tellus ultricies at."
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:98
-msgctxt "paragraph"
-msgid "No order"
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:15
-#: ../ui/shop/shop_website_view.xml.en:30
-msgctxt "paragraph"
-msgid "Nulla eget semper purus."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:20
-#: ../ui/shop/shop_website_view.xml.en:35
-msgctxt "paragraph"
-msgid "Nulla facilisi."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:16
-#: ../ui/shop/shop_website_view.xml.en:31
-msgctxt "paragraph"
-msgid "Nulla faucibus scelerisque felis semper aliquam."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:13
-#: ../ui/shop/shop_website_view.xml.en:28
-msgctxt "paragraph"
-msgid "Nullam porttitor leo non quam porta dignissim."
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:34
-msgctxt "paragraph"
-msgid "Out of stock."
-msgstr ""
-
-#: ../ui/shop/payments/payment_way_record_view.xml.en:12
-msgctxt "paragraph"
-msgid "Payment is ok."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:21
-#: ../ui/shop/shop_website_view.xml.en:36
-msgctxt "paragraph"
-msgid "Pellentesque suscipit interdum risus et tempor."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:14
-#: ../ui/shop/shop_website_view.xml.en:29
-msgctxt "paragraph"
-msgid "Phasellus in eros velit, id gravida urna."
-msgstr ""
-
-#: ../ui/shop/shop_delivery.xml.en:13
-msgctxt "paragraph"
-msgid "Please choose your delivery preferences."
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:24
-msgctxt "paragraph"
-msgid "Quantity:"
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:18
-#: ../ui/shop/shop_website_view.xml.en:33
-msgctxt "paragraph"
-msgid "Suspendisse orci lectus, ultricies sit amet volutpat quis, consequat et ante."
-msgstr ""
-
-#: ../ui/shop/shop_website_view.xml.en:10
-#: ../ui/shop/shop_website_view.xml.en:25
-msgctxt "paragraph"
-msgid "Suspendisse potenti."
-msgstr ""
-
-#: ../ui/shop/products/product_delete.xml.en:10
-msgctxt "paragraph"
-msgid "To confirm the deletion, click here:"
-msgstr ""
-
-#: ../ui/shop/payments/payment_way_record_view.xml.en:8
-msgctxt "paragraph"
-msgid "We are waiting for payment."
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:130
-msgctxt "paragraph"
-msgid "We're waiting for customer payment"
-msgstr ""
-
-#: ../ui/shop/shop_view.xml.en:21
-msgctxt "paragraph"
-msgid "Welcome in your shop control panel !"
-msgstr ""
-
-#: ../ui/shop/payments_end.xml.en:10
-msgctxt "paragraph"
-msgid "You can see details about your order <g id='1'>here.</g>"
-msgstr ""
-
-#: ../ui/shop/payments/transfer/record_view.xml.en:22
-msgctxt "paragraph"
-msgid "Your bank transfer has been validated."
-msgstr ""
-
-#: ../ui/shop/payments/check/record_view.xml.en:21
-msgctxt "paragraph"
-msgid "Your payment by check has been validated."
-msgstr ""
-
-#: ../ui/shop/payments/cash/record_view.xml.en:20
-msgctxt "paragraph"
-msgid "Your payment has been validated."
-msgstr ""
-
-#: ../ui/shop/shipping/shippingway_order_view.xml.en:8
-msgctxt "span"
-msgid "${number}"
-msgstr ""
-
-#: ../ui/shop/products/product_viewbox.xml.en:9
-msgctxt "span"
-msgid "(${price-with-tax} €)"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:41
-msgctxt "span"
-msgid "<g id='13'> Same that delivery address </g>  <g id='14'> ${bill_address/firstname} ${bill_address/lastname}<x id='15'/> ${bill_address/address_1}<x id='16'/>  <g id='17'> ${bill_address/address_2}<x id='18'/>  </g> ${bill_address/zipcode} ${bill_address/town}<x id='19'/> ${bill_address/country}<x id='20'/>  </g>"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:96
-msgctxt "span"
-msgid "<g id='13'>${property/value}</g>  <g id='14'>Unknow</g>"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:21
-msgctxt "span"
-msgid "<g id='2'>${price-with-tax}</g> € TTC<x id='3'/> Weight:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:115
-msgctxt "span"
-msgid "<g id='22'> We're waiting for payment </g>  <g id='23'> Last payment </g>"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:22
-msgctxt "span"
-msgid "<g id='4'>${weight}</g> kg"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:307
-msgctxt "span"
-msgid "<g id='46'> Public </g>  <g id='47'> Private </g>"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:33
-msgctxt "span"
-msgid "<g id='6'> Same that delivery address."
-msgstr ""
-
-#: ../ui/shop/shipping/shippingway_order_view.xml.en:8
-msgctxt "span"
-msgid "Package number:"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:140
-msgctxt "table cell"
-msgid "${address/address_1}<x id='18'/> ${address/address_2}"
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:25
-msgctxt "table cell"
-msgid "${address/address_2}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:145
-msgctxt "table cell"
-msgid "${address/country}"
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:22
-msgctxt "table cell"
-msgid "${address/firstname} ${address/lastname}<x id='1'/> ${address/address_1}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:138
-msgctxt "table cell"
-msgid "${address/gender} ${address/lastname} ${address/firstname}"
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:19
-msgctxt "table cell"
-msgid "${address/title}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:144
-msgctxt "table cell"
-msgid "${address/town}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:143
-msgctxt "table cell"
-msgid "${address/zipcode}"
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:27
-msgctxt "table cell"
-msgid "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:87
-#: ../ui/shop/mail.xhtml.en:21
-msgctxt "table cell"
-msgid "${body}"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:74
-msgctxt "table cell"
-msgid "${cart_preview} <x id='19'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='20'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='21'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='22'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='23'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='24'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='25'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='26'/> XXX XXX XXX XXX XXX XXX XXX XXX<x id='27'/> XXX XXX XXX XXX XXX XXX XXX XXX"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:47
-msgctxt "table cell"
-msgid "${compare/title}"
-msgstr ""
-
-#: ../ui/shop/payments/payment_manage.xml.en:22
-msgctxt "table cell"
-msgid "${customer/email}"
-msgstr ""
-
-#: ../ui/shop/payments/payment_manage.xml.en:21
-msgctxt "table cell"
-msgid "${customer/title}<x id='2'/> Email:"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:77
-#: ../ui/shop/products/print.xml.en:40
-msgctxt "table cell"
-msgid "${data}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:35
-#: ../ui/shop/orders/order_manage.xml.en:216
-msgctxt "table cell"
-msgid "${delivery_address/address_2}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:213
-msgctxt "table cell"
-msgid "${delivery_address/firstname} ${delivery_address/lastname}<x id='35'/> ${delivery_address/address_1}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:32
-msgctxt "table cell"
-msgid "${delivery_address/firstname} ${delivery_address/lastname}<x id='8'/> ${delivery_address/address_1}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:37
-msgctxt "table cell"
-msgid "${delivery_address/zipcode} ${delivery_address/town}<x id='11'/> ${delivery_address/country}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:218
-msgctxt "table cell"
-msgid "${delivery_address/zipcode} ${delivery_address/town}<x id='38'/> ${delivery_address/country}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:73
-msgctxt "table cell"
-msgid "${description}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:55
-msgctxt "table cell"
-msgid "${info/title}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:34
-msgctxt "table cell"
-msgid "${info/title}:"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:34
-#: ../ui/shop/shop_user_manage.xml.en:56
-msgctxt "table cell"
-msgid "${info/value}"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:90
-msgctxt "table cell"
-msgid "${menu}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:304
-msgctxt "table cell"
-msgid "${message/author}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:119
-#: ../ui/shop/orders/order_manage.xml.en:315
-msgctxt "table cell"
-msgid "${message/message}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:90
-msgctxt "table cell"
-msgid "${nb_orders} order(s)"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:82
-msgctxt "table cell"
-msgid "${option/description}"
-msgstr ""
-
-#: ../ui/shop/shop_recapitulatif.xml.en:78
-msgctxt "table cell"
-msgid "${option/value}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:116
-msgctxt "table cell"
-msgid "${order/amount}€"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:23
-msgctxt "table cell"
-msgid "${order/date}<x id='3'/> Total weight:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:22
-msgctxt "table cell"
-msgid "${order/id}<x id='2'/> Date:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:27
-msgctxt "table cell"
-msgid "${order/payment_way}<x id='7'/>  <g id='8'>  <x id='9'/> Download bill </g>"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:26
-msgctxt "table cell"
-msgid "${order/shipping_way} - ${order/shipping_price} €<x id='6'/> Payment:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:25
-msgctxt "table cell"
-msgid "${order/total_price} €<x id='5'/> Shipping:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:24
-msgctxt "table cell"
-msgid "${order/total_weight} kg<x id='4'/> Total price:"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:70
-msgctxt "table cell"
-msgid "${p/price/total/with_tax} €"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:45
-msgctxt "table cell"
-msgid "${p/price/unit/with_tax} €"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:369
-msgctxt "table cell"
-msgid "${payment/advance_state}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:368
-msgctxt "table cell"
-msgid "${payment/amount}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:365
-msgctxt "table cell"
-msgid "${payment/complete_id}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:364
-msgctxt "table cell"
-msgid "${payment/state}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:367
-msgctxt "table cell"
-msgid "${payment/ts}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:101
-msgctxt "table cell"
-msgid "${payment_view}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:78
-msgctxt "table cell"
-msgid "${payments/total_payed}€<x id='13'/> Refund:"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:85
-#: ../ui/shop/products/print.xml.en:36
-msgctxt "table cell"
-msgid "${price-with-tax} €"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator_view.xml.en:24
-msgctxt "table cell"
-msgid "${product/box}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:73
-#: ../ui/shop/orders/order_manage.xml.en:261
-msgctxt "table cell"
-msgid "${product/declination}"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:34
-msgctxt "table cell"
-msgid "${product/price-with-tax} €"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:78
-#: ../ui/shop/orders/order_manage.xml.en:266
-msgctxt "table cell"
-msgid "${product/price/total/with_tax} €"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:76
-#: ../ui/shop/orders/order_manage.xml.en:264
-msgctxt "table cell"
-msgid "${product/price/unit/with_tax} €"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:77
-#: ../ui/shop/orders/order_manage.xml.en:265
-msgctxt "table cell"
-msgid "${product/quantity}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:255
-msgctxt "table cell"
-msgid "${product/reference}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:71
-msgctxt "table cell"
-msgid "${product/title}"
-msgstr ""
-
-#: ../ui/shop/payments/payment_manage.xml.en:40
-msgctxt "table cell"
-msgid "${record_edit}"
-msgstr ""
-
-#: ../ui/shop/payments/payment_manage.xml.en:58
-msgctxt "table cell"
-msgid "${record_view}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:65
-#: ../ui/shop/products/print.xml.en:24
-msgctxt "table cell"
-msgid "${reference}"
-msgstr ""
-
-#: ../ui/shop/shop_delivery.xml.en:31
-msgctxt "table cell"
-msgid "${ship/description}"
-msgstr ""
-
-#: ../ui/shop/shop_delivery.xml.en:34
-msgctxt "table cell"
-msgid "${ship/html_form}"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:82
-msgctxt "table cell"
-msgid "${ship/price} €"
-msgstr ""
-
-#: ../ui/shop/shop_delivery.xml.en:28
-msgctxt "table cell"
-msgid "${ship/title}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:403
-msgctxt "table cell"
-msgid "${shipping/complete_id}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:405
-msgctxt "table cell"
-msgid "${shipping/shipping_mode}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:406
-msgctxt "table cell"
-msgid "${shipping/state}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:404
-msgctxt "table cell"
-msgid "${shipping/ts}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:185
-msgctxt "table cell"
-msgid "${shipping/view}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:161
-msgctxt "table cell"
-msgid "${shipping_address/address_2}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:158
-msgctxt "table cell"
-msgid "${shipping_address/firstname} ${shipping_address/lastname}<x id='27'/> ${shipping_address/address_1}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:163
-msgctxt "table cell"
-msgid "${shipping_address/zipcode} ${shipping_address/town}<x id='30'/> ${shipping_address/country}"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:82
-#: ../ui/shop/orders/order_manage.xml.en:270
-msgctxt "table cell"
-msgid "${shipping_price} €"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:91
-msgctxt "table cell"
-msgid "${state/comments}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:79
-msgctxt "table cell"
-msgid "${state/date}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:82
-msgctxt "table cell"
-msgid "${state/user}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:81
-msgctxt "table cell"
-msgid "${subject}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:69
-#: ../ui/shop/products/print.xml.en:32
-msgctxt "table cell"
-msgid "${title}"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:95
-msgctxt "table cell"
-msgid "${total/with_tax} €"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:89
-msgctxt "table cell"
-msgid "${total/without_tax} €"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:86
-#: ../ui/shop/orders/order_manage.xml.en:274
-msgctxt "table cell"
-msgid "${total_price} €"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:35
-msgctxt "table cell"
-msgid "${tree}"
-msgstr ""
-
-#: ../ui/shop/products/print.xml.en:28
-msgctxt "table cell"
-msgid "${url}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:25
-msgctxt "table cell"
-msgid "${user/base/email}<x id='6'/> User Language:"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:23
-msgctxt "table cell"
-msgid "${user/base/firstname}<x id='4'/> Lastname:"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:22
-msgctxt "table cell"
-msgid "${user/base/gender}<x id='3'/> Firstname:"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:24
-msgctxt "table cell"
-msgid "${user/base/lastname}<x id='5'/> Email:"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:28
-msgctxt "table cell"
-msgid "${user/base/phone1}"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:27
-msgctxt "table cell"
-msgid "${user/base/phone2}<x id='8'/> Phone1:"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:26
-msgctxt "table cell"
-msgid "${user/base/user_language}<x id='7'/> Phone2:"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:49
-msgctxt "table cell"
-msgid "${value}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:89
-msgctxt "table cell"
-msgid "${weight} Kg"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:366
-msgctxt "table cell"
-msgid "-"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:79
-msgctxt "table cell"
-msgid "0€"
-msgstr ""
-
-#: ../ui/shop/shipping/shippingway_add_record.xml.en:13
-msgctxt "table cell"
-msgid "</g>  <x id='4'/> Number:"
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:14
-msgctxt "table cell"
-msgid "Address"
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:13
-msgctxt "table cell"
-msgid "Address title"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:105
-#: ../ui/shop/orders/order_manage.xml.en:358
-msgctxt "table cell"
-msgid "Amount"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:26
-#: ../ui/shop/shop_addresses.xml.en:21
-#: ../ui/shop/shop_recapitulatif.xml.en:17
-msgctxt "table cell"
-msgid "Bill address"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:29
-msgctxt "table cell"
-msgid "Browse Categories"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:18
-msgctxt "table cell"
-msgid "Compare the selected products"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:56
-msgctxt "table cell"
-msgid "Cover"
-msgstr ""
-
-#: ../ui/shop/payments/payment_manage.xml.en:14
-#: ../ui/shop/orders/order_manage.xml.en:44
-msgctxt "table cell"
-msgid "Customer [Id n°${customer/id}]"
-msgstr ""
-
-#: ../ui/shop/payments/payment_manage.xml.en:51
-msgctxt "table cell"
-msgid "Customer payment view"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:71
-msgctxt "table cell"
-msgid "Customer payments"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:76
-msgctxt "table cell"
-msgid "Data"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:357
-#: ../ui/shop/orders/order_manage.xml.en:395
-msgctxt "table cell"
-msgid "Datetime"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:79
-msgctxt "table cell"
-msgid "Delivery (${ship/title}):"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:25
-#: ../ui/shop/shop_addresses.xml.en:18
-#: ../ui/shop/orders/order_manage.xml.en:206
-#: ../ui/shop/shop_recapitulatif.xml.en:14
-msgctxt "table cell"
-msgid "Delivery address"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:72
-#: ../ui/shop/shop_delivery.xml.en:20
-#: ../ui/shop/products/print.xml.en:39
-msgctxt "table cell"
-msgid "Description"
-msgstr ""
-
-#: ../ui/shop/shipping/shippingway_add_record.xml.en:17
-msgctxt "table cell"
-msgid "Details about shipping way:"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:22
-msgctxt "table cell"
-msgid "Gender:"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:104
-#: ../ui/shop/orders/order_manage.xml.en:355
-#: ../ui/shop/orders/order_manage.xml.en:394
-msgctxt "table cell"
-msgid "Id"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:22
-msgctxt "table cell"
-msgid "Id:"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:80
-msgctxt "table cell"
-msgid "Keywords"
-msgstr ""
-
-#: ../ui/shop/payments/payment_manage.xml.en:33
-msgctxt "table cell"
-msgid "Manage/Edit payment"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:110
-#: ../ui/shop/orders/order_manage.xml.en:290
-msgctxt "table cell"
-msgid "Messages"
-msgstr ""
-
-#: ../ui/shop/shop_delivery.xml.en:19
-#: ../ui/shop/orders/order_manage.xml.en:356
-#: ../ui/shop/orders/order_manage.xml.en:396
-msgctxt "table cell"
-msgid "Mode"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:90
-msgctxt "table cell"
-msgid "Order history:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:15
-msgctxt "table cell"
-msgid "Order informations"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:78
-msgctxt "table cell"
-msgid "Payed:"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:178
-msgctxt "table cell"
-msgid "Payment has been validated, preparation of order"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:95
-msgctxt "table cell"
-msgid "Payments"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:344
-msgctxt "table cell"
-msgid "Payments history"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:84
-#: ../ui/shop/products/print.xml.en:35
-msgctxt "table cell"
-msgid "Price"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:46
-msgctxt "table cell"
-msgid "Private user informations"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:63
-#: ../ui/shop/orders/order_manage.xml.en:243
-#: ../ui/shop/cart_view.xml.en:19
-msgctxt "table cell"
-msgid "Product"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:92
-msgctxt "table cell"
-msgid "Product model informations"
-msgstr ""
-
-#: ../ui/shop/products/print.xml.en:31
-msgctxt "table cell"
-msgid "Product name"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:231
-msgctxt "table cell"
-msgid "Products"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:15
-msgctxt "table cell"
-msgid "Public user informations"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:65
-#: ../ui/shop/orders/order_manage.xml.en:245
-#: ../ui/shop/cart_view.xml.en:21
-msgctxt "table cell"
-msgid "Quantity"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:64
-#: ../ui/shop/products/print.xml.en:23
-#: ../ui/shop/orders/order_manage.xml.en:242
-msgctxt "table cell"
-msgid "Reference"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:23
-msgctxt "table cell"
-msgid "Remove"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:30
-msgctxt "table cell"
-msgid "Select Product"
-msgstr ""
-
-#: ../ui/shop/shop_delivery.xml.en:21
-msgctxt "table cell"
-msgid "Selection"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:81
-#: ../ui/shop/orders/order_manage.xml.en:269
-msgctxt "table cell"
-msgid "Shipping"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:151
-msgctxt "table cell"
-msgid "Shipping address"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:384
-msgctxt "table cell"
-msgid "Shipping history"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:354
-#: ../ui/shop/orders/order_manage.xml.en:359
-#: ../ui/shop/orders/order_manage.xml.en:397
-msgctxt "table cell"
-msgid "State"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:69
-msgctxt "table cell"
-msgid "States history"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:68
-msgctxt "table cell"
-msgid "Title"
-msgstr ""
-
-#: ../ui/shop/payments/payment_manage.xml.en:21
-msgctxt "table cell"
-msgid "Title:"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:85
-#: ../ui/shop/orders/order_manage.xml.en:273
-#: ../ui/shop/cart_view.xml.en:22
-msgctxt "table cell"
-msgid "Total Price"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:66
-#: ../ui/shop/orders/order_manage.xml.en:246
-msgctxt "table cell"
-msgid "Total price"
-msgstr ""
-
-#: ../ui/shop/products/print.xml.en:27
-msgctxt "table cell"
-msgid "URL"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:20
-msgctxt "table cell"
-msgid "Unit Price with tax"
-msgstr ""
-
-#: ../ui/shop/orders/order_view.xml.en:64
-#: ../ui/shop/orders/order_manage.xml.en:244
-msgctxt "table cell"
-msgid "Unit price HT"
-msgstr ""
-
-#: ../ui/shop/shop_user_manage.xml.en:132
-msgctxt "table cell"
-msgid "User addresses"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:88
-msgctxt "table cell"
-msgid "Weight"
-msgstr ""
-
-#: ../ui/shop/shipping/shippingway_add_record.xml.en:18
-msgctxt "textarea"
-msgid "${description/value}"
-msgstr ""
-
-#: ../ui/shop/template.xhtml.en:7
-#: ../ui/shop/products/print.xml.en:8
-msgctxt "title"
-msgid "${title}"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:7
-msgctxt "title"
-msgid "Insert link"
-msgstr ""
-
-#: ../ui/shop/products/product_images_slider.xml.en:10
-#: ../ui/shop/products/product_images_slider.xml.en:15
-msgctxt "title attribute"
-msgid "${img/title}"
-msgstr ""
-
-#: ../ui/shop/products/addproduct.xml.en:46
-#: ../ui/shop/products/addproduct_tree.xml.en:9
-msgctxt "title attribute"
-msgid "${item/title}"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:31
-msgctxt "title attribute"
-msgid "${p/img/title}"
-msgstr ""
-
-#: ../ui/shop/virtualcategory_comparator.xml.en:39
-msgctxt "title attribute"
-msgid "${product/cover/title}"
-msgstr ""
-
-#: ../ui/shop/orders/order_manage.xml.en:85
-msgctxt "title attribute"
-msgid "${state/comments}"
-msgstr ""
-
-#: ../ui/shop/products/product_view.xml.en:58
-#: ../ui/shop/products/product_viewbox.xml.en:11
-msgctxt "title attribute"
-msgid "${title}"
-msgstr ""
-
-#: ../ui/shop/addresses_book.xml.en:32
-msgctxt "title attribute"
-msgid "Edit this address"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:62
-msgctxt "title attribute"
-msgid "Impossible to add product in cart"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:41
-msgctxt "ul"
-msgid "${option/title}:"
-msgstr ""
-
-#: ../ui/shop/cart_view.xml.en:41
-msgctxt "ul"
-msgid "${option/value}"
 msgstr ""

@@ -52,7 +52,7 @@
 
   <form id="form-order" name="form-order" method="POST">
     <h1 class="payment-process">
-      Terms of service
+      Terms of sales
     </h1>
 
     <p id="cgv">

@@ -494,7 +494,7 @@ class Shop_ShowRecapitulatif(STLForm):
         namespace = self.build_namespace(resource, context)
         # Alert MSG
         namespace['alert_msg'] = MSG(
-          u"""To continue, you have to validate the terms of service !""")
+          u"""To continue, you have to validate the terms of sales!""")
         # Progress bar
         namespace['progress'] = Shop_Progress(index=5).GET(resource, context)
         # Get delivery and bill address namespace
