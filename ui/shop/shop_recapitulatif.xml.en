@@ -56,8 +56,8 @@
     </h1>
 
     <p id="cgv">
-      <input type="checkbox" id="cgv" name="cgv" value="1"/>
-      <label for="cgv">
+      <input type="checkbox" id="accept-cgv" name="cgv" value="1"/>
+      <label for="accept-cgv">
         I agree with the general sales conditions and hereby certified having read them.
       </label>
       <a href="./terms-and-conditions-of-use" target="blank"><span>(</span>Read<span>)</span></a>
@@ -89,7 +89,7 @@
   <script>
     $(document).ready(function(){
       $("#form-order").submit(function() {
-        if ($('#cgv').is(':checked') == false) {
+        if ($('#accept-cgv').is(':checked') == false) {
           alert('${alert_msg}');
           return false;
         }

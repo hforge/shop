@@ -2180,10 +2180,6 @@ msgstr "Enumérations"
 msgid "Enumerates folder"
 msgstr "Dossier énumérations"
 
-#: ../payments/paybox/enumerates.py:30
-msgid "Erreur de paiement"
-msgstr ""
-
 #: ../payments/paybox/enumerates.py:214
 msgid "Erreur inconnue (code %s)"
 msgstr ""
@@ -3065,18 +3061,6 @@ msgstr ""
 msgid "Paiement Refusé (code %s)"
 msgstr ""
 
-#: ../payments/paybox/enumerates.py:32
-msgid "Paiement annulé"
-msgstr ""
-
-#: ../payments/paybox/enumerates.py:26
-msgid "Paiement effectué"
-msgstr ""
-
-#: ../payments/paybox/enumerates.py:28
-msgid "Paiement refusé"
-msgstr ""
-
 #: ../shop_views.py:211
 msgid "Password"
 msgstr "Mot de passe"
@@ -3157,11 +3141,19 @@ msgctxt "heading"
 msgid "Payment by transfer validated ?"
 msgstr "Paiement par virement bancaire validé ?"
 
+#: ../payments/paybox/enumerates.py:32
+msgid "Payment cancelled"
+msgstr "Paiement annulé"
+
+#: ../payments/paybox/enumerates.py:26
+msgid "Payment done"
+msgstr "Paiement effectué"
+
 #: ../shop_payments.py:35 ../shop_payments.py:46
 msgid "Payment end"
 msgstr "Fin de paiement"
 
-#: ../orders/workflow.py:54
+#: ../orders/workflow.py:54 ../payments/paybox/enumerates.py:30
 msgid "Payment error"
 msgstr "Erreur de payment"
 
@@ -3190,6 +3182,10 @@ msgstr "Module de paiement"
 #: ../payments/payment_way.py:53
 msgid "Payment number"
 msgstr "Numéro de paiement"
+
+#: ../payments/paybox/enumerates.py:28
+msgid "Payment refused"
+msgstr "Paiement refusé"
 
 #: ../ui/shop/payments/paybox/end.xml.en:10
 msgctxt "div"

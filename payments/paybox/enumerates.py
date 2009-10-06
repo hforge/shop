@@ -23,13 +23,13 @@ from itools.datatypes.primitive import enumerate_get_value, enumerate_is_valid
 class PBXState(Enumerate):
     options = [
         {'name': 1,
-         'value': MSG(u'Paiement effectué'), 'pbx': 'PBX_EFFECTUE'},
+         'value': MSG(u'Payment done'), 'pbx': 'PBX_EFFECTUE'},
         {'name': 2,
-         'value': MSG(u'Paiement refusé'), 'pbx': 'PBX_REFUSE'},
+         'value': MSG(u'Payment refused'), 'pbx': 'PBX_REFUSE'},
         {'name': 3,
-         'value': MSG(u'Erreur de paiement'), 'pbx': 'PBX_ERREUR'},
+         'value': MSG(u'Payment error'), 'pbx': 'PBX_ERREUR'},
         {'name': 4,
-         'value': MSG(u'Paiement annulé'), 'pbx': 'PBX_ANNULE'},
+         'value': MSG(u'Payment cancelled'), 'pbx': 'PBX_ANNULE'},
         ]
 
 

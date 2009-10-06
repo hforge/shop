@@ -169,5 +169,6 @@ class Paybox_End(PaymentWay_EndView):
             subject = u'Paybox problem'
             body = 'Paybox error: %s' % PayboxCGIErrors.get_value(erreur)
             root.send_email(from_addr, subject, from_addr, body)
-        namespace['state'] = PBXState.get_value(context.query['state'])
+        state = PBXState.get_value(context.query['state'])
+        namespace['state'] = state.gettext()
         return namespace
