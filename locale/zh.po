@@ -1531,7 +1531,7 @@ msgstr ""
 
 #: ../products/product_views.py:480
 msgid "Print product"
-msgstr ""
+msgstr "打印"
 
 #: ../products/enumerate.py:78
 msgid "Private"
@@ -2409,7 +2409,7 @@ msgstr ""
 #: ../ui/shop/shop_recapitulatif.xml.en:86
 msgctxt "button"
 msgid "Buy"
-msgstr ""
+msgstr "购买"
 
 #: ../ui/shop/orders/order_manage.xml.en:192
 msgctxt "button"
@@ -2527,7 +2527,7 @@ msgstr ""
 #: ../ui/shop/search_box.xml.en:14
 msgctxt "div"
 msgid "${nb_results} results found."
-msgstr ""
+msgstr "共有 ${nb_results} 幅画"
 
 #: ../ui/shop/virtualcategory_view.xml.en:24
 msgctxt "div"
@@ -3186,7 +3186,7 @@ msgstr ""
 #: ../ui/shop/browse_batch.xml.en:23
 msgctxt "link"
 msgid "Next »"
-msgstr ""
+msgstr "下一页 »"
 
 #: ../ui/shop/shop_view_cart.xml.en:23
 msgctxt "link"
@@ -3211,7 +3211,7 @@ msgstr ""
 #: ../ui/shop/browse_batch.xml.en:13
 msgctxt "link"
 msgid "« Previous"
-msgstr ""
+msgstr "« 上一页"
 
 #: ../ui/shop/cart_viewbox.xml.en:24
 msgctxt "link"
