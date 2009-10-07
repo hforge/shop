@@ -590,10 +590,11 @@ class Product_DeclinationsView(Folder_BrowseContent):
             name = declination.name
             kw = {'checkbox': (name, True),
                   'name': (name, name)}
-            for key in declination.get_metadata_schema():
+            for key in ['reference', 'stock-quantity']:
                 kw[key] = declination.get_property(key)
-            for key in declination.get_dynamic_schema():
-                kw[key] = declination.get_property(key)
+            for name, datatype in declination.get_dynamic_schema().items():
+                value = declination.get_property(name)
+                kw[name] = datatype.get_value(value)
             # Barcode
             shop_uri = context.resource.get_pathto(shop)
             reference = declination.get_property('reference')
