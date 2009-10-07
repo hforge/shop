@@ -204,7 +204,7 @@ class EnumeratesFolder_View(Folder_BrowseContent):
 class EnumerateTable_Handler(OrderedTableFile):
 
     record_schema = {
-        'name': String(Unique=True, is_indexed=True),
+        'name': String(unique=True, is_indexed=True),
         'title': Unicode(mandatory=True, multiple=True),
         }
 

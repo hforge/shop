@@ -93,7 +93,7 @@ class ProductTypeTable(OrderedTableFile):
 
     record_schema = {
         # XXX To remove
-        'name': String(Unique=True, is_indexed=True),
+        'name': String(unique=True, is_indexed=True),
         'title': Unicode(mandatory=True, multiple=True),
         'mandatory': Boolean,
         'multiple': Boolean,

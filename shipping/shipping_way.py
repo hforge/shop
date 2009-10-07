@@ -50,7 +50,7 @@ from shipping_way_views import ShippingWay_RecordEdit, ShippingWay_RecordView
 class ShippingWayBaseTable(BaseTable):
 
     record_schema = {
-        'ref': String(Unique=True, is_indexed=True),
+        'ref': String(unique=True, is_indexed=True),
         'state': ShippingStates,
         'price': Decimal,
         'weight': Decimal,
