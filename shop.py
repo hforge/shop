@@ -30,6 +30,7 @@ from categories import Categories, VirtualCategory
 from countries import Countries, CountriesZones, CountriesZonesEnumerate
 from datatypes import ImagePathDataType
 from enumerates import BarcodesFormat, SortBy_Enumerate
+from manufacturers import Manufacturers, Manufacturer
 from orders import Orders
 from products import Products, Product, ProductModels
 from products.cross_selling import CrossSellingTable
@@ -50,10 +51,11 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20091008'
+    class_version = '20091009'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
-                          'categories', 'orders', 'payments',
+                          'categories', 'customers',
+                          'manufacturers', 'orders', 'payments',
                           'products', 'products-models',
                           'shippings', 'countries',
                           'terms-and-conditions-of-use', 'taxes']
@@ -88,9 +90,10 @@ class Shop(ShopFolder):
     # Classes to override
     # for specific needs
     ###############################
-    user_class = ShopUser
+    manufacturer_class = Manufacturer
     product_class = Product
     payments_class = ShopPayments
+    user_class = ShopUser
     virtual_category_class = VirtualCategory
 
     ####################################
@@ -137,6 +140,9 @@ class Shop(ShopFolder):
         cls.payments_class._make_resource(cls.payments_class, folder,
                                 '%s/payments' % name,
                                 title={'en': u'Payment module'})
+        # Manufacturers
+        Manufacturers._make_resource(Manufacturers, folder,
+                      '%s/manufacturers' % name, title={'en': u'Manufacturers'})
         # Products
         Products._make_resource(Products, folder, '%s/products' % name,
                                 title={'en': u'Products'})
@@ -306,6 +312,12 @@ class Shop(ShopFolder):
         if self.get_resource('customers', soft=True) is not None:
             return
         Customers.make_resource(Customers, self, 'customers')
+
+
+    def update_20091009(self):
+        if self.get_resource('manufacturers', soft=True) is not None:
+            return
+        Manufacturers.make_resource(Manufacturers, self, 'manufacturers')
 
 
 register_resource_class(Shop)

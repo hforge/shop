@@ -23,8 +23,9 @@ from itools.datatypes import String, Integer
 
 # Import from shop
 from enumerate import CategoriesEnumerate, States, StockOptions
-from shop.datatypes import ImagePathDataType
 from taxes import TaxesEnumerate
+from shop.datatypes import ImagePathDataType
+from shop.manufacturers import ManufacturersEnumerate
 
 
 
@@ -42,6 +43,8 @@ product_schema = {# General informations
                   'subject': Unicode(multilingual=True),
                   'cover': ImagePathDataType(mandatory=True),
                   'weight': Decimal(default=decimal(0), mandatory=True),
+                  # Manufacturer
+                  'manufacturer': ManufacturersEnumerate,
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True, mandatory=True),
                   # Stock

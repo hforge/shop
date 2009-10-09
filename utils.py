@@ -23,6 +23,7 @@ from ikaaro.buttons import Button
 from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_Orphans, Folder_BrowseContent
 from ikaaro.revisions_views import DBResource_LastChanges
+from ikaaro.resource_views import DBResource_AddImage
 
 
 def bool_to_img(value):
@@ -49,6 +50,14 @@ class ShopFolder(Folder):
     browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
     orphans = Folder_Orphans(access='is_allowed_to_edit')
     last_changes = DBResource_LastChanges(access='is_allowed_to_edit')
+
+
+
+class CurrentFolder_AddImage(DBResource_AddImage):
+
+    def get_root(self, context):
+        return context.resource
+
 
 
 class ChangeCategoryButton(Button):

@@ -154,6 +154,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                              Editable._get_catalog_values(self))
         # Reference
         values['reference'] = self.get_property('reference')
+        # Manufacturer
+        values['manufacturer'] = self.get_property('manufacturer')
         # Product models
         values['product_model'] = self.get_property('product_model')
         # We index categories
@@ -788,6 +790,7 @@ CrossSellingTable.orderable_classes = Product
 
 # Register fields
 register_field('reference', Unicode(is_indexed=True, is_stored=True))
+register_field('manufacturer', Unicode(is_indexed=True))
 register_field('product_model', String(is_indexed=True, is_stored=True))
 register_field('categories', String(is_indexed=True, multiple=True, is_stored=True))
 register_field('has_categories', Boolean(is_indexed=True)) # XXX Obsolete

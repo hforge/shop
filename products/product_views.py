@@ -180,6 +180,8 @@ class Product_Edit(Editable_Edit, AutoForm):
                      has_empty_option=False),
         ProductModelWidget('product_model', title=MSG(u'Product model')),
         BarcodeWidget('reference', title=MSG(u'Reference')),
+        SelectWidget('manufacturer',
+                     title=MSG(u'Manufacturer / Creator')),
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Keywords')),
