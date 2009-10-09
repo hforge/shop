@@ -25,7 +25,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.buttons import RemoveButton, RenameButton
+from ikaaro.buttons import RemoveButton, RenameButton, CopyButton, PasteButton
 from ikaaro.exceptions import ConsistencyError
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
@@ -304,7 +304,8 @@ class Products_View(Folder_BrowseContent):
 
     context_menus = []
 
-    table_actions = [RemoveButton, RenameButton, ChangeCategoryButton]
+    table_actions = [CopyButton, PasteButton, RenameButton,
+                     RemoveButton, ChangeCategoryButton]
 
     table_columns = [
         ('checkbox', None),
