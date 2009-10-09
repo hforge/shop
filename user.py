@@ -19,6 +19,7 @@ from datetime import datetime
 
 # Import from itools
 from itools.core import merge_dicts
+from itools.csv import Table as BaseTable
 from itools.datatypes import String, Unicode, DateTime
 from itools.gettext import MSG
 
@@ -27,6 +28,7 @@ from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import SelectRadio, TextWidget
 from ikaaro.registry import register_resource_class
+from ikaaro.table import Table
 from ikaaro.user import User
 
 # Import from shop
@@ -36,16 +38,48 @@ from user_views import ShopUser_Manage, ShopUser_Profile
 from user_views import ShopUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView
-from user_views import Customers_View
+from user_views import Customers_View, AuthentificationLogs_View
 from utils import get_shop
+
+
+class AuthentificationLogsBase(BaseTable):
+
+    record_schema = {
+      'user': String(is_indexed=True),
+      }
+
+
+class AuthentificationLogs(Table):
+
+    class_id = 'customers-authentification-logs'
+    class_title = MSG(u'Customers authentification logs')
+    class_handler = AuthentificationLogsBase
+    class_views = ['view']
+
+    view = AuthentificationLogs_View()
+
+    def log_authentification(self, user):
+        self.handler.add_record({'user': user})
+
 
 
 class Customers(Folder):
 
     class_id = 'customers'
-    class_views = ['view']
+    class_views = ['view', 'last_connections']
 
     view = Customers_View()
+    last_connections = GoToSpecificDocument(
+                        title=MSG(u'Last connections'),
+                        specific_document='./authentification_logs')
+
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args, **kw):
+        Folder._make_resource(cls, folder, name, *args, **kw)
+        AuthentificationLogs._make_resource(AuthentificationLogs, folder,
+                    '%s/authentification_logs' % name, *args, **kw)
+
 
     def _get_resource(self, name):
         site_root = self.get_site_root()
@@ -80,6 +114,7 @@ class ShopUser(User):
     # Base schema / widgets
     base_schema = merge_dicts(User.get_metadata_schema(),
                               ctime=DateTime,
+                              last_time=DateTime,
                               gender=Civilite,
                               phone1=String,
                               phone2=String)
@@ -103,8 +138,9 @@ class ShopUser(User):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        ctime = datetime.now()
-        User._make_resource(cls, folder, name, ctime=ctime, *args, **kw)
+        ctime = last_time = datetime.now()
+        User._make_resource(cls, folder, name, ctime=ctime,
+                            last_time=last_time, *args, **kw)
 
 
     @classmethod
@@ -148,8 +184,11 @@ class ShopUser(User):
 
     def update_20091009(self):
         from itools.vfs import get_ctime
-        self.set_property('ctime', get_ctime('%s.metadata' % self.handler.uri))
+        t = get_ctime('%s.metadata' % self.handler.uri)
+        self.set_property('ctime', t)
+        self.set_property('last_time', t)
 
 
 register_resource_class(ShopUser)
 register_resource_class(Customers)
+register_resource_class(AuthentificationLogs)

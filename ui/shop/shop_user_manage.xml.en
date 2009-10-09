@@ -86,6 +86,61 @@
     </tbody>
   </table>
 
+
+  <table class="order-browse">
+    <thead>
+      <tr>
+        <th colspan="5">
+          <img src="/ui/icons/16x16/view.png"/>
+          User addresses
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px" stl:repeat="address addresses">
+        <td>${address/gender} ${address/lastname} ${address/firstname}</td>
+        <td>
+          ${address/address_1}<br/>
+          ${address/address_2}
+        </td>
+        <td>${address/zipcode}</td>
+        <td>${address/town}</td>
+        <td>${address/country}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="order-browse">
+    <thead>
+      <tr>
+        <th>
+          <img src="/ui/icons/16x16/view.png"/>
+          Connection history
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height:50px">
+        <td valign="top">
+          <table class="order-sub-browse">
+            <thead>
+              <tr>
+                <th>DateTime</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr stl:repeat="connection connections">
+                <td>
+                  ${connection}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
   <table class="order-browse">
     <thead>
       <tr>
@@ -126,39 +181,5 @@
       </tr>
     </tbody>
   </table>
-
-
-  <table class="order-browse">
-    <thead>
-      <tr>
-        <th colspan="5">
-          <img src="/ui/icons/16x16/view.png"/>
-          User addresses
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="height:50px" stl:repeat="address addresses">
-        <td>${address/gender} ${address/lastname} ${address/firstname}</td>
-        <td>
-          ${address/address_1}<br/>
-          ${address/address_2}
-        </td>
-        <td>${address/zipcode}</td>
-        <td>${address/town}</td>
-        <td>${address/country}</td>
-      </tr>
-    </tbody>
-  </table>
-
-
-
-
-
-
-
-
-
-
 
 </stl:block>

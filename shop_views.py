@@ -26,8 +26,8 @@ from itools.datatypes import Integer, Email, String, Unicode
 from itools.datatypes import Boolean, MultiLinesTokens
 from itools.gettext import MSG
 from itools.stl import stl
-from itools.uri import get_reference
-from itools.web import BaseView, STLForm, STLView, ERROR
+from itools.uri import get_reference, get_uri_path
+from itools.web import BaseView, STLForm, STLView, ERROR, INFO
 from itools.xapian import PhraseQuery, AndQuery
 from itools.xml import XMLParser
 
@@ -38,7 +38,7 @@ from ikaaro.forms import HiddenWidget, TextWidget, PasswordWidget
 from ikaaro.forms import MultilineWidget, ImageSelectorWidget
 from ikaaro.forms import BooleanRadio
 from ikaaro.messages import MSG_CHANGES_SAVED
-from ikaaro.resource_views import LoginView, DBResource_Edit
+from ikaaro.resource_views import DBResource_Edit
 from ikaaro.table_views import Table_AddRecord, Table_EditRecord
 from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
@@ -295,9 +295,14 @@ class Shop_Register(RegisterForm):
 
 
 
-class Shop_Login(LoginView):
+class Shop_Login(STLForm):
 
     access = True
+    title = MSG(u'Login')
+    schema = {
+        'username': Unicode(mandatory=True),
+        'password': String(mandatory=True)}
+
 
     def get_template(self, resource, context):
         shop = get_shop(resource)
@@ -320,6 +325,50 @@ class Shop_Login(LoginView):
             progress = Shop_Progress(index=2).GET(resource, context)
         namespace['progress'] = progress
         return namespace
+
+
+    def action(self, resource, context, form):
+        email = form['username'].strip()
+        password = form['password']
+
+        # Check the user exists
+        root = context.root
+        user = root.get_user_from_login(email)
+        if user is None:
+            message = ERROR(u'The user "{username}" does not exist.',
+                            username=email)
+            context.message = message
+            return
+
+        # Check the password is right
+        if not user.authenticate(password):
+            context.message = ERROR(u'The password is wrong.')
+            return
+
+        # We log authentification
+        shop = get_shop(resource)
+        logs = shop.get_resource('customers/authentification_logs')
+        logs.log_authentification(user.name)
+        user.set_property('last_time', datetime.now())
+
+        # Set cookie
+        user.set_auth_cookie(context, password)
+
+        # Set context
+        context.user = user
+
+        # Come back
+        referrer = context.request.referrer
+        if referrer is None:
+            goto = get_reference('./')
+        else:
+            path = get_uri_path(referrer)
+            if path.endswith(';login'):
+                goto = get_reference('./')
+            else:
+                goto = referrer
+
+        return context.come_back(INFO(u"Welcome!"), goto)
 
 
 

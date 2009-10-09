@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import String, Unicode
+from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.web import STLView, STLForm, INFO, ERROR
@@ -28,7 +28,7 @@ from ikaaro.forms import TextWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
-from ikaaro.table_views import Table_EditRecord, Table_AddRecord
+from ikaaro.table_views import Table_EditRecord, Table_AddRecord, Table_View
 
 # Import from shop
 from addresses_views import Addresses_EditAddress, Addresses_AddAddress
@@ -81,6 +81,15 @@ class ShopUser_Manage(STLView):
             namespace['user']['private'].append(
               {'title': widget.title,
                'value': user.get_property(widget.name)})
+        # Customer connections
+        namespace['connections'] = []
+        accept = context.accept_language
+        connections = shop.get_resource('customers/authentification_logs').handler
+        for record in connections.search(user=user.name):
+            ts = connections.get_record_value(record, 'ts')
+            dt = format_datetime(ts, accept)
+            namespace['connections'].append(dt)
+        namespace['connections'].sort(reverse=True)
         # Customer payments
         payments = shop.get_resource('payments')
         namespace['payments'] = payments.get_payments_informations(
@@ -331,6 +340,7 @@ class Customers_View(Folder_BrowseContent):
         ('lastname', MSG(u'Lastname')),
         ('email', MSG(u'Email')),
         ('ctime', MSG(u'Registration Date')),
+        ('last_time', MSG(u'Last connection Date')),
         ]
 
     search_template = '/ui/shop/products/products_view_search.xml'
@@ -390,11 +400,42 @@ class Customers_View(Folder_BrowseContent):
             return name, name
         elif column == 'gender':
             return Civilite.get_value(item_resource.get_property('gender'))
-        elif column == 'ctime':
-            ctime = item_resource.get_property('ctime')
+        elif column == 'email':
+            return item_resource.get_property(column), item_brain.name
+        elif column in ['ctime', 'last_time']:
+            dtime = item_resource.get_property(column)
             accept = context.accept_language
-            return format_datetime(ctime, accept)
+            return format_datetime(dtime, accept)
         return item_resource.get_property(column)
 
 
 
+class AuthentificationLogs_View(Table_View):
+
+    columns = [
+        ('user', MSG(u'user')),
+        ('ts', MSG(u'Connection Date')),
+        ]
+
+    table_actions = []
+
+    def get_table_columns(self, resource, context):
+        return self.columns
+
+
+    def get_query_schema(self):
+        return merge_dicts(Table_View.get_query_schema(self),
+                           reverse=Boolean(default=True),
+                           sort_by=String(default='ts'))
+
+
+
+    def get_item_value(self, resource, context, item, column):
+        handler = resource.handler
+        if column == 'user':
+            user_name = handler.get_record_value(item, 'user')
+            user = context.root.get_resource('users/%s' % user_name)
+            return user.get_title(), '../%s' % user_name
+        elif column == 'ts':
+            ts = handler.get_record_value(item, 'ts')
+            return format_datetime(ts, context.accept_language)
