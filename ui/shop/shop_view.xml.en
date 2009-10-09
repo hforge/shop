@@ -4,7 +4,14 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Shop control panel</h1>
+  <h1>
+    Shop control panel
+    <a href="http://perfect-sale.com/documentation/"
+      target="_blank" title="Help">
+      <img src="/ui/icons/16x16/help.png" alt="help"/>
+    </a>
+
+  </h1>
   <br/>
 
   <table class="new-resource-thumb">
