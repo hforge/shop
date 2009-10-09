@@ -276,6 +276,12 @@ class Shop_Register(RegisterForm):
         # Set the role
         site_root.set_user_role(user.name, 'guests')
 
+        # We log authentification
+        shop = get_shop(resource)
+        logs = shop.get_resource('customers/authentification_logs')
+        logs.log_authentification(user.name)
+        user.set_property('last_time', datetime.now())
+
         # Send confirmation email
         user.send_register_confirmation(context)
 

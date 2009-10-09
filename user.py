@@ -142,9 +142,8 @@ class ShopUser(User):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        ctime = last_time = datetime.now()
-        User._make_resource(cls, folder, name, ctime=ctime,
-                            last_time=last_time, *args, **kw)
+        ctime = datetime.now()
+        User._make_resource(cls, folder, name, ctime=ctime, *args, **kw)
 
 
     @classmethod
