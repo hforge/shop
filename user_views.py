@@ -20,9 +20,11 @@ from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.web import STLView, STLForm, INFO, ERROR
-from itools.xapian import PhraseQuery
+from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
+from ikaaro.folder_views import Folder_BrowseContent
+from ikaaro.forms import TextWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
@@ -41,6 +43,70 @@ class ShopUser_Profile(STLView):
     access = 'is_allowed_to_edit'
     template = '/ui/shop/shop_user_profile.xml'
     title = MSG(u'My profile')
+
+
+class ShopUser_Manage(STLView):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Manage customer')
+
+    template = '/ui/shop/shop_user_manage.xml'
+
+    schema = {'name': String}
+
+    base_fields = ['gender', 'firstname', 'lastname', 'phone1',
+                  'phone2', 'user_language', 'email']
+
+    def get_namespace(self, resource, context):
+        root = context.root
+        # Get user
+        user = resource
+        # Get user class
+        shop = get_shop(resource)
+        user_class = shop.user_class
+        # Build namespace
+        namespace = {'user': {'base': {},
+                              'public': [],
+                              'private': []}}
+        # Base schema
+        for key in self.base_fields:
+            namespace['user']['base'][key] = user.get_property(key)
+        # Additional public schema
+        for widget in user_class.public_widgets:
+            namespace['user']['public'].append(
+              {'title': widget.title,
+               'value': user.get_property(widget.name)})
+        # Additional private schema
+        for widget in user_class.private_widgets:
+            namespace['user']['private'].append(
+              {'title': widget.title,
+               'value': user.get_property(widget.name)})
+        # Customer payments
+        payments = shop.get_resource('payments')
+        namespace['payments'] = payments.get_payments_informations(
+                                    context, user=user.name)
+        # Customer orders
+        namespace['orders'] = []
+        query = PhraseQuery('customer_id', user.name)
+        results = root.search(query)
+        nb_orders = 0
+        for brain in results.get_documents():
+            order = root.get_resource(brain.abspath)
+            nb_orders += 1
+            namespace['orders'].append(
+                  {'id': brain.name,
+                   'href': resource.get_pathto(order),
+                   'amount': order.get_property('total_price')})
+        namespace['nb_orders'] = nb_orders
+        # Customer addresses
+        namespace['addresses'] = []
+        addresses = shop.get_resource('addresses').handler
+        for record in addresses.search(user=user.name):
+            namespace['addresses'].append(
+                addresses.get_record_namespace(record.id))
+
+        return namespace
+
 
 
 class ShopUser_EditAccount(User_EditAccount):
@@ -240,3 +306,92 @@ class ShopUser_EditAddress(Addresses_EditAddress, RealRessource_Form):
 
     def get_real_resource(self, resource, context):
         return resource.get_resource('../../shop/addresses')
+
+
+####################################
+# Backoffice / Customers
+####################################
+
+class Customers_View(Folder_BrowseContent):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'View')
+
+    batch_msg1 = MSG(u"There is 1 customer")
+    batch_msg2 = MSG(u"There are {n} customers")
+
+    context_menus = []
+
+    table_actions = []
+
+    table_columns = [
+        ('name', MSG(u'Id')),
+        ('gender', MSG(u'Gender')),
+        ('firstname', MSG(u'Firstname')),
+        ('lastname', MSG(u'Lastname')),
+        ('email', MSG(u'Email')),
+        ]
+
+    search_template = '/ui/shop/products/products_view_search.xml'
+
+    search_schema = {
+        'name': String,
+        'firstname': Unicode,
+        'lastname': Unicode,
+        'email': String,
+        }
+
+    search_widgets = [
+        TextWidget('name', title=MSG(u'Id')),
+        TextWidget('firstname', title=MSG(u'Firstname')),
+        TextWidget('lastname', title=MSG(u'Lastname')),
+        TextWidget('email', title=MSG(u'Email')),
+        ]
+
+
+    def get_search_namespace(self, resource, context):
+        query = context.query
+        namespace = {'widgets': []}
+        for widget in self.search_widgets:
+            value = context.query[widget.name]
+            html = widget.to_html(self.search_schema[widget.name], value)
+            namespace['widgets'].append({'title': widget.title,
+                                         'html': html})
+        return namespace
+
+
+    def get_query_schema(self):
+        schema = Folder_BrowseContent.get_query_schema(self)
+        # Override the default values
+        schema['sort_by'] = String(default='name')
+        return schema
+
+
+    def get_items(self, resource, context, *args):
+        search_query = []
+        # Base query (search in folder)
+        users = resource.get_site_root().get_resource('users')
+        abspath = str(users.get_canonical_path())
+        search_query.append(PhraseQuery('parent_path', abspath))
+        # Search query
+        for key in self.search_schema.keys():
+            value = context.get_form_value(key)
+            if not value:
+                continue
+            search_query.append(PhraseQuery(key, value))
+        # Ok
+        return context.root.search(AndQuery(*search_query))
+
+
+
+    def get_item_value(self, resource, context, item, column):
+        item_brain, item_resource = item
+        if column == 'name':
+            name = item_brain.name
+            return name, name
+        elif column == 'gender':
+            return Civilite.get_value(item_resource.get_property('gender'))
+        return item_resource.get_property(column)
+
+
+

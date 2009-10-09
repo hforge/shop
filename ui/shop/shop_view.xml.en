@@ -4,48 +4,67 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <table cellpadding="0" cellspacing="0">
+  <h1>Shop control panel</h1>
+  <br/>
+
+  <table class="new-resource-thumb">
     <tr>
-      <td>
-        <img src="/ui/icons/48x48/website.png"/>
+      <td style="width: 48px" valign="top">
+        <a href="./products/"><img src="/ui/shop/images/bag_green.png"/></a>
       </td>
-      <td>
-        <h1>
-          Shop control panel
-        </h1>
+      <td valign="middle">
+        <a href="./products/">Manage products</a>
       </td>
     </tr>
   </table>
 
-  <p>
-    Welcome in your shop control panel !
-  </p>
-
-  <h2>
-    <img src="/ui/icons/16x16/state.png"/>
-    Shop management
-  </h2>
-    <ul>
-      <li>
-        <a href="./products/">Manage products</a>
-      </li>
-      <li>
-        <a href="./;customers">Manage customers</a>
-      </li>
-      <li>
-        <a href="./orders/">Manage orders</a>
-      </li>
-      <li>
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href="./categories/"><img src="/ui/icons/48x48/folder.png"/></a>
+      </td>
+      <td valign="middle">
         <a href="./categories/">Manage categories</a>
-      </li>
-      <li>
-        <a href="./payments/">Manage payments</a>
-      </li>
-    </ul>
+      </td>
+    </tr>
+  </table>
 
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href="./customers/"><img src="/ui/icons/48x48/card.png"/></a>
+      </td>
+      <td valign="middle">
+        <a href="./customers/">Manage customers</a>
+      </td>
+    </tr>
+  </table>
+
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href="./orders/"><img src="/ui/icons/48x48/tasks.png"/></a>
+      </td>
+      <td valign="middle">
+        <a href="./orders/">Manage orders</a>
+      </td>
+    </tr>
+  </table>
+
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href=";configure"><img src="/ui/icons/48x48/preferences.png"/></a>
+      </td>
+      <td valign="middle">
+        <a href=";configure">Configure shop</a>
+      </td>
+    </tr>
+  </table>
+
+  <div class="clear"/>
   <h2>
-    <img src="/ui/icons/16x16/state.png"/>
-    Configuration
+    Advance configuration
   </h2>
     <ul>
       <li>

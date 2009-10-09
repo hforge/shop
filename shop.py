@@ -36,13 +36,12 @@ from products.cross_selling import CrossSellingTable
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
 from shop_payments import ShopPayments
-from shop_views import Shop_CustomersView, Shop_CustomerManage
 from shop_views import Shop_Addresses, Shop_AddressesBook
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Barcode
-from user import ShopUser
+from user import ShopUser, Customers
 from utils import ShopFolder
 
 
@@ -51,7 +50,7 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20090910'
+    class_version = '20091008'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'orders', 'payments',
@@ -102,8 +101,6 @@ class Shop(ShopFolder):
     view = Shop_View()
     barcode = Barcode()
     configure = Shop_Configure()
-    customers = Shop_CustomersView()
-    customer_manage = Shop_CustomerManage()
 
     #------------------------------
     # 6 Steps for payment process
@@ -149,6 +146,9 @@ class Shop(ShopFolder):
         # Orders
         Orders._make_resource(Orders, folder, '%s/orders' % name,
                               title={'en': u'Orders'})
+        # Customers
+        Customers._make_resource(Customers, folder, '%s/customers' % name,
+                                 title={'en': u'Customers'})
         # Addresses
         Addresses._make_resource(Addresses, folder, '%s/addresses' % name,
                                  title={'en': u'Addresses'})
@@ -301,6 +301,11 @@ class Shop(ShopFolder):
                 handler.add_record({'title': Property(country, language='fr'),
                                     'zone': str(zones.index(zone)),
                                     'enabled': True})
+
+    def update_20091008(self):
+        if self.get_resource('customers', soft=True) is not None:
+            return
+        Customers.make_resource(Customers, self, 'customers')
 
 
 register_resource_class(Shop)

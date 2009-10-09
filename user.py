@@ -20,6 +20,7 @@ from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 
 # Import from ikaaro
+from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import SelectRadio, TextWidget
 from ikaaro.registry import register_resource_class
@@ -28,19 +29,37 @@ from ikaaro.user import User
 # Import from shop
 from addresses_views import Addresses_Book
 from datatypes import Civilite
-from user_views import ShopUser_Profile
+from user_views import ShopUser_Manage, ShopUser_Profile
 from user_views import ShopUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView
+from user_views import Customers_View
 from utils import get_shop
+
+
+class Customers(Folder):
+
+    class_id = 'customers'
+    class_views = ['view']
+
+    view = Customers_View()
+
+    def _get_resource(self, name):
+        site_root = self.get_site_root()
+        user = site_root.get_resource('/users/' + name, soft=True)
+        if user:
+            return ShopUser(user.metadata)
+        return Folder._get_resource(self, name)
+
 
 
 class ShopUser(User):
 
-    class_views = ['profile', 'addresses_book', 'edit_account',
+    class_views = ['manage', 'profile', 'addresses_book', 'edit_account',
                    'orders_view', 'edit_preferences', 'edit_password']
 
     # Views
+    manage = ShopUser_Manage()
     profile = ShopUser_Profile()
     edit_account = ShopUser_EditAccount()
 
@@ -83,6 +102,9 @@ class ShopUser(User):
         return merge_dicts(cls.base_schema, cls.public_schema)
 
 
+    def get_document_types(self):
+        return []
+
 
     def save_form(self, schema, form):
         for key in schema:
@@ -114,3 +136,4 @@ class ShopUser(User):
 
 
 register_resource_class(ShopUser)
+register_resource_class(Customers)

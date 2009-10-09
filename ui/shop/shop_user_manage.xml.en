@@ -5,7 +5,7 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
 
-  <a href="./;customers">« Go to the customers list</a>
+  <a href="/shop/customers/">« Go to the customers list</a>
 
   <table class="order-browse" style="width:300px;float:left">
     <thead>
@@ -19,6 +19,10 @@
     <tbody>
       <tr>
         <td valign="top">
+          <a href="./;edit_account">
+            <img src="/ui/icons/16x16/edit.png"
+              title="Edit customer account"/>
+          </a><br/>
           Gender: ${user/base/gender}<br/>
           Firstname: ${user/base/firstname}<br/>
           Lastname: ${user/base/lastname}<br/>
