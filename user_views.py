@@ -47,7 +47,7 @@ class ShopUser_Profile(STLView):
 
 class ShopUser_Manage(STLView):
 
-    access = 'is_allowed_to_edit'
+    access = 'is_admin'
     title = MSG(u'Manage customer')
 
     template = '/ui/shop/shop_user_manage.xml'
@@ -411,6 +411,8 @@ class Customers_View(Folder_BrowseContent):
 
 
 class AuthentificationLogs_View(Table_View):
+
+    access = 'is_allowed_to_add'
 
     columns = [
         ('user', MSG(u'user')),

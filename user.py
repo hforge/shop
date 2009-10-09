@@ -22,6 +22,7 @@ from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
 from itools.datatypes import String, Unicode, DateTime
 from itools.gettext import MSG
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -71,6 +72,7 @@ class Customers(Folder):
     view = Customers_View()
     last_connections = GoToSpecificDocument(
                         title=MSG(u'Last connections'),
+                        access='is_allowed_to_add',
                         specific_document='./authentification_logs')
 
 
@@ -82,9 +84,11 @@ class Customers(Folder):
 
 
     def _get_resource(self, name):
+        context = get_context()
+        is_admin = self.get_access_control().is_admin(context.user, self)
         site_root = self.get_site_root()
         user = site_root.get_resource('/users/' + name, soft=True)
-        if user:
+        if user and is_admin:
             return ShopUser(user.metadata)
         return Folder._get_resource(self, name)
 
