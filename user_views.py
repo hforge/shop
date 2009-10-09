@@ -330,6 +330,7 @@ class Customers_View(Folder_BrowseContent):
         ('firstname', MSG(u'Firstname')),
         ('lastname', MSG(u'Lastname')),
         ('email', MSG(u'Email')),
+        ('ctime', MSG(u'Registration Date')),
         ]
 
     search_template = '/ui/shop/products/products_view_search.xml'
@@ -361,10 +362,8 @@ class Customers_View(Folder_BrowseContent):
 
 
     def get_query_schema(self):
-        schema = Folder_BrowseContent.get_query_schema(self)
-        # Override the default values
-        schema['sort_by'] = String(default='name')
-        return schema
+        return merge_dicts(Folder_BrowseContent.get_query_schema(self),
+                           sort_by=String(default='ctime'))
 
 
     def get_items(self, resource, context, *args):
@@ -391,6 +390,10 @@ class Customers_View(Folder_BrowseContent):
             return name, name
         elif column == 'gender':
             return Civilite.get_value(item_resource.get_property('gender'))
+        elif column == 'ctime':
+            ctime = item_resource.get_property('ctime')
+            accept = context.accept_language
+            return format_datetime(ctime, accept)
         return item_resource.get_property(column)
 
 

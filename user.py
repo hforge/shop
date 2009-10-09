@@ -14,9 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from datetime import datetime
+
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import String, Unicode
+from itools.datatypes import String, Unicode, DateTime
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -57,6 +60,7 @@ class ShopUser(User):
 
     class_views = ['manage', 'profile', 'addresses_book', 'edit_account',
                    'orders_view', 'edit_preferences', 'edit_password']
+    class_version = '20091009'
 
     # Views
     manage = ShopUser_Manage()
@@ -75,6 +79,7 @@ class ShopUser(User):
 
     # Base schema / widgets
     base_schema = merge_dicts(User.get_metadata_schema(),
+                              ctime=DateTime,
                               gender=Civilite,
                               phone1=String,
                               phone2=String)
@@ -95,6 +100,11 @@ class ShopUser(User):
     # Additional private schema / widgets
     private_schema = {}
     private_widgets = []
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args, **kw):
+        ctime = datetime.now()
+        User._make_resource(cls, folder, name, ctime=ctime, *args, **kw)
 
 
     @classmethod
@@ -133,6 +143,12 @@ class ShopUser(User):
                         to_addr=self.get_property('email'),
                         subject=self.mail_subject_template,
                         text=self.mail_body_template)
+
+
+
+    def update_20091009(self):
+        from itools.vfs import get_ctime
+        self.set_property('ctime', get_ctime('%s.metadata' % self.handler.uri))
 
 
 register_resource_class(ShopUser)
