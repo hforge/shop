@@ -373,6 +373,7 @@ class Customers_View(Folder_BrowseContent):
 
     def get_query_schema(self):
         return merge_dicts(Folder_BrowseContent.get_query_schema(self),
+                           reverse=Boolean(default=True),
                            sort_by=String(default='ctime'))
 
 

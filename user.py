@@ -28,7 +28,7 @@ from itools.web import get_context
 from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import SelectRadio, TextWidget
-from ikaaro.registry import register_resource_class
+from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
 from ikaaro.user import User
 
@@ -151,6 +151,13 @@ class ShopUser(User):
         return merge_dicts(cls.base_schema, cls.public_schema)
 
 
+    def _get_catalog_values(self):
+        values = User._get_catalog_values(self)
+        values['ctime'] = self.get_property('ctime')
+        values['last_time'] = self.get_property('last_time')
+        return values
+
+
     def get_document_types(self):
         return []
 
@@ -195,3 +202,5 @@ class ShopUser(User):
 register_resource_class(ShopUser)
 register_resource_class(Customers)
 register_resource_class(AuthentificationLogs)
+
+register_field('last_time', DateTime(is_stored=True))
