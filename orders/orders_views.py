@@ -52,7 +52,7 @@ class OrdersView(Folder_BrowseContent):
         ('checkbox', None),
         ('numero', MSG(u'Order id')),
         ('customer', MSG(u'Customer')),
-        ('state', MSG(u'State')),
+        ('workflow_state', MSG(u'State')),
         ('payment_mode', MSG(u'Payment mode')),
         ('shipping', MSG(u'Shipping mode')),
         ('total_price', MSG(u'Total price')),
@@ -92,7 +92,7 @@ class OrdersView(Folder_BrowseContent):
             value = item_resource.get_property(column)
             accept = context.accept_language
             return format_datetime(value, accept=accept)
-        elif column == 'state':
+        elif column == 'workflow_state':
             state = item_resource.get_state()
             if state is None:
                 return MSG(u'Unknow')
