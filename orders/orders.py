@@ -20,7 +20,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.csv import Table as BaseTable
-from itools.datatypes import Boolean
+from itools.datatypes import Boolean, DateTime
 from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_date
@@ -249,6 +249,7 @@ class Order(WorkflowAware, ShopFolder):
     def _get_catalog_values(self):
         values = ShopFolder._get_catalog_values(self)
         values['customer_id'] = self.get_property('customer_id')
+        values['creation_datetime'] = self.get_property('creation_datetime')
         return values
 
 
@@ -356,6 +357,7 @@ class Orders(ShopFolder):
 
 # Register catalog fields
 register_field('customer_id', String(is_indexed=True))
+register_field('creation_datetime', DateTime(is_stored=True, is_indexed=True))
 
 # Register resources
 register_resource_class(Order)

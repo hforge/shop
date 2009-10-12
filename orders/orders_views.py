@@ -59,7 +59,7 @@ class OrdersView(Folder_BrowseContent):
         ('creation_datetime', MSG(u'Date and Time'))]
 
     query_schema = merge_dicts(Folder_BrowseContent.query_schema,
-                               sort_by=String(),
+                               sort_by=String(default='creation_datetime'),
                                reverse=Boolean(default=True))
 
 
