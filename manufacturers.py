@@ -83,7 +83,7 @@ class VirtualManufacturers(Manufacturers):
 
     def _get_resource(self, name):
         shop = get_shop(self)
-        manufacturer = shop.get_resource('manufacuters/%s' % name, soft=True)
+        manufacturer = shop.get_resource('manufacturers/%s' % name, soft=True)
         if manufacturer is None:
             return None
         # Build another instance with the same properties

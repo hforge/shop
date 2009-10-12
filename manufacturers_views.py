@@ -57,6 +57,7 @@ class Manufacturer_Add(NewInstance):
         name = form['name']
         # Create the resource
         shop = get_shop(resource)
+        resource = shop.get_resource('manufacturers')
         cls = shop.manufacturer_class
         child = cls.make_resource(cls, resource, name)
         # The metadata
