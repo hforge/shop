@@ -74,7 +74,13 @@ class Manufacturers_View(STLView):
 
     access = True
     title = MSG(u'View')
-    template = '/ui/shop/manufacturers_view.xml'
+
+    def get_template(self, resource, context):
+        from utils import get_shop
+        shop = get_shop(resource)
+        template = shop.shop_templates['manufacturers_view']
+        return resource.get_resource(template)
+
 
     def get_namespace(self, resource, context):
         from manufacturers import Manufacturer
@@ -94,7 +100,13 @@ class Manufacturer_View(STLView):
 
     access = True
     title = MSG(u'View')
-    template = '/ui/shop/manufacturer_view.xml'
+
+    def get_template(self, resource, context):
+        from utils import get_shop
+        shop = get_shop(resource)
+        template = shop.shop_templates['manufacturer_view']
+        return resource.get_resource(template)
+
 
     def get_namespace(self, resource, context):
         root = context.root
