@@ -45,7 +45,7 @@ class OrdersView(Folder_BrowseContent):
 
     # Configuration
     table_actions = []
-    search_template = None
+    search_template = '/ui/shop/orders/orders_search.xml'
 
     table_columns = [
         ('checkbox', None),
@@ -152,6 +152,9 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         addresses = shop.get_resource('addresses').handler
         # Build namespace
         namespace = {}
+        # Is payed
+        for key in ['is_payed', 'is_sent']:
+            namespace[key] = bool_to_img(resource.get_property(key))
         # States
         namespace['states_history'] = self.get_states_history(resource, context)
         namespace['transitions'] = SelectWidget('transition').to_html(Order_Transitions, None)
@@ -172,9 +175,9 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         # Delivery and shipping addresses
         get_address = addresses.get_record_namespace
         delivery_address = resource.get_property('delivery_address')
-        shipping_address = resource.get_property('bill_address')
+        bill_address = resource.get_property('bill_address')
         namespace['delivery_address'] = get_address(delivery_address)
-        namespace['shipping_address'] = get_address(shipping_address)
+        namespace['bill_address'] = get_address(bill_address)
         # Customer
         customer_id = resource.get_property('customer_id')
         user = root.get_user(customer_id)

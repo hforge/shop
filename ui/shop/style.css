@@ -460,7 +460,7 @@ input[type="image"]{
 
 .order-sub-browse thead th{
   height: 25px;
-  background: url('/ui/shop/images/table-back.png') repeat;
+  background-color: #A67322;
   color: #fff;
   padding: 4px 6px;
   text-align: left;
@@ -477,6 +477,12 @@ input[type="image"]{
   height:23px;
   padding: 4px;
   background-color: #FFF;
+}
+
+.order-hr{
+  border:0px;
+  border-bottom: 1px solid #AC7622;
+  clear:both;
 }
 
 /*****************
