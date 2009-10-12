@@ -48,7 +48,7 @@
     <tbody>
       <tr style="height:80px">
         <td valign="top">
-          <a target="_blank" href="../../;customer_manage?name=${customer/id}">
+          <a target="_blank" href="/shop/customers/${customer/id}">
           ${customer/title}<br/>
           ${customer/email}
           </a>
