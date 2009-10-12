@@ -19,8 +19,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
-from itools.xapian import PhraseQuery
-from itools.xml import XMLParser
+from itools.xapian import PhraseQuery, OrQuery
 from itools.web import ERROR, INFO, STLForm, FormError
 from itools.web.views import process_form
 from itools.workflow import WorkflowError
@@ -36,13 +35,13 @@ from shop.payments.enumerates import PaymentWaysEnumerate
 from shop.payments.payments_views import Payments_EditablePayment
 from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.datatypes import Civilite
-from shop.utils import get_shop
+from shop.utils import get_shop, bool_to_img
 
 
 class OrdersView(Folder_BrowseContent):
 
     access = 'is_admin'
-    title = MSG(u'Manage Orders')
+    title = MSG(u'Open orders')
 
     # Configuration
     table_actions = []
@@ -52,10 +51,8 @@ class OrdersView(Folder_BrowseContent):
         ('checkbox', None),
         ('numero', MSG(u'Order id')),
         ('customer', MSG(u'Customer')),
-        ('workflow_state', MSG(u'State')),
-        ('payment_mode', MSG(u'Payment mode')),
-        ('shipping', MSG(u'Shipping mode')),
         ('total_price', MSG(u'Total price')),
+        ('is_payed', MSG(u'Payed ?')),
         ('creation_datetime', MSG(u'Date and Time'))]
 
     query_schema = merge_dicts(Folder_BrowseContent.query_schema,
@@ -72,37 +69,57 @@ class OrdersView(Folder_BrowseContent):
         if column == 'numero':
             href = context.resource.get_pathto(item_resource)
             return (item_brain.name, href)
-        elif column == 'payment_mode':
-            payment_mode = item_resource.get_property('payment_mode')
-            return PaymentWaysEnumerate.get_value(payment_mode)
-        elif column == 'shipping':
-            shipping_mode = item_resource.get_property('shipping')
-            return ShippingWaysEnumerate.get_value(shipping_mode)
         elif column == 'customer':
             users = context.root.get_resource('users')
             customer_id = item_resource.get_property('customer_id')
             customer = users.get_resource(customer_id)
             gender = Civilite.get_value(customer.get_property('gender'))
             if gender is None:
-                return customer.get_title()
-            return '%s %s' % (gender.gettext(), customer.get_title())
+                title = customer.get_title()
+            else:
+                title = '%s %s' % (gender.gettext(), customer.get_title())
+            return title, '../customers/%s' % customer_id
+        elif column == 'is_payed':
+            return bool_to_img(item_resource.get_property('is_payed'))
         elif column == 'total_price':
             return '%s € ' % item_resource.get_property(column)
         elif column == 'creation_datetime':
             value = item_resource.get_property(column)
             accept = context.accept_language
             return format_datetime(value, accept=accept)
-        elif column == 'workflow_state':
-            state = item_resource.get_state()
-            if state is None:
-                return MSG(u'Unknow')
-            state = '<strong class="wf-order-%s">%s</strong>' % (
-                        item_resource.get_statename(),
-                        state['title'].gettext())
-            return XMLParser(state.encode('utf-8'))
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
 
+
+    def get_items(self, resource, context, *args):
+        args = list(args)
+        query = OrQuery(*[PhraseQuery('workflow_state', x) for x in
+                        ['open', 'payment_ok', 'preparation', 'payment_error']])
+        args.append(query)
+        return Folder_BrowseContent.get_items(self, resource, context, *args)
+
+
+class OrdersViewCanceled(OrdersView):
+
+    title = MSG(u'Canceled orders')
+
+    def get_items(self, resource, context, *args):
+        args = list(args)
+        args.append(PhraseQuery('workflow_state', 'cancel'))
+        return Folder_BrowseContent.get_items(self, resource, context, *args)
+
+
+
+class OrdersViewArchive(OrdersView):
+
+    title = MSG(u'Archives')
+
+    def get_items(self, resource, context, *args):
+        args = list(args)
+        args.append(OrQuery(
+                    PhraseQuery('workflow_state', 'delivery'),
+                    PhraseQuery('workflow_state', 'closed')))
+        return Folder_BrowseContent.get_items(self, resource, context, *args)
 
 
 class Order_Manage(Payments_EditablePayment, STLForm):

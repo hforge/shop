@@ -43,7 +43,7 @@ from shop.utils import get_shop
 # Import from shop.orders
 from messages import Messages_TableResource
 from orders_views import Order_Manage
-from orders_views import OrdersView
+from orders_views import OrdersView, OrdersViewCanceled, OrdersViewArchive
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
 from shop.utils import format_price, ShopFolder
@@ -248,8 +248,8 @@ class Order(WorkflowAware, ShopFolder):
 
     def _get_catalog_values(self):
         values = ShopFolder._get_catalog_values(self)
-        values['customer_id'] = self.get_property('customer_id')
-        values['creation_datetime'] = self.get_property('creation_datetime')
+        for key in ['customer_id', 'creation_datetime', 'is_payed']:
+            values[key] = self.get_property(key)
         return values
 
 
@@ -346,10 +346,13 @@ class Orders(ShopFolder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')
-    class_views = ['view']
+    class_views = ['view', 'view_canceled', 'view_archive']
 
     # Views
     view = OrdersView()
+    view_canceled = OrdersViewCanceled()
+    view_archive = OrdersViewArchive()
+
 
     def get_document_types(self):
         return []
@@ -357,6 +360,7 @@ class Orders(ShopFolder):
 
 # Register catalog fields
 register_field('customer_id', String(is_indexed=True))
+register_field('is_payed', Boolean(is_stored=True))
 register_field('creation_datetime', DateTime(is_stored=True, is_indexed=True))
 
 # Register resources

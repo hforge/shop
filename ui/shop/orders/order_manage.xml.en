@@ -61,7 +61,7 @@
 
 
   <!-- States -->
-  <table class="order-browse" style="float:left;">
+  <table class="order-browse" style="float:left;display:none;">
     <thead>
       <tr>
         <th>
