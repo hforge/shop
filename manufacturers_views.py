@@ -78,8 +78,10 @@ class Manufacturers_View(STLView):
 
     def get_namespace(self, resource, context):
         from manufacturers import Manufacturer
+        from utils import get_shop
         namespace = {'manufacturers': []}
-        for resource in resource.search_resources(cls=Manufacturer):
+        manufacturers = get_shop(resource).get_resource('manufacturers')
+        for resource in manufacturers.search_resources(cls=Manufacturer):
             namespace['manufacturers'].append(
               {'name': resource.name,
                'title': resource.get_title()})

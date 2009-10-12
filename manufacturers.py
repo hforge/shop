@@ -28,7 +28,7 @@ from ikaaro.registry import register_resource_class
 from manufacturers_views import Manufacturer_Add
 from manufacturers_views import manufacturer_schema, Manufacturers_View
 from manufacturers_views import Manufacturer_View, Manufacturer_Edit
-from utils import CurrentFolder_AddImage, get_shop
+from utils import CurrentFolder_AddImage, get_shop, ShopFolder
 
 
 
@@ -77,14 +77,17 @@ class Manufacturers(Folder):
 
 
 
-class VirtualManufacturers(Folder):
+class VirtualManufacturers(Manufacturers):
 
     class_id = 'virtual-manufacturers'
 
     def _get_resource(self, name):
-        manufacturer = get_shop(self).get_resource(name)
+        shop = get_shop(self)
+        manufacturer = shop.get_resource('manufacuters/%s' % name, soft=True)
+        if manufacturer is None:
+            return None
+        # Build another instance with the same properties
         return Manufacturer(manufacturer.metadata)
-
 
 # Register
 register_resource_class(Manufacturers)
