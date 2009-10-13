@@ -18,6 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import Email, Integer, String, Unicode, Boolean
 from itools.gettext import MSG
+from itools.i18n import format_datetime
 from itools.uri import get_reference
 from itools.web import INFO, ERROR, STLView, STLForm, BaseView, get_context
 from itools.xapian import AndQuery, PhraseQuery
@@ -314,6 +315,7 @@ class Products_View(Folder_BrowseContent):
         ('reference', MSG(u'Reference')),
         ('title', MSG(u'Title')),
         ('stored_price', MSG(u'Price (included VAT)')),
+        ('ctime', MSG(u'Creation Time')),
         ('mtime', MSG(u'Last Modified')),
         ('product_model', MSG(u'Product model')),
         ('workflow_state', MSG(u'State'))
@@ -393,6 +395,10 @@ class Products_View(Folder_BrowseContent):
             return item_resource.get_title(), path
         elif column == 'stored_price':
             return '%s €' % item_resource.get_price_with_tax(pretty=True)
+        elif column == 'ctime':
+            ctime = item_resource.get_property('ctime')
+            accept = context.accept_language
+            return format_datetime(ctime, accept)
         elif column == 'product_model':
             product_model = item_resource.get_property('product_model')
             return ProductModelsEnumerate.get_value(product_model)

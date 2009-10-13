@@ -173,8 +173,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         # Price # XXX We can't sort decimal, so transform to int
         values['stored_price'] = int(self.get_property('pre-tax-price') * 100)
         # Creation time
-        ctime = self.get_property('ctime')
-        values['ctime'] = ctime
+        values['ctime'] = self.get_property('ctime')
 
         return values
 
