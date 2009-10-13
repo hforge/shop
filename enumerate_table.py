@@ -205,7 +205,8 @@ class EnumerateTable_Handler(OrderedTableFile):
 
     record_schema = {
         'name': String(unique=True, is_indexed=True),
-        'title': Unicode(unique=True, mandatory=True, multiple=True),
+        'title': Unicode(unique=True, is_indexed=True,
+                  mandatory=True, multiple=True),
         }
 
 
