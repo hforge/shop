@@ -37,7 +37,7 @@ from products.cross_selling import CrossSellingTable
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
 from shop_payments import ShopPayments
-from shop_views import Shop_Addresses, Shop_AddressesBook
+from shop_views import Shop_Addresses, Shop_AddressesBook, Shop_Login
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
@@ -103,6 +103,8 @@ class Shop(ShopFolder):
     ####################################
     ## Views
     ####################################
+
+    login = Shop_Login()
 
     # Administrator shop views
     view = Shop_View()

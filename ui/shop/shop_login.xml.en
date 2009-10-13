@@ -14,7 +14,7 @@
 
   <h2>I'm already a customer</h2>
 
-  <form id="loginform" name="loginform" method="post">
+  <form id="loginform" name="loginform" method="post" action="./;login">
     <dl>
       <dt>
         <label for="username" class="${username/class}">E-mail Address</label>

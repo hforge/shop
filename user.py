@@ -60,7 +60,7 @@ class AuthentificationLogs(Table):
     view = AuthentificationLogs_View()
 
     def log_authentification(self, user):
-        self.handler.add_record({'user': user})
+        self.add_new_record({'user': user})
 
 
 

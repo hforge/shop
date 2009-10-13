@@ -343,13 +343,14 @@ class Shop_Login(STLForm):
         if user is None:
             message = ERROR(u'The user "{username}" does not exist.',
                             username=email)
-            context.message = message
-            return
+            goto = context.request.referrer
+            return context.come_back(message, goto)
 
         # Check the password is right
         if not user.authenticate(password):
-            context.message = ERROR(u'The password is wrong.')
-            return
+            message = ERROR(u'The password is wrong.')
+            goto = context.request.referrer
+            return context.come_back(message, goto)
 
         # We log authentification
         shop = get_shop(resource)
