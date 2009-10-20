@@ -67,7 +67,7 @@ class Manufacturers(Folder):
 
     class_id = 'manufacturers'
     class_title = MSG(u'Manufacturers')
-    class_views = ['view', 'add']
+    class_views = ['view', 'edit', 'add']
 
     view = Manufacturers_View()
     add = Manufacturer_Add()
