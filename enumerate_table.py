@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean, Enumerate, String, Unicode
+from itools.core import merge_dicts
+from itools.datatypes import Boolean, Enumerate, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.xapian import PhraseQuery
@@ -56,6 +57,11 @@ class EnumerateTable_View(OrderedTable_View):
 
     batch_msg1 = MSG(u"There is 1 item in your dynamic enumerate.")
     batch_msg2 = MSG(u"There are {n} items in your dynamic enumerate.")
+
+    query_schema = merge_dicts(
+        OrderedTable_View.query_schema,
+        batch_size=Integer(default=200))
+
 
     # TODO we desactivate deletion of property
     table_actions = OrderedTable_View.table_actions[1:]
