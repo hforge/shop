@@ -40,6 +40,7 @@ from user_views import ShopUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView
 from user_views import Customers_View, AuthentificationLogs_View
+from user_views import ShopUser_EditPrivateInformations
 from utils import get_shop
 
 
@@ -97,13 +98,15 @@ class Customers(Folder):
 class ShopUser(User):
 
     class_views = ['manage', 'profile', 'addresses_book', 'edit_account',
-                   'orders_view', 'edit_preferences', 'edit_password']
+                   'edit_private_informations', 'orders_view',
+                   'edit_preferences', 'edit_password']
     class_version = '20091009'
 
     # Views
     manage = ShopUser_Manage()
     profile = ShopUser_Profile()
     edit_account = ShopUser_EditAccount()
+    edit_private_informations = ShopUser_EditPrivateInformations()
 
     # Orders views
     orders_view = ShopUser_OrdersView()
@@ -148,7 +151,8 @@ class ShopUser(User):
 
     @classmethod
     def get_metadata_schema(cls):
-        return merge_dicts(cls.base_schema, cls.public_schema)
+        return merge_dicts(cls.base_schema,
+                  cls.public_schema, cls.private_schema)
 
 
     def _get_catalog_values(self):
@@ -163,11 +167,13 @@ class ShopUser(User):
 
 
     def save_form(self, schema, form):
+        shop = get_shop(self)
+        private_schema = shop.user_class.private_schema
         for key in schema:
             if key.startswith('password'):
                 continue
             elif (key not in self.get_metadata_schema() and
-                  key not in self.private_schema):
+                  key not in private_schema):
                 continue
             value = form[key]
             if value is None:

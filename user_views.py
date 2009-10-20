@@ -24,7 +24,7 @@ from itools.xapian import PhraseQuery, AndQuery
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import TextWidget
+from ikaaro.forms import TextWidget, AutoForm
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
@@ -115,6 +115,33 @@ class ShopUser_Manage(STLView):
                 addresses.get_record_namespace(record.id))
 
         return namespace
+
+
+class ShopUser_EditPrivateInformations(AutoForm):
+
+    access = 'is_admin'
+    title = MSG(u'Edit private user informations')
+
+    def get_schema(self, resource, context):
+        shop = get_shop(resource)
+        return shop.user_class.private_schema
+
+
+    def get_widgets(self, resource, context):
+        shop = get_shop(resource)
+        return shop.user_class.private_widgets
+
+
+    def get_value(self, resource, context, name, datatype):
+        return resource.get_property(name) or datatype.get_default()
+
+
+    def action(self, resource, context, form):
+        # Save changes
+        schema = self.get_schema(resource, context)
+        resource.save_form(schema, form)
+        # Message 
+        context.message = MSG_CHANGES_SAVED
 
 
 
