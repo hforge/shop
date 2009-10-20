@@ -54,6 +54,7 @@ class Manufacturer(Folder):
     view = Manufacturer_View()
     edit = Manufacturer_Edit()
     add_image = CurrentFolder_AddImage()
+    new_instance = Manufacturer_Add()
 
 
     @classmethod
