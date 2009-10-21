@@ -91,6 +91,8 @@ class Shop_ProductSearch(VirtualCategories_View):
         'category': Shop_CategoriesEnumerate(default='*'),
     }
 
+    context_menus = []
+
     nb_results = 0
 
     def get_query_schema(self):
