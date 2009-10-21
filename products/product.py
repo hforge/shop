@@ -431,6 +431,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def get_namespace(self, context):
+        root = context.root
         namespace = {'name': self.name}
         # Get basic informations
         abspath = context.resource.get_abspath()
@@ -440,8 +441,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                 continue
             namespace[key] = self.get_property(key)
         # Manufacturer
-        namespace['manufacturer'] = ManufacturersEnumerate.get_value(
-                                          self.get_property('manufacturer'))
+        manufacturer = root.get_resource(self.get_property('manufacturer'))
+        namespace['manufacturer'] = {'name': manufacturer.name,
+                                     'title': manufacturer.get_title()}
         # Price
         namespace['price-with-tax'] = self.get_price_with_tax(pretty=True)
         # Data
