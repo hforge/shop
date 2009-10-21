@@ -717,7 +717,7 @@ class Barcode(BaseView):
         from elaphe import barcode
         # Generate barcode
         reference = context.query['reference']
-        img = barcode(format, reference)
+        img = barcode(format, reference, options={'scale': 1, 'height': 0.5})
         # Format PNG
         f = StringIO()
         img.save(f, 'png')
