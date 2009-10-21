@@ -53,6 +53,7 @@ from shop.cart import ProductCart
 from shop.editable import Editable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
+from shop.manufacturers import ManufacturersEnumerate
 from shop.utils import get_shop, format_price, ShopFolder
 
 
@@ -392,11 +393,13 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         shop = get_shop(self)
         abspath = context.resource.get_abspath()
         title = self.get_property('title')
+        manufacturer = self.get_property('manufacturer')
         namespace = {
           'name': self.name,
           'title': title,
           'mini-title': reduce_string(title, shop.product_title_word_treshold),
           'href': abspath.get_pathto(self.get_virtual_path()),
+          'manufacturer': ManufacturersEnumerate.get_value(manufacturer),
           'price-with-tax': self.get_price_with_tax(pretty=True),
           'cover': self.get_cover_namespace(context)}
         for key in ['description', 'reference']:
@@ -436,6 +439,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             if key=='data':
                 continue
             namespace[key] = self.get_property(key)
+        # Manufacturer
+        namespace['manufacturer'] = ManufacturersEnumerate.get_value(
+                                          self.get_property('manufacturer'))
         # Price
         namespace['price-with-tax'] = self.get_price_with_tax(pretty=True)
         # Data
