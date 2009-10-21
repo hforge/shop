@@ -52,8 +52,8 @@
   <table class="order-sub-browse">
     <thead>
       <tr>
-        <th></th>
         <th>Reference</th>
+        <th>Cover</th>
         <th>Product</th>
         <th>Unit price HT</th>
         <th>Quantity</th>
@@ -63,10 +63,14 @@
     <tbody>
       <tr stl:repeat="product products">
         <td>
+          ${product/reference}<br/><br/>
           <img src="../../;barcode?reference=${product/reference}"
             stl:if="product/reference"/>
         </td>
-        <td>${product/reference}</td>
+        <td>
+          <img src="${product/cover/href}/;thumb?width=100&amp;height=100"
+            stl:if="product/cover"/>
+        </td>
         <td>
           <a href="${product/uri}" stl:omit-tag="not product/uri">
             ${product/title}

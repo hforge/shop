@@ -130,6 +130,9 @@ class OrdersProducts(Table):
             product_resource = products.get_resource(name, soft=True)
             if product_resource:
                 kw['uri'] = context.resource.get_pathto(product_resource)
+                kw['cover'] = product_resource.get_cover_namespace(context)
+            else:
+                kw['cover'] = None
             for key in BaseOrdersProducts.record_schema.keys():
                 kw[key] = get_value(record, key)
             # Get prices
