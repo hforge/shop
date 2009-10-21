@@ -41,7 +41,10 @@ def get_shop(resource):
 def format_price(price):
     if price._isinteger():
         return str(int(price))
-    return '%.2f' % price
+    price = '%.2f' % price
+    if price.endswith('.00'):
+        price = price.replace('.00', '')
+    return price
 
 
 class ShopFolder(Folder):
