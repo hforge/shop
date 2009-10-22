@@ -167,8 +167,7 @@ class ShopUser(User):
 
 
     def save_form(self, schema, form):
-        shop = get_shop(self)
-        private_schema = shop.user_class.private_schema
+        private_schema = self.private_schema
         for key in schema:
             if key.startswith('password'):
                 continue
