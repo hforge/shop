@@ -37,6 +37,7 @@ class Shippings(ShopFolder):
 
     class_id = 'shippings'
     class_title = MSG(u'Shipping')
+    class_version = '20091022'
     class_views = ['view', 'configure', 'history']
 
 
@@ -100,6 +101,21 @@ class Shippings(ShopFolder):
             else:
                 records.extend(history.handler.get_records())
         return records
+
+
+
+    def update_20091022(self):
+        site_root = self.get_site_root()
+        languages = site_root.get_property('website_languages')
+        for resource in self.traverse_resources():
+            title = resource.get_property('title')
+            description = resource.get_property('description')
+            resource.del_property('title')
+            resource.del_property('description')
+            for language in languages:
+                resource.set_property('title', title, language)
+                resource.set_property('description', description, language)
+
 
 
 register_resource_class(Shippings)

@@ -50,12 +50,17 @@ class ShippingWay_Configure(AutoForm):
 
 
     def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name)
+        language = resource.get_content_language(context)
+        return resource.get_property(name, language)
 
 
     def action(self, resource, context, form):
+        language = resource.get_content_language(context)
         for key in self.schema.keys():
-            resource.set_property(key, form[key])
+            if key in ['title', 'description']:
+                resource.set_property(key, form[key], language)
+            else:
+                resource.set_property(key, form[key])
         return context.come_back(messages.MSG_CHANGES_SAVED)
 
 
