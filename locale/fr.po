@@ -1253,7 +1253,7 @@ msgid ""
 "<g id='16'> I agree with the general sales conditions and hereby certified "
 "having read them. </g>  <g id='17'><g id='18'>(</g>Read<g id='19'>)</g></g>"
 msgstr ""
-"<g id='16'> Je suis d'accord avec les conditions d'utilisation et j'y adhère "
+"<g id='16'> Je suis d'accord avec les conditions générales de vente et j'y adhère "
 "sans condition. </g>  <g id='17'><g id='18'>(</g>Lire<g id='19'>)</g></g>"
 
 #: ../ui/shop/orders/order_manage.xml.en:100
@@ -3834,7 +3834,7 @@ msgstr "Conditions d'utilisations"
 #: ../ui/shop/shop_recapitulatif.xml.en:55
 msgctxt "heading"
 msgid "Terms of sales"
-msgstr "Conditions de vente"
+msgstr "Conditions générales de vente"
 
 #: ../shipping/colissimo.py:71
 msgid "The colissimo has been added"
