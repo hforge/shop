@@ -123,7 +123,16 @@ class Cart_View(STLView):
 class Cart_Viewbox(STLView):
 
     access = True
-    template = '/ui/shop/cart_viewbox.xml'
+    template = None
+
+    def get_template(self, resource, context):
+        if self.template:
+            template = self.template
+        else:
+            shop = get_shop(resource)
+            template = shop.shop_templates['cart_viewbox']
+        return resource.get_resource(template)
+
 
     def GET(self, resource, context):
         cart = ProductCart(context)
