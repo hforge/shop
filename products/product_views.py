@@ -89,7 +89,7 @@ class Product_NewProduct(NewInstance):
 
 class Product_View(Editable_View, STLForm):
 
-    access = True
+    access = 'is_allowed_to_view'
     title = MSG(u'View')
     template = None
     model_template = None
