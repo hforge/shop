@@ -54,6 +54,7 @@ product_schema = {# General informations
                   'is_buyable': Boolean(default=True),
                   'purchase-price': Decimal,
                   'pre-tax-price': Decimal(default=decimal(0), mandatory=True),
+                  'reduction': Decimal(default=decimal(0)),
                   'tax': TaxesEnumerate(mandatory=True),
                   # ctime,
                   'ctime': DateTime}

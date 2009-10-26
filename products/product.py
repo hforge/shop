@@ -301,6 +301,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def get_javascript_namespace(self, declinations):
+        # XXX
+        # We have to Add price without tax (Before and after reduction)
         manage_stock = self.get_stock_option() != 'accept'
         purchase_options_names = self.get_purchase_options_names()
         # Base product
@@ -313,8 +315,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         # Other products (declinations)
         for declination in declinations:
             stock_quantity = declination.get_quantity_in_stock()
+            price = self.get_price_with_tax(id_declination=declination.name)
             products[declination.name] = {
-              'price': format_price(declination.get_price_with_tax()),
+              'price': format_price(price),
               'weight': str(declination.get_weight()),
               'option': {},
               'stock': stock_quantity if manage_stock else None}
@@ -400,11 +403,25 @@ class Product(WorkflowAware, Editable, DynamicFolder):
           'mini-title': reduce_string(title, shop.product_title_word_treshold),
           'href': abspath.get_pathto(self.get_virtual_path()),
           'manufacturer': ManufacturersEnumerate.get_value(manufacturer),
+          'cover': self.get_cover_namespace(context),
+          # Price
           'price-with-tax': self.get_price_with_tax(pretty=True),
-          'cover': self.get_cover_namespace(context)}
+          'price': self.get_price_namespace()}
         for key in ['description', 'reference']:
             namespace[key] = self.get_property(key)
         return namespace
+
+
+    def get_price_namespace(self):
+        has_reduction = self.get_property('reduction') > decimal(0)
+        ns = {'with_tax': self.get_price_with_tax(pretty=True),
+              'without_tax':  self.get_price_without_tax(pretty=True),
+              'has_reduction': has_reduction}
+        if has_reduction:
+            kw = {'pretty': True, 'with_reduction': False}
+            ns['with_tax_before_reduction'] = self.get_price_with_tax(**kw)
+            ns['without_tax_before_reduction'] = self.get_price_with_tax(**kw)
+        return ns
 
 
     def get_cross_selling_namespace(self, context):
@@ -432,7 +449,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
     def get_namespace(self, context):
         root = context.root
-        namespace = {'name': self.name}
+        namespace = {'name': self.name,
+                     'price': self.get_price_namespace()}
         # Get basic informations
         abspath = context.resource.get_abspath()
         namespace['href'] = abspath.get_pathto(self.get_virtual_path())
@@ -588,20 +606,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         return self.get_property('reference')
 
 
-    def get_price_without_tax(self, id_declination=None, pretty=False):
-        if id_declination:
-            declination = self.get_resource(id_declination)
-            price = declination.get_price_without_tax()
-        else:
-            price = self.get_property('pre-tax-price')
-        if pretty is True:
-            return format_price(price)
-        return price
-
-
-    def get_price_with_tax(self, id_declination=None, pretty=False):
+    def get_tax_value(self):
         shop = get_shop(self)
-        price = self.get_price_without_tax(id_declination)
         # Get zone from cookie
         id_zone = ProductCart(get_context()).id_zone
         # If not define... get default zone
@@ -613,7 +619,31 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         if zones.get_record_value(zone_record, 'has_tax') is True:
             tax = self.get_property('tax')
             tax_value = TaxesEnumerate.get_value(tax) or decimal(0)
-            price = price * (tax_value/decimal(100) + 1)
+        return (tax_value/decimal(100) + 1)
+
+
+    def get_price_without_tax(self, id_declination=None,
+                               with_reduction=True, pretty=False):
+        if id_declination:
+            declination = self.get_resource(id_declination)
+            price = declination.get_price_without_tax()
+        else:
+            price = self.get_property('pre-tax-price')
+        # Reduction
+        if with_reduction is True:
+            price = price - self.get_property('reduction')
+        # Format price
+        if pretty is True:
+            return format_price(price)
+        return price
+
+
+    def get_price_with_tax(self, id_declination=None,
+                            with_reduction=True, pretty=False):
+        price = self.get_price_without_tax(id_declination,
+                    with_reduction=with_reduction)
+        price = price * self.get_tax_value()
+        # Format price
         if pretty is True:
             return format_price(price)
         return price

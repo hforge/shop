@@ -7,6 +7,8 @@
     Pre-tax retail price:<br/>
       <input type="text" id="pre-tax-price" name="pre-tax-price"
         value="${pre-tax-price}"/>€ <br/>
+    Reduction amount on pre-tax retail price:<br/>
+      <input type="text" id="reduction" name="reduction" value="${reduction}"/>€<br/>
     Final pre-tax retail price:<br/>
        <span style="font-weight:bold" id="final-pre-tax-price"></span> €<br/>
     Tax:<br/>
@@ -30,6 +32,9 @@
         $("#retail-price").keyup(function(){
           calculHTPrice()
         });
+        $("#reduction").keyup(function(){
+          calculTTCPrice();
+        });
         calculTTCPrice();
       });
       function getTax(){
@@ -43,6 +48,10 @@
       }
       function calculTTCPrice(){
         var price = parseFloat($("#pre-tax-price").val());
+        var reduction = parseFloat($("#reduction").val());
+        if(reduction){
+          price = price - reduction;
+        }
         var new_price = price * (getTax() + 1);
         setPrice('#tax-value', new_price - price);
         setPrice('#retail-price', new_price);

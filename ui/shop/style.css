@@ -505,3 +505,12 @@ input[type="image"]{
   float: left;
   padding: 4px;
 }
+
+
+#final-retail-price, #final-retail-price-reduction{
+  font-size: 30px;
+}
+
+.strikethrough{
+  text-decoration: line-through;
+}

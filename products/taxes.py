@@ -77,11 +77,14 @@ class PriceWidget(Widget):
         submit = (context.request.method == 'POST')
         if submit:
             tax_value = context.get_form_value('tax', type=TaxesEnumerate)
+            reduction = context.get_form_value('reduction', type=Decimal)
         else:
             tax_value = context.resource.get_property('tax')
+            reduction = context.resource.get_property('reduction')
         taxes = SelectWidget('tax', css='tax-widget', has_empty_option=False)
         # Return namespace
         return {'pre-tax-price': value,
+                'reduction': reduction,
                 'taxes': taxes.to_html(TaxesEnumerate, tax_value)}
 
 

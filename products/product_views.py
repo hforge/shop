@@ -611,16 +611,14 @@ class Product_DeclinationsView(Folder_BrowseContent):
             kw['barcode'] = XMLParser('<img src="%s/;barcode?reference=%s"/>' %
                                       (shop_uri, reference))
             # Price XXX To simplify (use declination API)
-            base_price = resource.get_property('pre-tax-price')
+            base_price = resource.get_price_without_tax(
+                            id_declination=declination.name, pretty=False)
             price_impact = declination.get_property('impact-on-price')
             price_value = declination.get_property('price-impact-value')
-            if price_impact == 'none':
-                kw['price'] = u'%s HT' % base_price
-            elif price_impact == 'increase':
-                kw['price'] = u'%s HT' % (base_price + price_value)
+            kw['price'] = u'%s HT' % base_price
+            if price_impact == 'increase':
                 kw['price'] += u' (+ %s €)' % price_value
             elif price_impact == 'decrease':
-                kw['price'] = u'%s HT' % (base_price - price_value)
                 kw['price'] += u' (- %s €)' % price_value
             # Weight
             base_weight = resource.get_property('weight')
