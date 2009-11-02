@@ -78,6 +78,9 @@ class Shop(ShopFolder):
     slider_thumb_size = (90, 90)
     slider_show_cover = True
 
+    # Categories class_views (Do not show compare by default)
+    categories_class_views = ['view']
+
     # Templates
 
     shop_templates = {

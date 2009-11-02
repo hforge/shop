@@ -191,6 +191,40 @@ class VirtualCategory(Category):
         return []
 
 
+    #####################################
+    ## XXX Hack to change class_views
+    ## To report in ikaaro
+    #####################################
+    def get_class_views(self):
+        shop = get_shop(self)
+        return shop.categories_class_views
+
+
+    def get_default_view_name(self):
+        views = self.get_class_views()
+        if not views:
+            return None
+        context = get_context()
+        user = context.user
+        ac = self.get_access_control()
+        for view_name in views:
+            view = getattr(self, view_name, None)
+            if ac.is_access_allowed(user, self, view):
+                return view_name
+        return views[0]
+
+
+    def get_views(self):
+        user = get_context().user
+        ac = self.get_access_control()
+        for name in self.get_class_views():
+            view_name = name.split('?')[0]
+            view = self.get_view(view_name)
+            if ac.is_access_allowed(user, self, view):
+                yield name, view
+
+
+
 class VirtualCategories(ShopFolder):
     """The Virtual Categories Folder allows to publish categories (and
     products) in a front-office without exposing the shop module which
