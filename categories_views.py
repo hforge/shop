@@ -38,49 +38,6 @@ from utils import get_shop
 from views import BrowseFormBatchNumeric
 
 
-class VirtualCategory_BoxSubCategories(STLView):
-
-    access = True
-    template = '/ui/shop/virtualcategory_boxsubcategories.xml'
-
-
-    def get_namespace(self, resource, context):
-        root = context.root
-        site_root = context.resource.get_site_root()
-        shop = get_shop(resource)
-
-        # get the category
-        namespace = {'title': resource.get_title(),
-                     'description': resource.get_property('description'),
-                     'sub_categories': []}
-
-        # Get sub categories
-        abspath = site_root.get_canonical_path()
-        base_query = [
-            get_base_path_query(str(abspath)),
-            PhraseQuery('format', shop.product_class.class_id),
-            PhraseQuery('workflow_state', 'public'),
-            ]
-        category_path = resource.get_unique_id()
-        for subcat in resource.search_resources(format='category'):
-            subcat_path = '%s/%s' % (category_path, subcat.name)
-            query = base_query + [PhraseQuery('categories', subcat_path)]
-            query = AndQuery(*query)
-            # Search inside the site_root
-            results = root.search(query)
-            nb_items = results.get_n_documents()
-            if nb_items:
-                namespace['sub_categories'].append(
-                            {'title': subcat.get_title(),
-                             'uri': context.get_link(subcat),
-                             'nb_items': nb_items})
-
-        # Sort by title
-        namespace['sub_categories'].sort(key=itemgetter('title'))
-
-        return namespace
-
-
 
 class VirtualCategory_View(BrowseFormBatchNumeric):
 

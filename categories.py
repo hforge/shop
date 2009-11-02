@@ -29,7 +29,6 @@ from ikaaro.utils import get_base_path_query
 
 # Import from shop
 from categories_views import VirtualCategories_View, Category_Edit
-from categories_views import VirtualCategory_BoxSubCategories
 from categories_views import VirtualCategory_Comparator, Categories_View
 from categories_views import VirtualCategory_View, VirtualCategory_ComparatorView
 from products import Product
@@ -151,7 +150,6 @@ class VirtualCategory(Category):
     # Views
     view = VirtualCategory_View()
     compare = VirtualCategory_ComparatorView()
-    view2 = VirtualCategory_BoxSubCategories() # XXX to remove
     comparator = VirtualCategory_Comparator()
 
     # XXX Back-office views can't apply
