@@ -19,7 +19,7 @@ from operator import itemgetter
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, PathDataType, String
+from itools.datatypes import Boolean, PathDataType, String, Integer
 from itools.gettext import MSG
 from itools.stl import stl, set_prefix
 from itools.web import STLView, get_context
@@ -115,7 +115,8 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
 
     def get_query_schema(self):
         shop = get_shop(get_context().resource)
-        return merge_dicts(Folder_BrowseContent.get_query_schema(self),
+        return merge_dicts(BrowseFormBatchNumeric.get_query_schema(self),
+                batch_size=Integer(default=shop.categories_batch_size),
                 sort_by=String(default=shop.get_property('shop_sort_by')),
                 reverse=Boolean(default=shop.get_property('shop_sort_reverse')))
 
