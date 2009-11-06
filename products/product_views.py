@@ -80,6 +80,7 @@ class Product_NewProduct(NewInstance):
         metadata.set_property('title', title, language=language)
         metadata.set_property('product_model', form['product_model'])
         metadata.set_property('categories', form['categories'])
+        metadata.set_property('state', 'private')
 
         goto = './%s/' % name
         return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
