@@ -20,7 +20,6 @@
 
 # Import from itools
 from itools.datatypes import Tokens
-from itools.web import get_context
 
 # Import from Shop
 from shop.utils import ShopFolder

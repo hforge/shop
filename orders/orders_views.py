@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Unicode, Integer
+from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.xapian import PhraseQuery, OrQuery
@@ -27,7 +27,6 @@ from itools.workflow import WorkflowError
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import SelectWidget
-from ikaaro.table_views import Table_View
 
 # Import from shop
 from workflow import Order_Transitions

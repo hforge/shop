@@ -14,9 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from itools
-from itools.web import get_context
-
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
 

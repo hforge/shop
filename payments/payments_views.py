@@ -21,7 +21,7 @@ from operator import itemgetter
 from itools.datatypes import String, Boolean, Integer, Decimal, Unicode
 from itools.gettext import MSG
 from itools.xml import XMLParser
-from itools.web import BaseView, BaseForm, ERROR, FormError, STLForm
+from itools.web import ERROR, FormError, STLForm
 from itools.web.views import process_form
 from itools.xapian import PhraseQuery
 

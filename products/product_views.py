@@ -16,11 +16,11 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Email, Integer, String, Unicode, Boolean
+from itools.datatypes import Email, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.uri import get_reference
-from itools.web import INFO, ERROR, STLView, STLForm, BaseView, get_context
+from itools.web import INFO, ERROR, STLView, STLForm, get_context
 from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
 
@@ -31,9 +31,8 @@ from ikaaro.buttons import PublishButton, RetireButton
 from ikaaro.exceptions import ConsistencyError
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
-from ikaaro.forms import BooleanCheckBox, BooleanRadio, SelectRadio
+from ikaaro.forms import SelectRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
-from ikaaro.registry import get_resource_class
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
 from ikaaro.views import CompositeForm
 from ikaaro.views_new import NewInstance

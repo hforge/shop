@@ -28,7 +28,7 @@ from ikaaro.forms import TextWidget, AutoForm
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
-from ikaaro.table_views import Table_EditRecord, Table_AddRecord, Table_View
+from ikaaro.table_views import Table_View
 
 # Import from shop
 from addresses_views import Addresses_EditAddress, Addresses_AddAddress

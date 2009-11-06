@@ -15,13 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.core import get_abspath, merge_dicts
+from itools.core import merge_dicts
 from itools.datatypes import String
 from itools.gettext import MSG
-from itools.web import STLView, STLForm
+from itools.web import STLForm
 
 # Import from ikaaro
-from ikaaro.forms import TextWidget, stl_namespaces
+from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class
 
 # Import from shop.shipping

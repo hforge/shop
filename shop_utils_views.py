@@ -18,7 +18,6 @@
 from decimal import Decimal as decimal
 
 # Import from itools
-from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import STLView, STLForm
 

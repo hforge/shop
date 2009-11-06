@@ -31,7 +31,6 @@ from ikaaro.utils import get_base_path_query
 from categories_views import VirtualCategories_View, Category_Edit
 from categories_views import VirtualCategory_Comparator, Categories_View
 from categories_views import VirtualCategory_View, VirtualCategory_ComparatorView
-from products import Product
 from utils import get_shop, ShopFolder
 from editable import Editable
 

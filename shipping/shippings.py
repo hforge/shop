@@ -16,7 +16,6 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Decimal
 from itools.gettext import MSG
 
 # Import from ikaaro

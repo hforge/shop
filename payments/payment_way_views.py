@@ -18,8 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import Unicode, PathDataType, Boolean, String
 from itools.gettext import MSG
-from itools.stl import stl
-from itools.web import STLView, STLForm, ERROR
+from itools.web import STLView
 from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro

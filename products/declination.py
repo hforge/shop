@@ -19,13 +19,12 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import String, Boolean, Integer, Unicode
+from itools.datatypes import String, Integer
 from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.folder import Folder
-from ikaaro.forms import TextWidget, SelectWidget, BooleanRadio, AutoForm
+from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.views_new import NewInstance

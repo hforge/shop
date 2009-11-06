@@ -18,22 +18,16 @@
 from operator import itemgetter
 
 # Import from itools
-from itools.datatypes import Boolean, Decimal, Unicode
 from itools.gettext import MSG
 from itools.xml import XMLParser
-from itools.web import STLView
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import AutoForm, TextWidget, BooleanCheckBox, MultilineWidget
+from ikaaro.forms import AutoForm
 from ikaaro.forms import RTEWidget, XHTMLBody
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.table_views import Table_View
 from ikaaro.views import BrowseForm
 
-# Import from shop
-from shipping_way import ShippingWay
-from schema import delivery_schema
 
 
 class Shippings_Configure(AutoForm):

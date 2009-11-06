@@ -24,14 +24,13 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate, DateTime
 from itools.datatypes import Integer
 from itools.gettext import MSG
-from itools.stl import stl
 from itools.uri import Path
 from itools.web import get_context
-from itools.xml import TEXT, XMLParser
+from itools.xml import TEXT
 
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import SelectWidget, stl_namespaces
+from ikaaro.forms import SelectWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.utils import reduce_string
 from ikaaro.workflow import WorkflowAware

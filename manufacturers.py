@@ -15,20 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Enumerate, PathDataType
+from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
-from ikaaro.forms import XHTMLBody
 from ikaaro.registry import register_resource_class
 
 # Import from shop
 from manufacturers_views import Manufacturer_Add
 from manufacturers_views import manufacturer_schema, Manufacturers_View
 from manufacturers_views import Manufacturer_View, Manufacturer_Edit
-from utils import CurrentFolder_AddImage, get_shop, ShopFolder
+from utils import CurrentFolder_AddImage, get_shop
 
 
 

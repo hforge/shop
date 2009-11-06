@@ -24,7 +24,7 @@ from itools.gettext import MSG
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import BooleanRadio, BooleanCheckBox, SelectWidget, TextWidget
-from ikaaro.forms import XHTMLBody, RTEWidget, FileWidget, get_default_widget
+from ikaaro.forms import XHTMLBody, RTEWidget, get_default_widget
 from ikaaro.forms import PathSelectorWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable, OrderedTableFile

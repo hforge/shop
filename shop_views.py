@@ -15,31 +15,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
-from copy import deepcopy
 from datetime import datetime
 from decimal import Decimal as decimal
 from cStringIO import StringIO
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Integer, Email, String, Unicode
+from itools.datatypes import Email, String, Unicode
 from itools.datatypes import Boolean, MultiLinesTokens
 from itools.gettext import MSG
-from itools.stl import stl
 from itools.uri import get_reference, get_uri_path
 from itools.web import BaseView, STLForm, STLView, ERROR, INFO
-from itools.xapian import PhraseQuery, AndQuery
-from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import AutoForm, SelectRadio, SelectWidget
-from ikaaro.forms import HiddenWidget, TextWidget, PasswordWidget
+from ikaaro.forms import SelectRadio, SelectWidget
+from ikaaro.forms import TextWidget, PasswordWidget
 from ikaaro.forms import MultilineWidget, ImageSelectorWidget
 from ikaaro.forms import BooleanRadio
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.resource_views import DBResource_Edit
-from ikaaro.table_views import Table_AddRecord, Table_EditRecord
 from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
 
@@ -53,7 +47,6 @@ from enumerates import BarcodesFormat, SortBy_Enumerate
 from utils import get_shop, format_price
 from cart import ProductCart
 from countries import CountriesEnumerate, CountriesZonesEnumerate
-from datatypes import Civilite
 from orders import Order
 from payments import PaymentWaysEnumerate
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form

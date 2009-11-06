@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, Enumerate, String, Unicode, Integer
+from itools.datatypes import Enumerate, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.xapian import PhraseQuery
@@ -29,7 +29,7 @@ from ikaaro.forms import TextWidget, SelectWidget, HiddenWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.table_views import OrderedTable_View
-from ikaaro.table_views import Table_AddRecord, Table_View, Table_EditRecord
+from ikaaro.table_views import Table_AddRecord, Table_EditRecord
 
 # Import from shop
 from utils import get_shop
