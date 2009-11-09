@@ -161,7 +161,7 @@ class ShopUser_EditAccount(User_EditAccount):
 
 
     def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name) or datatype.get_default()
+        return resource.get_property(name)
 
 
     def action(self, resource, context, form):
