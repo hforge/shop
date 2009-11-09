@@ -19,13 +19,23 @@
 #######################################
 
 # Import from itools
-from itools.datatypes import Tokens
+from itools.datatypes import String, Tokens
+
+# Import from ikaaro
+from ikaaro.registry import get_register_fields
+from ikaaro.registry import register_field
 
 # Import from Shop
+from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.utils import ShopFolder
 
 
 class DynamicFolder(ShopFolder):
+
+
+    def get_dynamic_schema(self):
+        return {}
+
 
     def get_property_and_language(self, name, language=None):
         value, language = ShopFolder.get_property_and_language(self, name,
@@ -90,3 +100,19 @@ class DynamicFolder(ShopFolder):
         if getattr(datatype, 'multilingual', False):
             return ShopFolder.set_property(self, name, value, language)
         return ShopFolder.set_property(self, name, value)
+
+
+
+    def _get_catalog_values(self):
+        values = ShopFolder._get_catalog_values(self)
+        register_fields = get_register_fields()
+        for key, datatype in self.get_dynamic_schema().items():
+            # We index dynamic properties that correspond to
+            # an EnumerateTable datatype.
+            # So we are able to know if enumerate value is used or not
+            if issubclass(datatype, EnumerateTable_to_Enumerate) is True:
+                register_key = 'dynamic_enumerate_%s' % datatype.enumerate_name
+                if register_key not in register_fields:
+                    register_field(register_key, String(is_indexed=True))
+                values[register_key] = self.get_property(key)
+        return values

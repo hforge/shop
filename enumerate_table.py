@@ -27,12 +27,22 @@ from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import TextWidget, SelectWidget, HiddenWidget
 from ikaaro.registry import register_resource_class
+from ikaaro.registry import get_register_fields, register_field
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.table_views import OrderedTable_View
 from ikaaro.table_views import Table_AddRecord, Table_EditRecord
 
 # Import from shop
 from utils import get_shop
+
+
+def register_dynamic_enumerates(enumerates_folder):
+    register_fields = get_register_fields()
+    for enum in enumerates_folder.get_resources():
+        register_key = 'dynamic_enumerate_%s' % enum.name
+        if register_key not in register_fields:
+            register_field(register_key, String(is_indexed=True))
+
 
 
 class Enumerate_ListEnumerateTable(Enumerate):
@@ -53,7 +63,8 @@ class EnumerateTable_View(OrderedTable_View):
     base_columns = [
         ('checkbox', None),
         ('title', MSG(u'Title')),
-        ('order', MSG(u'Order'))]
+        ('order', MSG(u'Order')),
+        ('count', MSG(u'Count'))]
 
     batch_msg1 = MSG(u"There is 1 item in your dynamic enumerate.")
     batch_msg2 = MSG(u"There are {n} items in your dynamic enumerate.")
@@ -75,6 +86,15 @@ class EnumerateTable_View(OrderedTable_View):
             get_value = resource.handler.get_record_value
             return (get_value(item, 'title'),
                     ';edit_record?id=%s' % item.id)
+        elif column == 'count':
+            get_value = resource.handler.get_record_value
+            name = get_value(item, 'name')
+            query = PhraseQuery('dynamic_enumerate_%s' % resource.name, name)
+            try:
+                return context.root.search(query).get_n_documents()
+            except KeyError:
+                register_dynamic_enumerates(resource.parent)
+                return context.root.search(query).get_n_documents()
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
 
