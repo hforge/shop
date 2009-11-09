@@ -20,7 +20,7 @@ from itools.datatypes import Enumerate, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.xapian import PhraseQuery
-from itools.web import get_context
+from itools.web import get_context, INFO, ERROR
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -74,9 +74,6 @@ class EnumerateTable_View(OrderedTable_View):
         batch_size=Integer(default=200))
 
 
-    # TODO we desactivate deletion of property
-    table_actions = OrderedTable_View.table_actions[1:]
-
     def get_table_columns(self, resource, context):
         return self.base_columns
 
@@ -98,48 +95,36 @@ class EnumerateTable_View(OrderedTable_View):
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
 
-# TODO
-#    def action_remove(self, resource, context, form):
-#        """If we delete an item in an Enumerate,
-#           we have to delete the property of products that
-#           value correspond to the enumerate value we delete.
-#        """
-#        ids = form['ids']
-#        properties = []
-#        schema_handler = resource.parent.get_resource('schema').handler
-#        handler = resource.handler
-#        get_value = handler.get_record_value
-#        for id in ids:
-#            # Get value of record
-#            record = handler.get_record(id)
-#            record_value = get_value(record, 'name')
-#            # We search the names of the dynamic properties that
-#            # references to the current enumerate
-#            for record in schema_handler.search(
-#                            PhraseQuery('enumerate', resource.name)):
-#                property_name = schema_handler.get_record_value(records[0], 'name')
-#                # We memorize the values we have to search in products
-#                properties.append((property_name, record_value))
-#            # We delete value in the table
-#            resource.handler.del_record(id)
-#        # Search products
-#        root = context.root
-#        site_root = resource.get_site_root()
-#        abspath = site_root.get_canonical_path()
-#        product_model = resource.parent
-#        query = AndQuery(get_base_path_query(str(abspath)),
-#                         PhraseQuery('product_model', product_model.name))
-#        results = root.search(query)
-#        for doc in results.get_documents():
-#            product = root.get_resource(doc.abspath)
-#            for name, value in properties:
-#                # We delete properties if value is the same
-#                # that the value we wants to remove
-#                if value == product.get_property(name):
-#                    product.del_property(name)
-#        # Reindex the resource
-#        context.server.change_resource(resource)
-#        context.message = INFO(u'Record deleted.')
+
+    def action_remove(self, resource, context, form):
+        """If we delete an item in an Enumerate,
+           we have to delete the property of products that
+           value correspond to the enumerate value we delete.
+        """
+        ids = form['ids']
+        properties = []
+        handler = resource.handler
+        get_value = handler.get_record_value
+        for id in ids:
+            # Get value of record
+            record = handler.get_record(id)
+            record_value = get_value(record, 'name')
+            title = get_value(record, 'title')
+            # References ?
+            query = PhraseQuery('dynamic_enumerate_%s' % resource.name,
+                                record_value)
+            nb_references = context.root.search(query).get_n_documents()
+            if nb_references > 0:
+                context.commit = False
+                context.message = ERROR(u"You can't delete value '%s'" % title)
+                return
+            # We delete record
+            resource.handler.del_record(id)
+        # Reindex the resource
+        context.server.change_resource(resource)
+        context.message = INFO(u'Record deleted.')
+
+
 
 
 class Restricted_EnumerateTable_to_Enumerate(Enumerate):
