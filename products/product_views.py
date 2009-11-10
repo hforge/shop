@@ -46,6 +46,7 @@ from widgets import BarcodeWidget, MiniProductWidget, StockProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
+from shop.suppliers import SuppliersEnumerate
 from shop.utils import get_shop, ChangeCategoryButton
 
 
@@ -405,6 +406,11 @@ class Products_View(Folder_BrowseContent):
         elif column == 'product_model':
             product_model = item_resource.get_property('product_model')
             return ProductModelsEnumerate.get_value(product_model)
+        elif column == 'stock-quantity':
+            return item_resource.get_property('stock-quantity')
+        elif column == 'supplier':
+            supplier = item_resource.get_property('supplier')
+            return SuppliersEnumerate.get_value(supplier)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
 
@@ -421,6 +427,25 @@ class Products_View(Folder_BrowseContent):
         uri = '%s/;change_category?%s' % (context.get_link(resource), ids_list)
         return get_reference(uri)
 
+
+
+class Products_Stock(Products_View):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Manage stock')
+
+    search_template = None
+    table_actions = []
+
+    table_columns = [
+        ('checkbox', None),
+        ('barcode', None),
+        ('cover', MSG(u'Cover')),
+        ('reference', MSG(u'Reference')),
+        ('supplier', MSG(u'Supplier')),
+        ('title', MSG(u'Title')),
+        ('stock-quantity', MSG(u'Stock quantity')),
+        ]
 
 
 

@@ -45,7 +45,7 @@ from product_views import Product_View, Product_Edit, Product_AddLinkFile
 from product_views import Product_Delete, Product_ImagesSlider
 from product_views import Product_Print, Product_SendToFriend
 from product_views import Product_Declinations, Products_ChangeCategory
-from product_views import Product_ChangeProductModel
+from product_views import Product_ChangeProductModel, Products_Stock
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
@@ -808,10 +808,11 @@ class Products(ShopFolder):
 
     class_id = 'products'
     class_title = MSG(u'Products')
-    class_views = ['browse_content', 'new_product']
+    class_views = ['browse_content', 'stock', 'new_product']
 
     # Views
     browse_content = Products_View()
+    stock = Products_Stock()
     new_product = Product_NewProduct()
     change_category = Products_ChangeCategory()
 
