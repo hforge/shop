@@ -42,6 +42,7 @@ from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Barcode
+from suppliers import Suppliers, Supplier
 from user import ShopUser, Customers
 from utils import ShopFolder
 
@@ -51,7 +52,7 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20091009'
+    class_version = '20091110'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'customers',
@@ -103,6 +104,7 @@ class Shop(ShopFolder):
     manufacturer_class = Manufacturer
     product_class = Product
     payments_class = ShopPayments
+    supplier_class = Supplier
     user_class = ShopUser
     virtual_category_class = VirtualCategory
 
@@ -155,6 +157,9 @@ class Shop(ShopFolder):
         # Manufacturers
         Manufacturers._make_resource(Manufacturers, folder,
                       '%s/manufacturers' % name, title={'en': u'Manufacturers'})
+        # Suppliers
+        Suppliers._make_resource(Suppliers, folder,
+                      '%s/suppliers' % name, title={'en': u'Suppliers'})
         # Products
         Products._make_resource(Products, folder, '%s/products' % name,
                                 title={'en': u'Products'})
@@ -330,6 +335,13 @@ class Shop(ShopFolder):
         if self.get_resource('manufacturers', soft=True) is not None:
             return
         Manufacturers.make_resource(Manufacturers, self, 'manufacturers')
+
+
+    def update_20091110(self):
+        if self.get_resource('suppliers', soft=True) is not None:
+            return
+        Suppliers.make_resource(Suppliers, self, 'suppliers')
+
 
 
 register_resource_class(Shop)

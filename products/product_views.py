@@ -184,6 +184,8 @@ class Product_Edit(Editable_Edit, AutoForm):
         BarcodeWidget('reference', title=MSG(u'Reference')),
         SelectWidget('manufacturer',
                      title=MSG(u'Manufacturer / Creator')),
+        SelectWidget('supplier',
+                     title=MSG(u'Supplier')),
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Keywords')),

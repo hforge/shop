@@ -50,17 +50,6 @@
   <table class="new-resource-thumb">
     <tr>
       <td style="width: 48px" valign="top">
-        <a href="./manufacturers/"><img src="/ui/icons/48x48/languages.png"/></a>
-      </td>
-      <td valign="middle">
-        <a href="./manufacturers/">Manage manufacturers / creators</a>
-      </td>
-    </tr>
-  </table>
-
-  <table class="new-resource-thumb">
-    <tr>
-      <td style="width: 48px" valign="top">
         <a href="./orders/"><img src="/ui/icons/48x48/tasks.png"/></a>
       </td>
       <td valign="middle">
@@ -76,6 +65,28 @@
       </td>
       <td valign="middle">
         <a href=";configure">Configure shop</a>
+      </td>
+    </tr>
+  </table>
+
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href="./manufacturers/"><img src="/ui/icons/48x48/languages.png"/></a>
+      </td>
+      <td valign="middle">
+        <a href="./manufacturers/">Manage manufacturers / creators</a>
+      </td>
+    </tr>
+  </table>
+
+  <table class="new-resource-thumb">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href="./suppliers/"><img src="/ui/icons/48x48/languages.png"/></a>
+      </td>
+      <td valign="middle">
+        <a href="./suppliers/">Manage suppliers</a>
       </td>
     </tr>
   </table>
