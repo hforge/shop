@@ -41,10 +41,10 @@ class BrowseFormBatchNumeric(Folder_BrowseContent):
 
         # Message (singular or plural)
         total = len(items)
-        if total > 1:
-            namespace['msg'] = self.batch_msg2.gettext(n=total)
+        if total == 1:
+            namespace['msg'] = self.batch_msg1.gettext()
         else:
-            namespace['msg'] = self.batch_msg1.gettext(n=total)
+            namespace['msg'] = self.batch_msg2.gettext(n=total)
 
         # Add start & end value in namespace
         namespace['start'] = batch_start + 1
