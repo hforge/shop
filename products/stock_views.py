@@ -20,6 +20,14 @@ from itools.gettext import MSG
 from itools.web import ERROR, INFO, STLForm
 
 
+class Stock_Resupply(STLForm):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Resupply stock')
+    template = '/ui/shop/stock/resupply.xml'
+
+
+
 class Stock_FillStockOut(STLForm):
 
     access = 'is_allowed_to_edit'

@@ -47,7 +47,7 @@ from product_views import Product_Print, Product_SendToFriend
 from product_views import Product_Declinations, Products_ChangeCategory
 from product_views import Product_ChangeProductModel, Products_Stock
 from schema import product_schema
-from stock_views import Stock_FillStockOut
+from stock_views import Stock_FillStockOut, Stock_Resupply
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
 from shop.editable import Editable
@@ -815,6 +815,7 @@ class Products(ShopFolder):
     browse_content = Products_View()
     stock = Products_Stock()
     stock_out = Stock_FillStockOut()
+    stock_resupply = Stock_Resupply()
     new_product = Product_NewProduct()
     change_category = Products_ChangeCategory()
 
