@@ -49,9 +49,11 @@ product_schema = {# General informations
                   'supplier': SuppliersEnumerate,
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True, mandatory=True),
-                  # Stock
+                  # Manage stock
                   'stock-quantity': Integer(default=0, mandatory=True),
                   'stock-option': StockOptions(mandatory=True, default='accept'),
+                  'resupply-quantity': Integer(default=0),
+                  'sold-quantity': Integer(default=0),
                   # Price
                   'is_buyable': Boolean(default=True),
                   'purchase-price': Decimal,
