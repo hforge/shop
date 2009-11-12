@@ -19,7 +19,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import String, Integer
+from itools.datatypes import String, Unicode, Integer
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -38,6 +38,7 @@ from taxes import TaxesEnumerate
 
 
 declination_schema = {'reference': String,
+                      'title': Unicode,
                       'stock-quantity': Integer,
                       'impact-on-price': DeclinationImpact,
                       'price-impact-value': Integer,
@@ -47,6 +48,7 @@ declination_schema = {'reference': String,
 
 declination_widgets = [
     TextWidget('reference', title=MSG(u'Reference')),
+    TextWidget('title', title=MSG(u'Title')),
     TextWidget('stock-quantity', title=MSG(u'Stock quantity')),
     SelectWidget('impact-on-price', has_empty_option=False, title=MSG(u'Impact on price')),
     TextWidget('price-impact-value', title=MSG(u'Price impact value')),

@@ -604,6 +604,7 @@ class Product_DeclinationsView(Folder_BrowseContent):
             ('name', MSG(u'Name')),
             ('barcode', None),
             ('reference', MSG(u'Reference')),
+            ('title', MSG(u'Title')),
             ('stock-quantity', MSG(u'Stock quantity')),
             ('price', MSG(u'Price (HT)')),
             ('weight', MSG(u'Weight'))]
@@ -626,7 +627,8 @@ class Product_DeclinationsView(Folder_BrowseContent):
         for declination in resource.search_resources(cls=Declination):
             name = declination.name
             kw = {'checkbox': (name, True),
-                  'name': (name, name)}
+                  'name': (name, name),
+                  'title': declination.get_property('title')}
             for key in ['reference', 'stock-quantity']:
                 kw[key] = declination.get_property(key)
             for name, datatype in declination.get_dynamic_schema().items():
