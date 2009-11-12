@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h1>Update stock</h1>
+
+  <form method="POST">
+
+    <table border="0" class="order-browse">
+      <thead>
+        <tr>
+          <th>
+            <img src="/ui/icons/16x16/add.png"
+              onclick="add_line()"/>
+          </th>
+          <th>Reference</th>
+          <th>Stock</th>
+          <!--<th></th>-->
+          <th>New stock</th>
+          <th style="width:200px">Product</th>
+        </tr>
+      </thead>
+      <!-- Model line -->
+      <tr id="model-line" style="display:none" class="line">
+        <td>#numero#</td>
+        <td>
+          <input type="text" id="reference_#numero#" name="reference_#numero#"
+            onchange="check_line('#numero#');"/>
+        </td>
+        <td>
+          <input type="text" id="stock_#numero#" name="stock_#numero#" value="0" size="6" disabled="disabled"/>
+        </td>
+        <!--
+        <td>
+          <input type="text" name="quantity_#numero#" size="6" value="0"/>
+        </td>
+        -->
+        <td>
+          <input type="text" name="new_stock_#numero#" size="6" value="0"/>
+        </td>
+        <td id="link_#numero#"/>
+      </tr>
+      <!-- End model line -->
+    </table>
+
+    <p>
+      <input type="hidden" id="references_number" name="references_number"/>
+      <input type="submit" class="button-ok" name="validate" value="Update stock"/>
+    </p>
+  </form>
+
+  <script>
+    <![CDATA[
+    $(document).ready(function() {
+      add_lines(5);
+      $("#reference_1").focus();
+    });
+
+
+    function add_lines(q){
+      for (i=0; i<q; i++) {
+        add_line();
+      }
+    }
+    function add_line(){
+      var nb_lines = $(".line").size();
+      var model_line = $("#model-line").clone();
+      model_line.show();
+      var html = model_line.html().replace(new RegExp('#numero#', 'g'), nb_lines);
+      model_line.html(html);
+      model_line.insertAfter($("tr:last"));
+      $("#references_number").val(nb_lines);
+    }
+
+    function check_line(id_line){
+      var nb_lines = $(".line").size() - 1;
+      var reference = $('#reference_' + id_line).val();
+      if(id_line==nb_lines){
+        add_lines(5);
+      }
+      $.getJSON('/shop/;get_product_stock?reference=' + reference,
+        function(data){
+          if(data.exist){
+            var link = '<a href="'+ data.href + '">'+ data.title + '</a>';
+            $("#link_"+ id_line).html(link);
+            $("#stock_"+ id_line).val(data.stock_quantity);
+            $("#new_quantity_"+ id_line).val(data.stock_quantity);
+          }else{
+            var link = '<img src="/ui/icons/16x16/error.png"/>'
+            $("#link_"+ id_line).html(link);
+            $("#reference_"+ id_line).val('');
+          }
+      });
+    }
+    ]]>
+  </script>
+
+</stl:block>

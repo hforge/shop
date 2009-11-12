@@ -15,9 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
+from cStringIO import StringIO
 from datetime import datetime
 from decimal import Decimal as decimal
-from cStringIO import StringIO
+from json import dumps
 
 # Import from itools
 from itools.core import merge_dicts
@@ -680,10 +681,33 @@ class Shop_AddAddressProgress(RealRessource_Form, CompositeForm):
         return resource.get_resource('addresses')
 
 
+
+class Shop_GetProductStock(BaseView):
+
+    access = 'is_allowed_to_edit'
+    query_schema = {'reference': String}
+
+    def GET(self, resource, context):
+        response = context.response
+        response.set_header('Content-Type', 'text/plain')
+        root = context.root
+        results = root.search(reference=context.query['reference'])
+        if results:
+            documents = results.get_documents()
+            product = root.get_resource(documents[0].abspath)
+            kw = {'exist': True,
+                  'title': product.get_title(),
+                  'href': context.get_link(product),
+                  'stock_quantity': product.get_property('stock-quantity')}
+        else:
+            kw = {'exist': False}
+        return dumps(kw)
+
+
+
 class Barcode(BaseView):
 
     access = 'is_allowed_to_edit'
-
     query_schema = {'reference': String}
 
     def GET(self, resource, context):
