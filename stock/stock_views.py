@@ -17,7 +17,15 @@
 # Import from itools
 from itools.datatypes import Integer, String
 from itools.gettext import MSG
+from itools.i18n import format_date
+from itools.pdf import stl_pmltopdf
 from itools.web import ERROR, INFO, STLForm
+
+# Import from ikaaro
+#from ikaaro.file import PDF
+
+# Import from shop
+from shop.suppliers import SuppliersEnumerate
 
 
 class Stock_Resupply(STLForm):
@@ -26,6 +34,44 @@ class Stock_Resupply(STLForm):
     title = MSG(u'Resupply stock')
     template = '/ui/shop/stock/resupply.xml'
 
+    def get_namespace(self, resource, context):
+        root = context.root
+        namespace = {'lines': []}
+        format = resource.parent.product_class.class_id
+        search = root.search(format=format)
+        for i, brain in enumerate(search.get_documents()):
+            product = root.get_resource(brain.abspath)
+            # XXX By default we take first supplier
+            suppliers = product.get_property('supplier')
+            supplier = suppliers[0] if suppliers else '-'
+            kw = {'id': i+1,
+                  'reference': product.get_property('reference'),
+                  'title': product.get_title(),
+                  'href': context.get_link(product),
+                  'supplier': SuppliersEnumerate.get_value(supplier),
+                  'stock_quantity': product.get_property('stock-quantity'),
+                  'new_stock': product.get_property('stock-quantity') +5}
+            namespace['lines'].append(kw)
+        return namespace
+
+
+    def action(self, resource, context):
+        self.generate_pdf_resupply(context)
+
+
+    def generate_pdf_resupply(self, context):
+        accept = context.accept_language
+        creation_date = self.get_property('creation_datetime')
+        creation_date = format_date(creation_date, accept=accept)
+        # Delete old bill
+        if self.get_resource('bill', soft=True):
+            self.del_resource('bill')
+        document = self.get_resource('/ui/shop/stock/pdf_resupply.xml')
+        namespace =  {'creation_date': creation_date}
+        pdf = stl_pmltopdf(document, namespace=namespace)
+        #metadata =  {'title': {'en': u'Bill'}}
+        #PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
+        return pdf
 
 
 class Stock_FillStockOut(STLForm):

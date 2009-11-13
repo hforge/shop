@@ -47,13 +47,13 @@ from product_views import Product_Print, Product_SendToFriend
 from product_views import Product_Declinations, Products_ChangeCategory
 from product_views import Product_ChangeProductModel, Products_Stock
 from schema import product_schema
-from stock_views import Stock_FillStockOut, Stock_Resupply
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
 from shop.editable import Editable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
 from shop.manufacturers import ManufacturersEnumerate
+from shop.stock.stock_views import Stock_FillStockOut, Stock_Resupply
 from shop.utils import get_shop, format_price, ShopFolder
 
 

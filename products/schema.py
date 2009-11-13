@@ -46,7 +46,7 @@ product_schema = {# General informations
                   'weight': Decimal(default=decimal(0), mandatory=True),
                   # Manufacturer / supplier
                   'manufacturer': ManufacturersEnumerate,
-                  'supplier': SuppliersEnumerate,
+                  'supplier': SuppliersEnumerate(multiple=True),
                   # Categories
                   'categories': CategoriesEnumerate(multiple=True, mandatory=True),
                   # Manage stock
