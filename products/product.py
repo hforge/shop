@@ -809,7 +809,7 @@ class Products(ShopFolder):
 
     class_id = 'products'
     class_title = MSG(u'Products')
-    class_views = ['browse_content', 'stock', 'stock_out', 'new_product']
+    class_views = ['browse_content', 'new_product']
 
     # Views
     browse_content = Products_View()

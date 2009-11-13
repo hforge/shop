@@ -366,7 +366,9 @@ class Products_View(Folder_BrowseContent):
         search_query = []
         # Base query (search in folder)
         abspath = str(resource.get_canonical_path())
+        format = resource.parent.product_class.class_id
         search_query.append(PhraseQuery('parent_path', abspath))
+        search_query.append(PhraseQuery('format', format))
         # Search query
         for key in self.search_schema.keys():
             value = context.get_form_value(key)
