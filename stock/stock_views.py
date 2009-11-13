@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from datetime import datetime
+
 # Import from itools
 from itools.datatypes import Integer, String
 from itools.gettext import MSG
@@ -22,7 +25,7 @@ from itools.pdf import stl_pmltopdf
 from itools.web import ERROR, INFO, STLForm
 
 # Import from ikaaro
-#from ikaaro.file import PDF
+from ikaaro.file import PDF
 
 # Import from shop
 from shop.suppliers import SuppliersEnumerate
@@ -34,12 +37,25 @@ class Stock_Resupply(STLForm):
     title = MSG(u'Resupply stock')
     template = '/ui/shop/stock/resupply.xml'
 
+    def get_schema(self, resource, context):
+        references_number = context.get_form_value('references_number',
+                              type=Integer) or 0
+        schema = {}
+        for i in range(1, references_number+1):
+            schema.update(
+              {'reference_%s' % i: String,
+               'quantity_to_order_%s' % i: Integer(mandatory=True)})
+        return schema
+
+
     def get_namespace(self, resource, context):
         root = context.root
         namespace = {'lines': []}
         format = resource.parent.product_class.class_id
         search = root.search(format=format)
         for i, brain in enumerate(search.get_documents()):
+            if i > 20:
+                break
             product = root.get_resource(brain.abspath)
             # XXX By default we take first supplier
             suppliers = product.get_property('supplier')
@@ -50,28 +66,43 @@ class Stock_Resupply(STLForm):
                   'href': context.get_link(product),
                   'supplier': SuppliersEnumerate.get_value(supplier),
                   'stock_quantity': product.get_property('stock-quantity'),
-                  'new_stock': product.get_property('stock-quantity') +5}
+                  'quantity_to_order': product.get_property('stock-quantity') +5}
             namespace['lines'].append(kw)
         return namespace
 
 
-    def action(self, resource, context):
-        self.generate_pdf_resupply(context)
-
-
-    def generate_pdf_resupply(self, context):
-        accept = context.accept_language
-        creation_date = self.get_property('creation_datetime')
-        creation_date = format_date(creation_date, accept=accept)
-        # Delete old bill
-        if self.get_resource('bill', soft=True):
-            self.del_resource('bill')
-        document = self.get_resource('/ui/shop/stock/pdf_resupply.xml')
-        namespace =  {'creation_date': creation_date}
-        pdf = stl_pmltopdf(document, namespace=namespace)
-        #metadata =  {'title': {'en': u'Bill'}}
-        #PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
+    def action(self, resource, context, form):
+        response = context.response
+        response.set_header('Content-Type', 'application/pdf')
+        response.set_header('Content-Disposition',
+                            'attachment; filename="Document.pdf"')
+        pdf = self.generate_pdf_resupply(resource, context, form)
         return pdf
+
+
+    def generate_pdf_resupply(self, resource, context, form):
+        accept = context.accept_language
+        creation_date = datetime.now()
+        creation_date = format_date(creation_date, accept=accept)
+        document = resource.get_resource('/ui/shop/stock/pdf_resupply.xml')
+        # Build namespace
+        namespace =  {'creation_date': creation_date,
+                      'lines': []}
+        references_number = context.get_form_value('references_number',
+                              type=Integer) or 0
+        for i in range(1, references_number+1):
+            kw = {'id': i,
+                  'reference': form['reference_%s' % i],
+                  'quantity_to_order': form['quantity_to_order_%s' % i]}
+            namespace['lines'].append(kw)
+        # Generate pdf
+        pdf = stl_pmltopdf(document, namespace=namespace)
+        metadata =  {'title': {'en': u'Bill'}}
+        if resource.get_resource('bill.pdf', soft=True):
+            resource.del_resource('bill.pdf')
+        PDF.make_resource(PDF, resource, 'bill.pdf', body=pdf, **metadata)
+        return pdf
+
 
 
 class Stock_FillStockOut(STLForm):

@@ -3,12 +3,10 @@
 
   <pml:head>
     <pml:title>Resupply</pml:title>
-    <pml:link rel="stylesheet" type="text/css" href="../css/pdf-bill.css"/>
+    <pml:link rel="stylesheet" type="text/css" href="../css/pdf-resupply.css"/>
   </pml:head>
 
-  <pml:header>
-    <pml:img src="${logo}" stl:if="logo"/>
-  </pml:header>
+  <pml:header></pml:header>
 
   <pml:footer>
     <pml:p class="page">Page <pml:pagenumber/> / <pml:pagetotal/></pml:p>
@@ -18,12 +16,29 @@
   <pml:body style="margin-left:0.5cm; margin-right:0.5cm; padding-left:0; padding-right:0;">
     <pml:table id="infos">
       <pml:tr>
-        <pml:th>Order number</pml:th>
-        <pml:td>XXX</pml:td>
+        <pml:td>
+          Itaapy.com<br/>
+          9 rue darwin 75018 Paris<br/>
+          France<br/>
+        </pml:td>
+        <pml:td>
+          Order to:<br/>
+          XXX<br/>
+          Le 21/08/1984<br/>
+        </pml:td>
       </pml:tr>
+    </pml:table>
+
+    <pml:table id="infos">
       <pml:tr>
-        <pml:th>Date</pml:th>
-        <pml:td>XXX</pml:td>
+        <pml:th>ID</pml:th>
+        <pml:th>Reference</pml:th>
+        <pml:th>Quantity</pml:th>
+      </pml:tr>
+      <pml:tr stl:repeat="line lines">
+        <pml:td>${line/id}</pml:td>
+        <pml:td>${line/reference}</pml:td>
+        <pml:td>${line/quantity_to_order}</pml:td>
       </pml:tr>
     </pml:table>
 

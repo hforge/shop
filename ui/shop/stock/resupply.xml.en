@@ -36,7 +36,7 @@
           <input type="text" id="stock_#numero#" name="stock_#numero#" value="0" size="6" disabled="disabled"/>
         </td>
         <td>
-          <input type="text" name="new_stock_#numero#" size="6" value="0"/>
+          <input type="text" name="quantity_to_order_#numero#" size="6" value="0"/>
         </td>
         <td id="link_#numero#"/>
       </tr>
@@ -53,8 +53,8 @@
             value="${line/stock_quantity}" size="6" disabled="disabled"/>
         </td>
         <td>
-          <input type="text" name="new_stock_${line/id}" size="6"
-            value="${line/new_stock}"/>
+          <input type="text" name="quantity_to_order_${line/id}" size="6"
+            value="${line/quantity_to_order}"/>
         </td>
         <td id="link_${line/id}">
           <a href="${line/href}">
