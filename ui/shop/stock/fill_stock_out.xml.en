@@ -43,6 +43,26 @@
         <td id="link_#numero#"/>
       </tr>
       <!-- End model line -->
+      <tr id="model-line" class="line" stl:repeat="line lines">
+        <td>${line/id}</td>
+        <td>
+          <input type="text" id="reference_${line/id}" name="reference_${line/id}"
+            onchange="check_line('${line/id}');" value="${line/reference}"/>
+        </td>
+        <td>
+          <input type="text" id="stock_${line/id}" name="stock_${line/id}"
+            value="${line/stock_quantity}" size="6" disabled="disabled"/>
+        </td>
+        <td>
+          <input type="text" name="new_stock_${line/id}" size="6"
+            value=""/>
+        </td>
+        <td id="link_${line/id}">
+          <a href="${line/href}">
+            ${line/title}
+          </a>
+        </td>
+      </tr>
     </table>
 
     <p>

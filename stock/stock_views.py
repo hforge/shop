@@ -122,6 +122,27 @@ class Stock_FillStockOut(STLForm):
         return schema
 
 
+    def get_namespace(self, resource, context):
+        root = context.root
+        namespace = {'lines': []}
+        format = resource.parent.product_class.class_id
+        search = root.search(format=format)
+        for i, brain in enumerate(search.get_documents()):
+            if i > 20:
+                break
+            product = root.get_resource(brain.abspath)
+            # XXX By default we take first supplier
+            suppliers = product.get_property('supplier')
+            supplier = suppliers[0] if suppliers else '-'
+            kw = {'id': i+1,
+                  'reference': product.get_property('reference'),
+                  'title': product.get_title(),
+                  'href': context.get_link(product),
+                  'stock_quantity': product.get_property('stock-quantity')}
+            namespace['lines'].append(kw)
+        return namespace
+
+
     def action(self, resource, context, form):
         root = context.root
         references_number = context.get_form_value('references_number',
