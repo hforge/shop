@@ -326,8 +326,8 @@ class Products_View(Folder_BrowseContent):
         ('reference', MSG(u'Reference')),
         ('title', MSG(u'Title')),
         ('stored_price', MSG(u'Price (included VAT)')),
-        #('ctime', MSG(u'Creation Time')),
-        #('mtime', MSG(u'Last Modified')),
+        ('ctime', MSG(u'Creation Time')),
+        ('mtime', MSG(u'Last Modified')),
         ('product_model', MSG(u'Product model')),
         ('workflow_state', MSG(u'State'))
         ]
