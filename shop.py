@@ -41,7 +41,7 @@ from shop_views import Shop_Addresses, Shop_AddressesBook, Shop_Login
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
 from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
-from shop_views import Barcode, Shop_GetProductStock
+from shop_views import Barcode, Shop_GetProductStock, Shop_Configuration
 from suppliers import Suppliers, Supplier
 from user import ShopUser, Customers
 from utils import ShopFolder
@@ -116,6 +116,7 @@ class Shop(ShopFolder):
 
     # Administrator shop views
     view = Shop_View()
+    configuration = Shop_Configuration()
     barcode = Barcode()
     get_product_stock = Shop_GetProductStock()
     configure = Shop_Configure()

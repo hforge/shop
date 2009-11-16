@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h1>Configurations</h1>
+
+  <table id="browse-list">
+    <thead>
+      <tr>
+        <th class="checkbox" style="width:250px">System</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tr>
+      <td>
+        <a href="/;control_panel">
+          General website settings
+        </a>
+      </td>
+      <td>Configure website general settings</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./;configure">
+          General shop settings
+        </a>
+      </td>
+      <td>
+        Configure shop general settings
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./categories/">
+          Categories
+        </a>
+      </td>
+      <td>
+        Add/Edit/Delete your categories
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./manufacturers/">
+          Manufacturers
+        </a>
+      </td>
+      <td>
+        Manage list of your manufacturers
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./suppliers/">
+          Suppliers
+        </a>
+      </td>
+      <td>
+        Manage list of your suppliers
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./cross-selling/">
+          Cross selling
+        </a>
+      </td>
+      <td>
+        Configure website default cross selling.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./countries/">
+          Countries
+        </a>
+      </td>
+      <td>
+        Collection of countries
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./countries-zones">
+          Zones
+        </a>
+      </td>
+      <td>
+        Collection of zones
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./products-models/">
+          Products models
+        </a>
+      </td>
+      <td>
+        Configure products models
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./enumerates/">
+          Enumerates
+        </a>
+      </td>
+      <td>
+        Collection of enumerates
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./shippings/">
+          Shippings
+        </a>
+      </td>
+      <td>
+        Configure shippings mode
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./payments/">
+          Payments
+        </a>
+      </td>
+      <td>
+        Configure payments mode
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="./terms-and-conditions-of-use/">
+          Terms and conditions of use
+        </a>
+      </td>
+      <td>
+        Configure your shop terms and conditions of use
+      </td>
+    </tr>
+  </table>
+
+</stl:block>

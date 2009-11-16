@@ -64,6 +64,13 @@ class Shop_View(STLView):
     template = '/ui/shop/shop_view.xml'
 
 
+class Shop_Configuration(STLView):
+
+    access = 'is_admin'
+    title = MSG(u'Configuration')
+    template = '/ui/backoffice/configuration.xml'
+
+
 class Shop_Configure(DBResource_Edit):
 
     access = 'is_admin'

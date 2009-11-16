@@ -25,7 +25,7 @@
     <div id="menu" stl:if="user/info">
       <ul>
         <li>
-          <a href="/">Main</a>
+          <a href="/">Overview</a>
         </li>
         <li>
           <a href="/shop/products/">Products</a>
@@ -37,19 +37,37 @@
           <a href="/shop/orders/">Orders</a>
         </li>
         <li>
+          <a href="/shop/;configuration">Configuration</a>
+        </li>
+        <li>
+          <a href="/wiki/">
+            <img src="/ui/wiki/WikiFolder16.png"/>
+            Wiki
+          </a>
+        </li>
+        <li>
+          <a href="/tracker/">
+            <img src="/ui/tracker/tracker16.png"/>
+            Tracker
+          </a>
+        </li>
+        <li>
+          <a href="http://perfect-sale.com/documentation/"
+            target="_blank">
+            <img src="/ui/icons/16x16/help.png"/>
+            Help
+          </a>
+        </li>
+        <li>
           <stl:block stl:if="not user/info">
             <a href="${login}" id="top-menu-login">Log in</a>
           </stl:block>
           <stl:block stl:if="user/info">
-            <a href="${logout}" id="top-menu-logout">Log out</a>
+            <a href="${logout}" id="top-menu-logout">
+              <img src="/ui/icons/16x16/action_logout.png"/>
+              Log out
+            </a>
           </stl:block>
-        </li>
-        <li>
-          <a href="http://perfect-sale.com/documentation/"
-            target="_blank" style="padding: 5px 20px">
-            Help
-            <img src="/ui/icons/16x16/help.png"/>
-          </a>
         </li>
       </ul>
     </div>

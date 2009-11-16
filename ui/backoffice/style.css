@@ -44,7 +44,7 @@ a{
 #menu ul
 {
   list-style: none;
-  height: 35px;
+  height: 40px;
   background: url('/ui/backoffice/images/menu-back.png') repeat;
   font: bold 12px Verdana, sans-serif;
   margin: 0px;
