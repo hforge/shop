@@ -387,5 +387,15 @@
     </tbody>
   </table>
 
+  <hr class="order-hr"/>
+
+  <div stl:if="not is_canceled">
+    <form method="post" stl:if="not payment/is_payed">
+      <input type="submit" name=";cancel_order"
+        class="button-red"
+        value="Cancel the order"/>
+    </form>
+  </div>
+
 
 </stl:block>

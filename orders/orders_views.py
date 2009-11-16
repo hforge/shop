@@ -173,6 +173,7 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         for key in ['is_payed', 'is_sent']:
             namespace[key] = bool_to_img(resource.get_property(key))
         # States
+        namespace['is_canceled'] = resource.get_statename() == 'cancel'
         namespace['states_history'] = self.get_states_history(resource, context)
         namespace['transitions'] = SelectWidget('transition').to_html(Order_Transitions, None)
         # Bill
@@ -269,6 +270,17 @@ class Order_Manage(Payments_EditablePayment, STLForm):
 
         # Ok
         context.message = INFO(u'Transition done.')
+
+
+    action_cancel_order_schema = {}
+    def action_cancel_order(self, resource, context, form):
+        try:
+            resource.make_transition('open_to_cancel', None)
+        except WorkflowError, excp:
+            context.server.log_error(context)
+            context.message = ERROR(unicode(excp.message, 'utf-8'))
+            return
+        context.message = INFO(u'Order has been canceled')
 
 
 
