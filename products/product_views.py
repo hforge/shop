@@ -96,6 +96,12 @@ class Product_View(Editable_View, STLForm):
     model_template = None
 
     def get_template(self, resource, context):
+        # Backoffice template
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
+            template = '/ui/backoffice/product_view.xml'
+            return resource.get_resource(template)
+        # Other
         shop = get_shop(resource)
         product_model = resource.get_property('product_model')
         # No product model
@@ -307,6 +313,7 @@ class Products_View(Folder_BrowseContent):
     batch_msg1 = MSG(u"There is 1 product")
     batch_msg2 = MSG(u"There are {n} products")
 
+
     context_menus = []
 
     table_actions = [CopyButton, PasteButton, RenameButton,
@@ -319,8 +326,8 @@ class Products_View(Folder_BrowseContent):
         ('reference', MSG(u'Reference')),
         ('title', MSG(u'Title')),
         ('stored_price', MSG(u'Price (included VAT)')),
-        ('ctime', MSG(u'Creation Time')),
-        ('mtime', MSG(u'Last Modified')),
+        #('ctime', MSG(u'Creation Time')),
+        #('mtime', MSG(u'Last Modified')),
         ('product_model', MSG(u'Product model')),
         ('workflow_state', MSG(u'State'))
         ]
@@ -392,9 +399,9 @@ class Products_View(Folder_BrowseContent):
         elif column == 'cover':
             cover = item_resource.get_cover_namespace(context)
             if cover:
-                uri = '%s/;thumb?width=48&amp;size=48' % cover['href']
-                return XMLParser('<img src="%s"/>' % uri)
-            return u'-'
+                uri = '%s/;thumb?width=48&amp;height=48' % cover['href']
+                return XMLParser('<div class="thumb-products"><img src="%s"/></div>' % uri)
+            return XMLParser('<div class="thumb-products"/>')
         elif column == 'title':
             abspath = context.resource.get_abspath()
             path = abspath.get_pathto(item_resource.get_virtual_path())

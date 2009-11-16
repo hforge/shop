@@ -4,6 +4,14 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h1>
+    <img src="/ui/shop/images/bag_green.png"/>
+    Products
+  </h1>
+  <a href="./;new_product">
+    <img src="/ui/shop/images/plus.png"/>
+    Create a new product
+  </a>
   <form method="get">
     <fieldset>
       <legend>Search</legend>
@@ -18,5 +26,6 @@
       </dl>
     </fieldset>
   </form>
+
 
 </stl:block>

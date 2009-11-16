@@ -23,8 +23,15 @@ from ikaaro.skins import Skin, register_skin
 # Import from shop
 from shop_utils_views import Cart_Viewbox
 
+
+class BackofficeSkin(Skin):
+
+    pass
+
+
 class ShopSkin(Skin):
 
+    class_skin = 'ui/backoffice'
     base_styles = ['/ui/bo.css',
                    '/ui/shop/perfect_sale_style.css',
                    '/ui/shop/style.css']
@@ -59,3 +66,6 @@ class ShopSkin(Skin):
 ###########################################################################
 path = get_abspath('ui/shop/')
 register_skin('shop', ShopSkin(path))
+
+path = get_abspath('ui/backoffice/')
+register_skin('backoffice', BackofficeSkin(path))

@@ -305,8 +305,13 @@ class Shop_Login(STLForm):
 
 
     def get_template(self, resource, context):
-        shop = get_shop(resource)
-        template = shop.shop_templates['shop_login']
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
+            # Backoffice login template
+            template =  '/ui/backoffice/login.xml'
+        else:
+            shop = get_shop(resource)
+            template = shop.shop_templates['shop_login']
         return resource.get_resource(template)
 
 

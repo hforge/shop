@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <br/>
+  <table cellpadding="0" cellspacing="0" class="title">
+    <tr>
+      <td>
+        <img src="/shop/;barcode?reference=${reference}"/>
+      </td>
+      <td>
+        <h1>${title}</h1>
+      </td>
+      <td>
+        <a class="button-green" href="./;edit">Public</a>
+        <a class="button-red" href="./;edit">Private</a>
+      </td>
+    </tr>
+  </table>
+
+  Lien
+
+  <table cellpadding="0" cellspacing="0" id="product-details">
+    <tr stl:if="cover">
+      <th>Cover</th>
+      <td>
+        <a href="${href}" title="${title}" stl:if="cover"><img
+          src="${cover/href}/;thumb?width=90&amp;height=90"
+          alt="${title}"/></a>
+      </td>
+    </tr>
+    <tr>
+      <th>Reference</th>
+      <td>${reference}</td>
+    </tr>
+    <tr>
+      <th>Title</th>
+      <td>${title}</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>${description}</td>
+    </tr>
+    <tr>
+      <th>Data</th>
+      <td>${data}</td>
+    </tr>
+    <tr>
+      <th>Keywords</th>
+      <td>${subject}</td>
+    </tr>
+    <tr>
+      <th>Price</th>
+      <td>${price-with-tax} €</td>
+    </tr>
+    <tr>
+      <th>Weight</th>
+      <td>${weight} Kg</td>
+    </tr>
+    <tr stl:if="specific_list">
+      <th>Product model informations</th>
+      <td>
+        <stl:block stl:repeat="property specific_list" stl:if="property/visible">
+          <b>${property/title}</b>:
+          <span stl:if="property/value">${property/value}</span>
+          <span stl:if="not property/value">Unknow</span>
+          <br/>
+        </stl:block>
+      </td>
+    </tr>
+  </table>
+
+
+  <br/>
+
+</stl:block>

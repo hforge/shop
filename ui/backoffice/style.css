@@ -1,0 +1,270 @@
+body{
+  padding: 20px;
+  width: 990px;
+  margin: 0 auto;
+  background-color: #C5C5C5;
+}
+
+#header{
+  background-color: #FFF;
+}
+
+#body{
+  background-color: #FFF;
+  -moz-border-radius: 0px 0px 20px 20px;
+  -moz-box-shadow: 3px 3px 5px black;
+}
+
+#content{
+  padding: 20px;
+}
+
+#loginform{
+  background-color: #1B597A;
+  -moz-border-radius: 20px;
+  width: 400px;
+  margin: auto;
+  color: #FFF;
+  padding: 20px;
+}
+
+#loginform a{
+  color: white;
+}
+
+/* Menu */
+#menu{
+  width: 100%;
+}
+
+#menu ul
+{
+  list-style: none;
+  height: 35px;
+  background: url('/ui/backoffice/images/menu-back.png') repeat;
+  font: bold 12px Verdana, sans-serif;
+  margin: 0px;
+  padding: 0px;
+  border-top: 1px solid white;
+}
+
+#menu li {
+  float: left;
+  padding: 0;
+}
+
+#menu ul li a
+{
+  text-decoration: none;
+  color: #FFF;
+  display: block;
+  padding: 10px 20px;
+}
+
+#menu ul li a:hover
+{
+  color: #ffc600;
+}
+
+
+/* Input */
+input, textarea, select{
+  border: 1px solid gray;
+  padding: 2px;
+}
+/* Tableau backoffice */
+#browse-list{
+  border-collapse: separate;
+  border-spacing: 0px;
+  width: 100%;
+}
+
+#browse-list a{
+  color: #105D9D;
+}
+
+#browse-list thead th{
+  font-size: 13px;
+  background: url('/ui/backoffice/images/table-back.png') repeat;
+  border-color: #DDDDDD #AAAAAA #AAAAAA #DDDDDD;
+  border-style: solid;
+  border-width: 1px;
+}
+
+#browse-list td{
+  border-bottom: 1px solid #DDDDDD;
+}
+
+tr.odd th, tr.odd td, tr.odd td input{
+  background-color: #F9F9F9;
+}
+
+.thumb-products{
+  width: 48px;
+  height: 48px;
+  text-align: center;
+}
+
+fieldset{
+  background-color: #FFFCF3;
+  border: 1px solid black;
+}
+
+
+/****************************
+ * Backoffice order view
+ ****************************/
+.order-browse{
+  width: 90%;
+  border: 1px solid #dfd5c3;
+  border-collapse:collapse;
+  padding: 0;
+  margin: 10px;
+}
+
+.order-browse input,
+.order-browse textarea,
+.order-browse select{
+  border: 1px solid gray;
+}
+
+.order-browse thead th{
+  height: 25px;
+  background: url('/ui/shop/images/table-back2.png') repeat;
+  color: #fff;
+  padding: 4px 6px;
+  text-align: left;
+}
+
+.order-browse thead th img{
+  vertical-align: bottom;
+}
+
+.order-browse tr td {
+  border: 1px solid #dfd5c3;
+  color: #000;
+  font-size:0.9em;
+  height:23px;
+  padding: 4px;
+}
+
+.order-sub-browse{
+  width: 98%;
+  border: 1px solid #dfd5c3;
+  border-collapse:collapse;
+  padding: 0;
+  margin: 10px;
+}
+
+.order-sub-browse thead th{
+  height: 25px;
+  background-color: #A67322;
+  color: #fff;
+  padding: 4px 6px;
+  text-align: left;
+}
+
+.order-sub-browse thead th img{
+  vertical-align: bottom;
+}
+
+.order-sub-browse tr td {
+  border: 1px solid #dfd5c3;
+  color: #000;
+  font-size:0.9em;
+  height:23px;
+  padding: 4px;
+  background-color: #FFF;
+}
+
+.order-hr{
+  border:0px;
+  border-bottom: 1px solid #AC7622;
+  clear:both;
+}
+
+/* h1 */
+
+.title{
+  width: 100%;
+  color: #000;
+  height: 20px;
+  background-image: url('/ui/backoffice/images/h1-back.png');
+  background-repeat: repeat-x;
+  border-bottom: 1px solid #CBCBCB;
+  border-top: 1px solid #CBCBCB;
+  padding-left: 10px;
+}
+
+#product-details{
+  border: 1px solid #dfd5c3;
+  border-collapse:collapse;
+  padding: 0;
+  margin: 10px;
+}
+
+#product-details th{
+  height: 25px;
+  background-color: #A67322;
+  color: #fff;
+  padding: 4px 6px;
+  text-align: left;
+}
+
+#product-details td{
+  height: 25px;
+  border: 1px dashed black;
+  padding: 4px 6px;
+  text-align: left;
+}
+
+.button-green{
+  -moz-border-radius: 5px;
+  float: left;
+  display: block;
+  line-height: 20px;
+  margin: 10px;
+  text-align: center;
+  padding: 5px 20px;
+  color: #FFF;
+  font-weight: bold;
+  border: 1px solid gray;
+  background-image: url('/ui/backoffice/images/button-green-back.png');
+  background-repeat: repeat-x;
+}
+
+.button-red{
+  -moz-border-radius: 5px;
+  float: left;
+  display: block;
+  line-height: 20px;
+  margin: 10px;
+  text-align: center;
+  padding: 5px 20px;
+  color: #FFF;
+  font-weight: bold;
+  border: 1px solid gray;
+  background-image: url('/ui/backoffice/images/button-red-back.png');
+  background-repeat: repeat-x;
+}
+
+.button-green:hover {
+  background-image: url('/ui/backoffice/images/button-green-back-hover.png');
+}
+
+/* Context menu */
+.context-menu label {
+  background-color: #1261A2;
+}
+
+.context-menu{
+  width: 222px;
+  border: 1px solid gray;
+  margin-top: 50px;
+  padding: 0px;
+}
+
+.context-menu .nav-active a{
+  color: green;
+  font-size: 15px;
+}
