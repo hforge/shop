@@ -273,3 +273,47 @@ fieldset{
   color: green;
   font-size: 15px;
 }
+
+/* Wiki */
+.section h1{
+background-color:#F2F2F2;
+border-bottom:1px solid #CCCCCC;
+color:#20435C;
+font-family:'Trebuchet MS',sans-serif;
+font-weight:normal;
+margin:20px -20px 10px;
+padding:3px 0 3px 10px;
+}
+
+.section h1 a{
+  color: #20435C;
+}
+
+#page-wikipage-view #wrapper a{
+  color: #355F7C;
+}
+
+#page-wikipage-view #wrapper a:hover {
+  text-decoration: underline;
+}
+
+
+.wiki.reference.external:link, .wiki.reference.external:visited {
+ background: none;
+ padding: 0;
+ padding-left: 0 !important;
+}
+
+#page-wikipage-view #wrapper #breadcrumbs{
+ display: block;
+}
+
+#page-wikipage-view #wrapper #breadcrumbs span:first-child {
+ display: none;
+}
+
+.section .figure {
+  background:none;
+  border:0px;
+  text-align:center;
+}
