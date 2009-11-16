@@ -22,6 +22,7 @@ from itools.i18n import format_datetime
 from itools.xapian import PhraseQuery, OrQuery
 from itools.web import ERROR, INFO, STLForm, FormError
 from itools.web.views import process_form
+from itools.xml import XMLParser
 from itools.workflow import WorkflowError
 
 # Import from ikaaro
@@ -37,12 +38,16 @@ from shop.datatypes import Civilite
 from shop.utils import get_shop, bool_to_img
 
 
+numero_template = '<span class="counter counter-%s"><a href="%s">%s</a></span>'
+
+
 class OrdersView(Folder_BrowseContent):
 
     access = 'is_admin'
     title = MSG(u'Open orders')
 
     # Configuration
+    color = 'green'
     table_actions = []
     search_template = '/ui/shop/orders/orders_search.xml'
 
@@ -77,7 +82,8 @@ class OrdersView(Folder_BrowseContent):
         item_brain, item_resource = item
         if column == 'numero':
             href = context.resource.get_pathto(item_resource)
-            return (item_brain.name, href)
+            return XMLParser(numero_template % (self.color, item_brain.name, href))
+            #(item_brain.name, href)
         elif column == 'customer':
             users = context.root.get_resource('users')
             customer_id = item_resource.get_property('customer_id')
@@ -87,7 +93,7 @@ class OrdersView(Folder_BrowseContent):
                 title = customer.get_title()
             else:
                 title = '%s %s' % (gender.gettext(), customer.get_title())
-            return title, '../customers/%s' % customer_id
+            return title
         elif column == 'is_payed':
             return bool_to_img(item_resource.get_property('is_payed'))
         elif column == 'total_price':
@@ -114,6 +120,7 @@ class OrdersView(Folder_BrowseContent):
 class OrdersViewCanceled(OrdersView):
 
     title = MSG(u'Canceled orders')
+    color = 'red'
 
     def get_items_query(self):
         return PhraseQuery('workflow_state', 'cancel')
@@ -123,6 +130,7 @@ class OrdersViewCanceled(OrdersView):
 class OrdersViewArchive(OrdersView):
 
     title = MSG(u'Archives')
+    color = 'black'
 
     def get_items_query(self):
         return OrQuery(
