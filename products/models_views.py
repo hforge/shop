@@ -63,7 +63,9 @@ class ProductModels_View(Folder_BrowseContent):
             return (item_resource.get_title(), item_brain.name)
         elif column == 'img':
             # XXX Sylvain
-            cover = item_resource.get_property('default_cover')
+            cover = item_resource.get_property('default_cover') or None
+            if cover is None:
+                return '-'
             cover = item_resource.get_resource(cover)
             cover = resource.get_pathto(cover)
             return XMLParser('<img src="%s/;thumb?width=90&amp;height=90"/>' % cover)
