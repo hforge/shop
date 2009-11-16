@@ -48,7 +48,7 @@ class PhotoOrderedTable_TableView(OrderedTable_View):
             if image is None:
                 return None
             link = context.get_link(image)
-            src = '%s/;thumb?width=%s&amp;height=%s' % (link, 50, 50)
+            src = '%s/;thumb?width=%s&amp;height=%s' % (link, 250, 250)
             preview = '<img src="%s" />' % src
             return XMLParser(preview)
         return OrderedTable_View.get_item_value(self, resource, context,
