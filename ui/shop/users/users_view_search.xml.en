@@ -4,17 +4,10 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <a href="./;new_product" class="button-green"
-    style="float:right">
-    <img src="/ui/shop/images/plus.png"/>
-    Create a new product
-  </a>
-
   <h1>
-    <img src="/ui/shop/images/bag_green.png"/>
-    Products
+    <img src="/ui/icons/48x48/card.png"/>
+    Customers
   </h1>
-
   <form method="get">
     <fieldset>
       <legend>Search</legend>
@@ -29,5 +22,6 @@
       </dl>
     </fieldset>
   </form>
+
 
 </stl:block>

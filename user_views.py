@@ -370,7 +370,7 @@ class Customers_View(Folder_BrowseContent):
         ('last_time', MSG(u'Last connection Date')),
         ]
 
-    search_template = '/ui/shop/products/products_view_search.xml'
+    search_template = '/ui/shop/users/users_view_search.xml'
 
     search_schema = {
         'name': String,
