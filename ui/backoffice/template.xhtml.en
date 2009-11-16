@@ -44,6 +44,13 @@
             <a href="${logout}" id="top-menu-logout">Log out</a>
           </stl:block>
         </li>
+        <li>
+          <a href="http://perfect-sale.com/documentation/"
+            target="_blank" style="padding: 5px 20px">
+            Help
+            <img src="/ui/icons/16x16/help.png"/>
+          </a>
+        </li>
       </ul>
     </div>
     <div class="clear"/>
