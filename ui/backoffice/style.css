@@ -91,6 +91,11 @@ input, textarea, select{
   border-width: 1px;
 }
 
+#browse-list thead th:hover {
+  background: url('/ui/backoffice/images/table-back2.png') repeat;
+}
+
+
 #browse-list td{
   border-bottom: 1px solid #DDDDDD;
 }
