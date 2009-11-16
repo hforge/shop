@@ -1,7 +1,6 @@
 body{
-  padding: 20px;
   width: 990px;
-  margin: 0 auto;
+  margin: 20px auto;
   background-color: #C5C5C5;
 }
 
@@ -316,4 +315,25 @@ padding:3px 0 3px 10px;
   background:none;
   border:0px;
   text-align:center;
+}
+
+/* Divers */
+.counter{
+  -moz-border-radius: 5px;
+  width: 35px;
+  padding: 0 5px;
+  color: #FFF;
+  text-align: center;
+}
+
+.counter-green{
+  background-color: green;
+}
+
+.counter-red{
+  background-color: red;
+}
+
+.counter-black{
+  background-color: black;
 }

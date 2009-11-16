@@ -9,4 +9,36 @@
     Manage orders
   </h1>
 
+  <table id="browse-list" style="width:100px; float:right">
+   <tr>
+      <thead>
+      <th>
+        Order States
+      </th>
+      </thead>
+    </tr>
+    <tr>
+      <td>
+        <span class="counter counter-green">${nb_open}</span>
+        <a href="./;view">Open</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="counter counter-red">${nb_cancel}</span>
+        <a href="./;view_canceled">Cancel</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="counter counter-black">${nb_archive}</span>
+        <a href="./;view_archive">Archives</a>
+      </td>
+    </tr>
+  </table>
+
+  <br/>
+  <div class="clear"/>
+  <br/>
+
 </stl:block>

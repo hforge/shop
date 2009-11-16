@@ -62,6 +62,16 @@ class OrdersView(Folder_BrowseContent):
     batch_msg1 = MSG(u"There's one order.")
     batch_msg2 = MSG(u"There are {n} orders.")
 
+    def get_search_namespace(self, resource, context):
+        root = context.root
+        namespace = {}
+        for key, c in [('nb_open', OrdersView),
+                       ('nb_cancel', OrdersViewCanceled),
+                       ('nb_archive', OrdersViewArchive)]:
+            q = root.search(c().get_items_query()).get_n_documents()
+            namespace[key] = q
+        return namespace
+
 
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
@@ -89,23 +99,24 @@ class OrdersView(Folder_BrowseContent):
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
 
+    def get_items_query(self):
+        return OrQuery(*[PhraseQuery('workflow_state', x) for x in
+                        ['open', 'payment_ok', 'preparation', 'payment_error']])
+
 
     def get_items(self, resource, context, *args):
         args = list(args)
-        query = OrQuery(*[PhraseQuery('workflow_state', x) for x in
-                        ['open', 'payment_ok', 'preparation', 'payment_error']])
-        args.append(query)
+        args.append(self.get_items_query())
         return Folder_BrowseContent.get_items(self, resource, context, *args)
+
 
 
 class OrdersViewCanceled(OrdersView):
 
     title = MSG(u'Canceled orders')
 
-    def get_items(self, resource, context, *args):
-        args = list(args)
-        args.append(PhraseQuery('workflow_state', 'cancel'))
-        return Folder_BrowseContent.get_items(self, resource, context, *args)
+    def get_items_query(self):
+        return PhraseQuery('workflow_state', 'cancel')
 
 
 
@@ -113,12 +124,11 @@ class OrdersViewArchive(OrdersView):
 
     title = MSG(u'Archives')
 
-    def get_items(self, resource, context, *args):
-        args = list(args)
-        args.append(OrQuery(
-                    PhraseQuery('workflow_state', 'delivery'),
-                    PhraseQuery('workflow_state', 'closed')))
-        return Folder_BrowseContent.get_items(self, resource, context, *args)
+    def get_items_query(self):
+        return OrQuery(
+                  PhraseQuery('workflow_state', 'delivery'),
+                  PhraseQuery('workflow_state', 'closed'))
+
 
 
 class Order_Manage(Payments_EditablePayment, STLForm):
