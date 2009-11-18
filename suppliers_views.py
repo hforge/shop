@@ -17,20 +17,32 @@
 # Import from itools
 from itools.core import merge_dicts
 from itools.gettext import MSG
-from itools.datatypes import Unicode, String
+from itools.datatypes import Unicode, String, Email
 
 # Import from ikaaro
 from ikaaro import messages
+from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm
-from ikaaro.forms import TextWidget
+from ikaaro.forms import TextWidget, MultilineWidget
 from ikaaro.resource_views import EditLanguageMenu
 from ikaaro.views_new import NewInstance
 
 
-supplier_schema = {'title': Unicode(mandatory=True)}
+supplier_schema = {'title': Unicode(mandatory=True),
+                   'address': Unicode(mandatory=True),
+                   'phone': String,
+                   'fax': String,
+                   'email': Email,
+                   'description': Unicode}
 
 supplier_widgets = [
-        TextWidget('title', title=MSG(u'Title'))]
+        TextWidget('title', title=MSG(u'Title')),
+        MultilineWidget('address', title=MSG(u'Address')),
+        TextWidget('phone', title=MSG(u'Phone')),
+        TextWidget('fax', title=MSG(u'Fax')),
+        TextWidget('email', title=MSG(u'Email')),
+        MultilineWidget('description', title=MSG(u'Description'))
+        ]
 
 
 class Supplier_Add(NewInstance):
@@ -82,3 +94,20 @@ class Supplier_Edit(AutoForm):
         for key in self.schema.keys():
             resource.set_property(key, form[key], language=language)
         return context.come_back(messages.MSG_CHANGES_SAVED)
+
+
+
+class Suppliers_View(Folder_BrowseContent):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'View')
+    context_menus = [EditLanguageMenu()]
+
+    search_template = None
+
+    table_columns = [
+        ('name', MSG(u'Name')),
+        ('title', MSG(u'Title')),
+        ]
+
+    table_actions = []

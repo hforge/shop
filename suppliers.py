@@ -24,7 +24,7 @@ from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from suppliers_views import Supplier_Add, Supplier_Edit
+from suppliers_views import Suppliers_View, Supplier_Add, Supplier_Edit
 from suppliers_views import supplier_schema
 from utils import CurrentFolder_AddImage, get_shop
 
@@ -67,6 +67,7 @@ class Suppliers(Folder):
     class_title = MSG(u'Suppliers')
     class_views = ['browse_content', 'add']
 
+    browse_content = Suppliers_View()
     add = Supplier_Add()
 
     def get_document_types(self):
