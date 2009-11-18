@@ -254,7 +254,7 @@ class Shop(ShopFolder):
                          'subject': subject,
                          'body': html or text,
                          'signature': self.get_property('shop_signature')}
-            html = unicode(stl(resource, namespace, mode='xhtml'))
+            html = unicode(stl(resource, namespace, mode='xhtml'), 'utf-8')
         # Add signature
         text += '\n\n-- \n%s' % self.get_property('shop_signature')
         # Send mail
