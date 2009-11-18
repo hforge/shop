@@ -4,7 +4,34 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Update stock</h1>
+  <h1>Manage my stock</h1>
+
+  <h2>Update stock</h2>
+    <form id="form-add-on-stock">
+    <table border="0" style="width:200px">
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Quantity</th>
+          <th/>
+        </tr>
+      </thead>
+      <tr>
+        <td>
+          <input type="text" id="new_reference" size="50"/>
+        </td>
+        <td>
+          <input type="text" id="new_quantity" size="5" value="1"/>
+        </td>
+        <td>
+          <input type="submit" id="add-on-stock" class="button-ok"
+            name="ok" value="Add"/>
+        </td>
+      </tr>
+    </table>
+    </form>
+
+  <h2>My current stock updates</h2>
 
   <form method="POST">
 
@@ -23,27 +50,27 @@
         </tr>
       </thead>
       <!-- Model line -->
-      <tr id="model-line" style="display:none" class="line">
-        <td>#numero#</td>
-        <td>
-          <input type="text" id="reference_#numero#" name="reference_#numero#"
-            onchange="check_line('#numero#');"/>
-        </td>
-        <td>
-          <input type="text" id="stock_#numero#" name="stock_#numero#" value="0" size="6" disabled="disabled"/>
-        </td>
-        <!--
-        <td>
-          <input type="text" name="quantity_#numero#" size="6" value="0"/>
-        </td>
-        -->
-        <td>
-          <input type="text" name="new_stock_#numero#" size="6" value="0"/>
-        </td>
-        <td id="link_#numero#"/>
-      </tr>
+        <tr id="model-line" style="display:none" class="line">
+          <td>#numero#</td>
+          <td>
+            <input type="text" id="reference_#numero#" name="reference_#numero#"
+              onchange="check_line('#numero#');"/>
+          </td>
+          <td>
+            <input type="text" id="stock_#numero#" name="stock_#numero#" value="0" size="6" disabled="disabled"/>
+          </td>
+          <!--
+          <td>
+            <input type="text" name="quantity_#numero#" size="6" value="0"/>
+          </td>
+          -->
+          <td>
+            <input type="text" name="new_stock_#numero#" size="6" value="0"/>
+          </td>
+          <td id="link_#numero#"/>
+        </tr>
       <!-- End model line -->
-      <tr id="model-line" class="line" stl:repeat="line lines">
+      <tr class="line" stl:repeat="line lines">
         <td>${line/id}</td>
         <td>
           <input type="text" id="reference_${line/id}" name="reference_${line/id}"
@@ -74,8 +101,8 @@
   <script>
     <![CDATA[
     $(document).ready(function() {
-      add_lines(5);
-      $("#reference_1").focus();
+      add_lines(1);
+      $("#new_reference").focus();
     });
 
 
@@ -87,10 +114,11 @@
     function add_line(){
       var nb_lines = $(".line").size();
       var model_line = $("#model-line").clone();
-      model_line.show();
       var html = model_line.html().replace(new RegExp('#numero#', 'g'), nb_lines);
       model_line.html(html);
-      model_line.insertAfter($("tr:last"));
+      model_line.attr('id', 'line_number_' + nb_lines);
+      model_line.show();
+      model_line.insertBefore($("#browse-list tbody tr:first"));
       $("#references_number").val(nb_lines);
     }
 
@@ -114,6 +142,14 @@
           }
       });
     }
+
+    $("#form-add-on-stock").submit(function () {
+      add_line();
+      var nb_lines = $(".line").size() - 1;
+      var new_reference = $("#new_reference").val();
+      $("#reference_" + nb_lines).val(new_reference);
+      return false;
+    });
     ]]>
   </script>
 
