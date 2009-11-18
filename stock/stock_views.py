@@ -23,12 +23,15 @@ from itools.gettext import MSG
 from itools.i18n import format_date
 from itools.pdf import stl_pmltopdf
 from itools.web import ERROR, INFO, STLForm
+from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.file import PDF
+from ikaaro.forms import SelectWidget
 
 # Import from shop
 from shop.suppliers import SuppliersEnumerate
+from shop.utils import format_for_pdf
 
 
 class Stock_Resupply(STLForm):
@@ -37,10 +40,21 @@ class Stock_Resupply(STLForm):
     title = MSG(u'Resupply stock')
     template = '/ui/shop/stock/resupply.xml'
 
+    search_schema = {'supplier': SuppliersEnumerate}
+
+    search_widgets = [
+        SelectWidget('supplier', title=MSG(u'Supplier'),
+                      has_empty_option=False),
+        ]
+
+    def get_query_schema(self):
+        return self.search_schema
+
+
     def get_schema(self, resource, context):
         references_number = context.get_form_value('references_number',
                               type=Integer) or 0
-        schema = {}
+        schema = {'supplier': SuppliersEnumerate}
         for i in range(1, references_number+1):
             schema.update(
               {'reference_%s' % i: String,
@@ -48,23 +62,35 @@ class Stock_Resupply(STLForm):
         return schema
 
 
+    def get_search_namespace(self, resource, context):
+        query = context.query
+        namespace = {'widgets': []}
+        for widget in self.search_widgets:
+            value = context.query[widget.name]
+            html = widget.to_html(self.search_schema[widget.name], value)
+            namespace['widgets'].append({'title': widget.title,
+                                         'html': html})
+        return namespace
+
+
     def get_namespace(self, resource, context):
         root = context.root
-        namespace = {'lines': []}
+        namespace = self.get_search_namespace(resource, context)
+        namespace['lines'] = []
+        supplier = context.query['supplier']
+        if supplier is None:
+            return namespace
+        namespace['supplier'] = supplier
         format = resource.parent.product_class.class_id
-        search = root.search(format=format)
+        query = [PhraseQuery('format', format),
+                 PhraseQuery('supplier', supplier)]
+        search = root.search(AndQuery(*query))
         for i, brain in enumerate(search.get_documents()):
-            if i > 20:
-                break
             product = root.get_resource(brain.abspath)
-            # XXX By default we take first supplier
-            suppliers = product.get_property('supplier')
-            supplier = suppliers[0] if suppliers else '-'
             kw = {'id': i+1,
                   'reference': product.get_property('reference'),
                   'title': product.get_title(),
                   'href': context.get_link(product),
-                  'supplier': SuppliersEnumerate.get_value(supplier),
                   'stock_quantity': product.get_property('stock-quantity'),
                   'quantity_to_order': product.get_property('stock-quantity') +5}
             namespace['lines'].append(kw)
@@ -88,6 +114,13 @@ class Stock_Resupply(STLForm):
         # Build namespace
         namespace =  {'creation_date': creation_date,
                       'lines': []}
+        # Supplier
+        supplier = form['supplier']
+        supplier = resource.get_resource(supplier)
+        namespace['supplier'] = {
+            'title': supplier.get_title(),
+            'address': format_for_pdf(supplier.get_property('address'))}
+        # Get references
         references_number = context.get_form_value('references_number',
                               type=Integer) or 0
         for i in range(1, references_number+1):

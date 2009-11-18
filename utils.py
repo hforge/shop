@@ -38,6 +38,11 @@ def get_shop(resource):
     return resource.get_site_root().get_resource('shop')
 
 
+def format_for_pdf(data):
+    data = data.encode('utf-8')
+    return XMLParser(data.replace('\n', '<br/>'))
+
+
 def format_price(price):
     if price._isinteger():
         return str(int(price))

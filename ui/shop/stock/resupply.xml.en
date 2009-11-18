@@ -6,8 +6,26 @@
 
   <h1>Resupply stock</h1>
 
-  <form method="POST">
+  <form method="GET">
+    <fieldset>
+      <legend>Filter</legend>
+      <dl>
+        <stl:block stl:repeat="widget widgets">
+          <dt>${widget/title}</dt>
+          <dd>${widget/html}</dd>
+        </stl:block>
+        <p>
+          <input type="submit" class="button-ok" value="Filter" name="filter"/>
+        </p>
+      </dl>
+    </fieldset>
+  </form>
 
+  <br/><br/>
+
+  <stl:block stl:if="lines">
+    <form method="POST">
+    <input type="text" name="supplier" value="${supplier}"/>
     <table border="0" id="browse-list" style="width:700px">
       <thead>
         <tr>
@@ -16,38 +34,17 @@
               onclick="add_line()"/>
           </th>
           <th>Reference</th>
-          <th>Supplier</th>
           <th>Stock</th>
           <th>Quantity to order</th>
           <th style="width:400px">Product</th>
         </tr>
       </thead>
-      <!-- Model line -->
-      <tr id="model-line" style="display:none" class="line">
-        <td>#numero#</td>
-        <td>
-          <input type="text" id="reference_#numero#" name="reference_#numero#"
-            onchange="check_line('#numero#');"/>
-        </td>
-        <td>
-          XXX
-        </td>
-        <td>
-          <input type="text" id="stock_#numero#" name="stock_#numero#" value="0" size="6" disabled="disabled"/>
-        </td>
-        <td>
-          <input type="text" name="quantity_to_order_#numero#" size="6" value="0"/>
-        </td>
-        <td id="link_#numero#"/>
-      </tr>
-      <!-- End model line -->
-      <tr id="model-line" class="line" stl:repeat="line lines">
+      <tr class="line" stl:repeat="line lines">
         <td>${line/id}</td>
         <td>
           <input type="text" id="reference_${line/id}" name="reference_${line/id}"
-            onchange="check_line('${line/id}');" value="${line/reference}"/>
+            value="${line/reference}" disabled="disabled"/>
         </td>
-        <td>${line/supplier}</td>
         <td>
           <input type="text" id="stock_${line/id}" name="stock_${line/id}"
             value="${line/stock_quantity}" size="6" disabled="disabled"/>
@@ -66,53 +63,9 @@
 
     <p>
       <input type="hidden" id="references_number" name="references_number"/>
-      <input type="submit" class="button-ok" name="validate" value="Ressuply stock"/>
+      <input type="submit" class="button-ok" name="validate" value="Generate PDF"/>
     </p>
   </form>
+  </stl:block>
 
-  <script>
-    <![CDATA[
-    $(document).ready(function() {
-      add_lines(5);
-      $("#reference_1").focus();
-    });
-
-
-    function add_lines(q){
-      for (i=0; i<q; i++) {
-        add_line();
-      }
-    }
-    function add_line(){
-      var nb_lines = $(".line").size();
-      var model_line = $("#model-line").clone();
-      model_line.show();
-      var html = model_line.html().replace(new RegExp('#numero#', 'g'), nb_lines);
-      model_line.html(html);
-      model_line.insertAfter($("tr:last"));
-      $("#references_number").val(nb_lines);
-    }
-
-    function check_line(id_line){
-      var nb_lines = $(".line").size() - 1;
-      var reference = $('#reference_' + id_line).val();
-      if(id_line==nb_lines){
-        add_lines(5);
-      }
-      $.getJSON('/shop/;get_product_stock?reference=' + reference,
-        function(data){
-          if(data.exist){
-            var link = '<a href="'+ data.href + '">'+ data.title + '</a>';
-            $("#link_"+ id_line).html(link);
-            $("#stock_"+ id_line).val(data.stock_quantity);
-            $("#new_quantity_"+ id_line).val(data.stock_quantity);
-          }else{
-            var link = '<img src="/ui/icons/16x16/error.png"/>'
-            $("#link_"+ id_line).html(link);
-            $("#reference_"+ id_line).val('');
-          }
-      });
-    }
-    ]]>
-  </script>
 </stl:block>

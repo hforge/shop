@@ -22,9 +22,9 @@
           France<br/>
         </pml:td>
         <pml:td>
-          Order to:<br/>
-          XXX<br/>
-          Le 21/08/1984<br/>
+          To: ${supplier/title}<br/>
+          ${supplier/address}<br/>
+          Le ${creation_date}<br/>
         </pml:td>
       </pml:tr>
     </pml:table>
