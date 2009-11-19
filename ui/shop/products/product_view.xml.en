@@ -18,7 +18,7 @@
       </li>
     </ul>
     <br/>
-    Prix : <span id="price">${price-with-tax}</span> € TTC<br/>
+    Prix : <span id="price">${price/with_tax}</span> € TTC<br/>
     Weight: <span id="weight">${weight}</span> kg
     <p id="quantity-area">
       Quantity: <input id="quantity" name="quantity" type="text" size="3" value="1" />
@@ -82,7 +82,7 @@
     </tr>
     <tr>
       <th>Price</th>
-      <td>${price-with-tax} €</td>
+      <td>${price/with_tax} €</td>
     </tr>
     <tr>
       <th>Weight</th>

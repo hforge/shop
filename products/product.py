@@ -406,11 +406,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
           'href': abspath.get_pathto(self.get_virtual_path()),
           'manufacturer': ManufacturersEnumerate.get_value(manufacturer),
           'cover': self.get_cover_namespace(context),
-          # Price
-          'price-with-tax': self.get_price_with_tax(pretty=True),
-          'price': self.get_price_namespace()}
-        for key in ['description', 'reference']:
-            namespace[key] = self.get_property(key)
+          'price': self.get_price_namespace(),
+          'description': self.get_property('description'),
+          'reference': self.get_property('reference')}
         return namespace
 
 
@@ -468,8 +466,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                                          'title': manufacturer.get_title()}
         else:
             namespace['manufacturer'] = None
-        # Price
-        namespace['price-with-tax'] = self.get_price_with_tax(pretty=True)
         # Data
         namespace['data'] = self.get_xhtml_data()
         # Specific product informations

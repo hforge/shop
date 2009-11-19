@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-19 14:11+CET\n"
+"POT-Creation-Date: 2009-11-19 16:11+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -723,7 +723,7 @@ msgstr ""
 #: ../ui/shop/products/product_view.xml.en:85
 #: ../ui/backoffice/product_view.xml.en:56 ../ui/shop/products/print.xml.en:36
 msgctxt "table cell"
-msgid "${price-with-tax} €"
+msgid "${price/with_tax} €"
 msgstr ""
 
 #: ../ui/shop/virtualcategory_view.xml.en:24
@@ -747,11 +747,6 @@ msgctxt "table cell"
 msgid "${product/declination}"
 msgstr ""
 
-#: ../ui/shop/virtualcategory_comparator.xml.en:34
-msgctxt "table cell"
-msgid "${product/price-with-tax} €"
-msgstr ""
-
 #: ../ui/shop/orders/order_facture.xml.en:71
 msgid "${product/price/total/with_tax} €"
 msgstr ""
@@ -770,6 +765,11 @@ msgstr ""
 #: ../ui/shop/orders/order_manage.xml.en:82
 msgctxt "table cell"
 msgid "${product/price/unit/with_tax} €"
+msgstr ""
+
+#: ../ui/shop/virtualcategory_comparator.xml.en:34
+msgctxt "table cell"
+msgid "${product/price/with_tax} €"
 msgstr ""
 
 #: ../ui/shop/orders/order_facture.xml.en:70
@@ -1146,7 +1146,7 @@ msgstr ""
 
 #: ../ui/shop/products/product_viewbox.xml.en:9
 msgctxt "span"
-msgid "(${price-with-tax} €)"
+msgid "(${price/with_tax} €)"
 msgstr ""
 
 #: ../ui/shop/shop_addresses.xml.en:40
@@ -1305,7 +1305,7 @@ msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:21
 msgctxt "span"
-msgid "<g id='2'>${price-with-tax}</g> € TTC<x id='3'/> Weight:"
+msgid "<g id='2'>${price/with_tax}</g> € TTC<x id='3'/> Weight:"
 msgstr ""
 
 #: ../ui/shop/shop_user_manage.xml.en:22
@@ -3361,7 +3361,7 @@ msgctxt "heading"
 msgid "Order number:"
 msgstr ""
 
-#: ../products/product.py:146 ../products/product.py:735
+#: ../products/product.py:146 ../products/product.py:731
 msgid "Order photos"
 msgstr ""
 
@@ -3800,7 +3800,7 @@ msgstr ""
 msgid "Product title"
 msgstr ""
 
-#: ../orders/orders.py:105 ../orders/orders.py:230 ../products/product.py:813
+#: ../orders/orders.py:105 ../orders/orders.py:230 ../products/product.py:809
 #: ../shop.py:167 ../stock/resupply.py:44
 msgid "Products"
 msgstr ""

@@ -53,7 +53,7 @@
     </tr>
     <tr>
       <th>Price</th>
-      <td>${price-with-tax} €</td>
+      <td>${price/with_tax} €</td>
     </tr>
     <tr>
       <th>Weight</th>
