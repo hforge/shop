@@ -86,7 +86,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     class_views = ['view', 'edit', 'declinations', 'images',
                    'order', 'edit_cross_selling', 'delete_product']
     class_description = MSG(u'A product')
-    class_version = '20090806'
+    class_version = '20090920'
 
     ##################
     # Configuration
@@ -398,17 +398,22 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         shop = get_shop(self)
         abspath = context.resource.get_abspath()
         title = self.get_property('title')
-        manufacturer = self.get_property('manufacturer')
         namespace = {
           'name': self.name,
           'title': title,
           'mini-title': reduce_string(title, shop.product_title_word_treshold),
           'href': abspath.get_pathto(self.get_virtual_path()),
-          'manufacturer': ManufacturersEnumerate.get_value(manufacturer),
           'cover': self.get_cover_namespace(context),
           'price': self.get_price_namespace(),
           'description': self.get_property('description'),
           'reference': self.get_property('reference')}
+        # XXX Manufacturer (We should optimize)
+        manufacturer = self.get_property('manufacturer')
+        if manufacturer:
+            namespace['manufacturer'] = ManufacturersEnumerate.get_value(
+                                            manufacturer)
+        else:
+            namespace['manufacturer'] = None
         return namespace
 
 
@@ -800,6 +805,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
     def update_20090806(self):
         self.set_property('state', 'public')
+
 
 
 

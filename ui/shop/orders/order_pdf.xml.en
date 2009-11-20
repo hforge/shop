@@ -1,0 +1,58 @@
+<pml:html xmlns:pml="http://www.hforge.org/xml-namespaces/pml"
+          xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <pml:head>
+    <pml:title>Bill</pml:title>
+    <pml:link rel="stylesheet" type="text/css" href="../css/pdf-bill.css"/>
+  </pml:head>
+
+  <pml:header>
+    <pml:img src="${logo}" stl:if="logo"/>
+  </pml:header>
+
+  <pml:footer>
+    <pml:p class="page">Page <pml:pagenumber/> / <pml:pagetotal/></pml:p>
+  </pml:footer>
+
+  <pml:body style="margin-left:0.5cm; margin-right:0.5cm; padding-left:0; padding-right:0;">
+
+    <pml:table id="infos">
+      <pml:tr>
+        <pml:td>
+          <pml:h1>Order ${num_cmd}</pml:h1>
+          <pml:img src="${order_barcode}"/>
+        </pml:td>
+      </pml:tr>
+    </pml:table>
+
+    <pml:table id="articles">
+      <pml:tr>
+        <pml:th></pml:th>
+        <pml:th>Product</pml:th>
+        <pml:th>Unit price (With tax)</pml:th>
+        <pml:th>Quantity</pml:th>
+        <pml:th>Total price (With tax)</pml:th>
+      </pml:tr>
+      <pml:tr stl:repeat="product products">
+        <pml:td>
+          <pml:p>
+            <pml:img src="${product/uri}/barcode"/>
+          </pml:p>
+        </pml:td>
+        <pml:td>${product/title}</pml:td>
+        <pml:td>${product/price/unit/with_tax} €</pml:td>
+        <pml:td>${product/quantity}</pml:td>
+        <pml:td>${product/price/total/with_tax} €</pml:td>
+      </pml:tr>
+      <pml:tr>
+        <pml:td colspan="4" class="align-right">Shipping</pml:td>
+        <pml:td>${shipping_price} €</pml:td>
+      </pml:tr>
+      <pml:tr>
+        <pml:td colspan="4" class="align-right">Total Price</pml:td>
+        <pml:td>${total_price} €</pml:td>
+      </pml:tr>
+    </pml:table>
+
+ </pml:body>
+</pml:html>

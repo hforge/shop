@@ -28,7 +28,7 @@ from itools.pdf import stl_pmltopdf
 from itools.uri import get_uri_path
 
 # Import from ikaaro
-from ikaaro.file import PDF
+from ikaaro.file import PDF, Image
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
@@ -58,8 +58,6 @@ mail_confirmation_body = MSG(u"""Hi,
 Your order number {order_name} in our shop has been recorded.
 You can found details on our website:\n
   {order_uri}\n
--- 
-{shop_signature}
 """)
 
 #############################################
@@ -73,9 +71,6 @@ Hi,
 A new order has been done in your shop.
 You can found details here:\n
   {order_uri}\n
-
--- 
-{shop_signature}
 """)
 
 ###################################################################
@@ -129,7 +124,7 @@ class OrdersProducts(Table):
             name = get_value(record, 'name')
             product_resource = products.get_resource(name, soft=True)
             if product_resource:
-                kw['uri'] = context.resource.get_pathto(product_resource)
+                kw['uri'] = product_resource.handler.uri
                 kw['cover'] = product_resource.get_cover_namespace(context)
             else:
                 kw['cover'] = None
@@ -246,7 +241,17 @@ class Order(WorkflowAware, ShopFolder):
                                 '%s/messages' % name,
                                 **{'title': {'en': u'Messages'}})
         # Send mail of confirmation / notification
+        from shop.utils import generate_barcode
         cls.send_email_confirmation(shop, shop_uri, user, name)
+        # Generate barcode
+        order = shop.get_resource('orders/%s' % name)
+        barcode = generate_barcode(shop.get_property('barcode_format'), name)
+        metadata =  {'title': {'en': u'Barcode'},
+                     'filename': 'barcode.png'}
+        Image.make_resource(Image, order, 'barcode', body=barcode, **metadata)
+
+
+
 
 
     def _get_catalog_values(self):
@@ -262,26 +267,26 @@ class Order(WorkflowAware, ShopFolder):
     @classmethod
     def send_email_confirmation(cls, shop, shop_uri, user, order_name):
         """ """
+        from itools.web import get_context
+        context = get_context()
         customer_email = user.get_property('email')
-        root = shop.get_root()
         # Get configuration
         from_addr = shop.get_property('shop_from_addr')
         # Build email informations
-        kw = {'order_name': order_name,
-              'shop_signature': shop.get_property('shop_signature')}
+        kw = {'order_name': order_name}
         # Send confirmation to the shop
         subject = mail_notification_title.gettext()
         order_uri = '/shop/orders/%s/' % order_name
         kw['order_uri'] = shop_uri.resolve(order_uri)
         body = mail_notification_body.gettext(**kw)
         for to_addr in shop.get_property('order_notification_mails'):
-            root.send_email(to_addr, subject, from_addr, body)
+            shop.send_email(context, to_addr, subject, from_addr, body)
         # Send confirmation to client
         order_uri = '/users/%s/;order_view?id=%s' % (user.name, order_name)
         kw['order_uri'] = shop_uri.resolve(order_uri)
         subject = mail_confirmation_title.gettext()
         body = mail_confirmation_body.gettext(**kw)
-        root.send_email(customer_email, subject, from_addr, body)
+        shop.send_email(context, customer_email, subject, from_addr, body)
 
     ##################################################
     # Update order states
@@ -292,12 +297,28 @@ class Order(WorkflowAware, ShopFolder):
 
 
     def set_as_payed(self, context):
+        shop = get_shop(self)
+        # We set payment as payed
         self.set_property('is_payed', True)
-        self.generate_pdf_bill(context)
         try:
             self.make_transition('open_to_payment_ok')
         except WorkflowError:
             self.set_workflow_state('payment_ok')
+        # We generate PDF
+        order = None
+        try:
+            bill = self.generate_pdf_bill(context)
+            order = self.generate_pdf_order(context)
+        except Exception:
+            # PDF generation is dangerous
+            pass
+        # XXX Commit
+        context.database.save_changes()
+        # We send email confirmation
+        order.handler.name = 'Order.pdf'
+        from_addr = shop.get_property('shop_from_addr')
+        context.root.send_email('sylvain@itaapy.com', u'xxx', from_addr,
+                                u'xxx', attachment=order.handler)
 
 
     def set_as_sent(self, context):
@@ -306,6 +327,39 @@ class Order(WorkflowAware, ShopFolder):
             self.make_transition('preparation_to_delivery')
         except WorkflowError:
             self.set_workflow_state('delivery')
+
+
+    def generate_pdf_order(self, context):
+        shop = get_shop(self)
+        accept = context.accept_language
+        creation_date = self.get_property('creation_datetime')
+        creation_date = format_date(creation_date, accept=accept)
+        # Delete old pdf
+        if self.get_resource('order', soft=True):
+            self.del_resource('order')
+        document = self.get_resource('/ui/shop/orders/order_pdf.xml')
+        logo_uri = None
+        logo = shop.get_property('bill_logo')
+        if logo:
+            resource = shop.get_resource(logo, soft=True)
+            if resource:
+                logo_uri = resource.handler.uri
+        namespace =  {
+          'logo': logo_uri,
+          'order_barcode': '%s/barcode.png' % self.handler.uri,
+          'num_cmd': self.name,
+          'products': self.get_resource('products').get_namespace(context),
+          'shipping_price': self.get_property('shipping_price'),
+          'total_price': self.get_property('total_price'),
+          'creation_date': creation_date}
+        # Build pdf
+        path = get_uri_path(shop.handler.uri)
+        body = stl_pmltopdf(document, namespace=namespace)
+        metadata =  {'title': {'en': u'Bill'},
+                     'filename': 'order.pdf'}
+        pdf = PDF.make_resource(PDF, self, 'order', body=body, **metadata)
+        return pdf
+
 
 
     def generate_pdf_bill(self, context):
@@ -340,7 +394,8 @@ class Order(WorkflowAware, ShopFolder):
         # Build pdf
         path = get_uri_path(shop.handler.uri)
         pdf = stl_pmltopdf(document, namespace=namespace)
-        metadata =  {'title': {'en': u'Bill'}}
+        metadata =  {'title': {'en': u'Bill'},
+                     'filename': 'bill.pdf'}
         PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
 
 

@@ -14,6 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from cStringIO import StringIO
+from tempfile import mkstemp
+from os import close as close_fd, system
+
 # Import from itools
 from itools.gettext import MSG
 from itools.xml import XMLParser
@@ -50,6 +55,39 @@ def format_price(price):
     if price.endswith('.00'):
         price = price.replace('.00', '')
     return price
+
+
+
+def generate_barcode(format, code):
+    if format == '0':
+        return
+    try:
+        # Try to import elaphe
+        from elaphe import barcode
+        # Generate barcode
+        img = barcode(format, code, options={'scale': 1, 'height': 0.5})
+        # Format PNG
+        f = StringIO()
+        img.save(f, 'png')
+        f.seek(0)
+        return f.getvalue()
+    except Exception:
+        return
+
+
+def join_pdfs(list_pdf):
+    # Create temporary file
+    # Join pdfs
+    fd, filename = mkstemp(dir='/tmp', suffix='.pdf')
+    close_fd(fd)
+    cmd = 'pdftk %s cat output %s'
+    cmd = cmd % (' '.join(list_pdf),  filename)
+    system(cmd)
+    pdf_content = open(filename,  'r')
+    pdf = pdf_content.read()
+    pdf_content.close()
+    return pdf
+
 
 
 class ShopFolder(Folder):

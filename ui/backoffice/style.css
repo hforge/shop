@@ -81,6 +81,7 @@ input, textarea, select{
   border-collapse: separate;
   border-spacing: 0px;
   width: 100%;
+  font-size: 15px;
 }
 
 #browse-list a{
@@ -352,3 +353,14 @@ padding:3px 0 3px 10px;
 .counter-black{
   background-color: black;
 }
+
+.button-bill {
+  background-image: url(/ui/icons/16x16/pdf.png);
+  padding-left: 16px;
+}
+
+.button-order {
+  background-image: url(/ui/icons/16x16/select_none.png);
+  padding-left: 16px;
+}
+

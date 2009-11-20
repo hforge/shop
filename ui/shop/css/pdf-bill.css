@@ -5,7 +5,13 @@
 
 #articles th{
   background-color: #E2E2E2;
+  padding: 4px;
 }
+
+#articles td{
+  padding: 4px;
+}
+
 .align-right{
   text-align: right;
 }

@@ -26,6 +26,7 @@ from itools.xml import XMLParser
 from itools.workflow import WorkflowError
 
 # Import from ikaaro
+from ikaaro.buttons import Button
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import SelectWidget
 
@@ -35,10 +36,26 @@ from shop.payments.enumerates import PaymentWaysEnumerate
 from shop.payments.payments_views import Payments_EditablePayment
 from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.datatypes import Civilite
-from shop.utils import get_shop, bool_to_img
+from shop.utils import get_shop, bool_to_img, join_pdfs
 
 
 numero_template = '<span class="counter counter-%s"><a href="%s">%s</a></span>'
+
+class MergeOrderButton(Button):
+
+    access = 'is_allowed_to_remove'
+    css = 'button-order'
+    name = 'merge_orders'
+    title = MSG(u'Merge orders PDF')
+
+
+class MergeBillButton(Button):
+
+    access = 'is_allowed_to_remove'
+    css = 'button-bill'
+    name = 'merge_orders'
+    title = MSG(u'Merge bill PDF')
+
 
 
 class OrdersView(Folder_BrowseContent):
@@ -48,16 +65,20 @@ class OrdersView(Folder_BrowseContent):
 
     # Configuration
     color = 'green'
-    table_actions = []
+    table_actions = [MergeOrderButton, MergeBillButton]
     search_template = '/ui/shop/orders/orders_search.xml'
 
     table_columns = [
         ('checkbox', None),
+        ('barcode', None),
         ('numero', MSG(u'Order id')),
         ('customer', MSG(u'Customer')),
         ('total_price', MSG(u'Total price')),
         ('is_payed', MSG(u'Payed ?')),
-        ('creation_datetime', MSG(u'Date and Time'))]
+        ('creation_datetime', MSG(u'Date and Time')),
+        ('order_pdf', None),
+        ('bill', None),
+        ]
 
     query_schema = merge_dicts(Folder_BrowseContent.query_schema,
                                sort_by=String(default='creation_datetime'),
@@ -84,6 +105,9 @@ class OrdersView(Folder_BrowseContent):
             href = context.resource.get_pathto(item_resource)
             return XMLParser(numero_template % (self.color, item_brain.name, href))
             #(item_brain.name, href)
+        elif column == 'barcode':
+            barcode = '<img src="%s/barcode/;download"/>' % item_brain.name
+            return XMLParser(barcode)
         elif column == 'customer':
             users = context.root.get_resource('users')
             customer_id = item_resource.get_property('customer_id')
@@ -102,6 +126,24 @@ class OrdersView(Folder_BrowseContent):
             value = item_resource.get_property(column)
             accept = context.accept_language
             return format_datetime(value, accept=accept)
+        elif column == 'order_pdf':
+            if item_resource.get_resource('order', soft=True) is None:
+                return
+            img = """
+                  <a href="./%s/order/;download">
+                    <img src="/ui/icons/16x16/select_none.png"/>
+                  </a>
+                  """ % item_brain.name
+            return XMLParser(img)
+        elif column == 'bill':
+            if item_resource.get_resource('bill', soft=True) is None:
+                return
+            img = """
+                  <a href="./%s/bill/;download">
+                    <img src="/ui/icons/16x16/pdf.png"/>
+                  </a>
+                  """ % item_brain.name
+            return XMLParser(img)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
 
@@ -114,6 +156,29 @@ class OrdersView(Folder_BrowseContent):
         args = list(args)
         args.append(self.get_items_query())
         return Folder_BrowseContent.get_items(self, resource, context, *args)
+
+
+    def action_merge_pdfs(self, resource, context, form, pdf_name):
+        response = context.response
+        response.set_header('Content-Type', 'application/pdf')
+        response.set_header('Content-Disposition',
+                            'attachment; filename="Document.pdf"')
+        list_pdf = []
+        for id in form['ids']:
+            pdf = resource.get_resource('%s/%s' % (id, pdf_name), soft=True)
+            if pdf is None:
+                continue
+            list_pdf.append(pdf.handler.uri)
+        return join_pdfs(list_pdf)
+
+
+    def action_merge_bill(self, resource, context, form):
+        return self.action_merge_pdfs(resource, context, form, 'bill')
+
+
+    def action_merge_orders(self, resource, context, form):
+        return self.action_merge_pdfs(resource, context, form, 'order')
+
 
 
 

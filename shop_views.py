@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
-from cStringIO import StringIO
 from datetime import datetime
 from decimal import Decimal as decimal
 from json import dumps
@@ -714,41 +713,3 @@ class Shop_GetProductStock(BaseView):
         else:
             kw = {'exist': False}
         return dumps(kw)
-
-
-
-class Barcode(BaseView):
-
-    access = 'is_allowed_to_edit'
-    query_schema = {'reference': String}
-
-    def GET(self, resource, context):
-        shop = resource
-        response = context.response
-        format = shop.get_property('barcode_format')
-        if format == '0':
-            response.set_header('Content-Type', 'text/plain')
-            return
-        try:
-            img = self.get_barcode(format, context)
-        except ImportError:
-            response.set_header('Content-Type', 'text/plain')
-            return
-        except Exception:
-            response.set_header('Content-Type', 'text/plain')
-            return
-        response.set_header('Content-Type', 'image/png')
-        return img
-
-
-    def get_barcode(self, format, context):
-        # Try to import elaphe
-        from elaphe import barcode
-        # Generate barcode
-        reference = context.query['reference']
-        img = barcode(format, reference, options={'scale': 1, 'height': 0.5})
-        # Format PNG
-        f = StringIO()
-        img.save(f, 'png')
-        f.seek(0)
-        return f.getvalue()
