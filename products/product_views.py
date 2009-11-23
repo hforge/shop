@@ -368,6 +368,7 @@ class Products_View(Folder_BrowseContent):
     def get_query_schema(self):
         schema = Folder_BrowseContent.get_query_schema(self)
         # Override the default values
+        schema['batch_size'] = Integer(default=50)
         schema['sort_by'] = String(default='title')
         return schema
 
