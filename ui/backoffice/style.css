@@ -186,10 +186,10 @@ fieldset legend{
 .order-sub-browse tr td {
   border: 1px solid #dfd5c3;
   color: #000;
-  font-size:0.9em;
   height:23px;
   padding: 4px;
   background-color: #FFF;
+  font-size: 15px;
 }
 
 .order-hr{
