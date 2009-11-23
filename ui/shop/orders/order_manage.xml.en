@@ -88,7 +88,6 @@
 
   <hr class="order-hr"/>
 
-  <!--
   <table
     style="border-bottom: 1px solid #AC7622; width: 100%; background-color:#FFF7EA;">
     <tr>
@@ -100,7 +99,7 @@
       <td>${is_sent}</td>
     </tr>
   </table>
-  -->
+  <br/>
 
   <div class="clear"/>
   ${products}

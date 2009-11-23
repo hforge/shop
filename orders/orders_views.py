@@ -373,11 +373,13 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         shipping_way_resource = shop.get_resource('shippings/%s/' % shipping_way)
         shippings_records = shippings.get_shippings_records(context, resource.name)
         if is_sent:
-            # We show last delivery
-            last_delivery = shippings_records[0]
-            edit_record_view = shipping_way_resource.order_edit_view
-            view = edit_record_view.GET(resource, shipping_way_resource,
-                          last_delivery, context)
+            view = None
+            if shippings_records:
+                # We show last delivery
+                last_delivery = shippings_records[0]
+                edit_record_view = shipping_way_resource.order_edit_view
+                view = edit_record_view.GET(resource, shipping_way_resource,
+                              last_delivery, context)
         else:
             # We have to add delivery
             add_record_view = shipping_way_resource.order_add_view
