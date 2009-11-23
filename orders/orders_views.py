@@ -44,7 +44,7 @@ numero_template = '<span class="counter counter-%s"><a href="%s">%s</a></span>'
 
 class MergeOrderButton(Button):
 
-    access = 'is_allowed_to_remove'
+    access = 'is_allowed_to_edit'
     css = 'button-order'
     name = 'merge_orders'
     title = MSG(u'Merge orders PDF')
@@ -52,10 +52,18 @@ class MergeOrderButton(Button):
 
 class MergeBillButton(Button):
 
-    access = 'is_allowed_to_remove'
+    access = 'is_allowed_to_edit'
     css = 'button-bill'
     name = 'merge_bill'
     title = MSG(u'Merge bill PDF')
+
+
+class OrderSendButton(Button):
+
+    access = 'is_allowed_to_edit'
+    css = 'button-ok'
+    name = 'set_as_sent'
+    title = MSG(u'Set as sent')
 
 
 
@@ -66,7 +74,7 @@ class OrdersView(Folder_BrowseContent):
 
     # Configuration
     color = 'green'
-    table_actions = [MergeOrderButton, MergeBillButton]
+    table_actions = [MergeOrderButton, MergeBillButton, OrderSendButton]
     search_template = '/ui/shop/orders/orders_search.xml'
 
     table_columns = [
@@ -129,7 +137,7 @@ class OrdersView(Folder_BrowseContent):
         elif column == 'is_sent':
             is_sent = item_resource.get_property('is_sent')
             if is_sent is False:
-                products =item_resource.get_resource('products').handler
+                products = item_resource.get_resource('products').handler
                 return u'0/%d' % products.get_n_records()
             return bool_to_img(True)
         elif column == 'total_price':
@@ -193,9 +201,15 @@ class OrdersView(Folder_BrowseContent):
         return self.action_merge_pdfs(resource, context, form, 'bill')
 
 
+
     def action_merge_orders(self, resource, context, form):
         return self.action_merge_pdfs(resource, context, form, 'order')
 
+
+    def action_set_as_sent(self, resource, context, form):
+        for id in form['ids']:
+            order = resource.get_resource(id)
+            order.set_as_sent(context)
 
 
 
@@ -203,6 +217,8 @@ class OrdersViewCanceled(OrdersView):
 
     title = MSG(u'Canceled orders')
     color = 'red'
+
+    table_actions = [MergeOrderButton, MergeBillButton]
 
     def get_items_query(self):
         return PhraseQuery('workflow_state', 'cancel')
@@ -213,6 +229,8 @@ class OrdersViewArchive(OrdersView):
 
     title = MSG(u'Archives')
     color = 'black'
+
+    table_actions = [MergeOrderButton, MergeBillButton]
 
     def get_items_query(self):
         return OrQuery(
