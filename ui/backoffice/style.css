@@ -130,7 +130,7 @@ fieldset legend{
  * Backoffice order view
  ****************************/
 .order-browse{
-  width: 90%;
+  width: 100%;
   border: 1px solid #dfd5c3;
   border-collapse:collapse;
   padding: 0;
@@ -364,3 +364,6 @@ padding:3px 0 3px 10px;
   padding-left: 16px;
 }
 
+#order-manage-page-backoffice{
+  font-size: 15px;
+}

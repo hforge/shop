@@ -29,6 +29,7 @@ from itools.workflow import WorkflowError
 from ikaaro.buttons import Button
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import SelectWidget
+from ikaaro.table_views import Table_View
 
 # Import from shop
 from workflow import Order_Transitions
@@ -75,6 +76,7 @@ class OrdersView(Folder_BrowseContent):
         ('customer', MSG(u'Customer')),
         ('total_price', MSG(u'Total price')),
         ('is_payed', MSG(u'Payed ?')),
+        ('is_sent', MSG(u'Sent ?')),
         ('creation_datetime', MSG(u'Date and Time')),
         ('order_pdf', None),
         ('bill', None),
@@ -101,7 +103,11 @@ class OrdersView(Folder_BrowseContent):
 
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
-        if column == 'numero':
+        if column == 'checkbox':
+            if item_resource.get_property('is_payed'):
+                return item_brain.name, False
+            return None
+        elif column == 'numero':
             href = context.resource.get_pathto(item_resource)
             return XMLParser(numero_template % (self.color, item_brain.name, href))
             #(item_brain.name, href)
@@ -120,6 +126,12 @@ class OrdersView(Folder_BrowseContent):
             return title
         elif column == 'is_payed':
             return bool_to_img(item_resource.get_property('is_payed'))
+        elif column == 'is_sent':
+            is_sent = item_resource.get_property('is_sent')
+            if is_sent is False:
+                products =item_resource.get_resource('products').handler
+                return u'0/%d' % products.get_n_records()
+            return bool_to_img(True)
         elif column == 'total_price':
             return '%s € ' % item_resource.get_property(column)
         elif column == 'creation_datetime':
@@ -216,6 +228,11 @@ class Order_Manage(Payments_EditablePayment, STLForm):
 
     template = '/ui/shop/orders/order_manage.xml'
 
+    def get_query(self, context):
+        return {'sort_by': String(default='title'),
+                'reverse': Boolean(default=False)}
+
+
     def get_states_history(self, resource, context):
         from ikaaro.workflow import parse_git_message
         history = []
@@ -274,7 +291,8 @@ class Order_Manage(Payments_EditablePayment, STLForm):
                                  'email': user.get_property('email')}
         # Products
         products = resource.get_resource('products')
-        namespace['products'] = products.get_namespace(context)
+        namespace['products'] = OrdersProducts_View().GET(products, context)
+        # Price
         for key in ['shipping_price', 'total_price']:
             namespace[key] = resource.get_property(key)
         # Messages
@@ -405,3 +423,61 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         # Do actions
         return add_record_view.add_shipping(resource, shipping_way,
                     context, form)
+
+
+
+class OrdersProducts_View(Table_View):
+
+    title = MSG(u'Products')
+    access = 'is_allowed_to_edit'
+
+    search_template = None
+    batch_template = None
+    table_actions = []
+
+    columns = [
+        ('checkbox', None),
+        ('state', MSG(u'State')),
+        ('cover', None),
+        ('reference', MSG(u'Reference')),
+        ('title', MSG(u'Title')),
+        ('quantity', MSG(u'Quantity')),
+        ('pre-tax-price', MSG(u'Unit Price')),
+        ]
+
+
+    def get_table_columns(self, resource, context):
+        return self.columns
+
+
+    def get_item_value(self, resource, context, item, column):
+        get_value = resource.handler.get_record_value
+        shop = get_shop(resource)
+        products = shop.get_resource('products')
+        product_resource = products.get_resource(get_value(item, 'name'), soft=True)
+        if column == 'checkbox':
+            return item.id, False
+        elif column == 'state':
+            href = ''
+            color = 'green'
+            name = 'Ok'
+            return XMLParser(numero_template % (color, href, name))
+        elif column == 'cover':
+            if product_resource:
+                cover = product_resource.get_cover_namespace(context)
+                uri = '%s/;thumb?width=48&amp;height=48' % cover['href']
+                return XMLParser('<div class="thumb-products"><img src="%s"/></div>' % uri)
+            return None
+        elif column == 'title':
+            id = item.id
+            title = get_value(item, 'title')
+            link = None
+            if product_resource:
+                link = context.get_link(product_resource)
+            return title, link
+        return Table_View.get_item_value(self, resource, context, item, column)
+
+
+    def sort_and_batch(self, resource, context, items):
+        return items
+

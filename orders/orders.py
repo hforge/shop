@@ -42,7 +42,7 @@ from shop.utils import get_shop
 
 # Import from shop.orders
 from messages import Messages_TableResource
-from orders_views import Order_Manage
+from orders_views import Order_Manage, OrdersProducts_View
 from orders_views import OrdersView, OrdersViewCanceled, OrdersViewArchive
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
@@ -101,6 +101,7 @@ class OrdersProducts(Table):
     class_handler = BaseOrdersProducts
 
     class_views = ['view']
+    view = OrdersProducts_View()
 
     form = [
         TextWidget('name', title=MSG(u'Product name')),
@@ -120,7 +121,8 @@ class OrdersProducts(Table):
         handler = self.handler
         get_value = handler.get_record_value
         for record in handler.get_records():
-            kw = {'uri': None}
+            kw = {'id': record.id,
+                  'uri': None}
             name = get_value(record, 'name')
             product_resource = products.get_resource(name, soft=True)
             if product_resource:

@@ -4,9 +4,8 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-
-  <table cellpadding="0" cellspacing="0"
-    style="border-bottom: 1px solid #AC7622; width: 100%;">
+  <div id="order-manage-page-backoffice">
+  <table cellpadding="0" cellspacing="0">
     <tr>
       <td style="width:48px">
         <img src="/ui/icons/48x48/tasks.png"/>
@@ -14,6 +13,10 @@
       <td>
         <h1 style="padding:0;margin:0">
           Order number #${order/id}
+          <a href="/shop/orders/${order/id}/order/;download"
+            target="blank">
+            <img src="/ui/icons/16x16/select_none.png" title="Download order"/>
+          </a>
           <a href="/shop/orders/${order/id}/bill/;download"
             target="blank" stl:if="has_bill">
             <img src="/ui/icons/16x16/pdf.png" title="Download bill"/>
@@ -22,89 +25,26 @@
         <h2 style="padding:0;margin:0">${order/date}</h2>
         <a href="../">« Come back to orders list</a>
       </td>
-      <td style="float:right" valign="bottom">
-        <h1 style="padding:0;margin:0">
+    </tr>
+  </table>
+
+  <br/>
+
+  <table cellpadding="0" cellspacing="0" style="width:100%;background-color:#FFF7EA;
+    border-top: 1px solid #AC7622; padding: 5px;
+    border-bottom: 1px solid #AC7622; padding: 5px;
+    ">
+    <tr>
+      <td>
+        <h2 style="padding:0;margin:0">
           <img src="/ui/shop/icons/16x16/users.png"/>
           Customer
-        </h1>
+        </h2>
         <a target="_blank" href="/shop/customers/${customer/id}">
           ${customer/title}<br/>
           (${customer/email})
         </a>
       </td>
-    </tr>
-  </table>
-
-  <table
-    style="border-bottom: 1px solid #AC7622; width: 100%; background-color:#FFF7EA;">
-    <tr>
-      <td style="width:100px">Is payed ?</td>
-      <td>${is_payed}</td>
-    </tr>
-    <tr>
-      <td>Is sent ?</td>
-      <td>${is_sent}</td>
-    </tr>
-  </table>
-
-  <div class="clear"/>
-
-  <table class="order-sub-browse">
-    <thead>
-      <tr>
-        <th>Reference</th>
-        <th>Cover</th>
-        <th>Product</th>
-        <th>Unit price HT</th>
-        <th>Quantity</th>
-        <th>Total price</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr stl:repeat="product products">
-        <td>
-          ${product/reference}<br/><br/>
-          <img src="../../;barcode?reference=${product/reference}"
-            stl:if="product/reference"/>
-        </td>
-        <td>
-          <img src="${product/cover/href}/;thumb?width=100&amp;height=100"
-            stl:if="product/cover"/>
-        </td>
-        <td>
-          <a href="${product/uri}" stl:omit-tag="not product/uri">
-            ${product/title}
-          </a>
-          <stl:block stl:if="product/declination">
-            <br/>${product/declination}
-          </stl:block>
-        </td>
-        <td>${product/price/unit/with_tax} €</td>
-        <td>${product/quantity}</td>
-        <td>${product/price/total/with_tax} €</td>
-      </tr>
-      <tr>
-        <td colspan="5" style="text-align:right">
-          <span>${order/shipping_way}</span> »
-          Shipping
-          (${order/total_weight} kg)
-        </td>
-        <td>${shipping_price} €</td>
-      </tr>
-      <tr>
-        <td colspan="5" style="text-align:right">
-          <span>${order/payment_way}</span> »
-          Total Price
-        </td>
-        <td>${total_price} €</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <hr class="order-hr"/>
-
-  <table cellpadding="0" cellspacing="0" style="width:100%;background-color:#FFF7EA;">
-    <tr>
       <td>
         <h2 style="padding:0; margin:0">
           <img src="/ui/shop/icons/16x16/users.png"/>
@@ -138,6 +78,88 @@
     </tr>
   </table>
 
+  <hr class="order-hr"/>
+
+  <!--
+  <table
+    style="border-bottom: 1px solid #AC7622; width: 100%; background-color:#FFF7EA;">
+    <tr>
+      <td style="width:100px">Is payed ?</td>
+      <td>${is_payed}</td>
+    </tr>
+    <tr>
+      <td>Is sent ?</td>
+      <td>${is_sent}</td>
+    </tr>
+  </table>
+  -->
+
+  <div class="clear"/>
+  ${products}
+
+<!--
+  <table class="order-sub-browse">
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>Reference</th>
+        <th style="width:100px">Cover</th>
+        <th>Product</th>
+        <th>Unit price HT</th>
+        <th style="width:10px">Quantity</th>
+        <th>Total price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr stl:repeat="product products">
+        <td>
+          <input type="checkbox" name="id" value="${product/id}"/>
+        </td>
+        <td>
+          <span class="counter counter-green">
+            In stock
+          </span>
+        </td>
+        <td>
+          ${product/reference}<br/><br/>
+          <img src="../../;barcode?reference=${product/reference}"
+            stl:if="product/reference"/>
+        </td>
+        <td>
+          <img src="${product/cover/href}/;thumb?width=100&amp;height=100"
+            stl:if="product/cover"/>
+        </td>
+        <td>
+          <a href="${product/uri}" stl:omit-tag="not product/uri">
+            ${product/title}
+          </a>
+          <stl:block stl:if="product/declination">
+            <br/>${product/declination}
+          </stl:block>
+        </td>
+        <td>${product/price/unit/with_tax} €</td>
+        <td>${product/quantity}</td>
+        <td>${product/price/total/with_tax} €</td>
+      </tr>
+      <tr>
+        <td colspan="7" style="text-align:right">
+          <span>${order/shipping_way}</span> »
+          Shipping
+          (${order/total_weight} kg)
+        </td>
+        <td>${shipping_price} €</td>
+      </tr>
+      <tr>
+        <td colspan="7" style="text-align:right">
+          <span>${order/payment_way}</span> »
+          Total Price
+        </td>
+        <td>${total_price} €</td>
+      </tr>
+    </tbody>
+  </table>
+-->
   <hr class="order-hr"/>
 
   <!-- States -->
@@ -226,8 +248,7 @@
 
 
   <!-- Shipping -->
-  <table class="order-browse" style="width:500px;float:left;"
-    stl:if="payment/is_payed">
+  <table class="order-browse" stl:if="payment/is_payed">
     <thead>
       <tr>
         <th>
@@ -257,42 +278,42 @@
   <hr class="order-hr"/>
 
   <!-- Messages -->
-  <table class="order-browse">
+  <table id="browse-list">
     <thead>
       <tr>
         <th>
           <img src="/ui/icons/16x16/mail.png"/>
           Messages
         </th>
+        <th>Email</th>
+        <th>State</th>
+        <th width="60%">Message</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>
-          <table cellpadding="0" cellspacing="0" class="order-sub-browse"
-            stl:if="messages">
-            <tbody>
-              <tr stl:repeat="message messages">
-                <td>
-                  <b>${message/ts}</b>
-                </td>
-                <td>
-                  ${message/author}
-                </td>
-                <td>
-                  <span stl:if="not message/private">
-                    Public
-                  </span>
-                  <span stl:if="message/private">
-                    Private
-                  </span>
-                </td>
-                <td>
-                  ${message/message}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <tr stl:repeat="message messages"
+          class="${repeat/message/even}">
+          <td>
+            <b>${message/ts}</b>
+          </td>
+          <td>
+            ${message/author}
+          </td>
+          <td>
+            <span stl:if="not message/private">
+              Public
+            </span>
+            <span stl:if="message/private">
+              Private
+            </span>
+          </td>
+          <td>
+            ${message/message}
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  <p>
           <form method="post">
             If you want to add a message:<br/>
             <input type="radio" id="radio-public" name="private" value="0"
@@ -304,10 +325,7 @@
             <input type="submit" name=";add_message"
               class="button-ok" value="Send message"/>
           </form>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    </p>
 
   <!-- Payments history -->
   <table class="order-browse" stl:if="payment/history" style="display:none">
@@ -350,7 +368,7 @@
   </table>
 
   <!-- shipping history -->
-  <table class="order-browse" stl:if="shipping/history" style="display:none">
+  <table id="browse-list" stl:if="shipping/history" style="display:none">
     <thead>
       <tr>
         <th>
@@ -395,6 +413,7 @@
         class="button-red"
         value="Cancel the order"/>
     </form>
+  </div>
   </div>
 
 
