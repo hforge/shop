@@ -53,7 +53,7 @@ class MergeBillButton(Button):
 
     access = 'is_allowed_to_remove'
     css = 'button-bill'
-    name = 'merge_orders'
+    name = 'merge_bill'
     title = MSG(u'Merge bill PDF')
 
 
@@ -165,6 +165,11 @@ class OrdersView(Folder_BrowseContent):
                             'attachment; filename="Document.pdf"')
         list_pdf = []
         for id in form['ids']:
+            order = resource.get_resource(id)
+            order.del_resource(pdf_name)
+            order.generate_pdf_bill(context)
+            order.generate_pdf_order(context)
+            context.commit = True
             pdf = resource.get_resource('%s/%s' % (id, pdf_name), soft=True)
             if pdf is None:
                 continue

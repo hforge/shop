@@ -7,20 +7,54 @@
   </pml:head>
 
   <pml:header>
-    <pml:img src="${logo}" stl:if="logo"/>
+    <pml:table id="header">
+      <pml:tr>
+        <pml:td>
+          <pml:img src="${logo}" stl:if="logo" style="float:left"/>
+        </pml:td>
+        <pml:td>
+        Bill number: ${num_cmd}<br/>
+        <pml:img src="${order_barcode}"/><br/>
+        Date: ${creation_date}
+        </pml:td>
+      </pml:tr>
+    </pml:table>
   </pml:header>
 
   <pml:footer>
+    <pml:p class="footer">
+      ${pdf_signature}
+    </pml:p>
     <pml:p class="page">Page <pml:pagenumber/> / <pml:pagetotal/></pml:p>
   </pml:footer>
 
   <pml:body style="margin-left:0.5cm; margin-right:0.5cm; padding-left:0; padding-right:0;">
 
-    <pml:table id="infos">
+    <pml:table id="addresses">
       <pml:tr>
         <pml:td>
-          <pml:h1>Order ${num_cmd}</pml:h1>
-          <pml:img src="${order_barcode}"/>
+          <pml:p>
+            <pml:b>Delivery address</pml:b><pml:br/>
+            ${delivery_address/firstname} ${delivery_address/lastname}<pml:br/>
+            ${delivery_address/address_1}<br/>
+            <stl:block stl:if="delivery_address/address_2">
+              ${delivery_address/address_2}<br/>
+            </stl:block>
+            ${delivery_address/zipcode} ${delivery_address/town}<pml:br/>
+            ${delivery_address/country}<pml:br/>
+          </pml:p>
+        </pml:td>
+        <pml:td>
+          <pml:p>
+            <pml:b>Bill address</pml:b><pml:br/>
+            ${bill_address/firstname} ${bill_address/lastname}<pml:br/>
+            ${bill_address/address_1}<pml:br/>
+            <stl:block stl:if="bill_address/address_2">
+              ${bill_address/address_2}<br/>
+            </stl:block>
+            ${bill_address/zipcode} ${bill_address/town}<pml:br/>
+            ${bill_address/country}<pml:br/>
+          </pml:p>
         </pml:td>
       </pml:tr>
     </pml:table>
@@ -34,10 +68,9 @@
         <pml:th>Total price (With tax)</pml:th>
       </pml:tr>
       <pml:tr stl:repeat="product products">
-        <pml:td>
-          <pml:p>
-            <pml:img src="${product/uri}/barcode"/>
-          </pml:p>
+        <pml:td width="5cm">
+          ${product/reference}<br/>
+          <pml:img src="${product/uri}/barcode"/>
         </pml:td>
         <pml:td>${product/title}</pml:td>
         <pml:td>${product/price/unit/with_tax} €</pml:td>

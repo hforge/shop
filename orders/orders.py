@@ -46,7 +46,7 @@ from orders_views import Order_Manage
 from orders_views import OrdersView, OrdersViewCanceled, OrdersViewArchive
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
-from shop.utils import format_price, ShopFolder
+from shop.utils import format_price, ShopFolder, format_for_pdf
 
 
 #############################################
@@ -351,14 +351,21 @@ class Order(WorkflowAware, ShopFolder):
           'products': self.get_resource('products').get_namespace(context),
           'shipping_price': self.get_property('shipping_price'),
           'total_price': self.get_property('total_price'),
+          'pdf_signature': format_for_pdf(shop.get_property('pdf_signature')),
           'creation_date': creation_date}
+        # Addresses
+        addresses = shop.get_resource('addresses').handler
+        get_address = addresses.get_record_namespace
+        bill_address = self.get_property('bill_address')
+        delivery_address = self.get_property('delivery_address')
+        namespace['delivery_address'] = get_address(delivery_address)
+        namespace['bill_address'] = get_address(bill_address)
         # Build pdf
         path = get_uri_path(shop.handler.uri)
         body = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'},
                      'filename': 'order.pdf'}
-        pdf = PDF.make_resource(PDF, self, 'order', body=body, **metadata)
-        return pdf
+        return PDF.make_resource(PDF, self, 'order', body=body, **metadata)
 
 
 
@@ -382,6 +389,7 @@ class Order(WorkflowAware, ShopFolder):
           'num_cmd': self.name,
           'products': self.get_resource('products').get_namespace(context),
           'shipping_price': self.get_property('shipping_price'),
+          'pdf_signature': format_for_pdf(shop.get_property('pdf_signature')),
           'total_price': self.get_property('total_price'),
           'creation_date': creation_date}
         # Addresses
@@ -396,7 +404,7 @@ class Order(WorkflowAware, ShopFolder):
         pdf = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'},
                      'filename': 'bill.pdf'}
-        PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
+        return PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
 
 
 

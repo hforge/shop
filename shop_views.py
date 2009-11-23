@@ -84,6 +84,7 @@ class Shop_Configure(DBResource_Edit):
               'show_sub_categories': Boolean,
               'activate_mail_html': Boolean(mandatory=True),
               'bill_logo': ImagePathDataType,
+              'pdf_signature': Unicode,
               'barcode_format': BarcodesFormat}
 
     widgets = [
@@ -93,6 +94,8 @@ class Shop_Configure(DBResource_Edit):
             rows=8, cols=50),
         MultilineWidget('shop_signature',
             title=MSG(u'Shop signature'), rows=8, cols=50),
+        MultilineWidget('pdf_signature',
+            title=MSG(u'PDF signature'), rows=8, cols=50),
         BooleanRadio('activate_mail_html',
             title=MSG(u'Activate html mails')),
         SelectWidget('shop_default_zone', title=MSG(u'Shop default zone')),

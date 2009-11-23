@@ -1,3 +1,10 @@
+body{
+  margin-left:0.5cm;
+  margin-right:0.5cm;
+  padding-left:0;
+  padding-right:0;
+}
+
 #articles{
   margin-top: 20px;
   border: 1px solid black;
@@ -22,4 +29,20 @@ p.page {
   font-size: 6;
   font-weight: normal;
   padding: 0;
+}
+
+p.footer {
+  font-family: sansserif;
+  text-align: center;
+  font-size: 8;
+  font-weight: normal;
+  padding: 0;
+}
+
+#header td{
+  font-weight: bold;
+  font-size: 16px;
+}
+
+#addresses{
 }

@@ -7,25 +7,28 @@
   </pml:head>
 
   <pml:header>
-    <pml:img src="${logo}" stl:if="logo"/>
+    <pml:table id="header">
+      <pml:tr>
+        <pml:td>
+          <pml:img src="${logo}" stl:if="logo" style="float:left"/>
+        </pml:td>
+        <pml:td>
+        Bill number: ${num_cmd}<br/>
+        Date: ${creation_date}
+        </pml:td>
+      </pml:tr>
+    </pml:table>
   </pml:header>
 
   <pml:footer>
+    <pml:p class="footer">
+      ${pdf_signature}
+    </pml:p>
     <pml:p class="page">Page <pml:pagenumber/> / <pml:pagetotal/></pml:p>
   </pml:footer>
 
 
-  <pml:body style="margin-left:0.5cm; margin-right:0.5cm; padding-left:0; padding-right:0;">
-    <pml:table id="infos">
-      <pml:tr>
-        <pml:th>Order number</pml:th>
-        <pml:td>${num_cmd}</pml:td>
-      </pml:tr>
-      <pml:tr>
-        <pml:th>Date</pml:th>
-        <pml:td>${creation_date}</pml:td>
-      </pml:tr>
-    </pml:table>
+  <pml:body>
 
     <pml:table id="addresses">
       <pml:tr>
@@ -41,7 +44,6 @@
             ${delivery_address/country}<pml:br/>
           </pml:p>
         </pml:td>
-        <pml:td></pml:td>
         <pml:td>
           <pml:p>
             <pml:b>Bill address</pml:b><pml:br/>
@@ -59,26 +61,29 @@
 
     <pml:table id="articles">
       <pml:tr>
+        <pml:th>Reference</pml:th>
         <pml:th>Product</pml:th>
         <pml:th>Unit price (With tax)</pml:th>
         <pml:th>Quantity</pml:th>
         <pml:th>Total price (With tax)</pml:th>
       </pml:tr>
       <pml:tr stl:repeat="product products">
+        <pml:td>${product/reference}</pml:td>
         <pml:td>${product/title}</pml:td>
         <pml:td>${product/price/unit/with_tax} €</pml:td>
         <pml:td>${product/quantity}</pml:td>
         <pml:td>${product/price/total/with_tax} €</pml:td>
       </pml:tr>
       <pml:tr>
-        <pml:td colspan="3" class="align-right">Shipping</pml:td>
+        <pml:td colspan="4" class="align-right">Shipping</pml:td>
         <pml:td>${shipping_price} €</pml:td>
       </pml:tr>
       <pml:tr>
-        <pml:td colspan="3" class="align-right">Total Price</pml:td>
+        <pml:td colspan="4" class="align-right">Total Price</pml:td>
         <pml:td>${total_price} €</pml:td>
       </pml:tr>
     </pml:table>
+
 
  </pml:body>
 </pml:html>

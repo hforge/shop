@@ -218,6 +218,7 @@ class Shop(ShopFolder):
         schema['shop_sort_reverse'] = Boolean
         schema['shop_from_addr'] = Email
         schema['bill_logo'] = ImagePathDataType
+        schema['pdf_signature'] = Unicode
         schema['activate_mail_html'] = Boolean
         schema['barcode_format'] = BarcodesFormat
         schema['show_sub_categories'] = Boolean
