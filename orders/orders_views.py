@@ -427,6 +427,8 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         messages.add_record({'author': context.user.name,
                              'private': form['private'],
                              'message': form['message']})
+        if form['private'] is False:
+            resource.notify_new_message(form['message'], context)
         context.message = INFO(u'Your message has been sent')
 
 

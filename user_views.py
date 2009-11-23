@@ -316,6 +316,7 @@ class ShopUser_OrderView(STLForm):
         messages.add_record({'author': context.user.name,
                              'private': False,
                              'message': form['message']})
+        resource.notify_new_message(form['message'], context)
         context.message = INFO(u'Your message has been sent')
 
 

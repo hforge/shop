@@ -332,6 +332,18 @@ class Order(WorkflowAware, ShopFolder):
             self.set_workflow_state('delivery')
 
 
+    def notify_new_message(self, message, context):
+        shop = get_shop(self)
+        customer_id = self.get_property('customer_id')
+        customer = context.root.get_resource('/users/%s' % customer_id)
+        contact = customer.get_property('email')
+        subject = MSG(u'New message concerning your order number %s' % self.name)
+        shop.send_email(context, contact, subject, text=message)
+        subject = MSG(u'New message concerning order number %s' % self.name)
+        for to_addr in shop.get_property('order_notification_mails'):
+            shop.send_email(context, to_addr, subject, text=message)
+
+
     def generate_pdf_order(self, context):
         shop = get_shop(self)
         accept = context.accept_language
