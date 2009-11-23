@@ -95,6 +95,33 @@ class Shop_ProductSearch(VirtualCategories_View):
 
     nb_results = 0
 
+
+    def get_sub_categories_namespace(self, resource, context):
+        namespace = []
+        search_word = context.query['product_search_text']
+        query = AndQuery(PhraseQuery('format', 'category'),
+                         PhraseQuery('title', search_word))
+        for brain in context.root.search(query).get_documents():
+            cat = context.root.get_resource(brain.abspath)
+            nb_products = cat.get_nb_products()
+            if nb_products == 0:
+                continue
+            img = cat.get_property('image_category')
+            path_cat = resource.get_pathto(cat)
+            namespace.append(
+                {'name': cat.name,
+                 'link': '/categories/%s' % cat.get_unique_id(),
+                 'title': cat.get_title(),
+                 'css': None,
+                 'nb_products': nb_products,
+                 'img': str(path_cat.resolve2(img)) if img else None})
+        if namespace:
+            namespace[0]['css'] = 'start'
+            namespace[-1]['css'] = 'end'
+        return namespace
+
+
+
     def get_query_schema(self):
         schema = VirtualCategories_View.get_query_schema(self)
         schema['sort_by'] = String(default='ctime')

@@ -13,7 +13,7 @@
     <stl:block stl:if="category/img">
       <img src="${category/img}/;download"/><br/>
     </stl:block>
-    <a href="${category/name}">
+    <a href="${category/link}">
       ${category/title} (${category/nb_products})
     </a>
   </div>

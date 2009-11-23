@@ -46,7 +46,6 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
 
 
     def get_namespace(self, resource, context):
-        from categories import Category
         shop = get_shop(resource)
         real_category = resource.get_real_resource()
         batch = None
@@ -77,7 +76,17 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
         # Do not show subcategories
         if shop.get_property('show_sub_categories') is False:
             return namespace
-        # Show subcategories
+        namespace['sub_categories'] = self.get_sub_categories_namespace(
+                                          resource, context)
+        return namespace
+
+
+
+    def get_sub_categories_namespace(self, resource, context):
+        from categories import Category
+        shop = get_shop(resource)
+        real_category = resource.get_real_resource()
+        namespace = []
         product_query = AndQuery(PhraseQuery('format', shop.product_class.class_id),
                                  PhraseQuery('has_categories', True))
         for cat in real_category.search_resources(cls=Category):
@@ -86,16 +95,18 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
                 continue
             img = cat.get_property('image_category')
             path_cat = resource.get_pathto(cat)
-            namespace['sub_categories'].append(
+            namespace.append(
                 {'name': cat.name,
+                 'link': '/categories/%s' % cat.get_unique_id(),
                  'title': cat.get_title(),
                  'css': None,
                  'nb_products': nb_products,
                  'img': str(path_cat.resolve2(img)) if img else None})
-        if namespace['sub_categories']:
-            namespace['sub_categories'][0]['css'] = 'start'
-            namespace['sub_categories'][-1]['css'] = 'end'
+        if namespace:
+            namespace[0]['css'] = 'start'
+            namespace[-1]['css'] = 'end'
         return namespace
+
 
 
     def get_items(self, resource, context):
