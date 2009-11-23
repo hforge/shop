@@ -92,11 +92,26 @@ class OrdersView(Folder_BrowseContent):
 
     query_schema = merge_dicts(Folder_BrowseContent.query_schema,
                                sort_by=String(default='creation_datetime'),
-                               reverse=Boolean(default=True))
+                               reverse=Boolean(default=True),
+                               reference=String)
 
 
     batch_msg1 = MSG(u"There's one order.")
     batch_msg2 = MSG(u"There are {n} orders.")
+
+
+    def GET(self, resource, context):
+        reference = context.query['reference']
+        if reference:
+            order = resource.get_resource(reference, soft=True)
+            if order:
+                msg = INFO(u'Reference found !')
+                return context.come_back(msg, goto=context.get_link(order))
+            else:
+                context.message = ERROR(u'Unknow reference "%s"' % reference)
+        return Folder_BrowseContent.GET(self, resource, context)
+
+
 
     def get_search_namespace(self, resource, context):
         root = context.root
@@ -246,9 +261,22 @@ class Order_Manage(Payments_EditablePayment, STLForm):
 
     template = '/ui/shop/orders/order_manage.xml'
 
-    def get_query(self, context):
+    def get_query_schema(self):
         return {'sort_by': String(default='title'),
-                'reverse': Boolean(default=False)}
+                'reverse': Boolean(default=False),
+                'reference': String}
+
+
+    def GET(self, resource, context):
+        reference = context.query['reference']
+        if reference:
+            order = resource.parent.get_resource(reference, soft=True)
+            if order:
+                msg = INFO(u'Reference found !')
+                return context.come_back(msg, goto=context.get_link(order))
+            else:
+                context.message = ERROR(u'Unknow reference "%s"' % reference)
+        return STLForm.GET(self, resource, context)
 
 
     def get_states_history(self, resource, context):
@@ -284,6 +312,8 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         # Bill
         has_bill = resource.get_resource('bill', soft=True) is not None
         namespace['has_bill'] = has_bill
+        has_order = resource.get_resource('order', soft=True) is not None
+        namespace['has_order'] = has_order
         # Order
         creation_datetime = resource.get_property('creation_datetime')
         namespace['order'] = {

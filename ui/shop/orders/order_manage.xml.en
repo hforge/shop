@@ -5,16 +5,17 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <div id="order-manage-page-backoffice">
-  <table cellpadding="0" cellspacing="0">
+  <table cellpadding="0" cellspacing="0" style="width:100%">
     <tr>
       <td style="width:48px">
         <img src="/ui/icons/48x48/tasks.png"/>
       </td>
       <td>
+        <div style="float:left;">
         <h1 style="padding:0;margin:0">
           Order number #${order/id}
           <a href="/shop/orders/${order/id}/order/;download"
-            target="blank">
+            target="blank" stl:if="has_order">
             <img src="/ui/icons/16x16/select_none.png" title="Download order"/>
           </a>
           <a href="/shop/orders/${order/id}/bill/;download"
@@ -23,7 +24,15 @@
           </a>
         </h1>
         <h2 style="padding:0;margin:0">${order/date}</h2>
-        <a href="../">« Come back to orders list</a>
+        </div>
+        <div style="float:right;">
+          <form>
+            Goto reference:<br/>
+            <input type="text" name="reference" id="reference" size="12"/>
+            <input type="submit" name="ok" value="Ok" class="button-ok"/>
+          </form><br/>
+          <a href="../">« Come back to orders list</a>
+        </div>
       </td>
     </tr>
   </table>
@@ -32,8 +41,7 @@
 
   <table cellpadding="0" cellspacing="0" style="width:100%;background-color:#FFF7EA;
     border-top: 1px solid #AC7622; padding: 5px;
-    border-bottom: 1px solid #AC7622; padding: 5px;
-    ">
+    border-bottom: 1px solid #AC7622; padding: 5px;">
     <tr>
       <td>
         <h2 style="padding:0;margin:0">
@@ -416,5 +424,10 @@
   </div>
   </div>
 
+  <script>
+    $(document).ready(function(){
+      $("#reference").focus();
+    });
+  </script>
 
 </stl:block>

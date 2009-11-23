@@ -37,8 +37,22 @@
     </tr>
   </table>
 
-  <br/>
   <div class="clear"/>
-  <br/>
+  <br/><br/>
+  <br/><br/>
+
+  <div style="float:right;">
+    <form>
+      Goto Reference number:
+      <input type="text" id="reference" name="reference" value="" size="12"/>
+      <input type="submit" class="button-ok" value="Ok"/>
+    </form>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+      $("#reference").focus();
+    });
+  </script>
 
 </stl:block>
