@@ -609,7 +609,7 @@ class Shop_ShowRecapitulatif(STLForm):
         # Format total_price
         total_price = decimal(format_price(total_price))
         # We create a new order
-        ref = datetime.now().strftime('%y%m%d%M%S')
+        ref = datetime.now().strftime('%y%m%d%S%M%H')
         kw = {'user': context.user,
               'payment_mode': form['payment'],
               'shipping_price': shipping_price,
