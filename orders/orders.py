@@ -149,6 +149,7 @@ class Order(WorkflowAware, ShopFolder):
     class_id = 'order'
     class_title = MSG(u'Order')
     class_views = ['view', 'manage']
+    class_version = '20091123'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'messages', 'products']
@@ -241,9 +242,9 @@ class Order(WorkflowAware, ShopFolder):
                                 '%s/messages' % name,
                                 **{'title': {'en': u'Messages'}})
         # Send mail of confirmation / notification
-        from shop.utils import generate_barcode
         cls.send_email_confirmation(shop, shop_uri, user, name)
         # Generate barcode
+        from shop.utils import generate_barcode
         order = shop.get_resource('orders/%s' % name)
         barcode = generate_barcode(shop.get_property('barcode_format'), name)
         metadata =  {'title': {'en': u'Barcode'},
@@ -346,7 +347,7 @@ class Order(WorkflowAware, ShopFolder):
                 logo_uri = resource.handler.uri
         namespace =  {
           'logo': logo_uri,
-          'order_barcode': '%s/barcode.png' % self.handler.uri,
+          'order_barcode': '%s/barcode' % self.handler.uri,
           'num_cmd': self.name,
           'products': self.get_resource('products').get_namespace(context),
           'shipping_price': self.get_property('shipping_price'),
@@ -405,6 +406,22 @@ class Order(WorkflowAware, ShopFolder):
         metadata =  {'title': {'en': u'Bill'},
                      'filename': 'bill.pdf'}
         return PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
+
+
+    def update_20091123(self):
+        from shop.utils import generate_barcode
+        shop = get_shop(self)
+        barcode = generate_barcode(shop.get_property('barcode_format'), self.name)
+        metadata =  {'title': {'en': u'Barcode'},
+                     'filename': 'barcode.png'}
+        self.del_resource('barcode', soft=True)
+        Image.make_resource(Image, self, 'barcode', body=barcode, **metadata)
+        # Generate PDF
+        from itools.web import get_context
+        context = get_context()
+        context.resource = self
+        bill = self.generate_pdf_bill(context)
+        order = self.generate_pdf_order(context)
 
 
 

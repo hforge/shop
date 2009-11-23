@@ -29,6 +29,7 @@ from itools.web import get_context
 from itools.xml import TEXT
 
 # Import from ikaaro
+from ikaaro.file import Image
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import SelectWidget
 from ikaaro.registry import register_resource_class, register_field
@@ -54,7 +55,7 @@ from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
 from shop.manufacturers import ManufacturersEnumerate
 from shop.stock.stock_views import Stock_FillStockOut, Stock_Resupply
-from shop.utils import get_shop, format_price, ShopFolder
+from shop.utils import get_shop, format_price, ShopFolder, generate_barcode
 
 
 ###############
@@ -86,7 +87,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     class_views = ['view', 'edit', 'declinations', 'images',
                    'order', 'edit_cross_selling', 'delete_product']
     class_description = MSG(u'A product')
-    class_version = '20090920'
+    class_version = '20091123'
 
     ##################
     # Configuration
@@ -660,6 +661,17 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         return self.get_property('weight')
 
 
+    def save_barcode(self, reference):
+        shop = get_shop(self)
+        barcode = generate_barcode(shop.get_property('barcode_format'),
+                                   reference)
+        self.del_resource('barcode', soft=True)
+        metadata =  {'title': {'en': u'Barcode'},
+                     'filename': 'barcode.png'}
+        Image.make_resource(Image, self, 'barcode', body=barcode, **metadata)
+
+
+
     #########################################
     # Update links mechanism
     #-------------------------
@@ -806,6 +818,10 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     def update_20090806(self):
         self.set_property('state', 'public')
 
+
+    def update_20091123(self):
+        reference = self.get_property('reference')
+        self.save_barcode(reference)
 
 
 

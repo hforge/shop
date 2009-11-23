@@ -29,7 +29,6 @@ from ikaaro import messages
 from ikaaro.buttons import RemoveButton, RenameButton, CopyButton, PasteButton
 from ikaaro.buttons import PublishButton, RetireButton
 from ikaaro.exceptions import ConsistencyError
-from ikaaro.file import Image
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
 from ikaaro.forms import SelectRadio
@@ -48,7 +47,7 @@ from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.suppliers import SuppliersEnumerate
-from shop.utils import get_shop, ChangeCategoryButton, generate_barcode
+from shop.utils import get_shop, ChangeCategoryButton
 
 
 class Product_NewProduct(NewInstance):
@@ -234,7 +233,7 @@ class Product_Edit(Editable_Edit, AutoForm):
 
 
     def action(self, resource, context, form):
-        self.save_barcode(resource, form['reference'])
+        resource.save_barcode(form['reference'])
         # Save properties
         language = resource.get_content_language(context)
         for key, datatype in self.get_schema(resource, context).iteritems():
@@ -249,16 +248,6 @@ class Product_Edit(Editable_Edit, AutoForm):
         Editable_Edit.action(self, resource, context, form)
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED)
-
-
-    def save_barcode(self, resource, reference):
-        shop = get_shop(resource)
-        barcode = generate_barcode(shop.get_property('barcode_format'),
-                                   reference)
-        resource.del_resource('barcode', soft=True)
-        metadata =  {'title': {'en': u'Barcode'},
-                     'filename': 'barcode.png'}
-        Image.make_resource(Image, resource, 'barcode', body=barcode, **metadata)
 
 
 
