@@ -21,7 +21,7 @@ from decimal import Decimal as decimal
 from itools import vfs
 from itools.core import get_abspath, merge_dicts
 from itools.csv import Table as BaseTable, CSVFile
-from itools.datatypes import Decimal, Enumerate, String, Unicode
+from itools.datatypes import Decimal, Enumerate, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.stl import stl
@@ -37,6 +37,7 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
+from shop.cart import ProductCart
 from shop.countries import CountriesZonesEnumerate
 from shop.utils import get_shop, ShopFolder
 
@@ -105,7 +106,8 @@ class ShippingPricesTable(BaseTable):
 
     record_schema = {
       'zone': CountriesZonesEnumerate(mandatory=True, is_indexed=True),
-      'max-weight': Decimal(mandatory=True, is_indexed=True),
+      'max-weight': Decimal(is_indexed=True),
+      'max-quantity': Integer(is_indexed=True),
       'price': Decimal(mandatory=True)}
 
 
@@ -120,8 +122,15 @@ class ShippingPrices(Table):
 
     form = [
         SelectWidget('zone', title=MSG(u'Zone')),
-        TextWidget('max-weight', title=MSG(u'Max Weight (Kg)')),
         TextWidget('price', title=MSG(u'Price'))]
+
+    quantity_widget = TextWidget('max-quantity', title=MSG(u'Max quantity'))
+    weight_widget = TextWidget('max-weight', title=MSG(u'Max Weight (Kg)'))
+
+    def get_form(self):
+        if self.parent.get_property('mode') == 'quantity':
+            return self.form + [self.quantity_widget]
+        return self.form + [self.weight_widget]
 
 
 
@@ -178,15 +187,26 @@ class ShippingWay(ShopFolder):
         countries = shop.get_resource('countries').handler
         country_record = countries.get_record(int(country))
         zone = countries.get_record_value(country_record, 'zone')
+        # XXX to refactor
+        # Max value
+        mode = self.get_property('mode')
+        max_key = 'max-%s' % mode
+        if mode == 'weight':
+            value = purchase_weight
+        elif mode == 'quantity':
+            cart = ProductCart(get_context())
+            value = 0
+            for p in cart.products:
+                value += p['quantity']
         # Calcul price
         list_price_ok = {}
         prices = self.get_resource('prices').handler
-        # Get corresponding weight in table of price
+        # Get corresponding weight/quantity in table of price
         for record in prices.search(PhraseQuery('zone', zone)):
-            max_weight = prices.get_record_value(record, 'max-weight')
+            max_value = prices.get_record_value(record, max_key)
             price = prices.get_record_value(record, 'price')
-            if purchase_weight < max_weight:
-                list_price_ok[max_weight] = record
+            if value <= max_value:
+                list_price_ok[max_value] = record
         # No price, we return None
         if not list_price_ok:
             return None
@@ -257,6 +277,7 @@ class ShippingWay(ShopFolder):
     order_view = ShippingWay_RecordView()
     order_add_view = ShippingWay_RecordAdd()
     order_edit_view = ShippingWay_RecordEdit()
+
 
 
 

@@ -23,12 +23,13 @@ from itools.web import STLForm
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.forms import AutoForm, TextWidget, BooleanRadio, MultilineWidget
-from ikaaro.forms import ImageSelectorWidget
+from ikaaro.forms import ImageSelectorWidget, SelectWidget
 from ikaaro.resource_views import EditLanguageMenu
 
 # Import from shop
 from schema import delivery_schema
 from shop.shop_utils_views import Shop_PluginWay_Form
+
 
 
 class ShippingWay_Configure(AutoForm):
@@ -45,6 +46,7 @@ class ShippingWay_Configure(AutoForm):
         ImageSelectorWidget('logo', title=MSG(u'Logo')),
         MultilineWidget('description', title=MSG(u'Description')),
         BooleanRadio('enabled', title=MSG(u'Enabled ?')),
+        SelectWidget('mode', title=MSG(u'Mode ?'), has_empty_option=False),
         BooleanRadio('is_free', title=MSG(u'Shipping way is free ?')),
         ]
 

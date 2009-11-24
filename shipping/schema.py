@@ -15,11 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean, Unicode, PathDataType
+from itools.datatypes import Boolean, Unicode, PathDataType, Enumerate
+from itools.gettext import MSG
+
+
+class DeliveryModes(Enumerate):
+
+    options = [{'name': 'weight', 'value': MSG(u'Depends of weight')},
+               {'name': 'quantity', 'value': MSG(u'Depends of quantity')}]
+
+
 
 
 delivery_schema = {'title': Unicode,
                    'logo': PathDataType,
                    'description': Unicode,
                    'enabled': Boolean(default=True),
+                   'mode': DeliveryModes(default='weight'),
                    'is_free': Boolean}
