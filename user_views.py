@@ -187,6 +187,9 @@ class ShopUser_OrdersView(OrdersView):
     access = 'is_allowed_to_edit'
     title = MSG(u'Order history')
 
+    search_template = None
+    table_actions = []
+
     table_columns = [
         ('numero', MSG(u'Order id')),
         ('state', MSG(u'State')),
