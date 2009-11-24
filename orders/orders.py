@@ -315,8 +315,6 @@ class Order(WorkflowAware, ShopFolder):
         except Exception:
             # PDF generation is dangerous
             pass
-        # XXX Commit
-        context.database.save_changes()
         # We send email confirmation
         order.handler.name = 'Order.pdf'
         from_addr = shop.get_property('shop_from_addr')
