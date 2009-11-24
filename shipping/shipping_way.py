@@ -198,6 +198,15 @@ class ShippingWay(ShopFolder):
             value = 0
             for p in cart.products:
                 value += p['quantity']
+        # XXX limit by models
+        only_this_models = self.get_property('only_this_models')
+        if only_this_models:
+            cart = ProductCart(get_context())
+            products = shop.get_resource('products')
+            for product_cart in cart.products:
+                product = products.get_resource(product_cart['name'], soft=True)
+                if product.get_property('product_model') not in only_this_models:
+                    return None
         # Calcul price
         list_price_ok = {}
         prices = self.get_resource('prices').handler

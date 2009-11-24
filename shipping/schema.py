@@ -18,6 +18,9 @@
 from itools.datatypes import Boolean, Unicode, PathDataType, Enumerate
 from itools.gettext import MSG
 
+# Import from products
+from shop.products.enumerate import ProductModelsEnumerate
+
 
 class DeliveryModes(Enumerate):
 
@@ -32,4 +35,5 @@ delivery_schema = {'title': Unicode,
                    'description': Unicode,
                    'enabled': Boolean(default=True),
                    'mode': DeliveryModes(default='weight'),
+                   'only_this_models': ProductModelsEnumerate(multiple=True),
                    'is_free': Boolean}

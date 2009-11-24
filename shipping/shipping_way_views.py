@@ -48,6 +48,7 @@ class ShippingWay_Configure(AutoForm):
         BooleanRadio('enabled', title=MSG(u'Enabled ?')),
         SelectWidget('mode', title=MSG(u'Mode ?'), has_empty_option=False),
         BooleanRadio('is_free', title=MSG(u'Shipping way is free ?')),
+        SelectWidget('only_this_models', title=MSG(u'Only for this products models')),
         ]
 
 
