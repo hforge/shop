@@ -333,6 +333,8 @@ class Order(WorkflowAware, ShopFolder):
 
 
     def notify_new_message(self, message, context):
+        # XXX We have to reactivate it
+        return
         shop = get_shop(self)
         customer_id = self.get_property('customer_id')
         customer = context.root.get_resource('/users/%s' % customer_id)
