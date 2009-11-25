@@ -35,6 +35,7 @@ from ikaaro.registry import register_resource_class
 from enumerates import PayboxStatus, PBXState
 from paybox_views import Paybox_Configure, Paybox_View
 from paybox_views import Paybox_End, Paybox_ConfirmPayment, Paybox_Record_Edit
+from paybox_views import Paybox_RecordView
 from shop.datatypes import StringFixSize
 from shop.payments.payment_way import PaymentWay, PaymentWayBaseTable
 from shop.payments.payment_way import PaymentWayTable
@@ -95,6 +96,7 @@ class Paybox(PaymentWay):
     end = Paybox_End()
 
     # Admin order views
+    order_view = Paybox_RecordView
     order_edit_view = Paybox_Record_Edit
 
     # Schema

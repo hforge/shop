@@ -212,6 +212,7 @@ class ShopUser_OrdersView(OrdersView):
 
 
 
+
 class ShopUser_OrderView(STLForm):
 
     access = 'is_allowed_to_edit'
@@ -321,6 +322,29 @@ class ShopUser_OrderView(STLForm):
                              'message': form['message']})
         order.notify_new_message(form['message'], context)
         context.message = INFO(u'Your message has been sent')
+
+
+    def action_show_payment_form(self, resource, context, form):
+        shop = get_shop(resource)
+        order = shop.get_resource('orders/%s' % context.query['id'], soft=True)
+        # ACL
+        if not order or order.get_property('customer_id') != context.user.name:
+            msg = ERROR(u'Your are not authorized to view this ressource')
+            return context.come_back(msg, goto='/')
+        payments = shop.get_resource('payments')
+        payments_records = payments.get_payments_records(context, order.name)
+        for payment_way, payment_record in payments_records:
+            record_view = payment_way.order_view
+            if record_view:
+                payment_table = payment_way.get_resource('payments').handler
+                record_view = record_view(
+                        payment_way=payment_way,
+                        payment_table=payment_table,
+                        record=payment_record,
+                        id_payment=payment_record.id)
+                return record_view.action_show_payment_form(resource, context, form)
+
+
 
 
 ####################################

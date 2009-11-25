@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <div stl:if="not is_ok">
+    <p stl:if="not can_pay">
+      We are waiting for payment.
+    </p>
+    <p stl:if="can_pay">
+      <form method="POST">
+        <input type="submit" name=";show_payment_form"
+          class="button-ok"
+          value="Click here if you want to perform your payment"/>
+      </form>
+    </p>
+  </div>
+
+  <p stl:if="is_ok">
+    Payment is ok.
+  </p>
+
+
+</stl:block>

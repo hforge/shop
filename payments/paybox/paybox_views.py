@@ -172,3 +172,25 @@ class Paybox_End(PaymentWay_EndView):
         state = PBXState.get_value(context.query['state'])
         namespace['state'] = state.gettext()
         return namespace
+
+
+
+class Paybox_RecordView(STLView):
+
+
+    template = '/ui/shop/payments/paybox/record_view.xml'
+
+    def get_namespace(self, resource, context):
+        get_record_value = self.payment_table.get_record_value
+        # XXX delta de 3 heures
+        return {'is_ok': get_record_value(self.record, 'state'),
+                'can_pay': True}
+
+
+    def action_show_payment_form(self, resource, context, form):
+        get_record_value = self.payment_table.get_record_value
+        payment = {'ref': get_record_value(self.record, 'ref'),
+                   'amount': get_record_value(self.record, 'amount')}
+        return self.payment_way._show_payment_form(context, payment)
+
+
