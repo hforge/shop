@@ -231,7 +231,9 @@ class ShopUser_OrderView(STLForm):
             msg = ERROR(u'Your are not authorized to view this ressource')
             return context.come_back(msg, goto='/')
         # Build namespace
-        namespace = {'order_id': order.name}
+        namespace = {'order_id': order.name,
+                     'is_payed': order.get_property('is_payed'),
+                     'is_sent': order.get_property('is_sent')}
         # General informations
         namespace['order_number'] = order.name
         # Bill

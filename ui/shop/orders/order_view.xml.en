@@ -5,53 +5,95 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
 
-  <h2>
+  <h1>
     Order number: ${order_number}, registered the ${creation_datetime}
-  </h2>
+  </h1>
 
-    <p>
-      <a href="/shop/orders/${order_number}/bill/;download" target="blank" stl:if="has_bill">
-        <img src="/ui/icons/16x16/pdf.png"/> Download bill
-      </a><br/>
-    </p>
+  <table class="order-browse">
+    <thead>
+      <tr>
+        <th>
+        Order state
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td stl:if="is_payed">
+          <img src="/ui/shop/images/dollar-enabled.png"/>
+          Your order has been payed
+          <a href="/shop/orders/${order_number}/bill/;download"
+            target="blank" stl:if="has_bill"
+            style="text-decoration:none; color:red;">
+            <img src="/ui/icons/16x16/pdf.png"/> Download bill
+          </a>
+        </td>
+        <td stl:if="not is_payed">
+          <img src="/ui/shop/images/dollar-disabled.png"/>
+          Your order has not been payed.
+          <a href="#payments">Click here to have more informations</a>
+        </td>
+      </tr>
+      <tr stl:if="not is_sent">
+        <td stl:if="is_payed">
+          <img src="/ui/shop/images/colis-enabled.png"/>
+          Your order is in preparation
+        </td>
+        <td stl:if="not is_payed">
+          <img src="/ui/shop/images/colis-disabled.png"/>
+          Your order isn't in preparation
+        </td>
+      </tr>
+      <tr>
+        <td stl:if="not is_sent">
+          <img src="/ui/shop/images/mail-disabled.png"/>
+          Your order has not been sent yet.
+        </td>
+        <td stl:if="is_sent">
+          <img src="/ui/shop/images/mail-enabled.png"/>
+          Your order has been sent.
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <table class="order-browse" style="width:400px">
-      <thead>
-        <tr>
-          <th>Delivery address</th>
-          <th>Bill address</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            ${delivery_address/firstname} ${delivery_address/lastname}<br/>
-            ${delivery_address/address_1}<br/>
-            <stl:block stl:if="delivery_address/address_2">
-              ${delivery_address/address_2}<br/>
-            </stl:block>
-            ${delivery_address/zipcode} ${delivery_address/town}<br/>
-            ${delivery_address/country}<br/>
-          </td>
-          <td>
-            <span stl:if="not bill_address">
-              Same that delivery address
-            </span>
-            <span stl:if="bill_address">
-              ${bill_address/firstname} ${bill_address/lastname}<br/>
-              ${bill_address/address_1}<br/>
-              <stl:inline stl:if="bill_address/address_2">
-                ${bill_address/address_2}<br/>
-              </stl:inline>
-              ${bill_address/zipcode} ${bill_address/town}<br/>
-              ${bill_address/country}<br/>
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <table class="order-browse" style="width:400px">
+    <thead>
+      <tr>
+        <th>Delivery address</th>
+        <th>Bill address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          ${delivery_address/firstname} ${delivery_address/lastname}<br/>
+          ${delivery_address/address_1}<br/>
+          <stl:block stl:if="delivery_address/address_2">
+            ${delivery_address/address_2}<br/>
+          </stl:block>
+          ${delivery_address/zipcode} ${delivery_address/town}<br/>
+          ${delivery_address/country}<br/>
+        </td>
+        <td>
+          <span stl:if="not bill_address">
+            Same that delivery address
+          </span>
+          <span stl:if="bill_address">
+            ${bill_address/firstname} ${bill_address/lastname}<br/>
+            ${bill_address/address_1}<br/>
+            <stl:inline stl:if="bill_address/address_2">
+              ${bill_address/address_2}<br/>
+            </stl:inline>
+            ${bill_address/zipcode} ${bill_address/town}<br/>
+            ${bill_address/country}<br/>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <br/>
+  <br/>
 
   <table class="order-browse">
     <thead>
@@ -84,7 +126,7 @@
     </tbody>
   </table>
 
-
+  <a name="payments"/>
   <table cellpadding="0" cellspacing="0" class="order-browse" stl:if="payments_view">
     <thead>
       <tr>
