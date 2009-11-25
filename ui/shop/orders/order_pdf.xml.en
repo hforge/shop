@@ -22,9 +22,6 @@
   </pml:header>
 
   <pml:footer>
-    <pml:p class="footer">
-      ${pdf_signature}
-    </pml:p>
     <pml:p class="page">Page <pml:pagenumber/> / <pml:pagetotal/></pml:p>
   </pml:footer>
 

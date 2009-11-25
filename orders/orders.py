@@ -393,7 +393,6 @@ class Order(WorkflowAware, ShopFolder):
           'products': self.get_resource('products').get_namespace(context),
           'shipping_price': self.get_property('shipping_price'),
           'total_price': self.get_property('total_price'),
-          'pdf_signature': format_for_pdf(shop.get_property('pdf_signature')),
           'creation_date': creation_date}
         # Addresses
         addresses = shop.get_resource('addresses').handler
