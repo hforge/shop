@@ -80,11 +80,12 @@ class OrdersView(Folder_BrowseContent):
 
     table_columns = [
         ('checkbox', None),
-        ('numero', MSG(u'Order id')),
+        ('numero', None),
         ('customer', MSG(u'Customer')),
         ('total_price', MSG(u'Total price')),
-        ('is_payed', MSG(u'Payed ?')),
-        ('is_sent', MSG(u'Sent ?')),
+        ('state1', None),
+        ('state2', None),
+        ('state3', None),
         ('creation_datetime', MSG(u'Date and Time')),
         ('order_pdf', None),
         ('bill', None),
@@ -144,14 +145,18 @@ class OrdersView(Folder_BrowseContent):
             else:
                 title = '%s %s' % (gender.gettext(), customer.get_title())
             return title
-        elif column == 'is_payed':
-            return bool_to_img(item_resource.get_property('is_payed'))
-        elif column == 'is_sent':
-            is_sent = item_resource.get_property('is_sent')
-            if is_sent is False:
-                products = item_resource.get_resource('products').handler
-                return u'0/%d' % products.get_n_records()
-            return bool_to_img(True)
+        elif column == 'state1':
+            if item_resource.get_property('is_payed'):
+                return XMLParser('<img src="/ui/shop/images/dollar-enabled.png"/>')
+            return XMLParser('<img src="/ui/shop/images/dollar-disabled.png"/>')
+        elif column == 'state2':
+            if item_resource.get_property('is_sent'):
+                return XMLParser('<img src="/ui/shop/images/colis-enabled.png"/>')
+            return XMLParser('<img src="/ui/shop/images/colis-disabled.png"/>')
+        elif column == 'state3':
+            if item_resource.get_property('is_sent'):
+                return XMLParser('<img src="/ui/shop/images/mail-enabled.png"/>')
+            return XMLParser('<img src="/ui/shop/images/mail-disabled.png"/>')
         elif column == 'total_price':
             return '%s € ' % item_resource.get_property(column)
         elif column == 'creation_datetime':
@@ -184,10 +189,10 @@ class OrdersView(Folder_BrowseContent):
                         ['open', 'payment_ok', 'preparation', 'payment_error']])
 
 
-    def get_items(self, resource, context, *args):
-        args = list(args)
-        args.append(self.get_items_query())
-        return Folder_BrowseContent.get_items(self, resource, context, *args)
+    #def get_items(self, resource, context, *args):
+    #    args = list(args)
+    #    args.append(self.get_items_query())
+    #    return Folder_BrowseContent.get_items(self, resource, context, *args)
 
 
     def action_merge_pdfs(self, resource, context, form, pdf_name):
