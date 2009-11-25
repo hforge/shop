@@ -192,7 +192,6 @@ class ShopUser_OrdersView(OrdersView):
 
     table_columns = [
         ('numero', MSG(u'Order id')),
-        ('state', MSG(u'State')),
         ('total_price', MSG(u'Total price')),
         ('creation_datetime', MSG(u'Date and Time'))]
 
