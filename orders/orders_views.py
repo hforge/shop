@@ -189,10 +189,10 @@ class OrdersView(Folder_BrowseContent):
                         ['open', 'payment_ok', 'preparation', 'payment_error']])
 
 
-    #def get_items(self, resource, context, *args):
-    #    args = list(args)
-    #    args.append(self.get_items_query())
-    #    return Folder_BrowseContent.get_items(self, resource, context, *args)
+    def get_items(self, resource, context, *args):
+        args = list(args)
+        args.append(self.get_items_query())
+        return Folder_BrowseContent.get_items(self, resource, context, *args)
 
 
     def action_merge_pdfs(self, resource, context, form, pdf_name):
