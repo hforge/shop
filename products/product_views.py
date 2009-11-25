@@ -406,9 +406,7 @@ class Products_View(Folder_BrowseContent):
                 return XMLParser('<div class="thumb-products"><img src="%s"/></div>' % uri)
             return XMLParser('<div class="thumb-products"/>')
         elif column == 'title':
-            abspath = context.resource.get_abspath()
-            path = abspath.get_pathto(item_resource.get_virtual_path())
-            return item_resource.get_title(), path
+            return item_resource.get_title(), item_brain.name
         elif column == 'stored_price':
             return '%s €' % item_resource.get_price_with_tax(pretty=True)
         elif column == 'ctime':
