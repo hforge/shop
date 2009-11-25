@@ -254,7 +254,8 @@ class Order(WorkflowAware, ShopFolder):
         Image.make_resource(Image, order, 'barcode', body=barcode, **metadata)
 
 
-
+    def get_reference(self):
+        return '%.6d' % int(self.name)
 
 
     def _get_catalog_values(self):
@@ -364,7 +365,7 @@ class Order(WorkflowAware, ShopFolder):
         namespace =  {
           'logo': logo_uri,
           'order_barcode': '%s/barcode' % self.handler.uri,
-          'num_cmd': self.name,
+          'num_cmd': self.get_reference(),
           'products': self.get_resource('products').get_namespace(context),
           'shipping_price': self.get_property('shipping_price'),
           'total_price': self.get_property('total_price'),
@@ -401,9 +402,10 @@ class Order(WorkflowAware, ShopFolder):
             resource = shop.get_resource(logo, soft=True)
             if resource:
                 logo_uri = resource.handler.uri
+        reference = self.get_reference()
         namespace =  {
           'logo': logo_uri,
-          'num_cmd': self.name,
+          'num_cmd': self.get_reference(),
           'products': self.get_resource('products').get_namespace(context),
           'shipping_price': self.get_property('shipping_price'),
           'pdf_signature': format_for_pdf(shop.get_property('pdf_signature')),
@@ -446,6 +448,7 @@ class Orders(ShopFolder):
     class_id = 'orders'
     class_title = MSG(u'Orders')
     class_views = ['view', 'view_canceled', 'view_archive']
+    class_version = '20091127'
 
     # Views
     view = OrdersView()
@@ -454,7 +457,59 @@ class Orders(ShopFolder):
 
 
     def get_document_types(self):
-        return []
+        return [Order]
+
+
+    def update_20091125(self):
+        from itools.xapian import PhraseQuery
+        from itools.web import get_context
+        context = get_context()
+        context.resource = self
+        root = self.get_root()
+        shop = get_shop(self)
+        payments = shop.get_resource('payments')
+        shippings = shop.get_resource('shippings')
+        query = PhraseQuery('format', 'order')
+        for i, order in enumerate(root.search(query).get_documents(sort_by='creation_datetime')):
+            id = i + 1
+            r = root.get_resource(order.abspath)
+            new_reference = str(id)
+            for payment_way in payments.get_resources():
+                p = payment_way.get_resource('payments')
+                for record in p.handler.search(ref=r.name):
+                    p.handler.update_record(record.id, **{'ref': new_reference})
+            for shipping_way in shippings.get_resources():
+                h = shipping_way.get_resource('history')
+                for record in h.handler.search(ref=r.name):
+                    h.handler.update_record(record.id, **{'ref': new_reference})
+            self.move_resource(r.name, new_reference)
+
+
+    def update_20091126(self):
+        from shop.utils import generate_barcode
+        shop = get_shop(self)
+        # Step 2
+        for order in self.get_resources():
+            order.del_resource('barcode', soft=True)
+            barcode = generate_barcode(shop.get_property('barcode_format'), order.name)
+            metadata =  {'title': {'en': u'Barcode'},
+                         'filename': 'barcode.png'}
+            Image.make_resource(Image, order, 'barcode', body=barcode, **metadata)
+
+
+    def update_20091127(self):
+        from itools.web import get_context
+        context = get_context()
+        context.resource = self
+        # Step 3
+        for order in self.get_resources():
+            if order.get_property('is_payed') is True:
+                bill =  order.generate_pdf_bill(context)
+                order = order.generate_pdf_order(context)
+            else:
+                order.del_resource('order', soft=True)
+                order.del_resource('bill', soft=True)
+
 
 
 # Register catalog fields

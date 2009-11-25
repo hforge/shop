@@ -76,10 +76,10 @@ class OrdersView(Folder_BrowseContent):
     color = 'green'
     table_actions = [MergeOrderButton, MergeBillButton, OrderSendButton]
     search_template = '/ui/shop/orders/orders_search.xml'
+    context_menus = []
 
     table_columns = [
         ('checkbox', None),
-        ('barcode', None),
         ('numero', MSG(u'Order id')),
         ('customer', MSG(u'Customer')),
         ('total_price', MSG(u'Total price')),
@@ -132,11 +132,8 @@ class OrdersView(Folder_BrowseContent):
             return None
         elif column == 'numero':
             href = context.resource.get_pathto(item_resource)
-            return XMLParser(numero_template % (self.color, item_brain.name, href))
-            #(item_brain.name, href)
-        elif column == 'barcode':
-            barcode = '<img src="%s/barcode/;download"/>' % item_brain.name
-            return XMLParser(barcode)
+            name = item_resource.get_reference()
+            return XMLParser(numero_template % (self.color, href, name))
         elif column == 'customer':
             users = context.root.get_resource('users')
             customer_id = item_resource.get_property('customer_id')

@@ -594,6 +594,7 @@ class Shop_ShowRecapitulatif(STLForm):
 
     def action(self, resource, context, form):
         cart = ProductCart(context)
+        root = context.root
         # Check if cart is valid
         if not cart.is_valid():
             return context.come_back(CART_ERROR, goto='/')
@@ -622,8 +623,16 @@ class Shop_ShowRecapitulatif(STLForm):
         total_price += shipping_price
         # Format total_price
         total_price = decimal(format_price(total_price))
+        # Guess ref number
+        # We take last order name + 1
+        search = root.search(format='order')
+        orders =  search.get_documents(sort_by='creation_datetime',
+                                       reverse=True)
+        if orders:
+            ref = str(int(orders[0].name) + 1)
+        else:
+            ref = '1'
         # We create a new order
-        ref = datetime.now().strftime('%y%m%d%S%M%H')
         kw = {'user': context.user,
               'payment_mode': form['payment'],
               'shipping_price': shipping_price,
@@ -633,7 +642,7 @@ class Shop_ShowRecapitulatif(STLForm):
               'shop': resource,
               'shop_uri': context.uri.resolve('/')}
         orders = resource.get_resource('orders')
-        Order.make_resource(Order, orders, str(ref),
+        Order.make_resource(Order, orders, ref,
                             title={'en': u'#%s' % ref},
                             **kw)
         # We clear the cart
