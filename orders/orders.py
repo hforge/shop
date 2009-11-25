@@ -25,7 +25,7 @@ from itools.datatypes import ISODateTime, Decimal, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_date
 from itools.pdf import stl_pmltopdf
-from itools.uri import get_uri_path
+from itools.uri import get_reference
 
 # Import from ikaaro
 from ikaaro.file import PDF, Image
@@ -73,9 +73,15 @@ You can found details here:\n
   {order_uri}\n
 """)
 
-###################################################################
-###################################################################
+#############################################
+# Message notification
+#############################################
 
+new_message_subject = MSG(u'New message concerning order number {n}')
+new_message_footer = MSG('\n\nSee details here : \n\n {uri}')
+
+###################################################################
+###################################################################
 
 
 
@@ -334,18 +340,35 @@ class Order(WorkflowAware, ShopFolder):
             self.set_workflow_state('delivery')
 
 
-    def notify_new_message(self, message, context):
-        # XXX We have to reactivate it
-        return
+    def get_frontoffice_uri(self):
         shop = get_shop(self)
+        base_uri = shop.get_property('shop_uri')
+        customer_id = self.get_property('customer_id')
+        end_uri = '/users/%s/;order_view?id=%s' % (customer_id, self.name)
+        return get_reference(base_uri).resolve(end_uri)
+
+
+    def get_backoffice_uri(self):
+        shop = get_shop(self)
+        base_uri = shop.get_property('shop_backoffice_uri')
+        end_uri = '/shop/orders/%s' % self.name
+        return get_reference(base_uri).resolve(end_uri)
+
+
+    def notify_new_message(self, message, context):
+        shop = get_shop(self)
+        shop_uri = shop.get_property('shop_uri')
         customer_id = self.get_property('customer_id')
         customer = context.root.get_resource('/users/%s' % customer_id)
         contact = customer.get_property('email')
-        subject = MSG(u'New message concerning your order number %s' % self.name)
-        shop.send_email(context, contact, subject, text=message)
-        subject = MSG(u'New message concerning order number %s' % self.name)
+        subject = new_message_subject.gettext(n=self.name)
+        # Send mail to customer
+        text = message + new_message_footer.gettext(uri=self.get_frontoffice_uri())
+        shop.send_email(context, contact, subject, text=text)
+        # Send mail to administrators
+        text = message + new_message_footer.gettext(uri=self.get_backoffice_uri())
         for to_addr in shop.get_property('order_notification_mails'):
-            shop.send_email(context, to_addr, subject, text=message)
+            shop.send_email(context, to_addr, subject, text=text)
 
 
     def generate_pdf_order(self, context):
@@ -380,7 +403,6 @@ class Order(WorkflowAware, ShopFolder):
         namespace['delivery_address'] = get_address(delivery_address)
         namespace['bill_address'] = get_address(bill_address)
         # Build pdf
-        path = get_uri_path(shop.handler.uri)
         body = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'},
                      'filename': 'order.pdf'}
@@ -420,7 +442,6 @@ class Order(WorkflowAware, ShopFolder):
         namespace['delivery_address'] = get_address(delivery_address)
         namespace['bill_address'] = get_address(bill_address)
         # Build pdf
-        path = get_uri_path(shop.handler.uri)
         pdf = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'},
                      'filename': 'bill.pdf'}
