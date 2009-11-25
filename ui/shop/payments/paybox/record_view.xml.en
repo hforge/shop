@@ -5,16 +5,11 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <div stl:if="not is_ok">
-    <p stl:if="not can_pay">
-      We are waiting for payment.
-    </p>
-    <p stl:if="can_pay">
-      <form method="POST">
-        <input type="submit" name=";show_payment_form"
-          class="button-ok"
-          value="Click here if you want to perform your payment"/>
-      </form>
-    </p>
+    <form method="POST">
+      <input type="submit" name=";show_payment_form"
+        class="button-ok"
+        value="Click here if you want to perform your payment"/>
+    </form>
   </div>
 
   <p stl:if="is_ok">

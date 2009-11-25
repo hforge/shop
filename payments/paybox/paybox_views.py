@@ -21,10 +21,9 @@ from decimal import Decimal as decimal
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, Integer, Unicode, String, Decimal
 from itools.gettext import MSG
-from itools.web import BaseView, BaseForm, STLView, STLForm, FormError
+from itools.web import BaseForm, STLView
 
 # Import from ikaaro
-from ikaaro import messages
 from ikaaro.table_views import Table_View
 from ikaaro.forms import BooleanRadio, TextWidget
 
@@ -182,9 +181,7 @@ class Paybox_RecordView(STLView):
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
-        # XXX delta de 3 heures
-        return {'is_ok': get_record_value(self.record, 'state'),
-                'can_pay': True}
+        return {'is_ok': get_record_value(self.record, 'state')}
 
 
     def action_show_payment_form(self, resource, context, form):
