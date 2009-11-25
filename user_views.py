@@ -241,23 +241,6 @@ class ShopUser_OrderView(STLForm):
         creation_datetime = order.get_property('creation_datetime')
         namespace['creation_datetime'] = format_datetime(creation_datetime,
                                               context.accept_language)
-        # Customer informations
-        users = root.get_resource('users')
-        customer_id = order.get_property('customer_id')
-        customer = users.get_resource(customer_id)
-        gender = customer.get_property('gender')
-        namespace['customer'] = {'gender': Civilite.get_value(gender),
-                                 'title': customer.get_title(),
-                                 'email': customer.get_property('email'),
-                                 'href': order.get_pathto(customer)}
-        # Order state
-        state = order.get_state()
-        if not state:
-            namespace['state'] = {'name': 'unknow',
-                                  'title': MSG(u'Unknow')}
-        else:
-            namespace['state'] = {'name': order.get_statename(),
-                                  'title': state['title']}
         # Addresses
         addresses = shop.get_resource('addresses').handler
         get_address = addresses.get_record_namespace
