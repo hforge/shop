@@ -277,19 +277,19 @@ class Order(WorkflowAware, ShopFolder):
         from_addr = shop.get_property('shop_from_addr')
         # Build email informations
         kw = {'order_name': order_name}
-        # Send confirmation to the shop
-        subject = mail_notification_title.gettext()
-        order_uri = '/shop/orders/%s/' % order_name
-        kw['order_uri'] = shop_uri.resolve(order_uri)
-        body = mail_notification_body.gettext(**kw)
-        for to_addr in shop.get_property('order_notification_mails'):
-            shop.send_email(context, to_addr, subject, from_addr, body)
         # Send confirmation to client
         order_uri = '/users/%s/;order_view?id=%s' % (user.name, order_name)
         kw['order_uri'] = shop_uri.resolve(order_uri)
         subject = mail_confirmation_title.gettext()
         body = mail_confirmation_body.gettext(**kw)
         shop.send_email(context, customer_email, subject, from_addr, body)
+        # Send confirmation to the shop
+        subject = mail_notification_title.gettext()
+        shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
+        kw['order_uri'] = '%s/shop/orders/%s/' % (shop_backoffice_uri, order_name)
+        body = mail_notification_body.gettext(**kw)
+        for to_addr in shop.get_property('order_notification_mails'):
+            shop.send_email(context, to_addr, subject, from_addr, body)
 
     ##################################################
     # Update order states

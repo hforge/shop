@@ -75,7 +75,9 @@ class Shop_Configure(DBResource_Edit):
     access = 'is_admin'
     title = MSG(u'Configure shop')
 
-    schema = {'shop_from_addr': Email(mandatory=True),
+    schema = {'shop_uri': String(mandatory=True),
+              'shop_backoffice_uri': String(mandatory=True),
+              'shop_from_addr': Email(mandatory=True),
               'order_notification_mails': MultiLinesTokens(mandatory=True),
               'shop_default_zone': CountriesZonesEnumerate(mandatory=True),
               'shop_signature': Unicode(mandatory=True),
@@ -88,6 +90,8 @@ class Shop_Configure(DBResource_Edit):
               'barcode_format': BarcodesFormat}
 
     widgets = [
+        TextWidget('shop_uri', title=MSG(u'Website uri')),
+        TextWidget('shop_backoffice_uri', title=MSG(u'Website backoffice uri')),
         TextWidget('shop_from_addr', title=MSG(u'Shop from address')),
         MultilineWidget('order_notification_mails',
             title=MSG(u'New order notification emails (1 per line)'),

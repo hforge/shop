@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Email, Unicode, Boolean
+from itools.datatypes import Email, Unicode, Boolean, String
 from itools.gettext import MSG
 from itools.stl import stl
 
@@ -211,6 +211,8 @@ class Shop(ShopFolder):
     @classmethod
     def get_metadata_schema(cls):
         schema = ShopFolder.get_metadata_schema()
+        schema['shop_uri'] = String
+        schema['shop_backoffice_uri'] = String
         schema['order_notification_mails'] = Email(multiple=True)
         schema['shop_default_zone'] = CountriesZonesEnumerate
         schema['shop_signature'] = Unicode
