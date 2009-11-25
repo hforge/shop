@@ -2,7 +2,7 @@
           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <pml:head>
-    <pml:title>Bill</pml:title>
+    <pml:title>Order</pml:title>
     <pml:link rel="stylesheet" type="text/css" href="../css/pdf-bill.css"/>
   </pml:head>
 
@@ -13,7 +13,7 @@
           <pml:img src="${logo}" stl:if="logo" style="float:left"/>
         </pml:td>
         <pml:td>
-        Bill number: ${num_cmd}<br/>
+        Order number: ${num_cmd}<br/>
         <pml:img src="${order_barcode}"/><br/>
         Date: ${creation_date}
         </pml:td>
