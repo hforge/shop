@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Unicode
+from itools.datatypes import Boolean, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.xapian import PhraseQuery, OrQuery
@@ -93,7 +93,7 @@ class OrdersView(Folder_BrowseContent):
     query_schema = merge_dicts(Folder_BrowseContent.query_schema,
                                sort_by=String(default='creation_datetime'),
                                reverse=Boolean(default=True),
-                               reference=String)
+                               reference=Integer)
 
 
     batch_msg1 = MSG(u"There's one order.")
@@ -103,7 +103,7 @@ class OrdersView(Folder_BrowseContent):
     def GET(self, resource, context):
         reference = context.query['reference']
         if reference:
-            order = resource.get_resource(reference, soft=True)
+            order = resource.get_resource(str(reference), soft=True)
             if order:
                 msg = INFO(u'Reference found !')
                 return context.come_back(msg, goto=context.get_link(order))
@@ -256,13 +256,13 @@ class Order_Manage(Payments_EditablePayment, STLForm):
     def get_query_schema(self):
         return {'sort_by': String(default='title'),
                 'reverse': Boolean(default=False),
-                'reference': String}
+                'reference': Integer}
 
 
     def GET(self, resource, context):
         reference = context.query['reference']
         if reference:
-            order = resource.parent.get_resource(reference, soft=True)
+            order = resource.parent.get_resource(str(reference), soft=True)
             if order:
                 msg = INFO(u'Reference found !')
                 return context.come_back(msg, goto=context.get_link(order))
