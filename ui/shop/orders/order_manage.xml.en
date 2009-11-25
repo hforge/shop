@@ -88,20 +88,33 @@
 
   <hr class="order-hr"/>
 
-  <table
-    style="border-bottom: 1px solid #AC7622; width: 100%; background-color:#FFF7EA;">
+  <table cellpadding="5px">
     <tr>
-      <td style="width:100px">Is payed ?</td>
-      <td>${is_payed}</td>
-    </tr>
-    <tr>
-      <td>Is sent ?</td>
-      <td>${is_sent}</td>
+      <td stl:if="is_payed">
+        <img src="/ui/shop/images/dollar-enabled.png"/>
+        Order has been payed
+      </td>
+      <td stl:if="not is_payed">
+        <img src="/ui/shop/images/dollar-disabled.png"/>
+        Order has not been payed.
+      </td>
+      <td stl:if="not is_sent">
+        <img src="/ui/shop/images/colis-enabled.png"/>
+        Order is in preparation
+      </td>
+      <td stl:if="not is_sent">
+        <img src="/ui/shop/images/mail-disabled.png"/>
+        Order has not been sent.
+      </td>
+      <td stl:if="is_sent">
+        <img src="/ui/shop/images/mail-enabled.png"/>
+        Oder has been sent.
+      </td>
     </tr>
   </table>
-  <br/>
 
-  <div class="clear"/>
+  <hr class="order-hr"/>
+
   ${products}
 
 <!--

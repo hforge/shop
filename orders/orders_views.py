@@ -299,9 +299,8 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         addresses = shop.get_resource('addresses').handler
         # Build namespace
         namespace = {}
-        # Is payed
         for key in ['is_payed', 'is_sent']:
-            namespace[key] = bool_to_img(resource.get_property(key))
+            namespace[key] = resource.get_property(key)
         # States
         namespace['is_canceled'] = resource.get_statename() == 'cancel'
         namespace['states_history'] = self.get_states_history(resource, context)
