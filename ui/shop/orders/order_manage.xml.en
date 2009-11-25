@@ -98,10 +98,16 @@
         <img src="/ui/shop/images/dollar-disabled.png"/>
         Order has not been payed.
       </td>
-      <td stl:if="not is_sent">
-        <img src="/ui/shop/images/colis-enabled.png"/>
-        Order is in preparation
+      <td stl:if="not is_payed">
+        <img src="/ui/shop/images/colis-disabled.png"/>
+        Order isn't in preparation
       </td>
+      <stl:block stl:if="is_payed">
+        <td stl:if="not is_sent">
+          <img src="/ui/shop/images/colis-enabled.png"/>
+          Order is in preparation
+        </td>
+      </stl:block>
       <td stl:if="not is_sent">
         <img src="/ui/shop/images/mail-disabled.png"/>
         Order has not been sent.
