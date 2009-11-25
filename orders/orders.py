@@ -321,8 +321,9 @@ class Order(WorkflowAware, ShopFolder):
         from_addr = shop.get_property('shop_from_addr')
         subject = MSG(u'New order validated').gettext()
         text = MSG(u'New order has been validated').gettext()
-        context.root.send_email('sylvain@itaapy.com', subject, from_addr,
-                                text=text, attachment=order.handler)
+        for to_addr in shop.get_property('order_notification_mails'):
+            context.root.send_email(to_addr, subject, from_addr,
+                                    text=text, attachment=order.handler)
 
 
     def set_as_sent(self, context):
