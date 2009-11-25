@@ -35,7 +35,7 @@ from ikaaro.user import User
 # Import from shop
 from addresses_views import Addresses_Book
 from datatypes import Civilite
-from user_views import ShopUser_Manage, ShopUser_Profile
+from user_views import ShopUser_Profile
 from user_views import ShopUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView
@@ -97,13 +97,13 @@ class Customers(Folder):
 
 class ShopUser(User):
 
-    class_views = ['manage', 'profile', 'addresses_book', 'edit_account',
+    class_views = ['profile', 'addresses_book', 'edit_account',
                    'edit_private_informations', 'orders_view',
                    'edit_preferences', 'edit_password']
     class_version = '20091009'
 
     # Views
-    manage = ShopUser_Manage()
+    #manage = ShopUser_Manage() #XXX Not used
     profile = ShopUser_Profile()
     edit_account = ShopUser_EditAccount()
     edit_private_informations = ShopUser_EditPrivateInformations()
