@@ -121,9 +121,6 @@
 
   <hr class="order-hr"/>
 
-  ${products}
-
-<!--
   <table class="order-sub-browse">
     <thead>
       <tr>
@@ -143,9 +140,6 @@
           <input type="checkbox" name="id" value="${product/id}"/>
         </td>
         <td>
-          <span class="counter counter-green">
-            In stock
-          </span>
         </td>
         <td>
           ${product/reference}<br/><br/>
@@ -169,6 +163,25 @@
         <td>${product/price/total/with_tax} €</td>
       </tr>
       <tr>
+        <td colspan="8">
+          <img src="/ui/shop/images/colis-enabled.png"/><br/>
+          <img src="/ui/shop/images/colis-disabled.png"/><br/>
+          <img src="/ui/shop/images/colis-incomplete.png"/><br/>
+          <img src="/ui/shop/images/colis-waiting.png"/><br/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+
+  <table>
+    <tbody>
+      <tr>
         <td colspan="7" style="text-align:right">
           <span>${order/shipping_way}</span> »
           Shipping
@@ -185,7 +198,7 @@
       </tr>
     </tbody>
   </table>
--->
+
   <hr class="order-hr"/>
 
   <!-- States -->

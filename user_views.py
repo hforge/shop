@@ -231,28 +231,13 @@ class ShopUser_OrderView(STLForm):
             msg = ERROR(u'Your are not authorized to view this ressource')
             return context.come_back(msg, goto='/')
         # Build namespace
-        namespace = {'order_id': order.name,
-                     'is_payed': order.get_property('is_payed'),
-                     'is_sent': order.get_property('is_sent')}
-        # General informations
-        namespace['order_number'] = order.name
+        namespace = order.get_namespace(context)
+        namespace['order_name'] = order.name
+        namespace['is_payed'] = order.get_property('is_payed')
+        namespace['is_sent'] = order.get_property('is_sent')
         # Bill
         has_bill = order.get_resource('bill', soft=True) is not None
         namespace['has_bill'] = has_bill
-        # Order creation date time
-        creation_datetime = order.get_property('creation_datetime')
-        namespace['creation_datetime'] = format_datetime(creation_datetime,
-                                              context.accept_language)
-        # Addresses
-        addresses = shop.get_resource('addresses').handler
-        get_address = addresses.get_record_namespace
-        bill_address = order.get_property('bill_address')
-        delivery_address = order.get_property('delivery_address')
-        namespace['delivery_address'] = get_address(delivery_address)
-        namespace['bill_address'] = get_address(bill_address)
-        # Products
-        products = order.get_resource('products')
-        namespace['products'] = products.get_namespace(context)
         # Payments
         payments = shop.get_resource('payments')
         # Shipping

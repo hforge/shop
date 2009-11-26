@@ -5,18 +5,36 @@ body{
   padding-right:0;
 }
 
+#table{
+  margin-top: 20px;
+  border: 0.3px solid black;
+}
+
+#table th{
+  background-color: #F0F0F0;
+  padding: 4px;
+}
+
+#table td{
+  padding: 4px;
+}
+
 #articles{
   margin-top: 20px;
-  border: 1px solid black;
 }
 
 #articles th{
-  background-color: #E2E2E2;
+  background-color: #F0F0F0;
   padding: 4px;
 }
 
 #articles td{
   padding: 4px;
+  border-bottom: 1px solid black;
+}
+
+#price td{
+  font-weight: bold;
 }
 
 .align-right{

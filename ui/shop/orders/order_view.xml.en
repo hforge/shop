@@ -6,7 +6,7 @@
 
 
   <h1>
-    Order number: ${order_number}, registered the ${creation_datetime}
+    Order number: ${reference}, registered the ${creation_date}
   </h1>
 
   <table class="order-browse">
@@ -22,7 +22,7 @@
         <td stl:if="is_payed">
           <img src="/ui/shop/images/dollar-enabled.png"/>
           Your order has been payed
-          <a href="/shop/orders/${order_number}/bill/;download"
+          <a href="/shop/orders/${reference}/bill/;download"
             target="blank" stl:if="has_bill"
             style="text-decoration:none; color:red;">
             <img src="/ui/icons/16x16/pdf.png"/> Download bill
@@ -161,7 +161,7 @@
         <td colspan="2">
           <form method="post">
             <p>If you want to add a message:</p>
-            <input type="hidden" name="id" value="${order_id}"/>
+            <input type="hidden" name="id" value="${order_name}"/>
             <textarea name="message" cols="60" rows="8"/><br/>
             <input type="submit" name=";add_message"
               class="button-ok" value="Send message"/>

@@ -42,7 +42,7 @@ from shop.utils import get_shop
 
 # Import from shop.orders
 from messages import Messages_TableResource
-from orders_views import Order_Manage, OrdersProducts_View
+from orders_views import Order_Manage
 from orders_views import OrdersView, OrdersViewCanceled, OrdersViewArchive
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
@@ -107,7 +107,6 @@ class OrdersProducts(Table):
     class_handler = BaseOrdersProducts
 
     class_views = ['view']
-    view = OrdersProducts_View()
 
     form = [
         TextWidget('name', title=MSG(u'Product name')),
@@ -119,37 +118,6 @@ class OrdersProducts(Table):
         TextWidget('tax', title=MSG(u'Tax')),
         TextWidget('quantity', title=MSG(u'Quantity'))]
 
-
-    def get_namespace(self, context):
-        shop = get_shop(context.resource)
-        products = shop.get_resource('products')
-        ns = []
-        handler = self.handler
-        get_value = handler.get_record_value
-        for record in handler.get_records():
-            kw = {'id': record.id,
-                  'uri': None}
-            name = get_value(record, 'name')
-            product_resource = products.get_resource(name, soft=True)
-            if product_resource:
-                kw['uri'] = product_resource.handler.uri
-                kw['cover'] = product_resource.get_cover_namespace(context)
-            else:
-                kw['cover'] = None
-            for key in BaseOrdersProducts.record_schema.keys():
-                kw[key] = get_value(record, key)
-            # Get prices
-            unit_price_with_tax = kw['pre-tax-price'] * ((kw['tax']/100)+1)
-            unit_price_without_tax = kw['pre-tax-price']
-            total_price_with_tax = unit_price_with_tax * kw['quantity']
-            total_price_without_tax = unit_price_without_tax * kw['quantity']
-            kw['price'] = {
-              'unit': {'with_tax': format_price(unit_price_with_tax),
-                       'without_tax': format_price(unit_price_without_tax)},
-              'total': {'with_tax': format_price(total_price_with_tax),
-                        'without_tax': format_price(total_price_without_tax)}}
-            ns.append(kw)
-        return ns
 
 
 class Order(WorkflowAware, ShopFolder):
@@ -260,15 +228,12 @@ class Order(WorkflowAware, ShopFolder):
         Image.make_resource(Image, order, 'barcode', body=barcode, **metadata)
 
 
-    def get_reference(self):
-        return '%.6d' % int(self.name)
-
-
     def _get_catalog_values(self):
         values = ShopFolder._get_catalog_values(self)
         for key in ['customer_id', 'creation_datetime', 'is_payed']:
             values[key] = self.get_property(key)
         return values
+
 
 
     #########################################################
@@ -297,6 +262,77 @@ class Order(WorkflowAware, ShopFolder):
         body = mail_notification_body.gettext(**kw)
         for to_addr in shop.get_property('order_notification_mails'):
             shop.send_email(context, to_addr, subject, from_addr, body)
+
+    ##################################################
+    # Get namespace
+    ##################################################
+    def get_namespace(self, context):
+        # Get some resources
+        shop = get_shop(self)
+        shop_products = shop.get_resource('products')
+        order_products = self.get_resource('products')
+        # Get creation date
+        accept = context.accept_language
+        creation_date = self.get_property('creation_datetime')
+        creation_date = format_date(creation_date, accept=accept)
+        # Build namespace
+        namespace = {'products': [],
+                     'reference': self.get_reference(),
+                     'creation_date': creation_date,
+                     'price': {'shippings': {'with_tax': decimal(0),
+                                             'without_tax': decimal(0)},
+                               'products': {'with_tax': decimal(0),
+                                            'without_tax': decimal(0)},
+                               'total': {'with_tax': decimal(0),
+                                         'without_tax': decimal(0)}}}
+        # Build order products namespace
+        get_value = order_products.handler.get_record_value
+        for record in order_products.handler.get_records():
+            kw = {'id': record.id,
+                  'uri': None}
+            name = get_value(record, 'name')
+            product_resource = shop_products.get_resource(name, soft=True)
+            if product_resource:
+                kw['uri'] = product_resource.handler.uri
+                kw['cover'] = product_resource.get_cover_namespace(context)
+            else:
+                kw['cover'] = None
+            for key in BaseOrdersProducts.record_schema.keys():
+                kw[key] = get_value(record, key)
+            # Get product prices
+            unit_price_with_tax = kw['pre-tax-price'] * ((kw['tax']/100)+1)
+            unit_price_without_tax = kw['pre-tax-price']
+            total_price_with_tax = unit_price_with_tax * kw['quantity']
+            total_price_without_tax = unit_price_without_tax * kw['quantity']
+            kw['price'] = {
+              'unit': {'with_tax': format_price(unit_price_with_tax),
+                       'without_tax': format_price(unit_price_without_tax)},
+              'total': {'with_tax': format_price(total_price_with_tax),
+                        'without_tax': format_price(total_price_without_tax)}}
+            namespace['products'].append(kw)
+            # Calcul order price
+            namespace['price']['products']['with_tax'] += unit_price_with_tax
+            namespace['price']['products']['without_tax'] += unit_price_without_tax
+        # Format price
+        shipping_price = self.get_property('shipping_price')
+        namespace['price']['total']['with_tax'] = format_price(namespace['price']['products']['with_tax'] + shipping_price)
+        namespace['price']['products']['with_tax'] = format_price(namespace['price']['products']['with_tax'])
+        namespace['price']['products']['without_tax'] = format_price(namespace['price']['products']['without_tax'])
+        namespace['price']['shippings']['with_tax'] = format_price(shipping_price)
+        # Addresses
+        addresses = shop.get_resource('addresses').handler
+        get_address = addresses.get_record_namespace
+        bill_address = self.get_property('bill_address')
+        delivery_address = self.get_property('delivery_address')
+        namespace['delivery_address'] = get_address(delivery_address)
+        namespace['bill_address'] = get_address(bill_address)
+        # Carrier
+        namespace['carrier'] = u'xxx'
+        namespace['payment_way'] = u'xxx'
+        return namespace
+
+
+
 
     ##################################################
     # Update order states
@@ -373,34 +409,16 @@ class Order(WorkflowAware, ShopFolder):
 
     def generate_pdf_order(self, context):
         shop = get_shop(self)
-        accept = context.accept_language
-        creation_date = self.get_property('creation_datetime')
-        creation_date = format_date(creation_date, accept=accept)
         # Delete old pdf
         if self.get_resource('order', soft=True):
             self.del_resource('order')
+        # Get template
         document = self.get_resource('/ui/shop/orders/order_pdf.xml')
-        logo_uri = None
-        logo = shop.get_property('bill_logo')
-        if logo:
-            resource = shop.get_resource(logo, soft=True)
-            if resource:
-                logo_uri = resource.handler.uri
-        namespace =  {
-          'logo': logo_uri,
-          'order_barcode': '%s/barcode' % self.handler.uri,
-          'num_cmd': self.get_reference(),
-          'products': self.get_resource('products').get_namespace(context),
-          'shipping_price': self.get_property('shipping_price'),
-          'total_price': self.get_property('total_price'),
-          'creation_date': creation_date}
-        # Addresses
-        addresses = shop.get_resource('addresses').handler
-        get_address = addresses.get_record_namespace
-        bill_address = self.get_property('bill_address')
-        delivery_address = self.get_property('delivery_address')
-        namespace['delivery_address'] = get_address(delivery_address)
-        namespace['bill_address'] = get_address(bill_address)
+        # Build namespace
+        namespace = self.get_namespace(context)
+        namespace['logo'] = shop.get_pdf_logo_uri()
+        namespace['pdf_signature'] = format_for_pdf(shop.get_property('pdf_signature'))
+        namespace['order_barcode'] = '%s/barcode' % self.handler.uri
         # Build pdf
         body = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'},
@@ -411,40 +429,25 @@ class Order(WorkflowAware, ShopFolder):
 
     def generate_pdf_bill(self, context):
         shop = get_shop(self)
-        accept = context.accept_language
-        creation_date = self.get_property('creation_datetime')
-        creation_date = format_date(creation_date, accept=accept)
         # Delete old bill
         if self.get_resource('bill', soft=True):
             self.del_resource('bill')
+        # Get template
         document = self.get_resource('/ui/shop/orders/order_facture.xml')
-        logo_uri = None
-        logo = shop.get_property('bill_logo')
-        if logo:
-            resource = shop.get_resource(logo, soft=True)
-            if resource:
-                logo_uri = resource.handler.uri
-        reference = self.get_reference()
-        namespace =  {
-          'logo': logo_uri,
-          'num_cmd': self.get_reference(),
-          'products': self.get_resource('products').get_namespace(context),
-          'shipping_price': self.get_property('shipping_price'),
-          'pdf_signature': format_for_pdf(shop.get_property('pdf_signature')),
-          'total_price': self.get_property('total_price'),
-          'creation_date': creation_date}
-        # Addresses
-        addresses = shop.get_resource('addresses').handler
-        get_address = addresses.get_record_namespace
-        bill_address = self.get_property('bill_address')
-        delivery_address = self.get_property('delivery_address')
-        namespace['delivery_address'] = get_address(delivery_address)
-        namespace['bill_address'] = get_address(bill_address)
+        # Build namespace
+        namespace = self.get_namespace(context)
+        namespace['logo'] = shop.get_pdf_logo_uri()
+        namespace['pdf_signature'] = format_for_pdf(shop.get_property('pdf_signature'))
+        namespace['order_barcode'] = '%s/barcode' % self.handler.uri
         # Build pdf
         pdf = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'},
                      'filename': 'bill.pdf'}
         return PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
+
+
+    def get_reference(self):
+        return '%.6d' % int(self.name)
 
 
     def update_20091123(self):

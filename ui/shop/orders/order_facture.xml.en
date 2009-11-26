@@ -13,8 +13,8 @@
           <pml:img src="${logo}" stl:if="logo" style="float:left"/>
         </pml:td>
         <pml:td>
-        Bill number: ${num_cmd}<br/>
-        Date: ${creation_date}
+        Invoice number: ${reference}
+        <pml:img src="${order_barcode}"/><br/>
         </pml:td>
       </pml:tr>
     </pml:table>
@@ -59,28 +59,89 @@
       </pml:tr>
     </pml:table>
 
+
+
+    <pml:table id="table">
+      <pml:tr>
+        <pml:th colspan="3">
+          Invoice number ${reference} from ${creation_date}
+        </pml:th>
+      </pml:tr>
+      <pml:tr>
+        <pml:td>
+          Order ${reference}
+        </pml:td>
+        <pml:td>
+          Carrier:<br/>
+          ${carrier}
+        </pml:td>
+        <pml:td>
+          Payment method:<br/>
+          ${payment_way}
+        </pml:td>
+      </pml:tr>
+    </pml:table>
+
+
     <pml:table id="articles">
       <pml:tr>
+        <pml:th width="7cm">Description</pml:th>
         <pml:th>Reference</pml:th>
-        <pml:th>Product</pml:th>
-        <pml:th>Unit price (With tax)</pml:th>
-        <pml:th>Quantity</pml:th>
-        <pml:th>Total price (With tax)</pml:th>
+        <pml:th width="2cm">Unit price</pml:th>
+        <pml:th width="1cm">Qty</pml:th>
+        <pml:th width="2cm">Pre-Tax Total</pml:th>
+        <pml:th>VAT</pml:th>
+        <pml:th>Total</pml:th>
       </pml:tr>
       <pml:tr stl:repeat="product products">
-        <pml:td>${product/reference}</pml:td>
         <pml:td>${product/title}</pml:td>
-        <pml:td>${product/price/unit/with_tax} €</pml:td>
+        <pml:td>${product/reference}</pml:td>
+        <pml:td>${product/price/unit/without_tax} €</pml:td>
         <pml:td>${product/quantity}</pml:td>
+        <pml:td>${product/price/total/without_tax} €</pml:td>
+        <pml:td>${product/tax} %</pml:td>
         <pml:td>${product/price/total/with_tax} €</pml:td>
       </pml:tr>
+    </pml:table>
+
+    <p>
+      <br/>
+    </p>
+
+    <pml:table id="price">
       <pml:tr>
-        <pml:td colspan="4" class="align-right">Shipping</pml:td>
-        <pml:td>${shipping_price} €</pml:td>
+        <pml:td width="15cm"></pml:td>
+        <pml:td width="5cm" class="align-right">
+          Total products (tax exclu.):
+        </pml:td>
+        <pml:td width="5cm">
+          ${price/products/without_tax} €
+        </pml:td>
       </pml:tr>
       <pml:tr>
-        <pml:td colspan="4" class="align-right">Total Price</pml:td>
-        <pml:td>${total_price} €</pml:td>
+        <pml:td width="15cm"></pml:td>
+        <pml:td class="align-right">
+          Total products (tax incl.):
+        </pml:td>
+        <pml:td width="5cm">
+          ${price/products/with_tax} €
+        </pml:td>
+      </pml:tr>
+      <pml:tr>
+        <pml:td></pml:td>
+        <pml:td class="align-right">
+          Total shipping:
+        </pml:td>
+        <pml:td>
+          ${price/shippings/with_tax} €
+        </pml:td>
+      </pml:tr>
+      <pml:tr>
+        <pml:td></pml:td>
+        <pml:td class="align-right">
+          Total with Tax:
+        </pml:td>
+        <pml:td>${price/total/with_tax} €</pml:td>
       </pml:tr>
     </pml:table>
 

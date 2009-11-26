@@ -29,7 +29,6 @@ from itools.workflow import WorkflowError
 from ikaaro.buttons import Button
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import SelectWidget
-from ikaaro.table_views import Table_View
 
 # Import from shop
 from workflow import Order_Transitions
@@ -37,7 +36,7 @@ from shop.payments.enumerates import PaymentWaysEnumerate
 from shop.payments.payments_views import Payments_EditablePayment
 from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.datatypes import Civilite
-from shop.utils import get_shop, bool_to_img, join_pdfs
+from shop.utils import get_shop, join_pdfs
 
 
 numero_template = '<span class="counter counter-%s"><a href="%s">%s</a></span>'
@@ -202,6 +201,9 @@ class OrdersView(Folder_BrowseContent):
                             'attachment; filename="Document.pdf"')
         list_pdf = []
         for id in form['ids']:
+            order = resource.get_resource(id)
+            order.generate_pdf_bill(context)
+            order.generate_pdf_order(context)
             pdf = resource.get_resource('%s/%s' % (id, pdf_name), soft=True)
             if pdf is None:
                 continue
@@ -298,7 +300,7 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         shop = get_shop(resource)
         addresses = shop.get_resource('addresses').handler
         # Build namespace
-        namespace = {}
+        namespace = resource.get_namespace(context)
         for key in ['is_payed', 'is_sent']:
             namespace[key] = resource.get_property(key)
         # States
@@ -333,9 +335,6 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         namespace['customer'] = {'id': customer_id,
                                  'title': user.get_title(),
                                  'email': user.get_property('email')}
-        # Products
-        products = resource.get_resource('products')
-        namespace['products'] = OrdersProducts_View().GET(products, context)
         # Price
         for key in ['shipping_price', 'total_price']:
             namespace[key] = resource.get_property(key)
@@ -471,61 +470,3 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         # Do actions
         return add_record_view.add_shipping(resource, shipping_way,
                     context, form)
-
-
-
-class OrdersProducts_View(Table_View):
-
-    title = MSG(u'Products')
-    access = 'is_allowed_to_edit'
-
-    search_template = None
-    batch_template = None
-    table_actions = []
-
-    columns = [
-        ('checkbox', None),
-        ('state', MSG(u'State')),
-        ('cover', None),
-        ('reference', MSG(u'Reference')),
-        ('title', MSG(u'Title')),
-        ('quantity', MSG(u'Quantity')),
-        ('pre-tax-price', MSG(u'Unit Price')),
-        ]
-
-
-    def get_table_columns(self, resource, context):
-        return self.columns
-
-
-    def get_item_value(self, resource, context, item, column):
-        get_value = resource.handler.get_record_value
-        shop = get_shop(resource)
-        products = shop.get_resource('products')
-        product_resource = products.get_resource(get_value(item, 'name'), soft=True)
-        if column == 'checkbox':
-            return item.id, False
-        elif column == 'state':
-            href = ''
-            color = 'green'
-            name = 'Ok'
-            return XMLParser(numero_template % (color, href, name))
-        elif column == 'cover':
-            if product_resource:
-                cover = product_resource.get_cover_namespace(context)
-                uri = '%s/;thumb?width=48&amp;height=48' % cover['href']
-                return XMLParser('<div class="thumb-products"><img src="%s"/></div>' % uri)
-            return None
-        elif column == 'title':
-            id = item.id
-            title = get_value(item, 'title')
-            link = None
-            if product_resource:
-                link = context.get_link(product_resource)
-            return title, link
-        return Table_View.get_item_value(self, resource, context, item, column)
-
-
-    def sort_and_batch(self, resource, context, items):
-        return items
-
