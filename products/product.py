@@ -624,7 +624,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             tax = self.get_property('tax')
             tax_value = TaxesEnumerate.get_value(tax) or decimal(0)
             return (tax_value/decimal(100) + 1)
-        return decimal(0)
+        return decimal(1)
 
 
     def get_price_without_tax(self, id_declination=None,
