@@ -50,7 +50,9 @@
         </h2>
         <a target="_blank" href="/shop/customers/${customer/id}">
           ${customer/title}<br/>
-          (${customer/email})
+          <span stl:if="customer/phone1">${customer/phone1}<br/></span>
+          <span stl:if="customer/phone2">${customer/phone2}<br/></span>
+          Email: ${customer/email}<br/>
         </a>
       </td>
       <td>

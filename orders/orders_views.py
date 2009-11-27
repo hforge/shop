@@ -343,7 +343,9 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         user = root.get_user(customer_id)
         namespace['customer'] = {'id': customer_id,
                                  'title': user.get_title(),
-                                 'email': user.get_property('email')}
+                                 'email': user.get_property('email'),
+                                 'phone1': user.get_property('phone1'),
+                                 'phone2': user.get_property('phone2')}
         # Price
         for key in ['shipping_price', 'total_price']:
             namespace[key] = resource.get_property(key)
