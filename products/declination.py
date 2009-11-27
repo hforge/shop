@@ -133,6 +133,13 @@ class Declination(DynamicFolder):
                            declination_schema)
 
 
+    def get_title(self):
+        title = ''
+        for key, datatype in self.get_dynamic_schema().items():
+            title += datatype.get_value(self.get_property(key))
+        return title
+
+
     def get_dynamic_schema(self):
         schema = {}
         for name in self.parent.get_purchase_options_names():

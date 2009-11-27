@@ -290,15 +290,22 @@ class Order(WorkflowAware, ShopFolder):
         for record in order_products.handler.get_records():
             kw = {'id': record.id,
                   'uri': None}
+            for key in BaseOrdersProducts.record_schema.keys():
+                kw[key] = get_value(record, key)
             name = get_value(record, 'name')
             product_resource = shop_products.get_resource(name, soft=True)
             if product_resource:
                 kw['uri'] = product_resource.handler.uri
                 kw['cover'] = product_resource.get_cover_namespace(context)
+                # Declination
+                if kw['declination']:
+                    declination = product_resource.get_resource(
+                                    str(kw['declination']), soft=True)
+                    if declination:
+                        kw['declination'] = declination.get_title()
             else:
                 kw['cover'] = None
-            for key in BaseOrdersProducts.record_schema.keys():
-                kw[key] = get_value(record, key)
+
             # Get product prices
             unit_price_with_tax = kw['pre-tax-price'] * ((kw['tax']/100)+1)
             unit_price_without_tax = kw['pre-tax-price']
