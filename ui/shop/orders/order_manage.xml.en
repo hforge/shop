@@ -126,8 +126,6 @@
   <table class="order-sub-browse">
     <thead>
       <tr>
-        <th></th>
-        <th></th>
         <th>Reference</th>
         <th style="width:100px">Cover</th>
         <th>Product</th>
@@ -138,11 +136,6 @@
     </thead>
     <tbody>
       <tr stl:repeat="product products">
-        <td>
-          <input type="checkbox" name="id" value="${product/id}"/>
-        </td>
-        <td>
-        </td>
         <td>
           ${product/reference}<br/><br/>
           <img src="../../;barcode?reference=${product/reference}"
@@ -165,26 +158,7 @@
         <td>${product/price/total/with_tax} €</td>
       </tr>
       <tr>
-        <td colspan="8">
-          <img src="/ui/shop/images/colis-enabled.png"/><br/>
-          <img src="/ui/shop/images/colis-disabled.png"/><br/>
-          <img src="/ui/shop/images/colis-incomplete.png"/><br/>
-          <img src="/ui/shop/images/colis-waiting.png"/><br/>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-
-  <table>
-    <tbody>
-      <tr>
-        <td colspan="7" style="text-align:right">
+        <td colspan="5" style="text-align:right">
           <span>${order/shipping_way}</span> »
           Shipping
           (${order/total_weight} kg)
@@ -192,7 +166,7 @@
         <td>${shipping_price} €</td>
       </tr>
       <tr>
-        <td colspan="7" style="text-align:right">
+        <td colspan="5" style="text-align:right">
           <span>${order/payment_way}</span> »
           Total Price
         </td>
