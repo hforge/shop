@@ -63,21 +63,13 @@
 
     <pml:table id="table">
       <pml:tr>
-        <pml:th colspan="3">
+        <pml:th>
           Invoice number ${reference} from ${creation_date}
         </pml:th>
       </pml:tr>
       <pml:tr>
         <pml:td>
           Order ${reference}
-        </pml:td>
-        <pml:td>
-          Carrier:<br/>
-          ${carrier}
-        </pml:td>
-        <pml:td>
-          Payment method:<br/>
-          ${payment_way}
         </pml:td>
       </pml:tr>
     </pml:table>

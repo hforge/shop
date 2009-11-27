@@ -338,14 +338,6 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         bill_address = resource.get_property('bill_address')
         namespace['delivery_address'] = get_address(delivery_address)
         namespace['bill_address'] = get_address(bill_address)
-        # Customer
-        customer_id = resource.get_property('customer_id')
-        user = root.get_user(customer_id)
-        namespace['customer'] = {'id': customer_id,
-                                 'title': user.get_title(),
-                                 'email': user.get_property('email'),
-                                 'phone1': user.get_property('phone1'),
-                                 'phone2': user.get_property('phone2')}
         # Price
         for key in ['shipping_price', 'total_price']:
             namespace[key] = resource.get_property(key)

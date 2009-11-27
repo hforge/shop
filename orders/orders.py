@@ -322,10 +322,22 @@ class Order(WorkflowAware, ShopFolder):
             namespace['price']['products']['without_tax'] += unit_price_without_tax
         # Format price
         shipping_price = self.get_property('shipping_price')
-        namespace['price']['total']['with_tax'] = format_price(namespace['price']['products']['with_tax'] + shipping_price)
-        namespace['price']['products']['with_tax'] = format_price(namespace['price']['products']['with_tax'])
-        namespace['price']['products']['without_tax'] = format_price(namespace['price']['products']['without_tax'])
-        namespace['price']['shippings']['with_tax'] = format_price(shipping_price)
+        namespace['price']['total']['with_tax'] = format_price(
+            namespace['price']['products']['with_tax'] + shipping_price)
+        namespace['price']['products']['with_tax'] = format_price(
+            namespace['price']['products']['with_tax'])
+        namespace['price']['products']['without_tax'] = format_price(
+            namespace['price']['products']['without_tax'])
+        namespace['price']['shippings']['with_tax'] = format_price(
+            shipping_price)
+        # Customer
+        customer_id = self.get_property('customer_id')
+        user = context.root.get_user(customer_id)
+        namespace['customer'] = {'id': customer_id,
+                                 'title': user.get_title(),
+                                 'email': user.get_property('email'),
+                                 'phone1': user.get_property('phone1'),
+                                 'phone2': user.get_property('phone2')}
         # Addresses
         addresses = shop.get_resource('addresses').handler
         get_address = addresses.get_record_namespace
