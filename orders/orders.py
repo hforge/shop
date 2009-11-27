@@ -318,8 +318,8 @@ class Order(WorkflowAware, ShopFolder):
                         'without_tax': format_price(total_price_without_tax)}}
             namespace['products'].append(kw)
             # Calcul order price
-            namespace['price']['products']['with_tax'] += unit_price_with_tax
-            namespace['price']['products']['without_tax'] += unit_price_without_tax
+            namespace['price']['products']['with_tax'] += total_price_with_tax
+            namespace['price']['products']['without_tax'] += total_price_without_tax
         # Format price
         shipping_price = self.get_property('shipping_price')
         namespace['price']['total']['with_tax'] = format_price(
