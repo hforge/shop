@@ -1697,7 +1697,7 @@ msgid "Bank:"
 msgstr "Banque :"
 
 #: ../orders/orders.py:226 ../orders/orders.py:476 ../orders/orders.py:538
-#: ../products/product.py:669 ../ui/shop/orders/order_pdf.xml.en:77
+#: ../products/product.py:670 ../ui/shop/orders/order_pdf.xml.en:77
 msgid "Barcode"
 msgstr "Code Barre"
 
@@ -2964,6 +2964,10 @@ msgstr "Commerçant invalide"
 msgid "Invalid transaction"
 msgstr "Transaction invalide"
 
+#: ../ui/shop/orders/order_facture.xml.en:75
+msgid "Invoice ${reference}"
+msgstr "Facture ${reference}"
+
 #: ../ui/shop/orders/order_pdf.xml.en:61
 #: ../ui/shop/orders/order_facture.xml.en:70
 msgid "Invoice number ${reference} from ${creation_date}"
@@ -3501,7 +3505,6 @@ msgid "Order"
 msgstr "Commander"
 
 #: ../ui/shop/orders/order_pdf.xml.en:66
-#: ../ui/shop/orders/order_facture.xml.en:75
 msgid "Order ${reference}"
 msgstr "Bon de commande ${reference}"
 
@@ -3578,7 +3581,7 @@ msgctxt "heading"
 msgid "Order number:"
 msgstr "Commande numéro:"
 
-#: ../products/product.py:147 ../products/product.py:748
+#: ../products/product.py:147 ../products/product.py:749
 msgid "Order photos"
 msgstr "Ordonner les photos"
 
@@ -3904,7 +3907,7 @@ msgstr "Veuillez prendre un rendez vous avec nous"
 
 #: ../ui/shop/orders/order_facture.xml.en:87
 msgid "Pre-Tax Total"
-msgstr ""
+msgstr "Total HT"
 
 #: ../ui/shop/widgets/taxes.xml.en:7
 msgid "Pre-tax retail price:"
@@ -4032,7 +4035,7 @@ msgstr "En rupture de stock."
 msgid "Product title"
 msgstr "Nom du produit"
 
-#: ../orders/orders.py:106 ../orders/orders.py:202 ../products/product.py:831
+#: ../orders/orders.py:106 ../orders/orders.py:202 ../products/product.py:832
 #: ../shop.py:166 ../stock/resupply.py:44
 msgid "Products"
 msgstr "Produits"
@@ -4919,7 +4922,7 @@ msgstr "ID utilisateur"
 
 #: ../ui/shop/orders/order_facture.xml.en:88
 msgid "VAT"
-msgstr ""
+msgstr "TVA"
 
 #: ../payments/paybox/enumerates.py:83
 msgid "VISA"

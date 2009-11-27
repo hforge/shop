@@ -448,7 +448,7 @@ msgstr ""
 #: ../orders/orders.py:226
 #: ../orders/orders.py:476
 #: ../orders/orders.py:538
-#: ../products/product.py:669
+#: ../products/product.py:670
 #: ../ui/shop/orders/order_pdf.xml.en:77
 msgid "Barcode"
 msgstr ""
@@ -1193,6 +1193,10 @@ msgstr ""
 msgid "Invalid transaction"
 msgstr ""
 
+#: ../ui/shop/orders/order_facture.xml.en:75
+msgid "Invoice ${reference}"
+msgstr ""
+
 #: ../ui/shop/orders/order_pdf.xml.en:61
 #: ../ui/shop/orders/order_facture.xml.en:70
 msgid "Invoice number ${reference} from ${creation_date}"
@@ -1527,7 +1531,6 @@ msgid "Order"
 msgstr ""
 
 #: ../ui/shop/orders/order_pdf.xml.en:66
-#: ../ui/shop/orders/order_facture.xml.en:75
 msgid "Order ${reference}"
 msgstr ""
 
@@ -1556,7 +1559,7 @@ msgid "Order number:"
 msgstr ""
 
 #: ../products/product.py:147
-#: ../products/product.py:748
+#: ../products/product.py:749
 msgid "Order photos"
 msgstr ""
 
@@ -1874,7 +1877,7 @@ msgstr ""
 
 #: ../orders/orders.py:106
 #: ../orders/orders.py:202
-#: ../products/product.py:831
+#: ../products/product.py:832
 #: ../shop.py:166
 #: ../stock/resupply.py:44
 msgid "Products"

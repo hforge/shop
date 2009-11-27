@@ -72,7 +72,7 @@
       </pml:tr>
       <pml:tr>
         <pml:td>
-          Order ${reference}
+          Invoice ${reference}
         </pml:td>
       </pml:tr>
     </pml:table>
