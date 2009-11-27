@@ -31,7 +31,8 @@ class Messages_TableHandler(BaseTable):
 
     record_schema = {'author': String,
                      'message': Unicode,
-                     'private': Boolean}
+                     'private': Boolean,
+                     'seen': Boolean(is_indexed=True)}
 
 
 
@@ -40,10 +41,12 @@ class Messages_TableResource(Table):
     class_id = 'shop-order-messages'
     class_title = MSG(u'Messages')
     class_handler = Messages_TableHandler
+    class_version = '20091126'
 
     form = [TextWidget('author', title=MSG(u'Author')),
             MultilineWidget('message', title=MSG(u'Message')),
-            BooleanCheckBox('private', title=MSG(u'Private ?'))]
+            BooleanCheckBox('private', title=MSG(u'Private ?')),
+            BooleanCheckBox('seen', title=MSG(u'Seen ?'))]
 
     def get_namespace_messages(self, context):
         messages = []
@@ -52,11 +55,18 @@ class Messages_TableResource(Table):
             author = get_value(record, 'author')
             author = context.root.get_resource('/users/%s' % author)
             ts = get_value(record, 'ts')
-            messages.append({'author': author.get_title(),
+            messages.append({'id': record.id,
+                             'author': author.get_title(),
                              'message': get_value(record, 'message'),
                              'private': get_value(record, 'private'),
+                             'seen': get_value(record, 'seen'),
                              'ts': format_datetime(ts, context.accept_language)})
         return messages
+
+
+    def update_20091126(self):
+        for record in self.handler.get_records():
+            self.handler.update_record(record.id, **{'seen': True})
 
 
 register_resource_class(Messages_TableResource)

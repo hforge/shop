@@ -40,6 +40,7 @@ from shop.utils import get_shop, join_pdfs
 
 
 numero_template = '<span class="counter counter-%s"><a href="%s">%s</a></span>'
+img_mail = list(XMLParser('<img src="/ui/shop/images/mail.png"/>'))
 
 class MergeOrderButton(Button):
 
@@ -80,6 +81,7 @@ class OrdersView(Folder_BrowseContent):
     table_columns = [
         ('checkbox', None),
         ('numero', None),
+        ('nb_msg', img_mail),
         ('customer', MSG(u'Customer')),
         ('total_price', MSG(u'Total price')),
         ('state1', None),
@@ -134,6 +136,13 @@ class OrdersView(Folder_BrowseContent):
             href = context.resource.get_pathto(item_resource)
             name = item_resource.get_reference()
             return XMLParser(numero_template % (self.color, href, name))
+        elif column == 'nb_msg':
+            messages = item_resource.get_resource('messages')
+            nb_messages = len(messages.handler.search(seen=False))
+            if nb_messages:
+                href = context.resource.get_pathto(item_resource)
+                return XMLParser(numero_template % ('black', href, nb_messages))
+            return None
         elif column == 'customer':
             users = context.root.get_resource('users')
             customer_id = item_resource.get_property('customer_id')
@@ -423,11 +432,25 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         messages = resource.get_resource('messages').handler
         messages.add_record({'author': context.user.name,
                              'private': form['private'],
-                             'message': form['message']})
+                             'message': form['message'],
+                             'seen': True})
         if form['private'] is False:
             resource.notify_new_message(form['message'], context)
         context.message = INFO(u'Your message has been sent')
 
+
+    action_change_message_state_schema = {'id_message': Integer(mandatory=True)}
+    def action_change_message_state(self, resource, context, form):
+        handler = resource.get_resource('messages').handler
+        record = handler.get_record(form['id_message'])
+        seen = handler.get_record_value(record, 'seen')
+        handler.update_record(form['id_message'], **{'seen': not seen})
+        context.message = INFO(u'Changes saves')
+
+
+    ################
+    # Payments
+    ################
 
     action_add_payment_way_schema = {'payment_way': PaymentWaysEnumerate}
     def action_add_payment_way(self, resource, context, form):
