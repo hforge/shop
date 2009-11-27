@@ -4080,7 +4080,7 @@ msgstr "Etat de publication"
 #: ../ui/shop/orders/order_pdf.xml.en:80
 #: ../ui/shop/orders/order_facture.xml.en:86
 msgid "Qty"
-msgstr ""
+msgstr "Qté"
 
 #: ../orders/orders.py:119 ../ui/shop/stock/pdf_resupply.xml.en:36
 #: ../stock/resupply.py:52
