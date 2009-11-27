@@ -22,7 +22,7 @@
         <td stl:if="is_payed">
           <img src="/ui/shop/images/dollar-enabled.png"/>
           Your order has been payed
-          <a href="/shop/orders/${reference}/bill/;download"
+          <a href="/shop/orders/${order_name}/bill/;download"
             target="blank" stl:if="has_bill"
             style="text-decoration:none; color:red;">
             <img src="/ui/icons/16x16/pdf.png"/> Download bill
