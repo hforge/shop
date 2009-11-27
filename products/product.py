@@ -623,7 +623,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         if zones.get_record_value(zone_record, 'has_tax') is True:
             tax = self.get_property('tax')
             tax_value = TaxesEnumerate.get_value(tax) or decimal(0)
-        return (tax_value/decimal(100) + 1)
+            return (tax_value/decimal(100) + 1)
+        return decimal(0)
 
 
     def get_price_without_tax(self, id_declination=None,
