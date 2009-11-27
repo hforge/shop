@@ -42,6 +42,9 @@
             </stl:block>
             ${delivery_address/zipcode} ${delivery_address/town}<pml:br/>
             ${delivery_address/country}<pml:br/>
+            ${customer/email}<pml:br/>
+            <span stl:if="customer/phone1">${customer/phone1}<br/></span>
+            <span stl:if="customer/phone2">${customer/phone2}<br/></span>
           </pml:p>
         </pml:td>
         <pml:td>
