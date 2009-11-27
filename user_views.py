@@ -285,10 +285,10 @@ class ShopUser_OrderView(STLForm):
     def action_add_message(self, resource, context, form):
         shop = get_shop(resource)
         order = shop.get_resource('orders/%s' % form['id'])
-        messages = order.get_resource('messages').handler
-        messages.add_record({'author': context.user.name,
-                             'private': False,
-                             'message': form['message']})
+        messages = order.get_resource('messages')
+        messages.add_new_record({'author': context.user.name,
+                                 'private': False,
+                                 'message': form['message']})
         order.notify_new_message(form['message'], context)
         context.message = INFO(u'Your message has been sent')
 

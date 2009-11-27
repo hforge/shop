@@ -137,8 +137,9 @@ class OrdersView(Folder_BrowseContent):
             name = item_resource.get_reference()
             return XMLParser(numero_template % (self.color, href, name))
         elif column == 'nb_msg':
-            messages = item_resource.get_resource('messages')
-            nb_messages = len(messages.handler.search(seen=False))
+            # XXX Ne marche pas si on recherche seen=False => PB catalogue
+            messages = item_resource.get_resource('messages').handler
+            nb_messages = messages.get_n_records() - len(messages.search(seen=True))
             if nb_messages:
                 href = context.resource.get_pathto(item_resource)
                 return XMLParser(numero_template % ('black', href, nb_messages))
@@ -423,11 +424,11 @@ class Order_Manage(Payments_EditablePayment, STLForm):
     action_add_message_schema = {'message': Unicode(mandatory=True),
                                  'private': Boolean(mandatory=True)}
     def action_add_message(self, resource, context, form):
-        messages = resource.get_resource('messages').handler
-        messages.add_record({'author': context.user.name,
-                             'private': form['private'],
-                             'message': form['message'],
-                             'seen': True})
+        messages = resource.get_resource('messages')
+        messages.add_new_record({'author': context.user.name,
+                                 'private': form['private'],
+                                 'message': form['message'],
+                                 'seen': True})
         if form['private'] is False:
             resource.notify_new_message(form['message'], context)
         context.message = INFO(u'Your message has been sent')
