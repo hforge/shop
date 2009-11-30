@@ -289,12 +289,14 @@ class Order(WorkflowAware, ShopFolder):
         get_value = order_products.handler.get_record_value
         for record in order_products.handler.get_records():
             kw = {'id': record.id,
-                  'uri': None}
+                  'uri': None,
+                  'href': None}
             for key in BaseOrdersProducts.record_schema.keys():
                 kw[key] = get_value(record, key)
             name = get_value(record, 'name')
             product_resource = shop_products.get_resource(name, soft=True)
             if product_resource:
+                kw['href'] = context.get_link(product_resource)
                 kw['uri'] = product_resource.handler.uri
                 kw['cover'] = product_resource.get_cover_namespace(context)
                 # Declination

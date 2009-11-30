@@ -75,17 +75,19 @@
     <pml:table id="articles">
       <pml:tr>
         <pml:th width="5cm">Barcode</pml:th>
-        <pml:th width="2cm">Reference</pml:th>
-        <pml:th width="9cm">Description</pml:th>
+        <pml:th width="5cm"></pml:th>
+        <pml:th width="5cm">Description</pml:th>
         <pml:th width="1cm">Qty</pml:th>
         <pml:th>Total</pml:th>
       </pml:tr>
       <pml:tr stl:repeat="product products">
         <pml:td>
+          ${product/reference}<br/>
           <pml:img src="${product/uri}/barcode"/>
         </pml:td>
         <pml:td>
-          ${product/reference}<br/>
+          <pml:img src="${product/cover/uri}" width="100" height="100"
+            stl:if="product/cover"/>
         </pml:td>
         <pml:td>${product/title}</pml:td>
         <pml:td>${product/quantity}</pml:td>

@@ -138,7 +138,7 @@
       <tr stl:repeat="product products">
         <td>
           ${product/reference}<br/><br/>
-          <img src="../../;barcode?reference=${product/reference}"
+          <img src="${product/href}/barcode/;download"
             stl:if="product/reference"/>
         </td>
         <td>
@@ -146,7 +146,7 @@
             stl:if="product/cover"/>
         </td>
         <td>
-          <a href="${product/uri}" stl:omit-tag="not product/uri">
+          <a href="${product/href}" stl:omit-tag="not product/href">
             ${product/title}
           </a>
           <stl:block stl:if="product/declination">
