@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-27 13:11+CET\n"
+"POT-Creation-Date: 2009-11-30 15:11+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -731,12 +731,12 @@ msgstr ""
 msgid "${price/products/without_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:107
+#: ../ui/shop/orders/order_pdf.xml.en:109
 #: ../ui/shop/orders/order_facture.xml.en:131
 msgid "${price/shippings/with_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:115
+#: ../ui/shop/orders/order_pdf.xml.en:117
 #: ../ui/shop/orders/order_facture.xml.en:139
 msgid "${price/total/with_tax} €"
 msgstr ""
@@ -768,7 +768,7 @@ msgctxt "table cell"
 msgid "${product/declination}"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:92
+#: ../ui/shop/orders/order_pdf.xml.en:94
 #: ../ui/shop/orders/order_facture.xml.en:98
 msgid "${product/price/total/with_tax} €"
 msgstr ""
@@ -798,7 +798,7 @@ msgctxt "table cell"
 msgid "${product/price/with_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:91
+#: ../ui/shop/orders/order_pdf.xml.en:93
 #: ../ui/shop/orders/order_facture.xml.en:95
 msgid "${product/quantity}"
 msgstr ""
@@ -814,7 +814,7 @@ msgctxt "link"
 msgid "${product/quantity} x ${product/title}"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:88
+#: ../ui/shop/orders/order_pdf.xml.en:85
 #: ../ui/shop/orders/order_facture.xml.en:93
 msgid "${product/reference}"
 msgstr ""
@@ -828,7 +828,7 @@ msgstr ""
 msgid "${product/tax} %"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:90
+#: ../ui/shop/orders/order_pdf.xml.en:92
 #: ../ui/shop/orders/order_facture.xml.en:92
 msgid "${product/title}"
 msgstr ""
@@ -1665,8 +1665,8 @@ msgctxt "label"
 msgid "Bank:"
 msgstr ""
 
-#: ../orders/orders.py:226 ../orders/orders.py:476 ../orders/orders.py:538
-#: ../products/product.py:670 ../ui/shop/orders/order_pdf.xml.en:77
+#: ../orders/orders.py:226 ../orders/orders.py:478 ../orders/orders.py:540
+#: ../products/product.py:671 ../ui/shop/orders/order_pdf.xml.en:77
 msgid "Barcode"
 msgstr ""
 
@@ -1674,7 +1674,7 @@ msgstr ""
 msgid "Barcode format"
 msgstr ""
 
-#: ../orders/orders.py:443 ../orders/orders.py:463 ../stock/stock_views.py:133
+#: ../orders/orders.py:445 ../orders/orders.py:465 ../stock/stock_views.py:133
 #: ../ui/shop/orders/order_facture.xml.en:5
 msgid "Bill"
 msgstr ""
@@ -3293,7 +3293,7 @@ msgstr ""
 msgid "New message concerning order number {n}"
 msgstr ""
 
-#: ../orders/orders.py:384
+#: ../orders/orders.py:386
 msgid "New order has been validated"
 msgstr ""
 
@@ -3305,7 +3305,7 @@ msgstr ""
 msgid "New order notification emails (1 per line)"
 msgstr ""
 
-#: ../orders/orders.py:383
+#: ../orders/orders.py:385
 msgid "New order validated"
 msgstr ""
 
@@ -3525,7 +3525,7 @@ msgctxt "heading"
 msgid "Order number:"
 msgstr ""
 
-#: ../products/product.py:147 ../products/product.py:749
+#: ../products/product.py:147 ../products/product.py:750
 msgid "Order photos"
 msgstr ""
 
@@ -3548,7 +3548,7 @@ msgstr ""
 msgid "Order summary"
 msgstr ""
 
-#: ../orders/orders.py:492 ../shop.py:172
+#: ../orders/orders.py:494 ../shop.py:172
 msgid "Orders"
 msgstr ""
 
@@ -3979,7 +3979,7 @@ msgstr ""
 msgid "Product title"
 msgstr ""
 
-#: ../orders/orders.py:106 ../orders/orders.py:202 ../products/product.py:832
+#: ../orders/orders.py:106 ../orders/orders.py:202 ../products/product.py:833
 #: ../shop.py:166 ../stock/resupply.py:44
 msgid "Products"
 msgstr ""
@@ -4085,13 +4085,12 @@ msgstr ""
 msgid "Ref"
 msgstr ""
 
-#: ../orders/orders.py:113 ../ui/shop/orders/order_pdf.xml.en:78
-#: ../ui/shop/orders/order_facture.xml.en:84 ../stock/resupply.py:50
-#: ../ui/shop/stock/pdf_resupply.xml.en:35 ../payments/payments_views.py:128
-#: ../payments/payments_views.py:250 ../products/product_views.py:191
-#: ../products/product_views.py:329 ../products/product_views.py:349
-#: ../products/product_views.py:454 ../products/product_views.py:616
-#: ../products/declination.py:50
+#: ../orders/orders.py:113 ../ui/shop/orders/order_facture.xml.en:84
+#: ../stock/resupply.py:50 ../ui/shop/stock/pdf_resupply.xml.en:35
+#: ../payments/payments_views.py:128 ../payments/payments_views.py:250
+#: ../products/product_views.py:191 ../products/product_views.py:329
+#: ../products/product_views.py:349 ../products/product_views.py:454
+#: ../products/product_views.py:616 ../products/declination.py:50
 msgid "Reference"
 msgstr ""
 
@@ -4752,12 +4751,12 @@ msgstr ""
 msgid "Total products (tax incl.):"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:104
+#: ../ui/shop/orders/order_pdf.xml.en:106
 #: ../ui/shop/orders/order_facture.xml.en:128
 msgid "Total shipping:"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:113
+#: ../ui/shop/orders/order_pdf.xml.en:115
 #: ../ui/shop/orders/order_facture.xml.en:137
 msgid "Total with Tax:"
 msgstr ""
@@ -5163,7 +5162,7 @@ msgstr ""
 msgid "user"
 msgstr ""
 
-#: ../orders/orders.py:349 ../orders/orders.py:350
+#: ../orders/orders.py:351 ../orders/orders.py:352
 msgid "xxx"
 msgstr ""
 
