@@ -89,7 +89,12 @@
           <pml:img src="${product/cover/uri}" width="100" height="100"
             stl:if="product/cover"/>
         </pml:td>
-        <pml:td>${product/title}</pml:td>
+        <pml:td>
+          ${product/title}
+          <stl:block stl:if="product/declination">
+            <br/>${product/declination}
+          </stl:block>
+        </pml:td>
         <pml:td>${product/quantity}</pml:td>
         <pml:td>${product/price/total/with_tax} €</pml:td>
       </pml:tr>

@@ -155,53 +155,58 @@ msgstr ""
 msgid "${pdf_signature}"
 msgstr ""
 
-#: ../ui/shop/orders/order_facture.xml.en:122
+#: ../ui/shop/orders/order_facture.xml.en:127
 msgid "${price/products/with_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_facture.xml.en:113
+#: ../ui/shop/orders/order_facture.xml.en:118
 msgid "${price/products/without_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:109
-#: ../ui/shop/orders/order_facture.xml.en:131
+#: ../ui/shop/orders/order_pdf.xml.en:114
+#: ../ui/shop/orders/order_facture.xml.en:136
 msgid "${price/shippings/with_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:117
-#: ../ui/shop/orders/order_facture.xml.en:139
+#: ../ui/shop/orders/order_pdf.xml.en:122
+#: ../ui/shop/orders/order_facture.xml.en:144
 msgid "${price/total/with_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:94
-#: ../ui/shop/orders/order_facture.xml.en:98
+#: ../ui/shop/orders/order_pdf.xml.en:95
+#: ../ui/shop/orders/order_facture.xml.en:95
+msgid "${product/declination}"
+msgstr ""
+
+#: ../ui/shop/orders/order_pdf.xml.en:99
+#: ../ui/shop/orders/order_facture.xml.en:103
 msgid "${product/price/total/with_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_facture.xml.en:96
+#: ../ui/shop/orders/order_facture.xml.en:101
 msgid "${product/price/total/without_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_facture.xml.en:94
+#: ../ui/shop/orders/order_facture.xml.en:99
 msgid "${product/price/unit/without_tax} €"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:93
-#: ../ui/shop/orders/order_facture.xml.en:95
+#: ../ui/shop/orders/order_pdf.xml.en:98
+#: ../ui/shop/orders/order_facture.xml.en:100
 msgid "${product/quantity}"
 msgstr ""
 
 #: ../ui/shop/orders/order_pdf.xml.en:85
-#: ../ui/shop/orders/order_facture.xml.en:93
+#: ../ui/shop/orders/order_facture.xml.en:98
 msgid "${product/reference}"
 msgstr ""
 
-#: ../ui/shop/orders/order_facture.xml.en:97
+#: ../ui/shop/orders/order_facture.xml.en:102
 msgid "${product/tax} %"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:92
-#: ../ui/shop/orders/order_facture.xml.en:92
+#: ../ui/shop/orders/order_pdf.xml.en:93
+#: ../ui/shop/orders/order_facture.xml.en:93
 msgid "${product/title}"
 msgstr ""
 
@@ -2408,21 +2413,21 @@ msgstr ""
 msgid "Total price"
 msgstr ""
 
-#: ../ui/shop/orders/order_facture.xml.en:110
+#: ../ui/shop/orders/order_facture.xml.en:115
 msgid "Total products (tax exclu.):"
 msgstr ""
 
-#: ../ui/shop/orders/order_facture.xml.en:119
+#: ../ui/shop/orders/order_facture.xml.en:124
 msgid "Total products (tax incl.):"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:106
-#: ../ui/shop/orders/order_facture.xml.en:128
+#: ../ui/shop/orders/order_pdf.xml.en:111
+#: ../ui/shop/orders/order_facture.xml.en:133
 msgid "Total shipping:"
 msgstr ""
 
-#: ../ui/shop/orders/order_pdf.xml.en:115
-#: ../ui/shop/orders/order_facture.xml.en:137
+#: ../ui/shop/orders/order_pdf.xml.en:120
+#: ../ui/shop/orders/order_facture.xml.en:142
 msgid "Total with Tax:"
 msgstr ""
 

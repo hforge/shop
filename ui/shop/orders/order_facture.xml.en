@@ -89,7 +89,12 @@
         <pml:th>Total</pml:th>
       </pml:tr>
       <pml:tr stl:repeat="product products">
-        <pml:td>${product/title}</pml:td>
+        <pml:td>
+          ${product/title}
+          <stl:block stl:if="product/declination">
+            <br/>${product/declination}
+          </stl:block>
+        </pml:td>
         <pml:td>${product/reference}</pml:td>
         <pml:td>${product/price/unit/without_tax} €</pml:td>
         <pml:td>${product/quantity}</pml:td>
