@@ -6,3 +6,13 @@
 #menu, #location{
   display: none;
 }
+
+img{
+  width: 250px;
+  height: 90px;
+}
+
+.thumb-products img{
+  width: 48px;
+  height: 48px;
+}
