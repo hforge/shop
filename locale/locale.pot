@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-30 15:11+CET\n"
+"POT-Creation-Date: 2009-12-01 09:12+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1262,10 +1262,6 @@ msgstr ""
 
 #: ../ui/shop/stock/pdf_resupply.xml.en:27
 msgid "Le ${creation_date}"
-msgstr ""
-
-#: ../ui/backoffice/product_view.xml.en:23
-msgid "Lien"
 msgstr ""
 
 #: ../products/product_views.py:495
@@ -2763,14 +2759,14 @@ msgctxt "b"
 msgid "<g id='12'>${property/title}</g>:"
 msgstr ""
 
+#: ../ui/backoffice/product_view.xml.en:58
+msgctxt "b"
+msgid "<g id='3'>${property/title}</g>:"
+msgstr ""
+
 #: ../ui/shop/orders/order_manage.xml.en:217
 msgctxt "b"
 msgid "<g id='48'>Update order state:</g>${transitions}"
-msgstr ""
-
-#: ../ui/backoffice/product_view.xml.en:66
-msgctxt "b"
-msgid "<g id='7'>${property/title}</g>:"
 msgstr ""
 
 #: ../ui/shop/payments/transfer/record_view.xml.en:17
@@ -3151,7 +3147,7 @@ msgstr ""
 #: ../ui/shop/virtualcategory_boxsubcategories.xml.en:9
 #: ../ui/shop/manufacturer_view.xml.en:7
 #: ../ui/shop/products/print.xml.en:16
-#: ../ui/backoffice/product_view.xml.en:14
+#: ../ui/backoffice/product_view.xml.en:10
 msgctxt "heading"
 msgid "${title}"
 msgstr ""
@@ -3395,7 +3391,7 @@ msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:58
 #: ../ui/shop/products/product_viewbox.xml.en:15
-#: ../ui/backoffice/product_view.xml.en:29
+#: ../ui/backoffice/product_view.xml.en:22
 msgctxt "img[alt]"
 msgid "${title}"
 msgstr ""
@@ -3575,11 +3571,6 @@ msgstr ""
 #: ../ui/shop/shop_user_manage.xml.en:22
 msgctxt "link"
 msgid "<g id='3'>  <x id='4'/>  </g><x id='5'/> Gender:"
-msgstr ""
-
-#: ../ui/backoffice/product_view.xml.en:17
-msgctxt "link"
-msgid "<g id='3'>Public</g>  <g id='4'>Private</g>"
 msgstr ""
 
 #: ../ui/shop/template.xhtml.en:98
@@ -4017,6 +4008,11 @@ msgctxt "paragraph"
 msgid "${payment/view}"
 msgstr ""
 
+#: ../ui/backoffice/product_view.xml.en:69
+msgctxt "paragraph"
+msgid "${widget/title} ${widget/html}"
+msgstr ""
+
 #: ../ui/shop/products/product_view.xml.en:34
 msgctxt "paragraph"
 msgid "(Only <g id='7'>X</g> products in stock)"
@@ -4250,6 +4246,11 @@ msgctxt "span"
 msgid "<g id='4'>${nb_cancel}</g>  <g id='5'>Cancel</g>"
 msgstr ""
 
+#: ../ui/backoffice/product_view.xml.en:59
+msgctxt "span"
+msgid "<g id='4'>${property/value}</g>  <g id='5'>Unknow</g>"
+msgstr ""
+
 #: ../ui/shop/products/product_view.xml.en:22
 msgctxt "span"
 msgid "<g id='4'>${weight}</g> kg"
@@ -4283,11 +4284,6 @@ msgstr ""
 #: ../ui/shop/orders/order_manage.xml.en:334
 msgctxt "span"
 msgid "<g id='66'> Public </g>  <g id='67'> Private </g>"
-msgstr ""
-
-#: ../ui/backoffice/product_view.xml.en:67
-msgctxt "span"
-msgid "<g id='8'>${property/value}</g>  <g id='9'>Unknow</g>"
 msgstr ""
 
 #: ../ui/shop/shipping/shippingway_order_view.xml.en:8
@@ -4377,7 +4373,7 @@ msgid "${customer/title}<x id='2'/> Email:"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:77
-#: ../ui/backoffice/product_view.xml.en:48
+#: ../ui/backoffice/product_view.xml.en:40
 #: ../ui/shop/products/print.xml.en:40
 msgctxt "table cell"
 msgid "${data}"
@@ -4399,7 +4395,7 @@ msgid "${delivery_address/zipcode} ${delivery_address/town}<x id='13'/> ${delive
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:73
-#: ../ui/backoffice/product_view.xml.en:44
+#: ../ui/backoffice/product_view.xml.en:36
 msgctxt "table cell"
 msgid "${description}"
 msgstr ""
@@ -4515,7 +4511,7 @@ msgid "${payments/total_payed}€<x id='20'/> Refund:"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:85
-#: ../ui/backoffice/product_view.xml.en:56
+#: ../ui/backoffice/product_view.xml.en:48
 #: ../ui/shop/products/print.xml.en:36
 msgctxt "table cell"
 msgid "${price/with_tax} €"
@@ -4576,7 +4572,7 @@ msgid "${record_view}"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:65
-#: ../ui/backoffice/product_view.xml.en:36
+#: ../ui/backoffice/product_view.xml.en:28
 #: ../ui/shop/products/print.xml.en:24
 msgctxt "table cell"
 msgid "${reference}"
@@ -4649,13 +4645,13 @@ msgid "${state/user}"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:81
-#: ../ui/backoffice/product_view.xml.en:52
+#: ../ui/backoffice/product_view.xml.en:44
 msgctxt "table cell"
 msgid "${subject}"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:69
-#: ../ui/backoffice/product_view.xml.en:40
+#: ../ui/backoffice/product_view.xml.en:32
 #: ../ui/shop/products/print.xml.en:32
 msgctxt "table cell"
 msgid "${title}"
@@ -4728,7 +4724,7 @@ msgid "${value}"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:89
-#: ../ui/backoffice/product_view.xml.en:60
+#: ../ui/backoffice/product_view.xml.en:52
 msgctxt "table cell"
 msgid "${weight} Kg"
 msgstr ""
@@ -4767,6 +4763,11 @@ msgstr ""
 #: ../ui/shop/orders/order_manage.xml.en:383
 msgctxt "table cell"
 msgid "Amount"
+msgstr ""
+
+#: ../ui/backoffice/product_view.xml.en:14
+msgctxt "table cell"
+msgid "Barcode"
 msgstr ""
 
 #: ../ui/shop/orders/order_view.xml.en:64
@@ -4842,7 +4843,7 @@ msgid "Connection history"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:56
-#: ../ui/backoffice/product_view.xml.en:27
+#: ../ui/backoffice/product_view.xml.en:20
 #: ../ui/shop/orders/order_manage.xml.en:130
 msgctxt "table cell"
 msgid "Cover"
@@ -4864,7 +4865,7 @@ msgid "Customer payments"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:76
-#: ../ui/backoffice/product_view.xml.en:47
+#: ../ui/backoffice/product_view.xml.en:39
 msgctxt "table cell"
 msgid "Data"
 msgstr ""
@@ -4878,6 +4879,11 @@ msgstr ""
 #: ../ui/shop/orders/order_manage.xml.en:420
 msgctxt "table cell"
 msgid "Datetime"
+msgstr ""
+
+#: ../ui/backoffice/product_view.xml.en:66
+msgctxt "table cell"
+msgid "Declinations"
 msgstr ""
 
 #: ../ui/shop/cart_view.xml.en:79
@@ -4895,7 +4901,7 @@ msgstr ""
 #: ../ui/shop/products/print.xml.en:39
 #: ../ui/shop/products/product_view.xml.en:72
 #: ../ui/shop/shop_delivery.xml.en:20
-#: ../ui/backoffice/product_view.xml.en:43
+#: ../ui/backoffice/product_view.xml.en:35
 #: ../ui/backoffice/configuration.xml.en:13
 msgctxt "table cell"
 msgid "Description"
@@ -4919,7 +4925,7 @@ msgid "Id"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:80
-#: ../ui/backoffice/product_view.xml.en:51
+#: ../ui/backoffice/product_view.xml.en:43
 msgctxt "table cell"
 msgid "Keywords"
 msgstr ""
@@ -5028,7 +5034,7 @@ msgid "Payments history"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:84
-#: ../ui/backoffice/product_view.xml.en:55
+#: ../ui/backoffice/product_view.xml.en:47
 #: ../ui/shop/products/print.xml.en:35
 msgctxt "table cell"
 msgid "Price"
@@ -5049,7 +5055,7 @@ msgid "Product"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:92
-#: ../ui/backoffice/product_view.xml.en:63
+#: ../ui/backoffice/product_view.xml.en:55
 msgctxt "table cell"
 msgid "Product model informations"
 msgstr ""
@@ -5083,7 +5089,7 @@ msgstr ""
 #: ../ui/shop/products/print.xml.en:23
 #: ../ui/shop/orders/order_manage.xml.en:129
 #: ../ui/shop/stock/resupply.xml.en:36
-#: ../ui/backoffice/product_view.xml.en:35
+#: ../ui/backoffice/product_view.xml.en:27
 msgctxt "table cell"
 msgid "Reference"
 msgstr ""
@@ -5143,7 +5149,7 @@ msgid "System"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:68
-#: ../ui/backoffice/product_view.xml.en:39
+#: ../ui/backoffice/product_view.xml.en:31
 msgctxt "table cell"
 msgid "Title"
 msgstr ""
@@ -5187,7 +5193,7 @@ msgid "User addresses"
 msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:88
-#: ../ui/backoffice/product_view.xml.en:59
+#: ../ui/backoffice/product_view.xml.en:51
 msgctxt "table cell"
 msgid "Weight"
 msgstr ""
@@ -5268,7 +5274,6 @@ msgstr ""
 
 #: ../ui/shop/products/product_view.xml.en:58
 #: ../ui/shop/products/product_viewbox.xml.en:11
-#: ../ui/backoffice/product_view.xml.en:29
 msgctxt "title attribute"
 msgid "${title}"
 msgstr ""
