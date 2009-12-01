@@ -20,6 +20,7 @@ from itools.csv import Table as BaseTable
 from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import BooleanCheckBox, TextWidget, MultilineWidget
@@ -55,9 +56,10 @@ class Messages_TableResource(Table):
             author = get_value(record, 'author')
             author = context.root.get_resource('/users/%s' % author)
             ts = get_value(record, 'ts')
+            message = get_value(record, 'message').replace('\n', '<br/>')
             messages.append({'id': record.id,
                              'author': author.get_title(),
-                             'message': get_value(record, 'message'),
+                             'message': XMLParser(message.encode('utf-8')),
                              'private': get_value(record, 'private'),
                              'seen': get_value(record, 'seen'),
                              'ts': format_datetime(ts, context.accept_language)})
