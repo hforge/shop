@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-01 09:12+CET\n"
+"POT-Creation-Date: 2009-12-01 10:12+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3619,7 +3619,7 @@ msgctxt "link"
 msgid "Come back to the product list"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:40
+#: ../ui/backoffice/template.xhtml.en:42
 msgctxt "link"
 msgid "Configuration"
 msgstr ""
@@ -3680,7 +3680,7 @@ msgctxt "link"
 msgid "Cross selling"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:34
+#: ../ui/backoffice/template.xhtml.en:36
 msgctxt "link"
 msgid "Customers"
 msgstr ""
@@ -3730,7 +3730,7 @@ msgctxt "link"
 msgid "General website settings"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:58
+#: ../ui/backoffice/template.xhtml.en:60
 msgctxt "link"
 msgid "Help"
 msgstr ""
@@ -3746,12 +3746,12 @@ msgctxt "link"
 msgid "I forgot my password"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:63
+#: ../ui/backoffice/template.xhtml.en:65
 msgctxt "link"
 msgid "Log in"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:68
+#: ../ui/backoffice/template.xhtml.en:70
 msgctxt "link"
 msgid "Log out"
 msgstr ""
@@ -3811,7 +3811,7 @@ msgctxt "link"
 msgid "Order"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:37
+#: ../ui/backoffice/template.xhtml.en:39
 msgctxt "link"
 msgid "Orders"
 msgstr ""
@@ -3821,7 +3821,7 @@ msgctxt "link"
 msgid "Orders history"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:28
+#: ../ui/backoffice/template.xhtml.en:30
 msgctxt "link"
 msgid "Overview"
 msgstr ""
@@ -3831,7 +3831,7 @@ msgctxt "link"
 msgid "Payments"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:31
+#: ../ui/backoffice/template.xhtml.en:33
 msgctxt "link"
 msgid "Products"
 msgstr ""
@@ -3861,12 +3861,12 @@ msgctxt "link"
 msgid "Terms and conditions of use"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:51
+#: ../ui/backoffice/template.xhtml.en:53
 msgctxt "link"
 msgid "Tracker"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:45
+#: ../ui/backoffice/template.xhtml.en:47
 msgctxt "link"
 msgid "Wiki"
 msgstr ""
@@ -4418,13 +4418,13 @@ msgctxt "table cell"
 msgid "${line/id}"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:86
+#: ../ui/backoffice/template.xhtml.en:88
 msgctxt "table cell"
 msgid "${location} ${body}"
 msgstr ""
 
 #: ../ui/shop/template.xhtml.en:90
-#: ../ui/backoffice/template.xhtml.en:90
+#: ../ui/backoffice/template.xhtml.en:92
 msgctxt "table cell"
 msgid "${menu}"
 msgstr ""
@@ -4440,7 +4440,7 @@ msgctxt "table cell"
 msgid "${message/message}"
 msgstr ""
 
-#: ../ui/backoffice/template.xhtml.en:81
+#: ../ui/backoffice/template.xhtml.en:83
 msgctxt "table cell"
 msgid "${message}"
 msgstr ""
