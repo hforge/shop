@@ -671,7 +671,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                                    reference)
         self.del_resource('barcode', soft=True)
         metadata =  {'title': {'en': u'Barcode'},
-                     'filename': 'barcode.png'}
+                     'filename': 'barcode.png',
+                     'format': 'image/png'}
         Image.make_resource(Image, self, 'barcode', body=barcode, **metadata)
 
 

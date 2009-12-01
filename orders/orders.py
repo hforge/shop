@@ -224,7 +224,8 @@ class Order(WorkflowAware, ShopFolder):
         order = shop.get_resource('orders/%s' % name)
         barcode = generate_barcode(shop.get_property('barcode_format'), name)
         metadata =  {'title': {'en': u'Barcode'},
-                     'filename': 'barcode.png'}
+                     'filename': 'barcode.png',
+                     'format': 'image/png'}
         Image.make_resource(Image, order, 'barcode', body=barcode, **metadata)
 
 
