@@ -169,7 +169,8 @@ class Payments(ShopFolder):
         text = self.mail_body_template.gettext(id=id_record,
             payment_way=payment_way.name,
             ref=payments_table.get_record_value(record, 'ref'),
-            amount=payments_table.get_record_value(record, 'amount'))
+            amount=payments_table.get_record_value(record, 'amount'),
+            subject_with_host=False)
         root.send_email(recipient, subject, text=text)
 
 

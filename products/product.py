@@ -566,12 +566,12 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     def send_alert_stock(self):
         shop = get_shop(self)
         context = get_context()
+        root = context.root
         product_uri = context.uri.resolve('/shop/products/%s/' % self.name)
         kw = {'product_title': self.get_title(), 'product_uri': product_uri}
         body = mail_stock_body_template.gettext(**kw)
         for to_addr in shop.get_property('order_notification_mails'):
-            shop.send_email(context,
-                            to_addr=to_addr,
+            root.send_email(to_addr=to_addr,
                             subject=mail_stock_subject_template,
                             text=body)
 

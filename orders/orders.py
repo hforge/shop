@@ -244,9 +244,8 @@ class Order(WorkflowAware, ShopFolder):
         """ """
         from itools.web import get_context
         context = get_context()
+        root = context.root
         customer_email = user.get_property('email')
-        # Get configuration
-        from_addr = shop.get_property('shop_from_addr')
         # Build email informations
         kw = {'order_name': order_name}
         # Send confirmation to client
@@ -254,14 +253,14 @@ class Order(WorkflowAware, ShopFolder):
         kw['order_uri'] = shop_uri.resolve(order_uri)
         subject = mail_confirmation_title.gettext()
         body = mail_confirmation_body.gettext(**kw)
-        shop.send_email(context, customer_email, subject, from_addr, body)
+        root.send_email(customer_email, subject, text=body)
         # Send confirmation to the shop
         subject = mail_notification_title.gettext()
         shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
         kw['order_uri'] = '%s/shop/orders/%s/' % (shop_backoffice_uri, order_name)
         body = mail_notification_body.gettext(**kw)
         for to_addr in shop.get_property('order_notification_mails'):
-            shop.send_email(context, to_addr, subject, from_addr, body)
+            root.send_email(to_addr, subject, text=body)
 
     ##################################################
     # Get namespace
@@ -381,11 +380,10 @@ class Order(WorkflowAware, ShopFolder):
             pass
         # We send email confirmation
         order.handler.name = 'Order.pdf'
-        from_addr = shop.get_property('shop_from_addr')
         subject = MSG(u'New order validated').gettext()
         text = MSG(u'New order has been validated').gettext()
         for to_addr in shop.get_property('order_notification_mails'):
-            context.root.send_email(to_addr, subject, from_addr,
+            context.root.send_email(to_addr, subject,
                                     text=text, attachment=order.handler)
 
 
@@ -414,6 +412,7 @@ class Order(WorkflowAware, ShopFolder):
 
     def notify_new_message(self, message, context):
         shop = get_shop(self)
+        root = context.root
         shop_uri = shop.get_property('shop_uri')
         customer_id = self.get_property('customer_id')
         customer = context.root.get_resource('/users/%s' % customer_id)
@@ -421,11 +420,11 @@ class Order(WorkflowAware, ShopFolder):
         subject = new_message_subject.gettext(n=self.name)
         # Send mail to customer
         text = message + new_message_footer.gettext(uri=self.get_frontoffice_uri())
-        shop.send_email(context, contact, subject, text=text)
+        root.send_email(contact, subject, text=text, subject_with_host=False)
         # Send mail to administrators
         text = message + new_message_footer.gettext(uri=self.get_backoffice_uri())
         for to_addr in shop.get_property('order_notification_mails'):
-            shop.send_email(context, to_addr, subject, text=text)
+            root.send_email(to_addr, subject, text=text, subject_with_host=False)
 
 
     def generate_pdf_order(self, context):

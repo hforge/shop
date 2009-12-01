@@ -189,11 +189,9 @@ class ShopUser(User):
 
 
     def send_register_confirmation(self, context):
-        shop = get_shop(context.resource)
-        shop.send_email(context,
-                        to_addr=self.get_property('email'),
-                        subject=self.mail_subject_template,
-                        text=self.mail_body_template)
+        context.root.send_email(to_addr=self.get_property('email'),
+                                subject=self.mail_subject_template,
+                                text=self.mail_body_template)
 
 
 

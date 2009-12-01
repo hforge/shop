@@ -52,7 +52,7 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view', 'view_cart']
-    class_version = '20091110'
+    class_version = '20091201'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'customers',
@@ -215,13 +215,10 @@ class Shop(ShopFolder):
         schema['shop_backoffice_uri'] = String
         schema['order_notification_mails'] = Email(multiple=True)
         schema['shop_default_zone'] = CountriesZonesEnumerate
-        schema['shop_signature'] = Unicode
         schema['shop_sort_by'] = SortBy_Enumerate
         schema['shop_sort_reverse'] = Boolean
-        schema['shop_from_addr'] = Email
         schema['bill_logo'] = ImagePathDataType
         schema['pdf_signature'] = Unicode
-        schema['activate_mail_html'] = Boolean
         schema['barcode_format'] = BarcodesFormat
         schema['show_sub_categories'] = Boolean
         return schema
@@ -233,36 +230,6 @@ class Shop(ShopFolder):
     ##############################
     # API
     ##############################
-
-    def send_email(self, context, to_addr, subject, from_addr=None, text=None,
-                   html=None, add_signature=True,
-                   encoding='utf-8', subject_with_host=True,
-                   return_receipt=False, attachment=None):
-        root = context.root
-        # Translation
-        if isinstance(subject, MSG):
-            subject = subject.gettext()
-        if isinstance(text, MSG):
-            text = text.gettext()
-        # From_addr
-        if from_addr is None:
-            from_addr = self.get_property('shop_from_addr')
-        # Build HTML
-        send_in_html = self.get_property('activate_mail_html')
-        html = None
-        if (send_in_html is True) or (html is not None):
-            resource = self.get_resource(self.mail_template)
-            namespace = {'website_uri': context.uri.authority,
-                         'subject': subject,
-                         'body': html or text,
-                         'signature': self.get_property('shop_signature')}
-            html = unicode(stl(resource, namespace, mode='xhtml'), 'utf-8')
-        # Add signature
-        text += '\n\n-- \n%s' % self.get_property('shop_signature')
-        # Send mail
-        root.send_email(to_addr, subject, from_addr, text, html, encoding,
-                        subject_with_host, return_receipt, attachment)
-
 
     def get_pdf_logo_uri(self):
         logo = self.get_property('bill_logo')
@@ -352,6 +319,11 @@ class Shop(ShopFolder):
             return
         Suppliers.make_resource(Suppliers, self, 'suppliers')
 
+
+    def update_20091201(self):
+        self.del_property('activate_mail_html')
+        self.del_property('shop_signature')
+        self.del_property('shop_from_addr')
 
 
 register_resource_class(Shop)
