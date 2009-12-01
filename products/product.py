@@ -178,6 +178,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         values['stored_price'] = int(self.get_property('pre-tax-price') * 100)
         # Creation time
         values['ctime'] = self.get_property('ctime')
+        # Is buyable ?
+        values['is_buyable'] = self.is_buyable()
 
         return values
 
@@ -862,6 +864,7 @@ register_field('product_model', String(is_indexed=True, is_stored=True))
 register_field('categories', String(is_indexed=True, multiple=True, is_stored=True))
 register_field('has_categories', Boolean(is_indexed=True)) # XXX Obsolete
 register_field('has_images', Boolean(is_indexed=True, is_stored=True))
+register_field('is_buyable', Boolean(is_indexed=True))
 register_field('ctime', DateTime(is_stored=True, is_indexed=True))
 # XXX xapian can't sort decimal
 register_field('stored_price', Integer(is_indexed=False, is_stored=True))
