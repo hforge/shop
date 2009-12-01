@@ -78,7 +78,7 @@ You can found details here:\n
 #############################################
 
 new_message_subject = MSG(u'New message concerning order number {n}')
-new_message_footer = MSG('\n\nSee details here : \n\n {uri}')
+new_message_footer = MSG(u'\n\nSee details here : \n\n {uri}')
 
 ###################################################################
 ###################################################################

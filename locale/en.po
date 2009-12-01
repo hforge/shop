@@ -7,13 +7,22 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-01 10:12+CET\n"
+"POT-Creation-Date: 2009-12-01 13:12+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../orders/orders.py:81
+msgid ""
+"\n"
+"\n"
+"See details here : \n"
+"\n"
+" {uri}"
+msgstr ""
 
 #: ../addresses.py:104
 msgid ""
@@ -1670,7 +1679,7 @@ msgid "Bank:"
 msgstr ""
 
 #: ../orders/orders.py:226 ../orders/orders.py:478 ../orders/orders.py:540
-#: ../products/product.py:671 ../ui/shop/orders/order_pdf.xml.en:77
+#: ../products/product.py:673 ../ui/shop/orders/order_pdf.xml.en:77
 msgid "Barcode"
 msgstr ""
 
@@ -2044,7 +2053,7 @@ msgctxt "table cell"
 msgid "Configure your shop terms and conditions of use"
 msgstr ""
 
-#: ../user_views.py:444
+#: ../user_views.py:451
 msgid "Connection Date"
 msgstr ""
 
@@ -2226,7 +2235,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: ../user_views.py:196 ../payments/payments_views.py:146
+#: ../user_views.py:203 ../payments/payments_views.py:146
 #: ../orders/orders_views.py:90
 msgid "Date and Time"
 msgstr ""
@@ -2468,7 +2477,7 @@ msgctxt "link"
 msgid "Edit/Add Taxes"
 msgstr ""
 
-#: ../user_views.py:365 ../user_views.py:383 ../suppliers_views.py:43
+#: ../user_views.py:372 ../user_views.py:390 ../suppliers_views.py:43
 #: ../user.py:130 ../shop_views.py:214 ../products/enumerate.py:114
 msgid "Email"
 msgstr ""
@@ -2632,7 +2641,7 @@ msgctxt "legend"
 msgid "Filter"
 msgstr ""
 
-#: ../user_views.py:363 ../user_views.py:381 ../user.py:133
+#: ../user_views.py:370 ../user_views.py:388 ../user.py:133
 #: ../shop_views.py:217 ../addresses.py:110
 msgid "Firstname"
 msgstr ""
@@ -2641,7 +2650,7 @@ msgstr ""
 msgid "France"
 msgstr ""
 
-#: ../user_views.py:362
+#: ../user_views.py:369
 msgid "Gender"
 msgstr ""
 
@@ -2770,7 +2779,7 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: ../user_views.py:361 ../user_views.py:380 ../shipping/shippings_views.py:98
+#: ../user_views.py:368 ../user_views.py:387 ../shipping/shippings_views.py:98
 #: ../payments/paybox/paybox_views.py:47 ../payments/payments_views.py:144
 msgid "Id"
 msgstr ""
@@ -2981,7 +2990,7 @@ msgstr ""
 msgid "Last Modified"
 msgstr ""
 
-#: ../user_views.py:367
+#: ../user_views.py:374
 msgid "Last connection Date"
 msgstr ""
 
@@ -2989,7 +2998,7 @@ msgstr ""
 msgid "Last connections"
 msgstr ""
 
-#: ../user_views.py:364 ../user_views.py:382 ../user.py:132
+#: ../user_views.py:371 ../user_views.py:389 ../user.py:132
 #: ../shop_views.py:216 ../addresses.py:111
 msgid "Lastname"
 msgstr ""
@@ -3345,6 +3354,10 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+#: ../user_views.py:128
+msgid "No informations to edit"
+msgstr ""
+
 #: ../ui/shop/shop_user_manage.xml.en:158
 msgctxt "paragraph"
 msgid "No order"
@@ -3492,7 +3505,7 @@ msgctxt "table cell"
 msgid "Order has not been sent."
 msgstr ""
 
-#: ../user_views.py:188
+#: ../user_views.py:195
 msgid "Order history"
 msgstr ""
 
@@ -3501,7 +3514,7 @@ msgctxt "table cell"
 msgid "Order history:"
 msgstr ""
 
-#: ../user_views.py:194
+#: ../user_views.py:201
 msgid "Order id"
 msgstr ""
 
@@ -3535,7 +3548,7 @@ msgctxt "heading"
 msgid "Order number:"
 msgstr ""
 
-#: ../products/product.py:147 ../products/product.py:750
+#: ../products/product.py:147 ../products/product.py:752
 msgid "Order photos"
 msgstr ""
 
@@ -3989,7 +4002,7 @@ msgstr ""
 msgid "Product title"
 msgstr ""
 
-#: ../orders/orders.py:106 ../orders/orders.py:202 ../products/product.py:833
+#: ../orders/orders.py:106 ../orders/orders.py:202 ../products/product.py:835
 #: ../shop.py:166 ../stock/resupply.py:44
 msgid "Products"
 msgstr ""
@@ -4131,7 +4144,7 @@ msgctxt "link"
 msgid "Register"
 msgstr ""
 
-#: ../user_views.py:366
+#: ../user_views.py:373
 msgid "Registration Date"
 msgstr ""
 
@@ -4557,7 +4570,7 @@ msgstr ""
 msgid "There are {n} categories"
 msgstr ""
 
-#: ../user_views.py:354
+#: ../user_views.py:361
 msgid "There are {n} customers"
 msgstr ""
 
@@ -4597,7 +4610,7 @@ msgstr ""
 msgid "There is 1 category"
 msgstr ""
 
-#: ../user_views.py:353
+#: ../user_views.py:360
 msgid "There is 1 customer"
 msgstr ""
 
@@ -4633,7 +4646,7 @@ msgstr ""
 msgid "There's one order."
 msgstr ""
 
-#: ../user_views.py:175 ../shop_views.py:260
+#: ../user_views.py:182 ../shop_views.py:260
 msgid "This email address is already used."
 msgstr ""
 
@@ -4733,7 +4746,7 @@ msgctxt "b"
 msgid "Total amount:"
 msgstr ""
 
-#: ../user_views.py:195 ../orders/orders_views.py:86
+#: ../user_views.py:202 ../orders/orders_views.py:86
 msgid "Total price"
 msgstr ""
 
@@ -4888,7 +4901,7 @@ msgid "Validate the payment"
 msgstr ""
 
 #: ../products/models_views.py:46 ../manufacturers_views.py:77
-#: ../manufacturers_views.py:103 ../user_views.py:219 ../user_views.py:351
+#: ../manufacturers_views.py:103 ../user_views.py:226 ../user_views.py:358
 #: ../categories_views.py:42 ../categories_views.py:238 ../editable.py:37
 #: ../products/product_views.py:94 ../products/product_views.py:314
 #: ../enumerate_table.py:182 ../suppliers_views.py:103 ../website.py:41
@@ -5017,7 +5030,7 @@ msgstr ""
 msgid "Your address"
 msgstr ""
 
-#: ../user_views.py:231 ../user_views.py:301
+#: ../user_views.py:238 ../user_views.py:308
 msgid "Your are not authorized to view this ressource"
 msgstr ""
 
@@ -5062,7 +5075,7 @@ msgstr ""
 msgid "Your inscription has been validated"
 msgstr ""
 
-#: ../user_views.py:293 ../orders/orders_views.py:434
+#: ../user_views.py:300 ../orders/orders_views.py:434
 msgid "Your message has been sent"
 msgstr ""
 
@@ -5168,7 +5181,7 @@ msgstr ""
 msgid "s"
 msgstr ""
 
-#: ../user_views.py:443
+#: ../user_views.py:450
 msgid "user"
 msgstr ""
 
