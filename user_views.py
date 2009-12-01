@@ -122,6 +122,13 @@ class ShopUser_EditPrivateInformations(AutoForm):
     access = 'is_admin'
     title = MSG(u'Edit private user informations')
 
+    def GET(self, resource, context):
+        schema = self.get_schema(resource, context)
+        if not schema:
+            return context.come_back(ERROR(u'No informations to edit'))
+        return AutoForm.GET(self, resource, context)
+
+
     def get_schema(self, resource, context):
         shop = get_shop(resource)
         return shop.user_class.private_schema
