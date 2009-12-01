@@ -304,7 +304,7 @@ class Order(WorkflowAware, ShopFolder):
                     declination = product_resource.get_resource(
                                     str(kw['declination']), soft=True)
                     if declination:
-                        kw['declination'] = declination.get_title()
+                        kw['declination'] = declination.get_declination_title()
             else:
                 kw['cover'] = None
 
