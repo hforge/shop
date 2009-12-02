@@ -30,7 +30,7 @@ from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import SelectRadio, TextWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
-from ikaaro.user import User
+from ikaaro.user import User, UserFolder
 
 # Import from shop
 from addresses_views import Addresses_Book
@@ -202,7 +202,30 @@ class ShopUser(User):
         self.set_property('last_time', t)
 
 
+
+class ShopUserFolder(UserFolder):
+
+
+    def set_user(self, email=None, password=None):
+        context = get_context()
+        shop = get_shop(context.resource)
+        # Calculate the user id
+        user_id = self.get_next_user_id()
+        # Add the user
+        cls = shop.user_class
+        user = cls.make_resource(cls, self, user_id)
+        # Set the email and paswword
+        if email is not None:
+            user.set_property('email', email)
+        if password is not None:
+            user.set_password(password)
+
+        # Return the user
+        return user
+
+
 register_resource_class(ShopUser)
+register_resource_class(ShopUserFolder)
 register_resource_class(Customers)
 register_resource_class(AuthentificationLogs)
 
