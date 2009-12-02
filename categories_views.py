@@ -153,6 +153,14 @@ class VirtualCategory_ComparatorView(VirtualCategory_View):
     search_template = None
     template = '/ui/shop/virtualcategory_comparator_view.xml'
 
+    def get_template(self, resource, context):
+        shop = get_shop(resource)
+        if shop.shop_templates.has_key('products_comparator'):
+            template = shop.shop_templates['products_comparator']
+        else:
+            template = self.template
+        return resource.get_resource(template)
+
 
 ##########################################################
 # Comparateur
