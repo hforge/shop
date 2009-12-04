@@ -75,8 +75,8 @@
     <pml:table id="articles">
       <pml:tr>
         <pml:th width="5cm">Barcode</pml:th>
-        <pml:th width="5cm"></pml:th>
-        <pml:th width="5cm">Description</pml:th>
+        <pml:th width="4cm"></pml:th>
+        <pml:th width="7cm">Description</pml:th>
         <pml:th width="1cm">Qty</pml:th>
         <pml:th>Total</pml:th>
       </pml:tr>
@@ -90,9 +90,12 @@
             stl:if="product/cover"/>
         </pml:td>
         <pml:td>
-          ${product/title}
+          ${product/title}<br/>
+          <stl:block stl:if="product/category">
+            Category: ${product/category}<br/>
+          </stl:block>
           <stl:block stl:if="product/declination">
-            <br/>${product/declination}
+            Declination: ${product/declination}
           </stl:block>
         </pml:td>
         <pml:td>${product/quantity}</pml:td>

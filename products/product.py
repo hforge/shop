@@ -676,6 +676,12 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         Image.make_resource(Image, self, 'barcode', body=barcode, **metadata)
 
 
+    def get_category_title(self):
+        shop = get_shop(self)
+        category_path = self.get_property('categories')[0]
+        category = shop.get_resource('categories/%s' % category_path)
+        return category.get_title()
+
 
     #########################################
     # Update links mechanism

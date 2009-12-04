@@ -290,7 +290,8 @@ class Order(WorkflowAware, ShopFolder):
         for record in order_products.handler.get_records():
             kw = {'id': record.id,
                   'uri': None,
-                  'href': None}
+                  'href': None,
+                  'category': None}
             for key in BaseOrdersProducts.record_schema.keys():
                 kw[key] = get_value(record, key)
             name = get_value(record, 'name')
@@ -299,6 +300,7 @@ class Order(WorkflowAware, ShopFolder):
                 kw['href'] = context.get_link(product_resource)
                 kw['uri'] = product_resource.handler.uri
                 kw['cover'] = product_resource.get_cover_namespace(context)
+                kw['category'] = product_resource.get_category_title()
                 # Declination
                 if kw['declination']:
                     declination = product_resource.get_resource(

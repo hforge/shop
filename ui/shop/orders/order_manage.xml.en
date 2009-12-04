@@ -150,9 +150,12 @@
         <td>
           <a href="${product/href}" stl:omit-tag="not product/href">
             ${product/title}
-          </a>
+          </a><br/>
+          <stl:block stl:if="product/category">
+            Category: ${product/category}<br/>
+          </stl:block>
           <stl:block stl:if="product/declination">
-            <br/>${product/declination}
+            Declination: ${product/declination}
           </stl:block>
         </td>
         <td>${product/price/unit/without_tax} €</td>

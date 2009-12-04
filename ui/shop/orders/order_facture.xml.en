@@ -90,9 +90,12 @@
       </pml:tr>
       <pml:tr stl:repeat="product products">
         <pml:td>
-          ${product/title}
+          ${product/title}<br/>
+          <stl:block stl:if="product/category">
+            Category: ${product/category}<br/>
+          </stl:block>
           <stl:block stl:if="product/declination">
-            <br/>${product/declination}
+            Declination: ${product/declination}
           </stl:block>
         </pml:td>
         <pml:td>${product/reference}</pml:td>
