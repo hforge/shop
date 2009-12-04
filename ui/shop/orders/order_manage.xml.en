@@ -129,9 +129,11 @@
         <th>Reference</th>
         <th style="width:100px">Cover</th>
         <th>Product</th>
-        <th>Unit price HT</th>
-        <th style="width:10px">Quantity</th>
-        <th>Total price</th>
+        <th>Unit price</th>
+        <th style="width:10px">Qty</th>
+        <th>Total HT</th>
+        <th>TAX</th>
+        <th>Total</th>
       </tr>
     </thead>
     <tbody>
@@ -153,12 +155,14 @@
             <br/>${product/declination}
           </stl:block>
         </td>
-        <td>${product/price/unit/with_tax} €</td>
+        <td>${product/price/unit/without_tax} €</td>
         <td>${product/quantity}</td>
+        <td>${product/price/total/without_tax} €</td>
+        <td>${product/tax}%</td>
         <td>${product/price/total/with_tax} €</td>
       </tr>
       <tr>
-        <td colspan="5" style="text-align:right">
+        <td colspan="7" style="text-align:right">
           <span>${order/shipping_way}</span> »
           Shipping
           (${order/total_weight} kg)
@@ -166,7 +170,7 @@
         <td>${shipping_price} €</td>
       </tr>
       <tr>
-        <td colspan="5" style="text-align:right">
+        <td colspan="7" style="text-align:right">
           <span>${order/payment_way}</span> »
           Total Price
         </td>
