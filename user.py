@@ -123,7 +123,7 @@ class ShopUser(User):
                               ctime=DateTime,
                               last_time=DateTime,
                               gender=Civilite,
-                              phone1=String,
+                              phone1=String(mandatory=True),
                               phone2=String)
 
     base_widgets = [
