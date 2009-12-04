@@ -191,7 +191,7 @@ class ShopUser_EditAccount(User_EditAccount):
 
 class ShopUser_OrdersView(OrdersView):
 
-    access = 'is_allowed_to_edit'
+    access = 'is_allowed_to_view'
     title = MSG(u'Order history')
 
     search_template = None
