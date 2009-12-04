@@ -19,7 +19,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
-from itools.xapian import PhraseQuery, OrQuery, NotQuery
+from itools.xapian import AndQuery, PhraseQuery, OrQuery, NotQuery
 from itools.web import ERROR, INFO, STLForm, FormError
 from itools.web.views import process_form
 from itools.xml import XMLParser
@@ -117,10 +117,12 @@ class OrdersView(Folder_BrowseContent):
         root = context.root
         namespace = {}
         for key, c in [('nb_open', OrdersView),
+                       ('nb_sent', OrdersViewSent),
                        ('nb_cancel', OrdersViewCanceled),
                        ('nb_archive', OrdersViewArchive)]:
-            q = root.search(c().get_items_query()).get_n_documents()
-            namespace[key] = q
+            query = AndQuery(PhraseQuery('format', 'order'),
+                             c().get_items_query())
+            namespace[key] = root.search(query).get_n_documents()
         return namespace
 
 
@@ -241,6 +243,17 @@ class OrdersViewCanceled(OrdersView):
 
 
 
+class OrdersViewSent(OrdersView):
+
+    title = MSG(u'Sent Orders')
+
+    table_actions = [MergeOrderButton, MergeBillButton]
+
+    def get_items_query(self):
+        return PhraseQuery('workflow_state', 'delivery')
+
+
+
 class OrdersViewArchive(OrdersView):
 
     title = MSG(u'Archives')
@@ -248,9 +261,7 @@ class OrdersViewArchive(OrdersView):
     table_actions = [MergeOrderButton, MergeBillButton]
 
     def get_items_query(self):
-        return OrQuery(
-                  PhraseQuery('workflow_state', 'delivery'),
-                  PhraseQuery('workflow_state', 'closed'))
+        return PhraseQuery('workflow_state', 'closed')
 
 
 

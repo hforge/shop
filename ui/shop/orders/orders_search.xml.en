@@ -25,6 +25,12 @@
     </tr>
     <tr>
       <td>
+        <span class="counter" style="background-color:#FFC500">${nb_sent}</span>
+        <a href="./;view_sent">Sent</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
         <span class="counter counter-red">${nb_cancel}</span>
         <a href="./;view_canceled">Cancel</a>
       </td>

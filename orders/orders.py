@@ -42,7 +42,7 @@ from shop.utils import get_shop
 
 # Import from shop.orders
 from messages import Messages_TableResource
-from orders_views import Order_Manage
+from orders_views import Order_Manage, OrdersViewSent
 from orders_views import OrdersView, OrdersViewCanceled, OrdersViewArchive
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
@@ -499,6 +499,7 @@ class Orders(ShopFolder):
 
     # Views
     view = OrdersView()
+    view_sent = OrdersViewSent()
     view_canceled = OrdersViewCanceled()
     view_archive = OrdersViewArchive()
 
