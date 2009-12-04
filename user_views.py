@@ -206,7 +206,7 @@ class ShopUser_OrdersView(OrdersView):
     def get_items(self, resource, context, *args):
         args = PhraseQuery('customer_id', resource.name)
         orders = get_shop(resource).get_resource('orders')
-        return OrdersView.get_items(self, orders, context, args)
+        return Folder_BrowseContent.get_items(self, orders, context, args)
 
 
     def get_item_value(self, resource, context, item, column):
