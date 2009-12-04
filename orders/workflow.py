@@ -47,19 +47,38 @@ add_state = order_workflow.add_state
 add_trans = order_workflow.add_trans
 
 # States
-add_state('open', title=MSG(u'Open'))
-add_state('payment_ok', title=MSG(u'Payment validated'))
-add_state('preparation', title=MSG(u'Order in preparation')),
-add_state('delivery', title=MSG(u'Delivery ok')),
-add_state('payment_error', title=MSG(u'Payment error'))
-add_state('cancel', title=MSG(u'Cancel'))
-add_state('closed', title=MSG(u'Closed'))
+states = {
+  '': MSG(u'Unknow'),
+  'open': MSG(u'Open'),
+  'payment_ok': MSG(u'Payment validated'),
+  'preparation': MSG(u'Order in preparation'),
+  'out_stock': MSG(u'A product is out of stock'),
+  'delivery': MSG(u'Delivery ok'),
+  'payment_error': MSG(u'Payment error'),
+  'cancel': MSG(u'Cancel'),
+  'closed': MSG(u'Closed')}
+
+for name, title in states.items():
+    add_state(name, title=title)
+
+states_color = {
+  '': None,
+  'open': '#C3FFC3',
+  'payment_ok': '#008000',
+  'preparation': '#C8C3FF',
+  'out_stock': '#F9B1E9',
+  'delivery': '#FFC500',
+  'payment_error': '#FFAB00',
+  'cancel': '#FF1F00',
+  'closed': '#000000'}
 
 
 # Transition:
 transitions = [
   ('open', 'payment_ok', MSG(u'Validate the payment')),
   ('payment_ok', 'preparation', MSG(u'The order is in preparation')),
+  ('payment_ok', 'out_stock', MSG(u'A product is out of stock')),
+  ('out_stock', 'preparation', MSG(u'The order is in preparation')),
   ('preparation', 'delivery', MSG(u'Delivery ongoing')),
   ('delivery', 'closed', MSG(u'Closed')),
   ('open', 'payment_error', MSG(u'Signal a payment error')),

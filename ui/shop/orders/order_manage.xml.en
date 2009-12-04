@@ -88,6 +88,25 @@
     </tr>
   </table>
 
+  <!-- States -->
+  <table class="order-browse">
+    <tbody>
+      <tr>
+        <td valign="top">
+          Current state: ${current_state}
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#FFFBF2">
+          <form method="post">
+            <b>Update order state:</b>${transitions}
+            <input type="submit" name=";change_order_state" value="Ok"/><br/>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
   <hr class="order-hr"/>
 
   <table cellpadding="5px">
@@ -183,52 +202,6 @@
   </table>
 
   <hr class="order-hr"/>
-
-  <!-- States -->
-  <table class="order-browse" style="float:left;display:none;">
-    <thead>
-      <tr>
-        <th>
-          <img src="/ui/icons/16x16/history.png"/>
-          States history
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="height:110px">
-        <td valign="top">
-          <table class="order-sub-browse">
-            <tr stl:repeat="state states_history">
-              <td>
-                ${state/date}
-              </td>
-              <td>
-                ${state/user}
-              </td>
-              <td>
-                <i class="wf-order-${state/name}"
-                   title="${state/comments}">
-                ${state/title}
-                </i>
-              </td>
-              <td>
-                ${state/comments}
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td style="background-color:#FFFBF2">
-          <form method="post">
-            <b>Update order state:</b>${transitions}
-            <input type="submit" name=";change_order_state" value="Ok"/><br/>
-            <textarea name="comments" style="height:30px;width:320px;"/><br/>
-          </form>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
   <!-- Payment -->
   <table class="order-browse">

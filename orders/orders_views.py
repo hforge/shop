@@ -19,7 +19,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
-from itools.xapian import PhraseQuery, OrQuery
+from itools.xapian import PhraseQuery, OrQuery, NotQuery
 from itools.web import ERROR, INFO, STLForm, FormError
 from itools.web.views import process_form
 from itools.xml import XMLParser
@@ -31,7 +31,7 @@ from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import SelectWidget
 
 # Import from shop
-from workflow import Order_Transitions
+from workflow import Order_Transitions, states, states_color
 from shop.payments.enumerates import PaymentWaysEnumerate
 from shop.payments.payments_views import Payments_EditablePayment
 from shop.shipping.shipping_way import ShippingWaysEnumerate
@@ -39,7 +39,7 @@ from shop.datatypes import Civilite
 from shop.utils import get_shop, join_pdfs
 
 
-numero_template = '<span class="counter counter-%s"><a href="%s">%s</a></span>'
+numero_template = '<span class="counter" style="background-color:%s"><a href="%s">%s</a></span>'
 img_mail = list(XMLParser('<img src="/ui/shop/images/mail.png"/>'))
 
 class MergeOrderButton(Button):
@@ -73,7 +73,6 @@ class OrdersView(Folder_BrowseContent):
     title = MSG(u'Open orders')
 
     # Configuration
-    color = 'green'
     table_actions = [MergeOrderButton, MergeBillButton, OrderSendButton]
     search_template = '/ui/shop/orders/orders_search.xml'
     context_menus = []
@@ -83,16 +82,15 @@ class OrdersView(Folder_BrowseContent):
         ('numero', None),
         ('nb_msg', img_mail),
         ('customer', MSG(u'Customer')),
+        ('state', MSG(u'State')),
         ('total_price', MSG(u'Total price')),
-        ('state1', None),
-        ('state2', None),
-        ('state3', None),
         ('creation_datetime', MSG(u'Date and Time')),
         ('order_pdf', None),
         ('bill', None),
         ]
 
     query_schema = merge_dicts(Folder_BrowseContent.query_schema,
+                               batch_size=Integer(default=50),
                                sort_by=String(default='creation_datetime'),
                                reverse=Boolean(default=True),
                                reference=Integer)
@@ -133,9 +131,10 @@ class OrdersView(Folder_BrowseContent):
                 return item_brain.name, False
             return None
         elif column == 'numero':
+            state = item_brain.workflow_state
             href = context.resource.get_pathto(item_resource)
             name = item_resource.get_reference()
-            return XMLParser(numero_template % (self.color, href, name))
+            return XMLParser(numero_template % (states_color[state], href, name))
         elif column == 'nb_msg':
             # XXX Ne marche pas si on recherche seen=False => PB catalogue
             messages = item_resource.get_resource('messages').handler
@@ -154,18 +153,11 @@ class OrdersView(Folder_BrowseContent):
             else:
                 title = '%s %s' % (gender.gettext(), customer.get_title())
             return title
-        elif column == 'state1':
-            if item_resource.get_property('is_payed'):
-                return XMLParser('<img src="/ui/shop/images/dollar-enabled.png"/>')
-            return XMLParser('<img src="/ui/shop/images/dollar-disabled.png"/>')
-        elif column == 'state2':
-            if item_resource.get_property('is_sent'):
-                return XMLParser('<img src="/ui/shop/images/colis-enabled.png"/>')
-            return XMLParser('<img src="/ui/shop/images/colis-disabled.png"/>')
-        elif column == 'state3':
-            if item_resource.get_property('is_sent'):
-                return XMLParser('<img src="/ui/shop/images/mail-enabled.png"/>')
-            return XMLParser('<img src="/ui/shop/images/mail-disabled.png"/>')
+        elif column == 'state':
+            state = item_brain.workflow_state
+            state_title = states[state].gettext().encode('utf-8')
+            href = context.resource.get_pathto(item_resource)
+            return XMLParser(numero_template % (states_color[state], href, state_title))
         elif column == 'total_price':
             return '%s € ' % item_resource.get_property(column)
         elif column == 'creation_datetime':
@@ -194,8 +186,9 @@ class OrdersView(Folder_BrowseContent):
                                                    item, column)
 
     def get_items_query(self):
-        return OrQuery(*[PhraseQuery('workflow_state', x) for x in
-                        ['open', 'payment_ok', 'preparation', 'payment_error']])
+        return NotQuery(OrQuery(
+                  *[PhraseQuery('workflow_state', x) for x in
+                      ['closed', 'cancel']]))
 
 
     def get_items(self, resource, context, *args):
@@ -240,7 +233,6 @@ class OrdersView(Folder_BrowseContent):
 class OrdersViewCanceled(OrdersView):
 
     title = MSG(u'Canceled orders')
-    color = 'red'
 
     table_actions = [MergeOrderButton, MergeBillButton]
 
@@ -252,7 +244,6 @@ class OrdersViewCanceled(OrdersView):
 class OrdersViewArchive(OrdersView):
 
     title = MSG(u'Archives')
-    color = 'black'
 
     table_actions = [MergeOrderButton, MergeBillButton]
 
@@ -288,22 +279,6 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         return STLForm.GET(self, resource, context)
 
 
-    def get_states_history(self, resource, context):
-        from ikaaro.workflow import parse_git_message
-        history = []
-        for revision in resource.get_revisions():
-            transition, comment = parse_git_message(revision['message'])
-            if transition is not None:
-                history.append(
-                    {'name': transition,
-                     'title': transition,
-                     'date': format_datetime(revision['date']),
-                     'user': context.root.get_user_title(revision['username']),
-                     'comments': comment})
-        history.reverse()
-        return history
-
-
     def get_namespace(self, resource, context):
         # Get some resources
         root = context.root
@@ -315,7 +290,7 @@ class Order_Manage(Payments_EditablePayment, STLForm):
             namespace[key] = resource.get_property(key)
         # States
         namespace['is_canceled'] = resource.get_statename() == 'cancel'
-        namespace['states_history'] = self.get_states_history(resource, context)
+        namespace['current_state'] = states[resource.workflow_state]
         namespace['transitions'] = SelectWidget('transition').to_html(Order_Transitions, None)
         # Bill
         has_bill = resource.get_resource('bill', soft=True) is not None
@@ -404,7 +379,6 @@ class Order_Manage(Payments_EditablePayment, STLForm):
             context.server.log_error(context)
             context.message = ERROR(unicode(excp.message, 'utf-8'))
             return
-
         # Ok
         context.message = INFO(u'Transition done.')
 

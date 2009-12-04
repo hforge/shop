@@ -32,7 +32,7 @@ from ikaaro.file import PDF, Image
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
-from ikaaro.workflow import WorkflowAware, WorkflowError
+from ikaaro.workflow import WorkflowAware, WorkflowError, parse_git_message
 
 # Import from shop
 from shop.addresses import Addresses, BaseAddresses
