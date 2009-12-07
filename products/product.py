@@ -58,19 +58,6 @@ from shop.stock.stock_views import Stock_FillStockOut, Stock_Resupply
 from shop.utils import get_shop, format_price, ShopFolder, generate_barcode
 
 
-###############
-# TODO Future
-###############
-#
-# => We can define OrderedContainer in itws (ofen used)
-#    (method get_ordered_photos)
-#
-# => Events -> to_text API in Itools (see get_catalog_values)
-#
-#
-#
-
-
 mail_stock_subject_template = MSG(u'Product out of stock')
 
 mail_stock_body_template = MSG(u"""Hi,
