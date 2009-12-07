@@ -190,7 +190,7 @@ class OrdersView(Folder_BrowseContent):
     def get_items_query(self):
         return NotQuery(OrQuery(
                   *[PhraseQuery('workflow_state', x) for x in
-                      ['closed', 'cancel']]))
+                      ['closed', 'cancel', 'delivery']]))
 
 
     def get_items(self, resource, context, *args):
