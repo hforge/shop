@@ -55,3 +55,25 @@ class ImagePathDataType(PathDataType):
         if not isinstance(image, Image):
             return False
         return True
+
+
+class DynamicEnumerate(Enumerate):
+
+    path = None
+
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        resource = context.site_root.get_resource(cls.path)
+        return [{'name': res.get_abspath(),
+                 'value': res.get_title()}
+                   for res in resource.get_resources()]
+
+
+    @classmethod
+    def get_value(cls, name, default=None):
+        if name is None:
+            return
+        context = get_context()
+        resource = context.site_root.get_resource(cls.path)
+        return resource.get_title()

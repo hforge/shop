@@ -15,9 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Enumerate
 from itools.gettext import MSG
-from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -28,19 +26,13 @@ from manufacturers_views import Manufacturer_Add
 from manufacturers_views import manufacturer_schema, Manufacturers_View
 from manufacturers_views import Manufacturer_View, Manufacturer_Edit
 from utils import CurrentFolder_AddImage, get_shop
+from datatypes import DynamicEnumerate
 
 
 
-class ManufacturersEnumerate(Enumerate):
+class ManufacturersEnumerate(DynamicEnumerate):
 
-    @classmethod
-    def get_options(cls):
-        context = get_context()
-        shop = get_shop(context.resource)
-        manufacturers = shop.get_resource('manufacturers')
-        return [{'name': res.get_abspath(),
-                 'value': res.get_title()}
-                   for res in manufacturers.get_resources()]
+    path = 'shop/manufacturers/'
 
 
 
