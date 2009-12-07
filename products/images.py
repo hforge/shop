@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from copy import deepcopy
+
 # Import from itools
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
-from itools.uri import Path
+from itools.uri import Path, get_reference
 from itools.web import get_context
 
 # Import from ikaaro
@@ -94,7 +96,7 @@ class PhotoOrderedTable(ResourcesOrderedTable):
         return links
 
 
-    def change_link(self, old_path, new_path):
+    def update_links(self, old_path, new_path):
         # Use the canonical path instead of the abspath
         base = self.get_canonical_path()
         handler = self.handler
@@ -109,6 +111,34 @@ class PhotoOrderedTable(ResourcesOrderedTable):
                 handler.update_record(record.id, **{'name': str(new_path2)})
 
         get_context().server.change_resource(self)
+
+
+    def update_relative_links(self, source):
+        site_root = self.get_site_root()
+        target = self.get_canonical_path()
+        resources_old2new = get_context().database.resources_old2new
+
+        handler = self.handler
+        get_value = handler.get_record_value
+        for record in handler.get_records():
+            path = get_value(record, 'name')
+            if not path:
+                continue
+            ref = get_reference(str(path))
+            if ref.scheme:
+                continue
+            path = str(ref.path)
+            # Calcul the old absolute path
+            old_abs_path = source.resolve2(path)
+            # Check if the target path has not been moved
+            new_abs_path = resources_old2new.get(old_abs_path,
+                                                 old_abs_path)
+            # Build the new reference with the right path
+            # Absolute path allow to call get_pathto with the target
+            new_ref = deepcopy(ref)
+            new_ref.path = str(target.get_pathto(new_abs_path))
+            # Update the record
+            handler.update_record(record.id, **{'name': str(new_ref)})
 
 
 

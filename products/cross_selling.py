@@ -21,7 +21,7 @@ from random import shuffle
 from itools.core import merge_dicts
 from itools.datatypes import Integer, Boolean, Unicode
 from itools.gettext import MSG
-from itools.uri import resolve_uri2, Path
+from itools.uri import Path, resolve_uri2, get_reference
 from itools.web import get_context
 from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery
 from itools.xml import XMLParser
@@ -189,6 +189,32 @@ class CrossSellingTable(ResourcesOrderedTable):
             if path == source:
                 handler.update_record(record.id, **{'name': target_name})
         get_context().database.change_resource(self)
+
+
+    def update_relative_links(self, source):
+        site_root = self.get_site_root()
+        target = self.get_canonical_path()
+
+        handler = self.handler
+        record_schema = handler.record_schema
+        resources_old2new = get_context().database.resources_old2new
+        get_value = handler.get_record_value
+        for record in handler.get_records():
+            path = get_value(record, 'name')
+            if not path:
+                continue
+            ref = get_reference(str(path))
+            if ref.scheme:
+                continue
+            path = ref.path
+            # Calcul the old absolute path
+            old_abs_path = source.resolve2(path)
+            # Check if the target path has not been moved
+            new_abs_path = resources_old2new.get(old_abs_path,
+                                                 old_abs_path)
+            new_name = new_abs_path.get_name()
+            # Update the record
+            handler.update_record(record.id, **{'name': new_name})
 
 
 
