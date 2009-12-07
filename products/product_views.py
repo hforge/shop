@@ -398,6 +398,8 @@ class Products_View(Folder_BrowseContent):
             return item_resource.get_property('reference')
         elif column == 'barcode':
             reference = item_resource.get_property('reference')
+            if reference is None:
+                return None
             return XMLParser('<img src="./%s/barcode/;download"/>' % item_brain.name)
         elif column == 'cover':
             cover = item_resource.get_cover_namespace(context)
