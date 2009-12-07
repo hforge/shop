@@ -107,8 +107,7 @@ class CrossSellingTable(ResourcesOrderedTable):
         # Base query
         query = AndQuery(PhraseQuery('format', product_format),
                          PhraseQuery('workflow_state', 'public'),
-                         PhraseQuery('is_buyable', True),
-                         PhraseQuery('has_categories', True))
+                         PhraseQuery('is_buyable', True))
         # Excluded products query
         if excluded_products:
             exclude_query = OrQuery(*[ PhraseQuery('abspath', str(abspath))

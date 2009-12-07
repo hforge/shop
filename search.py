@@ -135,8 +135,7 @@ class Shop_ProductSearch(VirtualCategories_View):
         abspath = site_root.get_canonical_path()
         query = [get_base_path_query(str(abspath)),
                  PhraseQuery('format', shop.product_class.class_id),
-                 PhraseQuery('workflow_state', 'public'),
-                 PhraseQuery('has_categories', True)]
+                 PhraseQuery('workflow_state', 'public')]
         category = context.query['category']
         if category and category != '*':
             query.append(PhraseQuery('categories', category))

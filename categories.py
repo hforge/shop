@@ -77,7 +77,6 @@ class Category(Editable, ShopFolder):
         query = AndQuery(
             base_path_query,
             PhraseQuery('format', shop.product_class.class_id),
-            PhraseQuery('has_categories', True),
             PhraseQuery('categories', self.get_unique_id()))
         if only_public is True:
             query.atoms.append(PhraseQuery('workflow_state', 'public'))
