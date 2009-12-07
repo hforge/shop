@@ -18,6 +18,8 @@
 # Import from itools
 from itools.datatypes import String, Unicode
 from itools.gettext import MSG
+from itools.stl import rewrite_uris
+from itools.uri import Path, Reference, get_reference
 from itools.web import STLView, get_context
 
 # Import from ikaaro
@@ -104,19 +106,63 @@ class Editable(object):
         return links
 
 
-    def update_links(self, old_path, new_path):
+    def update_links(self, source, target):
         base = self.get_abspath()
-        languages = self.get_site_root().get_property('website_languages')
+        resources_new2old = get_context().database.resources_new2old
+        base = str(base)
+        old_base = resources_new2old.get(base, base)
+        old_base = Path(old_base)
+        new_base = Path(base)
 
+        languages = self.get_site_root().get_property('website_languages')
         links = []
         for language in languages:
             events = self.get_xhtml_data(language=language)
-            events = _change_link(old_path, new_path, base, events)
+            events = _change_link(source, target, old_base, new_base, events)
             # Save as XHTML
             data = XHTMLBody.encode(events)
             self.set_property('data', data, language=language)
         get_context().database.change_resource(self)
 
+
+    def update_relative_links(self, source):
+        target = self.get_abspath()
+        resources_old2new = get_context().database.resources_old2new
+
+        def my_func(value):
+            # Skip empty links, external links and links to '/ui/'
+            uri = get_reference(value)
+            if uri.scheme or uri.authority or uri.path.is_absolute():
+                return value
+            path = uri.path
+            if not path or path.is_absolute() and path[0] == 'ui':
+                return value
+
+            # Strip the view
+            name = path.get_name()
+            if name and name[0] == ';':
+                view = '/' + name
+                path = path[:-1]
+            else:
+                view = ''
+
+            # Resolve Path
+            # Calcul the old absolute path
+            old_abs_path = source.resolve2(path)
+            # Get the 'new' absolute parth
+            new_abs_path = resources_old2new.get(old_abs_path, old_abs_path)
+
+            path = str(target.get_pathto(new_abs_path)) + view
+            value = Reference('', '', path, uri.query.copy(), uri.fragment)
+            return str(value)
+
+        languages = self.get_site_root().get_property('website_languages')
+        for language in languages:
+            events = self.get_xhtml_data(language=language)
+            events = rewrite_uris(events, my_func)
+            # Save as XHTML
+            data = XHTMLBody.encode(events)
+            self.set_property('data', data, language=language)
 
 
 register_field('data', Unicode(is_indexed=True))
