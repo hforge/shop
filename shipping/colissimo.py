@@ -18,6 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import String
 from itools.gettext import MSG
+from itools.i18n import format_date
 from itools.web import STLForm
 
 # Import from ikaaro
@@ -40,7 +41,10 @@ class Colissimo_RecordView(Shop_PluginWay_Form):
     def get_namespace(self, order, shipping_way, record, context):
         history = shipping_way.get_resource('history').handler
         get_value = history.get_record_value
-        return {'num_colissimo': get_value(record, 'num_colissimo')}
+        ts = get_value(record, 'ts')
+        return {'num_colissimo': get_value(record, 'num_colissimo'),
+                'date': format_date(ts, context.accept_language)}
+
 
 
 class Colissimo_RecordEdit(Colissimo_RecordView):

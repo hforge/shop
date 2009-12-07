@@ -6,7 +6,7 @@
 
   <h1>Details about colissimo</h1>
 
-  Your order has been send.<br/>
+  Your order has been send the ${date}.<br/>
   <a href="http://www.coliposte.net/gp/services/main.jsp?m=10003005&amp;colispart=${num_colissimo}"
     target="blank">
     Click here to get more informations.
