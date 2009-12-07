@@ -68,7 +68,7 @@ class Category(Editable, ShopFolder):
         return [Category]
 
 
-    def get_nb_products(self):
+    def get_nb_products(self, only_public=False):
         root = self.get_root()
         site_root = self.get_site_root()
         shop = get_shop(self)
@@ -79,6 +79,8 @@ class Category(Editable, ShopFolder):
             PhraseQuery('format', shop.product_class.class_id),
             PhraseQuery('has_categories', True),
             PhraseQuery('categories', self.get_unique_id()))
+        if only_public is True:
+            query.atoms.append(PhraseQuery('workflow_state', 'public'))
         return root.search(query).get_n_documents()
 
 

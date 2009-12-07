@@ -87,10 +87,8 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
         shop = get_shop(resource)
         real_category = resource.get_real_resource()
         namespace = []
-        product_query = AndQuery(PhraseQuery('format', shop.product_class.class_id),
-                                 PhraseQuery('has_categories', True))
         for cat in real_category.search_resources(cls=Category):
-            nb_products = cat.get_nb_products()
+            nb_products = cat.get_nb_products(only_public=True)
             if nb_products == 0:
                 continue
             img = cat.get_property('image_category')
