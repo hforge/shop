@@ -194,7 +194,7 @@ class Shop_Register(RegisterForm):
         'gender': Civilite(mandatory=True),
         'password': String(mandatory=True),
         'password_check': String(mandatory=True),
-        'phone1': String,
+        'phone1': String(mandatory=True),
         'phone2': String,
         'address_1': Unicode(mandatory=True),
         'address_2': Unicode,

@@ -158,7 +158,7 @@ class ShopUser_EditAccount(User_EditAccount):
         return merge_dicts(RegisterForm.schema,
                            resource.public_schema,
                            gender=Civilite(mandatory=True),
-                           phone1=String,
+                           phone1=String(mandatory=True),
                            phone2=String)
 
 
