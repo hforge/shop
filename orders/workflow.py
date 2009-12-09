@@ -63,7 +63,7 @@ for name, title in states.items():
 
 states_color = {
   '': None,
-  'open': '#7C7C7C',
+  'open': '#E30000',
   'payment_ok': '#008000',
   'preparation': '#5154FF',
   'out_stock': '#C878D8',
