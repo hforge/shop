@@ -20,8 +20,7 @@ from itools.datatypes import Boolean, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.xapian import AndQuery, PhraseQuery, OrQuery, NotQuery
-from itools.web import ERROR, INFO, STLForm, FormError
-from itools.web.views import process_form
+from itools.web import ERROR, INFO, STLForm
 from itools.xml import XMLParser
 from itools.workflow import WorkflowError
 
@@ -271,7 +270,7 @@ class OrdersViewCanceled(OrdersView):
 
     title = MSG(u'Canceled orders')
 
-    table_actions = [MergeOrderButton, MergeBillButton]
+    table_actions = []
 
     def get_items_query(self):
         return PhraseQuery('workflow_state', 'cancel')
