@@ -55,7 +55,7 @@ states = {
   'out_stock': MSG(u'A product is out of stock'),
   'delivery': MSG(u'Delivery ok'),
   'payment_error': MSG(u'Payment error'),
-  'cancel': MSG(u'Cancel'),
+  'cancel': MSG(u'Canceled'),
   'closed': MSG(u'Closed')}
 
 for name, title in states.items():
