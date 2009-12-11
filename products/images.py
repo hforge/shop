@@ -24,6 +24,7 @@ from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.file import Image
+from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import ImageSelectorWidget
 from ikaaro.future.order import ResourcesOrderedTable
 from ikaaro.registry import register_resource_class
