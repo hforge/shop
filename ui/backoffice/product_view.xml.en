@@ -4,12 +4,23 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <hr/>
+  <div style="float:left;">
+    <h1>
+      #${reference} - ${title}
+    </h1>
+  </div>
+  <div style="float:right;">
+    <form>
+      Goto reference:<br/>
+      <input type="text" name="reference" id="reference" size="12"/>
+      <input type="submit" name="ok" value="Ok" class="button-ok"/>
+    </form><br/>
+    <a href="../">« Come back to products list</a>
+  </div>
+  <div class="clear"/>
+  <hr/>
   <table cellpadding="0" cellspacing="0" id="product-details">
-    <tr>
-      <td colspan="2">
-        <h1>${title}</h1>
-      </td>
-    </tr>
     <tr>
       <th>Barcode</th>
       <td>
@@ -73,7 +84,10 @@
     </tr>
   </table>
 
-
-  <br/>
+  <script>
+    $(document).ready(function(){
+      $("#reference").focus();
+    });
+  </script>
 
 </stl:block>

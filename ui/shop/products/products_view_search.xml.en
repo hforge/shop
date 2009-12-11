@@ -4,30 +4,48 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <a href="./;new_product" class="button-green"
-    style="float:right">
-    <img src="/ui/shop/images/plus.png"/>
-    Create a new product
-  </a>
-
   <h1>
     <img src="/ui/shop/images/bag_green.png"/>
     Products
   </h1>
 
-  <form method="get">
+  <div style="float:left;width:60%">
+    <form method="get">
+      <fieldset>
+        <legend>Search</legend>
+        <dl>
+          <stl:block stl:repeat="widget widgets">
+            <dt>${widget/title}</dt>
+            <dd>${widget/html}</dd>
+          </stl:block>
+          <p>
+            <input type="submit" class="button-ok" name="search" value="Search"/>
+          </p>
+        </dl>
+      </fieldset>
+    </form>
+  </div>
+  <div style="float:right;width:40%">
     <fieldset>
-      <legend>Search</legend>
-      <dl>
-        <stl:block stl:repeat="widget widgets">
-          <dt>${widget/title}</dt>
-          <dd>${widget/html}</dd>
-        </stl:block>
-        <p>
-          <input type="submit" class="button-ok" name="search" value="Search"/>
-        </p>
-      </dl>
+      <legend>Actions</legend>
+      <p>
+        <a href="./;new_product" class="button-green">
+          <img src="/ui/shop/images/plus.png"/>
+          Create a new product
+        </a>
+        <div class="clear"/>
+        <a href="./;stock_out" class="button-green">
+          <img src="/ui/shop/images/plus.png"/>
+          Update stock
+        </a>
+        <div class="clear"/>
+        <a href="./;stock_resupply" class="button-green">
+          <img src="/ui/shop/images/plus.png"/>
+          Resupply
+        </a>
+      </p>
     </fieldset>
-  </form>
+  </div>
+  <div class="clear"/>
 
 </stl:block>
