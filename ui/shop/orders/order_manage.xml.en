@@ -4,14 +4,18 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <hr/>
   <div id="order-manage-page-backoffice">
   <table cellpadding="0" cellspacing="0" style="width:100%">
     <tr>
-      <td style="width:48px">
+      <td style="width:48px" valign="top">
         <img src="/ui/icons/48x48/tasks.png"/>
       </td>
       <td>
         <div style="float:left;">
+        <span class="counter" style="background-color:${state/color}; font-size:30px;">
+          ${state/title}
+        </span>
         <h1 style="padding:0;margin:0">
           Order number #${order/id}
           <a href="/shop/orders/${order/id}/order/;download"
@@ -93,7 +97,8 @@
     <tbody>
       <tr>
         <td valign="top">
-          Current state: ${current_state}
+          Current state:
+          <span class="counter" style="background-color:${state/color}">${state/title}</span>
         </td>
       </tr>
       <tr>

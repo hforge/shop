@@ -335,7 +335,8 @@ class Order_Manage(Payments_EditablePayment, STLForm):
             namespace[key] = resource.get_property(key)
         # States
         namespace['is_canceled'] = resource.get_statename() == 'cancel'
-        namespace['current_state'] = states[resource.workflow_state]
+        namespace['state'] = {'title': states[resource.workflow_state],
+                              'color': states_color[resource.workflow_state]}
         namespace['transitions'] = SelectWidget('transition').to_html(Order_Transitions, None)
         # Bill
         has_bill = resource.get_resource('bill', soft=True) is not None
