@@ -228,45 +228,6 @@
           </p>
         </td>
       </tr>
-      <tr style="display:none">
-        <td>
-          <form method="post">
-            Add a new payment way: ${payment_ways}
-            <input type="submit" name=";add_payment_way"
-              value="Add"/>
-          </form>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-
-
-  <!-- Shipping -->
-  <table class="order-browse" stl:if="payment/is_payed">
-    <thead>
-      <tr>
-        <th>
-          <img src="/ui/icons/16x16/next.png"/>
-          Payment has been validated, preparation of order
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="height:50px">
-        <td valign="top">
-          ${shipping/view}
-        </td>
-      </tr>
-      <tr style="display:none">
-        <td style="background-color:#FFFBF2" stl:if="not shipping/is_sent">
-          <form method="post">
-            Choose another shipping way: ${shipping_ways}
-            <input type="submit" name=";change_shipping_way"
-              value="Change"/>
-          </form>
-        </td>
-      </tr>
     </tbody>
   </table>
 
@@ -340,83 +301,6 @@
     </tbody>
   </table>
 
-  <!-- Payments history -->
-  <table class="order-browse" stl:if="payment/history" style="display:none">
-    <thead>
-      <tr>
-        <th>
-          <img src="/ui/icons/16x16/history.png"/>
-          Payments history
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <table class="order-sub-browse">
-            <thead>
-              <tr>
-                <th>State</th>
-                <th>Id</th>
-                <th>Mode</th>
-                <th>Datetime</th>
-                <th>Amount</th>
-                <th>State</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr stl:repeat="payment payment/history">
-                <td>${payment/state}</td>
-                <td>${payment/complete_id}</td>
-                <td>-</td>
-                <td>${payment/ts}</td>
-                <td>${payment/amount}</td>
-                <td>${payment/advance_state}</td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- shipping history -->
-  <table id="browse-list" stl:if="shipping/history" style="display:none">
-    <thead>
-      <tr>
-        <th>
-          <img src="/ui/icons/16x16/history.png"/>
-          Shipping history
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <table class="order-sub-browse">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Datetime</th>
-                <th>Mode</th>
-                <th>State</th>
-              </tr>
-            </thead>
-            <tbody>
-              <stl:block stl:repeat="shipping shipping/history">
-                <tr>
-                  <td>${shipping/complete_id}</td>
-                  <td>${shipping/ts}</td>
-                  <td>${shipping/shipping_mode}</td>
-                  <td>${shipping/state}</td>
-                </tr>
-              </stl:block>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
   <hr class="order-hr"/>
 

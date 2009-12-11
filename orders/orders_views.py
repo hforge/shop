@@ -382,9 +382,7 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         namespace['payment_ways'] = SelectWidget('payment_way',
                 has_empty_option=False).to_html(PaymentWaysEnumerate,
                                                 resource.get_property('payment_way'))
-        # XXX get_payments_items is useless since exist get_payments_records
         namespace['payment'] = {'is_payed': is_payed,
-                                'history': payments.get_payments_items(context, resource.name),
                                 'view': view}
         # Shippings
         is_sent = resource.get_property('is_sent')
@@ -411,7 +409,6 @@ class Order_Manage(Payments_EditablePayment, STLForm):
                 has_empty_option=False).to_html(ShippingWaysEnumerate,
                                                 shipping_way)
         namespace['shipping'] = {'is_sent': is_sent,
-                                 'history': shippings.get_shippings_items(context, resource.name),
                                  'view': view}
         return namespace
 
@@ -454,6 +451,7 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         context.message = INFO(u'Your message has been sent')
 
 
+
     action_change_message_state_schema = {'id_message': Integer(mandatory=True)}
     def action_change_message_state(self, resource, context, form):
         handler = resource.get_resource('messages').handler
@@ -461,50 +459,3 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         seen = handler.get_record_value(record, 'seen')
         handler.update_record(form['id_message'], **{'seen': not seen})
         context.message = INFO(u'Changes saves')
-
-
-    ################
-    # Payments
-    ################
-
-    action_add_payment_way_schema = {'payment_way': PaymentWaysEnumerate}
-    def action_add_payment_way(self, resource, context, form):
-        resource.set_property('payment_mode', form['payment_way'])
-        # Add payment
-        shop = get_shop(resource)
-        payment_way = shop.get_resource('payments/%s' % form['payment_way'])
-        payments = payment_way.get_resource('payments').handler
-        payments.add_record({'ref': resource.name,
-                             'amount': resource.get_property('total_price'),
-                             'user': resource.get_property('customer_id')})
-        # Ok
-        context.message = INFO(u'Payment way has been added')
-
-
-    action_change_shipping_way_schema = {'shipping_way': ShippingWaysEnumerate}
-    def action_change_shipping_way(self, resource, context, form):
-        resource.set_property('shipping', form['shipping_way'])
-        context.message = INFO(u'Shipping way has been changed')
-
-    ######################################
-    # Add shipping way
-    ######################################
-
-    action_add_shipping_schema = {'shipping_way': String(mandatory=True)}
-    def action_add_shipping(self, resource, context, form):
-        shop = get_shop(resource)
-        # We get shipping way
-        shipping_way = shop.get_resource('shippings/%s/' % form['shipping_way'])
-        # We get add_record view
-        add_record_view = shipping_way.order_add_view
-        # We get shipping way add form schema
-        schema = add_record_view.schema
-        # We get form
-        try:
-            form = process_form(context.get_form_value, schema)
-        except FormError, error:
-            context.form_error = error
-            return self.on_form_error(resource, context)
-        # Do actions
-        return add_record_view.add_shipping(resource, shipping_way,
-                    context, form)
