@@ -49,7 +49,7 @@ add_trans = order_workflow.add_trans
 # States
 states = {
   '': MSG(u'Unknow'),
-  'open': MSG(u'Open'),
+  'open': MSG(u'Waiting payment'),
   'payment_ok': MSG(u'Payment validated'),
   'preparation': MSG(u'Order in preparation'),
   'out_stock': MSG(u'A product is out of stock'),
@@ -63,7 +63,7 @@ for name, title in states.items():
 
 states_color = {
   '': None,
-  'open': '#E30000',
+  'open': '#BF0000',
   'payment_ok': '#008000',
   'preparation': '#5154FF',
   'out_stock': '#C878D8',

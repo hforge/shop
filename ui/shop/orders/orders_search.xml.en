@@ -9,7 +9,7 @@
     Manage orders
   </h1>
 
-  <table id="browse-list" style="width:100px; float:right">
+  <table id="browse-list" style="width:200px; float:right">
    <tr>
       <thead>
       <th>
@@ -21,6 +21,12 @@
       <td>
         <span class="counter counter-green">${nb_open}</span>
         <a href="./;view">Open</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="counter" style="background-color:#BF0000">${nb_waiting_payment}</span>
+        <a href="./;view_waiting_payment">Waiting Payment</a>
       </td>
     </tr>
     <tr>

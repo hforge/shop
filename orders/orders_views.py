@@ -66,6 +66,14 @@ class OrderSendButton(Button):
     title = MSG(u'Set as sent')
 
 
+class OrderCancelButton(Button):
+
+    access = 'is_allowed_to_edit'
+    css = 'button-cancel'
+    name = 'set_as_cancel'
+    title = MSG(u'Set as cancel')
+
+
 
 class OrdersView(Folder_BrowseContent):
 
@@ -117,6 +125,7 @@ class OrdersView(Folder_BrowseContent):
         root = context.root
         namespace = {}
         for key, c in [('nb_open', OrdersView),
+                       ('nb_waiting_payment', OrdersViewWaitingPayment),
                        ('nb_sent', OrdersViewSent),
                        ('nb_cancel', OrdersViewCanceled),
                        ('nb_archive', OrdersViewArchive)]:
@@ -129,9 +138,7 @@ class OrdersView(Folder_BrowseContent):
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
         if column == 'checkbox':
-            if item_resource.get_property('is_payed'):
-                return item_brain.name, False
-            return None
+            return self.get_checkbox(item_resource)
         elif column == 'numero':
             state = item_brain.workflow_state
             href = context.resource.get_pathto(item_resource)
@@ -187,10 +194,17 @@ class OrdersView(Folder_BrowseContent):
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
 
+
+    def get_checkbox(self, item_resource):
+        if item_resource.get_property('is_payed'):
+            return item_resource.name, False
+        return None
+
+
     def get_items_query(self):
         return NotQuery(OrQuery(
                   *[PhraseQuery('workflow_state', x) for x in
-                      ['closed', 'cancel', 'delivery']]))
+                      ['closed', 'open', 'cancel', 'delivery']]))
 
 
     def get_items(self, resource, context, *args):
@@ -229,6 +243,27 @@ class OrdersView(Folder_BrowseContent):
         for id in form['ids']:
             order = resource.get_resource(id)
             order.set_as_sent(context)
+
+
+
+class OrdersViewWaitingPayment(OrdersView):
+
+    title = MSG(u'Waiting Payment orders')
+
+    table_actions = [OrderCancelButton]
+
+    def get_items_query(self):
+        return PhraseQuery('workflow_state', 'open')
+
+
+    def get_checkbox(self, item_resource):
+        return item_resource.name, False
+
+
+    def action_set_as_cancel(self, resource, context, form):
+        for id in form['ids']:
+            order = resource.get_resource(id)
+            order.make_transition('open_to_cancel', None)
 
 
 

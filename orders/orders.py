@@ -32,7 +32,7 @@ from ikaaro.file import PDF, Image
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
-from ikaaro.workflow import WorkflowAware, WorkflowError, parse_git_message
+from ikaaro.workflow import WorkflowAware, WorkflowError
 
 # Import from shop
 from shop.addresses import Addresses, BaseAddresses
@@ -42,7 +42,7 @@ from shop.utils import get_shop
 
 # Import from shop.orders
 from messages import Messages_TableResource
-from orders_views import Order_Manage, OrdersViewSent
+from orders_views import Order_Manage, OrdersViewSent, OrdersViewWaitingPayment
 from orders_views import OrdersView, OrdersViewCanceled, OrdersViewArchive
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
@@ -494,11 +494,12 @@ class Orders(ShopFolder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')
-    class_views = ['view', 'view_canceled', 'view_archive']
+    class_views = ['view']
     class_version = '20091127'
 
     # Views
     view = OrdersView()
+    view_waiting_payment = OrdersViewWaitingPayment()
     view_sent = OrdersViewSent()
     view_canceled = OrdersViewCanceled()
     view_archive = OrdersViewArchive()
