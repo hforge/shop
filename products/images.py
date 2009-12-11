@@ -24,13 +24,10 @@ from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.file import Image
-from ikaaro.folder_views import GoToSpecificDocument, Folder_Orphans
-from ikaaro.folder_views import Folder_BrowseContent, Folder_PreviewContent
 from ikaaro.forms import ImageSelectorWidget
 from ikaaro.future.order import ResourcesOrderedTable
 from ikaaro.registry import register_resource_class
 from ikaaro.resource_views import DBResource_AddImage
-from ikaaro.revisions_views import DBResource_LastChanges
 from ikaaro.table import OrderedTableFile
 
 # Import from shop
@@ -146,13 +143,6 @@ class ImagesFolder(ShopFolder):
 
     class_id = 'images-folder'
     class_title = MSG(u'Images folder')
-
-    # Views
-    browse_content = Folder_BrowseContent(access='is_admin')
-    preview_content = Folder_PreviewContent(access='is_admin')
-    last_changes = DBResource_LastChanges(access='is_admin')
-    orphans = Folder_Orphans(access='is_admin')
-
 
     def get_document_types(self):
         return [Image]

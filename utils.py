@@ -27,8 +27,9 @@ from itools.xml import XMLParser
 from ikaaro.buttons import Button
 from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_Orphans, Folder_BrowseContent
+from ikaaro.folder_views import Folder_PreviewContent
 from ikaaro.revisions_views import DBResource_LastChanges
-from ikaaro.resource_views import DBResource_AddImage
+from ikaaro.resource_views import DBResource_AddImage, DBResource_Backlinks
 
 
 def bool_to_img(value):
@@ -94,8 +95,10 @@ class ShopFolder(Folder):
     """Guest user cannot access to some views of ShopFolder
     """
     browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
+    preview_content = Folder_PreviewContent(access='is_allowed_to_edit')
     orphans = Folder_Orphans(access='is_allowed_to_edit')
     last_changes = DBResource_LastChanges(access='is_allowed_to_edit')
+    backlinks = DBResource_Backlinks(access='is_allowed_to_edit')
 
 
 
