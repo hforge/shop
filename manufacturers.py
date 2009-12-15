@@ -33,6 +33,7 @@ from datatypes import DynamicEnumerate
 class ManufacturersEnumerate(DynamicEnumerate):
 
     path = 'shop/manufacturers/'
+    format = 'manufacturer'
 
 
 

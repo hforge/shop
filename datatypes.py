@@ -60,6 +60,7 @@ class ImagePathDataType(PathDataType):
 class DynamicEnumerate(Enumerate):
 
     path = None
+    format = None
 
     @classmethod
     def get_options(cls):
@@ -67,7 +68,7 @@ class DynamicEnumerate(Enumerate):
         resource = context.site_root.get_resource(cls.path)
         return [{'name': res.get_abspath(),
                  'value': res.get_title()}
-                   for res in resource.get_resources()]
+                   for res in resource.search_resources(format=cls.format)]
 
 
     @classmethod
