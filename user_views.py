@@ -436,6 +436,8 @@ class Customers_View(Folder_BrowseContent):
             return item_resource.get_property(column), item_brain.name
         elif column in ['ctime', 'last_time']:
             dtime = item_resource.get_property(column)
+            if dtime is None:
+                return '-'
             accept = context.accept_language
             return format_datetime(dtime, accept)
         return item_resource.get_property(column)
