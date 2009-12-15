@@ -25,7 +25,7 @@
       </fieldset>
     </form>
   </div>
-  <div style="float:right;width:40%">
+  <div style="float:right;width:40%;display:None;">
     <fieldset>
       <legend>Actions</legend>
       <p>
