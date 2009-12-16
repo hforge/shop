@@ -20,7 +20,7 @@ from copy import deepcopy
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import PathDataType
+from itools.datatypes import PathDataType, Unicode
 from itools.gettext import MSG
 from itools.uri import Path, get_reference
 from itools.web import get_context
@@ -52,6 +52,7 @@ class Category(Editable, ShopFolder):
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
                            Editable.get_metadata_schema(),
+                           breadcrumb_title=Unicode(multilingual=True),
                            image_category=PathDataType(multilingual=True))
 
 
