@@ -19,39 +19,10 @@
     </thead>
     <tbody>
       <tr>
-        <td stl:if="is_payed">
-          <img src="/ui/shop/images/dollar-enabled.png"/>
-          Your order has been payed
-          <a href="/shop/orders/${order_name}/bill/;download"
-            target="blank" stl:if="has_bill"
-            style="text-decoration:none; color:red;">
-            <img src="/ui/icons/16x16/pdf.png"/> Download bill
-          </a>
-        </td>
-        <td stl:if="not is_payed">
-          <img src="/ui/shop/images/dollar-disabled.png"/>
-          Your order has not been payed.
-          <a href="#payments">Click here to have more informations</a>
-        </td>
-      </tr>
-      <tr stl:if="not is_sent">
-        <td stl:if="is_payed">
-          <img src="/ui/shop/images/colis-enabled.png"/>
-          Your order is in preparation
-        </td>
-        <td stl:if="not is_payed">
-          <img src="/ui/shop/images/colis-disabled.png"/>
-          Your order isn't in preparation
-        </td>
-      </tr>
-      <tr>
-        <td stl:if="not is_sent">
-          <img src="/ui/shop/images/mail-disabled.png"/>
-          Your order has not been sent yet.
-        </td>
-        <td stl:if="is_sent">
-          <img src="/ui/shop/images/mail-enabled.png"/>
-          Your order has been sent.
+        <td>
+          <span class="counter" style="background-color:${state/color}; font-size:30px;">
+            ${state/title}
+          </span>
         </td>
       </tr>
     </tbody>

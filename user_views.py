@@ -21,6 +21,7 @@ from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.web import STLView, STLForm, INFO, ERROR
 from itools.xapian import PhraseQuery, AndQuery
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
@@ -34,7 +35,8 @@ from ikaaro.table_views import Table_View
 from addresses_views import Addresses_EditAddress, Addresses_AddAddress
 from datatypes import Civilite
 from shop_utils_views import RealRessource_Form
-from orders.orders_views import OrdersView
+from orders.orders_views import OrdersView, numero_template
+from orders.workflow import states, states_color
 from utils import get_shop
 
 
@@ -200,7 +202,8 @@ class ShopUser_OrdersView(OrdersView):
     table_columns = [
         ('numero', MSG(u'Order id')),
         ('total_price', MSG(u'Total price')),
-        ('creation_datetime', MSG(u'Date and Time'))]
+        ('state', MSG(u'State')),
+        ('creation_datetime', MSG(u'Date and Time of order creation'))]
 
 
     def get_items(self, resource, context, *args):
@@ -212,7 +215,15 @@ class ShopUser_OrdersView(OrdersView):
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
         if column == 'numero':
-            return (item_brain.name, './;order_view?id=%s' % item_brain.name)
+            state = item_brain.workflow_state
+            href = './;order_view?id=%s' % item_brain.name
+            name = item_resource.get_reference()
+            return XMLParser(numero_template % (states_color[state], href, name))
+        elif column == 'state':
+            state = item_brain.workflow_state
+            state_title = states[state].gettext().encode('utf-8')
+            href = './;order_view?id=%s' % item_brain.name
+            return XMLParser(numero_template % (states_color[state], href, state_title))
         return OrdersView.get_item_value(self, resource,
                                           context, item, column)
 
@@ -239,6 +250,10 @@ class ShopUser_OrderView(STLForm):
             return context.come_back(msg, goto='/')
         # Build namespace
         namespace = order.get_namespace(context)
+        # States
+        namespace['state'] = {'title': states[order.workflow_state],
+                              'color': states_color[order.workflow_state]}
+        # Other
         namespace['order_name'] = order.name
         namespace['is_payed'] = order.get_property('is_payed')
         namespace['is_sent'] = order.get_property('is_sent')

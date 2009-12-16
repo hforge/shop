@@ -514,3 +514,28 @@ input[type="image"]{
 .strikethrough{
   text-decoration: line-through;
 }
+
+/* Counter */
+
+.counter{
+  -moz-border-radius: 5px;
+  width: 35px;
+  padding: 0 5px;
+  color: #FFF;
+  text-align: center;
+}
+
+#browse-list .counter a{
+  color: #FFF;
+  text-decoration: none;
+}
+
+/* User Orders view */
+#page-user-orders-view #browse-list{
+  width: 90%;
+  font-size: 14px;
+  border: 1px solid #dfd5c3;
+  border-collapse:collapse;
+  padding: 0;
+  margin: 10px;
+}
