@@ -76,5 +76,5 @@ class DynamicEnumerate(Enumerate):
         if name is None:
             return
         context = get_context()
-        resource = context.site_root.get_resource(cls.path)
+        resource = context.site_root.get_resource(name)
         return resource.get_title()
