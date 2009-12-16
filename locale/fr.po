@@ -2253,7 +2253,7 @@ msgstr "Date et heure"
 
 #: ../user_views.py:206
 msgid "Date and Time of order creation"
-msgstr ""
+msgstr "Date et heure de création de la commande"
 
 #: ../ui/shop/shop_user_manage.xml.en:129
 msgctxt "table cell"
