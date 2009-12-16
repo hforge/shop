@@ -517,6 +517,7 @@ msgid "Cancel"
 msgstr ""
 
 #: ../orders/workflow.py:85
+#: ../orders/workflow.py:86
 msgid "Cancel the order"
 msgstr ""
 
@@ -1954,8 +1955,8 @@ msgstr ""
 msgid "Random choice from shop"
 msgstr ""
 
-#: ../orders/workflow.py:86
 #: ../orders/workflow.py:87
+#: ../orders/workflow.py:88
 msgid "Re-open the order"
 msgstr ""
 

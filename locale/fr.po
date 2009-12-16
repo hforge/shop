@@ -1423,10 +1423,10 @@ msgid ""
 "${bill_address/zipcode} ${bill_address/town}<x id='13'/> ${bill_address/"
 "country}<x id='14'/>  </g>"
 msgstr ""
-"<g id='7'> Identique à l'adresse de livraison </g>  <g id='8'> ${bill_address/"
-"firstname} ${bill_address/lastname}<x id='9'/> ${bill_address/address_1}<x "
-"id='10'/>  <g id='11'> ${bill_address/address_2}<x id='12'/>  </g> "
-"${bill_address/zipcode} ${bill_address/town}<x id='13'/> ${bill_address/"
+"<g id='7'> Identique à l'adresse de livraison </g>  <g id='8'> "
+"${bill_address/firstname} ${bill_address/lastname}<x id='9'/> ${bill_address/"
+"address_1}<x id='10'/>  <g id='11'> ${bill_address/address_2}<x id='12'/>  </"
+"g> ${bill_address/zipcode} ${bill_address/town}<x id='13'/> ${bill_address/"
 "country}<x id='14'/>  </g>"
 
 #: ../ui/shop/orders/orders_search.xml.en:40
@@ -1769,7 +1769,7 @@ msgstr ""
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../orders/workflow.py:85
+#: ../orders/workflow.py:85 ../orders/workflow.py:86
 msgid "Cancel the order"
 msgstr "Annuler la commande"
 
@@ -4123,7 +4123,7 @@ msgstr "Choix aléatoire dans la catégorie courante"
 msgid "Random choice from shop"
 msgstr "Choix aléatoire dans le shop"
 
-#: ../orders/workflow.py:86 ../orders/workflow.py:87
+#: ../orders/workflow.py:87 ../orders/workflow.py:88
 msgid "Re-open the order"
 msgstr "Ré-ouvrir la commande"
 
