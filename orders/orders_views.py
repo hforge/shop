@@ -203,7 +203,7 @@ class OrdersView(Folder_BrowseContent):
     def get_items_query(self):
         return NotQuery(OrQuery(
                   *[PhraseQuery('workflow_state', x) for x in
-                      ['closed', 'open', 'cancel', 'delivery']]))
+                      ['closed', 'open', 'cancel', 'payment_error', 'delivery']]))
 
 
     def get_items(self, resource, context, *args):
@@ -252,7 +252,9 @@ class OrdersViewWaitingPayment(OrdersView):
     table_actions = [OrderCancelButton]
 
     def get_items_query(self):
-        return PhraseQuery('workflow_state', 'open')
+        return OrQuery(
+                  *[PhraseQuery('workflow_state', x)
+                      for x in ['open', 'payment_error']])
 
 
     def get_checkbox(self, item_resource):
