@@ -403,6 +403,10 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                                             manufacturer)
         else:
             namespace['manufacturer'] = None
+        # Category
+        category = self.get_property('categories')[0]
+        category = shop.get_resource('categories/%s' % category)
+        namespace['category'] = category.get_title()
         return namespace
 
 
