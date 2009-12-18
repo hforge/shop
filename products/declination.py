@@ -19,7 +19,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import String, Unicode, Integer
+from itools.datatypes import String, Unicode, Integer, Decimal
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -41,9 +41,9 @@ declination_schema = {'reference': String,
                       'title': Unicode,
                       'stock-quantity': Integer,
                       'impact-on-price': DeclinationImpact,
-                      'price-impact-value': Integer,
+                      'price-impact-value': Decimal,
                       'impact-on-weight': DeclinationImpact,
-                      'weight-impact-value': Integer}
+                      'weight-impact-value': Decimal}
 
 
 declination_widgets = [
