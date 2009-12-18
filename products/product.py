@@ -466,8 +466,11 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         manufacturer = self.get_property('manufacturer')
         if manufacturer:
             manufacturer = root.get_resource(manufacturer)
-            namespace['manufacturer'] = {'name': manufacturer.name,
-                                         'title': manufacturer.get_title()}
+            namespace['manufacturer'] = {
+                'name': manufacturer.name,
+                'link': context.get_link(manufacturer),
+                'photo': manufacturer.get_property('photo'),
+                'title': manufacturer.get_title()}
         else:
             namespace['manufacturer'] = None
         # Data

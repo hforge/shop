@@ -225,7 +225,7 @@ class Shop(ShopFolder):
 
 
     def get_document_types(self):
-        return []
+        return [Manufacturers]
 
     ##############################
     # API
