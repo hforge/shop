@@ -22,6 +22,7 @@ from itools.core import merge_dicts
 from itools.gettext import MSG
 from itools.datatypes import Unicode, PathDataType, String
 from itools.web import STLView
+from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro import messages
@@ -86,7 +87,8 @@ class Manufacturers_View(STLView):
     def get_namespace(self, resource, context):
         from manufacturers import Manufacturer
         from utils import get_shop
-        namespace = {'manufacturers': []}
+        namespace = {'manufacturers': [],
+                     'title': resource.get_title()}
         manufacturers = get_shop(resource).get_resource('manufacturers')
         for resource in manufacturers.search_resources(cls=Manufacturer):
             namespace['manufacturers'].append(
@@ -112,7 +114,9 @@ class Manufacturer_View(STLView):
     def get_namespace(self, resource, context):
         root = context.root
         products = []
-        results = root.search(manufacturer=resource.name)
+        query = AndQuery(PhraseQuery('manufacturer', resource.name),
+                         PhraseQuery('workflow_state', 'public'))
+        results = root.search(query)
         for result in results.get_documents():
             product = root.get_resource(result.abspath)
             products.append(product.viewbox.GET(product, context))
