@@ -6,11 +6,17 @@
 
   ${progress}
 
-  <p>
+  <p stl:if="ref">
     You can see details about your order
       <a href="/users/${user_name}/;order_view?id=${ref}">here.</a>
     <br/>
   </p>
+
+  <p stl:if="not ref">
+    You can see all your orders
+      <a href="/users/${user_name}/;orders_view">here.</a>
+  </p>
+
   <br/>
 
 </stl:block>

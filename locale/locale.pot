@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-16 18:12+CET\n"
+"POT-Creation-Date: 2010-01-12 10:01+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -284,6 +284,10 @@ msgstr ""
 msgid "(Example: Home, Office)"
 msgstr ""
 
+#: ../payments/payment_way_views.py:48
+msgid "-"
+msgstr ""
+
 #: ../ui/shop/stock/pdf_resupply.xml.en:12
 #: ../ui/shop/orders/order_pdf.xml.en:24
 #: ../ui/shop/orders/order_facture.xml.en:27
@@ -353,7 +357,7 @@ msgstr ""
 msgid "Add a new country"
 msgstr ""
 
-#: ../manufacturers_views.py:49
+#: ../manufacturers_views.py:50
 msgid "Add a new manufacturer"
 msgstr ""
 
@@ -444,7 +448,7 @@ msgstr ""
 msgid "Approve after holder identification"
 msgstr ""
 
-#: ../orders/orders_views.py:293
+#: ../orders/orders_views.py:295
 msgid "Archives"
 msgstr ""
 
@@ -463,7 +467,7 @@ msgstr ""
 #: ../orders/orders.py:226
 #: ../orders/orders.py:480
 #: ../orders/orders.py:544
-#: ../products/product.py:665
+#: ../products/product.py:672
 #: ../ui/shop/orders/order_pdf.xml.en:77
 msgid "Barcode"
 msgstr ""
@@ -525,7 +529,7 @@ msgstr ""
 msgid "Canceled"
 msgstr ""
 
-#: ../orders/orders_views.py:271
+#: ../orders/orders_views.py:273
 msgid "Canceled orders"
 msgstr ""
 
@@ -590,7 +594,7 @@ msgstr ""
 msgid "Change product model"
 msgstr ""
 
-#: ../orders/orders_views.py:461
+#: ../orders/orders_views.py:463
 msgid "Changes saves"
 msgstr ""
 
@@ -765,7 +769,7 @@ msgstr ""
 msgid "DINERS"
 msgstr ""
 
-#: ../manufacturers_views.py:43
+#: ../manufacturers_views.py:44
 msgid "Data"
 msgstr ""
 
@@ -849,7 +853,7 @@ msgid "Depends of weight"
 msgstr ""
 
 #: ../products/cross_selling_views.py:235
-#: ../payments/payment_way_views.py:77
+#: ../payments/payment_way_views.py:81
 #: ../suppliers_views.py:44
 #: ../categories_views.py:285
 #: ../shipping/shippings_views.py:71
@@ -893,7 +897,7 @@ msgid "E_CARD"
 msgstr ""
 
 #: ../shipping/shipping_way_views.py:38
-#: ../manufacturers_views.py:129
+#: ../manufacturers_views.py:133
 #: ../products/product_views.py:182
 #: ../editable.py:50
 #: ../suppliers_views.py:79
@@ -906,7 +910,7 @@ msgid "Edit address"
 msgstr ""
 
 #: ../shop_views.py:107
-#: ../payments/payment_way_views.py:80
+#: ../payments/payment_way_views.py:84
 msgid "Edit configuration"
 msgstr ""
 
@@ -942,7 +946,7 @@ msgstr ""
 
 #: ../shipping/shipping_way_views.py:48
 #: ../payments/payments_views.py:210
-#: ../payments/payment_way_views.py:76
+#: ../payments/payment_way_views.py:80
 #: ../shipping/shippings_views.py:72
 msgid "Enabled ?"
 msgstr ""
@@ -1262,7 +1266,7 @@ msgstr ""
 msgid "Keep the card, special conditions."
 msgstr ""
 
-#: ../manufacturers_views.py:41
+#: ../manufacturers_views.py:42
 #: ../products/product_views.py:198
 msgid "Keywords"
 msgstr ""
@@ -1304,7 +1308,7 @@ msgid "Login"
 msgstr ""
 
 #: ../shipping/shipping_way_views.py:46
-#: ../payments/payment_way_views.py:75
+#: ../payments/payment_way_views.py:79
 msgid "Logo"
 msgstr ""
 
@@ -1325,7 +1329,7 @@ msgstr ""
 msgid "Manage photos"
 msgstr ""
 
-#: ../orders/orders_views.py:305
+#: ../orders/orders_views.py:307
 msgid "Manage shipping"
 msgstr ""
 
@@ -1438,7 +1442,7 @@ msgid "My profile"
 msgstr ""
 
 #: ../categories_views.py:252
-#: ../manufacturers_views.py:51
+#: ../manufacturers_views.py:52
 #: ../products/product_views.py:65
 #: ../products/product_views.py:616
 #: ../products/images.py:72
@@ -1570,7 +1574,7 @@ msgstr ""
 msgid "Order confirmation"
 msgstr ""
 
-#: ../orders/orders_views.py:437
+#: ../orders/orders_views.py:439
 msgid "Order has been canceled"
 msgstr ""
 
@@ -1591,7 +1595,7 @@ msgid "Order number:"
 msgstr ""
 
 #: ../products/product.py:134
-#: ../products/product.py:751
+#: ../products/product.py:758
 msgid "Order photos"
 msgstr ""
 
@@ -1732,7 +1736,7 @@ msgstr ""
 msgid "Payment error"
 msgstr ""
 
-#: ../payments/payment_way_views.py:48
+#: ../payments/payment_way_views.py:56
 msgid "Payment invalid"
 msgstr ""
 
@@ -1786,7 +1790,7 @@ msgstr ""
 msgid "Phone number"
 msgstr ""
 
-#: ../manufacturers_views.py:42
+#: ../manufacturers_views.py:43
 msgid "Photo"
 msgstr ""
 
@@ -1905,7 +1909,7 @@ msgstr ""
 
 #: ../orders/orders.py:106
 #: ../orders/orders.py:202
-#: ../products/product.py:834
+#: ../products/product.py:841
 #: ../shop.py:166
 #: ../stock/resupply.py:44
 msgid "Products"
@@ -1990,7 +1994,7 @@ msgid "Reference"
 msgstr ""
 
 #: ../orders/orders_views.py:115
-#: ../orders/orders_views.py:320
+#: ../orders/orders_views.py:322
 msgid "Reference found !"
 msgstr ""
 
@@ -2087,7 +2091,7 @@ msgstr ""
 msgid "Sended"
 msgstr ""
 
-#: ../orders/orders_views.py:282
+#: ../orders/orders_views.py:284
 msgid "Sent Orders"
 msgstr ""
 
@@ -2381,8 +2385,8 @@ msgid "Time-out > 15 mn before validation by the buyer"
 msgstr ""
 
 #: ../products/cross_selling_views.py:234
-#: ../manufacturers_views.py:40
-#: ../payments/payment_way_views.py:74
+#: ../manufacturers_views.py:41
+#: ../payments/payment_way_views.py:78
 #: ../products/models_views.py:56
 #: ../products/models_views.py:151
 #: ../orders/orders.py:114
@@ -2470,7 +2474,7 @@ msgstr ""
 msgid "Transaction not permitted for this holder"
 msgstr ""
 
-#: ../orders/orders_views.py:426
+#: ../orders/orders_views.py:428
 msgid "Transition done."
 msgstr ""
 
@@ -2496,7 +2500,7 @@ msgid "Unknow error"
 msgstr ""
 
 #: ../orders/orders_views.py:118
-#: ../orders/orders_views.py:323
+#: ../orders/orders_views.py:325
 msgid "Unknow reference \"%s\""
 msgstr ""
 
@@ -2533,8 +2537,8 @@ msgid "Validate the payment"
 msgstr ""
 
 #: ../products/models_views.py:46
-#: ../manufacturers_views.py:77
-#: ../manufacturers_views.py:103
+#: ../manufacturers_views.py:78
+#: ../manufacturers_views.py:105
 #: ../user_views.py:237
 #: ../user_views.py:373
 #: ../categories_views.py:42
@@ -2663,7 +2667,7 @@ msgid "Your inscription has been validated"
 msgstr ""
 
 #: ../user_views.py:315
-#: ../orders/orders_views.py:451
+#: ../orders/orders_views.py:453
 msgid "Your message has been sent"
 msgstr ""
 
@@ -4220,6 +4224,11 @@ msgstr ""
 #: ../ui/shop/orders/order_manage.xml.en:233
 msgctxt "paragraph"
 msgid "We're waiting for customer payment"
+msgstr ""
+
+#: ../ui/shop/payments_end.xml.en:16
+msgctxt "paragraph"
+msgid "You can see all your orders <g id='3'>here.</g>"
 msgstr ""
 
 #: ../ui/shop/payments_end.xml.en:10
