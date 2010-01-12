@@ -20,7 +20,8 @@ from itools.datatypes import Boolean, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.xapian import AndQuery, PhraseQuery, OrQuery, NotQuery
-from itools.web import ERROR, INFO, STLForm
+from itools.web import ERROR, INFO, STLForm, FormError
+from itools.web.views import process_form
 from itools.xml import XMLParser
 from itools.workflow import WorkflowError
 
@@ -210,6 +211,7 @@ class OrdersView(Folder_BrowseContent):
         args = list(args)
         args.append(self.get_items_query())
         return Folder_BrowseContent.get_items(self, resource, context, *args)
+
 
 
     def action_merge_pdfs(self, resource, context, form, pdf_name):
@@ -461,3 +463,24 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         seen = handler.get_record_value(record, 'seen')
         handler.update_record(form['id_message'], **{'seen': not seen})
         context.message = INFO(u'Changes saves')
+
+
+    action_add_shipping_schema = {'shipping_way': String(mandatory=True)}
+    def action_add_shipping(self, resource, context, form):
+        shop = get_shop(resource)
+        # We get shipping way
+        shipping_way = shop.get_resource('shippings/%s/' % form['shipping_way'])
+        # We get add_record view
+        add_record_view = shipping_way.order_add_view
+        # We get shipping way add form schema
+        schema = add_record_view.schema
+        # We get form
+        try:
+            form = process_form(context.get_form_value, schema)
+        except FormError, error:
+            context.form_error = error
+            return self.on_form_error(resource, context)
+        # Do actions
+        return add_record_view.add_shipping(resource, shipping_way,
+                    context, form)
+
