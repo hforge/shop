@@ -81,6 +81,7 @@ transitions = [
   ('payment_ok', 'cancel', MSG(u'Cancel the order')),
   ('out_stock', 'preparation', MSG(u'The order is in preparation')),
   ('preparation', 'delivery', MSG(u'Delivery ongoing')),
+  ('preparation', 'cancel', MSG(u'Cancel the order')),
   ('delivery', 'closed', MSG(u'Closed')),
   ('open', 'payment_error', MSG(u'Signal a payment error')),
   ('payment_error', 'cancel', MSG(u'Cancel the order')),
