@@ -53,7 +53,7 @@ states = {
   'payment_ok': MSG(u'Payment validated'),
   'preparation': MSG(u'Order in preparation'),
   'out_stock': MSG(u'A product is out of stock'),
-  'delivery': MSG(u'Delivery ok'),
+  'delivery': MSG(u'Package sent'),
   'payment_error': MSG(u'Payment error'),
   'cancel': MSG(u'Canceled'),
   'closed': MSG(u'Closed')}

@@ -2292,10 +2292,6 @@ msgctxt "form"
 msgid "Delivery address:"
 msgstr ""
 
-#: ../orders/workflow.py:56
-msgid "Delivery ok"
-msgstr ""
-
 #: ../orders/workflow.py:82
 msgid "Delivery ongoing"
 msgstr ""
@@ -3606,6 +3602,10 @@ msgstr ""
 #: ../ui/shop/shipping/shippingway_order_view.xml.en:8
 msgctxt "span"
 msgid "Package number:"
+msgstr ""
+
+#: ../orders/workflow.py:56
+msgid "Package sent"
 msgstr ""
 
 #: ../ui/shop/stock/pdf_resupply.xml.en:12

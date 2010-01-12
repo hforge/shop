@@ -2337,10 +2337,6 @@ msgctxt "form"
 msgid "Delivery address:"
 msgstr "Adresse de livraison :"
 
-#: ../orders/workflow.py:56
-msgid "Delivery ok"
-msgstr "Livraison réalisée"
-
 #: ../orders/workflow.py:82
 msgid "Delivery ongoing"
 msgstr "Livraison en cours"
@@ -3675,6 +3671,10 @@ msgstr "Signature des PDF"
 msgctxt "span"
 msgid "Package number:"
 msgstr "Numéro de paquet :"
+
+#: ../orders/workflow.py:56
+msgid "Package sent"
+msgstr "Colis envoyé"
 
 #: ../ui/shop/stock/pdf_resupply.xml.en:12
 #: ../ui/shop/orders/order_pdf.xml.en:24
@@ -5497,6 +5497,9 @@ msgstr "€<x id='9'/> TVA:"
 
 #~ msgid "Default cover saved"
 #~ msgstr "Couverture par défaut enregistrée"
+
+#~ msgid "Delivery ok"
+#~ msgstr "Livraison réalisée"
 
 #~ msgid "Edit Model"
 #~ msgstr "Modifier le model"

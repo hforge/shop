@@ -836,10 +836,6 @@ msgstr ""
 msgid "Delivery address"
 msgstr ""
 
-#: ../orders/workflow.py:56
-msgid "Delivery ok"
-msgstr ""
-
 #: ../orders/workflow.py:82
 msgid "Delivery ongoing"
 msgstr ""
@@ -1643,6 +1639,10 @@ msgstr ""
 
 #: ../shop_views.py:96
 msgid "PDF signature"
+msgstr ""
+
+#: ../orders/workflow.py:56
+msgid "Package sent"
 msgstr ""
 
 #: ../ui/shop/stock/pdf_resupply.xml.en:12
