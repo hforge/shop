@@ -40,7 +40,7 @@ from user_views import ShopUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView
 from user_views import Customers_View, AuthentificationLogs_View
-from user_views import ShopUser_EditPrivateInformations
+from user_views import ShopUser_EditPrivateInformations, ShopUser_Manage
 from utils import get_shop
 
 
@@ -97,13 +97,13 @@ class Customers(Folder):
 
 class ShopUser(User):
 
-    class_views = ['profile', 'addresses_book', 'edit_account',
+    class_views = ['manage', 'profile', 'addresses_book', 'edit_account',
                    'edit_private_informations', 'orders_view',
                    'edit_preferences', 'edit_password']
     class_version = '20091009'
 
     # Views
-    #manage = ShopUser_Manage() #XXX Not used
+    manage = ShopUser_Manage()
     profile = ShopUser_Profile()
     edit_account = ShopUser_EditAccount()
     edit_private_informations = ShopUser_EditPrivateInformations()

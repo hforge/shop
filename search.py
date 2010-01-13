@@ -145,18 +145,21 @@ class Shop_ProductSearch(VirtualCategories_View):
             for word in split_unicode(search_word):
                 alternative = (word + u"s" if not word.endswith(u's')
                                             else word[:-1])
-                plain_text = OrQuery(PhraseQuery('reference', word),
-                                     # On product
-                                     PhraseQuery('title', word),
-                                     PhraseQuery('description', word),
-                                     PhraseQuery('data', word),
-                                     PhraseQuery('text', word),
-                                     # Alternative
-                                     PhraseQuery('title', alternative),
-                                     PhraseQuery('description', alternative),
-                                     PhraseQuery('data', alternative),
-                                     PhraseQuery('text', alternative))
+                plain_text = OrQuery(
+                                # By reference
+                                PhraseQuery('reference', word.upper()), #encode('utf-8')), #.upper()),
+                                # On product
+                                PhraseQuery('title', word),
+                                PhraseQuery('description', word),
+                                PhraseQuery('data', word),
+                                PhraseQuery('text', word),
+                                # Alternative
+                                PhraseQuery('title', alternative),
+                                PhraseQuery('description', alternative),
+                                PhraseQuery('data', alternative),
+                                PhraseQuery('text', alternative))
                 query.append(plain_text)
+        print AndQuery(*query)
         results = context.root.search(AndQuery(*query))
         # XXX Hack results
         self.nb_results = len(results)
