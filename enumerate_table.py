@@ -226,7 +226,7 @@ class EnumerateTable(OrderedTable):
     class_id = 'enumerate-table'
     class_title = MSG(u'Enumerate Table')
     class_handler = EnumerateTable_Handler
-    class_views = ['view', 'add_record']
+    class_views = ['view', 'edit', 'add_record']
 
 
     # Views
