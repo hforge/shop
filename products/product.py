@@ -712,6 +712,10 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         if cover:
             base = self.get_canonical_path()
             links.append(str(base.resolve2(cover)))
+        # Manufacturer
+        manufacturer = self.get_property('manufacturer')
+        if manufacturer:
+            links.append(manufacturer)
 
         return links
 
@@ -745,6 +749,12 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                 # Hit the old name
                 new_path2 = base.get_pathto(Path(new_path))
                 self.set_property('cover', str(new_path2))
+
+        # Manufacturer
+        manufacturer = self.get_property('manufacturer')
+        if manufacturer and manufacturer == old_path:
+            self.set_property('manufacturer', str(new_path))
+
         get_context().database.change_resource(self)
 
 
