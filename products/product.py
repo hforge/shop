@@ -74,7 +74,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     class_views = ['view', 'edit', 'declinations', 'images',
                    'order', 'edit_cross_selling', 'delete_product']
     class_description = MSG(u'A product')
-    class_version = '20091123'
+    class_version = '20100119'
 
     ##################
     # Configuration
@@ -411,7 +411,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def get_price_namespace(self):
-        has_reduction = self.get_property('reduction') > decimal(0)
+        has_reduction = self.get_property('has_reduction')
         ns = {'with_tax': self.get_price_with_tax(pretty=True),
               'without_tax':  self.get_price_without_tax(pretty=True),
               'has_reduction': has_reduction}
@@ -631,14 +631,15 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
     def get_price_without_tax(self, id_declination=None,
                                with_reduction=True, pretty=False):
-        if id_declination:
-            declination = self.get_resource(id_declination)
-            price = declination.get_price_without_tax()
+        # Base price
+        if with_reduction is True and self.get_property('has_reduction'):
+            price = self.get_property('reduce-pre-tax-price')
         else:
             price = self.get_property('pre-tax-price')
-        # Reduction
-        if with_reduction is True:
-            price = price - self.get_property('reduction')
+        # Declination
+        if id_declination:
+            declination = self.get_resource(id_declination)
+            price = price + declination.get_price_impact()
         # Format price
         if pretty is True:
             return format_price(price)
@@ -842,6 +843,16 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     def update_20091123(self):
         reference = self.get_property('reference')
         self.save_barcode(reference)
+
+
+    def update_20100119(self):
+        """ Update to new reduction mechanism """
+        reduction = self.get_property('reduction')
+        if reduction:
+            self.del_property('reduction')
+            value = self.get_property('pre-tax-price') - reduction
+            self.set_property('reduce-pre-tax-price', value)
+            self.set_property('has_reduction', True)
 
 
 

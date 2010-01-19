@@ -163,27 +163,15 @@ class Declination(DynamicFolder):
         return self.get_property('reference')
 
 
-    def get_price_without_tax(self):
-        # Get base price
-        base_price = self.parent.get_property('pre-tax-price')
-        # Get declination price
+    def get_price_impact(self):
         price_impact = self.get_property('impact-on-price')
         price_value = self.get_property('price-impact-value')
-        if price_impact == 'none':
-            price = base_price
-        elif price_impact == 'increase':
-            price = base_price + price_value
+        if price_impact == 'increase':
+            return price_value
         elif price_impact == 'decrease':
-            price = base_price - price_value
+            return -price_value
         else:
-            price = base_price
-        return price
-
-
-    def get_price_with_tax(self):
-        tax = self.parent.get_property('tax')
-        price = self.get_price_without_tax()
-        return price * (TaxesEnumerate.get_value(tax)/decimal(100) + 1)
+            return decimal(0)
 
 
     def get_weight(self):

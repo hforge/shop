@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Enumerate, Decimal
+from itools.datatypes import Enumerate, Decimal, Boolean
 from itools.gettext import MSG
 from itools.web import get_context
 
@@ -77,14 +77,17 @@ class PriceWidget(Widget):
         submit = (context.request.method == 'POST')
         if submit:
             tax_value = context.get_form_value('tax', type=TaxesEnumerate)
-            reduction = context.get_form_value('reduction', type=Decimal)
+            has_reduction = context.get_form_value('has_reduction', type=Boolean)
+            reduce_pre_tax_price = context.get_form_value('reduce-pre-tax-price')
         else:
             tax_value = context.resource.get_property('tax')
-            reduction = context.resource.get_property('reduction')
+            has_reduction = context.resource.get_property('has_reduction')
+            reduce_pre_tax_price = context.resource.get_property('reduce-pre-tax-price')
         taxes = SelectWidget('tax', css='tax-widget', has_empty_option=False)
         # Return namespace
         return {'pre-tax-price': value,
-                'reduction': reduction,
+                'reduce-pre-tax-price': reduce_pre_tax_price,
+                'has_reduction': has_reduction,
                 'taxes': taxes.to_html(TaxesEnumerate, tax_value)}
 
 

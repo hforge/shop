@@ -507,8 +507,20 @@ input[type="image"]{
 }
 
 
-#final-retail-price, #final-retail-price-reduction{
+#final-retail-price, #reduce-final-retail-price{
   font-size: 30px;
+}
+
+#final-retail-price.strikethrough{
+  color: red;
+}
+
+#widget-price td{
+  padding: 10px;
+}
+
+#zone-price.with-reduction{
+  background-color: #FFD9D9;
 }
 
 .strikethrough{

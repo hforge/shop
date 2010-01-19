@@ -58,7 +58,10 @@ product_schema = {# General informations
                   'is_buyable': Boolean(default=True),
                   'purchase-price': Decimal,
                   'pre-tax-price': Decimal(default=decimal(0), mandatory=True),
-                  'reduction': Decimal(default=decimal(0)),
                   'tax': TaxesEnumerate(mandatory=True),
+                  # Price reduction
+                  'has_reduction': Boolean,
+                  'reduce-pre-tax-price': Decimal(default=decimal(0)),
+                  'reduction': Decimal(default=decimal(0)), #XXX old to remove after update
                   # ctime,
                   'ctime': DateTime}
