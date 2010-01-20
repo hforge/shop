@@ -19,7 +19,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import DateTime, Decimal, Unicode, Boolean
-from itools.datatypes import String, Integer
+from itools.datatypes import String, Integer, Tokens
 
 # Import from shop
 from enumerate import CategoriesEnumerate, States, StockOptions
@@ -41,6 +41,7 @@ product_schema = {# General informations
                   'product_model': String,
                   'title': Unicode(multilingual=True),
                   'description': Unicode(multilingual=True),
+                  'tags': Tokens,
                   'subject': Unicode(multilingual=True),
                   'cover': ImagePathDataType(mandatory=True),
                   'weight': Decimal(default=decimal(0), mandatory=True),

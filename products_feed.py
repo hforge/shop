@@ -104,6 +104,7 @@ class ProductsFeed(Editable, Folder):
 
     class_id = 'products-feed'
     class_title = MSG(u'Products feed')
+    class_version = '20100120'
 
     view = ProductsFeed_View()
     compare = ProductsFeed_ComparatorView()

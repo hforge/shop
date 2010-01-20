@@ -166,6 +166,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         values['ctime'] = self.get_property('ctime')
         # Promotion
         values['has_reduction'] = self.get_property('has_reduction')
+        # Tags
+        values['tags'] = self.get_property('tags')
+        values['is_tagsaware'] = True
         # Is buyable ?
         values['is_buyable'] = self.is_buyable()
 
@@ -698,7 +701,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         links = Editable.get_links(self)
         links += DynamicFolder.get_links(self)
         real_resource = self.get_real_resource()
-        shop = get_shop(real_resource)
+        site_root = self.get_site_root()
+        shop = site_root.get_resource('shop')
         # categories
         categories = shop.get_resource('categories')
         categories_path = categories.get_abspath()
@@ -715,6 +719,10 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         if cover:
             base = self.get_canonical_path()
             links.append(str(base.resolve2(cover)))
+        # Tags
+        tags_base = site_root.get_abspath().resolve2('tags')
+        links.extend([str(tags_base.resolve2(tag))
+                      for tag in self.get_property('tags')])
         # Manufacturer
         manufacturer = self.get_property('manufacturer')
         if manufacturer:
@@ -752,7 +760,20 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                 # Hit the old name
                 new_path2 = base.get_pathto(Path(new_path))
                 self.set_property('cover', str(new_path2))
-
+        # Tags
+        site_root = self.get_site_root()
+        source = Path(old_path)
+        tags_base = site_root.get_abspath().resolve2('tags')
+        if tags_base.get_prefix(source) == tags_base:
+            tags = list(self.get_property('tags'))
+            source_name = source.get_name()
+            target_name = Path(new_path).get_name()
+            for tag in tags:
+                if tag == source_name:
+                    # Hit
+                    index = tags.index(source_name)
+                    tags[index] = target_name
+                    self.set_property('tags', tags)
         # Manufacturer
         manufacturer = self.get_property('manufacturer')
         if manufacturer and manufacturer == old_path:

@@ -46,6 +46,7 @@ from widgets import BarcodeWidget, MiniProductWidget, StockProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
+from shop.enumerates import TagsList
 from shop.suppliers import SuppliersEnumerate
 from shop.utils import get_shop, ChangeCategoryButton
 
@@ -196,6 +197,8 @@ class Product_Edit(Editable_Edit, AutoForm):
         TextWidget('title', title=MSG(u'Title')),
         MultilineWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Keywords')),
+        # Tags
+        SelectRadio('tags', title=MSG(u'Tags'), is_inline=True),
         # Cover
         ImageSelectorWidget('cover', title=MSG(u'Cover')),
         # Weight
@@ -219,8 +222,10 @@ class Product_Edit(Editable_Edit, AutoForm):
 
     def get_schema(self, resource, context):
         product_model = resource.get_product_model()
+        site_root = resource.get_site_root()
         return merge_dicts(Editable_Edit.schema, product_schema,
-                  (product_model.get_model_schema() if product_model else {}))
+                  (product_model.get_model_schema() if product_model else {}),
+                  tags=TagsList(site_root=site_root, multiple=True))
 
 
 
@@ -228,6 +233,9 @@ class Product_Edit(Editable_Edit, AutoForm):
         if name == 'data':
             return Editable_Edit.get_value(self, resource, context, name,
                                            datatype)
+        elif name == 'tags':
+            # XXX tuple -> list (enumerate.get_namespace expects list)
+            return list(resource.get_property('tags'))
         language = resource.get_content_language(context)
         return resource.get_property(name, language=language)
 
