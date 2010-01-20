@@ -22,8 +22,9 @@ from itools.core import get_abspath
 from itools.gettext import register_domain
 
 # Import from shop
-from website import ShopWebSite
+from products_feed import ProductsFeed
 from shop import Shop
+from website import ShopWebSite
 
 # Import from package
 import skin

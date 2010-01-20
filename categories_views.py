@@ -63,7 +63,11 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
                      'sub_categories': []}
         # Get products view box
         product_models = []
-        for item_brain, item_resource in items:
+        for item_resource in items:
+            # XXX Hack for cross selling
+            # Cross selling return only resource not brain
+            if type(item_resource) is tuple:
+                 item_brain, item_resource = item_resource
             viewbox = item_resource.viewbox
             namespace['products'].append({'name': item_resource.name,
                                           'box': viewbox.GET(item_resource, context)})
@@ -74,7 +78,9 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
             namespace['description'] = set_prefix(resource.get_xhtml_data(),
                                                   prefix)
         # Do not show subcategories
-        if shop.get_property('show_sub_categories') is False:
+        from categories import Category
+        if (isinstance(resource, Category) is False or
+            shop.get_property('show_sub_categories') is False):
             return namespace
         namespace['sub_categories'] = self.get_sub_categories_namespace(
                                           resource, context)
