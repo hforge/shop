@@ -16,26 +16,26 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Enumerate, Unicode
+from itools.datatypes import Boolean, Tokens, Unicode
 from itools.gettext import MSG
 from itools.web import get_context
-from itools.xapian import PhraseQuery, AndQuery
+from itools.xapian import PhraseQuery, AndQuery, OrQuery
 
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.folder import Folder
-from ikaaro.forms import AutoForm, SelectRadio, TextWidget
+from ikaaro.forms import AutoForm, SelectRadio, TextWidget, BooleanRadio
 from ikaaro.registry import register_resource_class
 
 # Import from project
 from categories_views import VirtualCategory_View
 from categories_views import VirtualCategory_ComparatorView
 from editable import Editable, Editable_Edit
+from enumerates import TagsList
 from utils import get_shop
 
 
 class ProductsFeed_View(VirtualCategory_View):
-
 
     def get_items(self, resource, context):
         site_root = context.resource.get_site_root()
@@ -43,9 +43,17 @@ class ProductsFeed_View(VirtualCategory_View):
         abspath = site_root.get_canonical_path()
         query = [
             PhraseQuery('format', shop.product_class.class_id),
-            PhraseQuery('workflow_state', 'public'),
-            PhraseQuery('has_reduction', True)]
+            PhraseQuery('workflow_state', 'public')]
+        # Tags ?
+        if resource.get_property('tags'):
+            query.append(
+                OrQuery(*[PhraseQuery('tags', x)
+                      for x in resource.get_property('tags')]))
+        # Promotions ?
+        if resource.get_property('only_has_reduction') is True:
+            query.append(PhraseQuery('has_reduction', True))
         return context.root.search(AndQuery(*query))
+
 
 
 class ProductsFeed_ComparatorView(ProductsFeed_View,
@@ -57,26 +65,25 @@ class ProductsFeed_ComparatorView(ProductsFeed_View,
 
 
 
-class ProductsFeed_Modes(Enumerate):
-
-    options = [
-      {'name': 'promotions' , 'value': MSG(u'Show promotions')}]
-
-
-
 class ProductsFeed_Configure(Editable_Edit, AutoForm):
 
     title = MSG(u'Configure')
     access = 'is_admin'
 
-    schema = merge_dicts(
+    widgets = [TextWidget('title', title=MSG(u'Title')),
+               SelectRadio('tags', title=MSG(u'Tags'), is_inline=True),
+               BooleanRadio('only_has_reduction',
+                  title=MSG(u'Show only products with promotions'),
+                  has_empty_option=False)] + Editable_Edit.widgets
+
+    def get_schema(self, resource, context):
+        site_root = resource.get_site_root()
+        return merge_dicts(
                 Editable_Edit.schema,
                 title=Unicode(mandatory=True, multilingual=True),
-                mode=ProductsFeed_Modes(mandatory=True))
+                tags=TagsList(site_root=site_root, multiple=True),
+                only_has_reduction=Boolean)
 
-    widgets = [TextWidget('title', title=MSG(u'Title')),
-               SelectRadio('mode', title=MSG(u'Products feed mode'),
-                  has_empty_option=False)] + Editable_Edit.widgets
 
     def get_value(self, resource, context, name, datatype):
         if name == 'data':
@@ -88,7 +95,7 @@ class ProductsFeed_Configure(Editable_Edit, AutoForm):
 
     def action(self, resource, context, form):
         language = resource.get_content_language(context)
-        for key, datatype in self.schema.items():
+        for key, datatype in self.get_schema(resource, context).items():
             if key in ('data'):
                 continue
             if getattr(datatype, 'multilingual', False):
@@ -118,7 +125,8 @@ class ProductsFeed(Editable, Folder):
     def get_metadata_schema(cls):
         return merge_dicts(Folder.get_metadata_schema(),
                            Editable.get_metadata_schema(),
-                           mode=ProductsFeed_Modes)
+                           tags=Tokens,
+                           only_has_reduction=Boolean)
 
 
     def get_document_types(self):

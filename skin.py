@@ -26,7 +26,12 @@ from shop_utils_views import Cart_Viewbox
 
 class BackofficeSkin(Skin):
 
-    pass
+    base_styles = ['/ui/common/style.css']
+
+    def get_styles(self, context):
+        styles = Skin.get_styles(self, context)
+        styles.extend(self.base_styles)
+        return styles
 
 
 class ShopSkin(Skin):
