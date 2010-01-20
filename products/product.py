@@ -164,6 +164,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         values['stored_price'] = int(self.get_property('pre-tax-price') * 100)
         # Creation time
         values['ctime'] = self.get_property('ctime')
+        # Promotion
+        values['has_reduction'] = self.get_property('has_reduction')
         # Is buyable ?
         values['is_buyable'] = self.is_buyable()
 
@@ -890,6 +892,7 @@ register_field('supplier', Unicode(is_indexed=True, multiple=True))
 register_field('product_model', String(is_indexed=True, is_stored=True))
 register_field('categories', String(is_indexed=True, multiple=True, is_stored=True))
 register_field('has_images', Boolean(is_indexed=True, is_stored=True))
+register_field('has_reduction', Boolean(is_indexed=True))
 register_field('is_buyable', Boolean(is_indexed=True))
 register_field('ctime', DateTime(is_stored=True, is_indexed=True))
 # XXX xapian can't sort decimal

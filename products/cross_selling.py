@@ -137,6 +137,14 @@ class CrossSellingTable(ResourcesOrderedTable):
                             reverse=True, size=products_quantity))
             for brain in brains:
                 yield root.get_resource(brain.abspath)
+        elif mode.startswith('promotions'):
+            # Only promotions
+            query.atoms.append(PhraseQuery('has_reduction', True))
+            results = root.search(query)
+            brains = list(results.get_documents())
+            shuffle(brains)
+            for brain in brains[:products_quantity]:
+                yield root.get_resource(brain.abspath)
         elif mode == 'table':
             # Selection in cross selling table
             handler = cross_selling_resource.handler

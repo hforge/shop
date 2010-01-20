@@ -50,6 +50,9 @@ class CrossSelling_Modes(Enumerate):
        'value': MSG(u'Select last products from current category')},
       {'name': 'last_products_shop',
        'value': MSG(u'Select last products from shop')},
+      {'name': 'promotions_shop', 'value': MSG(u'Promotions from shop')},
+      {'name': 'promotions_category',
+       'value': MSG(u'Promotions from current category')},
       {'name': 'table', 'value': list(link_table)},
       ]
 
