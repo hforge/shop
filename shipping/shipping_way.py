@@ -144,6 +144,7 @@ class ShippingWay(ShopFolder):
 
     img = '../ui/shop/images/shipping.png'
 
+    shipping_history_cls = ShippingWayTable
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
@@ -159,6 +160,9 @@ class ShippingWay(ShopFolder):
         handler = shop.get_resource('countries-zones').handler
         for record in handler.get_records():
             zones.append(handler.get_record_value(record, 'title'))
+        # Create history
+        cls.shipping_history_cls._make_resource(cls.shipping_history_cls,
+                              folder, '%s/history' % name)
         # Import CSV with prices
         ShippingPrices._make_resource(ShippingPrices, folder,
                                       '%s/prices' % name)

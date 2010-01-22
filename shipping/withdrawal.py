@@ -123,14 +123,14 @@ class Withdrawal(ShippingWay):
         """,
         stl_namespaces))
 
+    shipping_history_cls = WithdrawalTable
+
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         kw['title'] = {'en': cls.class_title.gettext()}
         kw['description'] = {'en': cls.class_description.gettext()}
         kw['is_free'] = True
         ShippingWay._make_resource(cls, folder, name, *args, **kw)
-        WithdrawalTable._make_resource(WithdrawalTable, folder,
-            '%s/history' % name)
 
 
     # Admin views

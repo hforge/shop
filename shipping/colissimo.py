@@ -107,14 +107,13 @@ class Colissimo(ShippingWay):
     img = '../ui/shop/images/colissimo.png'
     csv = '../data/colissimo.csv'
 
+    shipping_history_cls = ColissimoTable
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         kw['title'] = {'fr': cls.class_title.gettext()}
         kw['description'] = {'fr': cls.class_description.gettext()}
         ShippingWay._make_resource(cls, folder, name, *args, **kw)
-        ColissimoTable._make_resource(ColissimoTable, folder,
-            '%s/history' % name)
 
     # User inteface
     order_view = Colissimo_RecordView()
