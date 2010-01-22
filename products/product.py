@@ -673,8 +673,10 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
     def save_barcode(self, reference):
         shop = get_shop(self)
-        barcode = generate_barcode(shop.get_property('barcode_format'),
-                                   reference)
+        format = shop.get_property('barcode_format')
+        barcode = generate_barcode(format, reference)
+        if not barcode:
+            return
         self.del_resource('barcode', soft=True)
         metadata =  {'title': {'en': u'Barcode'},
                      'filename': 'barcode.png',
