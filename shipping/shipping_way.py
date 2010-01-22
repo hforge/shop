@@ -186,6 +186,8 @@ class ShippingWay(ShopFolder):
         # Transform country to zone
         countries = shop.get_resource('countries').handler
         country_record = countries.get_record(int(country))
+        if countries.get_record_value(country_record, 'enabled') is False:
+            return None
         zone = countries.get_record_value(country_record, 'zone')
         # XXX to refactor
         # Max value
