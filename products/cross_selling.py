@@ -76,9 +76,6 @@ class CrossSellingTable(ResourcesOrderedTable):
     back = GoToSpecificDocument(specific_document='..',
                                 title=MSG(u'See product'))
 
-    # TODO Add get_links, update_links
-
-
     @classmethod
     def get_metadata_schema(cls):
         schema = ResourcesOrderedTable.get_metadata_schema()
@@ -185,7 +182,13 @@ class CrossSellingTable(ResourcesOrderedTable):
 
     def update_links(self, source, target):
         shop = get_shop(self)
-        base = shop.get_canonical_path()
+        base = self.get_canonical_path()
+        resources_new2old = get_context().database.resources_new2old
+        base = str(base)
+        old_base = resources_new2old.get(base, base)
+        old_base = Path(old_base)
+        new_base = Path(base)
+
         target_name = Path(target).get_name()
         links = []
 
@@ -193,7 +196,7 @@ class CrossSellingTable(ResourcesOrderedTable):
         get_value = handler.get_record_value
         for record in handler.get_records_in_order():
             name = get_value(record, 'name')
-            path = str(resolve_uri2(base, 'products/%s' % name))
+            path = str(resolve_uri2(old_base, 'products/%s' % name))
             if path == source:
                 handler.update_record(record.id, **{'name': target_name})
         get_context().database.change_resource(self)

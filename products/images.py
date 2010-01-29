@@ -94,19 +94,31 @@ class PhotoOrderedTable(ResourcesOrderedTable):
         return links
 
 
-    def update_links(self, old_path, new_path):
-        # Use the canonical path instead of the abspath
+    def update_links(self, source, target):
         base = self.get_canonical_path()
+        resources_new2old = get_context().database.resources_new2old
+        base = str(base)
+        old_base = resources_new2old.get(base, base)
+        old_base = Path(old_base)
+        new_base = Path(base)
+
         handler = self.handler
         get_value = handler.get_record_value
 
         for record in handler.get_records_in_order():
-            name = get_value(record, 'name')
-            path = base.resolve2(name)
-            if str(path) == old_path:
+            path = get_value(record, 'name')
+            if not path:
+                continue
+            ref = get_reference(path)
+            if ref.scheme:
+                continue
+            path = str(old_base.resolve2(ref.path))
+            if path == source:
                 # Hit the old name
-                new_path2 = base.get_pathto(Path(new_path))
-                handler.update_record(record.id, **{'name': str(new_path2)})
+                # Build the new reference with the right path
+                new_ref = deepcopy(ref)
+                new_ref.path = str(new_base.get_pathto(target))
+                handler.update_record(record.id, **{'name': str(new_ref)})
 
         get_context().server.change_resource(self)
 

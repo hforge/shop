@@ -734,17 +734,17 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         return links
 
 
-    def update_links(self, old_path, new_path):
-        Editable.update_links(self, old_path, new_path)
-        DynamicFolder.update_links(self, old_path, new_path)
+    def update_links(self, source, target):
+        Editable.update_links(self, source, target)
+        DynamicFolder.update_links(self, source, target)
 
         real_resource = self.get_real_resource()
         shop = get_shop(real_resource)
         categories = shop.get_resource('categories')
         categories_path = categories.get_abspath()
 
-        old_name = str(categories_path.get_pathto(old_path))
-        new_name = str(categories_path.get_pathto(new_path))
+        old_name = str(categories_path.get_pathto(source))
+        new_name = str(categories_path.get_pathto(target))
 
         old_categories = self.get_property('categories')
         new_categories = []
@@ -759,17 +759,23 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         cover = self.get_property('cover')
         if cover:
             base = self.get_canonical_path()
-            if str(base.resolve2(cover)) == old_path:
+            resources_new2old = get_context().database.resources_new2old
+            base = str(base)
+            old_base = resources_new2old.get(base, base)
+            old_base = Path(old_base)
+            new_base = Path(base)
+            if str(old_base.resolve2(cover)) == source:
                 # Hit the old name
-                new_path2 = base.get_pathto(Path(new_path))
-                self.set_property('cover', str(new_path2))
+                new_path = new_base.get_pathto(Path(target))
+                self.set_property('cover', str(new_path))
+
         # Tags
         site_root = self.get_site_root()
-        source = Path(old_path)
+        source_path = Path(source)
         tags_base = site_root.get_abspath().resolve2('tags')
-        if tags_base.get_prefix(source) == tags_base:
+        if tags_base.get_prefix(source_path) == tags_base:
             tags = list(self.get_property('tags'))
-            source_name = source.get_name()
+            source_name = source_path.get_name()
             target_name = Path(new_path).get_name()
             for tag in tags:
                 if tag == source_name:
@@ -777,12 +783,37 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                     index = tags.index(source_name)
                     tags[index] = target_name
                     self.set_property('tags', tags)
+
         # Manufacturer
         manufacturer = self.get_property('manufacturer')
-        if manufacturer and manufacturer == old_path:
-            self.set_property('manufacturer', str(new_path))
+        if manufacturer and manufacturer == source:
+            self.set_property('manufacturer', str(target))
 
         get_context().database.change_resource(self)
+
+
+    def update_relative_links(self, source):
+        Editable.update_relative_links(self, source)
+        DynamicFolder.update_relative_links(self, source)
+
+        target = self.get_canonical_path()
+        resources_old2new = get_context().database.resources_old2new
+
+        # Cover
+        cover = self.get_property('cover')
+        if cover:
+            # Calcul the old absolute path
+            old_abs_path = source.resolve2(cover)
+            # Check if the target path has not been moved
+            new_abs_path = resources_old2new.get(old_abs_path,
+                                                 old_abs_path)
+            # Build the new reference with the right path
+            # Absolute path allow to call get_pathto with the target
+            new_path = str(target.get_pathto(new_abs_path))
+            # Update the title link
+            self.set_property('cover', str(new_path))
+
+        # Manufacturer and categories (not needed, due to abspath)
 
 
     #######################
