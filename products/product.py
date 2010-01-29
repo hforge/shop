@@ -24,7 +24,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate, DateTime
 from itools.datatypes import Integer
 from itools.gettext import MSG
-from itools.uri import Path
+from itools.uri import resolve_uri2, Path
 from itools.web import get_context
 from itools.xml import TEXT
 
@@ -472,10 +472,12 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         manufacturer = self.get_property('manufacturer')
         if manufacturer:
             manufacturer = root.get_resource(manufacturer)
+            link = context.get_link(manufacturer)
+            photo = manufacturer.get_property('photo')
             namespace['manufacturer'] = {
                 'name': manufacturer.name,
-                'link': context.get_link(manufacturer),
-                'photo': manufacturer.get_property('photo'),
+                'link': link,
+                'photo': resolve_uri2(link, photo),
                 'title': manufacturer.get_title()}
         else:
             namespace['manufacturer'] = None
