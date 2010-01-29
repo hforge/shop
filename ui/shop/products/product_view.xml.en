@@ -11,7 +11,7 @@
   </div>
 
   <form id="buy-form" method="post" stl:if="is_buyable">
-    <ul>
+    <ul id="product-purchase-options">
       <li stl:repeat="widget purchase_options">
         ${widget/title}
         ${widget/html}
