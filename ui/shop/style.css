@@ -551,3 +551,12 @@ input[type="image"]{
   padding: 0;
   margin: 10px;
 }
+
+
+/*****************
+ *    TAG VIEW   *
+ *****************/
+#tag-view .item.product {
+  border: none;
+}
+

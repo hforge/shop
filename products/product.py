@@ -93,7 +93,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     # Views
     #######################
     view = Product_View()
-    tag_view = None
+    tag_view = viewbox
     edit = Product_Edit()
     add_link_file = Product_AddLinkFile()
     change_product_model = Product_ChangeProductModel()
