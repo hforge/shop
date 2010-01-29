@@ -8,34 +8,38 @@
 
   ${progress}
 
-  <h2>I'm a new customer</h2>
+  <div id="register-new-customer">
+    <h2>I'm a new customer</h2>
 
-  <a href="${register_link}">Register</a>
+    <a href="${register_link}">Register</a>
+  </div>
 
-  <h2>I'm already a customer</h2>
+  <div id="register-customer">
+    <h2>I'm already a customer</h2>
 
-  <form id="loginform" name="loginform" method="post" action="./;login">
-    <dl>
-      <dt>
-        <label for="username" class="${username/class}">E-mail Address</label>
-      </dt>
-      <dd>
-        <input type="text" id="username" name="username" value="${username/value}"/>
-      </dd>
-      <dt>
-        <label for="password" class="${password/class}">Password</label>
-      </dt>
-      <dd>
-        <input type="password" id="password" name="password"/>
-        <a href="/;forgotten_password">I forgot my password</a>
-      </dd>
-    </dl>
-    <input type="submit" value="Log in" class="button-ok"/>
+    <form id="loginform" name="loginform" method="post" action="./;login">
+      <dl>
+        <dt>
+          <label for="username" class="${username/class}">E-mail Address</label>
+        </dt>
+        <dd>
+          <input type="text" id="username" name="username" value="${username/value}"/>
+        </dd>
+        <dt>
+          <label for="password" class="${password/class}">Password</label>
+        </dt>
+        <dd>
+          <input type="password" id="password" name="password"/>
+          <a href="/;forgotten_password">I forgot my password</a>
+        </dd>
+      </dl>
+      <input type="submit" value="Log in" class="button-ok"/>
 
-    <script language="javascript">
-      <stl:inline stl:if="not username/value">$("#username").focus();</stl:inline>
-      <stl:inline stl:if="username/value">$("#password").focus();</stl:inline>
-    </script>
-  </form>
+      <script language="javascript">
+        <stl:inline stl:if="not username/value">$("#username").focus();</stl:inline>
+        <stl:inline stl:if="username/value">$("#password").focus();</stl:inline>
+      </script>
+    </form>
+  </div>
 
 </stl:block>
