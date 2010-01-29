@@ -577,7 +577,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         body = mail_stock_body_template.gettext(**kw)
         for to_addr in shop.get_property('order_notification_mails'):
             root.send_email(to_addr=to_addr,
-                            subject=mail_stock_subject_template,
+                            subject=mail_stock_subject_template.gettext(),
                             text=body)
 
 
