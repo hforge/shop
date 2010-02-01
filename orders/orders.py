@@ -81,6 +81,19 @@ You can found details here:\n
 new_message_subject = MSG(u'New message concerning order number {n}')
 new_message_footer = MSG(u'\n\nSee details here : \n\n {uri}')
 
+
+#############################################
+# Message notification shipped
+#############################################
+
+order_shipped_subject = MSG(u'Your order has been shipped.')
+order_shipped_text = MSG(u"""
+Hi {firstname} {lastname},
+Your order number {order_reference} has been shipped.
+You can found details here:\n
+  {order_uri}\n
+""")
+
 ###################################################################
 ###################################################################
 
@@ -343,10 +356,8 @@ class Order(WorkflowAware, ShopFolder):
         # E-Mail confirmation / notification -> Order creation
         context = get_context()
         shop = get_shop(self)
-        customer_id = self.get_property('customer_id')
         root = context.root
-        user = root.get_user(customer_id)
-        customer_email = user.get_property('email')
+        customer_email = self.get_customer_email(context)
         # Build email informations
         kw = {'order_name': self.name}
         # Send confirmation to client
@@ -374,27 +385,29 @@ class Order(WorkflowAware, ShopFolder):
             order = self.generate_pdf_order(context)
         except Exception:
             # PDF generation is dangerous
-            pass
+            return
         # We send email confirmation to administrator
-        if order is not None:
-            order.handler.name = 'Order.pdf'
-            subject = MSG(u'New order validated').gettext()
-            text = MSG(u'New order has been validated').gettext()
-            for to_addr in shop.get_property('order_notification_mails'):
-                context.root.send_email(to_addr, subject,
-                                        text=text, attachment=order.handler)
+        order.handler.name = 'Order.pdf'
+        subject = MSG(u'New order validated').gettext()
+        text = MSG(u'New order has been validated').gettext()
+        for to_addr in shop.get_property('order_notification_mails'):
+            context.root.send_email(to_addr, subject,
+                                    text=text, attachment=order.handler)
 
 
-    def oneneter_preparation(self):
+    def onenter_preparation(self):
         # TODO:
         # We have to send email to inform customer ?
         pass
 
 
     def onenter_delivery(self):
-        # TODO:
-        # We have to send email to inform customer ?
+        # Set order as sent
         self.set_property('is_sent', True)
+        # Send email to inform customer
+        self.order_send_email(order_shipped_subject,
+                              order_shipped_text)
+
 
 
     def onenter_cancel(self):
@@ -427,6 +440,27 @@ class Order(WorkflowAware, ShopFolder):
     ###################################################
     def get_reference(self):
         return '%.6d' % int(self.name)
+
+
+    def get_customer_email(self, context):
+        root = context.root
+        customer_id = self.get_property('customer_id')
+        user = root.get_user(customer_id)
+        return user.get_property('email')
+
+
+    def order_send_email(self, subject, body):
+        context = get_context()
+        root = context.root
+        customer_id = self.get_property('customer_id')
+        user = root.get_user(customer_id)
+        kw = {'firstname': user.get_property('firstname'),
+              'lastname': user.get_property('lastname'),
+              'order_reference': self.get_reference(),
+              'order_uri': self.get_frontoffice_uri()}
+        customer_email = user.get_property('email')
+        context.root.send_email(customer_email,
+            subject.gettext(), text=body.gettext(**kw))
 
 
     def get_frontoffice_uri(self):
