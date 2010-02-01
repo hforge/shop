@@ -353,10 +353,22 @@ class Order(WorkflowAware, ShopFolder):
     # Workflow
     ##################################################
     def onenter_open(self):
-        # E-Mail confirmation / notification -> Order creation
         context = get_context()
         shop = get_shop(self)
         root = context.root
+        # Remove product from stock
+        order_products = self.get_resource('products')
+        shop_products = shop.get_resource('products')
+        get_value = order_products.handler.get_record_value
+        for record in order_products.handler.get_records():
+            name = get_value(record, 'name')
+            product_resource = shop_products.get_resource(name, soft=True)
+            if product_resource is None:
+                continue
+            quantity = get_value(record, 'quantity')
+            id_declination = get_value(record, 'declination')
+            product_resource.remove_from_stock(quantity, id_declination)
+        # E-Mail confirmation / notification -> Order creation
         customer_email = self.get_customer_email(context)
         # Build email informations
         kw = {'order_name': self.name}

@@ -604,8 +604,6 @@ class Shop_ShowRecapitulatif(STLForm):
             unit_price = product.get_price_with_tax(declination)
             total_price += unit_price * quantity
             total_weight += product.get_weight(declination) * quantity
-            # Stock
-            product.remove_from_stock(quantity)
         # XXX GEt Shipping price (Hardcoded, fix it)
         addresses = resource.get_resource('addresses').handler
         delivery_address = cart.addresses['delivery_address']
