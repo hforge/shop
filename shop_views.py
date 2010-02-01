@@ -47,7 +47,6 @@ from enumerates import BarcodesFormat, SortBy_Enumerate
 from utils import get_shop, format_price
 from cart import ProductCart
 from countries import CountriesEnumerate, CountriesZonesEnumerate
-from orders import Order
 from payments import PaymentWaysEnumerate
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
 
@@ -292,8 +291,11 @@ class Shop_Register(RegisterForm):
 
         # Redirect
         msg = MSG(u'Inscription ok')
-        if resource==get_shop(resource):
+        shop = get_shop(resource)
+        if resource == shop:
             goto = './;addresses'
+        elif resource.class_id == shop.product_class.class_id:
+            goto = './'
         else:
             goto = '/users/%s' % user.name
         return context.come_back(msg, goto)
@@ -585,6 +587,7 @@ class Shop_ShowRecapitulatif(STLForm):
 
 
     def action(self, resource, context, form):
+        from orders import Order
         cart = ProductCart(context)
         root = context.root
         # Check if cart is valid

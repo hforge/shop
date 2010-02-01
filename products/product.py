@@ -54,6 +54,7 @@ from shop.editable import Editable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
 from shop.manufacturers import ManufacturersEnumerate
+from shop.shop_views import Shop_Login, Shop_Register
 from shop.stock.stock_views import Stock_FillStockOut, Stock_Resupply
 from shop.utils import get_shop, format_price, ShopFolder, generate_barcode
 
@@ -93,6 +94,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     # Views
     #######################
     view = Product_View()
+    login = Shop_Login()
+    register = Shop_Register()
     tag_view = viewbox
     edit = Product_Edit()
     add_link_file = Product_AddLinkFile()
