@@ -26,6 +26,7 @@ from itools.gettext import MSG
 from itools.i18n import format_date
 from itools.pdf import stl_pmltopdf
 from itools.uri import get_reference
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.file import PDF, Image
@@ -156,6 +157,14 @@ class Order(WorkflowAware, ShopFolder):
 
 
     @staticmethod
+    def make_resource(cls, container, name, *args, **kw):
+        order = ShopFolder.make_resource(cls, container, name, *args, **kw)
+        # XXX Workflow (Should be done in ikaaro)
+        order.onenter_open()
+        return order
+
+
+    @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         shop = kw['shop']
         user = kw['user']
@@ -217,8 +226,6 @@ class Order(WorkflowAware, ShopFolder):
         Messages_TableResource._make_resource(Messages_TableResource, folder,
                                 '%s/messages' % name,
                                 **{'title': {'en': u'Messages'}})
-        # Send mail of confirmation / notification
-        cls.send_email_confirmation(shop, shop_uri, user, name)
         # Generate barcode
         from shop.utils import generate_barcode
         order = shop.get_resource('orders/%s' % name)
@@ -236,32 +243,6 @@ class Order(WorkflowAware, ShopFolder):
         return values
 
 
-
-    #########################################################
-    # E-Mail confirmation / notification -> Order creation
-    #########################################################
-    @classmethod
-    def send_email_confirmation(cls, shop, shop_uri, user, order_name):
-        """ """
-        from itools.web import get_context
-        context = get_context()
-        root = context.root
-        customer_email = user.get_property('email')
-        # Build email informations
-        kw = {'order_name': order_name}
-        # Send confirmation to client
-        order_uri = '/users/%s/;order_view?id=%s' % (user.name, order_name)
-        kw['order_uri'] = shop_uri.resolve(order_uri)
-        subject = mail_confirmation_title.gettext()
-        body = mail_confirmation_body.gettext(**kw)
-        root.send_email(customer_email, subject, text=body)
-        # Send confirmation to the shop
-        subject = mail_notification_title.gettext()
-        shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
-        kw['order_uri'] = '%s/shop/orders/%s/' % (shop_backoffice_uri, order_name)
-        body = mail_notification_body.gettext(**kw)
-        for to_addr in shop.get_property('order_notification_mails'):
-            root.send_email(to_addr, subject, text=body)
 
     ##################################################
     # Get namespace
@@ -355,24 +336,37 @@ class Order(WorkflowAware, ShopFolder):
         return namespace
 
 
-
-
     ##################################################
-    # Update order states
+    # Workflow
     ##################################################
+    def onenter_open(self):
+        # E-Mail confirmation / notification -> Order creation
+        context = get_context()
+        shop = get_shop(self)
+        customer_id = self.get_property('customer_id')
+        root = context.root
+        user = root.get_user(customer_id)
+        customer_email = user.get_property('email')
+        # Build email informations
+        kw = {'order_name': self.name}
+        # Send confirmation to client
+        kw['order_uri'] = self.get_frontoffice_uri()
+        subject = mail_confirmation_title.gettext()
+        body = mail_confirmation_body.gettext(**kw)
+        root.send_email(customer_email, subject, text=body)
+        # Send confirmation to the shop
+        subject = mail_notification_title.gettext()
+        kw['order_uri'] = self.get_backoffice_uri()
+        body = mail_notification_body.gettext(**kw)
+        for to_addr in shop.get_property('order_notification_mails'):
+            root.send_email(to_addr, subject, text=body)
 
-    def set_as_not_payed(self, context):
-        self.set_property('is_payed', False)
 
-
-    def set_as_payed(self, context):
+    def onenter_payment_ok(self):
+        context = get_context()
         shop = get_shop(self)
         # We set payment as payed
         self.set_property('is_payed', True)
-        try:
-            self.make_transition('open_to_payment_ok')
-        except WorkflowError:
-            self.set_workflow_state('payment_ok')
         # We generate PDF
         order = None
         try:
@@ -381,21 +375,58 @@ class Order(WorkflowAware, ShopFolder):
         except Exception:
             # PDF generation is dangerous
             pass
-        # We send email confirmation
-        order.handler.name = 'Order.pdf'
-        subject = MSG(u'New order validated').gettext()
-        text = MSG(u'New order has been validated').gettext()
-        for to_addr in shop.get_property('order_notification_mails'):
-            context.root.send_email(to_addr, subject,
-                                    text=text, attachment=order.handler)
+        # We send email confirmation to administrator
+        if order is not None:
+            order.handler.name = 'Order.pdf'
+            subject = MSG(u'New order validated').gettext()
+            text = MSG(u'New order has been validated').gettext()
+            for to_addr in shop.get_property('order_notification_mails'):
+                context.root.send_email(to_addr, subject,
+                                        text=text, attachment=order.handler)
+
+
+    def oneneter_preparation(self):
+        # TODO:
+        # We have to send email to inform customer ?
+        pass
+
+
+    def onenter_delivery(self):
+        # TODO:
+        # We have to send email to inform customer ?
+        self.set_property('is_sent', True)
+
+
+    def onenter_cancel(self):
+        # TODO:
+        # We have to send email to inform customer ?
+        # We have to update products stock values
+        pass
+
+
+    ##################################################
+    # Update order states
+    # XXX We have to delete it ?
+    ##################################################
+    def set_as_payed(self, context):
+        try:
+            self.make_transition('open_to_payment_ok')
+        except WorkflowError:
+            self.set_workflow_state('payment_ok')
 
 
     def set_as_sent(self, context):
-        self.set_property('is_sent', True)
         try:
             self.make_transition('preparation_to_delivery')
         except WorkflowError:
             self.set_workflow_state('delivery')
+
+
+    ###################################################
+    # API
+    ###################################################
+    def get_reference(self):
+        return '%.6d' % int(self.name)
 
 
     def get_frontoffice_uri(self):
@@ -416,7 +447,6 @@ class Order(WorkflowAware, ShopFolder):
     def notify_new_message(self, message, context):
         shop = get_shop(self)
         root = context.root
-        shop_uri = shop.get_property('shop_uri')
         customer_id = self.get_property('customer_id')
         customer = context.root.get_resource('/users/%s' % customer_id)
         contact = customer.get_property('email')
@@ -429,6 +459,10 @@ class Order(WorkflowAware, ShopFolder):
         for to_addr in shop.get_property('order_notification_mails'):
             root.send_email(to_addr, subject, text=text, subject_with_host=False)
 
+
+    ########################################################
+    # PDF Generation
+    ########################################################
 
     def generate_pdf_order(self, context):
         shop = get_shop(self)
@@ -447,7 +481,6 @@ class Order(WorkflowAware, ShopFolder):
         metadata =  {'title': {'en': u'Bill'},
                      'filename': 'order.pdf'}
         return PDF.make_resource(PDF, self, 'order', body=body, **metadata)
-
 
 
     def generate_pdf_bill(self, context):
@@ -469,9 +502,9 @@ class Order(WorkflowAware, ShopFolder):
         return PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
 
 
-    def get_reference(self):
-        return '%.6d' % int(self.name)
-
+    ###################################################
+    ## Update methods
+    ###################################################
 
     def update_20091123(self):
         from shop.utils import generate_barcode
@@ -508,6 +541,10 @@ class Orders(ShopFolder):
     def get_document_types(self):
         return [Order]
 
+
+    ###################################################
+    ## Update methods
+    ###################################################
 
     def update_20091125(self):
         from itools.xapian import PhraseQuery
