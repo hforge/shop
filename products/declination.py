@@ -155,6 +155,12 @@ class Declination(DynamicFolder):
         self.set_property('stock-quantity', new_quantity)
 
 
+    def add_on_stock(self, quantity):
+        old_quantity = self.get_property('stock-quantity')
+        new_quantity = old_quantity + quantity
+        self.set_property('stock-quantity', new_quantity)
+
+
     def get_quantity_in_stock(self):
         return self.get_property('stock-quantity')
 

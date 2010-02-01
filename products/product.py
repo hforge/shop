@@ -603,6 +603,17 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                 self.send_alert_stock()
             self.set_property('stock-quantity', new_quantity)
 
+
+    def add_on_stock(self, quantity, id_declination=None):
+        if id_declination:
+            declination = self.get_resource(id_declination)
+            declination.add_on_stock(quantity)
+        else:
+            stock_option = self.get_stock_option()
+            old_quantity = self.get_property('stock-quantity')
+            new_quantity = old_quantity + quantity
+            self.set_property('stock-quantity', new_quantity)
+
     #####################
     ## API
     #####################

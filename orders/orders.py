@@ -411,10 +411,20 @@ class Order(WorkflowAware, ShopFolder):
 
 
     def onenter_cancel(self):
-        # TODO:
-        # We have to send email to inform customer ?
-        # We have to update products stock values
-        pass
+        # XXX We have to send email to inform customer ?
+        # Update products stock values
+        shop = get_shop(self)
+        order_products = self.get_resource('products')
+        shop_products = shop.get_resource('products')
+        get_value = order_products.handler.get_record_value
+        for record in order_products.handler.get_records():
+            name = get_value(record, 'name')
+            product_resource = shop_products.get_resource(name, soft=True)
+            if product_resource is None:
+                continue
+            quantity = get_value(record, 'quantity')
+            id_declination = get_value(record, 'declination')
+            product_resource.add_on_stock(quantity, id_declination)
 
 
     ##################################################
