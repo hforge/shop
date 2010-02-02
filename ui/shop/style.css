@@ -531,6 +531,7 @@ input[type="image"]{
 
 .counter{
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   width: 35px;
   padding: 0 5px;
   color: #FFF;

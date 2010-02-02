@@ -1,3 +1,7 @@
+html{
+  background-color: #f0e6d6;
+}
+
 body{
   width: 990px;
   margin: 20px auto;
@@ -12,6 +16,8 @@ body{
   background-color: #FFF;
   -moz-border-radius: 0px 0px 20px 20px;
   -moz-box-shadow: 3px 3px 5px black;
+  -webkit-border-radius: 0px 0px 20px 20px;
+  -webkit-box-shadow: 3px 3px 5px black;
 }
 
 a{
@@ -26,6 +32,7 @@ a{
 #loginform{
   background-color: #1B597A;
   -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
   width: 400px;
   margin: auto;
   color: #FFF;
@@ -240,6 +247,7 @@ fieldset legend{
 
 .button-green{
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   float: left;
   display: block;
   line-height: 20px;
@@ -255,6 +263,7 @@ fieldset legend{
 
 .button-red{
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   float: left;
   display: block;
   line-height: 20px;
@@ -336,6 +345,7 @@ padding:3px 0 3px 10px;
 /* Divers */
 .counter{
   -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
   width: 35px;
   padding: 0 5px;
   color: #FFF;
