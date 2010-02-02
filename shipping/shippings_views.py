@@ -19,6 +19,7 @@ from operator import itemgetter
 
 # Import from itools
 from itools.gettext import MSG
+from itools.web import STLView
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -124,3 +125,64 @@ class Shippings_History(BrowseForm):
             href = '../orders/%s' % item['ref']
             return item[column], href
         return item[column]
+
+
+
+class Shippings_Details(STLView):
+
+    title = MSG(u'Shippings details')
+    access = 'is_admin'
+    template = '/ui/shop/shipping/shippings_details.xml'
+
+    def get_namespace(self, resource, context):
+        resource_zones = resource.get_resource('../countries-zones')
+        handler_countries = resource.get_resource('../countries').handler
+        namespace = {
+            'zones': [],
+            'msg_if_no_shipping': resource.get_property('msg_if_no_shipping')}
+        for zone in resource_zones.handler.get_records():
+            countries = []
+            for country in handler_countries.search(zone=str(zone.id)):
+                title = handler_countries.get_record_value(country, 'title')
+                if handler_countries.get_record_value(country, 'enabled') is False:
+                    continue
+                countries.append(title)
+            if len(countries) == 0:
+                continue
+            zone_title = resource_zones.handler.get_record_value(zone, 'title')
+            tarifications = []
+            for tarification in resource.get_resources():
+                if tarification.get_property('enabled') is False:
+                    continue
+                mode = tarification.get_property('mode')
+                unit = MSG(u'Kg') if mode == 'weight' else MSG(u'Unit')
+                prices = []
+                min = old_price = 0
+                prices_handler = tarification.get_resource('prices').handler
+                records = prices_handler.search(zone=str(zone.id))
+                records.sort(key=lambda x: prices_handler.get_record_value(x, 'max-%s' % mode))
+                for price in records:
+                    max = prices_handler.get_record_value(price, 'max-%s' % mode)
+                    price = prices_handler.get_record_value(price, 'price')
+                    prices.append(
+                      {'title': '%s to %s %s' % (min, max, unit.gettext()),
+                       'price': price,
+                       'error': price<=old_price})
+                    min = max
+                    old_price = price
+                if len(prices) == 0:
+                    continue
+                tarifications.append(
+                    {'name': tarification.name,
+                     'title': tarification.get_title(),
+                     'img': tarification.get_property('logo'),
+                     'is_free': tarification.get_property('is_free'),
+                     'prices': prices,
+                     'description': tarification.get_property('description')})
+            namespace['zones'].append({'title': zone_title,
+                                       'countries': countries,
+                                       'tarifications': tarifications})
+        return namespace
+
+
+

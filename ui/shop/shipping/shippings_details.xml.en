@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <div id="shippings-tarification">
+
+  <h1>Shippings price</h1>
+
+  Here you can see the price of shippings in our shop<br/>
+
+  <p stl:repeat="zone zones">
+    <h2 id="country">${zone/title}</h2>
+
+    <b>Countries:</b>
+    <stl:block stl:repeat="country zone/countries">
+      ${country},
+    </stl:block>
+
+    <br/>
+    <div class="shipping-way" stl:repeat="tarification zone/tarifications">
+      <table cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="padding:5px">
+            <img src="${tarification/name}/${tarification/img}/;download"/>
+          </td>
+          <td>
+            <b>${tarification/title}</b><br/>
+            ${tarification/description}
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      <div class="tarification" stl:if="tarification/is_free">
+        Free
+      </div>
+      <div class="tarification" stl:if="not tarification/is_free">
+        <div class="prices" stl:repeat="price tarification/prices">
+          <table cellpadding="0" cellspacing="0" id="browse-list">
+            <thead>
+              <tr>
+                <th>
+                  ${price/title}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <span style="color:red" stl:omit-tag="not price/error">
+                    ${price/price}&nbsp;€
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="clear"/>
+      </div>
+    </div>
+  </p>
+
+    <!-- -->
+    <h1>Message if no delivery mode is available</h1>
+    <div class="shipping-way">
+      <div class="tarification">
+        ${msg_if_no_shipping}
+      </div>
+    </div>
+
+  </div>
+
+
+</stl:block>

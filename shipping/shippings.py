@@ -26,7 +26,7 @@ from ikaaro.registry import register_resource_class
 from colissimo import Colissimo
 from withdrawal import Withdrawal
 from shippings_views import ShippingsView, Shippings_History
-from shippings_views import Shippings_Configure
+from shippings_views import Shippings_Configure, Shippings_Details
 from shipping_way import ShippingWay
 from shop.utils import ShopFolder
 
@@ -37,13 +37,14 @@ class Shippings(ShopFolder):
     class_id = 'shippings'
     class_title = MSG(u'Shipping')
     class_version = '20091022'
-    class_views = ['view', 'configure', 'history']
+    class_views = ['details', 'view', 'configure', 'history']
 
 
     # Views
     view = ShippingsView()
     configure = Shippings_Configure()
     history = Shippings_History()
+    details = Shippings_Details()
 
     @classmethod
     def get_metadata_schema(cls):

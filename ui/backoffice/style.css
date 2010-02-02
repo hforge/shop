@@ -382,3 +382,46 @@ padding:3px 0 3px 10px;
 #order-manage-page-backoffice{
   font-size: 15px;
 }
+
+/*****************
+ * Tarifs shippings
+ *****************/
+#shippings-tarification h1{
+  border: 1px solid black;
+  color: #FFF;
+  text-align: center;
+  background-color: #0F63A4;
+  padding: 5px;
+}
+
+#shippings-tarification h2{
+  border-bottom: 1px solid black;
+}
+
+#shippings-tarification .prices{
+  float: left;
+  margin-top: 5px;
+}
+
+
+#shippings-tarification .prices #browse-list thead th{
+  background: #EDEDED;
+  width: 100px;
+  white-space: nowrap;
+}
+
+#shippings-tarification .prices #browse-list tbody td{
+  background: #FFF;
+}
+
+#shippings-tarification .shipping-way{
+  padding: 10px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  margin: 20px 0 20px 50px;
+  background-color: #FFF8EE;
+}
+
+#shippings-tarification .shipping-way .tarification{
+  margin: 20px 0 20px 50px;
+}
