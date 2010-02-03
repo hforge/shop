@@ -31,9 +31,10 @@ from ikaaro.forms import BooleanCheckBox, TextWidget, MultilineWidget
 from ikaaro.views import BrowseForm, SearchForm
 
 # Import from shop
-from shop.utils import get_shop
 from enumerates import PaymentWaysEnumerate
 from payment_way import PaymentWay
+from shop.utils import bool_to_img, get_shop
+
 
 
 class Payments_EditablePayment(object):
@@ -206,7 +207,9 @@ class Payments_View(BrowseForm):
 
 
     table_columns = [
+        ('logo', MSG(u'Logo')),
         ('title', MSG(u'Title')),
+        ('description', MSG(u'Description')),
         ('enabled', MSG(u'Enabled ?')),
         ]
 
@@ -214,8 +217,12 @@ class Payments_View(BrowseForm):
         items = []
         for payment_way in resource.search_resources(cls=PaymentWay):
             name = payment_way.name
-            kw = {'title': (payment_way.get_title(), name),
-                  'enabled': payment_way.get_property('enabled')}
+            logo = '<img src="./%s/%s/;download"/>' % (name,
+                        payment_way.get_property('logo'))
+            kw = {'enabled': bool_to_img(payment_way.get_property('enabled')),
+                  'logo': XMLParser(logo),
+                  'title': (payment_way.get_title(), name),
+                  'description': payment_way.get_property('description')}
             items.append(kw)
         return items
 

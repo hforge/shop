@@ -38,7 +38,7 @@ class Payments(ShopFolder):
 
     class_id = 'payments'
     class_title = MSG(u'Payment Module')
-    class_views = ['history', 'view']
+    class_views = ['view', 'history']
 
     # Configure # TODO
     pay_view = None
