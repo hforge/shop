@@ -20,7 +20,7 @@ from itools.datatypes import Boolean, PathDataType, String, Integer, Unicode
 from itools.gettext import MSG
 from itools.stl import stl, set_prefix
 from itools.web import STLView, get_context
-from itools.xapian import PhraseQuery, AndQuery
+from itools.xapian import PhraseQuery, AndQuery, RangeQuery
 
 # Import from ikaaro
 from ikaaro import messages
@@ -41,6 +41,7 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
     access = True
     title = MSG(u'View')
 
+    search_schema = {}
     search_template = None
     template = '/ui/shop/virtualcategory_view.xml'
 
@@ -123,12 +124,27 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
             PhraseQuery('format', shop.product_class.class_id),
             PhraseQuery('workflow_state', 'public'),
             PhraseQuery('categories', resource.get_unique_id())]
+        # Add query of filter
+        for key, datatype in self.get_query_schema().items():
+            if key == 'min_price':
+                query.append(RangeQuery('stored_price',
+                                context.query['min_price'],
+                                context.query['max_price']))
+            elif key == 'max_price':
+                pass
+            # TODO Add other filters
         return context.root.search(AndQuery(*query))
+
+
+    def get_search_schema(self):
+        return {'min_price': Integer,
+                'max_price': Integer}
 
 
     def get_query_schema(self):
         shop = get_shop(get_context().resource)
         return merge_dicts(BrowseFormBatchNumeric.get_query_schema(self),
+                self.get_search_schema(),
                 batch_size=Integer(default=shop.categories_batch_size),
                 sort_by=String(default=shop.get_property('shop_sort_by')),
                 reverse=Boolean(default=shop.get_property('shop_sort_reverse')))
