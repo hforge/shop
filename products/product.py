@@ -166,7 +166,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         ordered_names = list(order.get_ordered_names())
         values['has_images'] = (len(ordered_names) != 0)
         # Price # XXX We can't sort decimal, so transform to int
-        values['stored_price'] = int(self.get_property('pre-tax-price') * 100)
+        values['stored_price'] = int(self.get_price_with_tax() * 100)
         # Creation time
         values['ctime'] = self.get_property('ctime')
         # Promotion
