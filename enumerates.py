@@ -17,6 +17,10 @@
 # Import from itools
 from itools.datatypes import Enumerate
 from itools.gettext import MSG
+from itools.web import get_context
+
+# Import from shop
+from utils import get_shop
 
 
 class BarcodesFormat(Enumerate):
@@ -101,3 +105,19 @@ class TagsList(Enumerate):
                    for tag in tags_folder.search_resources(format='tag') ]
         options.sort()
         return options
+
+
+class CountriesZonesEnumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        # Search shop
+        shop = get_shop(context.resource)
+        # Get options
+        resource = shop.get_resource('countries-zones').handler
+        return [{'name': str(record.id),
+                 'value': resource.get_record_value(record, 'title')}
+                    for record in resource.get_records()]
+
+

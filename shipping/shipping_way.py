@@ -38,7 +38,7 @@ from ikaaro.table import Table
 
 # Import from shop
 from shop.cart import ProductCart
-from shop.countries import CountriesZonesEnumerate
+from shop.enumerates import CountriesZonesEnumerate
 from shop.utils import get_shop, ShopFolder
 
 # Import from shipping

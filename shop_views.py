@@ -43,10 +43,10 @@ from addresses import Addresses_Enumerate
 from addresses_views import Addresses_Book, Addresses_AddAddress
 from addresses_views import Addresses_EditAddress
 from datatypes import Civilite, ImagePathDataType
-from enumerates import BarcodesFormat, SortBy_Enumerate
+from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from utils import get_shop, format_price
 from cart import ProductCart
-from countries import CountriesEnumerate, CountriesZonesEnumerate
+from countries import CountriesEnumerate
 from payments import PaymentWaysEnumerate
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
 

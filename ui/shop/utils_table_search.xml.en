@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <form method="GET">
+    <fieldset>
+      <legend>${title}</legend>
+      <dl>
+        <stl:block stl:repeat="widget widgets">
+          <dt>${widget/title}</dt>
+          <dd>${widget/widget}</dd>
+        </stl:block>
+        <p>
+          <input value="Search" class="button-ok" name="search" type="submit"></input>
+        </p>
+      </dl>
+    </fieldset>
+  </form>
+
+</stl:block>

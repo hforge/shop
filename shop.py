@@ -27,9 +27,9 @@ from ikaaro.webpage import WebPage
 from enumerate_table import EnumeratesFolder
 from addresses import Addresses
 from categories import Categories, VirtualCategory
-from countries import Countries, CountriesZones, CountriesZonesEnumerate
+from countries import Countries, CountriesZones
 from datatypes import ImagePathDataType
-from enumerates import BarcodesFormat, SortBy_Enumerate
+from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from manufacturers import Manufacturers, Manufacturer
 from orders import Orders
 from products import Products, Product, ProductModels

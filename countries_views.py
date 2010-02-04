@@ -25,10 +25,12 @@ from ikaaro.forms import SelectWidget
 from ikaaro.table_views import Table_View
 
 # Import from shop
+from enumerates import CountriesZonesEnumerate
 from utils import bool_to_img
+from utils_views import SearchTable_View
 
 
-class Countries_View(Table_View):
+class Countries_View(SearchTable_View):
 
     columns = [
         ('checkbox', None),
@@ -41,12 +43,16 @@ class Countries_View(Table_View):
     # We have to check -> User addresses ...
     table_actions = []
 
+    search_schema = {'zone': CountriesZonesEnumerate}
+    search_widgets = [SelectWidget('zone', title=MSG(u'Zone'))]
+
+
     def get_table_columns(self, resource, context):
         return self.columns
 
 
     def get_query_schema(self):
-        return merge_dicts(Table_View.get_query_schema(self),
+        return merge_dicts(SearchTable_View.get_query_schema(self),
                            batch_size=Integer(default=500),
                            reverse=Boolean(default=False),
                            sort_by=String(default='title'))
@@ -63,7 +69,6 @@ class Countries_View(Table_View):
             link = context.get_link(resource)
             return title, '%s/;edit_record?id=%s' % (link, id)
         elif column == 'zone':
-            from countries import CountriesZonesEnumerate
             zone = handler.get_record_value(item, 'zone')
             return CountriesZonesEnumerate.get_value(zone)
         elif column == 'enabled':

@@ -32,6 +32,7 @@ from ikaaro.table_views import Table_AddRecord
 
 # Import from shop
 from countries_views import Countries_View, CountriesZones_View
+from enumerates import CountriesZonesEnumerate
 from utils import get_shop
 
 ###########################################################
@@ -43,20 +44,6 @@ from utils import get_shop
 # Shipping module allow to configure the price of delivery
 # for each countries.
 ###########################################################
-
-
-class CountriesZonesEnumerate(Enumerate):
-
-    @classmethod
-    def get_options(cls):
-        context = get_context()
-        # Search shop
-        shop = get_shop(context.resource)
-        # Get options
-        resource = shop.get_resource('countries-zones').handler
-        return [{'name': str(record.id),
-                 'value': resource.get_record_value(record, 'title')}
-                    for record in resource.get_records()]
 
 
 class BaseCountriesZones(BaseTable):
