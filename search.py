@@ -21,7 +21,7 @@ from itools.xapian import OrQuery, PhraseQuery, AndQuery, split_unicode
 from itools.web import STLView, get_context
 
 # Import from ikaaro
-from ikaaro.forms import SelectWidget
+from ikaaro.forms import SelectRadio
 from ikaaro.utils import get_base_path_query
 
 # Import from shop
@@ -58,7 +58,7 @@ class Shop_SearchBox(STLView):
         'category': Shop_CategoriesEnumerate(default='*'),
     }
 
-    categories_widget = SelectWidget
+    categories_widget = SelectRadio
     show_list_categories = True
 
     def get_namespace(self, resource, context):
