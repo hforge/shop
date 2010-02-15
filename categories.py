@@ -64,14 +64,10 @@ class Category(Editable, ShopFolder):
         default_language = languages[0]
         # Titles
         m_title = {}
-        name = self.name
         for language in languages:
-            value = self.get_title(language=language)
-            if value != name:
+            value = self.get_property('title', language=language)
+            if value:
                 m_title[language] = value
-        # Need at least one title
-        if not m_title:
-            m_title = {default_language: self.get_title(language)}
 
         return merge_dicts(ShopFolder._get_catalog_values(self),
                            Editable._get_catalog_values(self),
