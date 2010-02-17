@@ -27,7 +27,8 @@ from itools.web import get_context
 from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
-from ikaaro.registry import register_resource_class
+from ikaaro.registry import register_resource_class, register_field
+from ikaaro.registry import get_register_fields
 from ikaaro.utils import get_base_path_query
 
 # Import from shop
@@ -57,8 +58,24 @@ class Category(Editable, ShopFolder):
 
 
     def _get_catalog_values(self):
+        # Get the languages
+        site_root = self.get_site_root()
+        languages = site_root.get_property('website_languages')
+        default_language = languages[0]
+        # Titles
+        m_title = {}
+        name = self.name
+        for language in languages:
+            value = self.get_title(language=language)
+            if value != name:
+                m_title[language] = value
+        # Need at least one title
+        if not m_title:
+            m_title = {default_language: self.get_title(language)}
+
         return merge_dicts(ShopFolder._get_catalog_values(self),
-                           Editable._get_catalog_values(self))
+                           Editable._get_catalog_values(self),
+                           m_title=m_title)
 
 
     def get_unique_id(self):
@@ -330,3 +347,8 @@ class VirtualCategories(ShopFolder):
 register_resource_class(Category)
 register_resource_class(Categories)
 register_resource_class(VirtualCategories)
+
+# Add m_title field if it does not already exist
+if 'm_title' in get_register_fields() is False:
+    # multilingual title with language negociation
+    register_field('m_title', Unicode(is_stored=True, is_indexed=True))
