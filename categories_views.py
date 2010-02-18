@@ -58,6 +58,7 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
         items = self.sort_and_batch(resource, context, items)
         # Build namespace
         namespace = {'batch': batch,
+                     'title': resource.get_title(),
                      'products': [],
                      'description': None,
                      'sub_categories': []}
