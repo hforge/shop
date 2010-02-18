@@ -47,6 +47,7 @@ from product_views import Product_Delete, Product_ImagesSlider
 from product_views import Product_Print, Product_SendToFriend
 from product_views import Product_Declinations, Products_ChangeCategory
 from product_views import Product_ChangeProductModel, Products_Stock
+from product_views import Products_ExportCSV
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
@@ -926,6 +927,7 @@ class Products(ShopFolder):
 
     # Views
     browse_content = Products_View()
+    export_csv = Products_ExportCSV()
     stock = Products_Stock()
     stock_out = Stock_FillStockOut()
     stock_resupply = Stock_Resupply()
