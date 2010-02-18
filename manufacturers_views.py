@@ -65,7 +65,15 @@ class Manufacturer_Add(NewInstance):
         metadata = child.metadata
         language = resource.get_content_language(context)
         for key in manufacturer_schema:
-            metadata.set_property(key, form[key], language=language)
+            value = form[key]
+            if key == 'photo':
+                # Manufacturer photo are upload inside the manufacturers folder
+                # and not the news created manufacturer
+                manufacturers_path = resource.get_canonical_path()
+                manufacturer_path = child.get_canonical_path()
+                image_abspath = manufacturers_path.resolve2(value)
+                value = manufacturer_path.get_pathto(image_abspath)
+            metadata.set_property(key, value, language=language)
 
         goto = './%s/' % name
         return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
