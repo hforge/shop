@@ -14,14 +14,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from shop
-from payments import Payments
-from enumerates import PaymentWaysEnumerate
-from registry import register_payment_way
+# Import from itools
+from itools.core import merge_dicts
+from itools.datatypes import Decimal
+from itools.gettext import MSG
+# Import from ikaaro
+from ikaaro.forms import TextWidget
 
-# Register payment ways
-import cash
-import check
-import deposit
-import paybox
-import transfer
+# Import from shop
+from shop.payments.payment_way_views import PaymentWay_Configure
+
+
+deposit_schema = {'percent': Decimal}
+deposit_widgets = [TextWidget('percent', title=MSG(u'Percent'))]
+
+
+class Deposit_Configure(PaymentWay_Configure):
+
+    title = MSG(u'Configure deposite module')
+
+    schema = merge_dicts(PaymentWay_Configure.schema,
+                         deposit_schema)
+
+    widgets = PaymentWay_Configure.widgets + deposit_widgets
