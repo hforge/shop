@@ -146,7 +146,7 @@ class PaymentWay(Editable, ShopFolder):
                              'user': context.user.name})
 
 
-    def get_payment_way_description(self, context):
+    def get_payment_way_description(self, context, total_amount):
         """ Overridable: for example to add available points... """
         return self.get_xhtml_data()
 

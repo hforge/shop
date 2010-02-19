@@ -53,10 +53,12 @@ class Deposit(PaymentWay):
         return self.parent.show_payment_form(context, payment)
 
 
-    def get_payment_way_description(self, context):
+    def get_payment_way_description(self, context, total_amount):
         # XXX Add price value
-        msg = MSG(u"Pay {percent}% now.")
-        return msg.gettext(percent=self.get_property('percent'))
+        msg = MSG(u"Pay {percent}% now ({amount}€)")
+        percent = self.get_property('percent')
+        amount = total_amount * (percent / decimal('100.0'))
+        return msg.gettext(percent=percent, amount=amount)
 
 
 

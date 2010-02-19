@@ -23,6 +23,7 @@ from itools.web import get_context
 from payment_way import PaymentWay
 
 # Import from shop
+from shop.cart import ProductCart
 from shop.utils import get_shop
 
 
@@ -45,13 +46,16 @@ class PaymentWaysEnumerate(Enumerate):
         context = get_context()
         shop = get_shop(context.resource)
         payments = shop.get_resource('payments')
+        cart = ProductCart(context)
+        price = cart.get_total_price(shop)
         for mode in payments.search_resources(cls=PaymentWay):
             logo = mode.get_resource(mode.get_property('logo'))
             if logo:
                 logo = context.resource.get_pathto(logo)
-            options.append({'name': mode.name,
-                            'value': mode.get_title(),
-                            'description': mode.get_payment_way_description(context),
-                            'logo': logo,
-                            'enabled': mode.is_enabled(context)})
+            options.append(
+                {'name': mode.name,
+                 'value': mode.get_title(),
+                 'description': mode.get_payment_way_description(context, price),
+                 'logo': logo,
+                 'enabled': mode.is_enabled(context)})
         return options
