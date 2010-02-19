@@ -281,6 +281,35 @@ class ProductCart(object):
         self._set_addresses(self.addresses['delivery_address'], id)
 
 
+    # XXX To improve
+    def get_total_price(self, shop):
+        context = self.context
+        products = shop.get_resource('products')
+        total_price = decimal(0)
+        total_weight = decimal(0)
+        for cart_elt in self.products:
+            product = products.get_resource(cart_elt['name'])
+            quantity = cart_elt['quantity']
+            declination = cart_elt['declination']
+            unit_price = product.get_price_with_tax(declination)
+            total_price += unit_price * quantity
+            total_weight += product.get_weight(declination) * quantity
+        # XXX GEt Shipping price (Hardcoded, fix it)
+        addresses = shop.get_resource('addresses').handler
+        delivery_address = self.addresses['delivery_address']
+        record = addresses.get_record(delivery_address)
+        country = addresses.get_record_value(record, 'country')
+        shippings = shop.get_resource('shippings')
+        shipping_mode = self.shipping['name']
+        shipping_price = shippings.get_namespace_shipping_way(context,
+                  shipping_mode, country, total_weight)['price']
+        total_price += shipping_price
+        # Format total_price
+        total_price = decimal(format_price(total_price))
+        return total_price
+
+
+
     ######################
     # Check validity
     ######################
