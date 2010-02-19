@@ -98,10 +98,9 @@ class Customers(Folder):
 
 class ShopUser(User):
 
-    class_views = ['manage', 'profile', 'addresses_book', 'edit_account',
-                   'edit_private_informations', 'orders_view',
-                   'edit_preferences', 'edit_password']
     class_version = '20091009'
+    base_class_views = ['profile', 'addresses_book', 'edit_account',
+                        'orders_view', 'edit_preferences', 'edit_password']
 
     # Views
     manage = ShopUser_Manage()
@@ -167,6 +166,14 @@ class ShopUser(User):
 
     def get_document_types(self):
         return []
+
+
+    def get_class_views(self):
+        # HACK Virtual
+        if self.parent.name == 'customers':
+            return ['manage', 'edit_private_informations']
+        return self.base_class_views
+    class_views = property(get_class_views, None, None, '')
 
 
     def save_form(self, schema, form):
