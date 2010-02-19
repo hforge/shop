@@ -33,15 +33,16 @@ from ikaaro.table import Table
 from ikaaro.user import User, UserFolder
 
 # Import from shop
-from addresses_views import Addresses_Book
-from datatypes import Civilite
 from user_views import ShopUser_Profile
 from user_views import ShopUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView
 from user_views import Customers_View, AuthentificationLogs_View
 from user_views import ShopUser_EditPrivateInformations, ShopUser_Manage
+from user_group import UserGroup_Enumerate
+from addresses_views import Addresses_Book
 from utils import get_shop
+from datatypes import Civilite
 
 
 class AuthentificationLogsBase(BaseTable):
@@ -121,6 +122,7 @@ class ShopUser(User):
     # Base schema / widgets
     base_schema = merge_dicts(User.get_metadata_schema(),
                               ctime=DateTime,
+                              user_group=UserGroup_Enumerate,
                               last_time=DateTime,
                               gender=Civilite,
                               phone1=String(mandatory=True),
@@ -159,6 +161,7 @@ class ShopUser(User):
         values = User._get_catalog_values(self)
         values['ctime'] = self.get_property('ctime')
         values['last_time'] = self.get_property('last_time')
+        values['user_group'] = self.get_property('user_group')
         return values
 
 
@@ -230,3 +233,4 @@ register_resource_class(Customers)
 register_resource_class(AuthentificationLogs)
 
 register_field('last_time', DateTime(is_stored=True))
+register_field('user_group', String(is_indexed=True))

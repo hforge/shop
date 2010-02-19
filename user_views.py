@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Unicode
+from itools.datatypes import Boolean, Enumerate, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.web import STLView, STLForm, INFO, ERROR
@@ -25,7 +25,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import TextWidget, AutoForm
+from ikaaro.forms import TextWidget, SelectWidget, AutoForm
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
@@ -37,6 +37,7 @@ from datatypes import Civilite
 from shop_utils_views import RealRessource_Form
 from orders.orders_views import OrdersView, numero_template
 from orders.workflow import states, states_color
+from user_group import UserGroup_Enumerate
 from utils import get_shop
 
 
@@ -124,21 +125,20 @@ class ShopUser_EditPrivateInformations(AutoForm):
     access = 'is_admin'
     title = MSG(u'Edit private user informations')
 
-    def GET(self, resource, context):
-        schema = self.get_schema(resource, context)
-        if not schema:
-            return context.come_back(ERROR(u'No informations to edit'))
-        return AutoForm.GET(self, resource, context)
-
-
     def get_schema(self, resource, context):
-        shop = get_shop(resource)
-        return shop.user_class.private_schema
+        user_class = get_shop(resource).user_class
+        return merge_dicts(user_class.base_schema,
+                           user_class.public_schema,
+                           user_class.private_schema,
+                           user_group=UserGroup_Enumerate)
 
 
     def get_widgets(self, resource, context):
-        shop = get_shop(resource)
-        return shop.user_class.private_widgets
+        user_class = get_shop(resource).user_class
+        return (user_class.base_widgets +
+                user_class.public_widgets +
+                user_class.private_widgets +
+                [SelectWidget('user_group', title=MSG(u'User group'))])
 
 
     def get_value(self, resource, context, name, datatype):
@@ -393,6 +393,7 @@ class Customers_View(Folder_BrowseContent):
 
     search_schema = {
         'name': String,
+        'user_group': UserGroup_Enumerate,
         'firstname': Unicode,
         'lastname': Unicode,
         'email': String,
@@ -400,6 +401,7 @@ class Customers_View(Folder_BrowseContent):
 
     search_widgets = [
         TextWidget('name', title=MSG(u'Id')),
+        SelectWidget('user_group', title=MSG(u'User group')),
         TextWidget('firstname', title=MSG(u'Firstname')),
         TextWidget('lastname', title=MSG(u'Lastname')),
         TextWidget('email', title=MSG(u'Email')),
@@ -411,7 +413,10 @@ class Customers_View(Folder_BrowseContent):
         namespace = {'widgets': []}
         for widget in self.search_widgets:
             value = context.query[widget.name]
-            html = widget.to_html(self.search_schema[widget.name], value)
+            datatype = self.search_schema[widget.name]
+            if issubclass(datatype, Enumerate):
+                value = datatype.get_namespace(value)
+            html = widget.to_html(datatype, value)
             namespace['widgets'].append({'title': widget.title,
                                          'html': html})
         return namespace
