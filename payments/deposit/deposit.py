@@ -20,6 +20,7 @@ from decimal import Decimal as decimal
 # Import from itools
 from itools.core import merge_dicts
 from itools.gettext import MSG
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
@@ -54,11 +55,11 @@ class Deposit(PaymentWay):
 
 
     def get_payment_way_description(self, context, total_amount):
-        # XXX Add price value
         msg = MSG(u"Pay {percent}% now ({amount}€)")
         percent = self.get_property('percent')
         amount = total_amount * (percent / decimal('100.0'))
-        return msg.gettext(percent=percent, amount=amount)
+        msg = msg.gettext(percent=percent, amount=amount)
+        return list(XMLParser(msg.encode('utf-8'))) + self.get_xhtml_data()
 
 
 

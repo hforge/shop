@@ -26,7 +26,7 @@ from shop.payments.payment_way_views import PaymentWay_Configure
 
 
 deposit_schema = {'percent': Decimal}
-deposit_widgets = [TextWidget('percent', title=MSG(u'Percent'))]
+deposit_widgets = [TextWidget('percent', title=MSG(u'Deposit amount (in %)'))]
 
 
 class Deposit_Configure(PaymentWay_Configure):
