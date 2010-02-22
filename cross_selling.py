@@ -19,7 +19,6 @@ from random import shuffle
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Integer, Boolean, Unicode
 from itools.gettext import MSG
 from itools.uri import Path, resolve_uri2, get_reference
 from itools.web import get_context
@@ -34,9 +33,10 @@ from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from cross_selling_views import AddProduct_View, CrossSelling_Modes
+from cross_selling_views import AddProduct_View
 from cross_selling_views import CrossSelling_Configure, CrossSelling_TableView
-from shop.utils import get_shop
+from cross_selling_views import cross_selling_schema
+from utils import get_shop
 
 
 
@@ -65,6 +65,7 @@ class CrossSellingTable(ResourcesOrderedTable):
     class_id = 'CrossSellingTable'
     class_title = MSG(u'Cross-Selling Table')
     class_handler = ResourcesOrderedTableFile
+    class_version = '20090223'
     class_views = ['configure', 'back']
 
     form = [ProductSelectorWidget('name', title=MSG(u'Product'))]
@@ -78,92 +79,90 @@ class CrossSellingTable(ResourcesOrderedTable):
 
     @classmethod
     def get_metadata_schema(cls):
-        schema = ResourcesOrderedTable.get_metadata_schema()
-        schema['mode'] = CrossSelling_Modes
-        schema['enabled'] = Boolean
-        schema['use_shop_configuration'] = Boolean(default=True)
-        schema['products_quantity'] = Integer(default=5)
-        schema['filter_text'] = Unicode
-        return schema
+        return merge_dicts(ResourcesOrderedTable.get_metadata_schema(),
+                           cross_selling_schema)
 
 
     def get_products(self, context, product_format, products_folder,
                      categories=None, excluded_products=[]):
         shop = get_shop(self)
-        cross_selling_resource = self
+        table = self
         if self.get_property('use_shop_configuration'):
-            cross_selling_resource = shop.get_resource('cross-selling')
-        if cross_selling_resource.get_property('enabled') is False:
+            table = shop.get_resource('cross-selling')
+        if table.get_property('enabled') is False:
             return
 
         root = context.root
-        mode = cross_selling_resource.get_property('mode')
-        products_quantity = cross_selling_resource.get_property(
-                                                      'products_quantity')
+        products_quantity = table.get_property('products_quantity')
 
         # Base query
-        query = AndQuery(PhraseQuery('format', product_format),
-                         PhraseQuery('workflow_state', 'public'),
-                         PhraseQuery('is_buyable', True))
+        query = [PhraseQuery('format', product_format),
+                 PhraseQuery('workflow_state', 'public'),
+                 PhraseQuery('is_buyable', True)]
         # Excluded products query
         if excluded_products:
             exclude_query = OrQuery(*[ PhraseQuery('abspath', str(abspath))
                                        for abspath in excluded_products ])
-            query = AndQuery(query, NotQuery(exclude_query))
+            query.append(NotQuery(exclude_query))
         # Filter on product title
-        filter_text = cross_selling_resource.get_property('filter_text')
+        filter_text = table.get_property('filter_text')
         if filter_text:
-            query = AndQuery(query, PhraseQuery('title', filter_text))
+            query.append(PhraseQuery('title', filter_text))
         # Categories query
-        if categories and mode.endswith('_category'):
+        mode_categories = table.get_property('categories')
+        if mode_categories == 'current_category':
             query_categorie = OrQuery(*[ PhraseQuery('categories', x)
                                          for x in categories ])
-            query = AndQuery(query, query_categorie)
+            query.append(query_categorie)
+        elif mode_categories == 'one_category':
+            query.append(PhraseQuery('categories',  table.get_property('specific_category')))
+        # Show reductions ?
+        promotion = table.get_property('show_product_with_promotion')
+        if promotion == '0':
+            query.append(PhraseQuery('has_reduction', False))
+        elif promotion == '1':
+            query.append(PhraseQuery('has_reduction', True))
 
-        if mode.startswith('random'):
+        # Tags
+        if table.get_property('tags'):
+            query.append(
+                OrQuery(*[PhraseQuery('tags', x)
+                        for x in table.get_property('tags')]))
+
+        # Selection in cross selling table
+        handler = table.handler
+        get_value = handler.get_record_value
+        ids = list(handler.get_record_ids_in_order())
+        names = []
+        for id in ids[:products_quantity]:
+            record = handler.get_record(id)
+            path = get_value(record, 'name')
+            names.append(path)
+            products_quantity -= 1
+            yield products_folder.get_resource(path)
+
+        if products_quantity == 0:
+            return
+        query.append(
+            NotQuery(
+              OrQuery(*[ PhraseQuery('name', name) for name in names ])))
+
+        # Complete results
+        sort = table.get_property('sort')
+        if sort == 'random':
             # Random selection
-            results = root.search(query)
+            results = root.search(AndQuery(*query))
             brains = list(results.get_documents())
             shuffle(brains)
             for brain in brains[:products_quantity]:
                 yield root.get_resource(brain.abspath)
-        elif mode.startswith('last'):
-            # Last products
-            results = root.search(query)
+        elif sort == 'last':
+            results = root.search(AndQuery(*query))
             brains = list(results.get_documents(sort_by='ctime',
                             reverse=True, size=products_quantity))
             for brain in brains:
                 yield root.get_resource(brain.abspath)
-        elif mode.startswith('promotions'):
-            # Only promotions
-            query.atoms.append(PhraseQuery('has_reduction', True))
-            results = root.search(query)
-            brains = list(results.get_documents())
-            shuffle(brains)
-            for brain in brains[:products_quantity]:
-                yield root.get_resource(brain.abspath)
-        elif mode == 'table':
-            # Selection in cross selling table
-            handler = cross_selling_resource.handler
-            get_value = handler.get_record_value
-            ids = list(handler.get_record_ids_in_order())
-            names = []
-            for id in ids[:products_quantity]:
-                record = handler.get_record(id)
-                path = get_value(record, 'name')
-                names.append(path)
-                yield products_folder.get_resource(path)
 
-            if len(ids) < products_quantity:
-                not_query = NotQuery(OrQuery(*[ PhraseQuery('name', name)
-                                                for name in names ]))
-                # Complete with random selection
-                diff = products_quantity - len(ids)
-                results = root.search(AndQuery(query, not_query))
-                brains = list(results.get_documents())
-                shuffle(brains)
-                for brain in brains[:diff]:
-                    yield root.get_resource(brain.abspath)
 
 
     def get_links(self):
@@ -227,6 +226,20 @@ class CrossSellingTable(ResourcesOrderedTable):
             # Update the record
             handler.update_record(record.id, **{'name': new_name})
 
+
+    def update_20090223(self):
+        mode = self.get_property('mode')
+        if self.get_property('use_shop_configuration') is False:
+            if mode.startswith('last'):
+                self.set_property('sort', 'last')
+            else:
+                self.set_property('sort', 'random')
+            if mode.endwith('_category'):
+                self.set_property('category', 'current_category')
+            elif mode.endwith('_shop'):
+                self.set_property('category', 'all_categories')
+            self.set_property('show_product_with_promotion', '2')
+        self.del_property('mode')
 
 
 register_resource_class(CrossSellingTable)

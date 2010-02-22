@@ -119,5 +119,3 @@ class CountriesZonesEnumerate(Enumerate):
         return [{'name': str(record.id),
                  'value': resource.get_record_value(record, 'title')}
                     for record in resource.get_records()]
-
-

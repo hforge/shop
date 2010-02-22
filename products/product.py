@@ -37,7 +37,6 @@ from ikaaro.utils import reduce_string
 from ikaaro.workflow import WorkflowAware
 
 # Import from shop
-from cross_selling import CrossSellingTable
 from declination import Declination
 from dynamic_folder import DynamicFolder
 from images import PhotoOrderedTable, ImagesFolder
@@ -51,6 +50,7 @@ from product_views import Products_ExportCSV
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
+from shop.cross_selling import CrossSellingTable
 from shop.editable import Editable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate

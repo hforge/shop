@@ -29,6 +29,7 @@ from website import ShopWebSite
 # Import from package
 import skin
 import user
+import cross_selling
 
 # Make the product version available to Python code
 __version__ = get_version()

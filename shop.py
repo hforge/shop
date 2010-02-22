@@ -27,13 +27,13 @@ from enumerate_table import EnumeratesFolder
 from addresses import Addresses
 from categories import Categories, VirtualCategory
 from countries import Countries, CountriesZones
+from cross_selling import CrossSellingTable
 from datatypes import ImagePathDataType
 from editorial import Shop_EditorialView
 from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from manufacturers import Manufacturers, Manufacturer
 from orders import Orders
 from products import Products, Product, ProductModels
-from products.cross_selling import CrossSellingTable
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
 from shop_payments import ShopPayments
