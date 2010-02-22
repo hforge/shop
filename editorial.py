@@ -18,7 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import String
 from itools.gettext import MSG
-from itools.xapian import AndQuery, OrQuery, PhraseQuery
+from itools.xapian import AndQuery, OrQuery, NotQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton, RenameButton
@@ -30,7 +30,7 @@ class Shop_EditorialView(Folder_BrowseContent):
     access = 'is_allowed_to_edit'
     title = MSG(u'View')
 
-    search_template = None
+    search_template = '/ui/backoffice/editorial_view.xml'
 
     table_actions = [RemoveButton, RenameButton]
     table_columns = [
@@ -39,6 +39,7 @@ class Shop_EditorialView(Folder_BrowseContent):
         ('name', MSG(u'Name')),
         ('title', MSG(u'Title')),
         ('format', MSG(u'Format')),
+        ('workflow_state', MSG(u'State')),
         ]
 
     def get_query_schema(self):
@@ -50,8 +51,10 @@ class Shop_EditorialView(Folder_BrowseContent):
         path = str(resource.parent.get_canonical_path())
         query = [
             PhraseQuery('parent_path', path),
+            NotQuery(PhraseQuery('name', '404')),
             OrQuery(PhraseQuery('format', 'shop-section'),
                     PhraseQuery('format', 'products-feed'),
+                    PhraseQuery('format', 'webpage'),
                     PhraseQuery('format', 'news-folder'))]
         return context.root.search(AndQuery(*query))
 

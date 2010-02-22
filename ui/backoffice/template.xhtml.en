@@ -27,7 +27,7 @@
     <div id="menu" stl:if="user/info">
       <ul>
         <li>
-          <a href="/">Overview</a>
+          <a href="/shop/;administration">Overview</a>
         </li>
         <li>
           <a href="/shop/;editorial">Editorial</a>

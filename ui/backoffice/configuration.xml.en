@@ -16,6 +16,14 @@
     <tr>
       <td>
         <a href="/;control_panel">
+          General application settings
+        </a>
+      </td>
+      <td>Configure application</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="/;edit">
           General website settings
         </a>
       </td>

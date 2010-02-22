@@ -53,15 +53,6 @@ from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
 
 CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
 
-
-class Shop_View(STLView):
-    """ Administration view"""
-
-    access = 'is_admin'
-    title = MSG(u'Shop control panel')
-    template = '/ui/shop/shop_view.xml'
-
-
 class Shop_Configuration(STLView):
 
     access = 'is_admin'
@@ -732,3 +723,9 @@ class Shop_GetProductStock(BaseView):
         else:
             kw = {'exist': False}
         return dumps(kw)
+
+
+class Shop_Administration(STLView):
+
+    access= 'is_allowed_to_edit'
+    template = '/ui/backoffice/administration.xml'

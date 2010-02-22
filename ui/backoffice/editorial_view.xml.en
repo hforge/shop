@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h1>Manage your website</h1>
+
+  <ul>
+    <li>
+      <a href="/;edit">
+        <img src="/ui/icons/16x16/text.png"></img> Change banner
+      </a>
+    </li>
+    <li>
+      <a href="/tags/">
+        <img src="/ui/icons/16x16/text.png"></img> Manage tags
+      </a>
+    </li>
+    <li>
+      <a href="/menu/">
+        <img src="/ui/icons/16x16/select_all.png"></img> Manage menu
+      </a>
+    </li>
+    <li>
+      <a href="/footer/">
+        <img src="/ui/icons/16x16/folder.png"></img> Edit footer
+      </a>
+    </li>
+    <li>
+      <a href="/turning-footer/">
+        <img src="/ui/icons/16x16/folder.png"></img> Edit turning footer
+      </a>
+    </li>
+    <li>
+      <a href="/style/;edit">
+        <img src="/ui/icons/16x16/css.png"></img> Edit CSS
+      </a>
+    </li>
+    <li>
+      <a href="/404/">
+        <img src="/ui/icons/16x16/error.png"></img> Edit 404
+      </a>
+    </li>
+    <li>
+      <a href="/robots.txt">
+        <img src="/ui/icons/16x16/text.png"></img> Robots.txt
+      </a>
+    </li>
+  </ul>
+
+  <h1>Editorial content</h1>
+
+</stl:block>

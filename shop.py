@@ -40,8 +40,9 @@ from shop_payments import ShopPayments
 from shop_views import Shop_Addresses, Shop_AddressesBook, Shop_Login
 from shop_views import Shop_Delivery, Shop_ViewCart, Shop_Configure
 from shop_views import Shop_RegisterProgress, Shop_AddAddressProgress
-from shop_views import Shop_View, Shop_ShowRecapitulatif, Shop_EditAddressProgress
+from shop_views import Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Shop_GetProductStock, Shop_Configuration
+from shop_views import Shop_Administration
 from suppliers import Suppliers, Supplier
 from user import ShopUser, Customers
 from utils import ShopFolder
@@ -51,7 +52,7 @@ class Shop(ShopFolder):
 
     class_id = 'shop'
     class_title = MSG(u'Shop')
-    class_views = ['view', 'view_cart']
+    class_views = ['view_cart']
     class_version = '20091201'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
@@ -115,7 +116,7 @@ class Shop(ShopFolder):
     login = Shop_Login()
 
     # Administrator shop views
-    view = Shop_View()
+    administration = Shop_Administration()
     configuration = Shop_Configuration()
     get_product_stock = Shop_GetProductStock()
     configure = Shop_Configure()
