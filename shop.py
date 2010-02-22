@@ -17,7 +17,6 @@
 # Import from itools
 from itools.datatypes import Email, Unicode, Boolean, String
 from itools.gettext import MSG
-from itools.stl import stl
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
@@ -29,6 +28,7 @@ from addresses import Addresses
 from categories import Categories, VirtualCategory
 from countries import Countries, CountriesZones
 from datatypes import ImagePathDataType
+from editorial import Shop_EditorialView
 from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from manufacturers import Manufacturers, Manufacturer
 from orders import Orders
@@ -119,6 +119,7 @@ class Shop(ShopFolder):
     configuration = Shop_Configuration()
     get_product_stock = Shop_GetProductStock()
     configure = Shop_Configure()
+    editorial = Shop_EditorialView()
 
     #------------------------------
     # 6 Steps for payment process
@@ -225,7 +226,7 @@ class Shop(ShopFolder):
 
 
     def get_document_types(self):
-        return [Manufacturers]
+        return []
 
     ##############################
     # API

@@ -111,6 +111,7 @@ class ProductsFeed(Editable, Folder):
 
     class_id = 'products-feed'
     class_title = MSG(u'Products feed')
+    class_icon16 = 'shop/icons/16x16/folder-blue.png'
     class_version = '20100120'
 
     view = ProductsFeed_View()
