@@ -30,6 +30,9 @@
           <a href="/">Overview</a>
         </li>
         <li>
+          <a href="/shop/;editorial">Editorial</a>
+        </li>
+        <li>
           <a href="/shop/products/">Products</a>
         </li>
         <li>
@@ -53,6 +56,7 @@
             Tracker
           </a>
         </li>
+        <!--
         <li>
           <a href="http://perfect-sale.com/documentation/"
             target="_blank">
@@ -60,6 +64,7 @@
             Help
           </a>
         </li>
+        -->
         <li>
           <stl:block stl:if="not user/info">
             <a href="${login}" id="top-menu-login">Log in</a>
