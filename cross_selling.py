@@ -234,9 +234,9 @@ class CrossSellingTable(ResourcesOrderedTable):
                 self.set_property('sort', 'last')
             else:
                 self.set_property('sort', 'random')
-            if mode.endwith('_category'):
+            if mode.endswith('_category'):
                 self.set_property('category', 'current_category')
-            elif mode.endwith('_shop'):
+            elif mode.endswith('_shop'):
                 self.set_property('category', 'all_categories')
             self.set_property('show_product_with_promotion', '2')
         self.del_property('mode')
