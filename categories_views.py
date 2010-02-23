@@ -61,8 +61,7 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
         namespace = {'batch': batch,
                      'title': resource.get_title(),
                      'products': [],
-                     'description': None,
-                     'sub_categories': []}
+                     'description': None}
         # Get products view box
         product_models = []
         for item_resource in items:
@@ -79,13 +78,6 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
             prefix = '%s/' % resource.get_pathto(real_category)
             namespace['description'] = set_prefix(resource.get_xhtml_data(),
                                                   prefix)
-        # Do not show subcategories
-        from categories import Category
-        if (isinstance(resource, Category) is False or
-            shop.get_property('show_sub_categories') is False):
-            return namespace
-        namespace['sub_categories'] = self.get_sub_categories_namespace(
-                                          resource, context)
         return namespace
 
 
