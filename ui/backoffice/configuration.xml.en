@@ -41,16 +41,6 @@
     </tr>
     <tr>
       <td>
-        <a href="./categories/">
-          Categories
-        </a>
-      </td>
-      <td>
-        Add/Edit/Delete your categories
-      </td>
-    </tr>
-    <tr>
-      <td>
         <a href="./manufacturers/">
           Manufacturers
         </a>

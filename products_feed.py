@@ -28,14 +28,13 @@ from ikaaro.forms import AutoForm, SelectRadio, TextWidget, BooleanRadio
 from ikaaro.registry import register_resource_class
 
 # Import from project
-from categories_views import VirtualCategory_View
-from categories_views import VirtualCategory_ComparatorView
+from categories_views import Category_View, Category_ComparatorView
 from editable import Editable, Editable_Edit
 from enumerates import TagsList
 from utils import get_shop
 
 
-class ProductsFeed_View(VirtualCategory_View):
+class ProductsFeed_View(Category_View):
 
     def get_items(self, resource, context):
         site_root = context.resource.get_site_root()
@@ -57,7 +56,7 @@ class ProductsFeed_View(VirtualCategory_View):
 
 
 class ProductsFeed_ComparatorView(ProductsFeed_View,
-      VirtualCategory_ComparatorView):
+                                  Category_ComparatorView):
 
 
     def get_items(self, resource, context):

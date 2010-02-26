@@ -106,12 +106,3 @@ class CurrentFolder_AddImage(DBResource_AddImage):
 
     def get_root(self, context):
         return context.resource
-
-
-
-class ChangeCategoryButton(Button):
-
-    access = 'is_allowed_to_edit'
-    css = 'button-compare'
-    name = 'change_category'
-    title = MSG(u'Change category')

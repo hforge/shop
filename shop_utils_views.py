@@ -94,7 +94,7 @@ class Cart_View(STLView):
                'name': product.name,
                'img': product.get_cover_namespace(context),
                'title': product.get_title(),
-               'href': abspath.get_pathto(product.get_virtual_path()),
+               'href': context.get_link(product),
                'can_add_quantity': can_add_quantity,
                'quantity': quantity,
                'declination': declination,

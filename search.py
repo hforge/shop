@@ -25,7 +25,7 @@ from ikaaro.forms import SelectRadio
 from ikaaro.utils import get_base_path_query
 
 # Import from shop
-from categories_views import VirtualCategories_View
+from categories_views import Category_View
 from utils import get_shop
 
 
@@ -81,7 +81,7 @@ class Shop_SearchBox(STLView):
 
 
 
-class Shop_ProductSearch(VirtualCategories_View):
+class Shop_ProductSearch(Category_View):
 
     access = True
     title = MSG(u'Search')
@@ -110,7 +110,7 @@ class Shop_ProductSearch(VirtualCategories_View):
             path_cat = resource.get_pathto(cat)
             namespace.append(
                 {'name': cat.name,
-                 'link': '/categories/%s' % cat.get_unique_id(),
+                 'link': context.get_link(cat),
                  'title': cat.get_title(),
                  'css': None,
                  'nb_products': nb_products,
@@ -123,7 +123,7 @@ class Shop_ProductSearch(VirtualCategories_View):
 
 
     def get_query_schema(self):
-        schema = VirtualCategories_View.get_query_schema(self)
+        schema = Category_View.get_query_schema(self)
         schema['sort_by'] = String(default='ctime')
         schema['reverse'] = Boolean(default=True)
         return schema

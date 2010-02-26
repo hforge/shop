@@ -155,7 +155,7 @@ class Shop_ViewCart(STLForm):
         cart = ProductCart(context)
         product_name = cart.get_product_name(form['id'])
         quantity_in_cart = cart.get_product_quantity_in_cart(product_name)
-        product = resource.get_resource('products/%s' % product_name)
+        product = resource.get_resource(product_name)
         if product.is_in_stock_or_ignore_stock(quantity_in_cart+1):
             cart.add_a_product(form['id'])
 
@@ -493,11 +493,10 @@ class Shop_Delivery(STLForm):
         # Progress
         ns['progress'] = Shop_Progress(index=4).GET(resource, context)
         # Get total price and weight
-        products = resource.get_resource('products')
         cart = ProductCart(context)
         total_weight = decimal(0)
         for cart_elt in cart.products:
-            product = products.get_resource(cart_elt['name'])
+            product = context.root.get_resource(cart_elt['name'])
             declination = cart_elt['declination']
             unit_price = product.get_price_with_tax(declination)
             total_weight += product.get_weight(declination) * cart_elt['quantity']
@@ -598,11 +597,10 @@ class Shop_ShowRecapitulatif(STLForm):
         if not cart.is_valid():
             return context.come_back(CART_ERROR, goto='/')
         # Calcul total price
-        products = resource.get_resource('products')
         total_price = decimal(0)
         total_weight = decimal(0)
         for cart_elt in cart.products:
-            product = products.get_resource(cart_elt['name'])
+            product = context.root.get_resource(cart_elt['name'])
             quantity = cart_elt['quantity']
             declination = cart_elt['declination']
             unit_price = product.get_price_with_tax(declination)

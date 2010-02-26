@@ -35,6 +35,8 @@ class TaxesEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
+        if get_context().resource is None:
+            return []
         shop = get_shop(get_context().resource)
         taxes = shop.get_resource('taxes').handler
         return [

@@ -36,6 +36,7 @@ from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
 from ikaaro.forms import SelectRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
+from ikaaro.utils import get_base_path_query
 from ikaaro.views import CompositeForm
 from ikaaro.views_new import NewInstance
 
@@ -50,7 +51,7 @@ from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.enumerates import TagsList
 from shop.suppliers import SuppliersEnumerate
-from shop.utils import get_shop, ChangeCategoryButton
+from shop.utils import get_shop
 
 
 class Product_NewProduct(NewInstance):
@@ -60,15 +61,13 @@ class Product_NewProduct(NewInstance):
     schema = {
         'name': String,
         'title': Unicode(mandatory=True),
-        'product_model': ProductModelsEnumerate,
-        'categories': CategoriesEnumerate(mandatory=True, multiple=True)}
+        'product_model': ProductModelsEnumerate}
 
     widgets = [
         title_widget,
         TextWidget('name', title=MSG(u'Name'), default=''),
         SelectWidget('product_model', title=MSG(u'Product model'),
-            has_empty_option=False),
-        SelectWidget('categories', title=MSG(u'Categories'))]
+            has_empty_option=False)]
 
 
     def action(self, resource, context, form):
@@ -83,7 +82,6 @@ class Product_NewProduct(NewInstance):
         language = resource.get_content_language(context)
         metadata.set_property('title', title, language=language)
         metadata.set_property('product_model', form['product_model'])
-        metadata.set_property('categories', form['categories'])
         metadata.set_property('state', 'private')
 
         goto = './%s/' % name
@@ -172,7 +170,7 @@ class Product_View(Editable_View, STLForm):
                 context.message = ERROR(u'Declination not exist')
                 return
         # Add to cart
-        cart.add_product(resource.name, form['quantity'], declination)
+        cart.add_product(resource, form['quantity'], declination)
         # Information message
         context.message = INFO(u'Product added to cart !')
 
@@ -205,8 +203,6 @@ class Product_Edit(Editable_Edit, AutoForm):
         ImageSelectorWidget('cover', title=MSG(u'Cover')),
         # Weight
         TextWidget('weight', title=MSG(u'Weight')),
-        # Categorie
-        SelectWidget('categories', title=MSG(u'Categories')),
         # Stock
         StockProductWidget('stock-quantity', title=MSG(u'Stock')),
         # Price
@@ -330,7 +326,7 @@ class Products_View(Folder_BrowseContent):
     context_menus = []
 
     table_actions = [CopyButton, PasteButton, RenameButton,
-             RemoveButton, PublishButton, RetireButton, ChangeCategoryButton]
+             RemoveButton, PublishButton, RetireButton]
 
     table_columns = [
         ('checkbox', None),
@@ -345,34 +341,7 @@ class Products_View(Folder_BrowseContent):
         ('workflow_state', MSG(u'State'))
         ]
 
-    search_template = '/ui/shop/products/products_view_search.xml'
-
-    search_schema = {
-        'reference': String,
-        'title': Unicode,
-        'workflow_state': States,
-        'product_model': ProductModelsEnumerate,
-        'categories': CategoriesEnumerate,
-        }
-
-    search_widgets = [
-        TextWidget('reference', title=MSG(u'Reference')),
-        TextWidget('title', title=MSG(u'Title')),
-        SelectWidget('workflow_state', title=MSG(u'State')),
-        SelectWidget('product_model', title=MSG(u'Product model')),
-        SelectWidget('categories', title=MSG(u'Categories')),
-        ]
-
-
-    def get_search_namespace(self, resource, context):
-        query = context.query
-        namespace = {'widgets': []}
-        for widget in self.search_widgets:
-            value = context.query[widget.name]
-            html = widget.to_html(self.search_schema[widget.name], value)
-            namespace['widgets'].append({'title': widget.title,
-                                         'html': html})
-        return namespace
+    search_template = None
 
 
     def get_query_schema(self):
@@ -384,12 +353,14 @@ class Products_View(Folder_BrowseContent):
 
 
     def get_items(self, resource, context, *args):
-        search_query = []
         # Base query (search in folder)
+        site_root = context.site_root
+        shop = site_root.get_resource('shop')
         abspath = str(resource.get_canonical_path())
-        format = resource.parent.product_class.class_id
-        search_query.append(PhraseQuery('parent_path', abspath))
-        search_query.append(PhraseQuery('format', format))
+        format = shop.product_class.class_id
+        search_query = [
+                get_base_path_query(str(abspath)),
+                PhraseQuery('format', format)]
         # Search query
         for key in self.search_schema.keys():
             value = context.get_form_value(key)
@@ -418,7 +389,7 @@ class Products_View(Folder_BrowseContent):
                 return XMLParser('<div class="thumb-products"><img src="%s"/></div>' % uri)
             return XMLParser('<div class="thumb-products"/>')
         elif column == 'title':
-            return item_resource.get_title(), item_brain.name
+            return item_resource.get_title(), context.get_link(item_resource)
         elif column == 'stored_price':
             return '%s €' % item_resource.get_price_with_tax(pretty=True)
         elif column == 'ctime':
@@ -708,32 +679,6 @@ class Product_Declinations(CompositeForm):
                 Product_DeclinationsView()]
 
 
-
-class Products_ChangeCategory(AutoForm):
-
-    access = 'is_allowed_to_edit'
-    title = MSG(u'Change category')
-    submit_value = MSG(u'Do changes')
-
-    schema = {'categories': CategoriesEnumerate(multiple=True),
-              'ids': String(multiple=True)}
-
-    widgets =[SelectRadio('ids', title=MSG(u'Products name')),
-              SelectWidget('categories',
-                has_empty_option=False, title=MSG(u'New category'))]
-
-
-    def get_value(self, resource, context, name, datatype):
-        if name == 'ids':
-            ids = context.get_query_value('ids', type=String(multiple=True))
-            return [{'name': x, 'value': x, 'selected': True} for x in ids]
-
-
-    def action(self, resource, context, form):
-        for id in form['ids']:
-            product =resource.get_resource(id)
-            product.set_property('categories', form['categories'])
-        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
 
 
 class Products_ExportCSV(BaseView):

@@ -26,17 +26,22 @@ from itools.xapian import PhraseQuery, AndQuery, RangeQuery
 from ikaaro import messages
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import ImageSelectorWidget, RTEWidget, TextWidget
+from ikaaro.forms import SelectWidget
 from ikaaro.utils import get_base_path_query
 from ikaaro.resource_views import DBResource_Edit
+from ikaaro.views import CompositeView
 
 # Import from shop
 from editable import Editable, Editable_Edit
+from products.enumerate import ProductModelsEnumerate, CategoriesEnumerate
+from products.enumerate import States
+from products.product_views import Products_View
 from utils import get_shop
 from views import BrowseFormBatchNumeric
 
 
 
-class VirtualCategory_View(BrowseFormBatchNumeric):
+class Category_View(BrowseFormBatchNumeric):
 
     access = True
     title = MSG(u'View')
@@ -95,7 +100,7 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
             path_cat = resource.get_pathto(cat)
             namespace.append(
                 {'name': cat.name,
-                 'link': '/categories/%s' % cat.get_unique_id(),
+                 'link': context.get_link(cat),
                  'title': cat.get_title(),
                  'css': None,
                  'nb_products': nb_products,
@@ -110,12 +115,11 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
     def get_items(self, resource, context):
         site_root = context.resource.get_site_root()
         shop = get_shop(resource)
-        abspath = site_root.get_canonical_path()
+        abspath = resource.get_canonical_path()
         query = [
             get_base_path_query(str(abspath)),
             PhraseQuery('format', shop.product_class.class_id),
-            PhraseQuery('workflow_state', 'public'),
-            PhraseQuery('categories', resource.get_unique_id())]
+            PhraseQuery('workflow_state', 'public')]
         # Add query of filter
         for key, datatype in self.get_query_schema().items():
             if key == 'min_price':
@@ -144,20 +148,7 @@ class VirtualCategory_View(BrowseFormBatchNumeric):
 
 
 
-class VirtualCategories_View(VirtualCategory_View):
-
-    def get_items(self, resource, context):
-        site_root = context.resource.get_site_root()
-        shop = get_shop(resource)
-        abspath = site_root.get_canonical_path()
-        query = [
-            get_base_path_query(str(abspath)),
-            PhraseQuery('format', shop.product_class.class_id),
-            PhraseQuery('workflow_state', 'public')]
-        return context.root.search(AndQuery(*query))
-
-
-class VirtualCategory_ComparatorView(VirtualCategory_View):
+class Category_ComparatorView(Category_View):
 
     title = MSG(u'Compare')
     access = True
@@ -177,7 +168,7 @@ class VirtualCategory_ComparatorView(VirtualCategory_View):
 ##########################################################
 # Comparateur
 ##########################################################
-class VirtualCategory_Comparator(STLView):
+class Category_Comparator(STLView):
 
     access = True
 
@@ -220,7 +211,6 @@ class VirtualCategory_Comparator(STLView):
         for product in products_to_compare:
             # Base products namespace
             ns = product.get_small_namespace(context)
-            ns['href'] = abspath.get_pathto(product.get_virtual_path())
             namespace['products'].append(ns)
         # Comporator model schema
         model = products_to_compare[0].get_product_model()
@@ -252,7 +242,7 @@ class VirtualCategory_Comparator(STLView):
 
 
 
-class Categories_View(Folder_BrowseContent):
+class Category_BaseBackofficeView(Folder_BrowseContent):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'View')
@@ -262,11 +252,31 @@ class Categories_View(Folder_BrowseContent):
 
     context_menus = []
 
+    search_template = None
+
+    table_actions = []
     table_columns = [
         ('checkbox', None),
-        ('name', MSG(u'Name')),
-        ('title', MSG(u'Title')),
-        ('nb_products', MSG(u'Nb products')),
+        ('name', MSG(u'Name'), None),
+        ('title', MSG(u'Title'), None),
+        ('nb_products', MSG(u'Nb products'), None),
+        ('actions', MSG(u'Actions'), None),
+        ]
+
+    search_schema = {
+        'reference': String,
+        'title': Unicode,
+        'workflow_state': States,
+        'product_model': ProductModelsEnumerate,
+        'categories': CategoriesEnumerate,
+        }
+
+    search_widgets = [
+        TextWidget('reference', title=MSG(u'Reference')),
+        TextWidget('title', title=MSG(u'Title')),
+        SelectWidget('workflow_state', title=MSG(u'State')),
+        SelectWidget('product_model', title=MSG(u'Product model')),
+        SelectWidget('categories', title=MSG(u'Categories')),
         ]
 
     def get_items(self, resource, context, *args):
@@ -279,8 +289,11 @@ class Categories_View(Folder_BrowseContent):
         if column == 'nb_products':
             brain, item_resource = item
             return item_resource.get_nb_products()
+        elif column == 'actions':
+            return 'XXX'
         return Folder_BrowseContent.get_item_value(self,
                  resource, context, item, column)
+
 
 
 
@@ -318,3 +331,52 @@ class Category_Edit(Editable_Edit, DBResource_Edit):
             resource.set_property(key, form[key], lang)
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
+
+
+
+class Search(STLView):
+
+    template = '/ui/shop/products/products_view_search.xml'
+
+    search_schema = {
+        'reference': String,
+        'title': Unicode,
+        'workflow_state': States,
+        'product_model': ProductModelsEnumerate,
+        }
+
+    search_widgets = [
+        TextWidget('reference', title=MSG(u'Reference')),
+        TextWidget('title', title=MSG(u'Title')),
+        SelectWidget('workflow_state', title=MSG(u'State')),
+        SelectWidget('product_model', title=MSG(u'Product model')),
+        ]
+
+    def get_namespace(self, resource, context):
+        query = context.query
+        namespace = {'widgets': []}
+        for widget in self.search_widgets:
+            value = None# XXX context.query[widget.name]
+            html = widget.to_html(self.search_schema[widget.name], value)
+            namespace['widgets'].append({'title': widget.title,
+                                         'html': html})
+        return namespace
+
+
+
+
+class Category_BackofficeView(CompositeView):
+
+    access = 'is_allowed_to_edit'
+    subviews = [Search(),
+                Category_BaseBackofficeView(),
+                Products_View()]
+
+    def get_query_schema(self):
+        # XXX
+        from itools.datatypes import Unicode, Boolean
+        return merge_dicts(
+              Products_View().get_query_schema(),
+              search_field=Unicode,
+              search_subfolders=Boolean,
+              search_term=Unicode)

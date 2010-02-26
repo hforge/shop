@@ -53,8 +53,8 @@ class CategoriesEnumerate(Enumerate):
     @classmethod
     def get_options(cls):
         context = get_context()
-        shop = get_shop(context.resource.get_real_resource())
-        categories = shop.get_resource('categories')
+        site_root = context.site_root
+        categories = site_root.get_resource('categories')
         # Build options
         options = []
         for categorie in categories.traverse_resources():

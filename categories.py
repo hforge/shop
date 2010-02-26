@@ -32,22 +32,28 @@ from ikaaro.registry import get_register_fields
 from ikaaro.utils import get_base_path_query
 
 # Import from shop
-from categories_views import VirtualCategories_View, Category_Edit
-from categories_views import VirtualCategory_Comparator, Categories_View
-from categories_views import VirtualCategory_View, VirtualCategory_ComparatorView
+from categories_views import Category_View, Category_Edit
+from categories_views import Category_ComparatorView, Category_Comparator
+from categories_views import Category_BackofficeView
 from utils import get_shop, ShopFolder
 from editable import Editable
+from products import Product
+from products.product_views import Product_NewProduct
 
 
 class Category(Editable, ShopFolder):
 
     class_id = 'category'
     class_title = MSG(u'Category')
-    class_views = ['view', 'new_resource?type=category', 'edit']
+    class_views = ['view_backoffice', 'edit', 'view', 'new_resource?type=category']
 
     # Views
-    view = Categories_View()
+    view = Category_View()
+    view_backoffice = Category_BackofficeView()
     edit = Category_Edit()
+    new_product = Product_NewProduct()
+    compare = Category_ComparatorView()
+    comparator = Category_Comparator()
 
     @classmethod
     def get_metadata_schema(cls):
@@ -74,27 +80,19 @@ class Category(Editable, ShopFolder):
                            m_title=m_title)
 
 
-    def get_unique_id(self):
-        """Get the path to get from the categories container to this category.
-        Used by products to store the categories they belong to.
-        """
-        return str(self.get_abspath()).split('categories/', 1)[1]
-
-
     def get_document_types(self):
-        return [Category]
+        return [Category, Product]
 
 
     def get_nb_products(self, only_public=False):
         root = self.get_root()
         site_root = self.get_site_root()
         shop = get_shop(self)
-        abspath = site_root.get_canonical_path()
+        abspath = self.get_canonical_path()
         base_path_query = get_base_path_query(str(abspath))
         query = AndQuery(
             base_path_query,
-            PhraseQuery('format', shop.product_class.class_id),
-            PhraseQuery('categories', self.get_unique_id()))
+            PhraseQuery('format', shop.product_class.class_id))
         if only_public is True:
             query.atoms.append(PhraseQuery('workflow_state', 'public'))
         return root.search(query).get_n_documents()
@@ -107,14 +105,13 @@ class Category(Editable, ShopFolder):
         site_root = self.get_site_root()
         base = self.get_canonical_path()
         links = []
-
         available_languages = site_root.get_property('website_languages')
         for lang in available_languages:
             path = self.get_property('image_category', language=lang)
             if path:
                 links.append(str(base.resolve2(path)))
-
         return links
+
 
 
     def update_links(self,  source, target):
@@ -170,179 +167,7 @@ class Category(Editable, ShopFolder):
 
 
 
-class Categories(ShopFolder):
-
-    class_id = 'categories'
-    class_title = MSG(u'Categories')
-    class_views = ['view', 'new_resource?type=category']
-
-    view = Categories_View()
-
-    def get_document_types(self):
-        return [Category]
-
-
-
-class VirtualCategory(Category):
-    """The Category wrapper. No need to register it: it's built dynamically.
-    """
-
-    class_id = 'VirtualCategory'
-    class_title = MSG(u"Category")
-    class_views = ['view', 'compare']
-
-    # Wrap products inside categories?
-    # (the alternative is to wrap products in their own folder)
-    wrap_products = True
-
-    # Views
-    view = VirtualCategory_View()
-    compare = VirtualCategory_ComparatorView()
-    comparator = VirtualCategory_Comparator()
-
-    # XXX Back-office views can't apply
-    browse_content = None
-    preview_content = None
-    new_resource = None
-    last_changes = None
-    orphans = None
-
-
-    def _get_resource(self, name):
-        """Get the virtual category.
-        Or the virtual product if we expose products into categories.
-        """
-        shop = get_shop(self)
-        # Get the real category
-        real_resource = self.get_real_resource()
-        try:
-            resource = real_resource.get_resource(name)
-        except LookupError:
-            resource = None
-        else:
-            virtual_cls = shop.virtual_category_class
-        # Or maybe the name matches a product
-        if resource is None and self.wrap_products:
-            try:
-                resource = shop.get_resource('products/%s' % name)
-            except LookupError:
-                resource = None
-            else:
-                virtual_cls = shop.product_class
-        if resource is None:
-            return None
-        # Return a copy of the resource wrapped into our virtual class
-        return virtual_cls(resource.metadata)
-
-
-    def get_document_types(self):
-        return []
-
-
-    #####################################
-    ## XXX Hack to change class_views
-    ## To report in ikaaro
-    #####################################
-    def get_class_views(self):
-        shop = get_shop(self)
-        return shop.categories_class_views
-
-
-    def get_default_view_name(self):
-        views = self.get_class_views()
-        if not views:
-            return None
-        context = get_context()
-        user = context.user
-        ac = self.get_access_control()
-        for view_name in views:
-            view = getattr(self, view_name, None)
-            if ac.is_access_allowed(user, self, view):
-                return view_name
-        return views[0]
-
-
-    def get_views(self):
-        user = get_context().user
-        ac = self.get_access_control()
-        for name in self.get_class_views():
-            view_name = name.split('?')[0]
-            view = self.get_view(view_name)
-            if ac.is_access_allowed(user, self, view):
-                yield name, view
-
-
-
-class VirtualCategories(ShopFolder):
-    """The Virtual Categories Folder allows to publish categories (and
-    products) in a front-office without exposing the shop module which
-    belongs to the back-office.
-    They also allow nice search engine optimisation with an user-friendly
-    URL such as:
-    http://example.com/categories/mycategory/mysubcategory
-    or with products:
-    http://example.com/categories/mycategory/mysubcategory/myproduct
-
-    Plug it in your website::
-
-      VirtualCategories.make_resource(VirtualCategories, self, 'categories',
-                                      title={'en': u"Categories",
-                                             'fr': u"Catégories"})
-
-    While making the website itself or in an update method.
-    """
-
-    class_id = 'VirtualCategories'
-    class_title = MSG(u"Categories")
-    class_views =  ['view']
-
-    view = VirtualCategories_View()
-    comparator = VirtualCategory_Comparator()
-
-    # Views
-    # XXX Back-office views can't apply
-    browse_content = None
-    preview_content = None
-    new_resource = None
-    last_changes = None
-    orphans = None
-
-    # XXX do NOT implement "_get_names"
-    # The virtual categories must NOT be indexed as real resources
-
-
-    def get_canonical_path(self):
-        site_root = self.get_site_root()
-        categories = site_root.get_resource('shop/categories')
-        return categories.get_canonical_path()
-
-
-    def _get_resource(self, name):
-        shop = get_shop(self)
-        category = shop.get_resource('categories/%s' % name, soft=True)
-        if category is None:
-            return None
-        metadata = category.metadata
-        # Build another instance with the same properties
-        return shop.virtual_category_class(metadata)
-
-
-    def search_resources(self, cls=None, format=None, state=None):
-        # We implement search_resources to show virtual categories
-        # XXX Show compatibility in 0.70
-        real_category = self.get_real_resource()
-        return real_category.search_resources(cls=Category)
-
-
-
-    def get_document_types(self):
-        return []
-
-
-
 register_resource_class(Category)
-register_resource_class(Categories)
-register_resource_class(VirtualCategories)
 
 # Add m_title field if it does not already exist
 if 'm_title' in get_register_fields() is False:

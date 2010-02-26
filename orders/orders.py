@@ -179,6 +179,7 @@ class Order(WorkflowAware, ShopFolder):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
+        context = get_context()
         shop = kw['shop']
         user = kw['user']
         shop_uri = kw['shop_uri']
@@ -204,9 +205,8 @@ class Order(WorkflowAware, ShopFolder):
         ShopFolder._make_resource(cls, folder, name, *args, **metadata)
         # Save products
         handler = BaseOrdersProducts()
-        products = shop.get_resource('products')
         for product_cart in cart.products:
-            product = products.get_resource(product_cart['name'])
+            product = context.root.get_resource(product_cart['name'])
             declination = product_cart['declination']
             if has_tax:
                 tax = TaxesEnumerate.get_value(product.get_property('tax'))
@@ -263,7 +263,6 @@ class Order(WorkflowAware, ShopFolder):
     def get_namespace(self, context):
         # Get some resources
         shop = get_shop(self)
-        shop_products = shop.get_resource('products')
         order_products = self.get_resource('products')
         # Get creation date
         accept = context.accept_language
@@ -294,7 +293,7 @@ class Order(WorkflowAware, ShopFolder):
                 kw['href'] = context.get_link(product_resource)
                 kw['uri'] = product_resource.handler.uri
                 kw['cover'] = product_resource.get_cover_namespace(context)
-                kw['category'] = product_resource.get_category_title()
+                kw['category'] = product_resource.parent.get_title()
                 # Declination
                 if kw['declination']:
                     declination = product_resource.get_resource(
@@ -358,11 +357,10 @@ class Order(WorkflowAware, ShopFolder):
         root = context.root
         # Remove product from stock
         order_products = self.get_resource('products')
-        shop_products = shop.get_resource('products')
         get_value = order_products.handler.get_record_value
         for record in order_products.handler.get_records():
             name = get_value(record, 'name')
-            product_resource = shop_products.get_resource(name, soft=True)
+            product_resource = context.root.get_resource(name, soft=True)
             if product_resource is None:
                 continue
             quantity = get_value(record, 'quantity')
@@ -426,12 +424,12 @@ class Order(WorkflowAware, ShopFolder):
         # XXX We have to send email to inform customer ?
         # Update products stock values
         shop = get_shop(self)
+        context = get_context()
         order_products = self.get_resource('products')
-        shop_products = shop.get_resource('products')
         get_value = order_products.handler.get_record_value
         for record in order_products.handler.get_records():
             name = get_value(record, 'name')
-            product_resource = shop_products.get_resource(name, soft=True)
+            product_resource = context.resource.get_resource(name, soft=True)
             if product_resource is None:
                 continue
             quantity = get_value(record, 'quantity')

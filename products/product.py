@@ -44,7 +44,7 @@ from product_views import Product_NewProduct, Products_View, Product_ViewBox
 from product_views import Product_View, Product_Edit, Product_AddLinkFile
 from product_views import Product_Delete, Product_ImagesSlider
 from product_views import Product_Print, Product_SendToFriend
-from product_views import Product_Declinations, Products_ChangeCategory
+from product_views import Product_Declinations
 from product_views import Product_ChangeProductModel, Products_Stock
 from product_views import Products_ExportCSV
 from schema import product_schema
@@ -154,13 +154,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         values['supplier'] = self.get_property('supplier')
         # Product models
         values['product_model'] = self.get_property('product_model')
-        # We index categories
-        categories = []
-        for category in self.get_property('categories'):
-            segments = category.split('/')
-            for i in range(len(segments)):
-                categories.append('/'.join(segments[:i+1]))
-        values['categories'] = categories
         # Images
         order = self.get_resource('order-photos')
         ordered_names = list(order.get_ordered_names())
@@ -192,8 +185,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         product_model = self.get_property('product_model')
         if not product_model:
             return None
-        product = self.get_real_resource()
-        shop = get_shop(product)
+        shop = get_shop(self)
         return shop.get_resource('products-models/%s' % product_model)
 
 
@@ -258,25 +250,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     # Get canonical /virtual paths.
     ####################################################
 
-    def get_canonical_path(self):
-        site_root = self.get_site_root()
-        products = site_root.get_resource('shop/products')
-        return products.get_canonical_path().resolve2(self.name)
-
-
-    def get_virtual_path(self):
-        """XXX hardcoded for values we have always used so far.
-        Remember to change it if your virtual categories folder is named
-        something else.
-        """
-        categories = self.get_property('categories')
-        if not categories:
-            # If there is no category attached to the product
-            # Just return his absolute path
-            return self.get_abspath()
-        category = categories[0]
-        path = '../../categories/%s/%s' % (category, self.name)
-        return self.get_abspath().resolve(path)
+# XXX
+#    def get_canonical_path(self):
+#    def get_virtual_path(self):
 
 
     ##################################################
@@ -395,29 +371,19 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     ##################################################
     def get_small_namespace(self, context):
         shop = get_shop(self)
-        abspath = context.resource.get_abspath()
         title = self.get_property('title')
-        namespace = {
+        return {
           'name': self.name,
-          'title': title,
-          'mini-title': reduce_string(title, shop.product_title_word_treshold),
-          'href': abspath.get_pathto(self.get_virtual_path()),
+          'category': self.parent.get_title(),
           'cover': self.get_cover_namespace(context),
-          'price': self.get_price_namespace(),
           'description': self.get_property('description'),
-          'reference': self.get_property('reference')}
-        # XXX Manufacturer (We should optimize)
-        manufacturer = self.get_property('manufacturer')
-        if manufacturer:
-            namespace['manufacturer'] = ManufacturersEnumerate.get_value(
-                                            manufacturer)
-        else:
-            namespace['manufacturer'] = None
-        # Category
-        category = self.get_property('categories')[0]
-        category = shop.get_resource('categories/%s' % category)
-        namespace['category'] = category.get_title()
-        return namespace
+          'href': context.get_link(self),
+          'manufacturer': ManufacturersEnumerate.get_value(
+                              self.get_property('manufacturer')),
+          'mini-title': reduce_string(title, shop.product_title_word_treshold),
+          'price': self.get_price_namespace(),
+          'reference': self.get_property('reference'),
+          'title': title}
 
 
     def get_price_namespace(self):
@@ -438,14 +404,11 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         table = self.get_resource('cross-selling')
         viewbox = self.cross_selling_viewbox
         cross_selling = []
-        real_resource = self.get_real_resource()
-        abspath = real_resource.get_abspath()
-        products = real_resource.parent
+        abspath = self.get_abspath()
+        products = get_shop(self).get_resource('products')
         parent = self.parent
         if isinstance(parent, Category):
-            current_category = parent.get_unique_id()
-        else:
-            current_category = self.get_property('categories')
+            current_category = 'XXX'
 
         cross_products = table.get_products(context, self.class_id,
                                             products, [current_category],
@@ -462,16 +425,13 @@ class Product(WorkflowAware, Editable, DynamicFolder):
                      'price': self.get_price_namespace()}
         # Get basic informations
         abspath = context.resource.get_abspath()
-        namespace['href'] = abspath.get_pathto(self.get_virtual_path())
+        namespace['href'] = context.get_link(self)
         for key in product_schema.keys():
             if key=='data':
                 continue
             namespace[key] = self.get_property(key)
         # Categorie
-        category = self.get_property('categories')[0]
-        categories = shop.get_resource('categories')
-        category = categories.get_resource(category)
-        namespace['categorie'] = category.get_title()
+        namespace['categorie'] = self.parent.get_title()
         # Manufacturer
         manufacturer = self.get_property('manufacturer')
         if manufacturer:
@@ -701,13 +661,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         Image.make_resource(Image, self, 'barcode', body=barcode, **metadata)
 
 
-    def get_category_title(self):
-        shop = get_shop(self)
-        category_path = self.get_property('categories')[0]
-        category = shop.get_resource('categories/%s' % category_path)
-        return category.get_title()
-
-
     #########################################
     # Update links mechanism
     #-------------------------
@@ -720,14 +673,8 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     def get_links(self):
         links = Editable.get_links(self)
         links += DynamicFolder.get_links(self)
-        real_resource = self.get_real_resource()
         site_root = self.get_site_root()
         shop = site_root.get_resource('shop')
-        # categories
-        categories = shop.get_resource('categories')
-        categories_path = categories.get_abspath()
-        for categorie in self.get_property('categories'):
-            links.append(str(categories_path.resolve2(categorie)))
         # product model
         product_model = self.get_property('product_model')
         if product_model:
@@ -754,23 +701,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     def update_links(self, source, target):
         Editable.update_links(self, source, target)
         DynamicFolder.update_links(self, source, target)
-
-        real_resource = self.get_real_resource()
-        shop = get_shop(real_resource)
-        categories = shop.get_resource('categories')
-        categories_path = categories.get_abspath()
-
-        old_name = str(categories_path.get_pathto(source))
-        new_name = str(categories_path.get_pathto(target))
-
-        old_categories = self.get_property('categories')
-        new_categories = []
-        for name in self.get_property('categories'):
-            if name == old_name:
-                new_categories.append(new_name)
-            else:
-                new_categories.append(name)
-        self.set_property('categories', new_categories)
 
         # Cover
         cover = self.get_property('cover')
@@ -935,6 +865,7 @@ class Products(ShopFolder):
     class_id = 'products'
     class_title = MSG(u'Products')
     class_views = ['browse_content', 'new_product']
+    class_version = '20100226'
 
     # Views
     browse_content = Products_View()
@@ -943,7 +874,6 @@ class Products(ShopFolder):
     stock_out = Stock_FillStockOut()
     stock_resupply = Stock_Resupply()
     new_product = Product_NewProduct()
-    change_category = Products_ChangeCategory()
 
 
     def can_paste(self, source):
@@ -952,6 +882,24 @@ class Products(ShopFolder):
 
     def get_document_types(self):
         return []
+
+
+#    def update_20100226(self):
+#        """ Now a product has only one category """
+#        shop = get_shop(self)
+#        for resource in self.get_resources():
+#            categories = resource.get_property('categories')
+#            if len(categories) > 1:
+#                return
+#                pass#raise ValueError
+#            category = categories[0]
+#            new_path = '../categories/%s/%s' % (category, resource.name)
+#            self.copy_resource(resource.name, new_path)
+#            print '=================='
+#            print resource.get_abspath()
+#            print '===>', new_path
+#            print '=================='
+
 
 
 
@@ -963,7 +911,6 @@ register_field('reference', String(is_indexed=True, is_stored=True))
 register_field('manufacturer', Unicode(is_indexed=True))
 register_field('supplier', Unicode(is_indexed=True, multiple=True))
 register_field('product_model', String(is_indexed=True, is_stored=True))
-register_field('categories', String(is_indexed=True, multiple=True, is_stored=True))
 register_field('has_images', Boolean(is_indexed=True, is_stored=True))
 register_field('has_reduction', Boolean(is_indexed=True))
 register_field('is_buyable', Boolean(is_indexed=True))

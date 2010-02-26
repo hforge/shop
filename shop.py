@@ -25,7 +25,7 @@ from ikaaro.webpage import WebPage
 # Import from project
 from enumerate_table import EnumeratesFolder
 from addresses import Addresses
-from categories import Categories, VirtualCategory
+from categories import Category
 from countries import Countries, CountriesZones
 from cross_selling import CrossSellingTable
 from datatypes import ImagePathDataType
@@ -107,7 +107,6 @@ class Shop(ShopFolder):
     payments_class = ShopPayments
     supplier_class = Supplier
     user_class = ShopUser
-    virtual_category_class = VirtualCategory
 
     ####################################
     ## Views
@@ -150,9 +149,6 @@ class Shop(ShopFolder):
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         root = ShopFolder._make_resource(cls, folder, name, **kw)
-        # Categories
-        Categories._make_resource(Categories, folder, '%s/categories' % name,
-                                title={'en': u'Categories'})
         # Payments module
         cls.payments_class._make_resource(cls.payments_class, folder,
                                 '%s/payments' % name,

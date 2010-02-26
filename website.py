@@ -23,7 +23,7 @@ from ikaaro.registry import register_resource_class
 from ikaaro.website import WebSite
 
 # Import from shop
-from categories import VirtualCategories
+from categories import Category
 from search import Shop_ProductSearch
 from shop import Shop
 from shop_views import Shop_Register, Shop_Login
@@ -31,7 +31,7 @@ from shop_views import Shop_Register, Shop_Login
 
 default_resources = {
     'shop': (Shop, {'title': {'en': u'Shop'}, 'state':'public'}),
-    'categories': (VirtualCategories, {'title': {'en': u"Categories"}}),
+    'categories': (Category, {'title': {'en': u"Categories"}}),
 }
 
 
@@ -47,6 +47,7 @@ class ShopWebSite(WebSite):
     class_id = 'shop-website'
     class_title = MSG(u'Shop website')
     class_views = ['view', 'control_panel']
+    class_version = '20100227'
     class_skin = '/ui/shop'
 
     __fixed_handlers__ = WebSite.__fixed_handlers__ + ['categories', 'shop']
@@ -84,6 +85,11 @@ class ShopWebSite(WebSite):
 
     def get_document_types(self):
         return []
+
+
+    def update_20100227(self):
+        self.del_resource('categories')
+        self.move_resource('shop/categories', 'categories')
 
 
 register_resource_class(ShopWebSite)

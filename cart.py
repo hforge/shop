@@ -54,17 +54,15 @@ class ProductCart(object):
     ######################
 
     def get_namespace(self, resource):
+        context = self.context
         abspath = resource.get_abspath()
-        # Get products
-        shop = get_shop(resource)
-        products = shop.get_resource('products')
         # products namespace
         products_ns = []
         total_with_tax = decimal(0)
         total_pre_tax = decimal(0)
         for product_cart in self.products:
             # Get product
-            product = products.get_resource(product_cart['name'], soft=True)
+            product = context.root.get_resource(product_cart['name'], soft=True)
             # Check product is buyable
             if not product or not product.is_buyable():
                 continue
@@ -77,11 +75,10 @@ class ProductCart(object):
             unit_price_pre_tax = decimal(unit_price_pre_tax)
             total_pre_tax += unit_price_pre_tax * quantity
 
-            virtual_path = product.get_virtual_path()
             product_ns = {'id': product_cart['id'],
                           'name': product.name,
                           'title': product.get_title(),
-                          'href': abspath.get_pathto(virtual_path),
+                          'href': context.get_link(product),
                           'price': unit_price_with_tax * quantity,
                           'quantity': quantity}
             products_ns.append(product_ns)
@@ -160,8 +157,8 @@ class ProductCart(object):
         return
 
 
-    def add_product(self, name, quantity=1, declination=None):
-        self.manage_product(None, quantity, declination, name)
+    def add_product(self, product, quantity=1, declination=None):
+        self.manage_product(None, quantity, declination, product.get_abspath())
 
 
     def add_a_product(self, id, quantity=1, declination=None):
@@ -284,11 +281,10 @@ class ProductCart(object):
     # XXX To improve
     def get_total_price(self, shop):
         context = self.context
-        products = shop.get_resource('products')
         total_price = decimal(0)
         total_weight = decimal(0)
         for cart_elt in self.products:
-            product = products.get_resource(cart_elt['name'])
+            product = context.root.get_resource(cart_elt['name'])
             quantity = cart_elt['quantity']
             declination = cart_elt['declination']
             unit_price = product.get_price_with_tax(declination)
