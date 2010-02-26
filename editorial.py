@@ -19,6 +19,7 @@ from itools.core import merge_dicts
 from itools.datatypes import String
 from itools.gettext import MSG
 from itools.xapian import AndQuery, OrQuery, NotQuery, PhraseQuery
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton, RenameButton
@@ -62,7 +63,10 @@ class Shop_EditorialView(Folder_BrowseContent):
     def get_item_value(self, resource, context, item, column):
         brain, item_resource = item
         if column == 'name':
-            return brain.name, context.get_link(item_resource)
+            link = '%s/%s' % (resource.get_property('shop_uri'),
+                              brain.name)
+            return XMLParser(
+                "<a href='%s' target='_blank'>%s</a>" % (link, brain.name))
         return Folder_BrowseContent.get_item_value(self, resource,
                   context, item, column)
 
