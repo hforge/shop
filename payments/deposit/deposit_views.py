@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from decimal import Decimal as decimal
+
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Decimal
@@ -25,7 +28,7 @@ from ikaaro.forms import TextWidget
 from shop.payments.payment_way_views import PaymentWay_Configure
 
 
-deposit_schema = {'percent': Decimal}
+deposit_schema = {'percent': Decimal(default=decimal('100.0'))}
 deposit_widgets = [TextWidget('percent', title=MSG(u'Deposit amount (in %)'))]
 
 

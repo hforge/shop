@@ -17,14 +17,12 @@
 # Import from itools
 from itools.datatypes import Enumerate
 from itools.gettext import MSG
-from itools.web import get_context
 
 # Import from payment
 from payment_way import PaymentWay
 
 # Import from shop
-from shop.cart import ProductCart
-from shop.utils import get_shop
+from shop.datatypes import DynamicEnumerate
 
 
 
@@ -38,24 +36,7 @@ class Devises(Enumerate):
       ]
 
 
-class PaymentWaysEnumerate(Enumerate):
+class PaymentWaysEnumerate(DynamicEnumerate):
 
-    @classmethod
-    def get_options(cls):
-        options = []
-        context = get_context()
-        shop = get_shop(context.resource)
-        payments = shop.get_resource('payments')
-        cart = ProductCart(context)
-        price = cart.get_total_price(shop)
-        for mode in payments.search_resources(cls=PaymentWay):
-            logo = mode.get_resource(mode.get_property('logo'))
-            if logo:
-                logo = context.resource.get_pathto(logo)
-            options.append(
-                {'name': mode.name,
-                 'value': mode.get_title(),
-                 'description': mode.get_payment_way_description(context, price),
-                 'logo': logo,
-                 'enabled': mode.is_enabled(context)})
-        return options
+    path = 'shop/payments/'
+    format = PaymentWay
