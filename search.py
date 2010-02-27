@@ -18,10 +18,9 @@
 from itools.datatypes import Boolean, String, Unicode, Enumerate
 from itools.gettext import MSG
 from itools.xapian import OrQuery, PhraseQuery, AndQuery, split_unicode
-from itools.web import STLView, get_context
+from itools.web import get_context
 
 # Import from ikaaro
-from ikaaro.forms import SelectRadio
 from ikaaro.utils import get_base_path_query
 
 # Import from shop
@@ -46,38 +45,6 @@ class Shop_CategoriesEnumerate(Enumerate):
             options.append({'name': brain.name,
                             'value': categorie.get_title()})
         return options
-
-
-
-class Shop_SearchBox(STLView):
-
-    template = '/ui/shop/search_box.xml'
-
-    query_schema = {
-        'product_search_text': Unicode,
-        'category': Shop_CategoriesEnumerate(default='*'),
-    }
-
-    categories_widget = SelectRadio
-    show_list_categories = True
-
-    def get_namespace(self, resource, context):
-        query = self.get_query(context)
-        # Widget with list of categories
-        widget = None
-        if self.show_list_categories:
-            widget = self.categories_widget('category', has_empty_option=False)
-            widget = widget.to_html(Shop_CategoriesEnumerate,
-                                    value=query['category'])
-        # XXX Hack Nb results
-        nb_results = None
-        if isinstance(context.view, Shop_ProductSearch):
-            nb_results = str(context.view.nb_results)
-        # Return namespace
-        return {'product_search_text': query['product_search_text'],
-                'show_list_categories': self.show_list_categories,
-                'widget_categories': widget,
-                'nb_results': nb_results}
 
 
 
