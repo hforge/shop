@@ -25,7 +25,6 @@ from ikaaro.webpage import WebPage
 # Import from project
 from enumerate_table import EnumeratesFolder
 from addresses import Addresses
-from categories import Category
 from countries import Countries, CountriesZones
 from cross_selling import CrossSellingTable
 from datatypes import ImagePathDataType

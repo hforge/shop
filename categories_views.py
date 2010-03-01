@@ -368,6 +368,8 @@ class Search(STLView):
 class Category_BackofficeView(CompositeView):
 
     access = 'is_allowed_to_edit'
+    title = MSG(u'View')
+
     subviews = [Search(),
                 Category_BaseBackofficeView(),
                 Products_View()]
