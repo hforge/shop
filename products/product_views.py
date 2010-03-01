@@ -287,7 +287,7 @@ class Product_Delete(STLForm):
     def action(self, resource, context, form):
         shop = get_shop(resource)
         try:
-            shop.del_resource('products/%s' % resource.name)
+            resource.parent.del_resource(resource.name)
         except ConsistencyError:
             context.messages = ERROR(u"You can't delete this product")
             return
