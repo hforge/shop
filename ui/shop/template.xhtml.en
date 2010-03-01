@@ -73,15 +73,6 @@
           <td id="left">
             ${cart_preview}
             <br/>
-            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
-            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
-            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
-            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
-            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
-            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
-            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
-            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
-            XXX XXX XXX XXX XXX XXX XXX XXX<br/>
           </td>
           <td id="content" valign="top">
             ${body}
