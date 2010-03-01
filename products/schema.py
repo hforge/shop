@@ -22,7 +22,7 @@ from itools.datatypes import DateTime, Decimal, Unicode, Boolean
 from itools.datatypes import String, Integer, Tokens
 
 # Import from shop
-from enumerate import CategoriesEnumerate, States, StockOptions
+from enumerate import States, StockOptions
 from taxes import TaxesEnumerate
 from shop.datatypes import ImagePathDataType
 from shop.manufacturers import ManufacturersEnumerate
@@ -49,7 +49,7 @@ product_schema = {# General informations
                   'manufacturer': ManufacturersEnumerate,
                   'supplier': SuppliersEnumerate(multiple=True),
                   # Categories XXX To remove after update
-                  'categories': CategoriesEnumerate(multiple=True),
+                  'categories': String(multiple=True),
                   # Manage stock
                   'stock-quantity': Integer(default=0, mandatory=True),
                   'stock-option': StockOptions(mandatory=True, default='accept'),

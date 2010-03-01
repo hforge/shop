@@ -378,8 +378,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
           'cover': self.get_cover_namespace(context),
           'description': self.get_property('description'),
           'href': context.get_link(self),
-          'manufacturer': ManufacturersEnumerate.get_value(
-                              self.get_property('manufacturer')),
+          'manufacturer': None,
+          # XXX
+          #ManufacturersEnumerate.get_value( self.get_property('manufacturer')),
           'mini-title': reduce_string(title, shop.product_title_word_treshold),
           'price': self.get_price_namespace(),
           'reference': self.get_property('reference'),
@@ -869,7 +870,7 @@ class Products(ShopFolder):
     class_id = 'products'
     class_title = MSG(u'Products')
     class_views = ['browse_content', 'new_product']
-    class_version = '20100226'
+    class_version = '20100229'
 
     # Views
     browse_content = Products_View()
@@ -888,21 +889,20 @@ class Products(ShopFolder):
         return []
 
 
-#    def update_20100226(self):
-#        """ Now a product has only one category """
-#        shop = get_shop(self)
-#        for resource in self.get_resources():
-#            categories = resource.get_property('categories')
-#            if len(categories) > 1:
-#                return
-#                pass#raise ValueError
-#            category = categories[0]
-#            new_path = '../categories/%s/%s' % (category, resource.name)
-#            self.copy_resource(resource.name, new_path)
-#            print '=================='
-#            print resource.get_abspath()
-#            print '===>', new_path
-#            print '=================='
+    def update_20100229(self):
+        """ Now a product has only one category """
+        shop = get_shop(self)
+        for resource in self.get_resources():
+            categories = resource.get_property('categories')
+            if len(categories) > 1:
+                continue
+            category = categories[0]
+            new_path = '../../categories/%s/%s' % (category, resource.name)
+            self.move_resource(resource.name, new_path)
+            print '=================='
+            print resource.get_abspath()
+            print '===>', new_path
+            print '=================='
 
 
 

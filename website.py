@@ -88,8 +88,17 @@ class ShopWebSite(WebSite):
 
 
     def update_20100227(self):
-        self.del_resource('categories')
+        self.move_resource('categories', 'categories_old')
         self.move_resource('shop/categories', 'categories')
+
+
+    def update_20100228(self):
+        resource = self.get_resource('categories')
+        metadata = resource.metadata
+        metadata.version = Category.class_version
+        metadata.format = Category.class_id
+        metadata.set_changed()
+
 
 
 register_resource_class(ShopWebSite)
