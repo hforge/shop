@@ -408,10 +408,14 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         products = get_shop(self).get_resource('products')
         parent = self.parent
         if isinstance(parent, Category):
-            current_category = 'XXX'
+            current_category = [parent]
+        elif isinstance(self, Category):
+            current_category = [self]
+        else:
+            current_category = []
 
         cross_products = table.get_products(context, self.class_id,
-                                            products, [current_category],
+                                            products, current_category,
                                             [abspath])
         for product in cross_products:
             cross_selling.append(viewbox.GET(product, context))
