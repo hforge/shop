@@ -218,7 +218,7 @@ class AddProduct_View(STLForm):
     def get_items(self, context, categories, current_category):
         root = context.root
         # Search inside the site_root
-        shop = categories.parent
+        shop = get_shop(context.resource)
         site_root = categories.get_site_root()
         abspath = site_root.get_canonical_path()
         query = [PhraseQuery('format', shop.product_class.class_id),
@@ -246,22 +246,16 @@ class AddProduct_View(STLForm):
     def get_namespace(self, resource, context):
         real_resource = resource.get_real_resource()
         shop = get_shop(real_resource)
-        categories = shop.get_resource('categories')
+        site_root = context.site_root
+        categories = site_root.get_resource('categories')
         namespace = {}
         target_id = context.get_form_value('target_id')
         category = context.get_query_value('category')
         if not category:
             # First try to get the category from the current product value
-            product_name = context.get_query_value('product')
-            product = shop.get_resource('products/%s' % product_name)
-            product_categories = product.get_property('categories')
-            if product_categories:
-                category = product_categories[0]
-            else:
-                # Fallback take the first category inside categories
-                category_items = categories._get_names()
-                if category_items:
-                    category = category_items[0]
+            product = context.get_query_value('product')
+            product = shop.get_resource(product)
+            category = product.parent.get_abspath()
         namespace['tree'] = self.build_tree(categories, None, category,
                                             target_id)
         namespace['message'] = None
