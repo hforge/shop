@@ -341,7 +341,7 @@ class Products_View(Folder_BrowseContent):
         ('workflow_state', MSG(u'State'))
         ]
 
-    search_template = None
+    search_template = '/ui/backoffice/products_view.xml'
 
 
     def get_query_schema(self):

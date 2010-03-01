@@ -29,7 +29,7 @@ from ikaaro.forms import ImageSelectorWidget, RTEWidget, TextWidget
 from ikaaro.forms import SelectWidget
 from ikaaro.utils import get_base_path_query
 from ikaaro.resource_views import DBResource_Edit
-from ikaaro.views import CompositeView
+from ikaaro.views import CompositeForm
 
 # Import from shop
 from editable import Editable, Editable_Edit
@@ -252,7 +252,7 @@ class Category_BaseBackofficeView(Folder_BrowseContent):
 
     context_menus = []
 
-    search_template = None
+    search_template = '/ui/backoffice/category_view.xml'
 
     table_actions = []
     table_columns = [
@@ -365,7 +365,7 @@ class Search(STLView):
 
 
 
-class Category_BackofficeView(CompositeView):
+class Category_BackofficeView(CompositeForm):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'View')

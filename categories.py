@@ -174,7 +174,7 @@ class Category(Editable, ShopFolder):
         shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
         print context.uri, shop_backoffice_uri
         if str(context.uri).startswith(shop_backoffice_uri):
-            return ['view_backoffice', 'edit', 'new_resource?type=category']
+            return ['view_backoffice', 'edit']
         return ['view']
 
 
