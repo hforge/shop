@@ -18,10 +18,8 @@
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, Enumerate, Integer, Unicode, Tokens
 from itools.gettext import MSG
-from itools.stl import stl
-from itools.web import STLForm, get_context
+from itools.web import get_context
 from itools.datatypes import String
-from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -29,8 +27,8 @@ from ikaaro import messages
 from ikaaro.forms import AutoForm, BooleanRadio, SelectRadio, TextWidget
 from ikaaro.forms import SelectWidget, Widget, stl_namespaces
 from ikaaro.future.order import ResourcesOrderedTable_Ordered
+from ikaaro.resource_views import DBResource_AddLink
 from ikaaro.table_views import Table_AddRecord
-from ikaaro.utils import get_base_path_query, reduce_string
 from ikaaro.views import CompositeForm
 
 # Import from shop
@@ -152,127 +150,37 @@ class CrossSelling_Configure(AutoForm):
 
 
 
-class AddProduct_View(STLForm):
+class AddProduct_View(DBResource_AddLink):
 
     access = 'is_allowed_to_edit'
-    template = '/ui/shop/products/addproduct.xml'
-    tree_template = '/ui/shop/products/addproduct_tree.xml'
     method_to_call = 'add_product'
-    query_schema = {'category': String,
-                    'target_id': String(mandatory=True),
-                    'product': String}
 
-    base_scripts = ['/ui/jquery.js',
-                    '/ui/javascript.js']
-
-    styles = ['/ui/bo.css',
-              '/ui/aruni/style.css',
-              '/ui/shop/products/style.css']
-
-    additional_javascript = """
-          function select_element(type, value, caption) {
-            window.opener.$("#%s").val(value);
-            window.close();
-          }
-          """
-
-    thumb_size = (75, 75)
-
-    def get_scripts(self):
-        return self.base_scripts
+    def get_configuration(self):
+        return {'show_browse': True,
+                'show_external': False,
+                'show_insert': False,
+                'show_upload': False}
 
 
-    def get_styles(self):
-        return self.styles
+    def get_root(self, context):
+        site_root = context.resource.get_site_root()
+        return site_root.get_resource('categories')
 
 
-    def get_additional_javascript(self, context):
-        target_id = context.get_form_value('target_id')
-        return self.additional_javascript % target_id
-
-
-    def build_tree(self, parent, base_dir, current_category, target_id):
-        from categories import Category
-
-        items = []
-        for category in parent.search_resources(cls=Category):
-            cat_name = category.name
-            if base_dir:
-                cat_name = '%s/%s' % (base_dir, cat_name)
-            sub_tree = self.build_tree(category, cat_name, current_category,
-                                       target_id)
-            css = None
-            if cat_name == current_category:
-                css = 'active'
-            href = './;%s?category=%s&target_id=%s'
-            d = {'title': category.get_title(),
-                 'href': href % (self.method_to_call, cat_name, target_id),
-                 'sub_tree': sub_tree,
-                 'css': css}
-            items.append(d)
-
-        template = parent.get_resource(self.tree_template)
-        return stl(template, {'items': items})
-
-
-    def get_items(self, context, categories, current_category):
-        root = context.root
-        # Search inside the site_root
+    def get_item_classes(self):
+        context = get_context()
         shop = get_shop(context.resource)
-        site_root = categories.get_site_root()
-        abspath = site_root.get_canonical_path()
-        query = [PhraseQuery('format', shop.product_class.class_id),
-                 PhraseQuery('workflow_state', 'public'),
-                 get_base_path_query(str(abspath))]
-        if current_category:
-            query.append(PhraseQuery('categories', current_category))
-        query = AndQuery(*query)
-        results = root.search(query)
-
-        items = []
-        for brain in results.get_documents():
-            product = root.get_resource(brain.abspath)
-            item = product.get_small_namespace(context)
-            short_title = reduce_string(item['title'], word_treshold=15,
-                                        phrase_treshold=15)
-            item['short_title'] = short_title
-            item['quoted_title'] = short_title.replace("'", "\\'")
-            item['path'] = brain.name
-            items.append(item)
-
-        return items
+        return (shop.product_class,)
 
 
-    def get_namespace(self, resource, context):
-        real_resource = resource.get_real_resource()
-        shop = get_shop(real_resource)
-        site_root = context.site_root
-        categories = site_root.get_resource('categories')
-        namespace = {}
-        target_id = context.get_form_value('target_id')
-        category = context.get_query_value('category')
-        if not category:
-            # First try to get the category from the current product value
-            product = context.get_query_value('product')
-            product = shop.get_resource(product)
-            category = product.parent.get_abspath()
-        namespace['tree'] = self.build_tree(categories, None, category,
-                                            target_id)
-        namespace['message'] = None
-        namespace['items'] = self.get_items(context, categories, category)
-        width, height = self.thumb_size
-        namespace['thumb'] = {'width': width, 'height': height}
+    def get_start(self, resource):
+        context = get_context()
+        return self.get_root(context)
 
-        javascript = self.get_additional_javascript(context)
-        namespace['additional_javascript'] = javascript
-        # Add the styles
-        namespace['styles'] = self.get_styles()
-        # Add the scripts
-        namespace['scripts'] = self.get_scripts()
-        # Avoid general template
-        response = context.response
-        response.set_header('Content-Type', 'text/html; charset=UTF-8')
-        return namespace
+
+    def get_folder_classes(self):
+        from categories import Category
+        return (Category,)
 
 
 
@@ -280,30 +188,11 @@ class ProductsOrderedTable_Ordered(ResourcesOrderedTable_Ordered):
 
     def get_table_columns(self, resource, context):
         return [('checkbox', None),
-                ('title', MSG(u'Title')),
-                ('description', MSG(u'Description')),
-                ('order', MSG(u'Order')),
-                ('order_preview', MSG(u'Preview'))]
+                ('title', MSG(u'Title'), False),
+                ('order', MSG(u'Order'), False),
+                ('workflow_state', MSG(u'State'), False),
+                ('order_preview', MSG(u'Preview'), False)]
 
-
-    def get_item_value(self, resource, context, item, column):
-        if column in ('title', 'description'):
-            shop = get_shop(resource)
-            product = shop.get_resource('products/%s' % item.name, soft=True)
-            if column == 'title':
-                if product:
-                    title = product.get_title()
-                    return title, context.get_link(product)
-                # Miss
-                return item.name
-            else:
-                if product:
-                    return product.get_property('description')
-                # Miss
-                return None
-        return ResourcesOrderedTable_Ordered.get_item_value(self, resource,
-                                                            context, item,
-                                                            column)
 
 
 

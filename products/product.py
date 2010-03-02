@@ -112,6 +112,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             title=MSG(u'Edit cross selling'),
             access='is_allowed_to_edit')
     delete_product = Product_Delete()
+    order_preview = viewbox
 
 
 
@@ -245,6 +246,13 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
         return result
 
+
+    def get_resource_icon(self, size=16):
+        context = get_context()
+        size = 48
+        cover = self.get_property('cover')
+        link = '%s/%s' % (context.get_link(self), cover)
+        return '%s/;thumb?width=%s&amp;height=%s' % (link, size, size)
 
     ####################################################
     # Get canonical /virtual paths.

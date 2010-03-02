@@ -20,14 +20,11 @@ from random import shuffle
 # Import from itools
 from itools.core import merge_dicts
 from itools.gettext import MSG
-from itools.uri import Path, resolve_uri2, get_reference
-from itools.web import get_context
 from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery
-from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import TextWidget, stl_namespaces
+from ikaaro.forms import PathSelectorWidget
 from ikaaro.future.order import ResourcesOrderedTable
 from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
@@ -40,35 +37,16 @@ from utils import get_shop
 
 
 
-class ProductSelectorWidget(TextWidget):
-
-    method_to_call = 'add_product'
-    template = list(XMLParser(
-    """
-    <input type="text" id="selector-${name}" size="${size}" name="${name}"
-      value="${value}" />
-    <input id="selector-button-${name}" type="button" value="..."
-      name="selector_button_${name}"
-      onclick="popup(';${method}?target_id=selector-${name}&amp;product=${value}',
-                     620, 300);"/>
-    """, stl_namespaces))
-
-
-    def get_namespace(self, datatype, value):
-        return merge_dicts(TextWidget.get_namespace(self, datatype, value),
-                           method=self.method_to_call)
-
-
 
 class CrossSellingTable(ResourcesOrderedTable):
 
     class_id = 'CrossSellingTable'
     class_title = MSG(u'Cross-Selling Table')
     class_handler = ResourcesOrderedTableFile
-    class_version = '20090223'
+    class_version = '20100302'
     class_views = ['configure', 'back']
 
-    form = [ProductSelectorWidget('name', title=MSG(u'Product'))]
+    form = [PathSelectorWidget('name', title=MSG(u'Product'), action='add_product')]
 
     # Views
     configure = CrossSelling_Configure()
@@ -81,6 +59,10 @@ class CrossSellingTable(ResourcesOrderedTable):
     def get_metadata_schema(cls):
         return merge_dicts(ResourcesOrderedTable.get_metadata_schema(),
                            cross_selling_schema)
+
+
+    def get_order_root(self):
+        return self
 
 
     def get_products(self, context, product_format, products_folder,
@@ -164,69 +146,6 @@ class CrossSellingTable(ResourcesOrderedTable):
                 yield root.get_resource(brain.abspath)
 
 
-
-    def get_links(self):
-        shop = get_shop(self)
-        base = shop.get_canonical_path()
-        links = []
-
-        handler = self.handler
-        get_value = handler.get_record_value
-        for record in handler.get_records_in_order():
-            name = get_value(record, 'name')
-            links.append(str(resolve_uri2(base, 'products/%s' % name)))
-
-        return links
-
-
-    def update_links(self, source, target):
-        shop = get_shop(self)
-        base = self.get_canonical_path()
-        resources_new2old = get_context().database.resources_new2old
-        base = str(base)
-        old_base = resources_new2old.get(base, base)
-        old_base = Path(old_base)
-        new_base = Path(base)
-
-        target_name = Path(target).get_name()
-        links = []
-
-        handler = self.handler
-        get_value = handler.get_record_value
-        for record in handler.get_records_in_order():
-            name = get_value(record, 'name')
-            path = str(resolve_uri2(old_base, 'products/%s' % name))
-            if path == source:
-                handler.update_record(record.id, **{'name': target_name})
-        get_context().database.change_resource(self)
-
-
-    def update_relative_links(self, source):
-        site_root = self.get_site_root()
-        target = self.get_canonical_path()
-
-        handler = self.handler
-        record_schema = handler.record_schema
-        resources_old2new = get_context().database.resources_old2new
-        get_value = handler.get_record_value
-        for record in handler.get_records():
-            path = get_value(record, 'name')
-            if not path:
-                continue
-            ref = get_reference(str(path))
-            if ref.scheme:
-                continue
-            path = ref.path
-            # Calcul the old absolute path
-            old_abs_path = source.resolve2(path)
-            # Check if the target path has not been moved
-            new_abs_path = resources_old2new.get(old_abs_path,
-                                                 old_abs_path)
-            new_name = new_abs_path.get_name()
-            # Update the record
-            handler.update_record(record.id, **{'name': new_name})
-
-
     def update_20090223(self):
         mode = self.get_property('mode')
         if self.get_property('use_shop_configuration') is False:
@@ -240,6 +159,11 @@ class CrossSellingTable(ResourcesOrderedTable):
                 self.set_property('category', 'all_categories')
             self.set_property('show_product_with_promotion', '2')
         self.del_property('mode')
+
+
+#    XXX TODO
+#    def update_20100302(self):
+#        pass
 
 
 register_resource_class(CrossSellingTable)
