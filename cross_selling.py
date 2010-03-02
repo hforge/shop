@@ -66,7 +66,7 @@ class CrossSellingTable(ResourcesOrderedTable):
 
 
     def get_products(self, context, product_format, products_folder,
-                     categories=None, excluded_products=[]):
+                     categories=[], excluded_products=[]):
         shop = get_shop(self)
         table = self
         if self.get_property('use_shop_configuration'):
