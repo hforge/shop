@@ -161,9 +161,30 @@ class CrossSellingTable(ResourcesOrderedTable):
         self.del_property('mode')
 
 
-#    XXX TODO
-#    def update_20100302(self):
-#        pass
+    def update_20100302(self):
+        # Replace product name by product abspath
+        shop = get_shop(self)
+        root = self.get_root()
+        handler = self.handler
+        get_value = handler.get_record_value
+        for record in handler.get_records():
+            name = get_value(record, 'name')
+            # Search product
+            q = [PhraseQuery('format', shop.product_class.class_id),
+                 PhraseQuery('name', name)]
+            results = root.search(AndQuery(*q))
+            print q, results.get_n_documents()
+            results = results.get_documents()
+            if results:
+                product = root.get_resource(results[0].abspath)
+                # Change name by abspath
+                handler.update_record(record.id, **{'name': str(product.get_abspath())})
+                print '===> update'
+            else:
+                handler.del_record(record.id)
+                print '===> delete'
+
+
 
 
 register_resource_class(CrossSellingTable)
