@@ -170,10 +170,9 @@ class Category(Editable, ShopFolder):
     #####################################
     def get_class_views(self):
         context = get_context()
-        shop = get_shop(self)
-        shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
-        print context.uri, shop_backoffice_uri
-        if str(context.uri).startswith(shop_backoffice_uri):
+        # Back-Office
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
             return ['view_backoffice', 'edit']
         return ['view']
 
