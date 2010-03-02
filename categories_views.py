@@ -33,7 +33,7 @@ from ikaaro.views import CompositeForm
 
 # Import from shop
 from editable import Editable, Editable_Edit
-from products.enumerate import ProductModelsEnumerate, CategoriesEnumerate
+from products.enumerate import ProductModelsEnumerate
 from products.enumerate import States
 from products.product_views import Products_View
 from utils import get_shop
@@ -268,7 +268,6 @@ class Category_BaseBackofficeView(Folder_BrowseContent):
         'title': Unicode,
         'workflow_state': States,
         'product_model': ProductModelsEnumerate,
-        'categories': CategoriesEnumerate,
         }
 
     search_widgets = [
@@ -276,7 +275,6 @@ class Category_BaseBackofficeView(Folder_BrowseContent):
         TextWidget('title', title=MSG(u'Title')),
         SelectWidget('workflow_state', title=MSG(u'State')),
         SelectWidget('product_model', title=MSG(u'Product model')),
-        SelectWidget('categories', title=MSG(u'Categories')),
         ]
 
     def get_items(self, resource, context, *args):

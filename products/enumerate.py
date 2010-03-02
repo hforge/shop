@@ -58,10 +58,8 @@ class CategoriesEnumerate(Enumerate):
         # Build options
         options = []
         for categorie in categories.traverse_resources():
-            name = str(categories.get_pathto(categorie))
-            if name == '.':
-                continue
-            value = '---'* (len(name.split('/')) - 1)
+            name = str(categorie.get_abspath())
+            value = '--'* (len(name.split('/')) - 1)
             value = value + categorie.get_property('title')
             options.append({'name': name, 'value': value})
         return options
