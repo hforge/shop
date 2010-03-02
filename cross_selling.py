@@ -65,7 +65,7 @@ class CrossSellingTable(ResourcesOrderedTable):
         return self
 
 
-    def get_products(self, context, product_format, products_folder,
+    def get_products(self, context, product_format,
                      categories=[], excluded_products=[]):
         shop = get_shop(self)
         table = self
@@ -121,7 +121,7 @@ class CrossSellingTable(ResourcesOrderedTable):
             path = get_value(record, 'name')
             names.append(path)
             products_quantity -= 1
-            yield products_folder.get_resource(path)
+            yield self.get_resource(path)
 
         if products_quantity == 0:
             return
