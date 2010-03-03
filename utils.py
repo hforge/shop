@@ -20,15 +20,13 @@ from tempfile import mkstemp
 from os import close as close_fd, system
 
 # Import from itools
-from itools.gettext import MSG
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.buttons import Button
 from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_Orphans, Folder_BrowseContent
 from ikaaro.folder_views import Folder_PreviewContent
-from ikaaro.revisions_views import DBResource_LastChanges
+from ikaaro.revisions_views import DBResource_CommitLog
 from ikaaro.resource_views import DBResource_AddImage, DBResource_Backlinks
 
 
@@ -97,7 +95,7 @@ class ShopFolder(Folder):
     browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
     preview_content = Folder_PreviewContent(access='is_allowed_to_edit')
     orphans = Folder_Orphans(access='is_allowed_to_edit')
-    last_changes = DBResource_LastChanges(access='is_allowed_to_edit')
+    commit_log = DBResource_CommitLog(access='is_allowed_to_edit')
     backlinks = DBResource_Backlinks(access='is_allowed_to_edit')
 
 

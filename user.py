@@ -47,7 +47,7 @@ from datatypes import Civilite
 
 class AuthentificationLogsBase(BaseTable):
 
-    record_schema = {
+    record_properties = {
       'user': String(is_indexed=True),
       }
 
@@ -206,7 +206,7 @@ class ShopUser(User):
 
 
     def update_20091009(self):
-        from itools.vfs import get_ctime
+        from itools.fs import get_ctime
         t = get_ctime('%s.metadata' % self.handler.uri)
         self.set_property('ctime', t)
         self.set_property('last_time', t)

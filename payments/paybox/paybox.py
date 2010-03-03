@@ -44,8 +44,8 @@ from shop.payments.registry import register_payment_way
 
 class PayboxBaseTable(PaymentWayBaseTable):
 
-    record_schema = merge_dicts(
-        PaymentWayBaseTable.record_schema,
+    record_properties = merge_dicts(
+        PaymentWayBaseTable.record_properties,
         id_payment=Integer,
         transaction=String,
         autorisation=String,

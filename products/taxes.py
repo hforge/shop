@@ -48,7 +48,7 @@ class TaxesEnumerate(Enumerate):
 
 class Taxes_TableHandler(OrderedTableFile):
 
-    record_schema = {'value': Decimal}
+    record_properties = {'value': Decimal}
 
 
 
@@ -76,7 +76,7 @@ class PriceWidget(Widget):
     def get_namespace(self, datatype, value):
         # XXX Hack to get tax value (and keep it when submit form)
         context = get_context()
-        submit = (context.request.method == 'POST')
+        submit = (context.method == 'POST')
         if submit:
             tax_value = context.get_form_value('tax', type=TaxesEnumerate)
             has_reduction = context.get_form_value('has_reduction', type=Boolean)

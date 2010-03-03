@@ -522,8 +522,7 @@ class Product_Print(STLView):
         namespace['cover'] = resource.get_cover_namespace(context)
 
         # Avoid general template
-        response = context.response
-        response.set_header('Content-Type', 'text/html; charset=UTF-8')
+        context.set_content_type('text/html; charset=UTF-8')
         return namespace
 
 
@@ -706,8 +705,6 @@ class Products_ExportCSV(BaseView):
                                   product.name)]
             csv.add_row(line)
         # Set response type
-        response = context.response
-        response.set_header('Content-Type', 'text/csv')
-        response.set_header('Content-Disposition',
-                            'attachment; filename=export.csv')
+        context.set_content_type('text/csv')
+        context.set_content_disposition('attachment; filename=export.csv')
         return csv.to_str()

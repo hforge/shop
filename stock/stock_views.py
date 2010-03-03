@@ -98,10 +98,8 @@ class Stock_Resupply(STLForm):
 
 
     def action(self, resource, context, form):
-        response = context.response
-        response.set_header('Content-Type', 'application/pdf')
-        response.set_header('Content-Disposition',
-                            'attachment; filename="Document.pdf"')
+        context.set_content_type('application/pdf')
+        context.set_content_disposition('attachment; filename="Document.pdf"')
         pdf = self.generate_pdf_resupply(resource, context, form)
         return pdf
 

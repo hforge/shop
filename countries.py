@@ -22,6 +22,7 @@ from itools.core import get_abspath
 from itools.csv import Table as BaseTable, CSVFile, Property
 from itools.datatypes import Enumerate, Boolean, Unicode
 from itools.gettext import MSG
+from itools.handlers import ro_database
 from itools.web import get_context
 
 # Import from ikaaro
@@ -48,7 +49,7 @@ from utils import get_shop
 
 class BaseCountriesZones(BaseTable):
 
-    record_schema = {
+    record_properties = {
       'title': Unicode(mandatory=True),
       'has_tax': Boolean
       }
@@ -78,7 +79,7 @@ class CountriesZones(Table):
         Table._make_resource(cls, folder, name)
         table = BaseCountriesZones()
         zones = []
-        csv = CSVFile(get_abspath('data/countries.csv'))
+        csv = ro_database.get_handler(get_abspath('data/countries.csv'), CSVFile)
         for line in csv.get_rows():
             zone = unicode(line[1], 'utf-8')
             if zone not in zones:
@@ -116,7 +117,7 @@ class CountriesEnumerate(Enumerate):
 
 class BaseCountries(BaseTable):
 
-    record_schema = {
+    record_properties = {
       'title': Unicode(mandatory=True, multiple=True),
       'zone': CountriesZonesEnumerate(is_indexed=True, mandatory=True),
       'enabled': Boolean,
@@ -147,7 +148,7 @@ class Countries(Table):
         # Import CSV with list of countries
         zones = []
         table = BaseCountries()
-        csv = CSVFile(get_abspath('data/countries.csv'))
+        csv = ro_database.get_handler(get_abspath('data/countries.csv'), CSVFile)
         for line in csv.get_rows():
             country = unicode(line[0], 'utf-8')
             zone = unicode(line[1], 'utf-8')

@@ -97,7 +97,7 @@ class ShippingWay_RecordAdd(STLForm):
 
 
     def get_namespace(self, resource, context):
-        namespace = self.build_namespace(resource, context)
+        namespace = STLForm.get_namespace(self, resource, context)
         namespace['name'] = resource.name
         return namespace
 

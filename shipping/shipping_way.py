@@ -18,7 +18,7 @@
 from decimal import Decimal as decimal
 
 # Import from itools
-from itools import vfs
+from itools import fs
 from itools.core import get_abspath, merge_dicts
 from itools.csv import Table as BaseTable, CSVFile
 from itools.datatypes import Decimal, Enumerate, String, Unicode, Integer
@@ -50,7 +50,7 @@ from shipping_way_views import ShippingWay_RecordEdit, ShippingWay_RecordView
 
 class ShippingWayBaseTable(BaseTable):
 
-    record_schema = {
+    record_properties = {
         'ref': String(unique=True, is_indexed=True),
         'state': ShippingStates,
         'price': Decimal,
@@ -82,7 +82,7 @@ class ShippingWayTable(Table):
         # Complete id
         namespace['complete_id'] = '%s-%s' % (self.parent.name, record.id)
         # Base namespace
-        for key in self.handler.record_schema.keys():
+        for key in self.handler.record_properties.keys():
             namespace[key] = self.handler.get_record_value(record, key)
         # State
         namespace['state'] = ShippingStates.get_value(namespace['state'])
@@ -104,7 +104,7 @@ class ShippingPricesCSV(CSVFile):
 
 class ShippingPricesTable(BaseTable):
 
-    record_schema = {
+    record_properties = {
       'zone': CountriesZonesEnumerate(mandatory=True, is_indexed=True),
       'max-weight': Decimal(is_indexed=True),
       'max-quantity': Integer(is_indexed=True),
@@ -150,7 +150,7 @@ class ShippingWay(ShopFolder):
     def _make_resource(cls, folder, name, *args, **kw):
         ShopFolder._make_resource(cls, folder, name, *args, **kw)
         # Image
-        body = vfs.open(get_abspath(cls.img)).read()
+        body = fs.open(get_abspath(cls.img)).read()
         img = Image._make_resource(Image, folder,
                                    '%s/logo.png' % name, body=body,
                                    **{'state': 'public'})

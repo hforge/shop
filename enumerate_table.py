@@ -88,10 +88,10 @@ class EnumerateTable_View(OrderedTable_View):
             name = get_value(item, 'name')
             query = PhraseQuery('dynamic_enumerate_%s' % resource.name, name)
             try:
-                return context.root.search(query).get_n_documents()
+                return len(context.root.search(query))
             except KeyError:
                 register_dynamic_enumerates(resource.parent)
-                return context.root.search(query).get_n_documents()
+                return len(context.root.search(query))
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
 
@@ -113,7 +113,7 @@ class EnumerateTable_View(OrderedTable_View):
             # References ?
             query = PhraseQuery('dynamic_enumerate_%s' % resource.name,
                                 record_value)
-            nb_references = context.root.search(query).get_n_documents()
+            nb_references = len(context.root.search(query))
             if nb_references > 0:
                 context.commit = False
                 context.message = ERROR(u"You can't delete value '%s'" % title)
@@ -214,7 +214,7 @@ class EnumeratesFolder_View(Folder_BrowseContent):
 
 class EnumerateTable_Handler(OrderedTableFile):
 
-    record_schema = {
+    record_properties = {
         'name': String(unique=True, is_indexed=True),
         'title': Unicode(mandatory=True, multiple=True),
         }

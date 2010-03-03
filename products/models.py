@@ -91,7 +91,7 @@ def get_real_datatype(model, record):
 
 class ProductTypeTable(OrderedTableFile):
 
-    record_schema = {
+    record_properties = {
         # XXX To remove
         'name': String(unique=True, is_indexed=True),
         'title': Unicode(mandatory=True, multiple=True),

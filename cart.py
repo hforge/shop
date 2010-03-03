@@ -40,7 +40,7 @@ class ProductCart(object):
         self.context = context
         # Init cookies
         for key in ['products', 'addresses', 'shipping']:
-            if not self.context.has_cookie(key):
+            if not self.context.get_cookie(key):
                 self.context.set_cookie(key, '', path='/')
         # We load cart
         self.products = self._get_products()

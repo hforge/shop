@@ -91,9 +91,6 @@ input, textarea, select{
   font-size: 15px;
 }
 
-#browse-list a{
-  color: #105D9D;
-}
 
 #browse-list thead th{
   font-size: 13px;
@@ -109,14 +106,6 @@ input, textarea, select{
 
 #browse-list tbody td {
   vertical-align: middle;
-}
-
-#browse-list td{
-  border-bottom: 1px solid #DDDDDD;
-}
-
-tr.odd th, tr.odd td, tr.odd td input{
-  background-color: #F9F9F9;
 }
 
 .thumb-products{

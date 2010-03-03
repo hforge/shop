@@ -30,10 +30,10 @@ from ikaaro.table import Table
 
 class Messages_TableHandler(BaseTable):
 
-    record_schema = {'author': String,
-                     'message': Unicode,
-                     'private': Boolean,
-                     'seen': Boolean(is_indexed=True)}
+    record_properties = {'author': String,
+                         'message': Unicode,
+                         'private': Boolean,
+                         'seen': Boolean(is_indexed=True)}
 
 
 

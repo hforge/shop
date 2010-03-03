@@ -315,7 +315,7 @@ class Shop_Login(STLForm):
 
 
     def get_namespace(self, resource, context):
-        namespace = self.build_namespace(resource, context)
+        namespace = STLForm.get_namespace(self, resource, context)
         # Register link
         register_link = '/;register'
         if getattr(resource, 'register', None):
@@ -351,13 +351,13 @@ class Shop_Login(STLForm):
         if user is None:
             message = ERROR(u'The user "{username}" does not exist.',
                             username=email)
-            goto = context.request.referrer
+            goto = context.get_referrer()
             return context.come_back(message, goto)
 
         # Check the password is right
         if not user.authenticate(password):
             message = ERROR(u'The password is wrong.')
-            goto = context.request.referrer
+            goto = context.get_referrer()
             return context.come_back(message, goto)
 
         # We log authentification
@@ -373,7 +373,7 @@ class Shop_Login(STLForm):
         context.user = user
 
         # Come back
-        referrer = context.request.referrer
+        referrer = context.get_referrer()
         if referrer is None:
             goto = get_reference('./')
         else:
@@ -554,7 +554,7 @@ class Shop_ShowRecapitulatif(STLForm):
         abspath = resource.get_abspath()
         cart = ProductCart(context)
         # Base namespace
-        namespace = self.build_namespace(resource, context)
+        namespace = STLForm.get_namespace(self, resource, context)
         # Payment ways
         payments = resource.get_resource('payments')
         total_price = cart.get_total_price(resource)
@@ -720,8 +720,7 @@ class Shop_GetProductStock(BaseView):
     query_schema = {'reference': String}
 
     def GET(self, resource, context):
-        response = context.response
-        response.set_header('Content-Type', 'text/plain')
+        context.set_content_type('text/plain')
         root = context.root
         results = root.search(reference=context.query['reference'])
         if results:

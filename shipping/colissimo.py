@@ -61,10 +61,6 @@ class Colissimo_RecordAdd(STLForm):
     schema = {'num_colissimo': String(mandatory=True)}
 
 
-    def get_namespace(self, resource, context):
-        return self.build_namespace(resource, context)
-
-
     def add_shipping(self, order, shipping_way, context, form):
         order.set_as_sent(context)
         kw = {'ref': order.name,
@@ -79,8 +75,8 @@ class Colissimo_RecordAdd(STLForm):
 
 class ColissimoBaseTable(ShippingWayBaseTable):
 
-    record_schema = merge_dicts(
-        ShippingWayBaseTable.record_schema,
+    record_properties = merge_dicts(
+        ShippingWayBaseTable.record_properties,
         num_colissimo=String)
 
 

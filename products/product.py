@@ -501,7 +501,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             if not image:
                 return
         return {'href': context.get_link(image),
-                'uri': image.handler.uri,
+                'uri': image.handler.key,
                 'title': image.get_property('title')}
 
 

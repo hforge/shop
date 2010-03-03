@@ -34,8 +34,8 @@ from check_views import CheckPayment_RecordView
 
 class CheckPaymentBaseTable(PaymentWayBaseTable):
 
-    record_schema = merge_dicts(
-        PaymentWayBaseTable.record_schema,
+    record_properties = merge_dicts(
+        PaymentWayBaseTable.record_properties,
         check_number=Integer,
         bank=Unicode,
         account_holder=Unicode,

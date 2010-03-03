@@ -52,7 +52,7 @@ class Addresses_Enumerate(Enumerate):
 
 class BaseAddresses(BaseTable):
 
-    record_schema = {
+    record_properties = {
       'title': Unicode(is_indexed=True, mandatory=True),
       'gender': Civilite(mandatory=True),
       'firstname': Unicode(mandatory=True),
@@ -68,7 +68,7 @@ class BaseAddresses(BaseTable):
     def get_record_kw(self, id):
         kw = {}
         record = self.get_record(id)
-        for key in self.record_schema.keys():
+        for key in self.record_properties.keys():
             kw[key] = self.get_record_value(record, key)
         return kw
 

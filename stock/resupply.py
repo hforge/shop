@@ -30,7 +30,7 @@ from shop.suppliers import SuppliersEnumerate
 
 class BaseResupply(BaseTable):
 
-    record_schema = {
+    record_properties = {
       'reference': String,
       'supplier': SuppliersEnumerate,
       'quantity': Integer,

@@ -40,7 +40,7 @@ from shop.utils import ShopFolder
 
 class PhotoOrderedTableFile(OrderedTableFile):
 
-    record_schema = {'title': Unicode,
+    record_properties = {'title': Unicode,
                      'description': Unicode,
                      'image': String,
                      'name': String}

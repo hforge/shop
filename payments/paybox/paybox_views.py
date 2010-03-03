@@ -118,6 +118,7 @@ class Paybox_ConfirmPayment(BaseForm):
             infos['state'] = False
             infos['advance_state'] = 'amount_invalid'
         # We ensure that remote ip address belongs to Paybox
+        # XXX 0.61
         remote_ip = context.request.get_remote_ip()
         if remote_ip not in self.authorized_ip:
             infos['state'] = False
@@ -129,8 +130,7 @@ class Paybox_ConfirmPayment(BaseForm):
         if infos['state']:
             resource.set_payment_as_ok(record.id, context)
         # Return a blank page to payment
-        response = context.response
-        response.set_header('Content-Type', 'text/plain')
+        context.set_content_type('text/plain')
 
 
 class Paybox_Record_Edit(STLView):
@@ -140,7 +140,7 @@ class Paybox_Record_Edit(STLView):
     def get_namespace(self, resource, context):
         namespace = {}
         get_record_value = self.payment_table.get_record_value
-        for key in self.payment_table.record_schema:
+        for key in self.payment_table.record_properties:
             namespace[key] = get_record_value(self.record, key)
         namespace['advance_state'] = PayboxStatus.get_value(
                                           namespace['advance_state'])

@@ -173,7 +173,6 @@ class CrossSellingTable(ResourcesOrderedTable):
             q = [PhraseQuery('format', shop.product_class.class_id),
                  PhraseQuery('name', name)]
             results = root.search(AndQuery(*q))
-            print q, results.get_n_documents()
             results = results.get_documents()
             if results:
                 product = root.get_resource(results[0].abspath)

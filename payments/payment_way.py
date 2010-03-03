@@ -35,7 +35,7 @@ from shop.utils import ShopFolder
 
 class PaymentWayBaseTable(BaseTable):
 
-    record_schema = {
+    record_properties = {
         'ref': String(is_indexed=True, is_stored=True),
         'user': String(is_indexed=True),
         'state': Boolean(is_indexed=True),
@@ -67,7 +67,7 @@ class PaymentWayTable(Table):
                      'complete_id': '%s-%s' % (self.parent.name, record.id),
                      'payment_mode': self.parent.name}
         # Base namespace
-        for key in self.handler.record_schema.keys():
+        for key in self.handler.record_properties.keys():
             namespace[key] = get_value(record, key)
         # Amount
         namespace['amount'] = '%s €' % get_value(record, 'amount')

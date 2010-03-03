@@ -54,10 +54,6 @@ class CashPayment_RecordEdit(STLForm):
               'state': Boolean}
 
 
-    def get_namespace(self, resource, context):
-        return self.build_namespace(resource, context)
-
-
     def get_value(self, resource, context, name, datatype):
         if name == 'payment_way':
             return self.payment_way.name

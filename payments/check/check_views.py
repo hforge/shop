@@ -85,10 +85,6 @@ class CheckPayment_RecordEdit(STLForm):
               'advance_state': CheckStates(mandatory=True)}
 
 
-    def get_namespace(self, resource, context):
-        return self.build_namespace(resource, context)
-
-
     def get_value(self, resource, context, name, datatype):
         if name == 'payment_way':
             return self.payment_way.name

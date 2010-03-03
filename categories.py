@@ -94,7 +94,7 @@ class Category(Editable, ShopFolder):
             PhraseQuery('format', shop.product_class.class_id))
         if only_public is True:
             query.atoms.append(PhraseQuery('workflow_state', 'public'))
-        return root.search(query).get_n_documents()
+        return len(root.search(query))
 
 
 

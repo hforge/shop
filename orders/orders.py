@@ -101,7 +101,7 @@ You can found details here:\n
 
 class BaseOrdersProducts(BaseTable):
 
-    record_schema = {
+    record_properties = {
       'name': String(mandatory=True),
       'reference': String,
       'title': Unicode,
@@ -285,7 +285,7 @@ class Order(WorkflowAware, ShopFolder):
                   'uri': None,
                   'href': None,
                   'category': None}
-            for key in BaseOrdersProducts.record_schema.keys():
+            for key in BaseOrdersProducts.record_properties.keys():
                 kw[key] = get_value(record, key)
             name = get_value(record, 'name')
             product_resource = shop_products.get_resource(name, soft=True)

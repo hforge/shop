@@ -131,7 +131,7 @@ class OrdersView(Folder_BrowseContent):
                        ('nb_archive', OrdersViewArchive)]:
             query = AndQuery(PhraseQuery('format', 'order'),
                              c().get_items_query())
-            namespace[key] = root.search(query).get_n_documents()
+            namespace[key] = len(root.search(query))
         return namespace
 
 
@@ -215,10 +215,8 @@ class OrdersView(Folder_BrowseContent):
 
 
     def action_merge_pdfs(self, resource, context, form, pdf_name):
-        response = context.response
-        response.set_header('Content-Type', 'application/pdf')
-        response.set_header('Content-Disposition',
-                            'attachment; filename="Document.pdf"')
+        context.set_content_type('application/pdf')
+        context.set_content_disposition('attachment; filename="Document.pdf"')
         list_pdf = []
         for id in form['ids']:
             order = resource.get_resource(id)
