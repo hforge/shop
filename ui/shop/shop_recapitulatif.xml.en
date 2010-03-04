@@ -69,7 +69,7 @@
     </h1>
 
     <table cellpadding="5px" cellspacing="0">
-      <tr stl:repeat="option payment/value" stl:if="option/enabled">
+      <tr stl:repeat="option payments" stl:if="option/enabled">
         <td valign="top">
           <input type="radio" name="${payment/name}"
             id="payment-${option/name}" value="${option/name}"/>

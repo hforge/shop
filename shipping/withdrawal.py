@@ -113,7 +113,7 @@ class Withdrawal(ShippingWay):
 
     html_form = list(XMLParser("""
         <form method="POST">
-          <button type="submit" id="button-order" name="action">Ok</button>
+          <button type="submit" id="button-order">Ok</button>
           <input type="hidden" name="shipping" value="${name}"/>
         </form>
         """,

@@ -254,7 +254,7 @@ class ShippingWay(ShopFolder):
           <input type="hidden" name="shipping" value="${name}"/>
           <span stl:if="price">${price} €</span>
           <span stl:if="not price">Free</span>
-          <button type="submit" id="button-order" name="action">Ok</button>
+          <button type="submit" id="button-order">Ok</button>
         </form>
         """,
         stl_namespaces))

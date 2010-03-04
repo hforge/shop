@@ -48,16 +48,16 @@
             <table class="table-quantity" stl:if="see_actions">
               <tr>
                 <td>
-                  <input type="image" name=";remove"
-                      src="/ui/shop/images/minus.png"/>
+                  <button id="remove-quantity"
+                    type="submit" name="action" value="remove"/>
                 </td>
                 <td>
                   <input type="text" class="quantity" name="quantity"
                     value="${p/quantity}" size="2" readonly="readonly"/>
                 </td>
                 <td>
-                  <input id="add_quantity" type="image" name=";add"
-                    src="/ui/shop/images/plus.png"
+                  <button id="add-quantity" type="image"
+                    name="action" value="add"
                     stl:if="p/can_add_quantity"/>
                   <img id="add_quantity_disable"
                     src="/ui/shop/images/plus_gris.png"
@@ -69,8 +69,7 @@
           </td>
           <td>${p/price/total/with_tax} €</td>
           <td stl:if="see_actions">
-            <input type="image" name=";delete"
-              src="/ui/shop/images/delete.png"/>
+            <button id="delete-cart" type="image" name="action" value="delete"/>
           </td>
         </tr>
       </form>

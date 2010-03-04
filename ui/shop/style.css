@@ -67,6 +67,29 @@ table.cart td{
   text-decoration: none;
 }
 
+#cart #add-quantity{
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  background: url('/ui/shop/images/plus.png') no-repeat top left;
+}
+
+#cart #remove-quantity{
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  background: url('/ui/shop/images/minus.png') no-repeat top left;
+}
+
+#cart #delete-cart{
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  background: url('/ui/shop/images/delete.png') no-repeat top left;
+}
 
 #clear-cart{
   background-image: url(/ui/shop/images/delete.png);
