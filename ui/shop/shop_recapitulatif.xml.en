@@ -83,7 +83,7 @@
         </td>
       </tr>
     </table>
-    <input type="submit" id="button-order" value="Buy" name="buy"/>
+    <button type="submit" id="button-order" name="action" value="buy">Buy</button>
   </form>
 
   <script>

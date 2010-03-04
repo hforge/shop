@@ -16,7 +16,8 @@
           <input type="text" size="30" name="number" value="${number/value}"/><br/>
           Details about shipping way:<br/>
           <textarea name="description" cols="50">${description/value}</textarea><br/>
-          <input name=";add_shipping" type="submit" class="button-ok" value="Ok"/>
+          <button name="action" value="add_shipping" type="submit"
+            class="button-ok">Ok</button>
         </td>
       </tr>
     </table>

@@ -232,7 +232,7 @@ class Shop(ShopFolder):
         logo = self.get_property('bill_logo')
         resource_logo = self.get_resource(logo, soft=True) if logo else None
         if resource_logo is not None:
-            return resource_logo.handler.uri
+            return resource_logo.handler.key
         return None
 
     ##############################

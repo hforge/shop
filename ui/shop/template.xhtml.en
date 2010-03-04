@@ -43,7 +43,8 @@
               <label for="search">Search</label>
               <input id="search_query" name="product_search_text" type="text"
                 value="${product_search_text}"/>
-              <input type="submit" name="Submit" value="OK" class="button-ok"/>
+              <button type="submit" name="action" value="Submit"
+                class="button-ok">Ok</button>
             </p>
           </form>
         </div>

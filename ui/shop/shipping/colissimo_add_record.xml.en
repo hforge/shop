@@ -16,7 +16,8 @@
           </label>
           <input type="hidden" name="shipping_way" value="colissimo"/>
           <input type="text" size="30" name="num_colissimo" value="${num_colissimo/value}"/>
-          <input name=";add_shipping" type="submit" class="button-ok" value="Ok"/>
+          <button name="action" value="add_shipping" type="submit"
+            class="button-ok">Ok</button>
         </td>
       </tr>
     </table>

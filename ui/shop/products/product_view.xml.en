@@ -24,8 +24,8 @@
       Quantity: <input id="quantity" name="quantity" type="text" size="3" value="1" />
     </p>
     <p id="add-to-cart">
-    <input type="submit" class="button-ok" name=";add_to_cart"
-      value="Add to cart"/>
+    <button type="submit" class="button-ok" name="action"
+      value="add_to_cart">Add to cart</button>
     </p>
     <p id="missing-declination">
       Missing declination, please select another options

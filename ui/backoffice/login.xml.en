@@ -21,7 +21,7 @@
         <a href="/;forgotten_password">I forgot my password</a>
       </dd>
     </dl>
-    <input type="submit" value="Log in" class="button-ok"/>
+    <button type="submit" name="action" class="button-ok"/>Log in</button>
 
     <script language="javascript">
       <stl:inline stl:if="not username/value">$("#username").focus();</stl:inline>

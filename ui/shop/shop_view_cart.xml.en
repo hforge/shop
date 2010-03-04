@@ -16,7 +16,9 @@
     ${cart}
 
     <form method="post">
-      <input type="submit" id="clear-cart" name=";clear" value="Clear the cart"/>
+      <button type="submit" id="clear-cart" name="action" value="clear">
+        Clear the cart
+      </button>
     </form>
     <div class="clear"/>
 

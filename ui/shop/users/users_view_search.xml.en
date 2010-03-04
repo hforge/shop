@@ -17,7 +17,8 @@
           <dd>${widget/html}</dd>
         </stl:block>
         <p>
-          <input type="submit" class="button-ok" name="search" value="Search"/>
+          <button type="submit" class="button-ok" name="action"
+            value="search">Search</button>
         </p>
       </dl>
     </fieldset>

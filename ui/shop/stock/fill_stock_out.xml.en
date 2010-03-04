@@ -24,8 +24,8 @@
           <input type="text" id="new_quantity" size="5" value="1"/>
         </td>
         <td>
-          <input type="submit" id="add-on-stock" class="button-ok"
-            name="ok" value="Add"/>
+          <button type="submit" id="add-on-stock" class="button-ok"
+            name="action" value="ok">Add</button>
         </td>
       </tr>
     </table>
@@ -94,7 +94,9 @@
 
     <p>
       <input type="hidden" id="references_number" name="references_number"/>
-      <input type="submit" class="button-ok" name="validate" value="Update stock"/>
+      <button type="submit" class="button-ok" name="action" value="validate">
+        Update stock
+      </button>
     </p>
   </form>
 

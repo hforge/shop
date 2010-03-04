@@ -11,7 +11,9 @@
           <dd>${widget/widget}</dd>
         </stl:block>
         <p>
-          <input value="Search" class="button-ok" name="search" type="submit"></input>
+          <button class="button-ok" name="search" type="submit">
+            Search
+          </button>
         </p>
       </dl>
     </fieldset>

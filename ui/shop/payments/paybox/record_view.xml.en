@@ -6,9 +6,10 @@
 
   <div stl:if="not is_ok">
     <form method="POST">
-      <input type="submit" name=";show_payment_form"
-        class="button-ok"
-        value="Click here if you want to perform your payment"/>
+      <button type="submit" name="action"
+        value="show_payment_form" class="button-ok">
+        Click here if you want to perform your payment
+        </button>
     </form>
   </div>
 

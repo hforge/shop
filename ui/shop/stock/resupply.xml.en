@@ -15,7 +15,8 @@
           <dd>${widget/html}</dd>
         </stl:block>
         <p>
-          <input type="submit" class="button-ok" value="Filter" name="filter"/>
+          <button type="submit" class="button-ok" name="action"
+            value="filter">Filter</button>
         </p>
       </dl>
     </fieldset>
@@ -63,7 +64,9 @@
 
     <p>
       <input type="hidden" id="references_number" name="references_number"/>
-      <input type="submit" class="button-ok" name="validate" value="Generate PDF"/>
+      <button type="submit" class="button-ok" name="validate">
+        Generate PDF
+      </button>
     </p>
   </form>
   </stl:block>

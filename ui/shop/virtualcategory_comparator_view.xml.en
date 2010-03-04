@@ -12,8 +12,9 @@
             <div class="fleche-bas"></div>
           </td>
           <td valign="top">
-            <input class="buttoncompare" type="submit"
-                value="Compare the selected products"/>
+            <button class="buttoncompare" type="submit">
+              Compare the selected products
+            </button>
           </td>
         </tr>
         <tr class="product" stl:repeat="product products">
@@ -29,8 +30,9 @@
             <div class="fleche-haut"></div>
           </td>
           <td>
-            <input class="buttoncompare" type="submit"
-                value="Compare the selected products"/>
+            <button class="buttoncompare" type="submit">
+              Compare the selected products
+            </button>
           </td>
         </tr>
       </table>

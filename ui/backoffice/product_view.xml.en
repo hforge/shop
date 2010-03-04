@@ -14,7 +14,7 @@
     <form>
       Goto reference:<br/>
       <input type="text" name="reference" id="reference" size="12"/>
-      <input type="submit" name="ok" value="Ok" class="button-ok"/>
+      <button type="submit" name="action" class="button-ok"/>Ok</button>
     </form><br/>
     <a href="../">« Come back to products list</a>
   </div>

@@ -9,6 +9,8 @@
       Are you sure you want to delete the product ?<br/>
       To confirm the deletion, click here:
     </p>
-    <input type="submit" name="delete" value="Delete the product"/>
+    <button type="submit" name="action" value="delete">
+      Delete the product
+    </button>
   </form>
 </stl:block>

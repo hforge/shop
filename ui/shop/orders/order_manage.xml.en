@@ -33,7 +33,7 @@
           <form>
             Goto reference:<br/>
             <input type="text" name="reference" id="reference" size="12"/>
-            <input type="submit" name="ok" value="Ok" class="button-ok"/>
+            <button type="submit" name="ok"class="button-ok">Ok</button>
           </form><br/>
           <a href="../">« Come back to orders list</a>
         </div>
@@ -106,7 +106,10 @@
         <td style="background-color:#FFFBF2">
           <form method="post">
             <b>Update order state:</b>${transitions}
-            <input type="submit" name=";change_order_state" value="Ok"/><br/>
+            <button type="submit" name="action" value="change_order_state">
+              OK
+            </button>
+            <br/>
           </form>
         </td>
       </tr>
@@ -321,8 +324,8 @@
               <input type="radio" id="radio-private" name="private" value="1"/>
               <label for="radio-private">Private</label><br/>
               <textarea name="message" style="width:100%;height:80px"/><br/>
-              <input type="submit" name=";add_message"
-                class="button-ok" value="Send message"/>
+              <button type="submit" name="action" value="add_message"
+                class="button-ok">Send message</button>
             </form>
           </td>
         </tr>
@@ -334,9 +337,8 @@
 
   <div stl:if="not is_canceled">
     <form method="post" stl:if="not payment/is_payed">
-      <input type="submit" name=";cancel_order"
-        class="button-red"
-        value="Cancel the order"/>
+      <button type="submit" name="action" value="cancel_order"
+        class="button-red">Cancel the order</button>
     </form>
   </div>
   </div>

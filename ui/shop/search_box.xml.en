@@ -18,8 +18,8 @@
         <div id="search-box-widget" stl:if="show_list_categories">
           ${widget_categories}
         </div>
-        <input id="search-box-submit"
-          type="submit" value="ok" class="submit"/>
+        <button id="search-box-submit"
+          type="submit" class="submit">Ok</button>
       </form>
     </div>
     <div id="search-box-footer"/>

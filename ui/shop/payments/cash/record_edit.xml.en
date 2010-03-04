@@ -22,7 +22,7 @@
       stl:if="state/value"/>
 
     <br/> <br/>
-    <input type="submit" name=";edit_payment"
-      class="button-ok" value="Validate"/>
+    <button type="submit" name="action" value="edit_payment"
+      class="button-ok">Validate</button>
   </form>
 </stl:block>
