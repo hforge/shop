@@ -30,11 +30,11 @@ a{
 
 
 #loginform{
-  background-color: #1B597A;
+  background-color: #135695;
   -moz-border-radius: 20px;
   -webkit-border-radius: 20px;
   width: 400px;
-  margin: auto;
+  margin: 50px auto;
   color: #FFF;
   padding: 20px;
 }

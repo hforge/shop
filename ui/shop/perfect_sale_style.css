@@ -16,7 +16,7 @@ body{
 }
 
 #header{
-  background: white url("/ui/shop/images/logo-ps.png") no-repeat left bottom;
+  background-color: white;
   height: 89px;
 }
 

@@ -24,6 +24,15 @@
     <link rel="shortcut icon" href="${favicon_href}" type="${favicon_type}" />
   </head>
   <body>
+    <div id="menu" stl:if="not user/info">
+      <ul>
+        <li>
+          <a>
+            Welcome in the backoffice of your shop
+          </a>
+        </li>
+      </ul>
+    </div>
     <div id="menu" stl:if="user/info">
       <ul>
         <li>

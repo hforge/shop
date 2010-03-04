@@ -4,7 +4,6 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <img src="/ui/backoffice/images/logo-ps.png"/>
   <form id="loginform" name="loginform" method="post" action="./;login">
     <dl>
       <dt>
@@ -21,7 +20,7 @@
         <a href="/;forgotten_password">I forgot my password</a>
       </dd>
     </dl>
-    <button type="submit" name="action" class="button-ok"/>Log in</button>
+    <button type="submit" class="button-ok">Log in</button>
 
     <script language="javascript">
       <stl:inline stl:if="not username/value">$("#username").focus();</stl:inline>

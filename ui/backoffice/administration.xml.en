@@ -4,8 +4,5 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <div style="text-align:center;width:100%">
-    <img src="/ui/backoffice/images/logo-ps.png"/>
-  </div>
 
 </stl:block>
