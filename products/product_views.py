@@ -329,7 +329,6 @@ class Products_View(Folder_BrowseContent):
              RemoveButton, PublishButton, RetireButton]
 
     table_columns = [
-        ('checkbox', None),
         ('barcode', None),
         ('cover', MSG(u'Cover')),
         ('reference', MSG(u'Reference')),
@@ -342,6 +341,13 @@ class Products_View(Folder_BrowseContent):
         ]
 
     search_template = '/ui/backoffice/products_view.xml'
+
+    def get_table_columns(self, resource, context):
+        base = [('checkbox', None)]
+        shop = get_shop(resource)
+        if shop.get_property('barcode_format') == '0':
+            return base + self.table_columns[1:]
+        return base + self.table_columns
 
 
     def get_query_schema(self):
