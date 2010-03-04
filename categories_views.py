@@ -34,7 +34,6 @@ from ikaaro.views import CompositeForm
 
 # Import from shop
 from editable import Editable, Editable_Edit
-from products.enumerate import ProductModelsEnumerate
 from products.enumerate import States
 from products.product_views import Products_View
 from utils import get_shop
@@ -326,30 +325,28 @@ class Category_Edit(Editable_Edit, DBResource_Edit):
 
 
 
-class Search(STLView):
+class Category_Search(STLView):
 
     template = '/ui/shop/products/products_view_search.xml'
 
-    search_schema = {
+    query_schema = {
         'reference': String,
         'title': Unicode,
         'workflow_state': States,
-        'product_model': ProductModelsEnumerate,
         }
 
-    search_widgets = [
+    widgets = [
         TextWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
         SelectWidget('workflow_state', title=MSG(u'State')),
-        SelectWidget('product_model', title=MSG(u'Product model')),
         ]
 
     def get_namespace(self, resource, context):
         query = context.query
         namespace = {'widgets': []}
-        for widget in self.search_widgets:
-            value = None# XXX context.query[widget.name]
-            html = widget.to_html(self.search_schema[widget.name], value)
+        for widget in self.widgets:
+            value = context.query[widget.name]
+            html = widget.to_html(self.query_schema[widget.name], value)
             namespace['widgets'].append({'title': widget.title,
                                          'html': html})
         return namespace
@@ -362,7 +359,7 @@ class Category_BackofficeView(CompositeForm):
     access = 'is_allowed_to_edit'
     title = MSG(u'View')
 
-    subviews = [Search(),
+    subviews = [Category_Search(),
                 Category_BaseBackofficeView(),
                 Products_View()]
 
@@ -370,6 +367,7 @@ class Category_BackofficeView(CompositeForm):
         # XXX
         from itools.datatypes import Unicode, Boolean
         return merge_dicts(
+              Category_Search().get_query_schema(),
               Products_View().get_query_schema(),
               search_field=Unicode,
               search_subfolders=Boolean,

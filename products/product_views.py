@@ -322,6 +322,11 @@ class Products_View(Folder_BrowseContent):
     batch_msg1 = MSG(u"There is 1 product")
     batch_msg2 = MSG(u"There are {n} products")
 
+    search_schema = {
+        'reference': String,
+        'title': Unicode,
+        'workflow_state': States,
+        }
 
     context_menus = []
 
