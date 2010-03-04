@@ -35,7 +35,7 @@ class BarcodeWidget(Widget):
         """
         <input type="${type}" name="${name}" value="${value}" size="${size}"
         /><br/><br/>
-        <img src="${shop_uri}/;barcode?reference=${reference}"/>
+        <img src="./barcode/;download"/>
         """,
         stl_namespaces))
 
