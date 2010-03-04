@@ -33,9 +33,11 @@ class BarcodeWidget(Widget):
 
     template = list(XMLParser(
         """
-        <input type="${type}" name="${name}" value="${value}" size="${size}"
-        /><br/><br/>
-        <img src="./barcode/;download"/>
+        <input type="${type}" name="${name}" value="${value}" size="${size}"/>
+        <stl:block stl:if="show_barcode">
+          <br/><br/>
+          <img src="./barcode/;download" stl:if="show_barcode"/>
+        </stl:block>
         """,
         stl_namespaces))
 
@@ -46,6 +48,7 @@ class BarcodeWidget(Widget):
         return merge_dicts(
             Widget.get_namespace(self, datatype, value),
             shop_uri=product.get_pathto(shop),
+            show_barcode=shop.get_property('barcode_format') != '0',
             reference=product.get_property('reference'))
 
 
