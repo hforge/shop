@@ -118,8 +118,7 @@ class Paybox_ConfirmPayment(BaseForm):
             infos['state'] = False
             infos['advance_state'] = 'amount_invalid'
         # We ensure that remote ip address belongs to Paybox
-        # XXX 0.61
-        remote_ip = context.request.get_remote_ip()
+        remote_ip = context.get_remote_ip()
         if remote_ip not in self.authorized_ip:
             infos['state'] = False
             infos['advance_state'] = 'ip_not_authorized'
