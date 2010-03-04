@@ -21,6 +21,7 @@ from itools.gettext import MSG
 from itools.stl import stl, set_prefix
 from itools.web import STLView, get_context
 from itools.xapian import PhraseQuery, AndQuery, RangeQuery
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
@@ -263,20 +264,6 @@ class Category_BaseBackofficeView(Folder_BrowseContent):
         ('actions', MSG(u'Actions'), None),
         ]
 
-    search_schema = {
-        'reference': String,
-        'title': Unicode,
-        'workflow_state': States,
-        'product_model': ProductModelsEnumerate,
-        }
-
-    search_widgets = [
-        TextWidget('reference', title=MSG(u'Reference')),
-        TextWidget('title', title=MSG(u'Title')),
-        SelectWidget('workflow_state', title=MSG(u'State')),
-        SelectWidget('product_model', title=MSG(u'Product model')),
-        ]
-
     def get_items(self, resource, context, *args):
         args = list(args)
         args.append(PhraseQuery('format', 'category'))
@@ -284,11 +271,18 @@ class Category_BaseBackofficeView(Folder_BrowseContent):
 
 
     def get_item_value(self, resource, context, item, column):
+        brain, item_resource = item
         if column == 'nb_products':
-            brain, item_resource = item
             return item_resource.get_nb_products()
         elif column == 'actions':
-            return 'XXX'
+            return XMLParser("""
+                <a href="./%s/" title="View category">
+                  <img src="/ui/icons/16x16/view.png"/>
+                </a>
+                <a href="./;edit" title="Edit category">
+                  <img src="/ui/icons/16x16/edit.png"/>
+                </a>
+                """ % brain.name)
         return Folder_BrowseContent.get_item_value(self,
                  resource, context, item, column)
 
