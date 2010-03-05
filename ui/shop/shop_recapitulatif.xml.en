@@ -50,7 +50,7 @@
   ${cart}
 
 
-  <form id="form-order" name="form-order" method="POST">
+  <div id="terms-of-sales">
     <h1 class="payment-process">
       Terms of sales
     </h1>
@@ -63,28 +63,12 @@
       <a href="./terms-and-conditions-of-use" target="blank"><span>(</span>Read<span>)</span></a>
       <br/>
     </p>
+  </div>
 
-    <h1 class="payment-process">
-      Please choose a payment mode
-    </h1>
+  <div id="choose-payment">
+    ${choose_payment}
+  </div>
 
-    <table cellpadding="5px" cellspacing="0">
-      <tr stl:repeat="option payments" stl:if="option/enabled">
-        <td valign="top">
-          <input type="radio" name="${payment/name}"
-            id="payment-${option/name}" value="${option/name}"/>
-        </td>
-        <td valign="top">
-          ${option/value}<br/><br/>
-          <img stl:if="option/logo" src="${option/logo}/;download"/>
-        </td>
-        <td style="width:400px;vertical-align:top;">
-          ${option/description}
-        </td>
-      </tr>
-    </table>
-    <button type="submit" id="button-order" name="action" value="buy">Buy</button>
-  </form>
 
   <script>
     $(document).ready(function(){

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <form id="form-order" name="form-order" method="POST">
+    <h1 class="payment-process">
+      Please choose a payment mode
+    </h1>
+
+    <b>Total to pay: ${total_price}€</b><br/><br/>
+
+    <table cellpadding="5px" cellspacing="0">
+      <tr stl:repeat="payment payments" stl:if="payment/enabled">
+        <td valign="top">
+          <input type="radio" name="payment"
+            id="payment-${payment/name}" value="${payment/name}"/>
+        </td>
+        <td valign="top">
+          ${payment/value}<br/><br/>
+          <img stl:if="payment/logo" src="${payment/logo}/;download"/>
+        </td>
+        <td style="width:400px;vertical-align:top;">
+          ${payment/description}
+        </td>
+      </tr>
+    </table>
+    <button type="submit" id="button-order">Buy</button>
+
+  </form>
+
+</stl:block>

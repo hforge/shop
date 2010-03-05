@@ -39,4 +39,4 @@ class Devises(Enumerate):
 class PaymentWaysEnumerate(DynamicEnumerate):
 
     path = 'shop/payments/'
-    format = PaymentWay
+    format = None

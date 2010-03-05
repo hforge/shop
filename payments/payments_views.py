@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2008 Sylvain Taverne <sylvain@itaapy.com>
+# Copyright (C) 2008-2010 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
+from decimal import Decimal as decimal
 from operator import itemgetter
 
 # Import from itools
@@ -273,3 +274,25 @@ class Payments_AddPayment(AutoForm):
         payments_table.add_record(form)
         return context.come_back(MSG(u'New payment added !'), goto='./')
 
+
+class Payments_ChoosePayment(STLForm):
+
+    access = 'is_authenticated'
+    title = MSG(u'Choose a payment way')
+    template = '/ui/shop/payments/choose_payment.xml'
+
+    total_price = decimal('0')
+
+    def get_namespace(self, resource, context):
+        total_price = self.total_price
+        namespace = {'payments': [],
+                     'total_price': total_price}
+        for mode in resource.search_resources(cls=PaymentWay):
+            logo = mode.get_resource(mode.get_property('logo'))
+            namespace['payments'].append(
+                {'name': mode.name,
+                 'value': mode.get_title(),
+                 'description': mode.get_payment_way_description(context, total_price),
+                 'logo': context.resource.get_pathto(logo),
+                 'enabled': mode.is_enabled(context)})
+        return namespace

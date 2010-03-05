@@ -48,7 +48,7 @@ from utils import get_shop, format_price
 from cart import ProductCart
 from countries import CountriesEnumerate
 from payments import PaymentWaysEnumerate
-from payments.payment_way import PaymentWay
+from payments.payments_views import Payments_ChoosePayment
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
 
 
@@ -539,8 +539,8 @@ class Shop_ShowRecapitulatif(STLForm):
     title = MSG(u'Order summary')
     template = '/ui/shop/shop_recapitulatif.xml'
 
-    schema = {'payment': PaymentWaysEnumerate(mandatory=True),
-              'cgv': Boolean(mandatory=True)}
+    schema = {'payment': String, # XXX #PaymentWaysEnumerate(mandatory=True),
+              'cgv': Boolean} # XXX (mandatory=True)}
 
     def GET(self, resource, context):
         cart = ProductCart(context)
@@ -555,18 +555,11 @@ class Shop_ShowRecapitulatif(STLForm):
         cart = ProductCart(context)
         # Base namespace
         namespace = STLForm.get_namespace(self, resource, context)
-        # Payment ways
+        # Choose payments
         payments = resource.get_resource('payments')
         total_price = cart.get_total_price(resource)
-        namespace['payments'] = []
-        for mode in payments.search_resources(cls=PaymentWay):
-            logo = mode.get_resource(mode.get_property('logo'))
-            namespace['payments'].append(
-                {'name': mode.name,
-                 'value': mode.get_title(),
-                 'description': mode.get_payment_way_description(context, total_price),
-                 'logo': context.resource.get_pathto(logo),
-                 'enabled': mode.is_enabled(context)})
+        view = Payments_ChoosePayment(total_price=total_price)
+        namespace['choose_payment'] = view.GET(payments, context)
         # Alert MSG
         namespace['alert_msg'] = MSG(
           u"""To continue, you have to validate the terms of sales!""")
@@ -641,7 +634,7 @@ class Shop_ShowRecapitulatif(STLForm):
                             title={'en': u'#%s' % ref},
                             **kw)
         # We clear the cart
-        cart.clear()
+        # XXX cart.clear()
         # We show the payment form
         kw = {'ref': ref, 'amount': total_price, 'mode': form['payment']}
         payments = resource.get_resource('payments')

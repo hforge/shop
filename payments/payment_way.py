@@ -141,9 +141,10 @@ class PaymentWay(Editable, ShopFolder):
         For example to auto-validate payment or to add additional informations
         """
         payments = self.get_resource('payments').handler
-        payments.add_record({'ref': payment['ref'],
-                             'amount': payment['amount'],
-                             'user': context.user.name})
+        record = payments.add_record({'ref': payment['ref'],
+                                     'amount': payment['amount'],
+                                     'user': context.user.name})
+        return record
 
 
     def get_payment_way_description(self, context, total_amount):
