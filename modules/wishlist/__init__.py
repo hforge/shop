@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2007 Taverne Sylvain <taverne.sylvain@gmail.com>
+# Copyright (C) 2010 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,27 +14,5 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from itools
-from itools import get_version
-from itools.core import get_abspath
 
-# Import from ikaaro
-from itools.gettext import register_domain
-
-# Import from shop
-from products_feed import ProductsFeed
-from shop import Shop
-from website import ShopWebSite
-
-# Import from package
-import modules
-import skin
-import user
-import cross_selling
-
-# Make the product version available to Python code
-__version__ = get_version()
-
-# Register the shop domain
-path = get_abspath('locale')
-register_domain('shop', path)
+from wishlist import ShopModule_WishList

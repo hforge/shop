@@ -74,3 +74,6 @@ register_skin('shop', ShopSkin(path))
 
 path = get_abspath('ui/backoffice/')
 register_skin('backoffice', BackofficeSkin(path))
+
+path = get_abspath('ui/modules/')
+register_skin('modules', BackofficeSkin(path))
