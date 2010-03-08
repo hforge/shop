@@ -14,8 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from datetime import datetime
+
 # Import from itools
 from itools.core import merge_dicts
+from itools.datatypes import DateTime, String
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -48,8 +52,22 @@ class WishList(ShopFolder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
-                           data=XHTMLBody())
+                           owner=String,
+                           ctime=DateTime,
+                           data=XHTMLBody)
 
+
+    @staticmethod
+    def _make_resource(cls, folder, name, ctime=None, *args, **kw):
+        if ctime is None:
+            ctime = datetime.now()
+        ShopFolder._make_resource(cls, folder, name, ctime=ctime, *args,
+                                     **kw)
+
+
+    def _get_catalog_values(self):
+        return merge_dicts(ShopFolder._get_catalog_values(self),
+                           ctime=self.get_property('ctime'))
 
 
 
@@ -57,7 +75,8 @@ class ShopModule_WishList(ShopFolder):
 
     class_id = 'shop-module-wishlist'
     class_title = MSG(u'Module wishlist')
-    class_views = ['view', 'edit', 'browse_content']
+    class_views = ['view', 'new_resource?type=wishlist',
+                   'edit', 'browse_content']
 
     view = ShopModule_WishListView()
     edit = ShopModule_WishList_Edit()
@@ -83,6 +102,8 @@ class ShopModule_WishList(ShopFolder):
         #order = shop.get_resource('orders/%s' % ref)
         # 3) Set order as payed (so generate bill)
         #order.set_as_payed(context)
+
+
 
 
 register_resource_class(ShopModule_WishList)

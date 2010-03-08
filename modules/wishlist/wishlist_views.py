@@ -15,12 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.datatypes import Unicode, Decimal, String
 from itools.gettext import MSG
-from itools.web import STLView
+from itools.web import STLView, get_context
 
 # Import from ikaaro
 from ikaaro import messages
+from ikaaro.forms import MultilineWidget
 from ikaaro.forms import RTEWidget, TextWidget, XHTMLBody, AutoForm
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.views_new import NewInstance
@@ -60,21 +62,37 @@ class WishList_Donate(AutoForm):
         return payments.show_payment_form(context, kw)
 
 
+
 class WishList_NewInstance(NewInstance):
 
-    access = 'is_allowed_to_edit'
+    access = True
 
-    widgets = [TextWidget('title', title=MSG(u'Title of your wishlist'))]
+    schema = merge_dicts(NewInstance.schema,
+                         description=Unicode)
+    widgets = [TextWidget('title', title=MSG(u'Title of your wishlist')),
+               MultilineWidget('description', title=MSG(u'Short description'))]
+
+
+    def get_new_resource_name(self, form):
+        root = get_context().root
+        search = root.search(format='wishlist')
+        wishlists = search.get_documents(sort_by='ctime', reverse=True)
+        if wishlists:
+            return str(int(wishlists[0].name) + 1)
+        return '1'
+
 
 
 class WishList_Edit(DBResource_Edit):
 
-    access = 'is_allowed_to_edit'
+    access = 'is_owner_or_admin'
 
     schema = {'title': Unicode,
+              'description': Unicode,
               'data': XHTMLBody}
 
     widgets = [TextWidget('title', title=MSG(u'Title of your wishlist')),
+               MultilineWidget('description', title=MSG(u'Short description')),
                RTEWidget('data', title=MSG(u"Presentation of your wishlist"))]
 
 
@@ -110,10 +128,10 @@ class ShopModule_WishList_Edit(DBResource_Edit):
 
     access = 'is_allowed_to_edit'
 
-    schema = {'title': Unicode,
-              'description': Unicode,
-              'subject': Unicode,
-              'data': XHTMLBody}
+    schema = {'title': Unicode(multilingual=True),
+              'description': Unicode(multilingual=True),
+              'subject': Unicode(multilingual=True),
+              'data': XHTMLBody(multilingual=True)}
 
     widgets = [TextWidget('title', title=MSG(u'Title')),
                TextWidget('description', title=MSG(u'Description')),
@@ -130,15 +148,20 @@ class ShopModule_WishList_Edit(DBResource_Edit):
 
 
     def action(self, resource, context, form):
-        for key in self.schema:
-            resource.set_property(key, form[key])
+        language = resource.get_content_language(context)
+        for key, datatype in self.schema.items():
+            if getattr(datatype, 'multilingual', False) is True:
+                resource.set_property(key, form[key], language)
+            else:
+                resource.set_property(key, form[key])
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
 
 
+
 class ShopModule_WishListView(STLView):
 
-    access = 'is_allowed_to_edit'
+    access = True
     title = MSG(u'View')
     template = '/ui/modules/wishlist/view.xml'
 

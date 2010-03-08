@@ -58,4 +58,6 @@ class ShopPayments(Payments):
     pay_view = ShopPayments_PayView
     end_view_top = ShopPayments_EndViewTop()
 
+
+
 register_resource_class(ShopPayments)

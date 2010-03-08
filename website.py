@@ -82,11 +82,26 @@ class ShopWebSite(WebSite):
                                language='en', **kw)
 
 
-
     def get_document_types(self):
         return []
 
 
+    #############################
+    # ACL
+    #############################
+    def is_owner_or_admin(self, user, resource):
+        if not user:
+            return False
+        # Admins are all powerfull
+        if self.is_admin(user, resource):
+            return True
+        owner = resource.get_property('owner')
+        return owner == user.name
+
+
+    #############################
+    # Update
+    #############################
     def update_20100227(self):
         self.move_resource('categories', 'categories_old')
         self.move_resource('shop/categories', 'categories')
