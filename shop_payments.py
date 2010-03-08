@@ -58,17 +58,4 @@ class ShopPayments(Payments):
     pay_view = ShopPayments_PayView
     end_view_top = ShopPayments_EndViewTop()
 
-    def set_payment_as_ok(self, payment_way, id_record, context):
-        shop = self.parent
-        # 1) Send Email confirmation
-        self.send_confirmation_mail(payment_way, id_record, context)
-        # 2) Get corresponding order
-        payments_table = payment_way.get_resource('payments').handler
-        record = payments_table.get_record(id_record)
-        ref = payments_table.get_record_value(record, 'ref')
-        order = shop.get_resource('orders/%s' % ref)
-        # 3) Set order as payed (so generate bill)
-        order.set_as_payed(context)
-
-
 register_resource_class(ShopPayments)

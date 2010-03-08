@@ -60,7 +60,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <button type="submit" value="action" name="edit_payment"
+          <button type="submit" name="action" value="edit_payment"
             class="button-ok">Validate</button>
         </td>
       </tr>

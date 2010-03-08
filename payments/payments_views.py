@@ -40,7 +40,7 @@ from shop.utils import bool_to_img, get_shop
 
 class Payments_EditablePayment(object):
 
-    action_edit_payment_schema = {'payment_way': PaymentWaysEnumerate(mandatory=True),
+    action_edit_payment_schema = {'payment_way': String, # XXX PaymentWaysEnumerate(mandatory=True),
                                   'id_payment': Integer(mandatory=True)}
     def action_edit_payment(self, resource, context, form):
         shop = get_shop(resource)
@@ -72,7 +72,7 @@ class Payments_ManagePayment(Payments_EditablePayment, STLForm):
 
     access = 'is_admin'
 
-    query_schema = {'payment_way': PaymentWaysEnumerate,
+    query_schema = {'payment_way': String, #XXX PaymentWaysEnumerate,
                     'id_payment': Integer}
 
     template = '/ui/shop/payments/payment_manage.xml'

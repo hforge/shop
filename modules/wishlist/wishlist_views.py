@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.core import merge_dicts
-from itools.datatypes import Unicode, Decimal
+from itools.datatypes import Unicode, Decimal, String
 from itools.gettext import MSG
 from itools.web import STLView
 
@@ -37,7 +36,8 @@ class WishList_Donate(AutoForm):
 
     submit_value = MSG(u'Do it')
 
-    schema = {'amount': Decimal(mandatory=True)}
+    schema = {'amount': Decimal(mandatory=True),
+              'payment': String}
     widgets = [TextWidget('amount', title=MSG(u'Amount of the gift (Ex: 50€)'))]
 
 
@@ -45,12 +45,19 @@ class WishList_Donate(AutoForm):
         # Choose payments
         payments = context.site_root.get_resource('shop/payments')
         total_price = form['amount']
-        view = Payments_ChoosePayment(total_price=total_price)
+        view = Payments_ChoosePayment(total_price=total_price,
+                                      resource_validator=resource.parent.get_abspath())
         return view.GET(payments, context)
 
 
     def action_pay(self, resource, context, form):
-        return 'ok'
+        # Show payment form
+        kw = {'ref': '0',
+              'amount': form['amount'],
+              'mode': form['payment'],
+              'resource_validator': str(resource.parent.get_abspath())}
+        payments = context.site_root.get_resource('shop/payments')
+        return payments.show_payment_form(context, kw)
 
 
 class WishList_NewInstance(NewInstance):

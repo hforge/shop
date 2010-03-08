@@ -155,7 +155,22 @@ class Payments(ShopFolder):
 
 
     def set_payment_as_ok(self, payment_way, id_record, context):
+        shop = self.parent
+        root = context.root
+        # Send Email confirmation
         self.send_confirmation_mail(payment_way, id_record, context)
+        # Get record
+        payments_table = payment_way.get_resource('payments').handler
+        record = payments_table.get_record(id_record)
+        get_value = payments_table.get_record_value
+        # Validate payment with validator
+        resource_validator = get_value(record, 'resource_validator')
+        validator = root.get_resource(resource_validator)
+        validator.set_payment_as_ok(payment_way, id_record, context)
+        #order = shop.get_resource('orders/%s' % ref)
+        ## 3) Set order as payed (so generate bill)
+        #order.set_as_payed(context)
+
 
 
     def send_confirmation_mail(self, payment_way, id_record, context):

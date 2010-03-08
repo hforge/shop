@@ -74,4 +74,15 @@ class ShopModule_WishList(ShopFolder):
                            data=XHTMLBody())
 
 
+    def set_payment_as_ok(self, payment_way, id_record, context):
+        """Payments module call this method when a payment is validated"""
+        payments_table = payment_way.get_resource('payments').handler
+        record = payments_table.get_record(id_record)
+        ref = payments_table.get_record_value(record, 'ref')
+        print ref, '@@@@@@@@'
+        #order = shop.get_resource('orders/%s' % ref)
+        # 3) Set order as payed (so generate bill)
+        #order.set_as_payed(context)
+
+
 register_resource_class(ShopModule_WishList)

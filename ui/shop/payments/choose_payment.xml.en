@@ -11,6 +11,8 @@
 
     <b>Total to pay: ${total_price}€</b><br/><br/>
 
+    <input type="hidden" name="amount" value="${total_price}"/>
+
     <table cellpadding="5px" cellspacing="0">
       <tr stl:repeat="payment payments" stl:if="payment/enabled">
         <td valign="top">
@@ -26,7 +28,9 @@
         </td>
       </tr>
     </table>
-    <button type="submit" id="button-order">Buy</button>
+    <button type="submit" id="button-order" name="action" value="pay">
+      Buy
+    </button>
 
   </form>
 

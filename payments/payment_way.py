@@ -40,6 +40,7 @@ class PaymentWayBaseTable(BaseTable):
         'user': String(is_indexed=True),
         'state': Boolean(is_indexed=True),
         'amount': Decimal,
+        'resource_validator': String,
         'description': Unicode}
 
 
@@ -54,6 +55,7 @@ class PaymentWayTable(Table):
         TextWidget('user', title=MSG(u'User id')),
         BooleanCheckBox('state', title=MSG(u'State')),
         TextWidget('amount', title=MSG(u'Amount')),
+        TextWidget('resource_validator', title=MSG(u'Resource validator')),
         TextWidget('description', title=MSG(u'Description'))]
 
     # Views
@@ -141,9 +143,11 @@ class PaymentWay(Editable, ShopFolder):
         For example to auto-validate payment or to add additional informations
         """
         payments = self.get_resource('payments').handler
-        record = payments.add_record({'ref': payment['ref'],
-                                     'amount': payment['amount'],
-                                     'user': context.user.name})
+        record = payments.add_record(
+            {'ref': payment['ref'],
+             'amount': payment['amount'],
+             'user': context.user.name,
+             'resource_validator': payment['resource_validator']})
         return record
 
 
