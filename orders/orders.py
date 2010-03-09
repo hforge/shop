@@ -378,16 +378,17 @@ class Order(WorkflowAware, ShopFolder):
         try:
             bill = self.generate_pdf_bill(context)
             order = self.generate_pdf_order(context)
+            order.handler.name = 'Order.pdf'
+            attachment = order.handler
         except Exception:
             # PDF generation is dangerous
-            pass
+            attachment = None
         # We send email confirmation
-        order.handler.name = 'Order.pdf'
         subject = MSG(u'New order validated').gettext()
         text = MSG(u'New order has been validated').gettext()
         for to_addr in shop.get_property('order_notification_mails'):
             context.root.send_email(to_addr, subject,
-                                    text=text, attachment=order.handler)
+                                    text=text, attachment=attachment)
 
 
     def set_as_sent(self, context):
