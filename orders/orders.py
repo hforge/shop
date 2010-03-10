@@ -394,7 +394,7 @@ class Order(WorkflowAware, ShopFolder):
             bill = self.generate_pdf_bill(context)
             order = self.generate_pdf_order(context)
             order.handler.name = 'Order.pdf'
-            attachment = [order.handler]
+            attachment = order.handler
         except Exception:
             # PDF generation is dangerous
             attachment = None
