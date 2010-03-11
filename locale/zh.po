@@ -1415,7 +1415,7 @@ msgstr "3<g id='3'>地址</g>"
 #: ../ui/shop/template.xhtml.en:32
 msgctxt "link"
 msgid "<g id='9'>Log in</g>  <g id='10'>Register</g>"
-msgstr ""
+msgstr "<g id='9'>登录</g>  <g id='10'>注册</g>"
 
 #: ../ui/shop/products/product_view.xml.en:47
 msgctxt "link"
@@ -1533,7 +1533,7 @@ msgstr ""
 #: ../payments/check/check_views.py:126 ../payments/cash/cash_views.py:88
 #: ../addresses.py:112
 msgid "Address"
-msgstr ""
+msgstr "地址"
 
 #: ../ui/shop/addresses_book.xml.en:14
 msgctxt "table cell"
@@ -1848,7 +1848,7 @@ msgstr ""
 
 #: ../user.py:131 ../shop_views.py:206
 msgid "Civility"
-msgstr ""
+msgstr "称谓"
 
 #: ../ui/shop/shop_view_cart.xml.en:19
 msgctxt "button"
@@ -2387,7 +2387,7 @@ msgstr ""
 #: ../ui/backoffice/login.xml.en:11 ../ui/shop/shop_login.xml.en:23
 msgctxt "label"
 msgid "E-mail Address"
-msgstr ""
+msgstr "电子邮箱地址"
 
 #: ../payments/paybox/enumerates.py:84
 msgid "EUROCARD_MASTERCARD"
@@ -2465,7 +2465,7 @@ msgstr ""
 #: ../user_views.py:387 ../user_views.py:405 ../suppliers_views.py:43
 #: ../user.py:130 ../shop_views.py:205 ../products/enumerate.py:114
 msgid "Email"
-msgstr ""
+msgstr "电子邮箱"
 
 #: ../ui/shop/orders/order_manage.xml.en:273
 msgctxt "table cell"
@@ -2629,7 +2629,7 @@ msgstr ""
 #: ../user_views.py:385 ../user_views.py:403 ../user.py:133
 #: ../shop_views.py:208 ../addresses.py:110
 msgid "Firstname"
-msgstr ""
+msgstr "名"
 
 #: ../ui/shop/stock/pdf_resupply.xml.en:22
 msgid "France"
@@ -2745,17 +2745,17 @@ msgstr ""
 #: ../ui/backoffice/login.xml.en:21 ../ui/shop/shop_login.xml.en:33
 msgctxt "link"
 msgid "I forgot my password"
-msgstr ""
+msgstr "忘记密码"
 
 #: ../ui/shop/shop_login.xml.en:12
 msgctxt "heading"
 msgid "I'm a new customer"
-msgstr ""
+msgstr "我是新用户"
 
 #: ../ui/shop/shop_login.xml.en:18
 msgctxt "heading"
 msgid "I'm already a customer"
-msgstr ""
+msgstr "我已经是注册用户"
 
 #: ../payments/transfer/transfer_views.py:96
 msgid "IBAN"
@@ -2790,7 +2790,7 @@ msgstr ""
 #: ../ui/shop/shop_login.xml.en:7
 msgctxt "heading"
 msgid "Identification"
-msgstr ""
+msgstr "用户登陆"
 
 #: ../payments/paybox/enumerates.py:164
 msgid "Identifier of purchasing body unknown"
@@ -2985,7 +2985,7 @@ msgstr ""
 #: ../user_views.py:386 ../user_views.py:404 ../user.py:132
 #: ../shop_views.py:207 ../addresses.py:111
 msgid "Lastname"
-msgstr ""
+msgstr "姓"
 
 #: ../ui/shop/stock/pdf_resupply.xml.en:27
 msgid "Le ${creation_date}"
@@ -2998,12 +2998,12 @@ msgstr ""
 #: ../ui/backoffice/login.xml.en:24 ../ui/shop/shop_login.xml.en:36
 msgctxt "button"
 msgid "Log in"
-msgstr ""
+msgstr "登录"
 
 #: ../ui/backoffice/template.xhtml.en:65
 msgctxt "link"
 msgid "Log in"
-msgstr ""
+msgstr "登录"
 
 #: ../ui/backoffice/template.xhtml.en:70
 msgctxt "link"
@@ -3012,7 +3012,7 @@ msgstr ""
 
 #: ../shop_views.py:308
 msgid "Login"
-msgstr ""
+msgstr "登录"
 
 #: ../shipping/shipping_way_views.py:46 ../payments/payment_way_views.py:79
 msgid "Logo"
@@ -3030,7 +3030,7 @@ msgstr ""
 
 #: ../datatypes.py:38
 msgid "M."
-msgstr ""
+msgstr "先生"
 
 #: ../ui/shop/shop_website_view.xml.en:12
 #: ../ui/shop/shop_website_view.xml.en:27
@@ -3186,15 +3186,15 @@ msgstr ""
 
 #: ../datatypes.py:40
 msgid "Mlle"
-msgstr ""
+msgstr "小姐"
 
 #: ../datatypes.py:39
 msgid "Mme"
-msgstr ""
+msgstr "女士"
 
 #: ../user.py:135 ../shop_views.py:212
 msgid "Mobile"
-msgstr ""
+msgstr "手机号码"
 
 #: ../ui/shop/shop_delivery.xml.en:19
 msgctxt "table cell"
@@ -3631,12 +3631,12 @@ msgstr ""
 
 #: ../shop_views.py:209
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 #: ../ui/backoffice/login.xml.en:17 ../ui/shop/shop_login.xml.en:29
 msgctxt "label"
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 #: ../payments/paybox/enumerates.py:110
 msgid "Paybox IP address invalid"
@@ -3798,7 +3798,7 @@ msgstr ""
 
 #: ../shop_views.py:219
 msgid "Pays"
-msgstr ""
+msgstr "国家"
 
 #: ../ui/shop/shop_website_view.xml.en:21
 #: ../ui/shop/shop_website_view.xml.en:36
@@ -3818,7 +3818,7 @@ msgstr ""
 
 #: ../user.py:134 ../shop_views.py:211
 msgid "Phone number"
-msgstr ""
+msgstr "电话号码"
 
 #: ../manufacturers_views.py:43
 msgid "Photo"
@@ -4141,7 +4141,7 @@ msgstr ""
 #: ../ui/shop/shop_login.xml.en:14
 msgctxt "link"
 msgid "Register"
-msgstr ""
+msgstr "注册"
 
 #: ../user_views.py:388
 msgid "Registration Date"
@@ -4154,7 +4154,7 @@ msgstr ""
 
 #: ../shop_views.py:210
 msgid "Repeat password"
-msgstr ""
+msgstr "重复密码"
 
 #: ../payments/paybox/enumerates.py:150
 msgid "Repeat the transaction later"
@@ -4802,7 +4802,7 @@ msgstr ""
 
 #: ../shop_views.py:218 ../addresses.py:115
 msgid "Town"
-msgstr ""
+msgstr "城市"
 
 #: ../ui/backoffice/template.xhtml.en:53
 msgctxt "link"
@@ -5154,7 +5154,7 @@ msgstr ""
 
 #: ../shop_views.py:217
 msgid "Zip code"
-msgstr ""
+msgstr "邮政编码"
 
 #: ../countries.py:152 ../shipping/shipping_way.py:124
 msgid "Zone"
