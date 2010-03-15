@@ -899,15 +899,21 @@ class Products(ShopFolder):
         """ Now a product has only one category """
         shop = get_shop(self)
         for resource in self.get_resources():
-            categories = resource.get_property('categories')
-            if len(categories) > 1:
+            if not isinstance(resource, Product):
                 continue
-            category = categories[0]
-            new_path = '../../categories/%s/%s' % (category, resource.name)
-            self.move_resource(resource.name, new_path)
+            categories = resource.get_property('categories')
+            if categories is None:
+                new_path = '../../categories/%s' % resource.name
+            elif len(categories) > 1:
+                category = categories[0]
+                new_path = '../../categories/%s/%s' % (category, resource.name)
+            elif len(categories) == 1:
+                category = categories[0]
+                new_path = '../../categories/%s/%s' % (category, resource.name)
             print '=================='
             print resource.get_abspath()
             print '===>', new_path
+            self.move_resource(resource.name, new_path)
             print '=================='
 
 
