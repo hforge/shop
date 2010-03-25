@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <table id="browse-list" style="width:200px; float:right">
+   <tr>
+      <thead>
+      <th>
+        Order States
+      </th>
+      </thead>
+    </tr>
+    <tr>
+      <td>
+        <span class="counter counter-green">${nb_open}</span>
+        <a href="${link_orders}/;view">Open</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="counter" style="background-color:#BF0000">${nb_waiting_payment}</span>
+        <a href="${link_orders}/;view_waiting_payment">Waiting Payment</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="counter" style="background-color:#FFC500">${nb_sent}</span>
+        <a href="${link_orders}/;view_sent">Sent</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="counter counter-red">${nb_cancel}</span>
+        <a href="${link_orders}/;view_canceled">Cancel</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="counter counter-black">${nb_archive}</span>
+        <a href="${link_orders}/;view_archive">Archives</a>
+      </td>
+    </tr>
+  </table>
+
+</stl:block>

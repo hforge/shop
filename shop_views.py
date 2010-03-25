@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 # Copyright (C) 2009 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -29,6 +28,7 @@ from itools.uri import get_reference, get_uri_path
 from itools.fs import vfs
 from itools.rss import RSSFile
 from itools.web import BaseView, STLForm, STLView, ERROR, INFO
+from itools.xapian import AndQuery, NotQuery, PhraseQuery
 from itools.xml import XMLError, XMLParser
 
 # Import from ikaaro
@@ -51,6 +51,7 @@ from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from utils import get_shop, format_price
 from cart import ProductCart
 from countries import CountriesEnumerate
+from orders.orders_views import Orders_StatesBox
 from payments import PaymentWaysEnumerate
 from payments.payments_views import Payments_ChoosePayment
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
@@ -759,5 +760,26 @@ class Shop_Administration(STLView):
         return rss_news
 
 
+    def get_nb_users(self, resource, context):
+          return len(context.root.search(format=resource.user_class.class_id))
+
+
+    def get_nb_products(self, resource, context):
+          return len(context.root.search(format=resource.product_class.class_id))
+
+
+    def get_nb_issues_for_me(self, resource, context):
+          # XXX Not sure for tracker state ids (3 = close) ?
+          query = [PhraseQuery('format', 'issue'),
+                   NotQuery(PhraseQuery('state', '3')),
+                   PhraseQuery('assigned_to', context.user)]
+          return len(context.root.search(AndQuery(*query)))
+
+
     def get_namespace(self, resource, context):
-        return {'news': self.get_rss_news(context)}
+        orders = resource.get_resource('orders')
+        return {'news': self.get_rss_news(context),
+                'nb_users': self.get_nb_users(resource, context),
+                'nb_products': self.get_nb_products(resource, context),
+                'nb_issues': self.get_nb_issues_for_me(resource, context),
+                'orders_states_box': Orders_StatesBox().GET(orders, context)}

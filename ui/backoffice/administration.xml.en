@@ -4,6 +4,35 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+
+  <div id="statistics">
+    <h1>Statistics</h1>
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td valign="top">
+          There are
+            <span class="counter counter-green">${nb_issues}</span>
+          issues assigned to you on the <a href="/tracker">tracker</a><br/><br/>
+
+          There are
+            <span class="counter counter-green">${nb_users}</span>
+          <a href="/shop/customers/">users</a> registered on your website<br/><br/>
+
+          There are
+            <span class="counter counter-green">${nb_products}</span>
+          <a href="/categories/">products</a> on your shop<br/>
+        </td>
+        <td>
+        </td>
+        <td style="width: 400px">
+          ${orders_states_box}
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="clear"/>
+
+  <!-- News -->
   <div id="news" stl:if="news">
     <h1>News</h1>
     <div class="a-news" stl:repeat="n news">

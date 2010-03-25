@@ -20,7 +20,7 @@ from itools.datatypes import Boolean, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.xapian import AndQuery, PhraseQuery, OrQuery, NotQuery
-from itools.web import ERROR, INFO, STLForm, FormError
+from itools.web import ERROR, INFO, STLForm, FormError, STLView
 from itools.web.views import process_form
 from itools.xml import XMLParser
 from itools.workflow import WorkflowError
@@ -74,6 +74,24 @@ class OrderCancelButton(Button):
     title = MSG(u'Set as cancel')
 
 
+class Orders_StatesBox(STLView):
+
+    template = '/ui/shop/orders/orders_states_box.xml'
+
+    def get_namespace(self, resource, context):
+        root = context.root
+        namespace = {'link_orders': context.get_link(resource)}
+        for key, c in [('nb_open', OrdersView),
+                       ('nb_waiting_payment', OrdersViewWaitingPayment),
+                       ('nb_sent', OrdersViewSent),
+                       ('nb_cancel', OrdersViewCanceled),
+                       ('nb_archive', OrdersViewArchive)]:
+            query = AndQuery(PhraseQuery('format', 'order'),
+                             c().get_items_query())
+            namespace[key] = len(root.search(query))
+        return namespace
+
+
 
 class OrdersView(Folder_BrowseContent):
 
@@ -122,17 +140,7 @@ class OrdersView(Folder_BrowseContent):
 
 
     def get_search_namespace(self, resource, context):
-        root = context.root
-        namespace = {}
-        for key, c in [('nb_open', OrdersView),
-                       ('nb_waiting_payment', OrdersViewWaitingPayment),
-                       ('nb_sent', OrdersViewSent),
-                       ('nb_cancel', OrdersViewCanceled),
-                       ('nb_archive', OrdersViewArchive)]:
-            query = AndQuery(PhraseQuery('format', 'order'),
-                             c().get_items_query())
-            namespace[key] = len(root.search(query))
-        return namespace
+        return {'orders_states_box': Orders_StatesBox().GET(resource, context)}
 
 
     def get_item_value(self, resource, context, item, column):
