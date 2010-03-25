@@ -4,5 +4,15 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <div id="news" stl:if="news">
+    <h1>News</h1>
+    <div class="a-news" stl:repeat="n news">
+      <h2>
+        [${n/pubDate}]
+        <a href="n/link">${n/title}</a>
+      </h2>
+      <p>${n/description}</p>
+    </div>
+  </div>
 
 </stl:block>

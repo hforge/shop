@@ -24,8 +24,12 @@ from itools.core import merge_dicts
 from itools.datatypes import Email, String, Unicode
 from itools.datatypes import Boolean, MultiLinesTokens
 from itools.gettext import MSG
+from itools.i18n import format_date
 from itools.uri import get_reference, get_uri_path
+from itools.fs import vfs
+from itools.rss import RSSFile
 from itools.web import BaseView, STLForm, STLView, ERROR, INFO
+from itools.xml import XMLError, XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import SelectRadio, SelectWidget
@@ -728,7 +732,32 @@ class Shop_GetProductStock(BaseView):
         return dumps(kw)
 
 
+
 class Shop_Administration(STLView):
 
     access= 'is_allowed_to_edit'
     template = '/ui/backoffice/administration.xml'
+
+    def get_rss_news(self, context):
+        url = getattr(context.site_root, 'backoffice_rss_news_uri', None)
+        if url is None:
+            return []
+        # Flux de news RSS
+        try:
+            f = vfs.open(url)
+        except Exception:
+            return []
+        try:
+            feed = RSSFile(string=f.read())
+        except XMLError:
+            return []
+        rss_news = []
+        for item in feed.items[:2]:
+            item['pubDate'] = format_date(item['pubDate'], context.accept_language)
+            item['description'] = XMLParser(item['description'].encode('utf-8'))
+            rss_news.append(item)
+        return rss_news
+
+
+    def get_namespace(self, resource, context):
+        return {'news': self.get_rss_news(context)}

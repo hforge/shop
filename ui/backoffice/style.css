@@ -414,3 +414,29 @@ padding:3px 0 3px 10px;
 #shippings-tarification .shipping-way .tarification{
   margin: 20px 0 20px 50px;
 }
+
+/* News */
+#news h1{
+  font-size: 25px;
+  color: #1065A2;
+  border-bottom: 2px solid #1065A2;
+}
+
+#news h2 a{
+  color: black;
+  text-decoration: none;
+}
+
+
+#news .a-news{
+  margin: 20px;
+  padding: 10px;
+  background-color: #EEE;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+}
+
+#news .a-news p a{
+  color: #FD7D00;
+  text-decoration: none;
+}
