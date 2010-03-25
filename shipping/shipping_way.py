@@ -18,11 +18,12 @@
 from decimal import Decimal as decimal
 
 # Import from itools
-from itools import fs
+from itools.fs import lfs
 from itools.core import get_abspath, merge_dicts
 from itools.csv import Table as BaseTable, CSVFile
 from itools.datatypes import Decimal, Enumerate, String, Unicode, Integer
 from itools.gettext import MSG
+from itools.handlers import ro_database
 from itools.i18n import format_datetime
 from itools.stl import stl
 from itools.web import get_context
@@ -150,7 +151,7 @@ class ShippingWay(ShopFolder):
     def _make_resource(cls, folder, name, *args, **kw):
         ShopFolder._make_resource(cls, folder, name, *args, **kw)
         # Image
-        body = fs.open(get_abspath(cls.img)).read()
+        body = lfs.open(get_abspath(cls.img)).read()
         img = Image._make_resource(Image, folder,
                                    '%s/logo.png' % name, body=body,
                                    **{'state': 'public'})
@@ -168,7 +169,7 @@ class ShippingWay(ShopFolder):
                                       '%s/prices' % name)
         if getattr(cls, 'csv', None):
             table = ShippingPricesTable()
-            csv = ShippingPricesCSV(get_abspath(cls.csv))
+            csv = ro_database.get_handler(get_abspath(cls.csv), ShippingPricesCSV)
             for row in csv.get_rows():
                 table.add_record(
                   {'zone': str(zones.index(row.get_value('zone'))),
