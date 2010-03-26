@@ -29,6 +29,7 @@ from ikaaro.registry import register_resource_class
 from deposit_views import Deposit_Configure, deposit_schema
 from shop.payments.payment_way import PaymentWay
 from shop.payments.registry import register_payment_way
+from shop.utils import format_price
 
 
 class Deposit(PaymentWay):
@@ -50,15 +51,24 @@ class Deposit(PaymentWay):
     def _show_payment_form(self, context, payment):
         percent = self.get_property('percent')
         payment['mode'] = 'paybox' # XXX (Can have another name ?)
-        payment['amount'] = payment['amount'] * (percent / decimal('100.0'))
+        if self.get_property('pay_tax'):
+            payment['amount'] = payment['amount'] * (percent / decimal('100.0'))
+        else:
+            payment['amount'] = payment['amount_without_tax'] * (percent / decimal('100.0'))
         return self.parent.show_payment_form(context, payment)
 
 
     def get_payment_way_description(self, context, total_amount):
-        msg = MSG(u"Pay {percent}% now ({amount}€)")
+        msg = MSG(u"Pay {percent}% of {original_amount}€ now ({amount}€)")
         percent = self.get_property('percent')
+        if self.get_property('pay_tax'):
+            total_amount = total_amount['with_tax']
+        else:
+            total_amount = total_amount['without_tax']
         amount = total_amount * (percent / decimal('100.0'))
-        msg = msg.gettext(percent=percent, amount=amount)
+        msg = msg.gettext(percent=percent,
+                          original_amount=format_price(total_amount),
+                          amount=format_price(amount))
         return list(XMLParser(msg.encode('utf-8'))) + self.get_xhtml_data()
 
 

@@ -23,7 +23,6 @@ from sys import prefix
 from itools.core import merge_dicts, get_abspath
 from itools.datatypes import Boolean, String, Integer
 from itools.gettext import MSG
-from itools.handlers import ConfigFile
 from itools.html import HTMLFile
 from itools.uri import Path
 
@@ -127,16 +126,17 @@ class Paybox(PaymentWay):
         payments = self.parent
         # We get the paybox CGI path on serveur
         cgi_path = Path(prefix).resolve2('bin/paybox.cgi')
-        # Get configuration
-        configuration_uri = get_abspath('paybox.cfg')
-        configuration = ConfigFile(configuration_uri)
         # Configuration
         kw = {}
         kw['PBX_CMD'] = payment['ref']
         kw['PBX_TOTAL'] = int(payment['amount'] * 100)
         # Basic configuration
-        for key in configuration.values.keys():
-            kw[key] = configuration.get_value(key)
+        kw['PBX_MODE'] = '4'
+        kw['PBX_LANGUE'] = 'FRA'
+        kw['PBX_TYPEPAIEMENT'] = 'CARTE'
+        kw['PBX_WAIT'] = '0'
+        kw['PBX_RUF1'] = 'POST'
+        kw['PBX_RETOUR'] = "ref:R\;transaction:T\;autorisation:A\;amount:M\;advance_state:E\;payment:P\;carte:C\;sign:K"
         # PBX Retour uri
         for option in PBXState.get_options():
             key = option['pbx']

@@ -34,7 +34,7 @@ from ikaaro.views import BrowseForm, SearchForm
 # Import from shop
 from enumerates import PaymentWaysEnumerate
 from payment_way import PaymentWay
-from shop.utils import bool_to_img, get_shop
+from shop.utils import bool_to_img, format_price, get_shop
 
 
 

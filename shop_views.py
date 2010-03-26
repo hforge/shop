@@ -587,7 +587,7 @@ class Shop_ShowRecapitulatif(STLForm):
         return namespace
 
 
-    def action(self, resource, context, form):
+    def action_pay(self, resource, context, form):
         from orders import Order
         cart = ProductCart(context)
         root = context.root
@@ -595,14 +595,17 @@ class Shop_ShowRecapitulatif(STLForm):
         if not cart.is_valid():
             return context.come_back(CART_ERROR, goto='/')
         # Calcul total price
-        total_price = decimal(0)
+        total_price_with_tax = decimal(0)
+        total_price_without_tax = decimal(0)
         total_weight = decimal(0)
         for cart_elt in cart.products:
             product = context.root.get_resource(cart_elt['name'])
             quantity = cart_elt['quantity']
             declination = cart_elt['declination']
-            unit_price = product.get_price_with_tax(declination)
-            total_price += unit_price * quantity
+            unit_price_with_tax = product.get_price_with_tax(declination)
+            unit_price_without_tax = product.get_price_without_tax(declination)
+            total_price_with_tax += unit_price_with_tax * quantity
+            total_price_without_tax += unit_price_without_tax * quantity
             total_weight += product.get_weight(declination) * quantity
         # XXX GEt Shipping price (Hardcoded, fix it)
         addresses = resource.get_resource('addresses').handler
@@ -613,9 +616,11 @@ class Shop_ShowRecapitulatif(STLForm):
         shipping_mode = cart.shipping['name']
         shipping_price = shippings.get_namespace_shipping_way(context,
                   shipping_mode, country, total_weight)['price']
-        total_price += shipping_price
+        total_price_with_tax += shipping_price
+        total_price_without_tax += shipping_price
         # Format total_price
-        total_price = decimal(format_price(total_price))
+        total_price_with_tax = decimal(format_price(total_price_with_tax))
+        total_price_without_tax = decimal(format_price(total_price_without_tax))
         # Guess ref number
         # We take last order name + 1
         search = root.search(format='order')
@@ -629,19 +634,23 @@ class Shop_ShowRecapitulatif(STLForm):
         kw = {'user': context.user,
               'payment_mode': form['payment'],
               'shipping_price': shipping_price,
-              'total_price': total_price,
+              'total_price': total_price_with_tax,
               'total_weight': total_weight,
               'cart': cart,
               'shop': resource,
               'shop_uri': context.uri.resolve('/')}
         orders = resource.get_resource('orders')
-        Order.make_resource(Order, orders, ref,
+        order = Order.make_resource(Order, orders, ref,
                             title={'en': u'#%s' % ref},
                             **kw)
         # We clear the cart
         # XXX cart.clear()
         # We show the payment form
-        kw = {'ref': ref, 'amount': total_price, 'mode': form['payment']}
+        kw = {'ref': ref,
+              'amount': total_price_with_tax,
+              'amount_without_tax': total_price_without_tax,
+              'resource_validator': str(order.get_abspath()),
+              'mode': form['payment']}
         payments = resource.get_resource('payments')
         return payments.show_payment_form(context, kw)
 

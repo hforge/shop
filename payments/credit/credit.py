@@ -112,6 +112,7 @@ class CreditPayment(PaymentWay):
 
 
     def get_payment_way_description(self, context, total_amount):
+        total_amount = total_amount['with_tax']
         amount_available = self.get_credit_available_for_user(context.user)
         remaining_amount = amount_available - total_amount
         if remaining_amount < decimal('0'):

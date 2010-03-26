@@ -281,14 +281,17 @@ class ProductCart(object):
     # XXX To improve
     def get_total_price(self, shop):
         context = self.context
-        total_price = decimal(0)
+        total_price_with_tax = decimal(0)
+        total_price_without_tax = decimal(0)
         total_weight = decimal(0)
         for cart_elt in self.products:
             product = context.root.get_resource(cart_elt['name'])
             quantity = cart_elt['quantity']
             declination = cart_elt['declination']
-            unit_price = product.get_price_with_tax(declination)
-            total_price += unit_price * quantity
+            unit_price_with_tax = product.get_price_with_tax(declination)
+            unit_price_without_tax = product.get_price_without_tax(declination)
+            total_price_with_tax += unit_price_with_tax * quantity
+            total_price_without_tax += unit_price_without_tax * quantity
             total_weight += product.get_weight(declination) * quantity
         # XXX GEt Shipping price (Hardcoded, fix it)
         addresses = shop.get_resource('addresses').handler
@@ -299,10 +302,10 @@ class ProductCart(object):
         shipping_mode = self.shipping['name']
         shipping_price = shippings.get_namespace_shipping_way(context,
                   shipping_mode, country, total_weight)['price']
-        total_price += shipping_price
-        # Format total_price
-        total_price = decimal(format_price(total_price))
-        return total_price
+        total_price_with_tax += shipping_price
+        total_price_without_tax += shipping_price
+        return {'with_tax': total_price_with_tax,
+                'without_tax': total_price_without_tax}
 
 
 

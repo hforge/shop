@@ -9,9 +9,9 @@
       Please choose a payment mode
     </h1>
 
-    <b>Total to pay: ${total_price}€</b><br/><br/>
+    <b>Total to pay: ${total_price/with_tax}€</b><br/><br/>
 
-    <input type="hidden" name="amount" value="${total_price}"/>
+    <input type="hidden" name="amount" value="${total_price/with_tax}"/>
 
     <table cellpadding="5px" cellspacing="0">
       <tr stl:repeat="payment payments" stl:if="payment/enabled">

@@ -19,17 +19,20 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Decimal
+from itools.datatypes import Decimal, Boolean
 from itools.gettext import MSG
 # Import from ikaaro
-from ikaaro.forms import TextWidget
+from ikaaro.forms import BooleanRadio, TextWidget
 
 # Import from shop
 from shop.payments.payment_way_views import PaymentWay_Configure
 
 
-deposit_schema = {'percent': Decimal(default=decimal('100.0'))}
-deposit_widgets = [TextWidget('percent', title=MSG(u'Deposit amount (in %)'))]
+deposit_schema = {'percent': Decimal(default=decimal('100.0'), mandatory=True),
+                  'pay_tax': Boolean(mandatory=True)}
+
+deposit_widgets = [TextWidget('percent', title=MSG(u'Deposit amount (in %)')),
+                   BooleanRadio('pay_tax', title=MSG(u'Pay deposite with tax ?'))]
 
 
 class Deposit_Configure(PaymentWay_Configure):
