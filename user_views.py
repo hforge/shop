@@ -33,12 +33,13 @@ from ikaaro.table_views import Table_View
 
 # Import from shop
 from addresses_views import Addresses_EditAddress, Addresses_AddAddress
-from datatypes import Civilite
+from datatypes import Civilite, ThreeStateBoolean
+from forms import ThreeStateBooleanRadio
 from shop_utils_views import RealRessource_Form
 from orders.orders_views import OrdersView, numero_template
 from orders.workflow import states, states_color
 from user_group import UserGroup_Enumerate
-from utils import get_shop
+from utils import bool_to_img, get_shop
 
 
 class ShopUser_Profile(STLView):
@@ -381,6 +382,7 @@ class Customers_View(Folder_BrowseContent):
 
     table_columns = [
         ('name', MSG(u'Id')),
+        ('is_enabled', MSG(u'?')),
         ('gender', MSG(u'Gender')),
         ('firstname', MSG(u'Firstname')),
         ('lastname', MSG(u'Lastname')),
@@ -393,6 +395,7 @@ class Customers_View(Folder_BrowseContent):
 
     search_schema = {
         'name': String,
+        'is_enabled': ThreeStateBoolean,
         'user_group': UserGroup_Enumerate,
         'firstname': Unicode,
         'lastname': Unicode,
@@ -401,6 +404,7 @@ class Customers_View(Folder_BrowseContent):
 
     search_widgets = [
         TextWidget('name', title=MSG(u'Id')),
+        ThreeStateBooleanRadio('is_enabled', title=MSG(u'Is enabled ?')),
         SelectWidget('user_group', title=MSG(u'User group')),
         TextWidget('firstname', title=MSG(u'Firstname')),
         TextWidget('lastname', title=MSG(u'Lastname')),
@@ -435,10 +439,11 @@ class Customers_View(Folder_BrowseContent):
         abspath = str(users.get_canonical_path())
         search_query.append(PhraseQuery('parent_path', abspath))
         # Search query
-        for key in self.search_schema.keys():
+        for key, datatype in self.search_schema.items():
             value = context.get_form_value(key)
             if not value:
                 continue
+            value = datatype.decode(value)
             search_query.append(PhraseQuery(key, value))
         # Ok
         return context.root.search(AndQuery(*search_query))
@@ -450,6 +455,8 @@ class Customers_View(Folder_BrowseContent):
         if column == 'name':
             name = item_brain.name
             return name, name
+        elif column == 'is_enabled':
+            return bool_to_img(item_resource.get_property(column))
         elif column == 'gender':
             return Civilite.get_value(item_resource.get_property('gender'))
         elif column == 'email':

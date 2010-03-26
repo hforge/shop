@@ -20,7 +20,7 @@ from datetime import datetime
 # Import from itools
 from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
-from itools.datatypes import String, Unicode, DateTime
+from itools.datatypes import Boolean, String, Unicode, DateTime
 from itools.gettext import MSG
 from itools.web import get_context
 
@@ -125,7 +125,8 @@ class ShopUser(User):
                               last_time=DateTime,
                               gender=Civilite,
                               phone1=String(mandatory=True),
-                              phone2=String)
+                              phone2=String,
+                              is_enabled=Boolean)
 
     base_widgets = [
                 TextWidget('email', title=MSG(u"Email")),
@@ -161,6 +162,7 @@ class ShopUser(User):
         values['ctime'] = self.get_property('ctime')
         values['last_time'] = self.get_property('last_time')
         values['user_group'] = self.get_property('user_group')
+        values['is_enabled'] = self.get_property('is_enabled')
         return values
 
 
@@ -241,3 +243,4 @@ register_resource_class(AuthentificationLogs)
 
 register_field('last_time', DateTime(is_stored=True))
 register_field('user_group', String(is_indexed=True))
+register_field('is_enabled', Boolean(is_indexed=True))

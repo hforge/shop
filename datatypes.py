@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Enumerate, PathDataType, String
+from itools.datatypes import Boolean, Enumerate, PathDataType, String
 from itools.gettext import MSG
 from itools.web import get_context
 
@@ -79,3 +79,29 @@ class DynamicEnumerate(Enumerate):
         path = '%s/%s' % (cls.path, name)
         resource = context.site_root.get_resource(path)
         return resource.get_title()
+
+
+
+class ThreeStateBoolean(Boolean):
+
+    default = ''
+
+    @staticmethod
+    def decode(value):
+        if value is '':
+            return None
+        return bool(int(value))
+
+
+    @staticmethod
+    def encode(value):
+        if value is True:
+            return '1'
+        elif value is False:
+            return '0'
+        return None
+
+
+    @staticmethod
+    def is_empty(value):
+        return False
