@@ -288,7 +288,7 @@ class Order(WorkflowAware, ShopFolder):
             for key in BaseOrdersProducts.record_properties.keys():
                 kw[key] = get_value(record, key)
             name = get_value(record, 'name')
-            product_resource = shop_products.get_resource(name, soft=True)
+            product_resource = context.root.get_resource(name, soft=True)
             if product_resource:
                 kw['href'] = context.get_link(product_resource)
                 kw['uri'] = product_resource.handler.uri
