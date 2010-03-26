@@ -13,6 +13,7 @@ body{
 }
 
 #body{
+  min-height: 600px;
   background-color: #FFF;
   -moz-border-radius: 0px 0px 20px 20px;
   -moz-box-shadow: 3px 3px 5px black;
@@ -84,6 +85,29 @@ h1{
   color: #ffc600;
 }
 
+/* Breadcrumbs */
+#breadcrumbs-container td{
+  padding: 0;
+  margin: 0px;
+}
+
+#breadcrumbs{
+  margin: 0;
+}
+
+#breadcrumbs span a{
+  background-color: gray;
+  color: #FFF;
+  padding: 5px;
+  margin: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+#breadcrumbs span a:hover {
+  background-color: #175794;
+  color: #FFF;
+}
 
 /* Input */
 input, textarea, select{
