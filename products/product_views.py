@@ -19,7 +19,7 @@ from itools.core import merge_dicts
 from itools.csv import CSVFile
 from itools.datatypes import Email, Integer, String, Unicode
 from itools.gettext import MSG
-from itools.i18n import format_datetime
+from itools.i18n import format_date
 from itools.uri import get_reference
 from itools.web import INFO, ERROR, STLView, STLForm, get_context
 from itools.web import BaseView
@@ -406,7 +406,7 @@ class Products_View(Folder_BrowseContent):
         elif column == 'ctime':
             ctime = item_resource.get_property('ctime')
             accept = context.accept_language
-            return format_datetime(ctime, accept)
+            return format_date(ctime, accept)
         elif column == 'product_model':
             product_model = item_resource.get_property('product_model')
             return ProductModelsEnumerate.get_value(product_model)
