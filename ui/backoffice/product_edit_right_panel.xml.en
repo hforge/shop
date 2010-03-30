@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <div class="context-menu">
+    <label>
+      Actions
+    </label>
+    <ul>
+      <li>
+        <a href="${frontoffice_uri}" target="_blank">
+          View product in frontoffice
+        </a>
+      </li>
+      <li>
+        <a href="./;delete_product">
+          Delete product
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <br/>
+
+  <div class="context-menu">
+    <label>
+      <a href="./images/">
+        ${nb_photos} Photos
+      </a>
+    </label>
+    <ul>
+      <li>
+        <a href="./order-photos/">
+          Order photos to show
+        </a>
+      </li>
+      <li>
+        <a href="./images/">
+          Manage photos
+        </a>
+      </li>
+    </ul>
+    <div style="padding:5px;text-align:center;width:215px">
+      <a href="${image/href}/?width=800&amp;height=600" stl:repeat="image images">
+        <img src="${image/href}/;thumb?width=200&amp;height=200"
+          title="${image/title}" style="margin-bottom:5px;"/>
+      </a>
+    </div>
+  </div>
+
+</stl:block>

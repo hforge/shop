@@ -37,7 +37,7 @@ from ikaaro.forms import SelectRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
 from ikaaro.utils import get_base_path_query
-from ikaaro.views import CompositeForm
+from ikaaro.views import CompositeForm, ContextMenu
 from ikaaro.views_new import NewInstance
 
 # Import from shop
@@ -175,13 +175,28 @@ class Product_View(Editable_View, STLForm):
         context.message = INFO(u'Product added to cart !')
 
 
+class Product_Edit_Right_Panel(ContextMenu):
+
+    title = MSG(u'Go To Issue')
+    template = '/ui/backoffice/product_edit_right_panel.xml'
+
+    def get_namespace(self, resource, context):
+        shop = get_shop(resource)
+        images = ([resource.get_cover_namespace(context)] +
+                  resource.get_images_namespace(context))
+        frontoffice_uri = '%s/%s' % (shop.get_property('shop_uri'),
+                                     resource.get_canonical_path())
+        return {'images': images,
+                'frontoffice_uri': frontoffice_uri,
+                'nb_photos': len(images)}
+
 
 
 class Product_Edit(Editable_Edit, AutoForm):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'Edit')
-    context_menus = [EditLanguageMenu()]
+    context_menus = [EditLanguageMenu(), Product_Edit_Right_Panel()]
 
     base_widgets = [
         # General informations

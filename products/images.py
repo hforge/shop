@@ -24,7 +24,7 @@ from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.file import Image
-from ikaaro.folder_views import GoToSpecificDocument
+from ikaaro.folder_views import Folder_PreviewContent, GoToSpecificDocument
 from ikaaro.forms import ImageSelectorWidget
 from ikaaro.future.order import ResourcesOrderedTable
 from ikaaro.registry import register_resource_class
@@ -156,6 +156,9 @@ class ImagesFolder(ShopFolder):
 
     class_id = 'images-folder'
     class_title = MSG(u'Images folder')
+    class_views = ['preview_content']
+
+    preview_content = Folder_PreviewContent(search_template=None)
 
     def get_document_types(self):
         return [Image]
