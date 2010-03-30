@@ -73,8 +73,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
-    class_views = ['view', 'edit', 'declinations', 'images',
-                   'order', 'edit_cross_selling', 'delete_product']
     class_description = MSG(u'A product')
     class_version = '20100119'
 
@@ -773,7 +771,34 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
         # Manufacturer and categories (not needed, due to abspath)
 
+    #######################
+    ## Class views
+    #######################
+    def get_class_views(self):
+        context = get_context()
+        # Back-Office
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
+            return ['edit', 'view'] + self.default_class_views
+        return ['view', 'edit'] + self.default_class_views
 
+
+    def get_default_view_name(self):
+        views = self.get_class_views()
+        print views
+        if not views:
+            return None
+        context = get_context()
+        user = context.user
+        ac = self.get_access_control()
+        for view_name in views:
+            view = getattr(self, view_name, None)
+            if ac.is_access_allowed(user, self, view):
+                return view_name
+
+    default_class_views = ['declinations', 'images',
+                   'order', 'edit_cross_selling', 'delete_product']
+    class_views = property(get_class_views, None, None, '')
     #######################
     ## Updates methods
     #######################
