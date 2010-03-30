@@ -95,6 +95,11 @@ h1{
   margin: 0;
 }
 
+#breadcrumbs span:first-child a{
+  -moz-border-radius: 0 5px 5px 0;
+  -webkit-border-radius: 0 5px 5px 0;
+}
+
 #breadcrumbs span a{
   background-color: gray;
   color: #FFF;
