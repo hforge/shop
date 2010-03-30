@@ -359,7 +359,7 @@ class Products_View(Folder_BrowseContent):
         schema = Folder_BrowseContent.get_query_schema(self)
         # Override the default values
         schema['batch_size'] = Integer(default=50)
-        schema['sort_by'] = String(default='title')
+        schema['sort_by'] = String(default='mtime')
         return schema
 
 

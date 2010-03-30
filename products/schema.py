@@ -49,7 +49,7 @@ product_schema = {# General informations
                   'manufacturer': ManufacturersEnumerate,
                   'supplier': SuppliersEnumerate(multiple=True),
                   # Categories XXX To remove after update
-                  #'categories': String(multiple=True),
+                  'categories': String(multiple=True),
                   # Manage stock
                   'stock-quantity': Integer(default=0, mandatory=True),
                   'stock-option': StockOptions(mandatory=True, default='accept'),
