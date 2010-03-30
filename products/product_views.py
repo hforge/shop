@@ -334,8 +334,8 @@ class Products_View(Folder_BrowseContent):
              RemoveButton, PublishButton, RetireButton]
 
     table_columns = [
-        ('barcode', None),
-        ('cover', MSG(u'Cover')),
+        ('barcode', None, False),
+        ('cover', None, False),
         ('reference', MSG(u'Reference')),
         ('title', MSG(u'Title')),
         ('stored_price', MSG(u'Price (included VAT)')),
