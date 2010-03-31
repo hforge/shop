@@ -25,10 +25,11 @@ from itools.xapian import AndQuery, PhraseQuery
 from ikaaro import messages
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.forms import HTMLBody, ImageSelectorWidget, TextWidget, RTEWidget
-from ikaaro.forms import BooleanRadio
+from ikaaro.forms import BooleanRadio, SelectWidget
 
 # Import from shop
 from shop.editable import Editable_Edit
+from shop.user_group import UserGroup_Enumerate
 
 
 class PaymentWay_EndView(STLView):
@@ -71,6 +72,7 @@ class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
                          title=Unicode(mandatory=True, multilingual=True),
                          logo=PathDataType(mandatory=True, multilingual=True),
                          data=HTMLBody(mandatory=True, multilingual=True),
+                         only_this_groups=UserGroup_Enumerate(multiple=True),
                          enabled=Boolean(mandatory=True))
 
 
@@ -78,7 +80,8 @@ class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
         TextWidget('title', title=MSG(u'Title')),
         ImageSelectorWidget('logo',  title=MSG(u'Logo')),
         BooleanRadio('enabled', title=MSG(u'Enabled ?')),
-        RTEWidget('data', title=MSG(u"Description"))]
+        RTEWidget('data', title=MSG(u"Description")),
+        SelectWidget('only_this_groups', title=MSG(u"Only for this groups"))]
 
 
     submit_value = MSG(u'Edit configuration')

@@ -49,6 +49,7 @@ class ShippingWay_Configure(AutoForm):
         SelectWidget('mode', title=MSG(u'Mode ?'), has_empty_option=False),
         BooleanRadio('is_free', title=MSG(u'Shipping way is free ?')),
         SelectWidget('only_this_models', title=MSG(u'Only for this products models')),
+        SelectWidget('only_this_groups', title=MSG(u'Only for this user groups')),
         ]
 
 

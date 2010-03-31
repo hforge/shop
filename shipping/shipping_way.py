@@ -306,6 +306,9 @@ class ShippingWaysEnumerate(Enumerate):
         shop = get_shop(context.resource)
         shippings = shop.get_resource('shippings')
         for way in shippings.search_resources(cls=ShippingWay):
+            shipping_groups = way.get_property('only_this_groups')
+            if context.user.get_property('user_group') not in shipping_groups:
+                continue
             options.append({'name': way.name,
                             'value': way.get_title(),
                             'enabled': way.get_property('enabled')})

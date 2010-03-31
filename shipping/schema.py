@@ -20,6 +20,7 @@ from itools.gettext import MSG
 
 # Import from products
 from shop.products.enumerate import ProductModelsEnumerate
+from shop.user_group import UserGroup_Enumerate
 
 
 class DeliveryModes(Enumerate):
@@ -36,4 +37,5 @@ delivery_schema = {'title': Unicode,
                    'enabled': Boolean(default=True),
                    'mode': DeliveryModes(default='weight'),
                    'only_this_models': ProductModelsEnumerate(multiple=True),
+                   'only_this_groups': UserGroup_Enumerate(multiple=True),
                    'is_free': Boolean}

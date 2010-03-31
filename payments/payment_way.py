@@ -30,6 +30,7 @@ from ikaaro.table import Table
 # Import from shop
 from payment_way_views import PaymentWay_RecordView
 from shop.editable import Editable
+from shop.user_group import UserGroup_Enumerate
 from shop.utils import ShopFolder
 
 
@@ -106,6 +107,7 @@ class PaymentWay(Editable, ShopFolder):
                            Editable.get_metadata_schema(),
                            title=Unicode(multilingual=True),
                            enabled=Boolean(default=True),
+                           only_this_groups=UserGroup_Enumerate(multiple=True),
                            logo=PathDataType(multilingual=True))
 
 
