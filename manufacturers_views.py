@@ -65,7 +65,10 @@ class Manufacturer_Add(NewInstance):
         metadata = child.metadata
         language = resource.get_content_language(context)
         for key in manufacturer_schema:
-            metadata.set_property(key, form[key], language=language)
+            if key != 'photo':
+                resource.set_property(key, form[key], language=language)
+            else:
+                resource.set_property(key, form[key])
 
         goto = './%s/' % name
         return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
@@ -146,5 +149,8 @@ class Manufacturer_Edit(AutoForm):
     def action(self, resource, context, form):
         language = resource.get_content_language(context)
         for key in self.schema.keys():
-            resource.set_property(key, form[key], language=language)
+            if key != 'photo':
+                resource.set_property(key, form[key], language=language)
+            else:
+                resource.set_property(key, form[key])
         return context.come_back(messages.MSG_CHANGES_SAVED)
