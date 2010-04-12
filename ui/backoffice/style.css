@@ -502,3 +502,40 @@ padding:3px 0 3px 10px;
 #form-table p{
   clear: both;
 }
+
+/* Style des buttons */
+button{
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  background-color: #FFF;
+  border:1px solid #CCCCCC;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 12px;
+  -moz-box-shadow:0 0 3px #CCCCCC;
+  background-position: 5px 5px;
+  padding-left: 24px !important;
+}
+
+button:hover, button:focus {
+  -moz-box-shadow:0 0 3px #999999;
+  -webkit-box-shadow:0 0 3px #999999;
+}
+
+button.button-ok:hover {
+  -moz-box-shadow:0 0 3px #70CD1A;
+  -webkit-box-shadow:0 0 3px #70CD1A;
+}
+
+button.button-delete:hover {
+  -moz-box-shadow:0 0 3px red;
+  -webkit-box-shadow:0 0 3px red;
+}
+
+button::-moz-focus-inner {
+  border: 0px;
+}
+
+button::-webkit-focus-inner {
+  border: 0px;
+}
