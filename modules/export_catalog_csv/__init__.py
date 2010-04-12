@@ -15,8 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from modules import Modules
-
-import export_catalog
-import export_catalog_csv
-import wishlist
+from export_catalog_csv import ShopModule_ExportCatalogCSV

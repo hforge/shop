@@ -16,13 +16,11 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.csv import CSVFile
 from itools.datatypes import Email, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_date
 from itools.uri import get_reference
 from itools.web import INFO, ERROR, STLView, STLForm, get_context
-from itools.web import BaseView
 from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
 
@@ -703,34 +701,3 @@ class Product_Declinations(CompositeForm):
     subviews = [Declination_NewInstance(),
                 Product_DeclinationsView()]
 
-
-
-
-class Products_ExportCSV(BaseView):
-
-    access = 'is_admin'
-
-    def GET(self, resource, context):
-        root = context.root
-        shop = resource.parent
-        shop_uri = get_reference(shop.get_property('shop_uri'))
-        categories_uri = str(shop_uri.resolve('/categories'))
-        csv = CSVFile()
-        header = ['title', 'description', 'price', 'link']
-        csv.add_row(header)
-        format = resource.parent.product_class.class_id
-        for brain in root.search(format=format).get_documents():
-            product = root.get_resource(brain.abspath)
-            if product.is_buyable() is False:
-                continue
-            line = [brain.title,
-                    product.get_property('description'),
-                    product.get_price_with_tax(pretty=True),
-                    '%s/%s/%s' % (categories_uri,
-                                  product.get_property('categories')[0],
-                                  product.name)]
-            csv.add_row(line)
-        # Set response type
-        context.set_content_type('text/csv')
-        context.set_content_disposition('attachment; filename=export.csv')
-        return csv.to_str()
