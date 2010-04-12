@@ -52,12 +52,15 @@ class CategoriesEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
+        # XXX To improve
         context = get_context()
         site_root = context.site_root
         categories = site_root.get_resource('categories')
         # Build options
         options = []
         for categorie in categories.traverse_resources():
+            if categorie.class_id != 'category':
+                continue
             name = str(categorie.get_abspath())
             value = '--'* (len(name.split('/')) - 1)
             value = value + categorie.get_property('title')
