@@ -31,6 +31,7 @@ from datatypes import ImagePathDataType
 from editorial import Shop_EditorialView
 from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from manufacturers import Manufacturers, Manufacturer
+from modules import Modules
 from orders import Orders
 from products import Products, Product, ProductModels
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
@@ -52,7 +53,7 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view_cart']
-    class_version = '20091201'
+    class_version = '20100412'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'customers',
@@ -155,6 +156,9 @@ class Shop(ShopFolder):
         # Manufacturers
         Manufacturers._make_resource(Manufacturers, folder,
                       '%s/manufacturers' % name, title={'en': u'Manufacturers'})
+        # Modules
+        Modules._make_resource(Modules, folder,
+                      '%s/modules' % name, title={'en': u'Modules'})
         # Suppliers
         Suppliers._make_resource(Suppliers, folder,
                       '%s/suppliers' % name, title={'en': u'Suppliers'})
@@ -321,6 +325,12 @@ class Shop(ShopFolder):
         self.del_property('activate_mail_html')
         self.del_property('shop_signature')
         self.del_property('shop_from_addr')
+
+
+    def update_20100412(self):
+        if self.get_resource('modules', soft=True) is not None:
+            return
+        Modules.make_resource(Modules, self, 'modules')
 
 
 register_resource_class(Shop)

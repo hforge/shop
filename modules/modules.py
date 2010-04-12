@@ -14,6 +14,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from itools
+from itools.gettext import MSG
 
-import wishlist
-from modules import Modules
+# Import from ikaaro
+from ikaaro.folder import Folder
+
+# Import from shop
+from modules_views import Modules_View
+
+
+class Modules(Folder):
+
+    class_id = 'modules'
+    class_title = MSG(u'Modules')
+    class_views = ['view']
+
+    view = Modules_View()
+
+    def get_document_types(self):
+        return []
+
