@@ -40,6 +40,8 @@ class Modules_View(Folder_BrowseContent):
         item_brain, item_resource = item
         if column == 'title':
             return item_resource.get_title(), item_brain.name
+        elif column == 'description':
+            return item_resource.class_description
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
 
