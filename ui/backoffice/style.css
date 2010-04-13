@@ -539,3 +539,16 @@ button::-moz-focus-inner {
 button::-webkit-focus-inner {
   border: 0px;
 }
+
+/* Product edit */
+#final-retail-price, #reduce-final-retail-price{
+  font-size: 30px;
+}
+
+#final-retail-price.strikethrough{
+  color: red;
+}
+
+.strikethrough{
+  text-decoration: line-through;
+}
