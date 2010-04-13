@@ -18,7 +18,6 @@
 from operator import itemgetter
 
 # Import from itools
-from itools.core import merge_dicts
 from itools.gettext import MSG
 from itools.datatypes import Unicode, PathDataType, String
 from itools.web import STLView
@@ -48,8 +47,10 @@ class Manufacturer_Add(NewInstance):
 
     access = 'is_allowed_to_add'
     title = MSG(u'Add a new manufacturer')
-    schema = merge_dicts(manufacturer_schema, name=String)
-    widgets = [TextWidget('name', title=MSG(u'Name'))] + manufacturer_widgets
+    schema = {'name': String,
+              'title': Unicode}
+    widgets = [TextWidget('name', title=MSG(u'Name')),
+               TextWidget('title', title=MSG(u'Title'))]
 
     context_menus = []
 
@@ -64,13 +65,9 @@ class Manufacturer_Add(NewInstance):
         # The metadata
         metadata = child.metadata
         language = resource.get_content_language(context)
-        for key in manufacturer_schema:
-            if key != 'photo':
-                resource.set_property(key, form[key], language=language)
-            else:
-                resource.set_property(key, form[key])
+        resource.set_property('title', form['title'], language=language)
 
-        goto = './%s/' % name
+        goto = './%s/;edit' % name
         return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
 
 
