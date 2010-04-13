@@ -18,9 +18,10 @@
 from itools.core import merge_dicts
 from itools.datatypes import Email, Integer, String, Unicode
 from itools.gettext import MSG
+from itools.handlers import checkid
 from itools.i18n import format_date
 from itools.uri import get_reference
-from itools.web import INFO, ERROR, STLView, STLForm, get_context
+from itools.web import INFO, ERROR, STLView, STLForm, FormError, get_context
 from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
 
@@ -59,13 +60,48 @@ class Product_NewProduct(NewInstance):
     schema = {
         'name': String,
         'title': Unicode(mandatory=True),
+        'category': CategoriesEnumerate,
         'product_model': ProductModelsEnumerate}
 
     widgets = [
         title_widget,
         TextWidget('name', title=MSG(u'Name'), default=''),
+        SelectWidget('category', title=MSG(u'Category'),
+            has_empty_option=False),
         SelectWidget('product_model', title=MSG(u'Product model'),
             has_empty_option=False)]
+
+    def get_value(self, resource, context, name, datatypes):
+        if name == 'category':
+            return resource.get_abspath()
+        return NewInstance.get_value(self, resource, context, name, datatypes)
+
+
+    def _get_form(self, resource, context):
+        form = AutoForm._get_form(self, resource, context)
+        name = self.get_new_resource_name(form)
+
+        # Check the name
+        if not name:
+            raise FormError, messages.MSG_NAME_MISSING
+
+        try:
+            name = checkid(name)
+        except UnicodeEncodeError:
+            name = None
+
+        if name is None:
+            raise FormError, messages.MSG_BAD_NAME
+
+        # Check the name is free
+        root = context.root
+        category = root.get_resource(form['category'])
+        if category.get_resource(name, soft=True) is not None:
+            raise FormError, messages.MSG_NAME_CLASH
+
+        # Ok
+        form['name'] = name
+        return form
 
 
     def action(self, resource, context, form):
@@ -74,7 +110,9 @@ class Product_NewProduct(NewInstance):
         # Create the resource
         shop = get_shop(resource)
         cls = shop.product_class
-        child = cls.make_resource(cls, resource, name)
+        root = context.root
+        category = root.get_resource(form['category'])
+        child = cls.make_resource(cls, category, name)
         # The metadata
         metadata = child.metadata
         language = resource.get_content_language(context)
@@ -82,7 +120,7 @@ class Product_NewProduct(NewInstance):
         metadata.set_property('product_model', form['product_model'])
         metadata.set_property('state', 'private')
 
-        goto = './%s/' % name
+        goto = context.get_link(child)
         return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
 
 
