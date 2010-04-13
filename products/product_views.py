@@ -218,12 +218,10 @@ class Product_Edit_Right_Panel(ContextMenu):
 
     def get_namespace(self, resource, context):
         shop = get_shop(resource)
-        cover = resource.get_cover_namespace(context)
         images = resource.get_images_namespace(context)
-        if cover:
-            images.insert(0, cover)
+        site_root = context.site_root
         frontoffice_uri = '%s/%s' % (shop.get_property('shop_uri'),
-                                     resource.get_canonical_path())
+                                     site_root.get_pathto(resource))
         return {'images': images,
                 'frontoffice_uri': frontoffice_uri,
                 'nb_photos': len(images)}
