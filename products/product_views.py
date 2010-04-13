@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Email, Integer, String, Unicode
+from itools.datatypes import Enumerate, Email, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.i18n import format_date
@@ -265,8 +265,18 @@ class Product_Edit(Editable_Edit, AutoForm):
 
     def get_widgets(self, resource, context):
         product_model = resource.get_product_model()
-        return (self.base_widgets + Editable_Edit.widgets +
-                (product_model.get_model_widgets() if product_model else []))
+        # XXX Hack
+        # We do not show enumerates with 0 options
+        schema = self.get_schema(resource, context)
+        widgets = []
+        for widget in (self.base_widgets + Editable_Edit.widgets +
+                       (product_model.get_model_widgets() if product_model else [])):
+            datatype = schema[widget.name]
+            if issubclass(datatype, Enumerate):
+                if len(datatype.get_options()) == 0:
+                    continue
+            widgets.append(widget)
+        return widgets
 
 
     def get_schema(self, resource, context):

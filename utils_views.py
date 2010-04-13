@@ -22,6 +22,7 @@ from itools.xapian import OrQuery, PhraseQuery, AndQuery
 
 # Import from ikaaro
 from ikaaro.table_views import Table_View
+from ikaaro.views import SearchForm
 
 
 
@@ -100,7 +101,6 @@ class SearchTable_View(Table_View):
         return resource.handler.search(query)
 
 
-from ikaaro.views import SearchForm
 
 class SearchTableFolder_View(SearchForm):
 
@@ -151,8 +151,8 @@ class SearchTableFolder_View(SearchForm):
             namespace['first_widget'] = namespace['widgets'][0]['name']
         return namespace
 
+
     def get_items(self, resource, context, query=[]):
-        print '===>', query
         query = get_search_query(self.search_schema, context, query)
         results = context.root.search(query)
         sort_by = context.query['sort_by']
