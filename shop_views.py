@@ -763,7 +763,10 @@ class Shop_Administration(STLView):
             return []
         rss_news = []
         for item in feed.items[:2]:
-            item['pubDate'] = format_date(item['pubDate'], context.accept_language)
+            if item.get('pubDate'):
+                item['pubDate'] = format_date(item['pubDate'], context.accept_language)
+            else:
+                item['pubDate'] = None
             item['description'] = XMLParser(item['description'].encode('utf-8'))
             rss_news.append(item)
         return rss_news
