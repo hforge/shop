@@ -36,6 +36,7 @@ from ikaaro.views import CompositeForm
 from editable import Editable, Editable_Edit
 from products.enumerate import States
 from products.product_views import Products_View
+from manufacturers import ManufacturersEnumerate
 from utils import get_shop
 from views import BrowseFormBatchNumeric
 
@@ -332,12 +333,14 @@ class Category_Search(STLView):
     query_schema = {
         'reference': String,
         'title': Unicode,
+        'manufacturer': ManufacturersEnumerate,
         'workflow_state': States,
         }
 
     widgets = [
         TextWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
+        SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
         SelectWidget('workflow_state', title=MSG(u'State')),
         ]
 

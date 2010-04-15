@@ -374,7 +374,6 @@ class Product_ViewBox(STLView):
         return resource.get_small_namespace(context)
 
 
-
 class Products_View(Folder_BrowseContent):
 
     access = 'is_allowed_to_edit'
@@ -382,12 +381,6 @@ class Products_View(Folder_BrowseContent):
 
     batch_msg1 = MSG(u"There is 1 product")
     batch_msg2 = MSG(u"There are {n} products")
-
-    search_schema = {
-        'reference': String,
-        'title': Unicode,
-        'workflow_state': States,
-        }
 
     context_menus = []
 
@@ -433,8 +426,10 @@ class Products_View(Folder_BrowseContent):
         search_query = [
                 get_base_path_query(str(abspath)),
                 PhraseQuery('format', format)]
-        # Search query
-        for key in self.search_schema.keys():
+        # Search query # XXX Hack
+        from shop.categories_views import Category_Search
+        search_schema = Category_Search().query_schema
+        for key in search_schema.keys():
             value = context.get_form_value(key)
             if not value:
                 continue
