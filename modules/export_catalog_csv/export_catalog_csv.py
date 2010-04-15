@@ -41,8 +41,8 @@ class ShopModule_ExportCatalogCSV_View(BaseView):
             product = root.get_resource(brain.abspath)
             if product.is_buyable() is False:
                 continue
-            line = [brain.title,
-                    product.get_property('description'),
+            line = [brain.title.encode('utf-8'),
+                    product.get_property('description').encode('utf-8'),
                     product.get_price_with_tax(pretty=True),
                     product.handler.key]
             csv.add_row(line)
