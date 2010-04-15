@@ -106,9 +106,8 @@
         <td style="background-color:#FFFBF2">
           <form method="post">
             <b>Update order state:</b>${transitions}
-            <button type="submit" name="action" value="change_order_state">
-              OK
-            </button>
+            <button type="submit" class="button-ok"
+              name="action" value="change_order_state">OK</button>
             <br/>
           </form>
         </td>
