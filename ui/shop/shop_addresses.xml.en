@@ -55,7 +55,7 @@
 
   <br/><br/>
 
-  <a id="button-order" href=";delivery">
+  <a id="button-order" class="button" href=";delivery">
     Continue
   </a>
 

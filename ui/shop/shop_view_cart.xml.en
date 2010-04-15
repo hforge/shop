@@ -16,13 +16,15 @@
     ${cart}
 
     <form method="post">
+      <a href=";addresses"  id="button-order" class="button">
+        Order
+      </a>
       <button type="submit" id="clear-cart" name="action" value="clear">
         Clear the cart
       </button>
     </form>
     <div class="clear"/>
 
-    <a href=";addresses"  id="button-order">Order</a>
   </stl:block>
 
 </stl:block>

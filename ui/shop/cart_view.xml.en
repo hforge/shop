@@ -48,17 +48,17 @@
             <table class="table-quantity" stl:if="see_actions">
               <tr>
                 <td>
-                  <button id="remove-quantity"
-                    type="submit" name="action" value="remove"/>
+                  <button id="remove-quantity" name="action" value="remove">-</button>
                 </td>
                 <td>
                   <input type="text" class="quantity" name="quantity"
                     value="${p/quantity}" size="2" readonly="readonly"/>
                 </td>
                 <td>
-                  <button id="add-quantity" type="image"
-                    name="action" value="add"
-                    stl:if="p/can_add_quantity"/>
+                  <stl:block stl:if="p/can_add_quantity">
+                    <button id="add-quantity" type="image"
+                      name="action" value="add">+</button>
+                  </stl:block>
                   <img id="add_quantity_disable"
                     src="/ui/shop/images/plus_gris.png"
                     title="Impossible to add product in cart"
@@ -69,7 +69,7 @@
           </td>
           <td>${p/price/total/with_tax} €</td>
           <td stl:if="see_actions">
-            <button id="delete-cart" type="image" name="action" value="delete"/>
+            <button id="delete-cart" name="action" value="delete">X</button>
           </td>
         </tr>
       </form>
