@@ -37,8 +37,7 @@ class BackofficeSkin(Skin):
 class ShopSkin(Skin):
 
     class_skin = 'ui/backoffice'
-    base_styles = ['/ui/bo.css',
-                   '/ui/shop/perfect_sale_style.css',
+    base_styles = ['/ui/shop/perfect_sale_style.css',
                    '/ui/shop/style.css']
 
     base_scripts = []
