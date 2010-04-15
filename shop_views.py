@@ -783,8 +783,8 @@ class Shop_Administration(STLView):
     def get_nb_issues_for_me(self, resource, context):
           # XXX Not sure for tracker state ids (3 = close) ?
           query = [PhraseQuery('format', 'issue'),
-                   NotQuery(PhraseQuery('state', '3')),
-                   PhraseQuery('assigned_to', context.user)]
+                   NotQuery(PhraseQuery('state', 3)),
+                   PhraseQuery('assigned_to', context.user.name)]
           return len(context.root.search(AndQuery(*query)))
 
 
