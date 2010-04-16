@@ -25,6 +25,7 @@ from ikaaro.webpage import WebPage
 # Import from project
 from enumerate_table import EnumeratesFolder
 from addresses import Addresses
+from categories import Category
 from countries import Countries, CountriesZones
 from cross_selling import CrossSellingTable
 from datatypes import ImagePathDataType
@@ -104,6 +105,7 @@ class Shop(ShopFolder):
     ###############################
     manufacturer_class = Manufacturer
     product_class = Product
+    category_class = Category
     payments_class = ShopPayments
     supplier_class = Supplier
     user_class = ShopUser
