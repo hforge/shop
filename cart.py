@@ -24,7 +24,7 @@ from itools.web import get_context
 from ikaaro.datatypes import Password
 
 # Import from shop
-from utils import format_price, get_shop
+from utils import format_price
 
 
 class ProductCart(object):
