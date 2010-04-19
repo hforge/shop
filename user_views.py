@@ -384,7 +384,7 @@ class Customers_View(Folder_BrowseContent):
 
     table_columns = [
         ('name', MSG(u'Id')),
-        ('is_enabled', MSG(u'?')),
+        ('is_enabled', MSG(u'Enabled?')),
         ('gender', MSG(u'Gender')),
         ('firstname', MSG(u'Firstname')),
         ('lastname', MSG(u'Lastname')),
