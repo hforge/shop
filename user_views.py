@@ -128,18 +128,20 @@ class ShopUser_EditPrivateInformations(AutoForm):
 
     def get_schema(self, resource, context):
         user_class = get_shop(resource).user_class
-        return merge_dicts(user_class.base_schema,
-                           user_class.public_schema,
-                           user_class.private_schema,
-                           user_group=UserGroup_Enumerate)
+        schema = merge_dicts(user_class.base_schema,
+                             user_class.public_schema,
+                             user_class.private_schema,
+                             user_group=UserGroup_Enumerate)
+        del schema['password']
+        del schema['user_must_confirm']
+        return schema
 
 
     def get_widgets(self, resource, context):
         user_class = get_shop(resource).user_class
         return (user_class.base_widgets +
                 user_class.public_widgets +
-                user_class.private_widgets +
-                [SelectWidget('user_group', title=MSG(u'User group'))])
+                user_class.private_widgets)
 
 
     def get_value(self, resource, context, name, datatype):

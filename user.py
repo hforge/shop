@@ -27,7 +27,7 @@ from itools.web import get_context
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import SelectRadio, TextWidget
+from ikaaro.forms import BooleanRadio, SelectRadio, SelectWidget, TextWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
 from ikaaro.user import User, UserFolder
@@ -121,12 +121,10 @@ class ShopUser(User):
     # Base schema / widgets
     base_schema = merge_dicts(User.get_metadata_schema(),
                               ctime=DateTime,
-                              user_group=UserGroup_Enumerate,
                               last_time=DateTime,
                               gender=Civilite,
                               phone1=String(mandatory=True),
-                              phone2=String,
-                              is_enabled=Boolean)
+                              phone2=String)
 
     base_widgets = [
                 TextWidget('email', title=MSG(u"Email")),
@@ -142,8 +140,10 @@ class ShopUser(User):
     public_widgets = []
 
     # Additional private schema / widgets
-    private_schema = {}
-    private_widgets = []
+    private_schema = {'is_enabled': Boolean,
+                      'user_group': UserGroup_Enumerate}
+    private_widgets = [BooleanRadio('is_enabled', title=MSG(u'Is enabled')),
+                       SelectWidget('user_group', title=MSG(u'User group'))]
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
@@ -181,7 +181,7 @@ class ShopUser(User):
     def save_form(self, schema, form):
         private_schema = self.private_schema
         for key in schema:
-            if key.startswith('password'):
+            if key in ['password', 'user_must_confirm']:
                 continue
             elif (key not in self.get_metadata_schema() and
                   key not in private_schema):
