@@ -290,12 +290,13 @@ class Payments_ChoosePayment(STLForm):
         for mode in resource.search_resources(cls=PaymentWay):
             logo = mode.get_resource(mode.get_property('logo'))
             shipping_groups = mode.get_property('only_this_groups')
-            if context.user.get_property('user_group') not in shipping_groups:
+            user_group = context.user.get_property('user_group')
+            if len(shipping_groups)>1 and user_group not in shipping_groups:
                 continue
             namespace['payments'].append(
                 {'name': mode.name,
                  'value': mode.get_title(),
                  'description': mode.get_payment_way_description(context, total_price),
-                 'logo': context.resource.get_pathto(logo),
+                 'logo': str(context.resource.get_pathto(logo)),
                  'enabled': mode.is_enabled(context)})
         return namespace
