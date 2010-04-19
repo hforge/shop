@@ -391,6 +391,7 @@ class Customers_View(Folder_BrowseContent):
         ('email', MSG(u'Email')),
         ('ctime', MSG(u'Registration Date')),
         ('last_time', MSG(u'Last connection Date')),
+        ('actions', MSG(u'Actions')),
         ]
 
     search_template = '/ui/shop/users/users_view_search.xml'
@@ -469,6 +470,15 @@ class Customers_View(Folder_BrowseContent):
                 return '-'
             accept = context.accept_language
             return format_datetime(dtime, accept)
+        elif column == 'actions':
+            return XMLParser("""
+                <a href="./%s/" title="View customer">
+                  <img src="/ui/icons/16x16/view.png"/>
+                </a>
+                <a href="./%s/;edit_private_informations" title="Edit customer">
+                  <img src="/ui/icons/16x16/edit.png"/>
+                </a>
+                """ % (item_brain.name, item_brain.name))
         return item_resource.get_property(column)
 
 
