@@ -24,6 +24,9 @@ from itools.xapian import OrQuery, PhraseQuery, AndQuery
 from ikaaro.table_views import Table_View
 from ikaaro.views import SearchForm
 
+# Import from shop
+from utils import get_non_empty_widgets
+
 
 
 def get_search_query(search_schema, context, query):
@@ -71,7 +74,8 @@ class SearchTable_View(Table_View):
                      'submit_class': 'button-ok',
                      'has_required_widget': False,
                      'widgets': []}
-        for widget in self.search_widgets:
+        widgets = get_non_empty_widgets(self.search_schema, self.search_widgets)
+        for widget in widgets:
             value = context.query[widget.name]
             datatype = self.search_schema[widget.name]
             if issubclass(datatype, Enumerate):
@@ -130,7 +134,8 @@ class SearchTableFolder_View(SearchForm):
                      'submit_class': 'button-ok',
                      'has_required_widget': False,
                      'widgets': []}
-        for widget in self.search_widgets:
+        widgets = get_non_empty_widgets(self.search_schema, self.search_widgets)
+        for widget in widgets:
             value = context.query[widget.name]
             datatype = self.search_schema[widget.name]
             if issubclass(datatype, Enumerate):

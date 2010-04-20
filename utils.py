@@ -20,6 +20,7 @@ from tempfile import mkstemp
 from os import close as close_fd, system
 
 # Import from itools
+from itools.datatypes import Enumerate
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -87,6 +88,16 @@ def join_pdfs(list_pdf):
     pdf_content.close()
     return pdf
 
+
+def get_non_empty_widgets(schema, widgets):
+    widgets_non_empty = []
+    for widget in widgets:
+        datatype = schema[widget.name]
+        if issubclass(datatype, Enumerate):
+            if len(datatype.get_options()) == 0:
+                continue
+        widgets_non_empty.append(widget)
+    return widgets_non_empty
 
 
 class ShopFolder(Folder):

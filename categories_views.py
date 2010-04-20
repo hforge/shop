@@ -37,7 +37,7 @@ from editable import Editable, Editable_Edit
 from products.enumerate import States
 from products.product_views import Products_View
 from manufacturers import ManufacturersEnumerate
-from utils import get_shop
+from utils import get_non_empty_widgets, get_shop
 from views import BrowseFormBatchNumeric
 
 
@@ -347,7 +347,8 @@ class Category_Search(STLView):
     def get_namespace(self, resource, context):
         query = context.query
         namespace = {'widgets': []}
-        for widget in self.widgets:
+        widgets = get_non_empty_widgets(self.query_schema, self.widgets)
+        for widget in widgets:
             value = context.query[widget.name]
             html = widget.to_html(self.query_schema[widget.name], value)
             namespace['widgets'].append({'title': widget.title,
