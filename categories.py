@@ -32,13 +32,12 @@ from ikaaro.registry import get_register_fields
 from ikaaro.utils import get_base_path_query
 
 # Import from shop
-from categories_views import Category_View, Category_Edit
+from categories_views import Category_View, Category_BackofficeView, Category_Edit
 from categories_views import Category_ComparatorView, Category_Comparator
-from categories_views import Category_BackofficeView
 from utils import get_shop, ShopFolder
 from editable import Editable
 from products import Product
-from products.product_views import Product_NewProduct
+from products.product_views import Product_NewProduct, Products_View
 
 
 class Category(Editable, ShopFolder):
@@ -48,7 +47,8 @@ class Category(Editable, ShopFolder):
 
     # Views
     view = Category_View()
-    view_backoffice = Category_BackofficeView()
+    view_products = Products_View()
+    view_categories = Category_BackofficeView()
     edit = Category_Edit()
     new_product = Product_NewProduct()
     compare = Category_ComparatorView()
@@ -80,7 +80,7 @@ class Category(Editable, ShopFolder):
 
 
     def get_document_types(self):
-        return [Category, Product]
+        return []
 
 
     def get_nb_products(self, only_public=False):
@@ -173,7 +173,7 @@ class Category(Editable, ShopFolder):
         # Back-Office
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
-            return ['view_backoffice', 'edit']
+            return ['view_products', 'view_categories', 'edit']
         return ['view']
 
 

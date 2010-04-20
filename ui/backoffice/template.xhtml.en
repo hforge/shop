@@ -42,6 +42,9 @@
           <a href="/shop/;editorial">Editorial</a>
         </li>
         <li>
+          <a href="/categories/;view_categories">Categories</a>
+        </li>
+        <li>
           <a href="/categories/">Products</a>
         </li>
         <li>

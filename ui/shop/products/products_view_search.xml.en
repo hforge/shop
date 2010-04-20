@@ -6,7 +6,7 @@
 
   <h1>
     <img src="/ui/shop/images/bag_green.png"/>
-    Products and categories
+    Products
   </h1>
 
   <div style="float:left;width:60%">
@@ -26,24 +26,25 @@
       </fieldset>
     </form>
   </div>
-  <div style="float:right;width:40%;display:None;">
+  <div style="float:right;width:40%">
     <fieldset>
       <legend>Actions</legend>
       <p>
-        <a href="./;new_product" class="button-green">
-          <img src="/ui/shop/images/plus.png"/>
+        <a href="./;new_product" class="button button-ok">
           Create a new product
         </a>
-        <div class="clear"/>
-        <a href="./;stock_out" class="button-green">
-          <img src="/ui/shop/images/plus.png"/>
-          Update stock
-        </a>
-        <div class="clear"/>
-        <a href="./;stock_resupply" class="button-green">
-          <img src="/ui/shop/images/plus.png"/>
-          Resupply
-        </a>
+        <div style="display:none">
+          <div class="clear"/>
+          <a href="./;stock_out" class="button-green">
+            <img src="/ui/shop/images/plus.png"/>
+            Update stock
+          </a>
+          <div class="clear"/>
+          <a href="./;stock_resupply" class="button-green">
+            <img src="/ui/shop/images/plus.png"/>
+            Resupply
+          </a>
+        </div>
       </p>
     </fieldset>
   </div>

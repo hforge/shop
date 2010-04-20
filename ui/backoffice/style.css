@@ -502,7 +502,7 @@ padding:3px 0 3px 10px;
 }
 
 /* Style des buttons */
-button{
+button, .button{
   -moz-border-radius:3px;
   -webkit-border-radius:3px;
   background-color: #FFF;
@@ -512,7 +512,9 @@ button{
   font-size: 12px;
   -moz-box-shadow:0 0 3px #CCCCCC;
   background-position: 5px 5px;
+  background-repeat: no-repeat;
   padding-left: 24px !important;
+  text-decoration: none;
 }
 
 button:hover, button:focus {

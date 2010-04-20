@@ -25,19 +25,15 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
+from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import ImageSelectorWidget, RTEWidget, TextWidget
-from ikaaro.forms import SelectWidget
 from ikaaro.utils import get_base_path_query
 from ikaaro.resource_views import DBResource_Edit
-from ikaaro.views import CompositeForm
 
 # Import from shop
 from editable import Editable, Editable_Edit
-from products.enumerate import States
-from products.product_views import Products_View
-from manufacturers import ManufacturersEnumerate
-from utils import get_non_empty_widgets, get_shop
+from utils import get_shop
 from views import BrowseFormBatchNumeric
 
 
@@ -45,7 +41,7 @@ from views import BrowseFormBatchNumeric
 class Category_View(BrowseFormBatchNumeric):
 
     access = True
-    title = MSG(u'View')
+    title = MSG(u'View category')
 
     search_schema = {}
     search_template = None
@@ -243,7 +239,7 @@ class Category_Comparator(STLView):
 
 
 
-class Category_BaseBackofficeView(Folder_BrowseContent):
+class Category_BackofficeView(Folder_BrowseContent):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'View')
@@ -255,7 +251,7 @@ class Category_BaseBackofficeView(Folder_BrowseContent):
 
     search_template = '/ui/backoffice/category_view.xml'
 
-    table_actions = []
+    table_actions = [RemoveButton]
     table_columns = [
         ('checkbox', None),
         ('name', MSG(u'Name'), None),
@@ -272,17 +268,19 @@ class Category_BaseBackofficeView(Folder_BrowseContent):
 
     def get_item_value(self, resource, context, item, column):
         brain, item_resource = item
-        if column == 'nb_products':
+        if column == 'name':
+            return brain.name, './%s/;view_categories' % brain.name
+        elif column == 'nb_products':
             return item_resource.get_nb_products()
         elif column == 'actions':
             return XMLParser("""
                 <a href="./%s/" title="View category">
                   <img src="/ui/icons/16x16/view.png"/>
                 </a>
-                <a href="./;edit" title="Edit category">
+                <a href="./%s/;edit" title="Edit category">
                   <img src="/ui/icons/16x16/edit.png"/>
                 </a>
-                """ % brain.name)
+                """ % (brain.name, brain.name))
         return Folder_BrowseContent.get_item_value(self,
                  resource, context, item, column)
 
@@ -323,56 +321,3 @@ class Category_Edit(Editable_Edit, DBResource_Edit):
             resource.set_property(key, form[key], lang)
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
-
-
-
-class Category_Search(STLView):
-
-    template = '/ui/shop/products/products_view_search.xml'
-
-    query_schema = {
-        'reference': String,
-        'title': Unicode,
-        'manufacturer': ManufacturersEnumerate,
-        'workflow_state': States,
-        }
-
-    widgets = [
-        TextWidget('reference', title=MSG(u'Reference')),
-        TextWidget('title', title=MSG(u'Title')),
-        SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
-        SelectWidget('workflow_state', title=MSG(u'State')),
-        ]
-
-    def get_namespace(self, resource, context):
-        query = context.query
-        namespace = {'widgets': []}
-        widgets = get_non_empty_widgets(self.query_schema, self.widgets)
-        for widget in widgets:
-            value = context.query[widget.name]
-            html = widget.to_html(self.query_schema[widget.name], value)
-            namespace['widgets'].append({'title': widget.title,
-                                         'html': html})
-        return namespace
-
-
-
-
-class Category_BackofficeView(CompositeForm):
-
-    access = 'is_allowed_to_edit'
-    title = MSG(u'View')
-
-    subviews = [Category_Search(),
-                Category_BaseBackofficeView(),
-                Products_View()]
-
-    def get_query_schema(self):
-        # XXX
-        from itools.datatypes import Unicode, Boolean
-        return merge_dicts(
-              Category_Search().get_query_schema(),
-              Products_View().get_query_schema(),
-              search_field=Unicode,
-              search_subfolders=Boolean,
-              search_term=Unicode)

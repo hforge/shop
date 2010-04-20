@@ -22,7 +22,7 @@ from itools.handlers import checkid
 from itools.i18n import format_date
 from itools.uri import get_reference
 from itools.web import INFO, ERROR, STLView, STLForm, FormError, get_context
-from itools.xapian import AndQuery, PhraseQuery
+from itools.xapian import AndQuery, PhraseQuery, StartQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -49,6 +49,7 @@ from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.enumerates import TagsList
+from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
 from shop.utils import get_non_empty_widgets, get_shop
 
@@ -128,7 +129,7 @@ class Product_NewProduct(NewInstance):
 class Product_View(Editable_View, STLForm):
 
     access = 'is_allowed_to_view'
-    title = MSG(u'View')
+    title = MSG(u'View products')
     template = None
     model_template = None
 
@@ -379,6 +380,7 @@ class Products_View(Folder_BrowseContent):
 
     context_menus = []
 
+
     table_actions = [CopyButton, PasteButton, RenameButton,
              RemoveButton, PublishButton, RetireButton]
 
@@ -394,7 +396,7 @@ class Products_View(Folder_BrowseContent):
         ('workflow_state', MSG(u'State'))
         ]
 
-    search_template = '/ui/backoffice/products_view.xml'
+    search_template = '/ui/shop/products/products_view_search.xml'
 
     def get_table_columns(self, resource, context):
         base = [('checkbox', None)]
@@ -404,12 +406,38 @@ class Products_View(Folder_BrowseContent):
         return base + self.table_columns
 
 
+    search_widgets = [
+        TextWidget('reference', title=MSG(u'Reference')),
+        TextWidget('title', title=MSG(u'Title')),
+        SelectWidget('abspath', title=MSG(u'Category')),
+        SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
+        SelectWidget('workflow_state', title=MSG(u'State')),
+        ]
+
+    search_schema = {
+        'reference': String,
+        'title': Unicode,
+        'abspath': CategoriesEnumerate,
+        'manufacturer': ManufacturersEnumerate,
+        'workflow_state': States}
+
+    def get_search_namespace(self, resource, context):
+        query = context.query
+        namespace = {'widgets': []}
+        widgets = get_non_empty_widgets(self.search_schema, self.search_widgets)
+        for widget in widgets:
+            value = context.query[widget.name]
+            html = widget.to_html(self.search_schema[widget.name], value)
+            namespace['widgets'].append({'title': widget.title,
+                                         'html': html})
+        return namespace
+
+
     def get_query_schema(self):
-        schema = Folder_BrowseContent.get_query_schema(self)
-        # Override the default values
-        schema['batch_size'] = Integer(default=50)
-        schema['sort_by'] = String(default='mtime')
-        return schema
+        return merge_dicts(Folder_BrowseContent.get_query_schema(self),
+                           self.search_schema,
+                           batch_size=Integer(default=50),
+                           sort_by=String(default='mtime'))
 
 
     def get_items(self, resource, context, *args):
@@ -421,14 +449,15 @@ class Products_View(Folder_BrowseContent):
         search_query = [
                 get_base_path_query(str(abspath)),
                 PhraseQuery('format', format)]
-        # Search query # XXX Hack
-        from shop.categories_views import Category_Search
-        search_schema = Category_Search().query_schema
-        for key in search_schema.keys():
+        # Search query
+        for key in self.get_query_schema().keys():
             value = context.get_form_value(key)
             if not value:
                 continue
-            search_query.append(PhraseQuery(key, value))
+            if key == 'abspath':
+                search_query.append(StartQuery(key, value))
+            else:
+                search_query.append(PhraseQuery(key, value))
 
         # Ok
         return context.root.search(AndQuery(*search_query))
