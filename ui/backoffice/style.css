@@ -27,6 +27,7 @@ a{
 
 h1{
   font-size: 25px;
+  margin: 0;
   color: #1065A2;
   border-bottom: 2px solid #1065A2;
 }
@@ -39,17 +40,15 @@ h1{
 
 
 #loginform{
-  background-color: #135695;
-  -moz-border-radius: 20px;
-  -webkit-border-radius: 20px;
   width: 400px;
   margin: 50px auto;
-  color: #FFF;
+  color: #000;
   padding: 20px;
 }
 
-#loginform a{
-  color: white;
+#loginform fieldset{
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 /* Menu */

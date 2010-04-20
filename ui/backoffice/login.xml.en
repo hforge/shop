@@ -5,27 +5,30 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <form id="loginform" name="loginform" method="post" action="./;login">
-    <dl>
-      <dt>
-        <label for="username" class="${username/class}">E-mail Address</label>
-      </dt>
-      <dd>
-        <input type="text" id="username" name="username" value="${username/value}"/>
-      </dd>
-      <dt>
-        <label for="password" class="${password/class}">Password</label>
-      </dt>
-      <dd>
-        <input type="password" id="password" name="password"/>
-        <a href="/;forgotten_password">I forgot my password</a>
-      </dd>
-    </dl>
-    <button type="submit" class="button-ok">Log in</button>
+    <fieldset>
+      <legend>Log in</legend>
+      <dl>
+        <dt>
+          <label for="username" class="${username/class}">E-mail Address</label>
+        </dt>
+        <dd>
+          <input type="text" id="username" name="username" value="${username/value}"/>
+        </dd>
+        <dt>
+          <label for="password" class="${password/class}">Password</label>
+        </dt>
+        <dd>
+          <input type="password" id="password" name="password"/>
+          <a href="/;forgotten_password">I forgot my password</a>
+        </dd>
+      </dl>
+      <button type="submit" class="button-ok">Log in</button>
 
-    <script language="javascript">
-      <stl:inline stl:if="not username/value">$("#username").focus();</stl:inline>
-      <stl:inline stl:if="username/value">$("#password").focus();</stl:inline>
-    </script>
+      <script language="javascript">
+        <stl:inline stl:if="not username/value">$("#username").focus();</stl:inline>
+        <stl:inline stl:if="username/value">$("#password").focus();</stl:inline>
+      </script>
+    </fieldset>
   </form>
 
 </stl:block>
