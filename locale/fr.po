@@ -2651,7 +2651,7 @@ msgstr "Modifier cette adresse"
 #: ../ui/backoffice/editorial_view.xml.en:32
 msgctxt "link"
 msgid "Edit turning footer"
-msgstr ""
+msgstr "Modifier le pied de page tournant"
 
 #: ../ui/backoffice/template.xhtml.en:42
 msgctxt "link"
@@ -2661,7 +2661,7 @@ msgstr "Editorial"
 #: ../ui/backoffice/editorial_view.xml.en:52
 msgctxt "heading"
 msgid "Editorial content"
-msgstr ""
+msgstr "Contenu éditorial"
 
 #: ../user_views.py:391 ../user_views.py:414 ../suppliers_views.py:43
 #: ../user.py:130 ../shop_views.py:211 ../products/enumerate.py:115
@@ -4207,7 +4207,7 @@ msgstr "Prix (HT)"
 
 #: ../products/product_views.py:392
 msgid "Price (included VAT)"
-msgstr ""
+msgstr "Prix (TTC)"
 
 #: ../products/declination.py:54
 msgid "Price impact value"
@@ -4431,7 +4431,7 @@ msgstr ""
 #: ../products/product_views.py:410 ../products/product_views.py:528
 #: ../products/product_views.py:689 ../products/declination.py:50
 msgid "Reference"
-msgstr ""
+msgstr "Référence"
 
 #: ../ui/shop/products/product_view.xml.en:64
 #: ../ui/shop/stock/fill_stock_out.xml.en:14
@@ -4934,6 +4934,10 @@ msgid ""
 "g>  <g id='6'>users</g> registered on your website<x id='7'/><x id='8'/> "
 "There are <g id='9'>${nb_products}</g>  <g id='10'>products</g> on your shop"
 msgstr ""
+"Il y a <g id='1'>${nb_issues}</g> issues assignée(s) à vous sur le <g "
+"id='2'>tracker</g><x id='3'/><x id='4'/> Il y a <g id='5'>${nb_users}</"
+"g>  <g id='6'>clients</g> enregistrés sur le site<x id='7'/><x id='8'/> "
+"Il y a <g id='9'>${nb_products}</g>  <g id='10'>produits</g> dans votre boutique"
 
 #: ../categories_views.py:248
 msgid "There are {n} categories"
@@ -5290,7 +5294,7 @@ msgstr "L'utilisateur n'existe pas"
 
 #: ../user_views.py:411 ../user.py:146
 msgid "User group"
-msgstr ""
+msgstr "Groupe de l'utilisateur"
 
 #: ../payments/credit/credit.py:51 ../payments/payment_way.py:56
 msgid "User id"
