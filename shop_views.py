@@ -138,6 +138,15 @@ class Shop_ViewCart(STLForm):
 
     schema = {'id': String}
 
+
+    def GET(self, resource, context):
+        # Back-Office
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
+            return context.uri.resolve('/shop/;administration')
+        return STLForm.GET(self, resource, context)
+
+
     def get_namespace(self, resource, context):
         cart = ProductCart(context)
         cart.clean()
