@@ -386,7 +386,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
           'manufacturer': None,
           # XXX
           #ManufacturersEnumerate.get_value( self.get_property('manufacturer')),
-          'mini-title': reduce_string(title, shop.product_title_word_treshold),
+          'mini-title': reduce_string(title,
+                                      shop.product_title_word_treshold,
+                                      shop.product_title_phrase_treshold),
           'price': self.get_price_namespace(),
           'reference': self.get_property('reference'),
           'title': title}
