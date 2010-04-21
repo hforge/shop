@@ -20,7 +20,7 @@ from datetime import datetime
 # Import from itools
 from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
-from itools.datatypes import Boolean, String, Unicode, DateTime
+from itools.datatypes import Boolean, String, Unicode, DateTime, Tokens
 from itools.gettext import MSG
 from itools.web import get_context
 
@@ -41,6 +41,7 @@ from user_views import Customers_View, AuthentificationLogs_View
 from user_views import ShopUser_EditPrivateInformations, ShopUser_Manage
 from user_group import UserGroup_Enumerate
 from addresses_views import Addresses_Book
+from user_group import groups
 from utils import get_shop
 from datatypes import Civilite
 
@@ -185,6 +186,7 @@ class ShopUser(User):
             if key in ['password', 'user_must_confirm']:
                 continue
             elif (key not in self.get_metadata_schema() and
+                  key not in self.get_dynamic_schema() and
                   key not in private_schema):
                 continue
             value = form[key]
@@ -205,6 +207,83 @@ class ShopUser(User):
         context.root.send_email(to_addr=self.get_property('email'),
                                 subject=self.mail_subject_template.gettext(),
                                 text=self.mail_body_template.gettext())
+
+
+
+    ###################################
+    ## XXX Dynamic group user
+    ###################################
+    def get_dynamic_schema(self):
+        user_group = self.get_property('user_group')
+        if user_group:
+            return groups[user_group].schema
+        return {}
+
+
+    def get_property_and_language(self, name, language=None):
+        value, language = User.get_property_and_language(self, name,
+                                                               language)
+
+        # Default properties first (we need "product_model")
+        if name in self.get_metadata_schema():
+            return value, language
+
+        # Dynamic property?
+        dynamic_schema = self.get_dynamic_schema()
+        if name in dynamic_schema:
+            datatype = dynamic_schema[name]
+            # Default value
+            if value is None:
+                value = datatype.get_default()
+            elif getattr(datatype, 'multiple', False):
+                if not isinstance(value, list):
+                    # Decode the property
+                    # Only support list of strings
+                    value = list(Tokens.decode(value))
+                # Else a list was already set by "set_property"
+            else:
+                value = datatype.decode(value)
+
+        return value, language
+
+
+    def set_property(self, name, value, language=None):
+        """Added to handle dynamic properties.
+        The value is encoded because metadata won't know about its datatype.
+        The multilingual status must be detected to give or not the
+        "language" argument.
+        """
+
+        # Dynamic property?
+        dynamic_schema = self.get_dynamic_schema()
+        if name in dynamic_schema:
+            datatype = dynamic_schema[name]
+            if getattr(datatype, 'multiple', False):
+                return User.set_property(self, name,
+                                               Tokens.encode(value))
+            elif getattr(datatype, 'multilingual', False):
+                # If the value equals the default value
+                # set the property to None (String's default value)
+                # to avoid problems during the language negociation
+                if value == datatype.get_default():
+                    # XXX Should not be hardcoded
+                    # Default value for String datatype is None
+                    value = None
+                else:
+                    value = datatype.encode(value)
+                return User.set_property(self, name, value, language)
+            # Even if the language was not None, this property is not
+            # multilingual so ignore it.
+            return User.set_property(self, name,
+                                           datatype.encode(value))
+
+        # Standard property
+        schema = self.get_metadata_schema()
+        datatype = schema[name]
+        if getattr(datatype, 'multilingual', False):
+            return User.set_property(self, name, value, language)
+        return User.set_property(self, name, value)
+
 
 
 
