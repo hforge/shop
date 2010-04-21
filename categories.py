@@ -80,7 +80,7 @@ class Category(Editable, ShopFolder):
 
 
     def get_document_types(self):
-        return []
+        return [Product, Category]
 
 
     def get_nb_products(self, only_public=False):
