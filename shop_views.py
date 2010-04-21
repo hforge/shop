@@ -194,6 +194,8 @@ class Shop_Register(RegisterForm):
     user_is_enabled = True
     user_group = ''
 
+    registration_notification_body = MSG(u'You have to validate user number {name} ({email})')
+
     base_schema = {
         'email': Email(mandatory=True),
         'lastname': Unicode(mandatory=True),
@@ -269,10 +271,17 @@ class Shop_Register(RegisterForm):
         # User group
         user.set_property('user_group', self.user_group)
 
-        # User is validated ?
+        # User is enabled ?
         user.set_property('is_enabled', self.user_is_enabled)
 
         if self.user_is_enabled is False:
+            # Send mail to webmaster to validate user
+            subject = MSG(u'A customer must be validated in your shop').gettext()
+            body = self.registration_notification_body.gettext(
+                        name=user.name, email=email)
+            for to_addr in shop.get_property('order_notification_mails'):
+                root.send_email(to_addr, subject, text=body)
+            # Redirect on specific page
             msg = MSG(u'Your account should be validated')
             return context.come_back(msg, '/')
 
