@@ -242,7 +242,7 @@ class Category_Comparator(STLView):
 class Category_BackofficeView(Folder_BrowseContent):
 
     access = 'is_allowed_to_edit'
-    title = MSG(u'View')
+    title = MSG(u'View categories')
 
     batch_msg1 = MSG(u"There is 1 category")
     batch_msg2 = MSG(u"There are {n} categories")
@@ -251,7 +251,9 @@ class Category_BackofficeView(Folder_BrowseContent):
 
     search_template = '/ui/backoffice/category_view.xml'
 
-    table_actions = [RemoveButton]
+    table_actions = [RemoveButton(
+        title=MSG(u'Remove category, sub-categories, and associated products'))]
+
     table_columns = [
         ('checkbox', None),
         ('name', MSG(u'Name'), None),

@@ -129,7 +129,7 @@ class Product_NewProduct(NewInstance):
 class Product_View(Editable_View, STLForm):
 
     access = 'is_allowed_to_view'
-    title = MSG(u'View products')
+    title = MSG(u'View')
     template = None
     model_template = None
 
@@ -373,7 +373,7 @@ class Product_ViewBox(STLView):
 class Products_View(Folder_BrowseContent):
 
     access = 'is_allowed_to_edit'
-    title = MSG(u'View')
+    title = MSG(u'View products')
 
     batch_msg1 = MSG(u"There is 1 product")
     batch_msg2 = MSG(u"There are {n} products")
