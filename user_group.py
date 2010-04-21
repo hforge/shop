@@ -51,7 +51,7 @@ class UserGroup_Enumerate(Enumerate):
 
     @classmethod
     def get_options(self):
-        options = [{'name': None, 'value': MSG(u'General group')}]
+        options = []
         for cls in [ShopUser_GroupPro]:
             options.append({'name': cls.name, 'value': cls.title})
         return options
