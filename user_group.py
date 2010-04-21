@@ -22,6 +22,9 @@ from itools.gettext import MSG
 from ikaaro.forms import TextWidget
 
 
+
+
+
 class ShopUser_GroupDefault(object):
 
     name = None
@@ -55,3 +58,6 @@ class UserGroup_Enumerate(Enumerate):
         for cls in [ShopUser_GroupPro]:
             options.append({'name': cls.name, 'value': cls.title})
         return options
+
+
+groups = {'group_pro': ShopUser_GroupPro}

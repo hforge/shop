@@ -38,7 +38,7 @@ from forms import ThreeStateBooleanRadio
 from shop_utils_views import RealRessource_Form
 from orders.orders_views import OrdersView, numero_template
 from orders.workflow import states, states_color
-from user_group import UserGroup_Enumerate
+from user_group import UserGroup_Enumerate, groups
 from utils import bool_to_img, get_shop
 
 
@@ -71,7 +71,8 @@ class ShopUser_Manage(STLView):
         # Build namespace
         namespace = {'user': {'base': {},
                               'public': [],
-                              'private': []}}
+                              'private': [],
+                              'group': []}}
         # Base schema
         for key in self.base_fields:
             namespace['user']['base'][key] = user.get_property(key)
@@ -85,6 +86,15 @@ class ShopUser_Manage(STLView):
             namespace['user']['private'].append(
               {'title': widget.title,
                'value': user.get_property(widget.name)})
+        # Additional group schema
+        user_group = user.get_property('user_group')
+        if user_group:
+            group = groups[user_group]
+            for widget in group.widgets:
+                namespace['user']['group'].append(
+                  {'title': widget.title,
+                   'value': user.get_property(widget.name)})
+
         # Customer connections
         namespace['connections'] = []
         accept = context.accept_language

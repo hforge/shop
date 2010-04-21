@@ -154,7 +154,8 @@ class ShopUser(User):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(cls.base_schema,
-                  cls.public_schema, cls.private_schema)
+                           cls.public_schema,
+                           cls.private_schema)
 
 
     def _get_catalog_values(self):
