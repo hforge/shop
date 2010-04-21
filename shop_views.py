@@ -191,6 +191,7 @@ class Shop_ViewCart(STLForm):
 class Shop_Register(RegisterForm):
 
     access = True
+    user_is_enabled = True
 
     base_schema = {
         'email': Email(mandatory=True),
@@ -263,6 +264,13 @@ class Shop_Register(RegisterForm):
 
         # Save properties
         user.save_form(self.get_schema(resource, context), form)
+
+        # User is validated ?
+        user.set_property('is_enabled', self.user_is_enabled)
+
+        if self.user_is_enabled is False:
+            msg = MSG(u'Your account should be validated')
+            return context.come_back(msg, '/')
 
         # Save address in addresses table
         kw = {'user': user.name}

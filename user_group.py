@@ -36,14 +36,14 @@ class ShopUser_GroupPro(ShopUser_GroupDefault):
     name = 'group_pro'
     title = MSG(u'Group pro')
 
-    schema = {'pro_title': Unicode,
-              'vat_number': Integer,
-              'siret_number': Integer}
+    schema = {'pro_title': Unicode(mandatory=True),
+              'vat_number': Integer(mandatory=True),
+              'siret_number': Integer(mandatory=True)}
 
 
-    widgets = [TextWidget('pro_title', title=MSG(u'Pro title')),
+    widgets = [TextWidget('pro_title', title=MSG(u'Company title')),
                TextWidget('vat_number', title=MSG(u'VAT number')),
-               TextWidget('siret_number', title=MSG(u'Sitert number'))]
+               TextWidget('siret_number', title=MSG(u'Siret number'))]
 
 
 
