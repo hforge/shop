@@ -304,8 +304,8 @@ class ProductCart(object):
                   shipping_mode, country, total_weight)['price']
         total_price_with_tax += shipping_price
         total_price_without_tax += shipping_price
-        return {'with_tax': total_price_with_tax,
-                'without_tax': total_price_without_tax}
+        return {'with_tax': format_price(total_price_with_tax),
+                'without_tax': format_price(total_price_without_tax)}
 
 
 

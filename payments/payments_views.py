@@ -34,7 +34,7 @@ from ikaaro.views import BrowseForm, SearchForm
 # Import from shop
 from enumerates import PaymentWaysEnumerate
 from payment_way import PaymentWay
-from shop.utils import bool_to_img, format_price, get_shop
+from shop.utils import bool_to_img, get_shop
 
 
 
@@ -281,7 +281,8 @@ class Payments_ChoosePayment(STLForm):
     title = MSG(u'Choose a payment way')
     template = '/ui/shop/payments/choose_payment.xml'
 
-    total_price = decimal('0')
+    total_price = {'with_tax': decimal('0'),
+                   'without_tax': decimal('0')}
 
     def get_namespace(self, resource, context):
         total_price = self.total_price
