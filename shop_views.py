@@ -457,10 +457,8 @@ class Shop_ChooseAddress(STLForm):
 
     def action(self, resource, context, form):
         cart = ProductCart(context)
-        # Set bill address
-        cart.set_bill_address(form['bill_address'])
-        # Set delivery address
-        cart.set_delivery_address(form['delivery_address'])
+        # Set addresses
+        cart._set_addresses(form['delivery_address'], form['bill_address'])
         # Set delivery zone
         addresses = resource.get_resource('addresses').handler
         delivery_address = addresses.get_record(int(form['delivery_address']))
@@ -512,7 +510,7 @@ class Shop_Addresses(STLForm):
         # Bill
         ns['bill_address'] = None
         bill_address = cart.addresses['bill_address']
-        if bill_address:
+        if bill_address and bill_address != delivery_address:
             ns['bill_address'] = resource.get_user_address_namespace(bill_address)
         return ns
 
