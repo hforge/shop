@@ -111,6 +111,22 @@ h1{
 #breadcrumbs span a:hover {
   background-color: #175794;
   color: #FFF;
+
+}
+
+/* Tabs */
+
+#tabs{
+  margin-top: 20px;
+}
+
+#tabs .active a{
+  background-color: #80509B;
+  color: #FFF;
+  padding: 5px;
+  margin: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 /* Input */
