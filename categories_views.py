@@ -256,8 +256,8 @@ class Category_BackofficeView(Folder_BrowseContent):
 
     table_columns = [
         ('checkbox', None),
-        ('name', MSG(u'Name'), None),
-        ('title', MSG(u'Title'), None),
+        ('name', MSG(u'Name')),
+        ('title', MSG(u'Title')),
         ('nb_products', MSG(u'Nb products'), None),
         ('actions', MSG(u'Actions'), None),
         ]
