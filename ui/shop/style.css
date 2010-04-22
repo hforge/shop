@@ -48,12 +48,13 @@ table.cart td{
   border: 0px;
 }
 
-#button, .button{
+#button, .button, .button:visited {
   background-color: #FF8A00;
   border: 1px solid #006;
   padding: 5px;
   margin: 10px;
   color: #FFF;
+  text-decoration: none;
 }
 
 #empty-cart{
