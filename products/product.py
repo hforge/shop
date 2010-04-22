@@ -784,7 +784,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
     def get_default_view_name(self):
         views = self.get_class_views()
-        print views
         if not views:
             return None
         context = get_context()
