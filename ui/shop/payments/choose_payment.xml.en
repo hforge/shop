@@ -28,7 +28,7 @@
         </td>
       </tr>
     </table>
-    <button type="submit" id="button-order" name="action" value="pay">
+    <button type="submit" id="button-order" class="button" name="action" value="pay">
       Buy
     </button>
 
