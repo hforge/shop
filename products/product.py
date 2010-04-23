@@ -558,31 +558,35 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def remove_from_stock(self, quantity, id_declination=None):
+        resource = self
         if id_declination:
             declination = self.get_resource(id_declination)
-            declination.remove_from_stock(quantity)
-        else:
-            stock_option = self.get_stock_option()
-            old_quantity = self.get_property('stock-quantity')
-            new_quantity = old_quantity - quantity
-            if new_quantity <= 0 and stock_option == 'accept':
-                new_quantity = 0
-            if new_quantity <= 0 and stock_option == 'refuse_go_private':
-                self.set_property('state', 'private')
-            if old_quantity > 0 and new_quantity == 0:
-                self.send_alert_stock()
-            self.set_property('stock-quantity', new_quantity)
+            resource = declination
+        stock_option = self.get_stock_option()
+        old_quantity = resource.get_quantity_in_stock()
+        new_quantity = old_quantity - quantity
+        if new_quantity <= 0 and stock_option == 'accept':
+            new_quantity = 0
+        if old_quantity > 0 and new_quantity == 0:
+            resource.send_alert_stock()
+        resource.set_property('stock-quantity', new_quantity)
+        # XXX If is declination go private ?
+        if not id_declination and new_quantity <= 0 and stock_option == 'refuse_go_private':
+            self.set_property('state', 'private')
 
 
     def add_on_stock(self, quantity, id_declination=None):
+        resource = self
         if id_declination:
             declination = self.get_resource(id_declination)
-            declination.add_on_stock(quantity)
-        else:
-            stock_option = self.get_stock_option()
-            old_quantity = self.get_property('stock-quantity')
-            new_quantity = old_quantity + quantity
-            self.set_property('stock-quantity', new_quantity)
+            resource = declination
+        old_quantity = resource.get_property('stock-quantity')
+        new_quantity = old_quantity + quantity
+        resource.set_property('stock-quantity', new_quantity)
+
+
+    def get_quantity_in_stock(self):
+        return self.get_property('stock-quantity')
 
     #####################
     ## API

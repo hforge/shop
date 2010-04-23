@@ -34,12 +34,11 @@ from enumerate import DeclinationImpact
 from dynamic_folder import DynamicFolder
 from shop.utils import get_shop
 from shop.enumerate_table import EnumerateTable_to_Enumerate
-from taxes import TaxesEnumerate
 
 
 declination_schema = {'reference': String,
                       'title': Unicode,
-                      'stock-quantity': Integer,
+                      'stock-quantity': Integer(default=0),
                       'impact-on-price': DeclinationImpact,
                       'price-impact-value': Decimal,
                       'impact-on-weight': DeclinationImpact,
@@ -145,20 +144,6 @@ class Declination(DynamicFolder):
         for name in self.parent.get_purchase_options_names():
             schema[name] = EnumerateTable_to_Enumerate(enumerate_name=name)
         return schema
-
-
-    def remove_from_stock(self, quantity):
-        old_quantity = self.get_property('stock-quantity')
-        new_quantity = old_quantity - quantity
-        if old_quantity > 0 and new_quantity == 0:
-            self.parent.send_alert_stock()
-        self.set_property('stock-quantity', new_quantity)
-
-
-    def add_on_stock(self, quantity):
-        old_quantity = self.get_property('stock-quantity')
-        new_quantity = old_quantity + quantity
-        self.set_property('stock-quantity', new_quantity)
 
 
     def get_quantity_in_stock(self):
