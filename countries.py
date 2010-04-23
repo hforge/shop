@@ -28,7 +28,7 @@ from itools.web import get_context
 # Import from ikaaro
 from ikaaro.forms import BooleanRadio, SelectWidget, TextWidget
 from ikaaro.registry import register_resource_class
-from ikaaro.table import Table
+from ikaaro.table import Table, OrderedTable, OrderedTableFile
 from ikaaro.table_views import Table_AddRecord
 
 # Import from shop
@@ -47,7 +47,7 @@ from utils import get_shop
 ###########################################################
 
 
-class BaseCountriesZones(BaseTable):
+class BaseCountriesZones(OrderedTableFile):
 
     record_properties = {
       'title': Unicode(mandatory=True),
@@ -56,7 +56,7 @@ class BaseCountriesZones(BaseTable):
 
 
 
-class CountriesZones(Table):
+class CountriesZones(OrderedTable):
 
 
     class_id = 'countries-zones'
@@ -76,7 +76,7 @@ class CountriesZones(Table):
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
-        Table._make_resource(cls, folder, name)
+        OrderedTable._make_resource(cls, folder, name)
         table = BaseCountriesZones()
         zones = []
         csv = ro_database.get_handler(get_abspath('data/countries.csv'), CSVFile)

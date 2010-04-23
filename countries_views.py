@@ -22,7 +22,7 @@ from itools.web import INFO, ERROR
 
 # Import from ikaaro
 from ikaaro.forms import SelectWidget
-from ikaaro.table_views import Table_View
+from ikaaro.table_views import OrderedTable_View
 
 # Import from shop
 from enumerates import CountriesZonesEnumerate
@@ -78,7 +78,7 @@ class Countries_View(SearchTable_View):
 
 
 
-class CountriesZones_View(Table_View):
+class CountriesZones_View(OrderedTable_View):
 
     columns = [
         ('checkbox', None),

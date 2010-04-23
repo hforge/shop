@@ -18,7 +18,6 @@
 from operator import itemgetter
 
 # Import from itools
-from itools.core import get_abspath
 from itools.gettext import MSG
 from itools.web import STLView
 from itools.xml import XMLParser
@@ -141,7 +140,7 @@ class Shippings_Details(STLView):
         namespace = {
             'zones': [],
             'msg_if_no_shipping': resource.get_property('msg_if_no_shipping')}
-        for zone in resource_zones.handler.get_records():
+        for zone in resource_zones.handler.get_records_in_order():
             countries = []
             for country in handler_countries.search(zone=str(zone.id)):
                 title = handler_countries.get_record_value(country, 'title')
