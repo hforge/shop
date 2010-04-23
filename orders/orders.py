@@ -290,6 +290,7 @@ class Order(WorkflowAware, ShopFolder):
             product_resource = context.root.get_resource(name, soft=True)
             if product_resource:
                 kw['href'] = context.get_link(product_resource)
+                kw['key'] = product_resource.handler.key
                 kw['cover'] = product_resource.get_cover_namespace(context)
                 kw['category'] = product_resource.parent.get_title()
                 # Declination
@@ -529,10 +530,17 @@ class Order(WorkflowAware, ShopFolder):
         # Get template
         document = self.get_resource('/ui/shop/orders/order_pdf.xml')
         # Build namespace
+        path = context.database.fs.get_absolute_path(self.handler.key)
         namespace = self.get_namespace(context)
-        namespace['logo'] = shop.get_pdf_logo_uri()
+        namespace['logo'] = shop.get_pdf_logo_key(context)
         namespace['pdf_signature'] = format_for_pdf(shop.get_property('pdf_signature'))
-        namespace['order_barcode'] = '%s/barcode' % self.handler.uri
+        barcode = self.get_resource('barcode', soft=True)
+        if barcode:
+            key = barcode.handler.key
+            path = context.database.fs.get_absolute_path(key)
+            namespace['order_barcode'] = path
+        else:
+            namespace['order_barcode'] = None
         # Build pdf
         body = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'},
@@ -549,9 +557,15 @@ class Order(WorkflowAware, ShopFolder):
         document = self.get_resource('/ui/shop/orders/order_facture.xml')
         # Build namespace
         namespace = self.get_namespace(context)
-        namespace['logo'] = shop.get_pdf_logo_uri()
+        namespace['logo'] = shop.get_pdf_logo_key(context)
         namespace['pdf_signature'] = format_for_pdf(shop.get_property('pdf_signature'))
-        namespace['order_barcode'] = '%s/barcode' % self.handler.uri
+        barcode = self.get_resource('barcode', soft=True)
+        if barcode:
+            key = barcode.handler.key
+            path = context.database.fs.get_absolute_path(key)
+            namespace['order_barcode'] = path
+        else:
+            namespace['order_barcode'] = None
         # Build pdf
         pdf = stl_pmltopdf(document, namespace=namespace)
         metadata =  {'title': {'en': u'Bill'},

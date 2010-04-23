@@ -14,7 +14,7 @@
         </pml:td>
         <pml:td>
         Invoice number: ${reference}
-        <pml:img src="${order_barcode}"/><br/>
+        <pml:img src="${order_barcode}" stl:if="order_barcode"/><br/>
         </pml:td>
       </pml:tr>
     </pml:table>

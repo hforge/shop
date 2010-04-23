@@ -14,7 +14,7 @@
         </pml:td>
         <pml:td>
         Order number: ${reference}<br/>
-        <pml:img src="${order_barcode}"/><br/>
+        <pml:img src="${order_barcode}" stl:if="order_barcode"/>
         </pml:td>
       </pml:tr>
     </pml:table>
@@ -83,10 +83,10 @@
       <pml:tr stl:repeat="product products">
         <pml:td>
           ${product/reference}<br/>
-          <pml:img src="${product/uri}/barcode"/>
+          <pml:img src="${product/key}/barcode"/>
         </pml:td>
         <pml:td>
-          <pml:img src="${product/cover/uri}" width="100" height="100"
+          <pml:img src="${product/cover/key}" width="100" height="100"
             stl:if="product/cover"/>
         </pml:td>
         <pml:td>

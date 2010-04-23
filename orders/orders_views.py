@@ -19,6 +19,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
+from itools.log import log_error
 from itools.xapian import AndQuery, PhraseQuery, OrQuery, NotQuery
 from itools.web import ERROR, INFO, STLForm, FormError, STLView
 from itools.web.views import process_form
@@ -429,7 +430,7 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         try:
             resource.make_transition(form['transition'], form['comments'])
         except WorkflowError, excp:
-            context.server.log_error(context)
+            log_error(excp.message, domain='ikaaro')
             context.message = ERROR(unicode(excp.message, 'utf-8'))
             return
         # Ok
@@ -441,7 +442,7 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         try:
             resource.make_transition('open_to_cancel', None)
         except WorkflowError, excp:
-            context.server.log_error(context)
+            log_error(excp.message, domain='ikaaro')
             context.message = ERROR(unicode(excp.message, 'utf-8'))
             return
         context.message = INFO(u'Order has been canceled')

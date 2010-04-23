@@ -235,11 +235,12 @@ class Shop(ShopFolder):
     # API
     ##############################
 
-    def get_pdf_logo_uri(self):
+    def get_pdf_logo_key(self, context):
         logo = self.get_property('bill_logo')
         resource_logo = self.get_resource(logo, soft=True) if logo else None
         if resource_logo is not None:
-            return resource_logo.handler.key
+            key = resource_logo.handler.key
+            return context.database.fs.get_absolute_path(key)
         return None
 
     ##############################
