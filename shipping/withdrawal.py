@@ -57,6 +57,9 @@ class Withdrawal_RecordAdd(STLForm):
 
     schema = {'state': Boolean}
 
+    def get_namespace(self, resource, context):
+        return {'name': resource.name}
+
 
     def add_shipping(self, order, shipping_way, context, form):
         order.set_as_sent(context)

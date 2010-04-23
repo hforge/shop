@@ -213,7 +213,7 @@ class Order(WorkflowAware, ShopFolder):
             else:
                 tax = decimal(0)
             handler.add_record(
-              {'name': product.name,
+              {'name': str(product.get_abspath()),
                'reference': product.get_reference(declination),
                'title': product.get_title(),
                'declination': declination,
@@ -282,7 +282,6 @@ class Order(WorkflowAware, ShopFolder):
         get_value = order_products.handler.get_record_value
         for record in order_products.handler.get_records():
             kw = {'id': record.id,
-                  'uri': None,
                   'href': None,
                   'category': None}
             for key in BaseOrdersProducts.record_properties.keys():
@@ -291,7 +290,6 @@ class Order(WorkflowAware, ShopFolder):
             product_resource = context.root.get_resource(name, soft=True)
             if product_resource:
                 kw['href'] = context.get_link(product_resource)
-                kw['uri'] = product_resource.handler.uri
                 kw['cover'] = product_resource.get_cover_namespace(context)
                 kw['category'] = product_resource.parent.get_title()
                 # Declination
