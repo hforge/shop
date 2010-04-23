@@ -410,6 +410,7 @@ class Products_View(Folder_BrowseContent):
         TextWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
         SelectWidget('abspath', title=MSG(u'Category')),
+        SelectWidget('product_model', title=MSG(u'Product model')),
         SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
         SelectWidget('workflow_state', title=MSG(u'State')),
         ]
@@ -418,6 +419,7 @@ class Products_View(Folder_BrowseContent):
         'reference': String,
         'title': Unicode,
         'abspath': CategoriesEnumerate,
+        'product_model': ProductModelsEnumerate,
         'manufacturer': ManufacturersEnumerate,
         'workflow_state': States}
 
