@@ -18,6 +18,7 @@
 from operator import itemgetter
 
 # Import from itools
+from itools.core import get_abspath
 from itools.gettext import MSG
 from itools.web import STLView
 from itools.xml import XMLParser
@@ -158,7 +159,10 @@ class Shippings_Details(STLView):
                 unit = MSG(u'Kg') if mode == 'weight' else MSG(u'Unit')
                 prices = []
                 min = old_price = 0
-                prices_handler = tarification.get_resource('prices').handler
+                prices_resource = tarification.get_resource('prices')
+                prices_handler = prices_resource.handler
+                edit_link = context.get_link(prices_resource)
+                edit_link += '/?zone=%i&search=' % zone.id
                 records = prices_handler.search(zone=str(zone.id))
                 records.sort(key=lambda x: prices_handler.get_record_value(x, 'max-%s' % mode))
                 for price in records:
@@ -178,7 +182,8 @@ class Shippings_Details(STLView):
                      'img': tarification.get_property('logo'),
                      'is_free': tarification.get_property('is_free'),
                      'prices': prices,
-                     'description': tarification.get_property('description')})
+                     'description': tarification.get_property('description'),
+                     'edit_link': edit_link})
             namespace['zones'].append({'title': zone_title,
                                        'countries': countries,
                                        'tarifications': tarifications})

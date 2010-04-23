@@ -41,6 +41,7 @@ from ikaaro.table import Table
 from shop.cart import ProductCart
 from shop.enumerates import CountriesZonesEnumerate
 from shop.utils import get_shop, ShopFolder
+from shop.utils_views import SearchTable_View
 
 # Import from shipping
 from enumerates import ShippingStates
@@ -132,6 +133,9 @@ class ShippingPrices(Table):
         if self.parent.get_property('mode') == 'quantity':
             return self.form + [self.quantity_widget]
         return self.form + [self.weight_widget]
+
+    view = SearchTable_View(search_widgets=[SelectWidget('zone', title=MSG(u'Zone'))],
+                            search_schema={'zone': CountriesZonesEnumerate})
 
 
 

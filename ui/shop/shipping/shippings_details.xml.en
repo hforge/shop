@@ -26,7 +26,8 @@
             <img src="${tarification/name}/${tarification/img}/;download"/>
           </td>
           <td>
-            <b>${tarification/title}</b><br/>
+            <b>${tarification/title}</b>
+            <a href="${tarification/edit_link}">> Edit</a><br/>
             ${tarification/description}
           </td>
         </tr>
