@@ -29,6 +29,8 @@ from ikaaro.forms import RTEWidget, XHTMLBody
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.views import BrowseForm
 
+# Import from shop
+from shop.utils import bool_to_img
 
 
 class Shippings_Configure(AutoForm):
@@ -169,8 +171,8 @@ class Shippings_Details(STLView):
                 min = old_price = 0
                 prices_resource = tarification.get_resource('prices')
                 prices_handler = prices_resource.handler
-                edit_link = context.get_link(prices_resource)
-                edit_link += '/?zone=%i&search=' % zone.id
+                tarif_edit = context.get_link(prices_resource)
+                tarif_edit += '/?zone=%i&search=' % zone.id
                 records = prices_handler.search(zone=str(zone.id))
                 records.sort(key=lambda x: prices_handler.get_record_value(x, 'max-%s' % mode))
                 for price in records:
@@ -191,10 +193,15 @@ class Shippings_Details(STLView):
                      'is_free': tarification.get_property('is_free'),
                      'prices': prices,
                      'description': tarification.get_property('description'),
-                     'edit_link': edit_link})
+                     'tarif_edit': tarif_edit})
+            zone_edit = '/shop/countries?zone=%i&search=' % zone.id
+            has_tax = resource_zones.handler.get_record_value(zone, 'has_tax')
+            tax_image = list(bool_to_img(has_tax))
             namespace['zones'].append({'title': zone_title,
                                        'countries': countries,
-                                       'tarifications': tarifications})
+                                       'tarifications': tarifications,
+                                       'zone_edit': zone_edit,
+                                       'tax_image': tax_image})
         return namespace
 
 

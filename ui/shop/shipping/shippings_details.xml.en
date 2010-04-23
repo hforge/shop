@@ -11,12 +11,14 @@
   Here you can see the price of shippings in our shop<br/>
 
   <p stl:repeat="zone zones">
-    <h2 id="country">${zone/title}</h2>
+    <h2 id="country">${zone/title} <a href="${zone/zone_edit}">> Edit</a></h2>
 
     <b>Countries:</b>
     <stl:block stl:repeat="country zone/countries">
       ${country},
     </stl:block>
+    <br />
+    <b>Has Tax:</b>${zone/tax_image}
 
     <br/>
     <div class="shipping-way" stl:repeat="tarification zone/tarifications">
@@ -27,7 +29,7 @@
           </td>
           <td>
             <b>${tarification/title}</b>
-            <a href="${tarification/edit_link}">> Edit</a><br/>
+            <a href="${tarification/tarif_edit}">> Edit tarification</a><br/>
             ${tarification/description}
           </td>
         </tr>
