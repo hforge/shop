@@ -19,6 +19,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, Integer, String
 from itools.gettext import MSG
 from itools.web import INFO, ERROR
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import SelectWidget
@@ -87,6 +88,8 @@ class CountriesZones_View(OrderedTable_View):
         ('has_tax', MSG(u'Has TAX ?')),
         ]
 
+    link_template = "<a href='%s'>(Edit this list)</a>"
+
     def get_table_columns(self, resource, context):
         return self.columns
 
@@ -104,7 +107,11 @@ class CountriesZones_View(OrderedTable_View):
             from countries import CountriesEnumerate
             datatype = CountriesEnumerate(zone=item.id)
             widget = SelectWidget('l_%s' % item.id, has_empty_option=False)
-            return widget.to_html(datatype, None)
+            h_widget = widget.to_html(datatype, None)
+            link = '/shop/countries?zone=%i&amp;search=' % item.id
+            link = self.link_template % link
+            h_link = XMLParser(link)
+            return list(h_widget) + list(h_link)
         elif column == 'has_tax':
             has_tax = handler.get_record_value(item, 'has_tax')
             return bool_to_img(has_tax)
