@@ -97,6 +97,17 @@ class Category(Editable, ShopFolder):
         return len(root.search(query))
 
 
+    def get_nb_categories(self):
+        root = self.get_root()
+        site_root = self.get_site_root()
+        shop = get_shop(self)
+        abspath = self.get_canonical_path()
+        base_path_query = get_base_path_query(str(abspath))
+        query = AndQuery(
+            base_path_query,
+            PhraseQuery('format', shop.category_class.class_id))
+        return len(root.search(query))
+
 
     def get_links(self):
         # Use the canonical path instead of the abspath

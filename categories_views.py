@@ -258,6 +258,7 @@ class Category_BackofficeView(Folder_BrowseContent):
         ('checkbox', None),
         ('name', MSG(u'Name')),
         ('title', MSG(u'Title')),
+        ('nb_sub_categories', MSG(u'Nb sub categories'), None),
         ('nb_products', MSG(u'Nb products'), None),
         ('actions', MSG(u'Actions'), None),
         ]
@@ -272,8 +273,12 @@ class Category_BackofficeView(Folder_BrowseContent):
         brain, item_resource = item
         if column == 'name':
             return brain.name, './%s/;view_categories' % brain.name
+        elif column == 'nb_sub_categories':
+            return item_resource.get_nb_categories()
         elif column == 'nb_products':
-            return item_resource.get_nb_products()
+            nb_products = item_resource.get_nb_products()
+            uri = '/categories/;view_products?abspath=%s' % brain.abspath
+            return nb_products, uri
         elif column == 'actions':
             return XMLParser("""
                 <a href="./%s/" title="View category">
