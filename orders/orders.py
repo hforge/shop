@@ -442,6 +442,10 @@ class Order(WorkflowAware, ShopFolder):
     # Update order states
     # XXX We have to delete it ?
     ##################################################
+    def set_payment_as_ok(self, payment_way, id_record, context):
+        self.set_as_payed(context)
+
+
     def set_as_payed(self, context):
         try:
             self.make_transition('open_to_payment_ok')
