@@ -277,7 +277,7 @@ class Category_BackofficeView(Folder_BrowseContent):
             return item_resource.get_nb_categories()
         elif column == 'nb_products':
             nb_products = item_resource.get_nb_products()
-            uri = '/categories/;view_products?abspath=%s' % brain.abspath
+            uri = '/categories/;browse_content?abspath=%s' % brain.abspath
             return nb_products, uri
         elif column == 'actions':
             return XMLParser("""

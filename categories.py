@@ -47,7 +47,7 @@ class Category(Editable, ShopFolder):
 
     # Views
     view = Category_View()
-    view_products = Products_View()
+    browse_content = Products_View()
     view_categories = Category_BackofficeView()
     edit = Category_Edit()
     new_product = Product_NewProduct()
@@ -184,7 +184,7 @@ class Category(Editable, ShopFolder):
         # Back-Office
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
-            return ['view_products', 'view_categories', 'edit']
+            return ['browse_content', 'view_categories', 'edit']
         return ['view']
 
 
