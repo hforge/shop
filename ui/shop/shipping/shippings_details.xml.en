@@ -6,7 +6,7 @@
 
   <div id="shippings-tarification">
 
-  <h1>Shippings price</h1>
+  <h1>${page_title}</h1>
 
   Here you can see the price of shippings in our shop<br/>
 

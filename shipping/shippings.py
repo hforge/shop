@@ -37,7 +37,7 @@ class Shippings(ShopFolder):
     class_id = 'shippings'
     class_title = MSG(u'Shipping')
     class_version = '20091022'
-    class_views = ['details', 'view', 'configure', 'history']
+    class_views = ['details', 'details_inactive', 'view', 'configure', 'history']
 
 
     # Views
@@ -45,6 +45,8 @@ class Shippings(ShopFolder):
     configure = Shippings_Configure()
     history = Shippings_History()
     details = Shippings_Details()
+    details_inactive = Shippings_Details(show_inactive=True,
+                                         title=MSG('Inactive Shippings details'))
 
     @classmethod
     def get_metadata_schema(cls):

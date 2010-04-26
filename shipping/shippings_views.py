@@ -134,12 +134,20 @@ class Shippings_Details(STLView):
     access = 'is_admin'
     template = '/ui/shop/shipping/shippings_details.xml'
 
+    # Should
+    show_inactive = False
+
     def get_namespace(self, resource, context):
         resource_zones = resource.get_resource('../countries-zones')
         handler_countries = resource.get_resource('../countries').handler
+        if self.show_inactive:
+            page_title = MSG('Inactives shippings prices')
+        else:
+            page_title = MSG('Shippings price')
         namespace = {
             'zones': [],
-            'msg_if_no_shipping': resource.get_property('msg_if_no_shipping')}
+            'msg_if_no_shipping': resource.get_property('msg_if_no_shipping'),
+            'page_title': page_title}
         for zone in resource_zones.handler.get_records_in_order():
             countries = []
             for country in handler_countries.search(zone=str(zone.id)):
@@ -152,7 +160,8 @@ class Shippings_Details(STLView):
             zone_title = resource_zones.handler.get_record_value(zone, 'title')
             tarifications = []
             for tarification in resource.get_resources():
-                if tarification.get_property('enabled') is False:
+                # We show only active or inactives modes, depending on config
+                if tarification.get_property('enabled') is self.show_inactive:
                     continue
                 mode = tarification.get_property('mode')
                 unit = MSG(u'Kg') if mode == 'weight' else MSG(u'Unit')
