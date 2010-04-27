@@ -286,15 +286,6 @@ class ShopUser(User):
 
 
 
-
-    def update_20091009(self):
-        from itools.fs import lfs
-        t = lfs.get_ctime('%s.metadata' % self.handler.key)
-        self.set_property('ctime', t)
-        self.set_property('last_time', t)
-
-
-
 class ShopUserFolder(UserFolder):
 
 
