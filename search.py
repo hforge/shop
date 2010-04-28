@@ -21,7 +21,12 @@ from itools.xapian import OrQuery, PhraseQuery, AndQuery, split_unicode
 from itools.web import get_context
 
 # Import from ikaaro
+from ikaaro.folder import Folder
+from ikaaro.registry import register_resource_class
 from ikaaro.utils import get_base_path_query
+
+# Import from itws
+from itws.bar import SideBarAware
 
 # Import from shop
 from categories_views import Category_View
@@ -130,3 +135,23 @@ class Shop_ProductSearch(Category_View):
         # XXX Hack results
         self.nb_results = len(results)
         return results
+
+
+
+class ShopSearch(SideBarAware, Folder):
+
+    class_id = 'shop-search'
+    class_title = MSG(u'Rechercher')
+    class_views = ['view', 'edit'] + SideBarAware.class_views
+
+    view = Shop_ProductSearch()
+
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args,  **kw):
+        Folder._make_resource(cls, folder, name, **kw)
+        _cls = SideBarAware
+        _cls._make_resource(_cls, folder, name, **kw)
+
+
+register_resource_class(ShopSearch)

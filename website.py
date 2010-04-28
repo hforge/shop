@@ -16,37 +16,48 @@
 
 # Import from itools
 from itools.gettext import MSG
-from itools.web import get_context, STLView
+from itools.web import get_context
 
 # Import from ikaaro
-from ikaaro.registry import register_resource_class
+from ikaaro.registry import register_resource_class, register_document_type
 from ikaaro.website import WebSite
+
+# Import from itws
+from itws.sitemap import SiteMap, SiteMapView
+from itws.ws_neutral import NeutralWS
 
 # Import from shop
 from categories import Category
-from search import Shop_ProductSearch
+from search import ShopSearch
 from shop import Shop
 from shop_views import Shop_Register, Shop_Login
+from shop_utils_views import Cart_Viewbox
+from utils_views import RedirectPermanent
+from website_views import ShopWebSite_View, ShopWS_SiteMap, ShopWS_RSS
 
 
 default_resources = {
     'shop': (Shop, {'title': {'en': u'Shop'}, 'state':'public'}),
     'categories': (Category, {'title': {'en': u"Categories"}}),
+    'seach': (ShopSearch, {'title': {'en': u'Search'}}),
 }
 
 
-class ShopWebSite_View(STLView):
+# XXX ??
+class ShopXMLSiteMap(SiteMap):
 
-    template = '/ui/shop/shop_website_view.xml.en'
-    title = MSG(u'View')
-    access = True
+    class_id = 'shop-sitemap'
+
+    view = SiteMapView()
 
 
-class ShopWebSite(WebSite):
+
+class ShopWebSite(NeutralWS):
 
     class_id = 'shop-website'
     class_title = MSG(u'Shop website')
-    class_views = ['view', 'control_panel']
+    class_views = ['view', 'edit', 'edit_rss',
+                   'browse_content', 'control_panel', 'last_changes']
     class_version = '20100227'
     class_skin = '/ui/shop'
 
@@ -54,17 +65,36 @@ class ShopWebSite(WebSite):
 
     # View
     view = ShopWebSite_View()
+    sitemap = ShopWS_SiteMap()
+    product_search = RedirectPermanent(specific_document='search')
 
     # Login views
     register = Shop_Register()
     login = Shop_Login()
     unauthorized = Shop_Login()
-    product_search = Shop_ProductSearch()
+
+    # Compatibility
+    rss = last_news_rss = ShopWS_RSS()
+
+
+    # Shop configuration
+    shop_class = Shop
+    sitemap_class = ShopXMLSiteMap
+    templates = {}
+    cart_preview_class = Cart_Viewbox
+    backoffice_rss_news_uri = None
+
+    # Skin configuration
+    show_sidebar_on_product = True
+    show_sidebar_on_category = True
+    show_sidebar_on_homepage = True
+
+
 
     @staticmethod
     def _make_resource(cls, folder, name, **kw):
         root = get_context().resource
-        WebSite._make_resource(cls, folder, name, **kw)
+        NeutralWS._make_resource(cls, folder, name, **kw)
         website = root.get_resource(name)
         # Configuration des langues
         metadata = website.metadata
@@ -85,6 +115,14 @@ class ShopWebSite(WebSite):
     def get_document_types(self):
         return []
 
+
+    def get_skin(self, context):
+        # Back-Office
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
+            return self.get_resource('/ui/backoffice/')
+        # Fron-Office
+        return self.get_resource(self.class_skin)
 
     #############################
     # ACL
@@ -117,3 +155,5 @@ class ShopWebSite(WebSite):
 
 
 register_resource_class(ShopWebSite)
+register_document_type(ShopWebSite, WebSite.class_id)
+register_resource_class(ShopXMLSiteMap)

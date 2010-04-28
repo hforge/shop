@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (C) 2007 Taverne Sylvain <taverne.sylvain@gmail.com>
+# Copyright (C) 2009 Sylvain Taverne <sylvain@itaapy.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,27 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools import get_version
 from itools.core import get_abspath
 
 # Import from ikaaro
-from itools.gettext import register_domain
+from ikaaro.skins import register_skin
 
-# Import from shop
-from products_feed import ProductsFeed
-from shop import Shop
-from website import ShopWebSite
+# Import from project
+from cart_box import CartBox
+from cross_selling_box import CrossSellingBox
+from sidebar_cross_selling_box import SideBarCrossSellingBox
+from filter_by_price_box import FilterByPriceBox
+from login_box import LoginBox
+from search_box import SearchBox
+from sub_categories_box import SubCategoriesBox
 
-# Import from package
-import modules
-import sidebar
-import skin
-import user
-import cross_selling
 
-# Make the product version available to Python code
-__version__ = get_version()
 
-# Register the shop domain
-path = get_abspath('locale')
-register_domain('shop', path)
+register_skin('vertical_depot', get_abspath('../ui/vertical_depot/'))

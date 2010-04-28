@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <div id="login-box">
+    <h3 class="title">${title}</h3>
+
+    <form method="post" action="./;login" id="loginform" stl:if="not is_connected">
+      <dl>
+        <dt>
+          <label for="username" class="field-is-required">Adresse mail</label>
+        </dt>
+        <dd>
+
+          <input value="" id="username" name="username" type="text"></input>
+        </dd>
+        <dt>
+          <label for="password" class="field-is-required">Mot de passe</label>
+        </dt>
+        <dd>
+          <input id="password" name="password" type="password"></input><br></br>
+          <a href="/;forgotten_password">J'ai oublié mon mot de passe</a>
+        </dd>
+      </dl>
+      <button class="button-ok" type="submit">
+        Se connecter
+      </button>
+    </form>
+
+    <div stl:if="is_connected">
+      Bienvenue ${user/title} !
+      <ul>
+        <li>
+          <a href="/users/${user/name}">My account</a>
+        </li>
+        <li>
+          <a href="/;logout">Se déconnecter</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+</stl:block>

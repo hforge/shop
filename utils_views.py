@@ -17,7 +17,8 @@
 # Import from itools
 from itools.datatypes import Enumerate
 from itools.gettext import MSG
-from itools.web import ERROR
+from itools.uri import get_reference
+from itools.web import BaseForm, ERROR
 from itools.xapian import OrQuery, PhraseQuery, AndQuery
 
 # Import from ikaaro
@@ -163,3 +164,26 @@ class SearchTableFolder_View(SearchForm):
         sort_by = context.query['sort_by']
         reverse = context.query['reverse']
         return results.get_documents(sort_by=sort_by, reverse=reverse)
+
+
+
+class RedirectPermanent(BaseForm):
+    """Copied from GoToSpecificPage, but keep query"""
+
+    access = True
+    specific_document = None
+
+    def get_specific_document(self, resource, context):
+        return self.specific_document
+
+
+    def GET(self, resource, context):
+        # We do a redirect permantent
+        context.status = 301
+        # Build goto
+        query = context.uri.query
+        specific_document = self.get_specific_document(resource, context)
+        goto = '%s/%s' % (context.get_link(resource), specific_document)
+        goto = get_reference(goto)
+        goto.query = context.uri.query
+        return goto

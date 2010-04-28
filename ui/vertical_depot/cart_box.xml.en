@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <div id="cart-box">
+    <div id="cart-box-title">
+      <h3 class="title">
+        <a href="/shop/;view_cart">${title}</a>
+      </h3>
+    </div>
+    <div id="cart-box-content">
+      <p id="cart-box-content-empty" stl:if="not products">
+        Panier vide
+      </p>
+      <ul stl:if="products">
+        <li stl:repeat="product products">
+          <a href="${product/href}">
+            ${product/quantity} x ${product/title}
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div id="cart-box-order">
+      <a href="/shop/;view_cart">
+        » ${order_title} (Total ${total_with_tax} €)
+      </a>
+    </div>
+  </div>
+
+</stl:block>

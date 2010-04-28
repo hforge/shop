@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+  <div id="centrer">
+    <div id="droite">
+      <div class="boite" id="grille">
+         <h2>Sitemap</h2>
+         <div stl:repeat="category categories" class="categorie" stl:if="not category/empty">
+           <a href="${category/href}">
+             <img src="${category/img_src}/;thumb?width=196&amp;height=116" stl:if="category/img_src"></img>
+           </a>
+           <h2>
+             <a href="${category/href}">${category/title}</a>
+           </h2>
+           <ul>
+             <li stl:repeat="sub_category category/sub_tree" stl:if="not sub_category/empty">
+               <a href="${sub_category/href}">${sub_category/title}</a>
+             </li>
+           </ul>
+         </div>
+      </div>
+    </div>
+  </div>
+</stl:block>
