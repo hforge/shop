@@ -27,10 +27,12 @@ from ikaaro.folder import Folder
 from ikaaro.forms import AutoForm, SelectRadio, TextWidget, BooleanRadio
 from ikaaro.registry import register_resource_class
 
+# Import from itws
+from itws.tags import TagsList
+
 # Import from project
 from categories_views import Category_View, Category_ComparatorView
 from editable import Editable, Editable_Edit
-from enumerates import TagsList
 from utils import get_shop
 
 

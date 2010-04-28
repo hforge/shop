@@ -78,34 +78,6 @@ class SortBy_Enumerate(Enumerate):
 
 
 
-class TagsList(Enumerate):
-
-    site_root = None
-
-    @staticmethod
-    def decode(value):
-        if not value:
-            return None
-        return str(value)
-
-
-    @staticmethod
-    def encode(value):
-        if value is None:
-            return ''
-        return str(value)
-
-
-    @classmethod
-    def get_options(cls):
-        tags_folder = cls.site_root.get_resource('tags', soft=True)
-        if tags_folder is None:
-            return []
-        options = [{'name': tag.name, 'value': tag.get_title()}
-                   for tag in tags_folder.search_resources(format='tag') ]
-        options.sort()
-        return options
-
 
 class CountriesZonesEnumerate(Enumerate):
 

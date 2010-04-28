@@ -36,6 +36,9 @@ from ikaaro.registry import register_resource_class, register_field
 from ikaaro.utils import reduce_string
 from ikaaro.workflow import WorkflowAware
 
+# Import from itws
+from itws.tags import TagsAware
+
 # Import from shop
 from declination import Declination
 from dynamic_folder import DynamicFolder
@@ -143,6 +146,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
     def _get_catalog_values(self):
         values = merge_dicts(DynamicFolder._get_catalog_values(self),
+                             TagsAware._get_catalog_values(self),
                              Editable._get_catalog_values(self))
         # Reference
         values['reference'] = self.get_property('reference')
@@ -162,9 +166,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         values['ctime'] = self.get_property('ctime')
         # Promotion
         values['has_reduction'] = self.get_property('has_reduction')
-        # Tags
-        values['tags'] = self.get_property('tags')
-        values['is_tagsaware'] = True
         # Is buyable ?
         values['is_buyable'] = self.is_buyable()
 

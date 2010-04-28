@@ -31,8 +31,11 @@ from ikaaro.resource_views import DBResource_AddLink
 from ikaaro.table_views import Table_AddRecord
 from ikaaro.views import CompositeForm
 
+# Import from itws
+from itws.tags import TagsList
+from itws.utils import DualSelectWidget
+
 # Import from shop
-from enumerates import TagsList
 from utils import get_shop
 
 
@@ -121,8 +124,9 @@ class CrossSelling_Configure(AutoForm):
                     title=MSG(u'Extend with promotion ?'),
                     is_inline=True,
                     has_empty_option=False),
-        SelectRadio('tags',
-                    title=MSG(u'Extend products associated to this tags')),
+        DualSelectWidget('tags',
+            title=MSG(u'Extend products associated to this tags'),
+            is_inline=True, has_empty_option=False),
         SelectWidget('sort', title=MSG(u'Selection'), has_empty_option=False),
         ]
 

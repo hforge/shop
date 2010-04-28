@@ -39,6 +39,10 @@ from ikaaro.utils import get_base_path_query
 from ikaaro.views import CompositeForm, ContextMenu
 from ikaaro.views_new import NewInstance
 
+# Import from itws
+from itws.tags import TagsList
+from itws.utils import DualSelectWidget
+
 # Import from shop
 from enumerate import ProductModelsEnumerate, CategoriesEnumerate, States
 from declination import Declination, Declination_NewInstance
@@ -48,7 +52,6 @@ from widgets import BarcodeWidget, MiniProductWidget, StockProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
-from shop.enumerates import TagsList
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
 from shop.utils import get_non_empty_widgets, get_shop
@@ -252,7 +255,8 @@ class Product_Edit(Editable_Edit, AutoForm):
         MultilineWidget('description', title=MSG(u'Description')),
         TextWidget('subject', title=MSG(u'Keywords')),
         # Tags
-        SelectRadio('tags', title=MSG(u'Tags'), is_inline=True),
+        DualSelectWidget('tags', title=MSG(u'Tags'), is_inline=True,
+                        has_empty_option=False),
         # Cover
         ImageSelectorWidget('cover', title=MSG(u'Cover')),
         # Weight
