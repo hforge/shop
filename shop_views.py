@@ -372,17 +372,7 @@ class Shop_Login(STLForm):
 
         # Check the user exists
         root = context.root
-        try:
-            user = root.get_user_from_login(email)
-        except ValueError:
-            # XXX Hack
-            results = root.search(username=email)
-            n = len(results)
-            if n == 0:
-                return None
-            # Get the user
-            brain = results.get_documents()[0]
-            user = root.get_user(brain.name)
+        user = root.get_user_from_login(email)
         if user is None:
             message = ERROR(u'The user "{username}" does not exist.',
                             username=email)

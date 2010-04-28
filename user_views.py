@@ -173,9 +173,10 @@ class ShopUser_EditPrivateInformations(AutoForm):
 
 
     def action(self, resource, context, form):
-        # Save changes
+        # Save changes XXX
         schema = self.get_schema(resource, context)
-        resource.save_form(schema, form)
+        user = context.root.get_resource('/users/%s' % resource.name)
+        user.save_form(schema, form)
         # Message 
         context.message = MSG_CHANGES_SAVED
 
@@ -210,9 +211,10 @@ class ShopUser_EditAccount(User_EditAccount):
             if user is not None:
                 context.message = ERROR(u'This email address is already used.')
                 return
-        # Save changes
+        # Save changes XXX
         schema = self.get_schema(resource, context)
-        resource.save_form(schema, form)
+        user = context.root.get_resource('/users/%s' % resource.name)
+        user.save_form(schema, form)
         # Message 
         context.message = MSG_CHANGES_SAVED
 
