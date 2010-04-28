@@ -133,6 +133,8 @@ class Product_View(Editable_View, STLForm):
     template = None
     model_template = None
 
+    scripts = ['/ui/shop/js/declinations.js']
+
     def get_template(self, resource, context):
         # Backoffice template
         hostname = context.uri.authority

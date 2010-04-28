@@ -42,6 +42,7 @@ class ShopSkin(Skin):
 
     base_scripts = []
 
+
     def get_styles(self, context):
         styles = Skin.get_styles(self, context)
         styles.extend(self.base_styles)

@@ -1,7 +1,6 @@
 // Add trigger on each select:
 // on change we have to check products
 $(document).ready(function() {
-
   $("#quantity").keyup(function(){
      check_products();
   }).trigger('keyup');
@@ -60,13 +59,13 @@ function check_products(){
     $("#missing-declination").hide('slow');
     $("#price").html(product['price']);
     $("#weight").html(product['weight']);
-    if (product['stock'] && product['stock'] < $("#quantity").val()){
+    if (product['stock'] != null && product['stock'] < $("#quantity").val()){
       $("#out-of-stock").show('slow');
       $("#add-to-cart").hide('slow');
       $("#quantity-in-stock").html(product['stock']);
     }else{
       $("#out-of-stock").hide();
-    $("#add-to-cart").show('slow');
+      $("#add-to-cart").show('slow');
     }
   }else{
     $("#out-of-stock").hide();

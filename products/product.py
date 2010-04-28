@@ -289,11 +289,13 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         purchase_options_names = self.get_purchase_options_names()
         # Base product
         stock_quantity = self.get_property('stock-quantity')
-        products = {'base_product':
-            {'price': format_price(self.get_price_with_tax()),
-             'weight': str(self.get_weight()),
-             'option': {},
-             'stock': stock_quantity if manage_stock else None}}
+        products = {}
+        if len(declinations)==0:
+            products['base_product'] = {
+                'price': format_price(self.get_price_with_tax()),
+                'weight': str(self.get_weight()),
+                'option': {},
+                'stock': stock_quantity if manage_stock else None}
         # Other products (declinations)
         for declination in declinations:
             stock_quantity = declination.get_quantity_in_stock()
