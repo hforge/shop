@@ -218,7 +218,7 @@ class Shop(ShopFolder):
         schema['shop_uri'] = String
         schema['shop_backoffice_uri'] = String
         schema['order_notification_mails'] = Email(multiple=True)
-        schema['shop_default_zone'] = CountriesZonesEnumerate
+        schema['shop_default_zone'] = CountriesZonesEnumerate(default=0)
         schema['shop_sort_by'] = SortBy_Enumerate
         schema['shop_sort_reverse'] = Boolean
         schema['bill_logo'] = ImagePathDataType
