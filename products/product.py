@@ -574,8 +574,6 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             resource = declination
         old_quantity = resource.get_quantity_in_stock()
         new_quantity = old_quantity - quantity
-        if new_quantity <= 0 and stock_option == 'accept':
-            new_quantity = 0
         if old_quantity > 0 and new_quantity == 0:
             self.send_alert_stock()
         resource.set_property('stock-quantity', new_quantity)
