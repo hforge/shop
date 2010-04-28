@@ -191,12 +191,6 @@ class Product_View(Editable_View, STLForm):
         if not resource.is_buyable():
             msg = MSG(u"This product isn't buyable")
             return context.come_back(msg)
-        # Check if product is in stock
-        cart_quantity = cart.get_product_quantity_in_cart(resource.name)
-        total_quantity =  cart_quantity + form['quantity']
-        if not resource.is_in_stock_or_ignore_stock(total_quantity):
-            msg = u"Quantity in stock insufficient."
-            return context.come_back(MSG(msg))
         # Get purchase options
         declination = None
         kw = {}
@@ -208,6 +202,12 @@ class Product_View(Editable_View, STLForm):
             if declination is None:
                 context.message = ERROR(u'Declination not exist')
                 return
+        # Check if product is in stock
+        cart_quantity = cart.get_product_quantity_in_cart(resource.name)
+        total_quantity =  cart_quantity + form['quantity']
+        if not resource.is_in_stock_or_ignore_stock(total_quantity, declination):
+            msg = u"Quantity in stock insufficient."
+            return context.come_back(MSG(msg))
         # Add to cart
         cart.add_product(resource, form['quantity'], declination)
         # Information message

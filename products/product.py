@@ -540,10 +540,15 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         return self.get_property('stock-option')
 
 
-    def is_in_stock_or_ignore_stock(self, quantity):
+    def is_in_stock_or_ignore_stock(self, quantity, id_declination=None):
         if self.get_stock_option() == 'accept':
             return True
-        return self.get_property('stock-quantity') >= quantity
+        if id_declination:
+            declination = self.get_resource(id_declination)
+            resource = declination
+        else:
+            resource = self
+        return resource.get_property('stock-quantity') >= quantity
 
 
     def send_alert_stock(self):

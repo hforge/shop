@@ -72,7 +72,6 @@ class Cart_View(STLView):
             # Weight
             total_weight += product.get_weight(declination) * quantity
             # Prices
-            declination = product_cart['declination']
             unit_price_with_tax = product.get_price_with_tax(declination)
             unit_price_without_tax = product.get_price_without_tax(declination)
             total_price_with_tax = unit_price_with_tax * quantity
@@ -85,10 +84,13 @@ class Cart_View(STLView):
             total['without_tax'] += total_price_without_tax
             total['with_tax'] += total_price_with_tax
             # All
-            declination = product_cart['declination']
-            if declination:
-                declination = product.get_declination_namespace(declination)
-            can_add_quantity = product.is_in_stock_or_ignore_stock(quantity+1)
+            declination_name = product_cart['declination']
+            if declination_name:
+                declination_ns = product.get_declination_namespace(declination_name)
+            else:
+                declination_ns = None
+            can_add_quantity = product.is_in_stock_or_ignore_stock(quantity+1,
+                declination_name)
             namespace['products'].append(
               {'id': product_cart['id'],
                'name': product.name,
@@ -97,7 +99,7 @@ class Cart_View(STLView):
                'href': context.get_link(product),
                'can_add_quantity': can_add_quantity,
                'quantity': quantity,
-               'declination': declination,
+               'declination': declination_ns,
                'price': price})
         namespace['total'] = total
         # Get shippings
