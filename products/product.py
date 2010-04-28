@@ -565,11 +565,13 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def remove_from_stock(self, quantity, id_declination=None):
+        stock_option = self.get_stock_option()
+        if stock_option == 'dont_handle':
+            return
         resource = self
         if id_declination:
             declination = self.get_resource(id_declination)
             resource = declination
-        stock_option = self.get_stock_option()
         old_quantity = resource.get_quantity_in_stock()
         new_quantity = old_quantity - quantity
         if new_quantity <= 0 and stock_option == 'accept':
@@ -583,6 +585,9 @@ class Product(WorkflowAware, Editable, DynamicFolder):
 
 
     def add_on_stock(self, quantity, id_declination=None):
+        stock_option = self.get_stock_option()
+        if stock_option == 'dont_handle':
+            return
         resource = self
         if id_declination:
             declination = self.get_resource(id_declination)
