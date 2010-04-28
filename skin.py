@@ -48,7 +48,7 @@ class ShopLanguagesTemplate(CommonLanguagesTemplate):
 
     def get_namespace(self):
         context = self.context
-        site_root = context.site_root
+        site_root = context.resource.get_site_root()
         shop = site_root.get_resource('shop')
         here = context.resource
 
@@ -113,9 +113,8 @@ class BackofficeSkin(Skin):
 
 
 
-class ShopSkin(Skin):
+class ShopSkin(NeutralSkin):
 
-    class_skin = 'ui/backoffice'
     base_styles = ['/ui/shop/perfect_sale_style.css',
                    '/ui/shop/style.css']
 
@@ -139,8 +138,8 @@ class ShopSkin(Skin):
 
 
     def get_styles(self, context):
-        styles = ['/ui/shop/style.css']
-        styles.extend(NeutralSkin.get_styles(self, context))
+        styles = NeutralSkin.get_styles(self, context)
+        styles.append('/ui/shop/style.css')
         styles.remove('/ui/common/menu.css')
         return styles
 
@@ -198,4 +197,7 @@ path = get_abspath('ui/backoffice/')
 register_skin('backoffice', BackofficeSkin(path))
 
 path = get_abspath('ui/modules/')
-register_skin('modules', BackofficeSkin(path))
+register_skin('modules', Skin(path))
+
+path = get_abspath('ui/default_skin/')
+register_skin('default_skin', ShopSkin(path))

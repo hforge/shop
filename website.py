@@ -59,7 +59,7 @@ class ShopWebSite(NeutralWS):
     class_views = ['view', 'edit', 'edit_rss',
                    'browse_content', 'control_panel', 'last_changes']
     class_version = '20100227'
-    class_skin = '/ui/shop'
+    class_skin = '/ui/default_skin'
 
     __fixed_handlers__ = WebSite.__fixed_handlers__ + ['categories', 'shop']
 
