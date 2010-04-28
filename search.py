@@ -126,7 +126,6 @@ class Shop_ProductSearch(Category_View):
                                 PhraseQuery('data', alternative),
                                 PhraseQuery('text', alternative))
                 query.append(plain_text)
-        print AndQuery(*query)
         results = context.root.search(AndQuery(*query))
         # XXX Hack results
         self.nb_results = len(results)
