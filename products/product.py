@@ -575,7 +575,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
         if new_quantity <= 0 and stock_option == 'accept':
             new_quantity = 0
         if old_quantity > 0 and new_quantity == 0:
-            resource.send_alert_stock()
+            self.send_alert_stock()
         resource.set_property('stock-quantity', new_quantity)
         # XXX If is declination go private ?
         if not id_declination and new_quantity <= 0 and stock_option == 'refuse_go_private':
