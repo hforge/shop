@@ -386,8 +386,9 @@ class Shop_Login(STLForm):
             return context.come_back(message, goto)
 
         # Check user is enabled
+        ac = resource.get_access_control()
         if not user.get_property('is_enabled') and \
-            not resource.is_admin(user, resource):
+            not ac.is_admin(user, resource):
             message = ERROR(u"""Your account isn't validated,
                 please contact the webmaster""")
             goto = context.get_referrer()
