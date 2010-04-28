@@ -31,10 +31,12 @@ from ikaaro.forms import ImageSelectorWidget, RTEWidget, TextWidget
 from ikaaro.utils import get_base_path_query
 from ikaaro.resource_views import DBResource_Edit
 
+# Import from itws
+from itws.views import BrowseFormBatchNumeric
+
 # Import from shop
 from editable import Editable, Editable_Edit
 from utils import get_shop
-from views import BrowseFormBatchNumeric
 
 
 
