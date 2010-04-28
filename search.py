@@ -17,6 +17,7 @@
 # Import from itools
 from itools.datatypes import Boolean, String, Unicode, Enumerate
 from itools.gettext import MSG
+from itools.handlers import checkid
 from itools.xapian import OrQuery, PhraseQuery, AndQuery, split_unicode
 from itools.web import STLView, get_context
 
@@ -153,13 +154,14 @@ class Shop_ProductSearch(VirtualCategories_View):
                                 PhraseQuery('description', word),
                                 PhraseQuery('data', word),
                                 PhraseQuery('text', word),
+                                # XXX Hack manufacturer
+                                PhraseQuery('manufacturer', checkid(word)),
                                 # Alternative
                                 PhraseQuery('title', alternative),
                                 PhraseQuery('description', alternative),
                                 PhraseQuery('data', alternative),
                                 PhraseQuery('text', alternative))
                 query.append(plain_text)
-        print AndQuery(*query)
         results = context.root.search(AndQuery(*query))
         # XXX Hack results
         self.nb_results = len(results)
