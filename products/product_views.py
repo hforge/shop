@@ -32,7 +32,6 @@ from ikaaro.buttons import PublishButton, RetireButton
 from ikaaro.exceptions import ConsistencyError
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
-from ikaaro.forms import SelectRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
 from ikaaro.utils import get_base_path_query
@@ -48,7 +47,7 @@ from enumerate import ProductModelsEnumerate, CategoriesEnumerate, States
 from declination import Declination, Declination_NewInstance
 from schema import product_schema
 from taxes import PriceWidget
-from widgets import BarcodeWidget, MiniProductWidget, StockProductWidget
+from widgets import BarcodeWidget, MiniProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from widgets import StockWidget
 from shop.cart import ProductCart
@@ -263,7 +262,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         # Weight
         TextWidget('weight', title=MSG(u'Weight')),
         # Stock
-        StockWidget('stock-quantity', title=MSG(u'Stock')),
+        StockWidget('stock-quantity', title=MSG(u'Handle stocks ?')),
         # Price
         BooleanRadio('is_buyable', title=MSG(u'Buyable by customer ?')),
         TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),

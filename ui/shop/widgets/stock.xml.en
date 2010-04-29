@@ -4,18 +4,7 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <table id="widget-stock" cellpadding="0" cellspacing="0">
-    <tr>
-      <td style="vertical-align:top;">
-        Handle stocks ?
-      </td>
-    </tr>
-    <tr>
-      <td>
-        ${stock-handled}
-      </td>
-    </tr>
-  </table>
+  ${stock-handled}
 
   <table class="zone-stock" style="padding:5px;margin: 5px 20px;border: 1px solid gray;">
     <tr>
