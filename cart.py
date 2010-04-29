@@ -105,6 +105,11 @@ class ProductCart(object):
         cookie = Password.decode(cookie)
         for data in cookie.split('@'):
             id, name, quantity, declination = data.split('|')
+            # Check product exist
+            product = self.context.root.get_resource(name, soft=True)
+            if not product or not product.is_buyable():
+                continue
+            # Add product
             products.append({'id': id,
                              'name': name,
                              'quantity': int(quantity),
