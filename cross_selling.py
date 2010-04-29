@@ -123,7 +123,7 @@ class CrossSellingTable(ResourcesOrderedTable):
             products_quantity -= 1
             yield self.get_resource(path)
 
-        if products_quantity == 0:
+        if products_quantity <= 0:
             return
         query.append(
             NotQuery(

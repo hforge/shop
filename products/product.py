@@ -575,7 +575,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
             resource = declination
         old_quantity = resource.get_quantity_in_stock()
         new_quantity = old_quantity - quantity
-        if old_quantity > 0 and new_quantity == 0:
+        if old_quantity > 0 and new_quantity <= 0:
             self.send_alert_stock()
         resource.set_property('stock-quantity', new_quantity)
         # XXX If is declination go private ?

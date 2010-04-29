@@ -130,7 +130,7 @@ class ProductCart(object):
             if(product['id'] == id):
                 product['quantity'] = int(product['quantity'])
                 new_quantity = product['quantity'] + quantity
-                if new_quantity == 0:
+                if new_quantity <= 0:
                     # Remove the product
                     self.products.remove(product)
                 else:
@@ -141,7 +141,7 @@ class ProductCart(object):
             if(product['name'] == name):
                 if product['declination'] == declination:
                     new_quantity = product['quantity'] + quantity
-                    if new_quantity == 0:
+                    if new_quantity <= 0:
                         # Remove the product
                         self.products.remove(product)
                     else:
