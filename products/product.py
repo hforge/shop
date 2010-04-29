@@ -71,7 +71,7 @@ The product {product_title} is out of stock\n
 
 
 
-class Product(WorkflowAware, Editable, DynamicFolder):
+class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
