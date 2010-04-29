@@ -105,7 +105,7 @@ class BaseOrdersProducts(BaseTable):
       'name': String(mandatory=True),
       'reference': String,
       'title': Unicode,
-      'declination': Unicode,
+      'declination': String,
       'quantity': Integer,
       'weight': Decimal,
       'pre-tax-price': Decimal(mandatory=True),
