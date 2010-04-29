@@ -37,7 +37,7 @@ from addresses_views import Addresses_EditAddress, Addresses_AddAddress
 from datatypes import Civilite, ThreeStateBoolean
 from forms import ThreeStateBooleanRadio
 from shop_utils_views import RealRessource_Form
-from orders.orders_views import OrdersView, numero_template
+from orders.orders_views import numero_template
 from orders.workflow import states, states_color
 from user_group import UserGroup_Enumerate, groups
 from utils import bool_to_img, get_shop
