@@ -48,7 +48,9 @@
             <table class="table-quantity" stl:if="see_actions">
               <tr>
                 <td>
-                  <button id="remove-quantity" name="action" value="remove">-</button>
+                  <button id="remove-quantity" name="action" value="remove">
+                    <span>-</span>
+                  </button>
                 </td>
                 <td>
                   <input type="text" class="quantity" name="quantity"
@@ -57,7 +59,7 @@
                 <td>
                   <stl:block stl:if="p/can_add_quantity">
                     <button id="add-quantity" type="image"
-                      name="action" value="add">+</button>
+                      name="action" value="add"><span>+</span></button>
                   </stl:block>
                   <img id="add_quantity_disable"
                     src="/ui/shop/images/plus_gris.png"
@@ -69,7 +71,9 @@
           </td>
           <td>${p/price/total/with_tax} €</td>
           <td stl:if="see_actions">
-            <button id="delete-cart" name="action" value="delete">X</button>
+            <button id="delete-cart" name="action" value="delete">
+              <span>X</span>
+            </button>
           </td>
         </tr>
       </form>

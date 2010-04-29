@@ -15,15 +15,16 @@
   <stl:block stl:if="cart">
     ${cart}
 
-    <form method="post">
-      <a href=";addresses"  id="button-order" class="button">
-        Order
-      </a>
-      <button type="submit" id="clear-cart" name="action" value="clear">
-        Clear the cart
-      </button>
-    </form>
-    <div class="clear"/>
+    <div id="cart-controls">
+      <form method="post">
+        <a href=";addresses"  id="button-order" class="button">
+          Order
+        </a>
+        <button type="submit" id="clear-cart" name="action" value="clear">
+          Clear the cart
+        </button>
+      </form>
+    </div>
 
   </stl:block>
 

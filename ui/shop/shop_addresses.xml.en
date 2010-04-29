@@ -53,11 +53,11 @@
     </tr>
   </table>
 
-  <br/><br/>
-
-  <a id="button-order" class="button" href=";delivery">
-    Continue
-  </a>
+  <div id="cart-controls">
+    <a id="button-order" class="button" href=";delivery">
+      Continue
+    </a>
+  </div>
 
 
 </stl:block>

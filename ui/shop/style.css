@@ -48,6 +48,10 @@ table.cart td{
   border: 0px;
 }
 
+#cart .table-quantity input{
+  border: 1px solid gray;
+}
+
 #button, .button, .button:visited {
   background-color: #FF8A00;
   border: 1px solid #006;
@@ -74,6 +78,11 @@ table.cart td{
   margin: 0;
   padding: 0;
   background: url('/ui/shop/images/plus.png') no-repeat top left;
+  border: 0;
+}
+
+#cart #add-quantity span{
+  display: none;
 }
 
 #cart #remove-quantity{
@@ -82,6 +91,11 @@ table.cart td{
   margin: 0;
   padding: 0;
   background: url('/ui/shop/images/minus.png') no-repeat top left;
+  border: 0;
+}
+
+#cart #remove-quantity span{
+  display: none;
 }
 
 #cart #delete-cart{
@@ -90,12 +104,23 @@ table.cart td{
   margin: 0;
   padding: 0;
   background: url('/ui/shop/images/delete.png') no-repeat top left;
+  border: 0;
+}
+
+#cart #delete-cart span{
+  display: none;
+}
+
+#cart-controls{
+  margin: 5px;
+  padding: 5px;
 }
 
 #clear-cart{
   background-image: url(/ui/shop/images/delete.png);
   margin: 5px;
   padding-left: 20px;
+  height: 16px;
   float: right;
   border: 0px;
 }
