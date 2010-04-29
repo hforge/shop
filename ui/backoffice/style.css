@@ -183,6 +183,10 @@ fieldset dt label:first-child
   font-size: 13px;
 }
 
+fieldset .field-mandatory{
+  color: #F68231;
+}
+
 /****************************
  * Backoffice order view
  ****************************/
