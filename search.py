@@ -17,6 +17,7 @@
 # Import from itools
 from itools.datatypes import Boolean, String, Unicode, Enumerate
 from itools.gettext import MSG
+from itools.handlers import checkid
 from itools.xapian import OrQuery, PhraseQuery, AndQuery, split_unicode
 from itools.web import get_context
 
@@ -125,6 +126,8 @@ class Shop_ProductSearch(Category_View):
                                 PhraseQuery('description', word),
                                 PhraseQuery('data', word),
                                 PhraseQuery('text', word),
+                                # XXX Hack manufacturer
+                                PhraseQuery('manufacturer', checkid(word)),
                                 # Alternative
                                 PhraseQuery('title', alternative),
                                 PhraseQuery('description', alternative),

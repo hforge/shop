@@ -63,9 +63,8 @@ class Manufacturer_Add(NewInstance):
         cls = shop.manufacturer_class
         child = cls.make_resource(cls, resource, name)
         # The metadata
-        metadata = child.metadata
         language = resource.get_content_language(context)
-        resource.set_property('title', form['title'], language=language)
+        child.set_property('title', form['title'], language=language)
 
         goto = './%s/;edit' % name
         return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
