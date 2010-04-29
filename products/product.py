@@ -76,7 +76,7 @@ class Product(WorkflowAware, Editable, DynamicFolder):
     class_id = 'product'
     class_title = MSG(u'Product')
     class_description = MSG(u'A product')
-    class_version = '20100119'
+    class_version = '20100429'
 
     ##################
     # Configuration
@@ -909,6 +909,11 @@ class Product(WorkflowAware, Editable, DynamicFolder):
             self.set_property('reduce-pre-tax-price', value)
             self.set_property('has_reduction', True)
 
+
+    def update_20100429(self):
+        """Add the handle-stock boolean"""
+        print 'updating', self
+        self.set_property('stock-handled', True)
 
 
 class Products(ShopFolder):

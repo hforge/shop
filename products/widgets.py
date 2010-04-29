@@ -16,11 +16,12 @@
 
 # Import from itools
 from itools.core import merge_dicts
+from itools.datatypes import Boolean
 from itools.web import get_context
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import SelectRadio, Widget, stl_namespaces
+from ikaaro.forms import BooleanRadio, SelectRadio, Widget, stl_namespaces
 
 # Import from shop
 from declination import Declination
@@ -161,3 +162,33 @@ class StockProductWidget(Widget):
         widget = SelectRadio('stock-option', has_empty_option=False)
         namespace['widget'] = widget.to_html(StockOptions, stock_option)
         return namespace
+
+
+
+class StockWidget(Widget):
+
+    template = 'ui/shop/widgets/stock.xml'
+
+    def get_template(self, datatype, value):
+        context = get_context()
+        handler = context.root.get_resource(self.template)
+        return handler.events
+
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        here = context.resource
+        # BooleanRadio for handled
+        stock_handled = here.get_property('stock-handled')
+        handled_widget = BooleanRadio('stock-handled', css='stock-handled')
+
+        # SelectRadio for option
+        stock_option_value = here.get_property('stock-option')
+        options_widget = SelectRadio('stock-option', css='stock-option',
+                                has_empty_option=False)
+        stock_quantity = here.get_property('stock-quantity')
+
+        return {'stock-handled': handled_widget.to_html(Boolean, stock_handled),
+                'stock-quantity': stock_quantity,
+                'stock-option': options_widget.to_html(StockOptions,
+                    stock_option_value)}

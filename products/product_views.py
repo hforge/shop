@@ -50,6 +50,7 @@ from schema import product_schema
 from taxes import PriceWidget
 from widgets import BarcodeWidget, MiniProductWidget, StockProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
+from widgets import StockWidget
 from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.manufacturers import ManufacturersEnumerate
@@ -262,7 +263,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         # Weight
         TextWidget('weight', title=MSG(u'Weight')),
         # Stock
-        StockProductWidget('stock-quantity', title=MSG(u'Stock')),
+        StockWidget('stock-quantity', title=MSG(u'Stock')),
         # Price
         BooleanRadio('is_buyable', title=MSG(u'Buyable by customer ?')),
         TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),

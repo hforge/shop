@@ -48,9 +48,8 @@ product_schema = {# General informations
                   # Manufacturer / supplier
                   'manufacturer': ManufacturersEnumerate,
                   'supplier': SuppliersEnumerate(multiple=True),
-                  # Categories XXX To remove after update
-                  'categories': String(multiple=True),
                   # Manage stock
+                  'stock-handled': Boolean(mandatory=True),
                   'stock-quantity': Integer(default=0, mandatory=True),
                   'stock-option': StockOptions(mandatory=True, default='accept'),
                   'resupply-quantity': Integer(default=0),
