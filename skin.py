@@ -108,8 +108,15 @@ class BackofficeSkin(Skin):
     def get_styles(self, context):
         styles = Skin.get_styles(self, context)
         styles.extend(self.base_styles)
+        styles.append('/ui/common/js/jquery.multiselect2side/css/jquery.multiselect2side.css')
         return styles
 
+
+    def get_scripts(self, context):
+        scripts = Skin.get_scripts(self, context)
+        scripts.append('/ui/common/js/javascript.js')
+        scripts.append('/ui/common/js/jquery.multiselect2side/js/jquery.multiselect2side.js')
+        return scripts
 
 
 
