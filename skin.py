@@ -145,8 +145,8 @@ class ShopSkin(NeutralSkin):
 
 
     def get_styles(self, context):
-        styles = NeutralSkin.get_styles(self, context)
-        styles.append('/ui/shop/style.css')
+        styles = ['/ui/shop/style.css']
+        styles.extend(NeutralSkin.get_styles(self, context))
         styles.remove('/ui/common/menu.css')
         return styles
 
