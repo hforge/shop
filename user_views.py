@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, Enumerate, String, Unicode
+from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.web import STLView, STLForm, INFO, ERROR
@@ -24,7 +24,6 @@ from itools.xapian import PhraseQuery, AndQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, TextWidget, SelectWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
@@ -41,6 +40,7 @@ from orders.orders_views import numero_template
 from orders.workflow import states, states_color
 from user_group import UserGroup_Enumerate, groups
 from utils import bool_to_img, get_shop
+from utils_views import SearchTableFolder_View
 
 
 class ShopUser_Profile(STLView):
@@ -416,7 +416,7 @@ class ShopUser_EditAddress(Addresses_EditAddress, RealRessource_Form):
 # Backoffice / Customers
 ####################################
 
-class Customers_View(Folder_BrowseContent):
+class Customers_View(SearchTableFolder_View):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'View')
@@ -440,8 +440,6 @@ class Customers_View(Folder_BrowseContent):
         ('actions', MSG(u'Actions')),
         ]
 
-    search_template = '/ui/shop/users/users_view_search.xml'
-
     search_schema = {
         'name': String,
         'is_enabled': ThreeStateBoolean,
@@ -461,46 +459,22 @@ class Customers_View(Folder_BrowseContent):
         ]
 
 
-    def get_search_namespace(self, resource, context):
-        query = context.query
-        namespace = {'widgets': []}
-        for widget in self.search_widgets:
-            value = context.query[widget.name]
-            datatype = self.search_schema[widget.name]
-            if issubclass(datatype, Enumerate):
-                value = datatype.get_namespace(value)
-            html = widget.to_html(datatype, value)
-            namespace['widgets'].append({'title': widget.title,
-                                         'html': html})
-        return namespace
-
-
     def get_query_schema(self):
-        return merge_dicts(Folder_BrowseContent.get_query_schema(self),
+        return merge_dicts(SearchTableFolder_View.get_query_schema(self),
                            reverse=Boolean(default=True),
                            sort_by=String(default='ctime'))
 
 
     def get_items(self, resource, context, *args):
-        search_query = []
         # Base query (search in folder)
         users = resource.get_site_root().get_resource('users')
         abspath = str(users.get_canonical_path())
-        search_query.append(PhraseQuery('parent_path', abspath))
-        # Search query
-        for key, datatype in self.search_schema.items():
-            value = context.get_form_value(key)
-            if not value:
-                continue
-            value = datatype.decode(value)
-            search_query.append(PhraseQuery(key, value))
-        # Ok
-        return context.root.search(AndQuery(*search_query))
+        query = [PhraseQuery('parent_path', abspath)]
+        return SearchTableFolder_View.get_items(self, resource, context, query=query)
 
 
-
-    def get_item_value(self, resource, context, item, column):
-        item_brain, item_resource = item
+    def get_item_value(self, resource, context, item_brain, column):
+        item_resource = context.root.get_resource(item_brain.abspath)
         if column == 'name':
             name = item_brain.name
             return name, name
@@ -526,6 +500,13 @@ class Customers_View(Folder_BrowseContent):
                 </a>
                 """ % (item_brain.name, item_brain.name))
         return item_resource.get_property(column)
+
+
+    def sort_and_batch(self, resource, context, items):
+        # Batch
+        start = context.query['batch_start']
+        size = context.query['batch_size']
+        return items[start:start+size]
 
 
 
