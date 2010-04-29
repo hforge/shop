@@ -6,19 +6,27 @@
 
   <table id="widget-stock" cellpadding="0" cellspacing="0">
     <tr>
-      <td style="vertical-align:top;" colspan="3">
-        Handle stocks ? ${stock-handled}
+      <td style="vertical-align:top;">
+        Handle stocks ?
       </td>
     </tr>
-
-    <tr class="zone-stock">
+    <tr>
       <td>
-        Quantity in stock<br />
+        ${stock-handled}
+      </td>
+    </tr>
+  </table>
+
+  <table class="zone-stock" style="padding:5px;margin: 5px 20px;border: 1px solid gray;">
+    <tr>
+      <td>
+        Quantity in stock:<br />
         <input type="text" id="stock-quantity" name="stock-quantity" value="${stock-quantity}"/><br/>
       </td>
     </tr>
     <tr class="zone-stock">
       <td>
+        If out of stock:<br/>
         ${stock-option}
       </td>
     </tr>
