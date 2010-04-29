@@ -176,6 +176,13 @@ fieldset legend{
   color: #145391;
 }
 
+fieldset td label:first-child,
+fieldset dt label:first-child
+{
+  font-weight: bold;
+  font-size: 13px;
+}
+
 /****************************
  * Backoffice order view
  ****************************/

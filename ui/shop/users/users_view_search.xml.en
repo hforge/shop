@@ -13,7 +13,7 @@
       <legend>Search</legend>
       <dl>
         <stl:block stl:repeat="widget widgets">
-          <dt>${widget/title}</dt>
+          <dt><label>${widget/title}</label></dt>
           <dd>${widget/html}</dd>
         </stl:block>
         <p>
