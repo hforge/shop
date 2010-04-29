@@ -25,11 +25,12 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import TextWidget, SelectWidget, AutoForm
+from ikaaro.forms import AutoForm, TextWidget, SelectWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
 from ikaaro.table_views import Table_View
+from ikaaro.views import BrowseForm
 
 # Import from shop
 from addresses_views import Addresses_EditAddress, Addresses_AddAddress
@@ -220,9 +221,9 @@ class ShopUser_EditAccount(User_EditAccount):
 
 
 
-class ShopUser_OrdersView(OrdersView):
+class ShopUser_OrdersView(BrowseForm):
 
-    access = 'is_allowed_to_view'
+    access = 'is_allowed_to_edit'
     title = MSG(u'Order history')
 
     search_template = None
@@ -236,26 +237,43 @@ class ShopUser_OrdersView(OrdersView):
 
 
     def get_items(self, resource, context, *args):
-        args = PhraseQuery('customer_id', resource.name)
-        orders = get_shop(resource).get_resource('orders')
-        return Folder_BrowseContent.get_items(self, orders, context, args)
+        root = context.root
+        items = []
+        id_query = PhraseQuery('customer_id', resource.name)
+        cls_query = PhraseQuery('format', 'order')
+        args = AndQuery(id_query, cls_query)
+        orders = root.search(args)
+        for brain in orders.get_documents():
+            resource = root.get_resource(brain.abspath)
+            items.append(resource)
+
+        return items
 
 
     def get_item_value(self, resource, context, item, column):
-        item_brain, item_resource = item
         if column == 'numero':
-            state = item_brain.workflow_state
-            href = './;order_view?id=%s' % item_brain.name
-            name = item_resource.get_reference()
+            state = item.workflow_state
+            href = './;order_view?id=%s' % item.name
+            name = item.get_reference()
             return XMLParser(numero_template % (states_color[state], href, name))
         elif column == 'state':
-            state = item_brain.workflow_state
+            state = item.workflow_state
             state_title = states[state].gettext().encode('utf-8')
-            href = './;order_view?id=%s' % item_brain.name
+            href = './;order_view?id=%s' % item.name
             return XMLParser(numero_template % (states_color[state], href, state_title))
-        return OrdersView.get_item_value(self, resource,
-                                          context, item, column)
+        elif column == 'total_price':
+            return '%s € ' % item.get_property(column)
+        elif column == 'creation_datetime':
+            value = item.get_property(column)
+            accept = context.accept_language
+            return format_datetime(value, accept=accept)
+        return BrowseForm.get_item_value(self, resource, context, item, column)
 
+    def sort_and_batch(self, resource, context, items):
+        # Batch
+        start = context.query['batch_start']
+        size = context.query['batch_size']
+        return items[start:start+size]
 
 
 
@@ -274,7 +292,9 @@ class ShopUser_OrderView(STLForm):
         shop = get_shop(resource)
         order = shop.get_resource('orders/%s' % context.query['id'], soft=True)
         # ACL
-        if not order or order.get_property('customer_id') != context.user.name:
+        ac = resource.get_access_control()
+        if not order or (order.get_property('customer_id') != context.user.name
+                and not ac.is_admin(context.user, resource)):
             msg = ERROR(u'Your are not authorized to view this ressource')
             return context.come_back(msg, goto='/')
         # Build namespace
