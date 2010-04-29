@@ -17,12 +17,13 @@
 # Import from itools
 from itools.datatypes import Integer, Unicode, Enumerate
 from itools.gettext import MSG
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.forms import TextWidget
 
-
-
+# Import from shop
+from utils import get_shop
 
 
 class ShopUser_GroupDefault(object):
@@ -54,8 +55,10 @@ class UserGroup_Enumerate(Enumerate):
 
     @classmethod
     def get_options(self):
+        context = get_context()
+        shop = get_shop(context.resource)
         options = []
-        for cls in [ShopUser_GroupPro]:
+        for cls in shop.user_groups_class:
             options.append({'name': cls.name, 'value': cls.title})
         return options
 

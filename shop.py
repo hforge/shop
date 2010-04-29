@@ -110,6 +110,7 @@ class Shop(ShopFolder):
     payments_class = ShopPayments
     supplier_class = Supplier
     user_class = ShopUser
+    user_groups_class = []
 
     ####################################
     ## Views
