@@ -66,10 +66,10 @@ class SearchBox_View(BarItem_View):
 
 class SearchBox(BarItem):
 
-    class_id = 'vertical-item-search-box'
+    class_id = 'sidebar-item-search-box'
     class_title = MSG(u'Search box')
     view = SearchBox_View()
 
 
 register_resource_class(SearchBox)
-register_bar_item(SearchBox, allow_instanciation=False)
+register_bar_item(SearchBox, allow_instanciation=True)

@@ -18,7 +18,7 @@
 from itools.datatypes import Boolean, String, Unicode, Enumerate
 from itools.gettext import MSG
 from itools.handlers import checkid
-from itools.xapian import OrQuery, PhraseQuery, AndQuery, split_unicode
+from itools.xapian import OrQuery, PhraseQuery, AndQuery, StartQuery, split_unicode
 from itools.web import get_context
 
 # Import from ikaaro
@@ -31,7 +31,6 @@ from itws.bar import SideBarAware
 
 # Import from shop
 from categories_views import Category_View
-from utils import get_shop
 
 
 class Shop_CategoriesEnumerate(Enumerate):
@@ -41,14 +40,14 @@ class Shop_CategoriesEnumerate(Enumerate):
         options = [{'name': '*', 'value': MSG(u'All the site')}]
         context = get_context()
         resource = context.resource
-        shop = get_shop(resource)
         root = context.root
-        categories = shop.get_resource('categories')
+        site_root = resource.get_site_root()
+        categories = site_root.get_resource('categories')
         query = [PhraseQuery('format', 'category'),
                  PhraseQuery('parent_path', str(categories.get_abspath()))]
         for brain in root.search(AndQuery(*query)).get_documents():
             categorie = root.get_resource(brain.abspath)
-            options.append({'name': brain.name,
+            options.append({'name': brain.abspath,
                             'value': categorie.get_title()})
         return options
 
@@ -111,7 +110,7 @@ class Shop_ProductSearch(Category_View):
                  PhraseQuery('workflow_state', 'public')]
         category = context.query['category']
         if category and category != '*':
-            query.append(PhraseQuery('categories', category))
+            query.append(StartQuery('abspath', category))
         search_word = context.query['product_search_text']
         if search_word:
             words = [word for word in split_unicode(search_word)]
