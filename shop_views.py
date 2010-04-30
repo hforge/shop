@@ -671,7 +671,7 @@ class Shop_ShowRecapitulatif(STLForm):
                             title={'en': u'#%s' % ref},
                             **kw)
         # We clear the cart
-        # XXX cart.clear()
+        cart.clear()
         # We show the payment form
         kw = {'ref': ref,
               'amount': total_price_with_tax,
