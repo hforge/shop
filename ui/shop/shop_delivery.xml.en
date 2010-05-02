@@ -22,7 +22,7 @@
       </tr>
       <tr stl:repeat="ship shipping">
         <td>
-          <img src="${ship/img}"/>
+          <img src="${ship/img}/;download" stl:if="ship/img"/>
         </td>
         <td>
           ${ship/title}
@@ -31,7 +31,12 @@
           ${ship/description}
         </td>
         <td>
-          ${ship/html_form}
+          <form method="POST">
+            <input type="hidden" name="shipping" value="${ship/name}"/>
+            <span stl:if="ship/price">${ship/price} €</span>
+            <span stl:if="not ship/price">Free</span>
+            <button type="submit" class="button" id="button-order">Ok</button>
+          </form>
         </td>
       </tr>
     </table>

@@ -14,46 +14,58 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from standard library
-from operator import itemgetter
-
 # Import from itools
+from itools.datatypes import String, Unicode
 from itools.gettext import MSG
 from itools.web import STLView
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import AutoForm
-from ikaaro.forms import RTEWidget, XHTMLBody
+from ikaaro.forms import AutoForm, ImageSelectorWidget, MultilineWidget
+from ikaaro.forms import RTEWidget, TextWidget, XHTMLBody
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.views import BrowseForm
+from ikaaro.resource_views import EditLanguageMenu
 
 # Import from shop
 from shop.utils import bool_to_img
+
+# XXX msg_if_no_shipping must be multilingual
+
+shippings_schema = {
+    'default_shipping_way_title': Unicode(mandatory=True),
+    'default_shipping_way_logo': String(mandatory=True),
+    'default_shipping_way_description': Unicode(mandatory=True),
+    'msg_if_no_shipping': XHTMLBody(mandatory=True)}
 
 
 class Shippings_Configure(AutoForm):
 
     access = 'is_admin'
     title = MSG(u'Configure')
+    context_menus = [EditLanguageMenu()]
 
-    schema = {'msg_if_no_shipping': XHTMLBody(mandatory=True)}
+    schema = shippings_schema
 
     widgets = [
+        TextWidget('default_shipping_way_title',
+                  title=MSG(u'Default shipping way title')),
+        ImageSelectorWidget('default_shipping_way_logo',
+                  title=MSG(u'Default shipping way logo')),
+        MultilineWidget('default_shipping_way_description',
+                  title=MSG(u'Default shipping way description')),
         RTEWidget('msg_if_no_shipping',
                   title=MSG(u'Message if no shipping available')),
         ]
 
 
     def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name)
+        return resource.get_property(name) or datatype.get_default()
 
 
     def action(self, resource, context, form):
-        resource.set_property('msg_if_no_shipping',
-                              form['msg_if_no_shipping'])
-        # Come back
+        for key in self.get_schema(resource, context):
+            resource.set_property(key, form[key])
         return context.come_back(messages.MSG_CHANGES_SAVED)
 
 
@@ -90,43 +102,6 @@ class ShippingsView(Folder_BrowseContent):
             return item_resource.get_property(column)
         return Folder_BrowseContent.get_item_value(self, resource, context,
                                                    item, column)
-
-
-class Shippings_History(BrowseForm):
-
-    title = MSG(u'Shippings history')
-    access = 'is_admin'
-
-    table_columns = [
-        ('complete_id', MSG(u'Id')),
-        ('ref', MSG(u'Ref')),
-        ('ts', MSG(u'Date')),
-        ('shipping_mode', MSG(u'Shipping mode')),
-        ('state', MSG(u'State')),
-        ]
-
-    def get_items(self, resource, context):
-        return resource.get_shippings_items(context)
-
-
-    def sort_and_batch(self, resource, context, items):
-        # Sort
-        sort_by = context.query['sort_by']
-        reverse = context.query['reverse']
-        if sort_by:
-            items.sort(key=itemgetter(sort_by), reverse=reverse)
-
-        # Batch
-        start = context.query['batch_start']
-        size = context.query['batch_size']
-        return items[start:start+size]
-
-
-    def get_item_value(self, resource, context, item, column):
-        if column == 'ref':
-            href = '../orders/%s' % item['ref']
-            return item[column], href
-        return item[column]
 
 
 

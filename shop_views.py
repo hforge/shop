@@ -55,6 +55,7 @@ from orders.orders_views import Orders_StatesBox
 from payments import PaymentWaysEnumerate
 from payments.payments_views import Payments_ChoosePayment
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
+from utils import get_shippings_details
 
 
 CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
@@ -522,25 +523,20 @@ class Shop_Delivery(STLForm):
 
     def get_namespace(self, resource, context):
         ns = {}
+        cart = ProductCart(context)
         # Progress
         ns['progress'] = Shop_Progress(index=4).GET(resource, context)
-        # Get total price and weight
-        cart = ProductCart(context)
-        total_weight = decimal(0)
-        for cart_elt in cart.products:
-            product = context.root.get_resource(cart_elt['name'])
-            declination = cart_elt['declination']
-            unit_price = product.get_price_with_tax(declination)
-            total_weight += product.get_weight(declination) * cart_elt['quantity']
         # Get user delivery country
         addresses = resource.get_resource('addresses').handler
         delivery_address = cart.addresses['delivery_address']
         record = addresses.get_record(delivery_address)
         country = addresses.get_record_value(record, 'country')
+
         # Guess shipping posibilities
+        shippings_details = get_shippings_details(cart, context)
         shippings = resource.get_resource('shippings')
         ns['shipping'] = shippings.get_namespace_shipping_ways(context,
-                                            country, total_weight)
+                                            country, shippings_details)
         # If no shipping
         ns['msg_if_no_shipping'] = shippings.get_property('msg_if_no_shipping')
         return ns
@@ -634,15 +630,8 @@ class Shop_ShowRecapitulatif(STLForm):
             total_price_with_tax += unit_price_with_tax * quantity
             total_price_without_tax += unit_price_without_tax * quantity
             total_weight += product.get_weight(declination) * quantity
-        # XXX GEt Shipping price (Hardcoded, fix it)
-        addresses = resource.get_resource('addresses').handler
-        delivery_address = cart.addresses['delivery_address']
-        record = addresses.get_record(delivery_address)
-        country = addresses.get_record_value(record, 'country')
-        shippings = resource.get_resource('shippings')
-        shipping_mode = cart.shipping['name']
-        shipping_price = shippings.get_namespace_shipping_way(context,
-                  shipping_mode, country, total_weight)['price']
+        # Get Shipping price
+        shipping_price = cart.get_shipping_ns(resource, context)['price']
         total_price_with_tax += shipping_price
         total_price_without_tax += shipping_price
         # Format total_price

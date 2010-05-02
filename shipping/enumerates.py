@@ -18,6 +18,7 @@
 # Import from itools
 from itools.datatypes import Enumerate
 from itools.gettext import MSG
+from itools.web import get_context
 
 
 
@@ -29,3 +30,36 @@ class ShippingStates(Enumerate):
                {'name': 'sent',      'value': MSG(u'Sended')},
                {'name': 'cancel',      'value': MSG(u'Cancel')}]
 
+
+class ShippingsWaysEnumerate(Enumerate):
+
+    path = 'shop/shippings/'
+    format = None
+
+    @classmethod
+    def get_options(cls):
+        from shipping_way import ShippingWay
+        from withdrawal import Withdrawal
+        context = get_context()
+        resource = context.site_root.get_resource(cls.path)
+        options = []
+        for res in resource.search_resources():
+            if isinstance(res, ShippingWay) is False:
+                continue
+            if res.get_property('enabled') is False:
+                continue
+            if res.class_id == Withdrawal.class_id:
+                continue
+            options.append({'name': str(res.get_abspath()),
+                            'value': res.get_title()})
+        return options
+
+
+    @classmethod
+    def get_value(cls, name, default=None):
+        if name is None:
+            return
+        context = get_context()
+        path = '%s/%s' % (cls.path, name)
+        resource = context.site_root.get_resource(path)
+        return resource.get_title()

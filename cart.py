@@ -25,6 +25,7 @@ from ikaaro.datatypes import Password
 
 # Import from shop
 from utils import format_price
+from utils import get_shippings_details
 
 
 class ProductCart(object):
@@ -299,19 +300,27 @@ class ProductCart(object):
             total_price_without_tax += unit_price_without_tax * quantity
             total_weight += product.get_weight(declination) * quantity
         # XXX GEt Shipping price (Hardcoded, fix it)
+        shipping_price = self.get_shipping_ns(shop, context)['price']
+        total_price_with_tax += shipping_price
+        total_price_without_tax += shipping_price
+        return {'with_tax': format_price(total_price_with_tax),
+                'without_tax': format_price(total_price_without_tax)}
+
+
+    def get_shipping_ns(self, shop, context):
         addresses = shop.get_resource('addresses').handler
         delivery_address = self.addresses['delivery_address']
         record = addresses.get_record(delivery_address)
         country = addresses.get_record_value(record, 'country')
         shippings = shop.get_resource('shippings')
         shipping_mode = self.shipping['name']
-        shipping_price = shippings.get_namespace_shipping_way(context,
-                  shipping_mode, country, total_weight)['price']
-        total_price_with_tax += shipping_price
-        total_price_without_tax += shipping_price
-        return {'with_tax': format_price(total_price_with_tax),
-                'without_tax': format_price(total_price_without_tax)}
-
+        # Guess shipping posibilities
+        shippings_details = get_shippings_details(self, context)
+        shippings = shop.get_resource('shippings')
+        for s in shippings.get_namespace_shipping_ways(context,
+                        country, shippings_details):
+            if s['name'] == shipping_mode:
+              return s
 
 
     ######################

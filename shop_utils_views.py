@@ -105,14 +105,7 @@ class Cart_View(STLView):
         # Get shippings
         namespace['ship'] = None
         if cart.shipping:
-            shipping_mode = cart.shipping['name']
-            shippings = resource.get_resource('shippings')
-            addresses = resource.get_resource('addresses').handler
-            delivery_address = cart.addresses['delivery_address']
-            record = addresses.get_record(delivery_address)
-            country = addresses.get_record_value(record, 'country')
-            namespace['ship'] = shippings.get_namespace_shipping_way(context,
-                                    shipping_mode, country, total_weight)
+            namespace['ship'] = cart.get_shipping_ns(resource, context)
             namespace['total']['with_tax'] += namespace['ship']['price']
             namespace['total']['without_tax'] += namespace['ship']['price']
         # Format total prices

@@ -27,7 +27,7 @@ from taxes import TaxesEnumerate
 from shop.datatypes import ImagePathDataType
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
-
+from shop.shipping.enumerates import ShippingsWaysEnumerate
 
 
 #############################################
@@ -44,7 +44,9 @@ product_schema = {# General informations
                   'tags': Tokens,
                   'subject': Unicode(multilingual=True),
                   'cover': ImagePathDataType(mandatory=True),
+                  # Shippings
                   'weight': Decimal(default=decimal(0), mandatory=True),
+                  'use_this_shipping_way': ShippingsWaysEnumerate,
                   # Manufacturer / supplier
                   'manufacturer': ManufacturersEnumerate,
                   'supplier': SuppliersEnumerate(multiple=True),

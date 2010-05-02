@@ -399,8 +399,11 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         is_sent = resource.get_property('is_sent')
         shippings = shop.get_resource('shippings')
         shipping_way = resource.get_property('shipping')
-        shipping_way_resource = shop.get_resource('shippings/%s/' % shipping_way)
-        shippings_records = shippings.get_shippings_records(context, resource.name)
+        if shipping_way == 'default':
+            shippings_records = None
+        else:
+            shipping_way_resource = shop.get_resource('shippings/%s/' % shipping_way)
+            shippings_records = shippings.get_shippings_records(context, resource.name)
         if is_sent:
             view = None
             if shippings_records:
@@ -409,6 +412,8 @@ class Order_Manage(Payments_EditablePayment, STLForm):
                 edit_record_view = shipping_way_resource.order_edit_view
                 view = edit_record_view.GET(resource, shipping_way_resource,
                               last_delivery, context)
+        elif shippings_records is None and shipping_way == 'default':
+            view = None
         else:
             # We have to add delivery
             add_record_view = shipping_way_resource.order_add_view

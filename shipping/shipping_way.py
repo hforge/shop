@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
+from copy import deepcopy
 from decimal import Decimal as decimal
 
 # Import from itools
@@ -25,20 +26,17 @@ from itools.datatypes import Decimal, Enumerate, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.handlers import ro_database
 from itools.i18n import format_datetime
-from itools.stl import stl
 from itools.web import get_context
 from itools.xapian import PhraseQuery
-from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.file import Image
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import SelectWidget, TextWidget, stl_namespaces
+from ikaaro.forms import SelectWidget, TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
-from shop.cart import ProductCart
 from shop.enumerates import CountriesZonesEnumerate
 from shop.utils import get_shop, ShopFolder
 from shop.utils_views import SearchTable_View
@@ -187,7 +185,8 @@ class ShippingWay(ShopFolder):
         return merge_dicts(ShopFolder.get_metadata_schema(), delivery_schema)
 
 
-    def get_price(self, country, purchase_weight):
+    def get_price(self, country, list_weight):
+        list_weight = deepcopy(list_weight)
         shop = get_shop(self)
         # Is Free ?
         if self.get_property('is_free'):
@@ -201,37 +200,63 @@ class ShippingWay(ShopFolder):
         # XXX to refactor
         # Max value
         mode = self.get_property('mode')
-        max_key = 'max-%s' % mode
         if mode == 'weight':
-            value = purchase_weight
+            list_weight.sort(reverse=True)
+            list_values = list_weight
         elif mode == 'quantity':
-            cart = ProductCart(get_context())
-            value = 0
-            for p in cart.products:
-                value += p['quantity']
+            list_values = [1] * len(list_weight)
         # XXX limit by models
-        only_this_models = self.get_property('only_this_models')
-        if only_this_models:
-            cart = ProductCart(get_context())
-            products = shop.get_resource('products')
-            for product_cart in cart.products:
-                product = products.get_resource(product_cart['name'], soft=True)
-                if product.get_property('product_model') not in only_this_models:
-                    return None
-        # Calcul price
+        #only_this_models = self.get_property('only_this_models')
+        #if only_this_models:
+        #    cart = ProductCart(get_context())
+        #    products = shop.get_resource('products')
+        #    for product_cart in cart.products:
+        #        product = products.get_resource(product_cart['name'], soft=True)
+        #        if product.get_property('product_model') not in only_this_models:
+        #            return None
+
+        # Get corresponding weight/quantity in table of price
         list_price_ok = {}
         prices = self.get_resource('prices').handler
-        # Get corresponding weight/quantity in table of price
-        for record in prices.search(PhraseQuery('zone', zone)):
-            max_value = prices.get_record_value(record, max_key)
+        min_value = 0
+        for record in prices.search(PhraseQuery('zone', zone),
+                                    sort_by='max-%s' % mode):
+            max_value = prices.get_record_value(record, 'max-%s' % mode)
             price = prices.get_record_value(record, 'price')
-            if value <= max_value:
-                list_price_ok[max_value] = record
-        # No price, we return None
-        if not list_price_ok:
+            list_price_ok[max_value] = {'min': min_value,
+                                        'max': max_value,
+                                        'price': price}
+            min_value = max_value
+        # No price ?
+        if len(list_price_ok.keys()) == 0:
             return None
-        record = list_price_ok[min(list_price_ok.keys())]
-        return prices.get_record_value(record, 'price')
+        # Check all weigh if < max_weight
+        if mode == 'weight':
+            max_value = max(list_price_ok.keys())
+            for key in list_weight:
+                if key > max_value:
+                    return None
+        # On crée une partition de poids
+        current_value = decimal(0)
+        partition = []
+        list_values.sort(reverse=True)
+        while list_values:
+            if current_value + list_values[-1] <= max_value:
+                current_value += list_values.pop()
+            else:
+                partition.append(current_value)
+                current_value = decimal(0)
+            if len(list_values) == 0:
+                partition.append(current_value)
+        # Calcul total price
+        total_price = decimal(0)
+        for p in partition:
+            for value in list_price_ok.values():
+                if p >= value['min'] and p <= value['max']:
+                    total_price += value['price']
+                    break
+        return total_price
+
 
 
     def get_logo(self, context):
@@ -239,7 +264,7 @@ class ShippingWay(ShopFolder):
         resource = self.get_resource(logo, soft=True)
         if resource is None:
             return
-        return '%s/;download' % context.get_link(resource)
+        return context.get_link(resource)
 
 
     def get_shipping_option(self, context):
@@ -254,29 +279,20 @@ class ShippingWay(ShopFolder):
                  'title': self.get_title(language)}
 
 
-    html_form = list(XMLParser("""
-        <form method="POST">
-          <input type="hidden" name="shipping" value="${name}"/>
-          <span stl:if="price">${price} €</span>
-          <span stl:if="not price">Free</span>
-          <button type="submit" class="button" id="button-order">Ok</button>
-        </form>
-        """,
-        stl_namespaces))
 
-    def get_widget_namespace(self, context, country, weight):
-        price = self.get_price(country, weight)
+    def get_widget_namespace(self, context, country, list_weight):
+        # Is enabled ?
+        if not self.get_property('enabled'):
+            return None
+        # Get price of shipping
+        price = self.get_price(country, list_weight)
         if price is None:
             return None
-        ns = {'name': self.name,
-              'price': price}
-        html_form = stl(events=self.html_form, namespace=ns)
         language = self.get_content_language(context)
         ns = {'name': self.name,
               'img': self.get_logo(context),
               'title': self.get_title(language),
-              'price': price,
-              'html_form': html_form}
+              'price': price}
         for key in ['description', 'enabled']:
             ns[key] = self.get_property(key, language)
         return ns

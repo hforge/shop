@@ -261,6 +261,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         ImageSelectorWidget('cover', title=MSG(u'Cover')),
         # Weight
         TextWidget('weight', title=MSG(u'Weight')),
+        SelectWidget('use_this_shipping_way', title=MSG(u'Prefer use this shipping way')),
         # Stock
         StockWidget('stock-quantity', title=MSG(u'Handle stocks ?')),
         # Price

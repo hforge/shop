@@ -100,6 +100,30 @@ def get_non_empty_widgets(schema, widgets):
     return widgets_non_empty
 
 
+def get_shippings_details(cart, context):
+    shippings_details = {}
+    for cart_elt in cart.products:
+        product = context.root.get_resource(cart_elt['name'])
+        declination = cart_elt['declination']
+        unit_price = product.get_price_with_tax(declination)
+        unit_weight = product.get_weight(declination)
+        shipping_way = product.get_property('use_this_shipping_way')
+        # Has specific shipping way or use default ?
+        if shipping_way:
+            mode = context.root.get_resource(shipping_way)
+            mode = str(mode.get_abspath())
+        else:
+            mode = 'default'
+        # Add to list of shippings
+        if shippings_details.has_key(mode) is False:
+            shippings_details[mode] = {'list_weight': [],
+                                       'nb_products': 0}
+        for i in range(0, cart_elt['quantity']):
+            shippings_details[mode]['list_weight'].append(unit_weight)
+        shippings_details[mode]['nb_products'] += cart_elt['quantity']
+    return shippings_details
+
+
 class ShopFolder(Folder):
     """Guest user cannot access to some views of ShopFolder
     """

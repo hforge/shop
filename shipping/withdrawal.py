@@ -19,11 +19,9 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, Enumerate, Unicode
 from itools.gettext import MSG
 from itools.web import STLForm
-from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import MultilineWidget
-from ikaaro.forms import stl_namespaces
 from ikaaro.registry import register_resource_class
 
 # Import from shop.shipping
@@ -113,14 +111,6 @@ class Withdrawal(ShippingWay):
     class_description = MSG(u'Withdrawal at the store')
 
     img = '../ui/shop/images/noship.png'
-
-    html_form = list(XMLParser("""
-        <form method="POST">
-          <button type="submit" class="button" id="button-order">Ok</button>
-          <input type="hidden" name="shipping" value="${name}"/>
-        </form>
-        """,
-        stl_namespaces))
 
     shipping_history_cls = WithdrawalTable
 
