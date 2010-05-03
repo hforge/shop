@@ -60,7 +60,8 @@ class Shippings_Configure(AutoForm):
 
 
     def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name) or datatype.get_default()
+        language = resource.get_content_language(context)
+        return resource.get_property(name, language) or datatype.get_default()
 
 
     def action(self, resource, context, form):
