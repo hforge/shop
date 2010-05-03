@@ -167,6 +167,7 @@ class Shippings(ShopFolder):
         site_root = self.get_site_root()
         for language in site_root.get_property('website_languages'):
             value = self.get_property('msg_if_no_shipping')
+            self.del_property('msg_if_no_shipping')
             self.set_property('msg_if_no_shipping', value, language)
 
 
