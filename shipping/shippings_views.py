@@ -33,10 +33,10 @@ from shop.utils import bool_to_img
 # XXX msg_if_no_shipping must be multilingual
 
 shippings_schema = {
-    'default_shipping_way_title': Unicode(mandatory=True),
+    'default_shipping_way_title': Unicode(mandatory=True, multilingual=True),
     'default_shipping_way_logo': String(mandatory=True),
-    'default_shipping_way_description': Unicode(mandatory=True),
-    'msg_if_no_shipping': XHTMLBody(mandatory=True)}
+    'default_shipping_way_description': Unicode(mandatory=True, multilingual=True),
+    'msg_if_no_shipping': XHTMLBody(mandatory=True, multilingual=True)}
 
 
 class Shippings_Configure(AutoForm):
@@ -64,8 +64,12 @@ class Shippings_Configure(AutoForm):
 
 
     def action(self, resource, context, form):
-        for key in self.get_schema(resource, context):
-            resource.set_property(key, form[key])
+        language = resource.get_content_language(context)
+        for key, datatype in self.get_schema(resource, context).items():
+            if getattr(datatype, 'multilingual', False):
+                resource.set_property(key, form[key], language)
+            else:
+                resource.set_property(key, form[key])
         return context.come_back(messages.MSG_CHANGES_SAVED)
 
 
