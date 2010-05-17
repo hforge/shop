@@ -171,4 +171,4 @@ class SubCategoriesBox(BarItem):
 
 
 register_resource_class(SubCategoriesBox)
-register_bar_item(SubCategoriesBox, allow_instanciation=False)
+register_bar_item(SubCategoriesBox, allow_instanciation=True)
