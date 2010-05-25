@@ -162,7 +162,6 @@ class ProductModel(ShopFolder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
-                default_cover=PathDataType,
                 declinations_enumerates=Enumerate_ListEnumerateTable(multiple=True))
 
 

@@ -37,6 +37,8 @@ from shop.shipping.enumerates import ShippingsWaysEnumerate
 
 product_schema = {# General informations
                   'state': States(mandatory=True, default='public'),
+                  # XXX
+                  'categories': String(multiple=True),
                   'reference': String,
                   'product_model': String,
                   'title': Unicode(multilingual=True),

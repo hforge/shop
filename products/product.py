@@ -492,16 +492,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         if cover:
             image = self.get_resource(cover, soft=True)
         if not image:
-            model = self.get_product_model()
-            if model is None:
-                return
-            cover = model.get_property('default_cover')
-            if cover:
-                image = model.get_resource(cover, soft=True)
-            else:
-                return
-            if not image:
-                return
+            return
         return {'href': context.get_link(image),
                 'key': image.handler.key,
                 'title': image.get_property('title')}

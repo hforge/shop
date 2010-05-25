@@ -15,18 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import PathDataType, Unicode
+from itools.datatypes import Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.web import INFO
 from itools.xapian import PhraseQuery, AndQuery
-from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.buttons import RemoveButton, RenameButton, CopyButton, PasteButton
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import AutoForm, ImageSelectorWidget, SelectWidget
+from ikaaro.forms import AutoForm, SelectWidget
 from ikaaro.forms import TextWidget
 from ikaaro.table_views import OrderedTable_View
 from ikaaro.table_views import Table_AddRecord, Table_EditRecord
@@ -52,7 +51,6 @@ class ProductModels_View(Folder_BrowseContent):
 
     table_columns = [
         ('checkbox', None),
-        ('img', MSG(u'Image')),
         ('title', MSG(u'Title'))
         ]
 
@@ -61,14 +59,6 @@ class ProductModels_View(Folder_BrowseContent):
         item_brain, item_resource = item
         if column == 'title':
             return (item_resource.get_title(), item_brain.name)
-        elif column == 'img':
-            # XXX Sylvain
-            cover = item_resource.get_property('default_cover') or None
-            if cover is None:
-                return '-'
-            cover = item_resource.get_resource(cover)
-            cover = resource.get_pathto(cover)
-            return XMLParser('<img src="%s/;thumb?width=90&amp;height=90"/>' % cover)
         return Folder_BrowseContent.get_item_value(self, resource, context,
             item, column)
 
@@ -145,11 +135,9 @@ class ProductModel_Configure(AutoForm):
 
     schema = {
       'title': Unicode,
-      'default_cover': PathDataType,
       'declinations_enumerates': Enumerate_ListEnumerateTable(multiple=True)}
 
     widgets = [TextWidget('title', title=MSG(u'Title')),
-               ImageSelectorWidget('default_cover', title=MSG(u'Default cover')),
                SelectWidget('declinations_enumerates',
                             title=MSG(u'Declinations activated'))]
 
