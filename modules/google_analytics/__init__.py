@@ -15,9 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from modules import Modules, ShopModule
-
-import export_catalog
-import export_catalog_csv
-import google_analytics
-import wishlist
+from google_analytics import ShopModule_GoogleAnalytics

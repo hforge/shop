@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', '${tracking_id}']);
+    _gaq.push(['_setCustomVar', '1', 'UserID', '0', '1']);
+    _gaq.push(['_trackPageview']);
+    <stl:block stl:if="track_end_of_order">
+    _gaq.push(['_addTrans',
+      '${order/name}',           // order ID - required
+      'PerfectSale',             // affiliation or store name
+      '${order/total_price}',    // total - required
+      '',                        // tax
+      '${order/shipping_price}', // shipping
+      '',                        // city
+      '',                        // state or province
+      ''                         // country
+    ]);
+    _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
+    </stl:block>
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+    })();
+  </script>
+</stl:block>

@@ -15,7 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
-class ShopModule(object):
-
-    pass
+from export_catalog import ShopModule_ExportCatalog

@@ -15,13 +15,36 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
+from itools.datatypes import Boolean
 from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.folder import Folder
+from ikaaro.registry import register_field
 
 # Import from shop
-from modules_views import Modules_View
+from modules_views import Modules_View, ShopModule_Edit
+from shop.utils import ShopFolder
+
+
+class ShopModule(ShopFolder):
+
+    edit = ShopModule_Edit()
+
+    item_schema = {}
+    item_widgets = []
+
+    def _get_catalog_values(self):
+        return merge_dicts(ShopFolder._get_catalog_values(self),
+                           is_shop_module=True)
+
+
+    @classmethod
+    def get_metadata_schema(cls):
+        return merge_dicts(ShopFolder.get_metadata_schema(),
+                           cls.item_schema)
+
 
 
 class Modules(Folder):
@@ -35,3 +58,6 @@ class Modules(Folder):
     def get_document_types(self):
         return []
 
+
+
+register_field('is_shop_module', Boolean(is_indexed=True))

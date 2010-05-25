@@ -14,10 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from itools
+from itools.gettext import MSG
 
-from modules import Modules, ShopModule
+# Import from shop
+from shop.modules import ShopModule
 
-import export_catalog
-import export_catalog_csv
-import google_analytics
-import wishlist
+
+class ShopModule_LoupeOnProducts(ShopModule):
+
+    class_id = 'shop_module_export_catalog'
+    class_title = MSG(u'Loupe on products')
+    class_views = ['view']
+    class_description = MSG(u'Add a loupe on products view')
