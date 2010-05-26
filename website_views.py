@@ -67,28 +67,13 @@ class ShopWS_RSS(NeutralWS_RSS):
         return [ OrQuery(AndQuery(*query), AndQuery(*product_query)) ]
 
 
-    def _sort_and_batch(self, resource, context, results):
-        # XXX Do not sort news by mtime but by time_of_writing
-        size = self.get_max_items_number(resource, context)
-        items = results.get_documents(sort_by='mtime', reverse=True, size=size)
-
-        # Shop resources are sorted by ctime
-        sorted_items = []
-        for item in items:
-            xtime = getattr(item, 'ctime', item.mtime)
-            sorted_items.append((xtime, item))
-        sorted_items.sort(key=lambda x: x[0], reverse=True)
-
-        return [ x[1] for x in sorted_items ]
-
-
-    def get_item_value(self, resource, context, item, column):
+    def get_item_value(self, resource, context, item, column, site_root):
         brain, item_resource = item
         if isinstance(item_resource, Product) is False:
             return NeutralWS_RSS.get_item_value(self, resource, context,
                                                 item, column)
         if column == 'description':
-            value = item_resource.get_property('data', language)
+            value = item_resource.get_property('data')
             value = Unicode.decode(value)
             # Add category
             site_root = resource.get_site_root()
@@ -96,7 +81,7 @@ class ShopWS_RSS(NeutralWS_RSS):
             value = u'%s <br/><br/>Catégorie %s' % (value, category.get_title())
             return value
         return NeutralWS_RSS.get_item_value(self, resource, context,
-                                            item, column)
+                                            item, column, site_root)
 
 
 
