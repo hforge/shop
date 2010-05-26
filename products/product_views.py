@@ -249,6 +249,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         BarcodeWidget('reference', title=MSG(u'Reference')),
         SelectWidget('manufacturer',
                      title=MSG(u'Manufacturer / Creator')),
+        SelectWidget('category', title=MSG(u'Category')),
         SelectWidget('supplier',
                      title=MSG(u'Supplier')),
         TextWidget('title', title=MSG(u'Title')),
@@ -285,8 +286,10 @@ class Product_Edit(Editable_Edit, AutoForm):
     def get_schema(self, resource, context):
         product_model = resource.get_product_model()
         site_root = resource.get_site_root()
-        return merge_dicts(Editable_Edit.schema, product_schema,
+        return merge_dicts(Editable_Edit.schema,
+                  product_schema,
                   (product_model.get_model_schema() if product_model else {}),
+                  category=CategoriesEnumerate,
                   tags=TagsList(site_root=site_root, multiple=True))
 
 
@@ -298,18 +301,28 @@ class Product_Edit(Editable_Edit, AutoForm):
         elif name == 'tags':
             # XXX tuple -> list (enumerate.get_namespace expects list)
             return list(resource.get_property('tags'))
+        elif name == 'category':
+            return str(resource.parent.get_abspath())
         language = resource.get_content_language(context)
         return resource.get_property(name, language=language)
 
 
     def action(self, resource, context, form):
         resource.save_barcode(form['reference'])
+        # We change category if needed
+        if str(resource.parent.get_abspath()) != form['category']:
+            target = context.root.get_resource(form['category'])
+            target.move_resource(resource.get_abspath(), resource.name)
+            goto = '%s/%s' % (context.get_link(target), resource.name)
+            resource = target.get_resource(resource.name)
+        else:
+            goto = None
         # Save properties
         language = resource.get_content_language(context)
         for key, datatype in self.get_schema(resource, context).iteritems():
-            if key in ('data', 'ctime'):
+            if key in ('data', 'ctime', 'category'):
                 continue
-            if issubclass(datatype, Unicode):
+            elif issubclass(datatype, Unicode):
                 resource.set_property(key, form[key], language)
             elif getattr(datatype, 'multilingual', False):
                 resource.set_property(key, form[key], language)
@@ -317,7 +330,7 @@ class Product_Edit(Editable_Edit, AutoForm):
                 resource.set_property(key, form[key])
         Editable_Edit.action(self, resource, context, form)
         # Come back
-        return context.come_back(messages.MSG_CHANGES_SAVED)
+        return context.come_back(messages.MSG_CHANGES_SAVED, goto=goto)
 
 
 
