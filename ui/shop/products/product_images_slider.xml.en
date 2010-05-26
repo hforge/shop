@@ -20,7 +20,7 @@
           title="${img/title}" alt="${img/title}" class="product-slider-preview-img"/>
       </stl:block>
     </div>
-    <stl:block stl:if="has_more_than_one_image">
+    <stl:block>
       <script type="text/javascript" src="/ui/shop/product_gallery.js"/>
       <script type="text/javascript" src="/ui/shop/js/jquery.loupe.js"/>
       <script type="text/javascript">
