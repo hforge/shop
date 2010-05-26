@@ -81,6 +81,8 @@ class Shop(ShopFolder):
     slider_img_size = (500, 600)
     slider_thumb_size = (90, 90)
     slider_show_cover = True
+    slider_show_loupe = False
+    slider_change_on_click = True
 
     # Categories class_views (Do not show compare by default)
     categories_class_views = ['view']

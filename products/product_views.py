@@ -573,6 +573,8 @@ class Product_ImagesSlider(STLView):
         namespace['has_more_than_one_image'] = len(namespace['images']) > 1
         namespace['img_width'], namespace['img_height'] = img_size
         namespace['thumb_width'], namespace['thumb_height'] = thumb_size
+        namespace['show_loupe'] = 'true' if shop.slider_show_loupe else 'false'
+        namespace['change_on_click'] = 'true' if shop.slider_change_on_click else 'false'
         return namespace
 
 
