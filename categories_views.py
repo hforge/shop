@@ -75,6 +75,7 @@ class Category_View(BrowseFormBatchNumeric):
                  item_brain, item_resource = item_resource
             viewbox = item_resource.viewbox
             namespace['products'].append({'name': item_resource.name,
+                                          'abspath': str(item_resource.get_abspath()),
                                           'box': viewbox.GET(item_resource, context)})
         # Categorie description (not for categories folder)
         if isinstance(resource, Editable):

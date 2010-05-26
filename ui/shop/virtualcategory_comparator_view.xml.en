@@ -19,7 +19,7 @@
         </tr>
         <tr class="product" stl:repeat="product products">
           <td class="checkbox">
-            <input type="checkbox" name="products" value="${product/name}"/>
+            <input type="checkbox" name="products" value="${product/abspath}"/>
           </td>
           <td class="product-box">
             ${product/box}
