@@ -58,7 +58,16 @@
       </td>
     </tr>
   </table>
-
+  <table class="new-resource-thumb" stl:repeat="item items">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href="${item/href}"><img src="${item/img}"/></a>
+      </td>
+      <td valign="middle">
+        <a href="${item/href}">${item/title}</a>
+      </td>
+    </tr>
+  </table>
 
 
 </stl:block>

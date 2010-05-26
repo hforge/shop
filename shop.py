@@ -84,6 +84,9 @@ class Shop(ShopFolder):
     slider_show_loupe = False
     slider_change_on_click = True
 
+    # XXX
+    profile_items = []
+
     # Categories class_views (Do not show compare by default)
     categories_class_views = ['view']
 

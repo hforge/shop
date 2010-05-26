@@ -49,6 +49,12 @@ class ShopUser_Profile(STLView):
     template = '/ui/shop/shop_user_profile.xml'
     title = MSG(u'My profile')
 
+    def get_namespace(self, resource, context):
+        shop = get_shop(context.site_root)
+        # XXX
+        items = shop.profile_items
+        return {'items': items}
+
 
 class ShopUser_Manage(STLView):
 
