@@ -71,7 +71,7 @@ class ShopWS_RSS(NeutralWS_RSS):
         brain, item_resource = item
         if isinstance(item_resource, Product) is False:
             return NeutralWS_RSS.get_item_value(self, resource, context,
-                                                item, column)
+                                                item, column, site_root)
         if column == 'description':
             value = item_resource.get_property('data')
             value = Unicode.decode(value)
