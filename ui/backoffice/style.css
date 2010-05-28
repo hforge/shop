@@ -579,3 +579,8 @@ button::-webkit-focus-inner {
 .strikethrough{
   text-decoration: line-through;
 }
+
+/* Batch */
+#content .batch-numerotation{
+  display: block;
+}

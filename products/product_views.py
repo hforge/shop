@@ -30,7 +30,6 @@ from ikaaro import messages
 from ikaaro.buttons import RemoveButton, RenameButton, CopyButton, PasteButton
 from ikaaro.buttons import PublishButton, RetireButton
 from ikaaro.exceptions import ConsistencyError
-from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
@@ -41,6 +40,7 @@ from ikaaro.views_new import NewInstance
 # Import from itws
 from itws.tags import TagsList
 from itws.utils import DualSelectWidget
+from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
 from enumerate import ProductModelsEnumerate, CategoriesEnumerate, States
@@ -390,7 +390,7 @@ class Product_ViewBox(STLView):
         return resource.get_small_namespace(context)
 
 
-class Products_View(Folder_BrowseContent):
+class Products_View(BrowseFormBatchNumeric):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'View products')
@@ -456,7 +456,7 @@ class Products_View(Folder_BrowseContent):
 
 
     def get_query_schema(self):
-        return merge_dicts(Folder_BrowseContent.get_query_schema(self),
+        return merge_dicts(BrowseFormBatchNumeric.get_query_schema(self),
                            self.search_schema,
                            batch_size=Integer(default=50),
                            sort_by=String(default='mtime'))
@@ -472,7 +472,7 @@ class Products_View(Folder_BrowseContent):
                 get_base_path_query(str(abspath)),
                 PhraseQuery('format', format)]
         # Search query
-        for key in self.get_query_schema().keys():
+        for key in self.search_schema.keys():
             value = context.get_form_value(key)
             if not value:
                 continue
@@ -517,7 +517,7 @@ class Products_View(Folder_BrowseContent):
         elif column == 'supplier':
             supplier = item_resource.get_property('supplier')
             return SuppliersEnumerate.get_value(supplier)
-        return Folder_BrowseContent.get_item_value(self, resource, context,
+        return BrowseFormBatchNumeric.get_item_value(self, resource, context,
                                                    item, column)
 
 
@@ -696,7 +696,7 @@ class Product_SendToFriend(AutoForm):
 
 
 
-class Product_DeclinationsView(Folder_BrowseContent):
+class Product_DeclinationsView(BrowseFormBatchNumeric):
 
     title = MSG(u'Declinations')
     access = 'is_allowed_to_edit'
