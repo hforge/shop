@@ -6,9 +6,10 @@
 
   <script type="text/javascript">
     var _gaq = _gaq || [];
+    var url = document.location.toString().replace(';', '');
+    url = url.replace('http://www.XXX.fr/', '');
     _gaq.push(['_setAccount', '${tracking_id}']);
-    _gaq.push(['_setCustomVar', '1', 'UserID', '0', '1']);
-    _gaq.push(['_trackPageview']);
+    _gaq.push(['_trackPageview', url]);
     <stl:block stl:if="track_end_of_order">
     _gaq.push(['_addTrans',
       '${order/name}',           // order ID - required

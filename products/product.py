@@ -57,6 +57,7 @@ from shop.editable import Editable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
 from shop.manufacturers import ManufacturersEnumerate
+from shop.modules import ModuleLoader
 from shop.shop_views import Shop_Login, Shop_Register
 from shop.stock.stock_views import Stock_FillStockOut, Stock_Resupply
 from shop.utils import get_shop, format_price, ShopFolder, generate_barcode
@@ -480,6 +481,10 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         # Authentificated ?
         ac = self.get_access_control()
         namespace['is_authenticated'] = ac.is_authenticated(context.user, self)
+        # Shop modules
+        shop_module = ModuleLoader()
+        shop_module.context = context
+        namespace['module'] = shop_module
         return namespace
 
 

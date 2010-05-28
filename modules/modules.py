@@ -25,7 +25,7 @@ from ikaaro.registry import register_field
 
 # Import from shop
 from modules_views import Modules_View, ShopModule_Edit
-from shop.utils import ShopFolder
+from shop.utils import ShopFolder, get_shop
 
 
 class ShopModule(ShopFolder):
@@ -57,6 +57,20 @@ class Modules(Folder):
 
     def get_document_types(self):
         return []
+
+
+
+class ModuleLoader(dict):
+
+    context = None
+
+    def __getitem__(self, key):
+        shop = get_shop(self.context.resource)
+        module = shop.get_resource('modules/%s' % key, soft=True)
+        if module is None:
+            return 'ok'
+            raise ValueError, 'Module do no exist'
+        return module.render(self.context)
 
 
 

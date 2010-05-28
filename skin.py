@@ -30,6 +30,7 @@ from itws.utils import is_empty
 from itws.ws_neutral import NeutralSkin
 
 # Import from shop
+from modules import ModuleLoader
 from products import Product
 from utils import get_shop
 
@@ -190,6 +191,10 @@ class ShopSkin(NeutralSkin):
         elif (isinstance(here, WebSite) and
             site_root.show_sidebar_on_homepage is False):
             namespace['sidebar_view'] = None
+        # Modules
+        shop_module = ModuleLoader()
+        shop_module.context = context
+        namespace['module'] = shop_module
         return namespace
 
 
