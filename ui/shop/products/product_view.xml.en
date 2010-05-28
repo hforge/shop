@@ -7,7 +7,7 @@
   <h1>${title}</h1>
 
   <div id="product-slider-area">
-    ${images-slider}
+    Images slider
   </div>
 
   <form id="buy-form" method="post" stl:if="is_buyable">

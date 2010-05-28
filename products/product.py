@@ -46,7 +46,7 @@ from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewProduct, Products_View, Product_ViewBox
 from product_views import Product_CrossSellingViewBox
 from product_views import Product_View, Product_Edit, Product_AddLinkFile
-from product_views import Product_Delete, Product_ImagesSlider
+from product_views import Product_Delete
 from product_views import Product_Print, Product_SendToFriend
 from product_views import Product_Declinations
 from product_views import Product_ChangeProductModel, Products_Stock
@@ -82,7 +82,6 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
     ##################
     # Configuration
     ##################
-    slider_view = Product_ImagesSlider()
     viewbox = Product_ViewBox()
     cross_selling_viewbox = Product_CrossSellingViewBox()
     ##################
@@ -381,12 +380,23 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
     def get_small_namespace(self, context):
         shop = get_shop(self)
         title = self.get_property('title')
+        # Dynamic property
         dynamic_property = DynamicProperty()
         dynamic_property.resource = self
+        # Category
+        category = {'name': self.parent.name,
+                    'href': context.get_link(self.parent),
+                    'title': self.parent.get_title()}
+        # Lang (usefull to show contextuel images)
+        ws_languages = context.site_root.get_property('website_languages')
+        accept = context.accept_language
+        lang = accept.select_language(ws_languages)
+        # Return namespace
         return {
           'name': self.name,
+          'lang': lang,
           'dynamic_property': dynamic_property,
-          'category': self.parent.get_title(),
+          'category': category,
           'cover': self.get_cover_namespace(context),
           'description': self.get_property('description'),
           'href': context.get_link(self),
@@ -449,6 +459,11 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
             namespace[key] = self.get_property(key)
         # Categorie
         namespace['categorie'] = self.parent.get_title()
+        # Lang (usefull to show contextuel images)
+        ws_languages = context.site_root.get_property('website_languages')
+        accept = context.accept_language
+        lang = accept.select_language(ws_languages)
+        namespace['lang'] = lang
         # Manufacturer
         manufacturer = self.get_property('manufacturer')
         if manufacturer:
@@ -475,8 +490,6 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         namespace['cover'] = self.get_cover_namespace(context)
         namespace['images'] = self.get_images_namespace(context)
         namespace['has_more_than_one_image'] = len(namespace['images']) > 1
-        # Slider
-        namespace['images-slider'] = self.slider_view.GET(self, context)
         # Product is buyable
         namespace['is_buyable'] = self.is_buyable()
         # Cross selling

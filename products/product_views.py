@@ -566,28 +566,6 @@ class Products_Stock(Products_View):
 
 
 
-class Product_ImagesSlider(STLView):
-
-    access = True
-    template = '/ui/shop/products/product_images_slider.xml'
-
-    def get_namespace(self, resource, context):
-        namespace = {}
-        shop = get_shop(resource)
-        img_size = getattr(self, 'img_size', shop.slider_img_size)
-        thumb_size = getattr(self, 'thumb_size', shop.slider_thumb_size)
-        show_cover = getattr(self, 'show_cover', shop.slider_show_cover)
-
-        namespace['cover'] = resource.get_cover_namespace(context)
-        namespace['images'] = [namespace['cover']] if show_cover else []
-        namespace['images'] += resource.get_images_namespace(context)
-        namespace['has_more_than_one_image'] = len(namespace['images']) > 1
-        namespace['img_width'], namespace['img_height'] = img_size
-        namespace['thumb_width'], namespace['thumb_height'] = thumb_size
-        namespace['show_loupe'] = 'true' if shop.slider_show_loupe else 'false'
-        namespace['change_on_click'] = 'true' if shop.slider_change_on_click else 'false'
-        return namespace
-
 
 class Product_ChangeProductModel(AutoForm):
 

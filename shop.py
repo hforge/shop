@@ -74,13 +74,6 @@ class Shop(ShopFolder):
     product_title_word_treshold = 50
     product_title_phrase_treshold= 150
 
-    # Slider
-    slider_img_size = (500, 600)
-    slider_thumb_size = (90, 90)
-    slider_show_cover = True
-    slider_show_loupe = False
-    slider_change_on_click = True
-
     # XXX
     profile_items = []
 

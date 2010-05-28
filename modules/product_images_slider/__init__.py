@@ -15,11 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from modules import Modules, ShopModule, ModuleLoader
-
-import export_catalog
-import export_catalog_csv
-import facebook_like
-import google_analytics
-import product_images_slider
-import wishlist
+from product_images_slider import ShopModule_ProductImagesSlider
