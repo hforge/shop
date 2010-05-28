@@ -20,7 +20,7 @@ from json import dumps
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Email, String, Unicode
+from itools.datatypes import Email, Integer, String, Unicode
 from itools.datatypes import Boolean, MultiLinesTokens
 from itools.gettext import MSG
 from itools.i18n import format_date
@@ -78,6 +78,7 @@ class Shop_Configure(DBResource_Edit):
               'shop_default_zone': CountriesZonesEnumerate(mandatory=True),
               'shop_sort_by': SortBy_Enumerate(mandatory=True),
               'shop_sort_reverse': Boolean(mandatory=True),
+              'categories_batch_size': Integer(mandatory=True),
               'show_sub_categories': Boolean,
               'bill_logo': ImagePathDataType,
               'pdf_signature': Unicode,
@@ -92,6 +93,7 @@ class Shop_Configure(DBResource_Edit):
         MultilineWidget('pdf_signature',
             title=MSG(u'PDF signature'), rows=8, cols=50),
         SelectWidget('shop_default_zone', title=MSG(u'Shop default zone')),
+        TextWidget('categories_batch_size', title=MSG(u'Batch size for categories ?')),
         SelectWidget('shop_sort_by', title=MSG(u'Sort products by ...'),
                      has_empty_option=False),
         BooleanRadio('shop_sort_reverse', title=MSG(u'Reverse sort ?')),

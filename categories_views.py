@@ -141,7 +141,7 @@ class Category_View(BrowseFormBatchNumeric):
         shop = get_shop(get_context().resource)
         return merge_dicts(BrowseFormBatchNumeric.get_query_schema(self),
                 self.get_search_schema(),
-                batch_size=Integer(default=shop.categories_batch_size),
+                batch_size=Integer(default=shop.get_property('categories_batch_size')),
                 sort_by=String(default=shop.get_property('shop_sort_by')),
                 reverse=Boolean(default=shop.get_property('shop_sort_reverse')))
 

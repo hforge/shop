@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Email, Unicode, Boolean, String
+from itools.datatypes import Email, Unicode, Boolean, Integer, String
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -69,9 +69,6 @@ class Shop(ShopFolder):
 
     # Mail
     mail_template = '/ui/shop/mail.xhtml'
-
-    # Batch
-    categories_batch_size = 20
 
     # Reduce string (for product mini-title)
     product_title_word_treshold = 50
@@ -229,6 +226,7 @@ class Shop(ShopFolder):
         schema['shop_default_zone'] = CountriesZonesEnumerate(default=0)
         schema['shop_sort_by'] = SortBy_Enumerate
         schema['shop_sort_reverse'] = Boolean
+        schema['categories_batch_size'] = Integer(default=20)
         schema['bill_logo'] = ImagePathDataType
         schema['pdf_signature'] = Unicode
         schema['barcode_format'] = BarcodesFormat
