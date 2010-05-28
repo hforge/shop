@@ -100,6 +100,8 @@ class Shop(ShopFolder):
       # Product
       'product_view': '/ui/shop/products/product_view.xml',
       'product_viewbox': '/ui/shop/products/product_viewbox.xml',
+      # Cross selling
+      'product_cross_selling_viewbox': '/ui/shop/products/product_viewbox.xml',
       # Manufacturer
       'manufacturer_view': '/ui/shop/manufacturer_view.xml',
       'manufacturers_view': '/ui/shop/manufacturers_view.xml'

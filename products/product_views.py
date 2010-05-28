@@ -390,6 +390,17 @@ class Product_ViewBox(STLView):
         return resource.get_small_namespace(context)
 
 
+class Product_CrossSellingViewBox(Product_ViewBox):
+
+    def get_template(self, resource, context):
+        if self.template:
+            template = self.template
+        else:
+            shop = get_shop(resource)
+            template = shop.shop_templates['product_cross_selling_viewbox']
+        return resource.get_resource(template)
+
+
 class Products_View(BrowseFormBatchNumeric):
 
     access = 'is_allowed_to_edit'
