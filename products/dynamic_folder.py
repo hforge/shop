@@ -30,6 +30,14 @@ from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.utils import ShopFolder
 
 
+class DynamicProperty(dict):
+
+    resource = None
+
+    def __getitem__(self, key):
+        return self.resource.get_property(key)
+
+
 class DynamicFolder(ShopFolder):
 
 

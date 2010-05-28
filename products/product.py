@@ -41,7 +41,7 @@ from itws.tags import TagsAware
 
 # Import from shop
 from declination import Declination
-from dynamic_folder import DynamicFolder
+from dynamic_folder import DynamicFolder, DynamicProperty
 from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewProduct, Products_View, Product_ViewBox
 from product_views import Product_CrossSellingViewBox
@@ -70,7 +70,6 @@ mail_stock_body_template = MSG(u"""Hi,
 The product {product_title} is out of stock\n
   {product_uri}\n
 """)
-
 
 
 class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
@@ -382,8 +381,11 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
     def get_small_namespace(self, context):
         shop = get_shop(self)
         title = self.get_property('title')
+        dynamic_property = DynamicProperty()
+        dynamic_property.resource = self
         return {
           'name': self.name,
+          'dynamic_property': dynamic_property,
           'category': self.parent.get_title(),
           'cover': self.get_cover_namespace(context),
           'description': self.get_property('description'),
