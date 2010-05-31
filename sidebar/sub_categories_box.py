@@ -120,8 +120,11 @@ class SubCategoriesBox_View(BarItem_View):
                     sub_tree = None
                     css = ''
                 css = 'active' if here_abspath == doc.abspath else css
-
-                d = {'title': doc.m_title or doc.name,
+                if resource.get_property('use_small_title'):
+                    title = doc.m_breadcrumb_title or doc.m_title or doc.name
+                else:
+                    title = doc.m_title or doc.name
+                d = {'title': title,
                      # get_link emulation
                      'href': '/%s' % site_root_abspath.get_pathto(doc.abspath),
                      'sub_tree': sub_tree,
@@ -139,7 +142,11 @@ class SubCategoriesBox_View(BarItem_View):
                 css = 'active'
             elif here_real_abspath.startswith(categories_abspath):
                 css = 'in-path'
-            category_namespace = {'title': categories.get_title(),
+            if resource.get_property('use_small_title'):
+                title = categories.get_property('m_breadcrumb_title')
+            else:
+                title = categories.get_title()
+            category_namespace = {'title': title,
                                   'href': '/categories',
                                   'sub_tree': tree,
                                   'nb_products': len(all_products),
@@ -162,12 +169,15 @@ class SubCategoriesBox(BarItem):
     view = SubCategoriesBox_View()
 
     item_schema = {'show_first_category': Boolean,
-                   'show_nb_products': Boolean}
+                   'show_nb_products': Boolean,
+                   'use_small_title': Boolean}
 
-    item_widgets = [BooleanRadio('show_first_category',
+    item_widgets = [
+        BooleanRadio('show_first_category',
                                  title=MSG(u'Afficher la 1ére categorie ?')),
-                    BooleanRadio('show_nb_products',
-                                 title=MSG(u'Afficher le nombre de produits'))]
+        BooleanRadio('show_nb_products',
+                     title=MSG(u'Afficher le nombre de produits')),
+        BooleanRadio('use_small_title', title=MSG(u'Use small title'))]
 
 
 register_resource_class(SubCategoriesBox)

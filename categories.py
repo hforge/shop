@@ -69,14 +69,19 @@ class Category(Editable, ShopFolder):
         default_language = languages[0]
         # Titles
         m_title = {}
+        m_breadcrumb_title = {}
         for language in languages:
             value = self.get_property('title', language=language)
             if value:
                 m_title[language] = value
+            value = self.get_property('breadcrumb_title', language=language)
+            if value:
+                m_breadcrumb_title[language] = value
 
         return merge_dicts(ShopFolder._get_catalog_values(self),
                            Editable._get_catalog_values(self),
-                           m_title=m_title)
+                           m_title=m_title,
+                           m_breadcrumb_title=m_breadcrumb_title)
 
 
     def get_document_types(self):
@@ -217,5 +222,5 @@ register_resource_class(Category)
 
 # Add m_title field if it does not already exist
 if 'm_title' in get_register_fields() is False:
-    # multilingual title with language negociation
     register_field('m_title', Unicode(is_stored=True, is_indexed=True))
+register_field('m_breadcrumb_title', Unicode(is_stored=True, is_indexed=True))
