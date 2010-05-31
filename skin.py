@@ -179,18 +179,6 @@ class ShopSkin(NeutralSkin):
         namespace['page_title'] = context.resource.get_title()
         # Current view type
         namespace['is_on_view_product'] = isinstance(context.resource, Product)
-        # Show sidebar
-        if isinstance(here, site_root.shop_class):
-            namespace['sidebar_view'] = None
-        elif (isinstance(here, shop.product_class) and
-            site_root.show_sidebar_on_product is False):
-            namespace['sidebar_view'] = None
-        elif (isinstance(here, shop.category_class) and
-              site_root.show_sidebar_on_category is False):
-            namespace['sidebar_view'] = None
-        elif (isinstance(here, WebSite) and
-            site_root.show_sidebar_on_homepage is False):
-            namespace['sidebar_view'] = None
         # Modules
         shop_module = ModuleLoader()
         shop_module.context = context
@@ -198,6 +186,25 @@ class ShopSkin(NeutralSkin):
         return namespace
 
 
+    def get_sidebar_resource(self, context):
+        # Show sidebar
+        here = context.resource
+        shop = get_shop(here)
+        site_root = here.get_site_root()
+        if isinstance(here, site_root.shop_class):
+            return None
+        elif isinstance(here, shop.product_class):
+            if site_root.show_sidebar_on_product is False:
+                return None
+            return site_root.get_resource('product-sidebar')
+        elif isinstance(here, shop.category_class):
+            if site_root.show_sidebar_on_category is False:
+                return None
+            return site_root.get_resource('category-sidebar')
+        elif (isinstance(here, WebSite) and
+            site_root.show_sidebar_on_homepage is False):
+            return None
+        return NeutralSkin.get_sidebar_resource(self, context)
 
 ###########################################################################
 # Register

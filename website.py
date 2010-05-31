@@ -58,7 +58,7 @@ class ShopWebSite(NeutralWS):
     class_title = MSG(u'Shop website')
     class_views = ['view', 'edit', 'edit_rss',
                    'browse_content', 'control_panel', 'last_changes']
-    class_version = '20100227'
+    class_version = '20100601'
     class_skin = '/ui/default_skin'
 
     __fixed_handlers__ = NeutralWS.__fixed_handlers__ + ['categories', 'shop']
@@ -152,6 +152,14 @@ class ShopWebSite(NeutralWS):
         metadata.format = Category.class_id
         metadata.set_changed()
 
+
+    def update_20100601(self):
+        from sidebar import CategorySidebar
+        from sidebar import ProductSidebar
+        cls = CategorySidebar
+        cls.make_resource(cls, self, 'category-sidebar')
+        cls = ProductSidebar
+        cls.make_resource(cls, self, 'product-sidebar')
 
 
 register_resource_class(ShopWebSite)

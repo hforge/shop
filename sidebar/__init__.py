@@ -21,6 +21,7 @@ from itools.core import get_abspath
 from ikaaro.skins import register_skin
 
 # Import from project
+from sidebar import CategorySidebar, ProductSidebar
 from cart_box import CartBox
 from cross_selling_box import CrossSellingBox
 from sidebar_cross_selling_box import SideBarCrossSellingBox
