@@ -90,6 +90,7 @@ class Shop(ShopFolder):
       # Login
       'shop_login': '/ui/shop/shop_login.xml',
       # Product
+      'product_print': '/ui/shop/products/print.xml',
       'product_view': '/ui/shop/products/product_view.xml',
       'product_viewbox': '/ui/shop/products/product_viewbox.xml',
       # Cross selling

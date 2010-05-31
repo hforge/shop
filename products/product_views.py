@@ -610,8 +610,16 @@ class Product_ChangeProductModel(AutoForm):
 class Product_Print(STLView):
 
     access = True
-    template = '/ui/shop/products/print.xml'
     title = MSG(u"Print product")
+
+    def get_template(self, resource, context):
+        if self.template:
+            template = self.template
+        else:
+            shop = get_shop(resource)
+            template = shop.shop_templates['product_print']
+        return resource.get_resource(template)
+
 
     def get_namespace(self, resource, context):
         site_root = resource.get_site_root()
