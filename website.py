@@ -61,7 +61,7 @@ class ShopWebSite(NeutralWS):
     class_version = '20100227'
     class_skin = '/ui/default_skin'
 
-    __fixed_handlers__ = WebSite.__fixed_handlers__ + ['categories', 'shop']
+    __fixed_handlers__ = NeutralWS.__fixed_handlers__ + ['categories', 'shop']
 
     # View
     view = ShopWebSite_View()
