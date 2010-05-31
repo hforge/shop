@@ -361,7 +361,7 @@ class Product_Delete(STLForm):
     title = MSG(u'Delete product')
     template = '/ui/shop/products/product_delete.xml'
 
-    def action(self, resource, context, form):
+    def action_delete(self, resource, context, form):
         shop = get_shop(resource)
         try:
             resource.parent.del_resource(resource.name)
