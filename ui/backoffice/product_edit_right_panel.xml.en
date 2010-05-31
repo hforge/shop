@@ -48,7 +48,7 @@
       </li>
     </ul>
     <div style="padding:5px;text-align:center;width:215px" id="gallery">
-      <a href="${image/href}/;download" stl:repeat="image images"
+      <a href="${image/href}/?size=128&amp;width=1024&amp;height=1024" stl:repeat="image images"
         stl:if="image">
         <img src="${image/href}/;thumb?width=200&amp;height=200"
           title="${image/title}" style="margin-bottom:5px;"/>
