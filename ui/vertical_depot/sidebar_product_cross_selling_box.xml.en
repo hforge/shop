@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+  <div class="cross-selling-box">
+    <h3 class="title">${title}</h3>
+    <div stl:repeat="product products" class="content">
+      <h4>
+        <a href="${product/href}" title="${product/title}">${product/title}</a>
+      </h4>
+      <a href="${product/href}" id="img-link" title="${product/title}">
+        <img src="${product/cover/href}/;thumb?width=${thumb/width}&amp;height=${thumb/height}" alt="${product/description}" stl:if="product/cover"></img>
+      </a>
+      <div class="description">${product/description}</div>
+    </div>
+  </div>
+</stl:block>

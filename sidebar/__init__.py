@@ -25,6 +25,7 @@ from sidebar import CategorySidebar, ProductSidebar
 from cart_box import CartBox
 from cross_selling_box import CrossSellingBox
 from sidebar_cross_selling_box import SideBarCrossSellingBox
+from sidebar_product_cross_selling_box import SideBarProductCrossSellingBox
 from filter_by_price_box import FilterByPriceBox
 from login_box import LoginBox
 from search_box import SearchBox
