@@ -85,6 +85,8 @@ class Shop(ShopFolder):
     shop_templates = {
       # Cart viewbox
       'cart_viewbox': '/ui/shop/cart_viewbox.xml',
+      # Category view
+      'category_view': '/ui/shop/virtualcategory_view.xml',
       # Login
       'shop_login': '/ui/shop/shop_login.xml',
       # Product

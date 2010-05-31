@@ -47,7 +47,14 @@ class Category_View(BrowseFormBatchNumeric):
 
     search_schema = {}
     search_template = None
-    template = '/ui/shop/virtualcategory_view.xml'
+
+    def get_template(self, resource, context):
+        shop = get_shop(resource)
+        if shop.shop_templates.has_key('category_view'):
+            template = shop.shop_templates['category_view']
+        else:
+            template = self.template
+        return resource.get_resource(template)
 
 
     def get_namespace(self, resource, context):
