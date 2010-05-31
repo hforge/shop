@@ -8,6 +8,7 @@
     <base href="${base_uri}" />
     <!-- Meta -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="noindex,nofollow" />
     <meta stl:repeat="meta meta_tags" name="${meta/name}" lang="${meta/lang}"
       content="${meta/content}" />
     <!-- Canonical URL for search engines -->
