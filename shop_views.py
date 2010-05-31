@@ -334,6 +334,9 @@ class Shop_Login(STLForm):
 
     access = True
     title = MSG(u'Login')
+
+    meta = [('robots', 'noindex, follow', None)]
+
     schema = {
         'username': Unicode(mandatory=True),
         'password': String(mandatory=True)}
