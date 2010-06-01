@@ -4,7 +4,9 @@
 
     <div id="sub-categories">
       <h3 class="title">${title}</h3>
+      <div class="content">
       ${tree}
+      </div>
     </div>
 
 </stl:block>
