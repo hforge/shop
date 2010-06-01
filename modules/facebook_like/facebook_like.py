@@ -90,7 +90,7 @@ class ShopModule_FacebookLike(ShopModule):
         BooleanRadio('show_faces', title=MSG(u'Show faces ?'))]
 
 
-    def render(self, context):
+    def render(self, resource, context):
         return ShopModule_FacebookLike_View().GET(self, context)
 
 

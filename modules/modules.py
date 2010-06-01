@@ -63,6 +63,7 @@ class Modules(Folder):
 class ModuleLoader(dict):
 
     context = None
+    here = None
 
     def __getitem__(self, key):
         shop = get_shop(self.context.resource)
@@ -70,7 +71,7 @@ class ModuleLoader(dict):
         if module is None:
             return 'ok'
             raise ValueError, 'Module do no exist'
-        return module.render(self.context)
+        return module.render(self.here, self.context)
 
 
 

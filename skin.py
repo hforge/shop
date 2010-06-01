@@ -182,6 +182,7 @@ class ShopSkin(NeutralSkin):
         # Modules
         shop_module = ModuleLoader()
         shop_module.context = context
+        shop_module.here = context.resource
         namespace['module'] = shop_module
         return namespace
 

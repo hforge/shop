@@ -87,7 +87,7 @@ class ShopModule_ProductImagesSlider(ShopModule):
       BooleanRadio('change_img_on_hover', title=MSG(u'Change img on hover?'))]
 
 
-    def render(self, context):
+    def render(self, resource, context):
         return ShopModule_ProductImagesSlider_View().GET(self, context)
 
 

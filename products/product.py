@@ -391,10 +391,15 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         ws_languages = context.site_root.get_property('website_languages')
         accept = context.accept_language
         lang = accept.select_language(ws_languages)
+        # Shop modules
+        shop_module = ModuleLoader()
+        shop_module.context = context
+        shop_module.here = self
         # Return namespace
         return {
           'name': self.name,
           'lang': lang,
+          'module': shop_module,
           'dynamic_property': dynamic_property,
           'category': category,
           'cover': self.get_cover_namespace(context),
@@ -500,6 +505,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         # Shop modules
         shop_module = ModuleLoader()
         shop_module.context = context
+        shop_module.here = self
         namespace['module'] = shop_module
         return namespace
 

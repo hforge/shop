@@ -70,7 +70,7 @@ class ShopModule_GoogleAnalytics(ShopModule):
     item_widgets = [TextWidget('tracking_id', title=MSG(u'Tracking id'))]
 
 
-    def render(self, context):
+    def render(self, resource, context):
         return ShopModule_GoogleAnalytics_View().GET(self, context)
 
 
