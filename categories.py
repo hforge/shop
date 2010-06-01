@@ -80,6 +80,8 @@ class Category(Editable, ShopFolder):
 
         return merge_dicts(ShopFolder._get_catalog_values(self),
                            Editable._get_catalog_values(self),
+                           # XXX Hack to be on sitemap
+                           workflow_state='public',
                            m_title=m_title,
                            m_breadcrumb_title=m_breadcrumb_title)
 
