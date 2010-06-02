@@ -5,7 +5,7 @@
   <div id="search-box">
     <h3 class="title">${title}</h3>
 
-    <div id="search-box-content">
+    <div class="content">
       <form action="/search/" method="GET">
         <div id="search-box-nb-results" stl:if="nb_results">
           ${nb_results} resultats trouvés.
