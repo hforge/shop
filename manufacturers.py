@@ -34,6 +34,7 @@ class ManufacturersEnumerate(DynamicEnumerate):
 
     path = 'shop/manufacturers/'
     format = 'manufacturer'
+    is_abspath = True
 
 
 

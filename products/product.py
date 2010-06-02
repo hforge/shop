@@ -405,9 +405,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
           'cover': self.get_cover_namespace(context),
           'description': self.get_property('description'),
           'href': context.get_link(self),
-          'manufacturer': None,
-          # XXX
-          #ManufacturersEnumerate.get_value( self.get_property('manufacturer')),
+          'manufacturer': ManufacturersEnumerate.get_value( self.get_property('manufacturer')),
           'mini-title': reduce_string(title,
                                       shop.product_title_word_treshold,
                                       shop.product_title_phrase_treshold),

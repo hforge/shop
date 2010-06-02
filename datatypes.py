@@ -61,6 +61,7 @@ class DynamicEnumerate(Enumerate):
 
     path = None
     format = None
+    is_abspath = False
 
     @classmethod
     def get_options(cls):
@@ -76,7 +77,10 @@ class DynamicEnumerate(Enumerate):
         if name is None:
             return
         context = get_context()
-        path = '%s/%s' % (cls.path, name)
+        if cls.is_abspath is True:
+            path = name
+        else:
+            path = '%s/%s' % (cls.path, name)
         resource = context.site_root.get_resource(path)
         return resource.get_title()
 
