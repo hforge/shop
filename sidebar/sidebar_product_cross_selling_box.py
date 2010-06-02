@@ -47,7 +47,7 @@ class SideBarCrossSellingBox_View(BarItem_View):
     def get_namespace(self, resource, context):
         site_root = resource.get_site_root()
         here = context.resource
-        categories = here.parent
+        categories = [here.parent]
         shop = site_root.get_resource('shop')
         product_class_id = shop.product_class.class_id
         title = resource.get_property('title')
