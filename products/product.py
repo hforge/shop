@@ -520,14 +520,14 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
             return
         return {'href': context.get_link(image),
                 'key': image.handler.key,
-                'title': image.get_property('title')}
+                'title': image.get_property('title') or self.get_title()}
 
 
     def get_images_namespace(self, context):
         images = []
         for image in self.get_ordered_photos(context):
             images.append({'href': context.get_link(image),
-                           'title': image.get_property('title')})
+                           'title': image.get_property('title') or self.get_title()})
         return images
 
 

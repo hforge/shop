@@ -4,6 +4,18 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <!-- Imports -->
+  <stl:block stl:if="activate_lightbox">
+    <script type="text/javascript" src="/ui/shop/js/fancybox/jquery.fancybox-1.3.1.pack.js"/>
+    <!--
+    <script type="text/javascript" src="/ui/shop/js/fancybox/jquery.easing-1.3.pack.js"/>
+    <script type="text/javascript" src="/ui/shop/js/fancybox/jquery.mousewheel-3.0.2.pack.js"/>
+    -->
+    <link rel="stylesheet" href="/ui/shop/js/fancybox/jquery.fancybox-1.3.1.css" type="text/css"/>
+  </stl:block>
+  <script type="text/javascript" src="/ui/shop/product_gallery.js"/>
+  <script type="text/javascript" src="/ui/shop/js/jquery.loupe.js" stl:if="show_loupe"/>
+
   <div id="product-slider-box" stl:if="images">
     <stl:block stl:repeat="img images">
       <stl:block stl:if="repeat/img/start">
@@ -15,22 +27,19 @@
       </stl:block>
     </stl:block>
     <div id="product-slider-box-thumbs" stl:if="has_more_than_one_image">
-      <stl:block stl:repeat="img images">
+      <a class="product-slider-preview-a" rel="slider-img" href="${img/href}/;download" stl:repeat="img images"
+        title="${img/title}">
         <img stl:if="img" src="${img/href}/;thumb?width=${thumb_width}&amp;height=${thumb_height}"
-          title="${img/title}" alt="${img/title}" class="product-slider-preview-img"/>
-      </stl:block>
+          alt="${img/title}" class="product-slider-preview-img"/>
+      </a>
     </div>
-    <stl:block>
-      <script type="text/javascript" src="/ui/shop/product_gallery.js"/>
-      <script type="text/javascript" src="/ui/shop/js/jquery.loupe.js"/>
-      <script type="text/javascript">
-        $(document).ready(
-          function(){
-            init_product_gallery(${thumb_width}, ${thumb_height}, ${img_width}, ${img_height}, ${change_on_click}, ${show_loupe});
-            }
-          );
-      </script>
-    </stl:block>
   </div>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+        init_product_gallery(${thumb_width}, ${thumb_height}, ${img_width}, ${img_height},
+                             ${change_on_click}, ${show_loupe}, ${activate_lightbox});
+    });
+  </script>
 
 </stl:block>

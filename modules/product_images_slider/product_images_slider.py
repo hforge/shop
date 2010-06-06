@@ -45,6 +45,7 @@ class ShopModule_ProductImagesSlider_View(STLView):
         show_cover = resource.get_property('show_cover')
         show_loupe = resource.get_property('show_loupe')
         change_img_on_hover = resource.get_property('change_img_on_hover')
+        activate_lightbox = resource.get_property('activate_lightbox')
         # Informations about product
         namespace['cover'] = product.get_cover_namespace(context)
         namespace['images'] = [namespace['cover']] if show_cover else []
@@ -57,6 +58,7 @@ class ShopModule_ProductImagesSlider_View(STLView):
         namespace['thumb_height'] = resource.get_property('thumb_img_height')
         namespace['show_loupe'] = 'true' if show_loupe else 'false'
         namespace['change_on_click'] = 'false' if change_img_on_hover else 'true'
+        namespace['activate_lightbox'] = 'true' if activate_lightbox else 'false'
         return namespace
 
 
@@ -75,7 +77,8 @@ class ShopModule_ProductImagesSlider(ShopModule):
                    'thumb_img_height': Integer(default=90),
                    'show_cover': Boolean,
                    'show_loupe': Boolean,
-                   'change_img_on_hover': Boolean}
+                   'change_img_on_hover': Boolean,
+                   'activate_lightbox': Boolean}
 
     item_widgets = [
       TextWidget('big_img_width', title=MSG(u'Width of big image')),
@@ -84,7 +87,9 @@ class ShopModule_ProductImagesSlider(ShopModule):
       TextWidget('thumb_img_height', title=MSG(u'Height of thumb image')),
       BooleanRadio('show_cover', title=MSG(u'Show cover ?')),
       BooleanRadio('show_loupe', title=MSG(u'Show loupe ?')),
-      BooleanRadio('change_img_on_hover', title=MSG(u'Change img on hover?'))]
+      BooleanRadio('change_img_on_hover', title=MSG(u'Change img on hover ?')),
+      BooleanRadio('activate_lightbox', title=MSG(u'Activate lightbox ?')),
+      ]
 
 
     def render(self, resource, context):
