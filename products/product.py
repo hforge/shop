@@ -636,8 +636,18 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         return self.get_property('reference')
 
 
+    def get_price_prefix(self):
+        context = get_context()
+        user = context.user
+        if (context.user and
+            context.user.get_property('user_group') == 'group_pro'):
+            return 'pro-'
+        return ''
+
+
     def get_tax_value(self):
         shop = get_shop(self)
+        prefix = self.get_price_prefix()
         # Get zone from cookie
         id_zone = ProductCart(get_context()).id_zone
         # If not define... get default zone
@@ -647,7 +657,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         zones = shop.get_resource('countries-zones').handler
         zone_record = zones.get_record(int(id_zone))
         if zones.get_record_value(zone_record, 'has_tax') is True:
-            tax = self.get_property('tax')
+            tax = self.get_property('%stax'% prefix)
             tax_value = TaxesEnumerate.get_value(tax) or decimal(0)
             return (tax_value/decimal(100) + 1)
         return decimal(1)
@@ -655,11 +665,12 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
 
     def get_price_without_tax(self, id_declination=None,
                                with_reduction=True, pretty=False):
+        prefix = self.get_price_prefix()
         # Base price
-        if with_reduction is True and self.get_property('has_reduction'):
-            price = self.get_property('reduce-pre-tax-price')
+        if with_reduction is True and self.get_property('%shas_reduction' % prefix):
+            price = self.get_property('%sreduce-pre-tax-price' % prefix)
         else:
-            price = self.get_property('pre-tax-price')
+            price = self.get_property('%spre-tax-price' % prefix)
         # Declination
         if id_declination:
             declination = self.get_resource(id_declination)

@@ -66,6 +66,7 @@ class Taxes_TableResource(OrderedTable):
 class PriceWidget(Widget):
 
     template = 'ui/shop/widgets/taxes.xml'
+    prefix = ''
 
     def get_template(self, datatype, value):
         context = get_context()
@@ -77,17 +78,22 @@ class PriceWidget(Widget):
         # XXX Hack to get tax value (and keep it when submit form)
         context = get_context()
         submit = (context.method == 'POST')
+        prefix = self.prefix
+        if prefix:
+            prefix = '%s-' % prefix
         if submit:
-            tax_value = context.get_form_value('tax', type=TaxesEnumerate)
-            has_reduction = context.get_form_value('has_reduction', type=Boolean)
-            reduce_pre_tax_price = context.get_form_value('reduce-pre-tax-price')
+            tax_value = context.get_form_value('%stax' % prefix, type=TaxesEnumerate)
+            has_reduction = context.get_form_value('%shas_reduction' % prefix, type=Boolean)
+            reduce_pre_tax_price = context.get_form_value('%sreduce-pre-tax-price' % prefix)
         else:
-            tax_value = context.resource.get_property('tax')
-            has_reduction = context.resource.get_property('has_reduction')
-            reduce_pre_tax_price = context.resource.get_property('reduce-pre-tax-price')
-        taxes = SelectWidget('tax', css='tax-widget', has_empty_option=False)
+            tax_value = context.resource.get_property('%stax' % prefix)
+            has_reduction = context.resource.get_property('%shas_reduction' % prefix)
+            reduce_pre_tax_price = context.resource.get_property('%sreduce-pre-tax-price' % prefix)
+        taxes = SelectWidget('%stax' % prefix, css='tax-widget', has_empty_option=False)
         # Return namespace
-        return {'pre-tax-price': value,
+        return {'widget_name': self.name,
+                'pre-tax-price': value,
+                'prefix': prefix,
                 'reduce-pre-tax-price': reduce_pre_tax_price,
                 'has_reduction': has_reduction,
                 'taxes': taxes.to_html(TaxesEnumerate, tax_value)}

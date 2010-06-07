@@ -4,92 +4,92 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <table id="widget-price" cellpadding="0" cellspacing="0">
+  <table id="${widget_name}" class="widget-price" cellpadding="0" cellspacing="0">
     <tr>
       <td style="vertical-align:top;" colspan="3">
         Tax:<br/>
           ${taxes}<br/>
         Has reduction ?<br/>
-          <input type="checkbox" name="has_reduction" id="has-reduction" value="1"
+          <input type="checkbox" name="${prefix}has_reduction" id="${widget_name}has-reduction" value="1"
             stl:if="not has_reduction"/>
-          <input type="checkbox" name="has_reduction" id="has-reduction" value="1"
+          <input type="checkbox" name="${prefix}has_reduction" id="${widget_name}has-reduction" value="1"
             checked="checked" stl:if="has_reduction"/>
       </td>
     </tr>
     <tr>
-      <td id="zone-price" style="vertical-align:top;">
+      <td id="${widget_name}zone-price" style="vertical-align:top;">
         Pre-tax retail price:<br/>
-          <input type="text" id="pre-tax-price" name="pre-tax-price"
+          <input type="text" id="${widget_name}pre-tax-price" name="${prefix}pre-tax-price"
             value="${pre-tax-price}"/>€ <br/>
         Final pre-tax retail price:<br/>
-           <span style="font-weight:bold" id="final-pre-tax-price"></span> €<br/>
+           <span style="font-weight:bold" id="${widget_name}final-pre-tax-price"></span> €<br/>
         Tax value:<br/>
-          <input type="text" id="tax-value" readonly="readonly"
+          <input type="text" id="${widget_name}tax-value" readonly="readonly"
             style="background-color:#F1F1F1"/>€<br/>
         Retail price with tax:<br/>
-          <input type="text" id="retail-price" name="retail-price"/>€<br/>
+          <input type="text" id="${widget_name}retail-price" name="${prefix}retail-price"/>€<br/>
         Final retail price:<br/>
-          <span style="font-weight:bold" id="final-retail-price"></span> €
+          <span style="font-weight:bold" id="${widget_name}final-retail-price"></span> €
       </td>
       <td style="padding:10px">
       &nbsp;
       </td>
-      <td id="zone-reduction" style="vertical-align:top;">
+      <td id="${widget_name}zone-reduction" style="vertical-align:top;">
         Reduce Pre-tax retail price:<br/>
-        <input type="text" id="reduce-pre-tax-price" name="reduce-pre-tax-price"
+        <input type="text" id="${widget_name}reduce-pre-tax-price" name="${prefix}reduce-pre-tax-price"
           value="${reduce-pre-tax-price}"/>€ <br/>
         Reduce final pre-tax retail price:<br/>
-           <span style="font-weight:bold" id="reduce-final-pre-tax-price"></span> €<br/>
+           <span style="font-weight:bold" id="${widget_name}reduce-final-pre-tax-price"></span> €<br/>
         Reduce tax value:<br/>
-          <input type="text" id="reduce-tax-value" readonly="readonly"
+          <input type="text" id="${widget_name}reduce-tax-value" readonly="readonly"
             style="background-color:#F1F1F1"/>€<br/>
         Reduce retail price with tax:<br/>
-          <input type="text" id="reduce-retail-price" name="reduce-retail-price"/>€<br/>
+          <input type="text" id="${widget_name}reduce-retail-price" name="${prefix}reduce-retail-price"/>€<br/>
         Reduce final retail price:<br/>
-          <span style="font-weight:bold" id="reduce-final-retail-price"></span> €
+          <span style="font-weight:bold" id="${widget_name}reduce-final-retail-price"></span> €
       </td>
     </tr>
   </table>
 
     <script>
       $(document).ready(function(){
-        $(".tax-widget").change(function(){
-          calculTTCPrice('');
-          calculTTCPrice('reduce-');
+        $("#${widget_name} .tax-widget").change(function(){
+          calculTTCPrice('${widget_name}', '');
+          calculTTCPrice('${widget_name}', 'reduce-');
         });
-        $("#pre-tax-price").keyup(function(){
-          calculTTCPrice('')
+        $("#${widget_name}pre-tax-price").keyup(function(){
+          calculTTCPrice('${widget_name}', '')
         });
-        $("#retail-price").keyup(function(){
-          calculHTPrice('')
+        $("#${widget_name}retail-price").keyup(function(){
+          calculHTPrice('${widget_name}', '')
         });
-        $("#reduce-pre-tax-price").keyup(function(){
-          calculTTCPrice('reduce-')
+        $("#${widget_name}reduce-pre-tax-price").keyup(function(){
+          calculTTCPrice('${widget_name}', 'reduce-')
         });
-        $("#reduce-retail-price").keyup(function(){
-          calculHTPrice('reduce-')
+        $("#${widget_name}reduce-retail-price").keyup(function(){
+          calculHTPrice('${widget_name}', 'reduce-')
         });
-        $("#has-reduction").change(function(){
-          showReduction();
+        $("#${widget_name}has-reduction").change(function(){
+          showReduction('${widget_name}');
         });
-        showReduction();
-        calculTTCPrice('');
-        calculTTCPrice('reduce-');
+        showReduction('${widget_name}');
+        calculTTCPrice('${widget_name}', '');
+        calculTTCPrice('${widget_name}', 'reduce-');
       });
 
-      function showReduction(){
-        if ($("#has-reduction:checked").length){
-          $("#zone-reduction").show();
-          $("#final-retail-price").addClass("strikethrough");
-          $("#zone-price").addClass("with-reduction");
+      function showReduction(widget_name){
+        if ($("#"+ widget_name +"has-reduction:checked").length){
+          $("#"+ widget_name +"zone-reduction").show();
+          $("#"+ widget_name +"final-retail-price").addClass("strikethrough");
+          $("#"+ widget_name +"zone-price").addClass("with-reduction");
         }else{
-          $("#zone-reduction").hide();
-          $("#final-retail-price").removeClass("strikethrough");
-          $("#zone-price").removeClass("with-reduction");
+          $("#"+ widget_name +"zone-reduction").hide();
+          $("#"+ widget_name +"final-retail-price").removeClass("strikethrough");
+          $("#"+ widget_name +"zone-price").removeClass("with-reduction");
         }
       }
-      function getTax(){
-        return parseFloat($(".tax-widget").find(':selected').text())/100;
+      function getTax(widget_name){
+        return parseFloat($("#"+ widget_name +" .tax-widget").find(':selected').text())/100;
       }
       function setPrice(id, price){
         $(id).val((isNaN(price) == true) ? '' : (Math.round(price * 1000000) / 1000000));
@@ -97,21 +97,21 @@
       function setFinalPrice(id, price){
         $(id).html((isNaN(price) == true) ? '' : price.toFixed(2));
       }
-      function calculTTCPrice(prefix){
-        var price = parseFloat($("#"+ prefix +"pre-tax-price").val());
-        var new_price = price * (getTax() + 1);
-        setPrice('#'+ prefix +'tax-value', new_price - price);
-        setPrice('#'+ prefix +'retail-price', new_price);
-        setFinalPrice("#"+ prefix +"final-pre-tax-price", price);
-        setFinalPrice("#"+ prefix +"final-retail-price", new_price);
+      function calculTTCPrice(widget_name, prefix){
+        var price = parseFloat($("#"+ widget_name +""+ prefix +"pre-tax-price").val());
+        var new_price = price * (getTax(widget_name) + 1);
+        setPrice('#'+ widget_name +''+ prefix +'tax-value', new_price - price);
+        setPrice('#'+ widget_name +''+ prefix +'retail-price', new_price);
+        setFinalPrice("#"+ widget_name + "" + prefix +"final-pre-tax-price", price);
+        setFinalPrice("#"+ widget_name + "" + prefix +"final-retail-price", new_price);
       }
-      function calculHTPrice(prefix){
-        var price = parseFloat($("#"+ prefix +"retail-price").val());
-        var new_price = price / (getTax() + 1);
-        setPrice('#'+ prefix +'tax-value', price - new_price);
-        setPrice('#'+ prefix +'pre-tax-price', new_price);
-        setFinalPrice("#"+ prefix +"final-pre-tax-price", new_price);
-        setFinalPrice("#"+ prefix +"final-retail-price", price);
+      function calculHTPrice(widget_name, prefix){
+        var price = parseFloat($("#"+ widget_name +""+ prefix +"retail-price").val());
+        var new_price = price / (getTax(widget_name) + 1);
+        setPrice('#'+ widget_name +''+ prefix +'tax-value', price - new_price);
+        setPrice('#'+ widget_name +''+ prefix +'pre-tax-price', new_price);
+        setFinalPrice("#"+ widget_name +""+ prefix +"final-pre-tax-price", new_price);
+        setFinalPrice("#"+ widget_name +""+ prefix +"final-retail-price", price);
       }
     </script>
 

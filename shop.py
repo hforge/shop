@@ -74,6 +74,9 @@ class Shop(ShopFolder):
     product_title_word_treshold = 50
     product_title_phrase_treshold= 150
 
+    # Pro price
+    has_pro_price = False
+
     # XXX
     profile_items = []
 

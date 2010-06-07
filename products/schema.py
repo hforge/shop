@@ -58,14 +58,19 @@ product_schema = {# General informations
                   'stock-option': StockOptions(mandatory=True, default='accept'),
                   'resupply-quantity': Integer(default=0),
                   'sold-quantity': Integer(default=0),
-                  # Price
                   'is_buyable': Boolean(default=True),
                   'purchase-price': Decimal,
+                  # Price
                   'pre-tax-price': Decimal(default=decimal(0), mandatory=True),
                   'tax': TaxesEnumerate(mandatory=True),
-                  # Price reduction
                   'has_reduction': Boolean,
                   'reduce-pre-tax-price': Decimal(default=decimal(0)),
+                  # Pro Price
+                  'pro-pre-tax-price': Decimal(default=decimal(0)),
+                  'pro-tax':  TaxesEnumerate,
+                  'pro-has_reduction': Boolean,
+                  'pro-reduce-pre-tax-price': Decimal(default=decimal(0)),
+                  # OLD
                   'reduction': Decimal(default=decimal(0)), #XXX old to remove after update
                   # ctime,
                   'ctime': DateTime}

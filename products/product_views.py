@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from copy import deepcopy
+
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Email, Integer, String, Unicode
@@ -274,12 +277,22 @@ class Product_Edit(Editable_Edit, AutoForm):
 
     def get_widgets(self, resource, context):
         product_model = resource.get_product_model()
+        shop = get_shop(resource)
+        schema = self.get_schema(resource, context)
+        widgets = deepcopy(self.base_widgets)
+        # Prix pro
+        if shop.has_pro_price is True:
+            widget = PriceWidget('pro-pre-tax-price',
+                                 title=MSG(u'PRO Selling price'),
+                                 prefix='pro')
+            widgets.append(widget)
+        # Editble widgets
+        widgets.extend(Editable_Edit.widgets)
+        # Product model
+        if product_model:
+            widgets.extend(product_model.get_model_widgets())
         # XXX Hack
         # We do not show enumerates with 0 options
-        schema = self.get_schema(resource, context)
-        widgets = (self.base_widgets +
-                   Editable_Edit.widgets +
-                   (product_model.get_model_widgets() if product_model else []))
         return get_non_empty_widgets(schema, widgets)
 
 

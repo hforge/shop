@@ -564,7 +564,7 @@ input[type="image"]{
   color: red;
 }
 
-#widget-price td{
+.widget-price td{
   padding: 10px;
 }
 
