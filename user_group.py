@@ -21,17 +21,36 @@ from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.forms import TextWidget
+from ikaaro.webpage import WebPage
 
 # Import from shop
-from utils import get_shop
+from utils import get_shop, ShopFolder
 
 
-class ShopUser_GroupDefault(object):
+class ShopUser_Groups(ShopFolder):
+
+    class_id = 'user-groups'
+    class_title = MSG(u'User groups')
+
+
+
+class ShopUser_GroupDefault(ShopFolder):
 
     name = None
     title = MSG(u'Base user group')
     schema = {}
     widgets = []
+
+    __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['welcome']
+
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args, **kw):
+        ShopFolder._make_resource(cls, folder, name, *args, **kw)
+        # Welcome Page
+        cls = WebPage
+        cls._make_resource(cls, folder, '%s/welcome' % name,
+                                title={'en': u'Welcome'})
 
 
 

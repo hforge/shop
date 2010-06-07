@@ -46,6 +46,7 @@ from shop_views import Shop_GetProductStock, Shop_Configuration
 from shop_views import Shop_Administration
 from suppliers import Suppliers, Supplier
 from user import ShopUser, Customers
+from user_groups import ShopUser_Groups
 from utils import ShopFolder
 
 
@@ -54,10 +55,10 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view_cart']
-    class_version = '20100412'
+    class_version = '20100607'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
-                          'categories', 'customers',
+                          'categories', 'customers', 'groups',
                           'manufacturers', 'orders', 'payments',
                           'products', 'products-models',
                           'shippings', 'countries',
@@ -181,6 +182,9 @@ class Shop(ShopFolder):
         # Customers
         Customers._make_resource(Customers, folder, '%s/customers' % name,
                                  title={'en': u'Customers'})
+        # ShopUser_Groups
+        ShopUser_Groups._make_resource(ShopUser_Groups, folder, '%s/groups' % name,
+                                        title={'en': u'User groups'})
         # Addresses
         Addresses._make_resource(Addresses, folder, '%s/addresses' % name,
                                  title={'en': u'Addresses'})
@@ -340,6 +344,12 @@ class Shop(ShopFolder):
         if self.get_resource('modules', soft=True) is not None:
             return
         Modules.make_resource(Modules, self, 'modules')
+
+
+    def update_20100607(self):
+        if self.get_resource('groups', soft=True) is not None:
+            return
+        ShopUser_Groups.make_resource(ShopUser_Groups, self, 'groups')
 
 
 register_resource_class(Shop)

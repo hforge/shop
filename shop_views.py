@@ -246,6 +246,7 @@ class Shop_Register(RegisterForm):
 
 
     def action(self, resource, context, form):
+        msg = MSG(u'Inscription ok')
         shop = get_shop(resource)
         root = context.root
         site_root = resource.get_site_root()
@@ -285,8 +286,7 @@ class Shop_Register(RegisterForm):
             for to_addr in shop.get_property('order_notification_mails'):
                 root.send_email(to_addr, subject, text=body)
             # Redirect on specific page
-            msg = MSG(u'Your account should be validated')
-            return context.come_back(msg, '/')
+            return context.come_back(msg, goto='/shop/groups/%s/welcome' % self.user_group)
 
         # Save address in addresses table
         kw = {'user': user.name}
@@ -320,7 +320,6 @@ class Shop_Register(RegisterForm):
         context.user = user
 
         # Redirect
-        msg = MSG(u'Inscription ok')
         shop = get_shop(resource)
         if resource == shop:
             goto = './;addresses'
