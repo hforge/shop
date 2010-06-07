@@ -292,7 +292,7 @@ class Payments_ChoosePayment(STLForm):
             logo = mode.get_resource(mode.get_property('logo'))
             shipping_groups = mode.get_property('only_this_groups')
             user_group = context.user.get_property('user_group')
-            if len(shipping_groups)>1 and user_group not in shipping_groups:
+            if len(shipping_groups)>0 and user_group not in shipping_groups:
                 continue
             namespace['payments'].append(
                 {'name': mode.name,

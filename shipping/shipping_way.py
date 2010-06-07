@@ -284,6 +284,11 @@ class ShippingWay(ShopFolder):
         # Is enabled ?
         if not self.get_property('enabled'):
             return None
+        # For good group ?
+        shipping_groups = self.get_property('only_this_groups')
+        if (shipping_groups and
+           context.user.get_property('user_group') not in shipping_groups):
+            return None
         # Get price of shipping
         price = self.get_price(country, list_weight)
         if price is None:
