@@ -273,11 +273,11 @@ class Shop_Register(RegisterForm):
         users = root.get_resource('users')
         user = users.set_user(email, password)
 
+        # Set user group
+        user.set_property('user_group', self.user_group)
+
         # Save properties
         user.save_form(self.get_schema(resource, context), form)
-
-        # User group
-        user.set_property('user_group', self.user_group)
 
         # User is enabled ?
         user.set_property('is_enabled', self.user_is_enabled)
