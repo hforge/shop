@@ -273,26 +273,11 @@ class Shop_Register(RegisterForm):
         users = root.get_resource('users')
         user = users.set_user(email, password)
 
-        # Set user group
+        # Set user group (do it befor save_form for dynanic schema)
         user.set_property('user_group', self.user_group)
 
         # Save properties
         user.save_form(self.get_schema(resource, context), form)
-
-        # User is enabled ?
-        user.set_property('is_enabled', self.user_is_enabled)
-
-        if self.user_is_enabled is False:
-            # Send mail to webmaster to validate user
-            subject = MSG(u'A customer must be validated in your shop').gettext()
-            shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
-            body = registration_notification_body.gettext(
-                        name=user.name, email=email,
-                        shop_backoffice_uri=shop_backoffice_uri)
-            for to_addr in shop.get_property('order_notification_mails'):
-                root.send_email(to_addr, subject, text=body)
-            # Redirect on specific page
-            return context.come_back(msg, goto='/shop/groups/%s/welcome' % self.user_group)
 
         # Save address in addresses table
         kw = {'user': user.name}
@@ -319,6 +304,24 @@ class Shop_Register(RegisterForm):
         # Send confirmation email
         user.send_register_confirmation(context)
 
+        # User is enabled ?
+        user.set_property('is_enabled', self.user_is_enabled)
+
+        if self.user_is_enabled is False:
+            # Send mail to webmaster to validate user
+            subject = MSG(u'A customer must be validated in your shop').gettext()
+            shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
+            body = registration_notification_body.gettext(
+                        name=user.name, email=email,
+                        shop_backoffice_uri=shop_backoffice_uri)
+            for to_addr in shop.get_property('order_notification_mails'):
+                root.send_email(to_addr, subject, text=body)
+            # Redirect on specific page
+            return context.come_back(msg, goto='/shop/groups/%s/welcome' % self.user_group)
+
+        ########################
+        # Do authentification
+        ########################
         # Set cookie
         user.set_auth_cookie(context, form['password'])
 

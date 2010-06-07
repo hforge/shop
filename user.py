@@ -202,11 +202,18 @@ class ShopUser(User):
     mail_subject_template = MSG(u"Inscription confirmation.")
     mail_body_template = MSG(u"Your inscription has been validated")
 
+    mail_subject_template_not_enabled = MSG(u"Inscription confirmation - Your account must be validated")
+    mail_body_template_not_enabled = MSG(u"Your inscription is done. Our administrator should validate your account.")
 
     def send_register_confirmation(self, context):
+        if self.get_property('is_enabled') is True:
+            subject = self.mail_subject_template.gettext()
+            text = self.mail_body_template.gettext()
+        else:
+            subject = self.mail_subject_template_not_enabled.gettext()
+            text = self.mail_body_template_not_enabled.gettext()
         context.root.send_email(to_addr=self.get_property('email'),
-                                subject=self.mail_subject_template.gettext(),
-                                text=self.mail_body_template.gettext())
+                                subject=subject, text=text)
 
 
 
