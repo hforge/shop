@@ -619,8 +619,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
     ## API
     #####################
     def is_buyable(self, quantity=1):
-        return (self.get_property('pre-tax-price') != decimal(0) and
-                self.get_property('tax') is not None and
+        return (self.get_price_without_tax() != decimal(0) and
                 self.get_property('is_buyable') is True and
                 self.get_statename() == 'public' and
                 self.is_in_stock_or_ignore_stock(quantity))
