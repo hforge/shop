@@ -60,6 +60,12 @@ from utils import get_shippings_details
 
 CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
 
+registration_notification_body = MSG(u"""
+    You have to validate user number {name} ({email})\n
+    {shop_backoffice_uri}/shop/customers/{name}/;edit_private_informations\n
+    """)
+
+
 class Shop_Configuration(STLView):
 
     access = 'is_admin'
@@ -197,8 +203,6 @@ class Shop_Register(RegisterForm):
     user_is_enabled = True
     user_group = ''
 
-    registration_notification_body = MSG(u'You have to validate user number {name} ({email})')
-
     base_schema = {
         'email': Email(mandatory=True),
         'lastname': Unicode(mandatory=True),
@@ -281,8 +285,10 @@ class Shop_Register(RegisterForm):
         if self.user_is_enabled is False:
             # Send mail to webmaster to validate user
             subject = MSG(u'A customer must be validated in your shop').gettext()
-            body = self.registration_notification_body.gettext(
-                        name=user.name, email=email)
+            shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
+            body = registration_notification_body.gettext(
+                        name=user.name, email=email,
+                        shop_backoffice_uri=shop_backoffice_uri)
             for to_addr in shop.get_property('order_notification_mails'):
                 root.send_email(to_addr, subject, text=body)
             # Redirect on specific page
