@@ -36,6 +36,14 @@ class ShopUser_Groups(ShopFolder):
 
 class ShopUser_GroupDefault(ShopFolder):
 
+    class_id = 'user-groups'
+    class_title = MSG(u'User groups')
+
+
+
+class ShopUser_GroupDefault(ShopFolder):
+
+    class_id = 'user-group-default'
     name = None
     title = MSG(u'Base user group')
     schema = {}
@@ -50,13 +58,16 @@ class ShopUser_GroupDefault(ShopFolder):
         # Welcome Page
         cls = WebPage
         cls._make_resource(cls, folder, '%s/welcome' % name,
-                                title={'en': u'Welcome'})
+                                title={'en': u'Welcome'},
+                                state='public')
 
 
 
 class ShopUser_GroupPro(ShopUser_GroupDefault):
 
-    name = 'group_pro'
+    class_id = 'user-group-pro'
+
+    name = 'group_pro' # XXX Why use a name ?
     title = MSG(u'Group pro')
 
     schema = {'pro_title': Unicode(mandatory=True),

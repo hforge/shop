@@ -46,7 +46,7 @@ from shop_views import Shop_GetProductStock, Shop_Configuration
 from shop_views import Shop_Administration
 from suppliers import Suppliers, Supplier
 from user import ShopUser, Customers
-from user_groups import ShopUser_Groups
+from user_group import ShopUser_Groups
 from utils import ShopFolder
 
 
