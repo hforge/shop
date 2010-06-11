@@ -33,7 +33,7 @@
           <a href="/;forgotten_password">I forgot my password</a>
         </dd>
       </dl>
-      <button class="button-ok">Log in</button>
+      <button class="button-ok" type="submit">Log in</button>
 
       <script language="javascript">
         <stl:inline stl:if="not username/value">$("#username").focus();</stl:inline>

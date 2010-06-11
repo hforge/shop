@@ -9,7 +9,7 @@
     <h1 class="payment-process"></h1>
     Delivery address: ${delivery_address}<br/><br/>
     Bill address: ${bill_address}<br/><br/>
-    <button class="button">Validate</button>
+    <button class="button" type="submit">Validate</button>
   </form>
 
 

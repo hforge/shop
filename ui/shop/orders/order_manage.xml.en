@@ -33,7 +33,7 @@
           <form>
             Goto reference:<br/>
             <input type="text" name="reference" id="reference" size="12"/>
-            <button type="submit" name="ok"class="button-ok">Ok</button>
+            <button type="submit" name="ok" class="button-ok">Ok</button>
           </form><br/>
           <a href="../">« Come back to orders list</a>
         </div>
