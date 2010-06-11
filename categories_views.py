@@ -36,7 +36,7 @@ from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
 from editable import Editable, Editable_Edit
-from utils import get_shop
+from utils import get_skin_template, get_shop
 
 
 
@@ -49,12 +49,7 @@ class Category_View(BrowseFormBatchNumeric):
     search_template = None
 
     def get_template(self, resource, context):
-        shop = get_shop(resource)
-        if shop.shop_templates.has_key('category_view'):
-            template = shop.shop_templates['category_view']
-        else:
-            template = self.template
-        return resource.get_resource(template)
+        return get_skin_template(context, 'virtualcategory_view.xml') # XXX category_view
 
 
     def get_namespace(self, resource, context):
@@ -153,23 +148,6 @@ class Category_View(BrowseFormBatchNumeric):
                 reverse=Boolean(default=shop.get_property('shop_sort_reverse')))
 
 
-
-
-class Category_ComparatorView(Category_View):
-
-    title = MSG(u'Compare')
-    access = True
-
-    search_template = None
-    template = '/ui/shop/virtualcategory_comparator_view.xml'
-
-    def get_template(self, resource, context):
-        shop = get_shop(resource)
-        if shop.shop_templates.has_key('products_comparator'):
-            template = shop.shop_templates['products_comparator']
-        else:
-            template = self.template
-        return resource.get_resource(template)
 
 
 ##########################################################

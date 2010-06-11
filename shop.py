@@ -81,29 +81,6 @@ class Shop(ShopFolder):
     # XXX
     profile_items = []
 
-    # Categories class_views (Do not show compare by default)
-    categories_class_views = ['view']
-
-    # Templates
-
-    shop_templates = {
-      # Cart viewbox
-      'cart_viewbox': '/ui/shop/cart_viewbox.xml',
-      # Category view
-      'category_view': '/ui/shop/virtualcategory_view.xml',
-      # Login
-      'shop_login': '/ui/shop/shop_login.xml',
-      # Product
-      'product_print': '/ui/shop/products/print.xml',
-      'product_view': '/ui/shop/products/product_view.xml',
-      'product_viewbox': '/ui/shop/products/product_viewbox.xml',
-      # Cross selling
-      'product_cross_selling_viewbox': '/ui/shop/products/product_viewbox.xml',
-      # Manufacturer
-      'manufacturer_view': '/ui/shop/manufacturer_view.xml',
-      'manufacturers_view': '/ui/shop/manufacturers_view.xml'
-      }
-
     ###############################
     # Classes to override
     # for specific needs

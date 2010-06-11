@@ -23,7 +23,7 @@ from itools.web import STLView, STLForm
 
 # Import from shop
 from cart import ProductCart
-from utils import format_price, get_shop
+from utils import format_price, get_skin_template
 
 
 
@@ -120,12 +120,7 @@ class Cart_Viewbox(STLView):
     template = None
 
     def get_template(self, resource, context):
-        if self.template:
-            template = self.template
-        else:
-            shop = get_shop(resource)
-            template = shop.shop_templates['cart_viewbox']
-        return resource.get_resource(template)
+        return get_skin_template(context, 'cart_viewbox.xml')
 
 
     def GET(self, resource, context):

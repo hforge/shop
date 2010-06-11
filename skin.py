@@ -49,7 +49,7 @@ class ShopLanguagesTemplate(CommonLanguagesTemplate):
 
     def get_namespace(self):
         context = self.context
-        site_root = context.resource.get_site_root()
+        site_root = context.site_root
         shop = site_root.get_resource('shop')
         here = context.resource
 

@@ -55,7 +55,7 @@ from orders.orders_views import Orders_StatesBox
 from payments import PaymentWaysEnumerate
 from payments.payments_views import Payments_ChoosePayment
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
-from utils import get_shippings_details
+from utils import get_shippings_details, get_skin_template
 
 
 CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
@@ -357,10 +357,8 @@ class Shop_Login(STLForm):
         if hostname[:6] == 'admin.' :
             # Backoffice login template
             template =  '/ui/backoffice/login.xml'
-        else:
-            shop = get_shop(resource)
-            template = shop.shop_templates['shop_login']
-        return resource.get_resource(template)
+            return resource.get_resource(template)
+        return get_skin_template(context, 'shop_login.xml')
 
 
     def get_namespace(self, resource, context):

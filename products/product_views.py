@@ -57,7 +57,7 @@ from shop.cart import ProductCart
 from shop.editable import Editable_View, Editable_Edit
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
-from shop.utils import get_non_empty_widgets, get_shop
+from shop.utils import get_non_empty_widgets, get_shop, get_skin_template
 
 
 class Product_NewProduct(NewInstance):
@@ -136,42 +136,13 @@ class Product_View(Editable_View, STLForm):
 
     access = 'is_allowed_to_view'
     title = MSG(u'View')
-    template = None
-    model_template = None
 
     scripts = ['/ui/shop/js/declinations.js']
 
     def get_template(self, resource, context):
-        # Backoffice template
-        hostname = context.uri.authority
-        if hostname[:6] == 'admin.' :
-            template = '/ui/backoffice/product_view.xml'
-            return resource.get_resource(template)
-        # Other
-        shop = get_shop(resource)
         product_model = resource.get_property('product_model')
-        # No product model
-        if not product_model:
-            if self.template:
-                template = self.template
-            else:
-                template = shop.shop_templates['product_view']
-            return resource.get_resource(template)
-        # If has a product model
-        if self.model_template:
-            path = self.model_template % product_model
-            try:
-                return resource.get_resource(path)
-            except LookupError:
-                return resource.get_resource(self.template)
-        if self.template:
-            return resource.get_resource(self.template)
-        # Get from shop templates
-        if shop.shop_templates.has_key('product_view_%s' % product_model):
-            template = shop.shop_templates['product_view_%s' % product_model]
-        else:
-            template = shop.shop_templates['product_view']
-        return resource.get_resource(template)
+        return get_skin_template(context, '/product/product_view_%s.xml' % product_model,
+                                          '/product/product_view.xml')
 
 
     def get_schema(self, resource, context):
@@ -391,12 +362,7 @@ class Product_ViewBox(STLView):
     template = None
 
     def get_template(self, resource, context):
-        if self.template:
-            template = self.template
-        else:
-            shop = get_shop(resource)
-            template = shop.shop_templates['product_viewbox']
-        return resource.get_resource(template)
+        return get_skin_template(context, '/product/product_viewbox.xml')
 
 
     def get_namespace(self, resource, context):
@@ -406,12 +372,8 @@ class Product_ViewBox(STLView):
 class Product_CrossSellingViewBox(Product_ViewBox):
 
     def get_template(self, resource, context):
-        if self.template:
-            template = self.template
-        else:
-            shop = get_shop(resource)
-            template = shop.shop_templates['product_cross_selling_viewbox']
-        return resource.get_resource(template)
+        return get_skin_template(context, '/product/product_viewbox.xml')
+
 
 
 class Products_View(BrowseFormBatchNumeric):
@@ -626,12 +588,7 @@ class Product_Print(STLView):
     title = MSG(u"Print product")
 
     def get_template(self, resource, context):
-        if self.template:
-            template = self.template
-        else:
-            shop = get_shop(resource)
-            template = shop.shop_templates['product_print']
-        return resource.get_resource(template)
+        return get_skin_template(context, '/product/print.xml')
 
 
     def get_namespace(self, resource, context):

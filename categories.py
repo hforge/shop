@@ -33,7 +33,7 @@ from ikaaro.utils import get_base_path_query
 
 # Import from shop
 from categories_views import Category_View, Category_BackofficeView, Category_Edit
-from categories_views import Category_ComparatorView, Category_Comparator
+from categories_views import Category_Comparator
 from utils import get_shop, ShopFolder
 from editable import Editable
 from products import Product
@@ -51,7 +51,6 @@ class Category(Editable, ShopFolder):
     view_categories = Category_BackofficeView()
     edit = Category_Edit()
     new_product = Product_NewProduct()
-    compare = Category_ComparatorView()
     comparator = Category_Comparator()
 
     @classmethod

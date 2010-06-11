@@ -30,6 +30,9 @@ from ikaaro.forms import ImageSelectorWidget, TextWidget
 from ikaaro.resource_views import EditLanguageMenu
 from ikaaro.views_new import NewInstance
 
+# Import from here
+from utils import get_skin_template
+
 
 manufacturer_schema = {'title': Unicode(mandatory=True),
                        'subject': Unicode,
@@ -77,10 +80,7 @@ class Manufacturers_View(STLView):
     title = MSG(u'View')
 
     def get_template(self, resource, context):
-        from utils import get_shop
-        shop = get_shop(resource)
-        template = shop.shop_templates['manufacturers_view']
-        return resource.get_resource(template)
+        return get_skin_template(context, 'manufacturers_view.xml')
 
 
     def get_namespace(self, resource, context):
@@ -104,10 +104,7 @@ class Manufacturer_View(STLView):
     title = MSG(u'View')
 
     def get_template(self, resource, context):
-        from utils import get_shop
-        shop = get_shop(resource)
-        template = shop.shop_templates['manufacturer_view']
-        return resource.get_resource(template)
+        return get_skin_template(context, 'manufacturer_view.xml')
 
 
     def get_namespace(self, resource, context):
