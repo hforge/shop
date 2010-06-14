@@ -120,6 +120,16 @@ class BackofficeSkin(Skin):
         return scripts
 
 
+class ShopSkinDynamicProperty(dict):
+
+    resource = None
+    context = None
+
+    def __getitem__(self, key):
+        if key == 'current_category':
+            return self.resource.get_lazy_current_category(self.context)
+
+
 
 class ShopSkin(NeutralSkin):
 
@@ -179,6 +189,11 @@ class ShopSkin(NeutralSkin):
         namespace['page_title'] = context.resource.get_title()
         # Current view type
         namespace['is_on_view_product'] = isinstance(context.resource, Product)
+        # Dynamic property
+        dynamic_property = ShopSkinDynamicProperty()
+        dynamic_property.context = context
+        dynamic_property.resource = self
+        namespace['dynamic_property'] = dynamic_property
         # Modules
         shop_module = ModuleLoader()
         shop_module.context = context
@@ -206,6 +221,19 @@ class ShopSkin(NeutralSkin):
             site_root.show_sidebar_on_homepage is False):
             return None
         return NeutralSkin.get_sidebar_resource(self, context)
+
+
+    # Lazy (dynamic property)
+    def get_lazy_current_category(self, context):
+        here = context.resource
+        shop = get_shop(here)
+        here = context.resource
+        if isinstance(here, shop.category_class):
+            return here.get_title()
+        elif isinstance(here, shop.product_class):
+            return here.parent.get_title()
+        return None
+
 
 ###########################################################################
 # Register
