@@ -343,7 +343,7 @@ class Product_Delete(STLForm):
 
     access = 'is_allowed_to_remove'
     title = MSG(u'Delete product')
-    template = '/ui/shop/products/product_delete.xml'
+    template = '/ui/shop/product/product_delete.xml'
 
     def action_delete(self, resource, context, form):
         shop = get_shop(resource)
@@ -402,7 +402,7 @@ class Products_View(BrowseFormBatchNumeric):
         ('workflow_state', MSG(u'State'))
         ]
 
-    search_template = '/ui/shop/products/products_view_search.xml'
+    search_template = '/ui/shop/product/products_view_search.xml'
 
     def get_table_columns(self, resource, context):
         base = [('checkbox', None)]
