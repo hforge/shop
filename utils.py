@@ -126,7 +126,7 @@ def get_shippings_details(cart, context):
 
 def get_skin_template(context, path1, path2=None):
     resource = context.resource
-    prefix = resource.get_site_root().class_skin
+    prefix = resource.get_site_root().get_class_skin(context)
     template = resource.get_resource('%s/%s' % (prefix, path1), soft=True)
     if template is None and path2 != None:
         template = resource.get_resource('%s/%s' % (prefix, path2), soft=True)

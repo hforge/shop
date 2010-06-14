@@ -116,13 +116,17 @@ class ShopWebSite(NeutralWS):
         return []
 
 
+    def get_class_skin(self, context):
+        return self.class_skin
+
+
     def get_skin(self, context):
         # Back-Office
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
             return self.get_resource('/ui/backoffice/')
         # Fron-Office
-        return self.get_resource(self.class_skin)
+        return self.get_resource(self.get_class_skin(context))
 
     #############################
     # ACL
