@@ -66,6 +66,7 @@ class Category_View(BrowseFormBatchNumeric):
         # Build namespace
         namespace = {'batch': batch,
                      'title': resource.get_title(),
+                     'categories': self.get_sub_categories_namespace(resource, context),
                      'products': [],
                      'description': None}
         # Get products view box
@@ -91,10 +92,8 @@ class Category_View(BrowseFormBatchNumeric):
 
     def get_sub_categories_namespace(self, resource, context):
         from categories import Category
-        shop = get_shop(resource)
-        real_category = resource.get_real_resource()
         namespace = []
-        for cat in real_category.search_resources(cls=Category):
+        for cat in resource.search_resources(cls=Category):
             nb_products = cat.get_nb_products(only_public=True)
             if nb_products == 0:
                 continue
