@@ -37,7 +37,7 @@ from utils import get_shop
 
 class ShopLocationTemplate(LocationTemplateWithoutTab):
 
-    excluded = ['/categories/']
+    excluded = []
     skip_breadcrumb_in_homepage = True
     bc_separator = '>'
     homepage_name = 'index'
