@@ -460,7 +460,11 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
             if key=='data':
                 continue
             namespace[key] = self.get_property(key)
-        # Categorie
+        # Category
+        namespace['category'] = {'name': self.parent.name,
+                                 'href': context.get_link(self.parent),
+                                 'title': self.parent.get_title()}
+        # Categorie XXX To remove
         namespace['categorie'] = self.parent.get_title()
         # Lang (usefull to show contextuel images)
         ws_languages = context.site_root.get_property('website_languages')
