@@ -38,6 +38,7 @@ from ikaaro.workflow import WorkflowAware
 
 # Import from itws
 from itws.tags import TagsAware
+from itws.utils import is_empty
 
 # Import from shop
 from declination import Declination
@@ -372,6 +373,15 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
                               'value': datatype.get_value(value)})
         return namespace
 
+
+    def get_available_languages(self, languages):
+        available_langs = []
+        for language in languages:
+            events = self.get_xhtml_data(language=language)
+            title = self.get_property('title', language=language)
+            if is_empty(events) is False and len(title.strip()):
+                available_langs.append(language)
+        return available_langs
 
 
     ##################################################

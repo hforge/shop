@@ -16,8 +16,7 @@
 
 # Import from itools
 from itools.core import get_abspath
-from itools.gettext import MSG, get_domain
-from itools.i18n import get_language_name
+from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.future.menu import get_menu_namespace
@@ -25,8 +24,7 @@ from ikaaro.skins import Skin, register_skin
 from ikaaro.website import WebSite
 
 # Import from itws
-from itws.common import LocationTemplateWithoutTab, CommonLanguagesTemplate
-from itws.utils import is_empty
+from itws.common import LocationTemplateWithoutTab
 from itws.ws_neutral import NeutralSkin
 
 # Import from shop
@@ -42,63 +40,6 @@ class ShopLocationTemplate(LocationTemplateWithoutTab):
     bc_separator = '>'
     homepage_name = 'index'
     tabs_hidden_roles = ('guests',)
-
-
-
-class ShopLanguagesTemplate(CommonLanguagesTemplate):
-
-    def get_namespace(self):
-        context = self.context
-        site_root = context.site_root
-        shop = site_root.get_resource('shop')
-        here = context.resource
-
-        if isinstance(here, shop.product_class) is False:
-            return CommonLanguagesTemplate.get_namespace(self)
-
-        # Special case for the product of the shop
-        # If the user can edit the resource, we display all the languages
-        here = context.resource
-        ac = here.get_access_control()
-        allowed = ac.is_allowed_to_edit(context.user, here)
-        if allowed:
-            return CommonLanguagesTemplate.get_namespace(self)
-
-        # Website languages
-        ws_languages = site_root.get_property('website_languages')
-        # Select language
-        accept = context.accept_language
-        current_language = accept.select_language(ws_languages)
-        # Sort the available languages
-        ws_languages = list(ws_languages)
-        ws_languages.sort()
-
-        available_langs = []
-        for language in ws_languages:
-            # data (html)
-            # XXX It should be usefull to index the available languages for
-            # the html and the description
-            events = here.get_xhtml_data(language=language)
-            title = here.get_property('title', language=language)
-            if is_empty(events) is False and len(title.strip()):
-                available_langs.append(language)
-
-        languages = []
-        gettext = get_domain('itools').gettext
-        for language in available_langs:
-            href = context.uri.replace(language=language)
-            selected = (language == current_language)
-            css_class = 'selected' if selected else None
-            value = get_language_name(language)
-            languages.append({
-                'name': language,
-                'value': gettext(value, language),
-                'href': href,
-                'selected': selected,
-                'class': css_class})
-
-        return {'languages': languages}
-
 
 
 
@@ -140,7 +81,6 @@ class ShopSkin(NeutralSkin):
 
     menu_level = 1
     location_template = ShopLocationTemplate
-    languages_template = ShopLanguagesTemplate
 
 
     def get_template_title(self, context):
