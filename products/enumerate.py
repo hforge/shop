@@ -110,6 +110,7 @@ class Datatypes(Enumerate):
       {'name': 'unicode', 'value': MSG(u'Unicode')},
       {'name': 'integer', 'value': MSG(u'Integer')},
       {'name': 'decimal', 'value': MSG(u'Decimal')},
+      {'name': 'cm_to_inch', 'value': MSG(u'CM to INCH')},
       {'name': 'boolean', 'value': MSG(u'Boolean')},
       {'name': 'path', 'value': MSG(u'File')},
       {'name': 'email',   'value': MSG(u'Email')},

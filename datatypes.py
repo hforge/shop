@@ -14,13 +14,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from decimal import Decimal as decimal
+
 # Import from itools
 from itools.datatypes import Boolean, Enumerate, PathDataType, String
+from itools.datatypes import Decimal
 from itools.gettext import MSG
 from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.file import Image
+
+# Import from shop
+from utils import format_price
 
 
 class StringFixSize(String):
@@ -109,3 +116,22 @@ class ThreeStateBoolean(Boolean):
     @staticmethod
     def is_empty(value):
         return False
+
+
+class DatatypeCM_to_INCH(Decimal):
+
+
+    @staticmethod
+    def render(value, context):
+        # Get informations
+        accept = context.accept_language
+        site_root = context.resource.get_site_root()
+        ws_languages = site_root.get_property('website_languages')
+        lang = accept.select_language(ws_languages)
+        # Render
+        mesure = u'cm'
+        if lang == 'en':
+            inch = decimal('2.54')
+            mesure = u'inch'
+            value = format_price(value/inch)
+        return u'%s %s' % (value, mesure)
