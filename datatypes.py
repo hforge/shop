@@ -64,6 +64,13 @@ class ImagePathDataType(PathDataType):
         return True
 
 
+class ProductPathDataType(PathDataType):
+
+    # XXX we have to implement is_valid
+    default = ''
+
+
+
 class DynamicEnumerate(Enumerate):
 
     path = None
@@ -116,6 +123,7 @@ class ThreeStateBoolean(Boolean):
     @staticmethod
     def is_empty(value):
         return False
+
 
 
 class DatatypeCM_to_INCH(Decimal):

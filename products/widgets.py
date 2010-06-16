@@ -67,6 +67,7 @@ class MiniProductWidget(Widget):
         return {'viewbox': viewbox.GET(context.resource, context)}
 
 
+
 class ProductModelWidget(Widget):
 
     template = list(XMLParser(

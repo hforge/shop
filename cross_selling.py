@@ -24,7 +24,6 @@ from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery, StartQuery
 
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import PathSelectorWidget
 from ikaaro.future.order import ResourcesOrderedTable
 from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
@@ -34,6 +33,7 @@ from cross_selling_views import AddProduct_View
 from cross_selling_views import CrossSelling_Configure, CrossSelling_TableView
 from cross_selling_views import cross_selling_schema
 from utils import get_shop
+from forms import ProductSelectorWidget
 
 
 
@@ -46,12 +46,12 @@ class CrossSellingTable(ResourcesOrderedTable):
     class_version = '20100601'
     class_views = ['configure', 'back']
 
-    form = [PathSelectorWidget('name', title=MSG(u'Product'), action='add_product')]
+    form = [ProductSelectorWidget('name', title=MSG(u'Product'))]
 
     # Views
     configure = CrossSelling_Configure()
     view_table = CrossSelling_TableView()
-    add_product = AddProduct_View()
+    add_product = AddProduct_View() # (XXX used by product selector widget)
     back = GoToSpecificDocument(specific_document='..',
                                 title=MSG(u'See product'))
 

@@ -33,3 +33,5 @@ pour implémenter get_links et update_links sur les property
 de type XHTMLBody. See:
 
   http://bugs.hforge.org/show_bug.cgi?id=755
+
+vi lib/python2.6/site-packages/shop/products/declination.py +138

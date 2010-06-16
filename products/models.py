@@ -37,9 +37,10 @@ from models_views import ProductModelSchema_EditRecord
 from models_views import ProductModelSchema_View
 from models_views import ProductModels_View
 from models_views import ProductModel_Configure
-from shop.datatypes import DatatypeCM_to_INCH
+from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
+from shop.forms import ProductSelectorWidget
 from shop.utils import ShopFolder
 
 
@@ -50,13 +51,14 @@ real_datatypes = {'string': String,
                   'cm_to_inch': DatatypeCM_to_INCH,
                   'boolean': Boolean,
                   'path': PathDataType,
+                  'product':  ProductPathDataType,
                   'email': Email,
                   'html': XHTMLBody,
                   'date': ISOCalendarDate}
 
 
 
-class ProductPathSelectorWidget(PathSelectorWidget):
+class LinkPathSelectorWidget(PathSelectorWidget):
 
     action = 'add_link_file'
 
@@ -65,19 +67,20 @@ class ProductPathSelectorWidget(PathSelectorWidget):
 def get_default_widget_shop(datatype):
     if issubclass(datatype, Boolean):
         return BooleanRadio
+    elif issubclass(datatype, ProductPathDataType):
+        return ProductSelectorWidget
     elif issubclass(datatype, PathDataType):
-        return ProductPathSelectorWidget
+        return LinkPathSelectorWidget
     elif issubclass(datatype, XHTMLBody):
         return RTEWidget
     return get_default_widget(datatype)
 
 
-def get_real_datatype(model, record):
+def get_real_datatype(schema_handler, record):
     # If name not in real_datatypes dict ...
     # It's an enumerate table from enumerates library
     # that we transform in Enumerate
-    schema_resource = model.get_resource('schema').handler
-    get_value = schema_resource.get_record_value
+    get_value = schema_handler.get_record_value
     datatype = get_value(record, 'datatype')
     # Get properties
     kw = {}
@@ -183,21 +186,22 @@ class ProductModel(ShopFolder):
 
     def get_model_schema(self):
         schema = {}
-        schema_resource = self.get_resource('schema').handler
-        get_value = schema_resource.get_record_value
-        for record in schema_resource.get_records_in_order():
+        schema_resource = self.get_resource('schema')
+        schema_handler = schema_resource.handler
+        get_value = schema_handler.get_record_value
+        for record in schema_handler.get_records_in_order():
             name = get_value(record, 'name')
-            schema[name] = get_real_datatype(self, record)
+            schema[name] = get_real_datatype(schema_handler, record)
         return schema
 
 
     def get_model_widgets(self):
         widgets = []
-        schema_resource = self.get_resource('schema').handler
-        get_value = schema_resource.get_record_value
-        for record in schema_resource.get_records_in_order():
+        schema_handler = self.get_resource('schema').handler
+        get_value = schema_handler.get_record_value
+        for record in schema_handler.get_records_in_order():
             name = get_value(record, 'name')
-            datatype = get_real_datatype(self, record)
+            datatype = get_real_datatype(schema_handler, record)
             widget = get_default_widget_shop(datatype)
             title = get_value(record, 'title')
             widget = widget(name, title=title, has_empty_option=False)
@@ -210,14 +214,14 @@ class ProductModel(ShopFolder):
         namespace = {'specific_dict': {},
                      'specific_list': [],
                      'specific_list_complete': []}
-        schema_resource = self.get_resource('schema').handler
-        get_value = schema_resource.get_record_value
-        for record in schema_resource.get_records_in_order():
+        schema_handler = self.get_resource('schema').handler
+        get_value = schema_handler.get_record_value
+        for record in schema_handler.get_records_in_order():
             name = get_value(record, 'name')
             value = real_value = resource.get_property(name)
             # Real value is used to keep the enumerate value
             # corresponding to the options[{'name': xxx}]
-            datatype = get_real_datatype(self, record)
+            datatype = get_real_datatype(schema_handler, record)
             # XXX Use datatype.render()
             if issubclass(datatype, Enumerate):
                 if datatype.multiple:

@@ -15,12 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.web import get_context
 from itools.xml import XMLParser
 
 
 # Import from ikaaro
 from ikaaro.forms import Widget, stl_namespaces
+from ikaaro.forms import PathSelectorWidget
 
+# Import from shop
+from utils import get_shop
 
 
 class ThreeStateBooleanRadio(Widget):
@@ -54,3 +58,35 @@ class ThreeStateBooleanRadio(Widget):
             'is_yes': value in [True, 1, '1'],
             'is_no': value in [False, 0, '0']}
 
+
+
+class ProductSelectorWidget(Widget):
+
+    action = 'add_product'
+
+    template = list(XMLParser(
+        """
+          <span stl:if="not viewbox">
+            ${widget}
+          </span>
+          ${viewbox}
+          <div class="clear"/>
+        """,
+        stl_namespaces))
+
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        shop = get_shop(context.resource)
+        product = context.resource.get_resource(value, soft=True)
+        product_class = shop.product_class
+        if product is None or not isinstance(product, product_class):
+            widget = PathSelectorWidget(self.name,
+                        action=self.action).to_html(datatype, value)
+            viewbox = None
+        else:
+            widget = None
+            viewbox = product_class.viewbox.GET(product, context)
+        return {'widget': widget,
+                'value': value,
+                'viewbox': viewbox}
