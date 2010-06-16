@@ -6,12 +6,14 @@
 
   <!-- Imports -->
   <stl:block stl:if="activate_lightbox">
-    <script type="text/javascript" src="/ui/shop/js/fancybox/jquery.fancybox-1.3.1.pack.js"/>
     <!--
-    <script type="text/javascript" src="/ui/shop/js/fancybox/jquery.easing-1.3.pack.js"/>
-    <script type="text/javascript" src="/ui/shop/js/fancybox/jquery.mousewheel-3.0.2.pack.js"/>
+    <script type="text/javascript" src="/ui/common/js/fancybox/jquery.fancybox-1.3.1.pack.js"/>
     -->
-    <link rel="stylesheet" href="/ui/shop/js/fancybox/jquery.fancybox-1.3.1.css" type="text/css"/>
+    <!--
+    <script type="text/javascript" src="/ui/common/js/fancybox/jquery.easing-1.3.pack.js"/>
+    <script type="text/javascript" src="/ui/common/js/fancybox/jquery.mousewheel-3.0.2.pack.js"/>
+    -->
+    <link rel="stylesheet" href="/ui/common/js/fancybox/jquery.fancybox-1.3.1.css" type="text/css"/>
   </stl:block>
   <script type="text/javascript" src="/ui/shop/product_gallery.js"/>
   <script type="text/javascript" src="/ui/shop/js/jquery.loupe.js" stl:if="show_loupe"/>

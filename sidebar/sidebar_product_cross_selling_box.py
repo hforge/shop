@@ -24,8 +24,8 @@ from ikaaro.registry import register_resource_class
 from ikaaro.resource_views import DBResource_AddImage
 
 # Import from itws
-from itws.repository import register_bar_item, BarItem
-from itws.repository_views import BarItem_View
+from itws.repository import register_box, Box
+from itws.repository_views import Box_View
 
 
 
@@ -37,7 +37,7 @@ class SideBarCrossSellingBox_AddImage(DBResource_AddImage):
 
 
 
-class SideBarCrossSellingBox_View(BarItem_View):
+class SideBarCrossSellingBox_View(Box_View):
 
     access = True
     title = MSG(u'View')
@@ -68,22 +68,24 @@ class SideBarCrossSellingBox_View(BarItem_View):
 
 
 
-class SideBarProductCrossSellingBox(BarItem):
+class SideBarProductCrossSellingBox(Box):
 
     class_id = 'sidebar-product-cross-selling-box'
     class_version = '20090122'
     class_title = MSG(u'Vertical item cross selling (product)')
+    class_description = MSG(u"""Show on sidebar the
+                                cross selling configure in product""")
 
     view = SideBarCrossSellingBox_View()
 
-    item_schema = {'thumb_width': Integer(mandatory=True),
+    box_schema = {'thumb_width': Integer(mandatory=True),
                    'thumb_height': Integer(mandatory=True)}
 
-    item_widgets = [TextWidget('thumb_width', size=3,
+    box_widgets = [TextWidget('thumb_width', size=3,
                                title=MSG(u'Largeur des miniatures')),
                     TextWidget('thumb_height', size=3,
                                title=MSG(u'Hauteur des miniatures'))]
 
 
 register_resource_class(SideBarProductCrossSellingBox)
-register_bar_item(SideBarProductCrossSellingBox, allow_instanciation=True)
+register_box(SideBarProductCrossSellingBox, allow_instanciation=True)

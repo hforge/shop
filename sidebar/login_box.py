@@ -21,13 +21,13 @@ from itools.gettext import MSG
 from ikaaro.registry import register_resource_class
 
 # Import from itws
-from itws.repository import BarItem
-from itws.repository_views import BarItem_View
+from itws.repository import Box
+from itws.repository_views import Box_View
 
 
 
 
-class LoginBox_View(BarItem_View):
+class LoginBox_View(Box_View):
 
     template = '/ui/vertical_depot/login_box.xml'
 
@@ -43,7 +43,7 @@ class LoginBox_View(BarItem_View):
 
 
 
-class LoginBox(BarItem):
+class LoginBox(Box):
 
     class_id = 'vertical-item-login-box'
     class_title = MSG(u'Login box')

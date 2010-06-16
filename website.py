@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.datatypes import Boolean
 from itools.gettext import MSG
 from itools.web import get_context
 
@@ -121,6 +122,8 @@ class ShopWebSite(NeutralWS):
 
 
     def get_skin(self, context):
+        if context.get_query_value('is_admin_popup', type=Boolean) is True:
+            return self.get_resource('/ui/admin-popup/')
         # Back-Office
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :

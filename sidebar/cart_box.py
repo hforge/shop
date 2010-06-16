@@ -24,15 +24,15 @@ from ikaaro.forms import TextWidget, BooleanRadio
 from ikaaro.registry import register_resource_class
 
 # Import from itws
-from itws.repository import BarItem, register_bar_item
-from itws.repository_views import BarItem_View
+from itws.repository import Box, register_box
+from itws.repository_views import Box_View
 
 # Import from shop
 from shop.cart import ProductCart
 
 
 
-class CartBox_View(BarItem_View):
+class CartBox_View(Box_View):
 
     template = '/ui/vertical_depot/cart_box.xml.fr'
 
@@ -52,20 +52,20 @@ class CartBox_View(BarItem_View):
 
 
 
-class CartBox(BarItem):
+class CartBox(Box):
 
     class_id = 'vertical-item-cart-box'
     class_title = MSG(u'Boîte panier')
     view = CartBox_View()
 
 
-    item_schema = {'order_title': Unicode(multilingual=True),
+    box_schema = {'order_title': Unicode(multilingual=True),
                    'show_if_empty': Boolean}
 
-    item_widgets = [TextWidget('order_title', title=MSG(u'Order title')),
+    box_widgets = [TextWidget('order_title', title=MSG(u'Order title')),
                     BooleanRadio('show_if_empty',
                                  title=MSG(u'Show cart if empty ?'))]
 
 
 register_resource_class(CartBox)
-register_bar_item(CartBox, allow_instanciation=False)
+register_box(CartBox, allow_instanciation=False)

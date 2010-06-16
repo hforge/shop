@@ -26,12 +26,12 @@ from ikaaro.forms import BooleanRadio
 from ikaaro.registry import register_resource_class
 
 # Import from itws
-from itws.repository import BarItem, register_bar_item
-from itws.repository_views import BarItem_View
+from itws.repository import Box, register_box
+from itws.repository_views import Box_View
 
 
 
-class SubCategoriesBox_View(BarItem_View):
+class SubCategoriesBox_View(Box_View):
 
     template = '/ui/vertical_depot/sub_categories_box.xml'
     tree_template = '/ui/vertical_depot/sub_categories_box_tree.xml'
@@ -161,18 +161,18 @@ class SubCategoriesBox_View(BarItem_View):
 
 
 
-class SubCategoriesBox(BarItem):
+class SubCategoriesBox(Box):
 
     class_id = 'vertical-item-sub-categories-box'
     class_title = MSG(u'Vertical item that list sub categories')
 
     view = SubCategoriesBox_View()
 
-    item_schema = {'show_first_category': Boolean,
+    box_schema = {'show_first_category': Boolean,
                    'show_nb_products': Boolean,
                    'use_small_title': Boolean}
 
-    item_widgets = [
+    box_widgets = [
         BooleanRadio('show_first_category',
                                  title=MSG(u'Afficher la 1ére categorie ?')),
         BooleanRadio('show_nb_products',
@@ -181,4 +181,4 @@ class SubCategoriesBox(BarItem):
 
 
 register_resource_class(SubCategoriesBox)
-register_bar_item(SubCategoriesBox, allow_instanciation=True)
+register_box(SubCategoriesBox, allow_instanciation=True)

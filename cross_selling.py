@@ -42,6 +42,7 @@ class CrossSellingTable(ResourcesOrderedTable):
 
     class_id = 'CrossSellingTable'
     class_title = MSG(u'Cross-Selling Table')
+    class_description = MSG(u'This box allow to configure cross selling')
     class_handler = ResourcesOrderedTableFile
     class_version = '20100601'
     class_views = ['configure', 'back']

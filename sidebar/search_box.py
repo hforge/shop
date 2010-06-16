@@ -23,15 +23,15 @@ from ikaaro.forms import SelectRadio
 from ikaaro.registry import register_resource_class
 
 # Import from itws
-from itws.repository import BarItem, register_bar_item
-from itws.repository_views import BarItem_View
+from itws.repository import Box, register_box
+from itws.repository_views import Box_View
 
 # Import from shop
 from shop.search import Shop_ProductSearch, Shop_CategoriesEnumerate
 
 
 
-class SearchBox_View(BarItem_View):
+class SearchBox_View(Box_View):
 
     template = '/ui/vertical_depot/search_box.xml'
 
@@ -64,12 +64,13 @@ class SearchBox_View(BarItem_View):
 
 
 
-class SearchBox(BarItem):
+class SearchBox(Box):
 
     class_id = 'sidebar-item-search-box'
     class_title = MSG(u'Search box')
+    class_description = MSG(u'Product research box')
     view = SearchBox_View()
 
 
 register_resource_class(SearchBox)
-register_bar_item(SearchBox, allow_instanciation=True)
+register_box(SearchBox, allow_instanciation=True)

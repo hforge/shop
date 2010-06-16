@@ -14,42 +14,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from the Standard Library
-from copy import deepcopy
-
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Unicode
 from itools.gettext import MSG
-from itools.uri import get_reference
-from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import ImageSelectorWidget
 from ikaaro.registry import register_resource_class
-from ikaaro.resource_views import DBResource_AddImage
 
 # Import from itws
-from itws.utils import get_path_and_view
-from itws.repository import register_bar_item
-from itws.repository_views import BarItem_View
+from itws.repository import register_box
+from itws.repository_views import Box_View
 
 # Import from shop
 from shop.categories import Category
 from shop.cross_selling import CrossSellingTable
+from shop.utils_views import RedirectPermanent
 
 
 
-class CrossSellingBox_AddImage(DBResource_AddImage):
-
-    def get_root(self, context):
-        return context.resource
-
-
-
-class CrossSellingBox_View(BarItem_View):
+class CrossSellingBox_View(Box_View):
 
     access = True
     title = MSG(u'View')
@@ -97,14 +82,10 @@ class CrossSellingBox(Folder):
     order_class = CrossSellingTable
     __fixed_handlers__ = [order_path]
 
-    item_schema = {'title_image': Unicode(multilingual=True)}
 
-    item_widgets = [ImageSelectorWidget('title_image',
-                    title=MSG(u'Image servant de titre'), width=640)]
-
-    add_image = CrossSellingBox_AddImage()
     configure = GoToSpecificDocument(title=MSG(u'Configurer'),
                                      specific_document=order_path)
+    edit = RedirectPermanent(specific_document=order_path)
     view = CrossSellingBox_View()
 
     @staticmethod
@@ -118,84 +99,9 @@ class CrossSellingBox(Folder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(Folder.get_metadata_schema(),
-                           CrossSellingTable.get_metadata_schema(),
-                           title_image=Unicode)
-
-
-    def get_links(self):
-        # Use the canonical path instead of the abspath
-        # Caution multilingual property
-
-        site_root = self.get_site_root()
-        base = self.get_canonical_path()
-        links = []
-
-        available_languages = site_root.get_property('website_languages')
-        for lang in available_languages:
-            path = self.get_property('title_image', language=lang)
-            if not path:
-                continue
-            ref = get_reference(str(path)) # Unicode -> str
-            if not ref.scheme:
-                path, view = get_path_and_view(ref.path)
-                links.append(str(base.resolve2(path)))
-
-        return links
-
-
-    def update_links(self, source, target):
-        # Use the canonical path instead of the abspath
-        # Caution multilingual property
-        site_root = self.get_site_root()
-        base = self.get_canonical_path()
-
-        available_languages = site_root.get_property('website_languages')
-        for lang in available_languages:
-            path = self.get_property('title_image', language=lang)
-            if not path:
-                continue
-            ref = get_reference(str(path)) # Unicode -> str
-            if ref.scheme:
-                continue
-            path, view = get_path_and_view(ref.path)
-            path = str(base.resolve2(path))
-            if path == source:
-                # Hit the old name
-                # Build the new reference with the right path
-                new_ref = deepcopy(ref)
-                new_ref.path = str(base.get_pathto(target)) + view
-                self.set_property('title_image', str(new_ref), language=lang)
-
-        get_context().server.change_resource(self)
-
-
-    def update_relative_links(self, source):
-        site_root = self.get_site_root()
-        available_languages = site_root.get_property('website_languages')
-
-        target = self.get_canonical_path()
-        resources_old2new = get_context().database.resources_old2new
-
-        for lang in available_languages:
-            path = self.get_property('title_image', language=lang)
-            if not path:
-                continue
-            ref = get_reference(str(path)) # Unicode -> str
-            if ref.scheme:
-                continue
-            path, view = get_path_and_view(ref.path)
-            # Calcul the old absolute path
-            old_abs_path = source.resolve2(path)
-            # Check if the target path has not been moved
-            new_abs_path = resources_old2new.get(old_abs_path, old_abs_path)
-            # Build the new reference with the right path
-            # Absolute path allow to call get_pathto with the target
-            new_ref = deepcopy(ref)
-            new_ref.path = str(target.get_pathto(new_abs_path)) + view
-            self.set_property('title_image', str(new_ref), language=lang)
-
+                           CrossSellingTable.get_metadata_schema())
 
 
 register_resource_class(CrossSellingBox)
-register_bar_item(CrossSellingBox, allow_instanciation=True)
-register_bar_item(CrossSellingBox, allow_instanciation=True, is_content=True)
+register_box(CrossSellingBox, allow_instanciation=True)
+register_box(CrossSellingBox, allow_instanciation=True, is_content=True)

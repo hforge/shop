@@ -23,12 +23,12 @@ from ikaaro.registry import register_resource_class
 from ikaaro.utils import get_base_path_query
 
 # Import from itws
-from itws.repository import BarItem
-from itws.repository_views import BarItem_View
+from itws.repository import Box
+from itws.repository_views import Box_View
 
 
 
-class FilterByPriceBox_View(BarItem_View):
+class FilterByPriceBox_View(Box_View):
 
     title = MSG(u'Filtrer par prix')
     template = '/ui/vertical_depot/filter_by_price_box.xml'
@@ -64,7 +64,7 @@ class FilterByPriceBox_View(BarItem_View):
 
 
 
-class FilterByPriceBox(BarItem):
+class FilterByPriceBox(Box):
 
     class_id = 'vertical-item-filter-by-price-box'
     class_title = MSG(u'Vertical item filter by price')
