@@ -34,7 +34,8 @@ from ikaaro.resource_views import DBResource_AddImage
 # Import from itws
 from itws.utils import get_path_and_view
 from itws.repository import register_box
-from itws.repository_views import Box_Edit, Box_View
+from itws.repository_views import Box_View
+from itws.views import AutomaticEditView
 
 # Import from shop
 from shop.categories import Category
@@ -98,7 +99,7 @@ class SideBarCrossSellingBox(Folder):
     order_class = CrossSellingTable
     __fixed_handlers__ = [order_path]
 
-    item_schema = {'title_image': Unicode(multilingual=True),
+    edit_schema = {'title_image': Unicode(multilingual=True),
                    'thumb_width': Integer(mandatory=True),
                    'thumb_height': Integer(mandatory=True)}
 
@@ -113,7 +114,7 @@ class SideBarCrossSellingBox(Folder):
     configure = GoToSpecificDocument(title=MSG(u'Configurer'),
                                      specific_document=order_path)
     view = SideBarCrossSellingBox_View()
-    edit = Box_Edit()
+    edit = AutomaticEditView()
 
     @staticmethod
     def _make_resource(cls, folder, name, **kw):

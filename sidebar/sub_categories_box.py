@@ -168,11 +168,11 @@ class SubCategoriesBox(Box):
 
     view = SubCategoriesBox_View()
 
-    box_schema = {'show_first_category': Boolean,
+    edit_schema = {'show_first_category': Boolean,
                    'show_nb_products': Boolean,
                    'use_small_title': Boolean}
 
-    box_widgets = [
+    edit_widgets = [
         BooleanRadio('show_first_category',
                                  title=MSG(u'Afficher la 1ére categorie ?')),
         BooleanRadio('show_nb_products',

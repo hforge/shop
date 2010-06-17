@@ -609,3 +609,7 @@ input[type="image"]{
 #tag-view .item.product {
   border: none;
 }
+
+.context-menu label {
+  width: 90% !important;
+}

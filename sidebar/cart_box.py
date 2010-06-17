@@ -59,10 +59,10 @@ class CartBox(Box):
     view = CartBox_View()
 
 
-    box_schema = {'order_title': Unicode(multilingual=True),
+    edit_schema = {'order_title': Unicode(multilingual=True),
                    'show_if_empty': Boolean}
 
-    box_widgets = [TextWidget('order_title', title=MSG(u'Order title')),
+    edit_widgets = [TextWidget('order_title', title=MSG(u'Order title')),
                     BooleanRadio('show_if_empty',
                                  title=MSG(u'Show cart if empty ?'))]
 

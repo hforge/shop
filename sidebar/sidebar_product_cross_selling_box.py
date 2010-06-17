@@ -78,10 +78,10 @@ class SideBarProductCrossSellingBox(Box):
 
     view = SideBarCrossSellingBox_View()
 
-    box_schema = {'thumb_width': Integer(mandatory=True),
+    edit_schema = {'thumb_width': Integer(mandatory=True),
                    'thumb_height': Integer(mandatory=True)}
 
-    box_widgets = [TextWidget('thumb_width', size=3,
+    edit_widgets = [TextWidget('thumb_width', size=3,
                                title=MSG(u'Largeur des miniatures')),
                     TextWidget('thumb_height', size=3,
                                title=MSG(u'Hauteur des miniatures'))]
