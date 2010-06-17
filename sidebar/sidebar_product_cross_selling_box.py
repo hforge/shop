@@ -41,8 +41,13 @@ class SideBarCrossSellingBox_View(Box_View):
 
     access = True
     title = MSG(u'View')
-    template = '/ui/vertical_depot/sidebar_product_cross_selling_box.xml'
 
+    template = '/ui/shop/sidebar/product_cross_selling_box.xml'
+
+    # XXX Sylvain see if needed
+    #from shop.utils import get_skin_template
+    #    def get_template(self, resource, context):
+    #        return get_skin_template(context, '/sidebar/product_cross_selling_box.xml')
 
     def get_namespace(self, resource, context):
         site_root = resource.get_site_root()
@@ -51,19 +56,14 @@ class SideBarCrossSellingBox_View(Box_View):
         shop = site_root.get_resource('shop')
         product_class_id = shop.product_class.class_id
         title = resource.get_property('title')
+        namespace = {'title': title,
+                     'viewboxes': []}
         if here.class_id != product_class_id:
             self.set_view_is_empty(True)
-            return {'title': title,
-                    'products': []}
-        width = resource.get_property('thumb_width')
-        height = resource.get_property('thumb_height')
-        thumb = {'width': width, 'height': height}
-        namespace = {'title': title,
-                     'products': [],
-                     'thumb': thumb}
+            return namespace
         table = here.get_resource('cross-selling')
         for product in table.get_products(context, product_class_id, categories):
-            namespace['products'].append(product.get_small_namespace(context))
+            namespace['viewboxes'].append(product.viewbox.GET(product, context))
         return namespace
 
 
@@ -78,6 +78,8 @@ class SideBarProductCrossSellingBox(Box):
 
     view = SideBarCrossSellingBox_View()
 
+
+    # XXX Need ?
     edit_schema = {'thumb_width': Integer(mandatory=True),
                    'thumb_height': Integer(mandatory=True)}
 
