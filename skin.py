@@ -17,6 +17,7 @@
 # Import from itools
 from itools.core import get_abspath
 from itools.gettext import MSG
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.future.menu import get_menu_namespace
@@ -30,7 +31,7 @@ from itws.ws_neutral import NeutralSkin
 # Import from shop
 from modules import ModuleLoader
 from products import Product
-from utils import get_shop
+from utils import get_shop, get_skin_template
 
 
 class ShopLocationTemplate(LocationTemplateWithoutTab):
@@ -40,6 +41,10 @@ class ShopLocationTemplate(LocationTemplateWithoutTab):
     bc_separator = '>'
     homepage_name = 'index'
     tabs_hidden_roles = ('guests',)
+
+    def get_template(self):
+        context = get_context()
+        return get_skin_template(context, '/common/location.xml')
 
 
 
@@ -80,6 +85,7 @@ class ShopSkin(NeutralSkin):
     base_scripts = []
 
     menu_level = 1
+
     location_template = ShopLocationTemplate
 
 
