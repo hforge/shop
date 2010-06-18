@@ -36,7 +36,7 @@ from shop.shop_utils_views import Shop_PluginWay_Form
 
 class Colissimo_RecordView(Shop_PluginWay_Form):
 
-    template = '/ui/shop/shipping/colissimo_record_order_view.xml'
+    template = '/ui/backoffice/shipping/colissimo_record_order_view.xml'
 
     def get_namespace(self, order, shipping_way, record, context):
         history = shipping_way.get_resource('history').handler
@@ -56,7 +56,7 @@ class Colissimo_RecordEdit(Colissimo_RecordView):
 class Colissimo_RecordAdd(STLForm):
 
     access = 'is_admin'
-    template = '/ui/shop/shipping/colissimo_add_record.xml'
+    template = '/ui/backoffice/shipping/colissimo_add_record.xml'
 
     schema = {'num_colissimo': String(mandatory=True)}
 

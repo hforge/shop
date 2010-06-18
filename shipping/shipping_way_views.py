@@ -71,7 +71,7 @@ class ShippingWay_Configure(AutoForm):
 
 class ShippingWay_RecordView(Shop_PluginWay_Form):
 
-    template = '/ui/shop/shipping/shippingway_order_view.xml'
+    template = '/ui/backoffice/shipping/shippingway_order_view.xml'
 
     def get_namespace(self, order, shipping_way, record, context):
         history = shipping_way.get_resource('history').handler
@@ -91,7 +91,7 @@ class ShippingWay_RecordEdit(ShippingWay_RecordView):
 class ShippingWay_RecordAdd(STLForm):
 
     access = 'is_admin'
-    template = '/ui/shop/shipping/shippingway_add_record.xml'
+    template = '/ui/backoffice/shipping/shippingway_add_record.xml'
 
     schema = {'number': String(mandatory=True),
               'description': Unicode}

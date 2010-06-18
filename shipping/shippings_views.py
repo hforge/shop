@@ -114,7 +114,7 @@ class Shippings_Details(STLView):
 
     title = MSG(u'Shippings details')
     access = 'is_admin'
-    template = '/ui/shop/shipping/shippings_details.xml'
+    template = '/ui/backoffice/shipping/shippings_details.xml'
 
     # Should
     show_inactive = False

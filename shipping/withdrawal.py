@@ -31,7 +31,7 @@ from shop.shop_utils_views import Shop_PluginWay_Form
 
 class Withdrawal_RecordView(Shop_PluginWay_Form):
 
-    template = '/ui/shop/shipping/withdrawal_record_order_view.xml'
+    template = '/ui/backoffice/shipping/withdrawal_record_order_view.xml'
 
     def get_namespace(self, order, shipping_way, record, context):
         return Shop_PluginWay_Form().get_namespace(shipping_way, context)
@@ -41,7 +41,7 @@ class Withdrawal_RecordView(Shop_PluginWay_Form):
 class Withdrawal_RecordEdit(Shop_PluginWay_Form):
 
     # XXX TODO: allow to take RDV
-    template = '/ui/shop/shipping/withdrawal_record_order_view.xml'
+    template = '/ui/backoffice/shipping/withdrawal_record_order_view.xml'
 
     def get_namespace(self, order, shipping_way, record, context):
         return Shop_PluginWay_Form().get_namespace(shipping_way, context)
@@ -51,7 +51,7 @@ class Withdrawal_RecordEdit(Shop_PluginWay_Form):
 class Withdrawal_RecordAdd(STLForm):
 
     access = 'is_admin'
-    template = '/ui/shop/shipping/withdrawal_record_order_add.xml'
+    template = '/ui/backoffice/shipping/withdrawal_record_order_add.xml'
 
     schema = {'state': Boolean}
 
