@@ -43,48 +43,33 @@ from shop.cross_selling import CrossSellingTable
 
 
 
-class SideBarCrossSellingBox_AddImage(DBResource_AddImage):
-
-    def get_root(self, context):
-        return context.resource
-
-
-
 class SideBarCrossSellingBox_View(Box_View):
 
     access = True
     title = MSG(u'View')
-    template = '/ui/vertical_depot/sidebar_cross_selling_box.xml'
+    template = '/ui/shop/sidebar/product_cross_selling_box.xml'
 
 
     def get_namespace(self, resource, context):
         site_root = resource.get_site_root()
+        here = context.resource
         shop = site_root.get_resource('shop')
         product_class_id = shop.product_class.class_id
-        width = resource.get_property('thumb_width')
-        height = resource.get_property('thumb_height')
-        thumb = {'width': width, 'height': height}
         title = resource.get_property('title')
-        title_image_path = resource.get_property('title_image')
-        if title_image_path:
-            # XXX title image multilingual -> Unicode => String
-            title_image = resource.get_resource(str(title_image_path),
-                                                soft=True)
-            if title_image:
-                title_image_path = context.get_link(title_image)
-                title_image_path = '%s/;download' % title_image_path
-        has_title = (title or title_image_path)
-        namespace = {'title': title, 'has_title': has_title,
-                     'title_image_path': title_image_path,
-                     'products': [], 'thumb': thumb}
-        categories = []
+        namespace = {'title': title,
+                     'viewboxes': []}
+        if here.class_id != product_class_id:
+            self.set_view_is_empty(True)
+            return namespace
         if isinstance(context.resource, Category):
             categories = [context.resource]
         elif isinstance(context.resource, shop.product_class):
             categories = [context.resource.parent]
+        else:
+            categories = []
         table = resource.get_resource(resource.order_path)
         for product in table.get_products(context, product_class_id, categories):
-            namespace['products'].append(product.get_small_namespace(context))
+            namespace['viewboxes'].append(product.viewbox.GET(product, context))
         return namespace
 
 
@@ -99,22 +84,14 @@ class SideBarCrossSellingBox(Folder):
     order_class = CrossSellingTable
     __fixed_handlers__ = [order_path]
 
-    edit_schema = {'title_image': Unicode(multilingual=True),
-                   'thumb_width': Integer(mandatory=True),
-                   'thumb_height': Integer(mandatory=True)}
+    edit_schema = {}
 
-    item_widgets = [ImageSelectorWidget('title_image',
-                    title=MSG(u'Image servant de titre'), width=640),
-                    TextWidget('thumb_width', size=3,
-                               title=MSG(u'Largeur des miniatures')),
-                    TextWidget('thumb_height', size=3,
-                               title=MSG(u'Hauteur des miniatures'))]
+    item_widgets = []
 
-    add_image = SideBarCrossSellingBox_AddImage()
+    edit = AutomaticEditView()
+    view = SideBarCrossSellingBox_View()
     configure = GoToSpecificDocument(title=MSG(u'Configurer'),
                                      specific_document=order_path)
-    view = SideBarCrossSellingBox_View()
-    edit = AutomaticEditView()
 
     @staticmethod
     def _make_resource(cls, folder, name, **kw):
@@ -127,84 +104,8 @@ class SideBarCrossSellingBox(Folder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(Folder.get_metadata_schema(),
-                           CrossSellingTable.get_metadata_schema(),
-                           title_image=Unicode,
-                           # FIXME Must be a positive integer
-                           thumb_width=Integer(default=188),
-                           thumb_height=Integer(default=1000))
+                           CrossSellingTable.get_metadata_schema())
 
-
-    def get_links(self):
-        # Use the canonical path instead of the abspath
-        # Caution multilingual property
-
-        site_root = self.get_site_root()
-        base = self.get_canonical_path()
-        links = []
-
-        available_languages = site_root.get_property('website_languages')
-        for lang in available_languages:
-            path = self.get_property('title_image', language=lang)
-            if not path:
-                continue
-            ref = get_reference(str(path)) # Unicode -> str
-            if not ref.scheme:
-                path, view = get_path_and_view(ref.path)
-                links.append(str(base.resolve2(path)))
-
-        return links
-
-
-    def update_links(self, source, target):
-        # Use the canonical path instead of the abspath
-        # Caution multilingual property
-        site_root = self.get_site_root()
-        base = self.get_canonical_path()
-
-        available_languages = site_root.get_property('website_languages')
-        for lang in available_languages:
-            path = self.get_property('title_image', language=lang)
-            if not path:
-                continue
-            ref = get_reference(str(path)) # Unicode -> str
-            if ref.scheme:
-                continue
-            path, view = get_path_and_view(ref.path)
-            path = str(base.resolve2(path))
-            if path == source:
-                # Hit the old name
-                # Build the new reference with the right path
-                new_ref = deepcopy(ref)
-                new_ref.path = str(base.get_pathto(target)) + view
-                self.set_property('title_image', str(new_ref), language=lang)
-
-        get_context().server.change_resource(self)
-
-
-    def update_relative_links(self, source):
-        site_root = self.get_site_root()
-        available_languages = site_root.get_property('website_languages')
-
-        target = self.get_canonical_path()
-        resources_old2new = get_context().database.resources_old2new
-
-        for lang in available_languages:
-            path = self.get_property('title_image', language=lang)
-            if not path:
-                continue
-            ref = get_reference(str(path)) # Unicode -> str
-            if ref.scheme:
-                continue
-            path, view = get_path_and_view(ref.path)
-            # Calcul the old absolute path
-            old_abs_path = source.resolve2(path)
-            # Check if the target path has not been moved
-            new_abs_path = resources_old2new.get(old_abs_path, old_abs_path)
-            # Build the new reference with the right path
-            # Absolute path allow to call get_pathto with the target
-            new_ref = deepcopy(ref)
-            new_ref.path = str(target.get_pathto(new_abs_path)) + view
-            self.set_property('title_image', str(new_ref), language=lang)
 
 
 
