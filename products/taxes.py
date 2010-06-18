@@ -65,7 +65,7 @@ class Taxes_TableResource(OrderedTable):
 
 class PriceWidget(Widget):
 
-    template = 'ui/shop/widgets/taxes.xml'
+    template = 'ui/backoffice/widgets/taxes.xml'
     prefix = ''
 
     def get_template(self, datatype, value):

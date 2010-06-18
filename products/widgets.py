@@ -144,7 +144,7 @@ class ProductModel_DeletedInformations(Widget):
 
 class StockWidget(Widget):
 
-    template = 'ui/shop/widgets/stock.xml'
+    template = 'ui/backoffice/widgets/stock.xml'
 
     def get_template(self, datatype, value):
         context = get_context()
