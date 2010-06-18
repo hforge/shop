@@ -38,7 +38,7 @@ class Stock_Resupply(STLForm):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'Resupply stock')
-    template = '/ui/shop/stock/resupply.xml'
+    template = '/ui/backoffice/stock/resupply.xml'
 
     search_schema = {'supplier': SuppliersEnumerate}
 
@@ -108,7 +108,7 @@ class Stock_Resupply(STLForm):
         accept = context.accept_language
         creation_date = datetime.now()
         creation_date = format_date(creation_date, accept=accept)
-        document = resource.get_resource('/ui/shop/stock/pdf_resupply.xml')
+        document = resource.get_resource('/ui/backoffice/stock/pdf_resupply.xml')
         # Build namespace
         namespace =  {'creation_date': creation_date,
                       'lines': []}
@@ -140,7 +140,7 @@ class Stock_FillStockOut(STLForm):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'Fill stock')
-    template = '/ui/shop/stock/fill_stock_out.xml'
+    template = '/ui/backoffice/stock/fill_stock_out.xml'
 
     def get_schema(self, resource, context):
         references_number = context.get_form_value('references_number',
