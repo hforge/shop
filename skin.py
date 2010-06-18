@@ -79,8 +79,7 @@ class ShopSkinDynamicProperty(dict):
 
 class ShopSkin(NeutralSkin):
 
-    base_styles = ['/ui/shop/perfect_sale_style.css',
-                   '/ui/shop/style.css']
+    base_styles = ['/ui/shop/style.css']
 
     base_scripts = []
 
