@@ -54,7 +54,7 @@ def get_search_query(search_schema, context, query):
 class SearchTable_View(Table_View):
 
     search_title = MSG(u'Search')
-    search_template = '/ui/shop/utils_table_search.xml'
+    search_template = '/ui/backoffice/utils_table_search.xml'
 
     search_widgets = []
     search_schema = {}
@@ -114,7 +114,7 @@ class SearchTable_View(Table_View):
 class SearchTableFolder_View(SearchForm):
 
     search_title = MSG(u'Search')
-    search_template = '/ui/shop/utils_table_search.xml'
+    search_template = '/ui/backoffice/utils_table_search.xml'
 
     search_widgets = []
     search_schema = {}
