@@ -77,7 +77,7 @@ class OrderCancelButton(Button):
 
 class Orders_StatesBox(STLView):
 
-    template = '/ui/shop/orders/orders_states_box.xml'
+    template = '/ui/backoffice/orders/orders_states_box.xml'
 
     def get_namespace(self, resource, context):
         root = context.root
@@ -101,7 +101,7 @@ class OrdersView(Folder_BrowseContent):
 
     # Configuration
     table_actions = [MergeOrderButton, MergeBillButton, OrderSendButton]
-    search_template = '/ui/shop/orders/orders_search.xml'
+    search_template = '/ui/backoffice/orders/orders_search.xml'
     context_menus = []
 
     table_columns = [
@@ -315,7 +315,7 @@ class Order_Manage(Payments_EditablePayment, STLForm):
     access = 'is_admin'
     title = MSG(u'Manage shipping')
 
-    template = '/ui/shop/orders/order_manage.xml'
+    template = '/ui/backoffice/orders/order_manage.xml'
 
     def get_query_schema(self):
         return {'sort_by': String(default='title'),

@@ -528,7 +528,7 @@ class Order(WorkflowAware, ShopFolder):
         if self.get_resource('order', soft=True):
             self.del_resource('order')
         # Get template
-        document = self.get_resource('/ui/shop/orders/order_pdf.xml')
+        document = self.get_resource('/ui/backoffice/orders/order_pdf.xml')
         # Build namespace
         path = context.database.fs.get_absolute_path(self.handler.key)
         namespace = self.get_namespace(context)
@@ -554,7 +554,7 @@ class Order(WorkflowAware, ShopFolder):
         if self.get_resource('bill', soft=True):
             self.del_resource('bill')
         # Get template
-        document = self.get_resource('/ui/shop/orders/order_facture.xml')
+        document = self.get_resource('/ui/backoffice/orders/order_facture.xml')
         # Build namespace
         namespace = self.get_namespace(context)
         namespace['logo'] = shop.get_pdf_logo_key(context)

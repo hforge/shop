@@ -291,7 +291,7 @@ class ShopUser_OrderView(STLForm):
 
     query_schema = {'id': String(mandatory=True)}
 
-    template = '/ui/shop/orders/order_view.xml'
+    template = '/ui/backoffice/orders/order_view.xml'
 
     def get_namespace(self, resource, context):
         root = context.root
