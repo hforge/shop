@@ -46,7 +46,7 @@ class CheckPayment_End(PaymentWay_EndView):
 
     access = "is_authenticated"
 
-    template = '/ui/shop/payments/check/end.xml'
+    template = '/ui/backoffice/payments/check/end.xml'
 
     def get_namespace(self, resource, context):
         address = resource.get_property('address').encode('utf-8')
@@ -59,7 +59,7 @@ class CheckPayment_End(PaymentWay_EndView):
 
 class CheckPayment_RecordView(STLView):
 
-    template = '/ui/shop/payments/check/record_view.xml'
+    template = '/ui/backoffice/payments/check/record_view.xml'
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
@@ -75,7 +75,7 @@ class CheckPayment_RecordView(STLView):
 
 class CheckPayment_RecordEdit(STLForm):
 
-    template = '/ui/shop/payments/check/record_edit.xml'
+    template = '/ui/backoffice/payments/check/record_edit.xml'
 
     schema = {'payment_way': String,
               'id_payment': Integer,

@@ -75,7 +75,7 @@ class Payments_ManagePayment(Payments_EditablePayment, STLForm):
     query_schema = {'payment_way': String, #XXX PaymentWaysEnumerate,
                     'id_payment': Integer}
 
-    template = '/ui/shop/payments/payment_manage.xml'
+    template = '/ui/backoffice/payments/payment_manage.xml'
 
     def get_namespace(self, resource, context):
         root = context.root
@@ -120,7 +120,7 @@ class Payments_History_View(SearchForm):
     batch_msg1 = MSG(u"There is 1 payment.")
     batch_msg2 = MSG(u"There are {n} payments.")
 
-    search_template = '/ui/shop/payments/history_view_search.xml'
+    search_template = '/ui/backoffice/payments/history_view_search.xml'
     search_schema = {
         'ref': String,
         'user': String,
@@ -279,7 +279,7 @@ class Payments_ChoosePayment(STLForm):
 
     access = 'is_authenticated'
     title = MSG(u'Choose a payment way')
-    template = '/ui/shop/payments/choose_payment.xml'
+    template = '/ui/backoffice/payments/choose_payment.xml'
 
     total_price = {'with_tax': decimal('0'),
                    'without_tax': decimal('0')}

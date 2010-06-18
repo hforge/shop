@@ -74,7 +74,7 @@ class CheckPayment(PaymentWay):
     class_views = ['configure', 'payments']
 
     # XXX found a good logo
-    logo = '/ui/shop/payments/paybox/images/logo.png'
+    logo = '/ui/backoffice/payments/paybox/images/logo.png'
     payment_table = CheckPaymentTable
 
     # Views

@@ -34,7 +34,7 @@ from shop.payments.payment_way_views import PaymentWay_EndView
 
 class CashPayment_RecordView(STLView):
 
-    template = '/ui/shop/payments/cash/record_view.xml'
+    template = '/ui/backoffice/payments/cash/record_view.xml'
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
@@ -47,7 +47,7 @@ class CashPayment_RecordView(STLView):
 
 class CashPayment_RecordEdit(STLForm):
 
-    template = '/ui/shop/payments/cash/record_edit.xml'
+    template = '/ui/backoffice/payments/cash/record_edit.xml'
 
     schema = {'payment_way': String,
               'id_payment': Integer,
@@ -89,7 +89,7 @@ class CashPayment_End(PaymentWay_EndView):
 
     access = "is_authenticated"
 
-    template = '/ui/shop/payments/cash/end.xml'
+    template = '/ui/backoffice/payments/cash/end.xml'
 
     def get_namespace(self, resource, context):
         address = resource.get_property('address').encode('utf-8')

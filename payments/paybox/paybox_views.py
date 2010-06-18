@@ -134,7 +134,7 @@ class Paybox_ConfirmPayment(BaseForm):
 
 class Paybox_Record_Edit(STLView):
 
-    template = '/ui/shop/payments/paybox/record_edit.xml'
+    template = '/ui/backoffice/payments/paybox/record_edit.xml'
 
     def get_namespace(self, resource, context):
         namespace = {}
@@ -154,7 +154,7 @@ class Paybox_End(PaymentWay_EndView):
     query_schema = merge_dicts(PaymentWay_EndView.query_schema,
                     state=Integer, NUMERR=String)
 
-    template = '/ui/shop/payments/paybox/end.xml'
+    template = '/ui/backoffice/payments/paybox/end.xml'
 
     def get_namespace(self, resource, context):
         namespace = PaymentWay_EndView.get_namespace(self, resource, context)
@@ -176,7 +176,7 @@ class Paybox_End(PaymentWay_EndView):
 class Paybox_RecordView(STLView):
 
 
-    template = '/ui/shop/payments/paybox/record_view.xml'
+    template = '/ui/backoffice/payments/paybox/record_view.xml'
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value

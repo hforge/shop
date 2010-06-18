@@ -37,7 +37,7 @@ class TransferPayment(PaymentWay):
     class_description = MSG(u'Payment by transfer')
     class_views = ['configure', 'payments']
 
-    logo = '/ui/shop/payments/transfer/images/logo.png'
+    logo = '/ui/backoffice/payments/transfer/images/logo.png'
 
     # Views
     configure = TransferPayment_Configure()

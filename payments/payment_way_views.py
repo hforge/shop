@@ -111,7 +111,7 @@ class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
 class PaymentWay_RecordView(STLView):
 
 
-    template = '/ui/shop/payments/payment_way_record_view.xml'
+    template = '/ui/backoffice/payments/payment_way_record_view.xml'
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value

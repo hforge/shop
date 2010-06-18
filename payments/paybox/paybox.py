@@ -86,7 +86,7 @@ class Paybox(PaymentWay):
     # Views
     class_views = ['configure', 'payments']
 
-    logo = '/ui/shop/payments/paybox/images/logo.png'
+    logo = '/ui/backoffice/payments/paybox/images/logo.png'
     payment_table = PayboxTable
 
     # Views

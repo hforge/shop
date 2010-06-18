@@ -36,7 +36,7 @@ from shop.payments.payment_way_views import PaymentWay_EndView
 
 class TransferPayment_RecordView(STLView):
 
-    template = '/ui/shop/payments/transfer/record_view.xml'
+    template = '/ui/backoffice/payments/transfer/record_view.xml'
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
@@ -51,7 +51,7 @@ class TransferPayment_RecordView(STLView):
 
 class TransferPayment_RecordEdit(STLForm):
 
-    template = '/ui/shop/payments/transfer/record_edit.xml'
+    template = '/ui/backoffice/payments/transfer/record_edit.xml'
 
     schema = {'payment_way': String,
               'id_payment': Integer,
@@ -96,7 +96,7 @@ class TransferPayment_Configure(PaymentWay_Configure):
 class TransferPayment_End(PaymentWay_EndView):
 
     access = "is_authenticated"
-    template = '/ui/shop/payments/transfer/end.xml'
+    template = '/ui/backoffice/payments/transfer/end.xml'
 
     def get_namespace(self, resource, context):
         return merge_dicts(
