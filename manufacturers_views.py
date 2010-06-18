@@ -19,31 +19,17 @@ from operator import itemgetter
 
 # Import from itools
 from itools.gettext import MSG
-from itools.datatypes import Unicode, PathDataType, String
+from itools.datatypes import Unicode, String
 from itools.web import STLView
 from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import AutoForm, XHTMLBody, RTEWidget
-from ikaaro.forms import ImageSelectorWidget, TextWidget
-from ikaaro.resource_views import EditLanguageMenu
+from ikaaro.forms import TextWidget
 from ikaaro.views_new import NewInstance
 
 # Import from here
 from utils import get_skin_template
-
-
-manufacturer_schema = {'title': Unicode(mandatory=True),
-                       'subject': Unicode,
-                       'data': XHTMLBody(mandatory=True),
-                       'photo': PathDataType(mandatory=True)}
-
-manufacturer_widgets = [
-        TextWidget('title', title=MSG(u'Title')),
-        TextWidget('subject', title=MSG(u'Keywords')),
-        ImageSelectorWidget('photo', title=MSG(u'Photo')),
-        RTEWidget('data', title=MSG(u'Data'))]
 
 
 class Manufacturer_Add(NewInstance):
@@ -120,30 +106,3 @@ class Manufacturer_View(STLView):
                 'data': resource.get_property('data'),
                 'photo': resource.get_property('photo'),
                 'products': products}
-
-
-
-class Manufacturer_Edit(AutoForm):
-
-    access = 'is_allowed_to_edit'
-    title = MSG(u'Edit')
-    context_menus = [EditLanguageMenu()]
-
-    schema = manufacturer_schema
-
-    widgets = manufacturer_widgets
-
-
-    def get_value(self, resource, context, name, datatype):
-        language = resource.get_content_language(context)
-        return resource.get_property(name, language=language)
-
-
-    def action(self, resource, context, form):
-        language = resource.get_content_language(context)
-        for key in self.schema.keys():
-            if key != 'photo':
-                resource.set_property(key, form[key], language=language)
-            else:
-                resource.set_property(key, form[key])
-        return context.come_back(messages.MSG_CHANGES_SAVED)

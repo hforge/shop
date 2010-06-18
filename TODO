@@ -1,15 +1,4 @@
 ======================
-Categories
-======================
-
-Un produit devrait avoir une seule catégorie et non
-plusieurs. Cela simplifierais énormément et permettrais
-de supprimer les virtualcategories.
-Souvent on ajouter la catégories "Promotions".
-Cela devrait être pallier par un objet de remontée de produits
-sur un critére donnée
-
-======================
 Shippings / Payments
 ======================
 
@@ -35,3 +24,5 @@ de type XHTMLBody. See:
   http://bugs.hforge.org/show_bug.cgi?id=755
 
 vi lib/python2.6/site-packages/shop/products/declination.py +138
+
+XXX Add EditLanguageMenu on AutomaticEditView

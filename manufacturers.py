@@ -15,16 +15,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
+from itools.datatypes import PathDataType, String
 from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.folder import Folder
+from ikaaro.forms import HTMLBody, ImageSelectorWidget, RTEWidget
 from ikaaro.registry import register_resource_class
+
+# Import from itws
+from itws.views import AutomaticEditView
 
 # Import from shop
 from manufacturers_views import Manufacturer_Add
-from manufacturers_views import manufacturer_schema, Manufacturers_View
-from manufacturers_views import Manufacturer_View, Manufacturer_Edit
+from manufacturers_views import Manufacturers_View
+from manufacturers_views import Manufacturer_View
 from utils import CurrentFolder_AddImage, get_shop
 from datatypes import DynamicEnumerate
 
@@ -45,14 +51,25 @@ class Manufacturer(Folder):
     class_views = ['view', 'edit']
 
     view = Manufacturer_View()
-    edit = Manufacturer_Edit()
+    edit = AutomaticEditView()
     add_image = CurrentFolder_AddImage()
     new_instance = Manufacturer_Add()
 
+    edit_schema = {'data': HTMLBody(mandatory=True, multilingual=True),
+                   'photo': PathDataType(mandatory=True)}
+
+    edit_widgets = [
+            ImageSelectorWidget('photo', title=MSG(u'Photo')),
+            RTEWidget('data', title=MSG(u'Data'))]
+
+
+    # XXX Get links / update_links
 
     @classmethod
     def get_metadata_schema(cls):
-        return manufacturer_schema
+        return merge_dicts(cls.get_metadata_schema(),
+                           data=String,
+                           photo=PathDataType)
 
 
 
@@ -82,6 +99,7 @@ class VirtualManufacturers(Manufacturers):
             return None
         # Build another instance with the same properties
         return Manufacturer(manufacturer.metadata)
+
 
 # Register
 register_resource_class(Manufacturers)
