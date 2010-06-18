@@ -14,25 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from the Standard Library
-from copy import deepcopy
-
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Integer, Unicode
 from itools.gettext import MSG
-from itools.uri import get_reference
-from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import TextWidget, ImageSelectorWidget
 from ikaaro.registry import register_resource_class
-from ikaaro.resource_views import DBResource_AddImage
 
 # Import from itws
-from itws.utils import get_path_and_view
 from itws.repository import register_box
 from itws.repository_views import Box_View
 from itws.views import AutomaticEditView
@@ -58,9 +49,6 @@ class SideBarCrossSellingBox_View(Box_View):
         title = resource.get_property('title')
         namespace = {'title': title,
                      'viewboxes': []}
-        if here.class_id != product_class_id:
-            self.set_view_is_empty(True)
-            return namespace
         if isinstance(context.resource, Category):
             categories = [context.resource]
         elif isinstance(context.resource, shop.product_class):
