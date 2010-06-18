@@ -61,7 +61,7 @@ class ShopUser_Manage(STLView):
     access = 'is_admin'
     title = MSG(u'Manage customer')
 
-    template = '/ui/shop/shop_user_manage.xml'
+    template = '/ui/backoffice/shop_user_manage.xml'
 
     schema = {'name': String}
 
