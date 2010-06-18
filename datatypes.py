@@ -131,6 +131,8 @@ class DatatypeCM_to_INCH(Decimal):
 
     @staticmethod
     def render(value, context):
+        if value is None:
+            return None
         # Get informations
         accept = context.accept_language
         site_root = context.resource.get_site_root()
