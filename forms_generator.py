@@ -24,11 +24,13 @@ from itools.web import get_context
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanCheckBox
 from ikaaro.table import OrderedTable, OrderedTableFile
 
+# Import from itws
+from itws.views import AutomaticEditView
+
 # Import from shop
 from cross_selling_views import AddProduct_View
 from products.models import get_real_datatype, get_default_widget_shop
 from products.enumerate import Datatypes
-from utils_views import AutomaticEditView
 
 
 class ShopForm_Display(AutoForm):

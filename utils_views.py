@@ -15,17 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.core import merge_dicts
-from itools.datatypes import DateTime, Enumerate, Unicode
+from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.uri import get_reference
 from itools.web import BaseForm, ERROR
 from itools.xapian import OrQuery, PhraseQuery, AndQuery
 
 # Import from ikaaro
-from ikaaro import messages
-from ikaaro.forms import timestamp_widget, title_widget
-from ikaaro.resource_views import DBResource_Edit
 from ikaaro.table_views import Table_View
 from ikaaro.views import SearchForm
 
@@ -191,41 +187,3 @@ class RedirectPermanent(BaseForm):
         goto = get_reference(goto)
         goto.query = context.uri.query
         return goto
-
-
-
-
-class AutomaticEditView(DBResource_Edit):
-
-    access = 'is_admin'
-
-    base_schema = {'title': Unicode(multilingual=True),
-                   'timestamp': DateTime(readonly=True, ignore=True)}
-
-    base_widgets = [timestamp_widget,
-                    title_widget]
-
-
-    def get_schema(self, resource, context):
-        return merge_dicts(self.base_schema, resource.edit_schema)
-
-
-    def get_widgets(self, resource, context):
-        return self.base_widgets + resource.edit_widgets
-
-
-    def action(self, resource, context, form):
-        self.check_edit_conflict(resource, context, form)
-        # Check edit conflict
-        if context.edit_conflict:
-            return
-        # Save changes
-        language = resource.get_content_language(context)
-        for key, datatype in self.get_schema(resource, context).items():
-            if getattr(datatype, 'ignore', False) is True:
-                continue
-            elif getattr(datatype, 'multilingual', False) is True:
-                resource.set_property(key, form[key], language=language)
-            else:
-                resource.set_property(key, form[key])
-        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
