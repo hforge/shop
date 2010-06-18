@@ -55,6 +55,8 @@ class Manufacturer(Folder):
     add_image = CurrentFolder_AddImage()
     new_instance = Manufacturer_Add()
 
+    # Edit configuration
+    edit_show_meta = True
     edit_schema = {'data': HTMLBody(mandatory=True, multilingual=True),
                    'photo': PathDataType(mandatory=True)}
 

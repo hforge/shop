@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, PathDataType, String, Integer, Unicode
+from itools.datatypes import Boolean, String, Integer
 from itools.gettext import MSG
 from itools.stl import stl, set_prefix
 from itools.web import STLView, get_context
@@ -24,18 +24,15 @@ from itools.xapian import PhraseQuery, AndQuery, RangeQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro import messages
 from ikaaro.buttons import RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import ImageSelectorWidget, RTEWidget, TextWidget
 from ikaaro.utils import get_base_path_query
-from ikaaro.resource_views import DBResource_Edit
 
 # Import from itws
 from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
-from editable import Editable, Editable_Edit
+from editable import Editable
 from utils import get_skin_template, get_shop
 
 
@@ -277,41 +274,3 @@ class Category_BackofficeView(Folder_BrowseContent):
                 """ % (brain.name, brain.name))
         return Folder_BrowseContent.get_item_value(self,
                  resource, context, item, column)
-
-
-
-
-class Category_Edit(Editable_Edit, DBResource_Edit):
-
-    access = 'is_allowed_to_edit'
-
-    schema = merge_dicts(DBResource_Edit.schema,
-                         Editable_Edit.schema,
-                         breadcrumb_title=Unicode(multilingual=True),
-                         image_category=PathDataType(multilingual=True))
-
-
-    widgets = DBResource_Edit.widgets + [
-        TextWidget('breadcrumb_title', title=MSG(u'Breadcrumb title')),
-        ImageSelectorWidget('image_category',  title=MSG(u'Category image')),
-        RTEWidget('data', title=MSG(u"Description"))]
-
-
-
-    def get_value(self, resource, context, name, datatype):
-        if name == 'data':
-            return Editable_Edit.get_value(self, resource, context, name,
-                                           datatype)
-        return DBResource_Edit.get_value(self, resource, context, name,
-                                         datatype)
-
-
-    def action(self, resource, context, form):
-        DBResource_Edit.action(self, resource, context, form)
-        Editable_Edit.action(self, resource, context, form)
-        # Other
-        lang = resource.get_content_language(context)
-        for key in ['breadcrumb_title', 'image_category']:
-            resource.set_property(key, form[key], lang)
-        # Come back
-        return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')

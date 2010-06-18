@@ -27,12 +27,16 @@ from itools.web import get_context
 from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
+from ikaaro.forms import XHTMLBody, TextWidget, ImageSelectorWidget, RTEWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.registry import get_register_fields
 from ikaaro.utils import get_base_path_query
 
+# Import from itws
+from itws.views import AutomaticEditView
+
 # Import from shop
-from categories_views import Category_View, Category_BackofficeView, Category_Edit
+from categories_views import Category_View, Category_BackofficeView
 from categories_views import Category_Comparator
 from utils import get_shop, ShopFolder
 from editable import Editable
@@ -45,11 +49,22 @@ class Category(Editable, ShopFolder):
     class_id = 'category'
     class_title = MSG(u'Category')
 
+    # Edit configuration
+    edit_show_meta = True
+    edit_schema = {'data': XHTMLBody(multilingual=True),
+                   'breadcrumb_title': Unicode(multilingual=True),
+                   'image_category': PathDataType(multilingual=True)}
+    edit_widgets = [
+        TextWidget('breadcrumb_title', title=MSG(u'Breadcrumb title')),
+        ImageSelectorWidget('image_category',  title=MSG(u'Category image')),
+        RTEWidget('data', title=MSG(u"Description"))]
+
+
     # Views
     view = Category_View()
     browse_content = Products_View()
     view_categories = Category_BackofficeView()
-    edit = Category_Edit()
+    edit = AutomaticEditView()
     new_product = Product_NewProduct()
     comparator = Category_Comparator()
 
