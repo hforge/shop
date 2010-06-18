@@ -68,9 +68,6 @@ class Shop(ShopFolder):
     # Shop configuration
     ####################################
 
-    # Mail
-    mail_template = '/ui/shop/mail.xhtml'
-
     # Reduce string (for product mini-title)
     product_title_word_treshold = 50
     product_title_phrase_treshold= 150
