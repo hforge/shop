@@ -30,7 +30,7 @@ from withdrawal import Withdrawal
 from shippings_views import ShippingsView, shippings_schema
 from shippings_views import Shippings_Configure, Shippings_Details
 from shipping_way import ShippingWay
-from shop.utils import ShopFolder
+from shop.folder import ShopFolder
 
 
 

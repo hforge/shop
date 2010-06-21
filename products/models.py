@@ -40,8 +40,8 @@ from models_views import ProductModel_Configure
 from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
+from shop.folder import ShopFolder
 from shop.forms import ProductSelectorWidget
-from shop.utils import ShopFolder
 
 
 real_datatypes = {'string': String,

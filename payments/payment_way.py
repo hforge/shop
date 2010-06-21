@@ -23,15 +23,14 @@ from itools.gettext import MSG
 from itools.i18n import format_datetime
 
 # Import from ikaaro
-from ikaaro.forms import TextWidget, BooleanCheckBox
+from ikaaro.forms import TextWidget, BooleanCheckBox, XHTMLBody
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
 from payment_way_views import PaymentWay_RecordView
-from shop.editable import Editable
+from shop.folder import ShopFolder
 from shop.user_group import UserGroup_Enumerate
-from shop.utils import ShopFolder
 
 
 class PaymentWayBaseTable(BaseTable):
@@ -90,7 +89,7 @@ class PaymentWayTable(Table):
         return namespace
 
 
-class PaymentWay(Editable, ShopFolder):
+class PaymentWay(ShopFolder):
 
     class_id = 'payment_way'
 
@@ -104,7 +103,7 @@ class PaymentWay(Editable, ShopFolder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
-                           Editable.get_metadata_schema(),
+                           data=XHTMLBody(multilingual=True),
                            title=Unicode(multilingual=True),
                            enabled=Boolean(default=True),
                            only_this_groups=UserGroup_Enumerate(multiple=True),
@@ -122,7 +121,7 @@ class PaymentWay(Editable, ShopFolder):
 
 
     def _get_catalog_values(self):
-        # XXX We do not index data from Editable
+        # XXX We do not index data from data
         return ShopFolder._get_catalog_values(self)
 
 
@@ -155,7 +154,7 @@ class PaymentWay(Editable, ShopFolder):
 
     def get_payment_way_description(self, context, total_amount):
         """ Overridable: for example to add available points... """
-        return self.get_xhtml_data()
+        return self.get_property('data')
 
 
     def is_enabled(self, context):

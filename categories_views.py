@@ -18,7 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Integer
 from itools.gettext import MSG
-from itools.stl import stl, set_prefix
+from itools.stl import stl
 from itools.web import STLView, get_context
 from itools.xapian import PhraseQuery, AndQuery, RangeQuery
 from itools.xml import XMLParser
@@ -32,7 +32,6 @@ from ikaaro.utils import get_base_path_query
 from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
-from editable import Editable
 from utils import get_skin_template, get_shop
 
 
@@ -51,7 +50,6 @@ class Category_View(BrowseFormBatchNumeric):
 
     def get_namespace(self, resource, context):
         shop = get_shop(resource)
-        real_category = resource.get_real_resource()
         batch = None
         # Batch
         items = self.get_items(resource, context)
@@ -78,11 +76,7 @@ class Category_View(BrowseFormBatchNumeric):
                                           'abspath': str(item_resource.get_abspath()),
                                           'box': viewbox.GET(item_resource, context)})
         # Categorie description (not for categories folder)
-        if isinstance(resource, Editable):
-            real_category = resource.get_real_resource()
-            prefix = '%s/' % resource.get_pathto(real_category)
-            namespace['description'] = set_prefix(resource.get_xhtml_data(),
-                                                  prefix)
+        namespace['description'] = resource.get_property('data')
         return namespace
 
 

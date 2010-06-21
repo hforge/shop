@@ -24,14 +24,14 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate, DateTime
 from itools.datatypes import Integer
 from itools.gettext import MSG
-from itools.uri import resolve_uri2, Path
+from itools.uri import resolve_uri2
 from itools.web import get_context
-from itools.xml import TEXT
+from itools.xml import TEXT, xml_to_text
 
 # Import from ikaaro
 from ikaaro.file import Image
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import SelectWidget
+from ikaaro.forms import SelectWidget, XHTMLBody
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.utils import reduce_string
 from ikaaro.workflow import WorkflowAware
@@ -55,14 +55,14 @@ from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
 from shop.cross_selling import CrossSellingTable
-from shop.editable import Editable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
+from shop.folder import ShopFolder
 from shop.manufacturers import ManufacturersEnumerate
 from shop.modules import ModuleLoader
 from shop.shop_views import Shop_Login, Shop_Register
 from shop.stock.stock_views import Stock_FillStockOut, Stock_Resupply
-from shop.utils import get_shop, format_price, ShopFolder, generate_barcode
+from shop.utils import get_shop, format_price, generate_barcode
 
 
 mail_stock_subject_template = MSG(u'Product out of stock')
@@ -73,12 +73,12 @@ The product {product_title} is out of stock\n
 """)
 
 
-class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
+class Product(WorkflowAware, TagsAware, DynamicFolder):
 
     class_id = 'product'
     class_title = MSG(u'Product')
     class_description = MSG(u'A product')
-    class_version = '20100429'
+    class_version = '20100621'
 
     ##################
     # Configuration
@@ -120,9 +120,9 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(DynamicFolder.get_metadata_schema(),
-                           Editable.get_metadata_schema(),
                            WorkflowAware.get_metadata_schema(),
-                           product_schema)
+                           product_schema,
+                           data=XHTMLBody(multilingual=True))
 
 
     @staticmethod
@@ -147,8 +147,12 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
 
     def _get_catalog_values(self):
         values = merge_dicts(DynamicFolder._get_catalog_values(self),
-                             TagsAware._get_catalog_values(self),
-                             Editable._get_catalog_values(self))
+                             TagsAware._get_catalog_values(self))
+        # Data
+        data = self.get_property('data')
+        if data is not None:
+            data = xml_to_text(data)
+        values['data'] = data
         # Reference
         values['reference'] = self.get_property('reference')
         # Manufacturer
@@ -156,7 +160,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         # Supplier
         values['supplier'] = self.get_property('supplier')
         # Product models
-        values['product_model'] = self.get_property('product_model')
+        values['product_model'] = str(self.get_property('product_model'))
         # Images
         order = self.get_resource('order-photos')
         ordered_names = list(order.get_ordered_names())
@@ -185,8 +189,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         product_model = self.get_property('product_model')
         if not product_model:
             return None
-        shop = get_shop(self)
-        return shop.get_resource('products-models/%s' % product_model)
+        return self.get_resource(product_model)
 
 
     def to_text(self):
@@ -205,7 +208,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
                     texts.append(value)
 
             # data (html)
-            events = self.get_xhtml_data(language=language)
+            events = self.get_property('data', language=language)
             text = [ unicode(value, 'utf-8') for event, value, line in events
                      if event == TEXT ]
             if text:
@@ -252,14 +255,6 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         cover = self.get_property('cover')
         link = '%s/%s' % (context.get_link(self), cover)
         return '%s/;thumb?width=%s&amp;height=%s' % (link, size, size)
-
-    ####################################################
-    # Get canonical /virtual paths.
-    ####################################################
-
-# XXX
-#    def get_canonical_path(self):
-#    def get_virtual_path(self):
 
 
     ##################################################
@@ -377,7 +372,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
     def get_available_languages(self, languages):
         available_langs = []
         for language in languages:
-            events = self.get_xhtml_data(language=language)
+            events = self.get_property('data', language=language)
             title = self.get_property('title', language=language)
             if is_empty(events) is False and len(title.strip()):
                 available_langs.append(language)
@@ -495,7 +490,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         else:
             namespace['manufacturer'] = None
         # Data
-        namespace['data'] = self.get_xhtml_data()
+        namespace['data'] = self.get_property('data')
         # Specific product informations
         model = self.get_product_model()
         if model:
@@ -726,107 +721,6 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         Image.make_resource(Image, self, 'barcode', body=barcode, **metadata)
 
 
-    #########################################
-    # Update links mechanism
-    #-------------------------
-    #
-    # If a user rename a category we have
-    # to update categories associated to products
-    #
-    #########################################
-
-    def get_links(self):
-        links = Editable.get_links(self)
-        links += DynamicFolder.get_links(self)
-        site_root = self.get_site_root()
-        shop = site_root.get_resource('shop')
-        # product model
-        product_model = self.get_property('product_model')
-        if product_model:
-            shop_path = shop.get_abspath()
-            full_path = shop_path.resolve2('products-models/%s' % product_model)
-            links.append(str(full_path))
-        # Cover
-        cover = self.get_property('cover')
-        if cover:
-            base = self.get_canonical_path()
-            links.append(str(base.resolve2(cover)))
-        # Tags
-        tags_base = site_root.get_abspath().resolve2('tags')
-        links.extend([str(tags_base.resolve2(tag))
-                      for tag in self.get_property('tags')])
-        # Manufacturer
-        manufacturer = self.get_property('manufacturer')
-        if manufacturer:
-            links.append(manufacturer)
-
-        return links
-
-
-    def update_links(self, source, target):
-        Editable.update_links(self, source, target)
-        DynamicFolder.update_links(self, source, target)
-
-        # Cover
-        cover = self.get_property('cover')
-        if cover:
-            base = self.get_canonical_path()
-            resources_new2old = get_context().database.resources_new2old
-            base = str(base)
-            old_base = resources_new2old.get(base, base)
-            old_base = Path(old_base)
-            new_base = Path(base)
-            if str(old_base.resolve2(cover)) == source:
-                # Hit the old name
-                new_path = new_base.get_pathto(Path(target))
-                self.set_property('cover', str(new_path))
-
-        # Tags
-        site_root = self.get_site_root()
-        source_path = Path(source)
-        tags_base = site_root.get_abspath().resolve2('tags')
-        if tags_base.get_prefix(source_path) == tags_base:
-            tags = list(self.get_property('tags'))
-            source_name = source_path.get_name()
-            target_name = Path(new_path).get_name()
-            for tag in tags:
-                if tag == source_name:
-                    # Hit
-                    index = tags.index(source_name)
-                    tags[index] = target_name
-                    self.set_property('tags', tags)
-
-        # Manufacturer
-        manufacturer = self.get_property('manufacturer')
-        if manufacturer and manufacturer == source:
-            self.set_property('manufacturer', str(target))
-
-        get_context().database.change_resource(self)
-
-
-    def update_relative_links(self, source):
-        Editable.update_relative_links(self, source)
-        DynamicFolder.update_relative_links(self, source)
-
-        target = self.get_canonical_path()
-        resources_old2new = get_context().database.resources_old2new
-
-        # Cover
-        cover = self.get_property('cover')
-        if cover:
-            # Calcul the old absolute path
-            old_abs_path = source.resolve2(cover)
-            # Check if the target path has not been moved
-            new_abs_path = resources_old2new.get(old_abs_path,
-                                                 old_abs_path)
-            # Build the new reference with the right path
-            # Absolute path allow to call get_pathto with the target
-            new_path = str(target.get_pathto(new_abs_path))
-            # Update the title link
-            self.set_property('cover', str(new_path))
-
-        # Manufacturer and categories (not needed, due to abspath)
-
     #######################
     ## Class views
     #######################
@@ -854,6 +748,20 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
     default_class_views = ['declinations', 'images',
                    'order', 'edit_cross_selling', 'delete_product', 'commit_log']
     class_views = property(get_class_views, None, None, '')
+
+
+    def get_links(self):
+        return DynamicFolder.get_links(self)
+
+
+    def update_links(self, source, target):
+        return DynamicFolder.update_links(self, source, target)
+
+
+    def update_relative_links(self, source):
+        return DynamicFolder.update_relative_links(self, source)
+
+
     #######################
     ## Updates methods
     #######################
@@ -956,6 +864,16 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
         self.set_property('stock-handled', True)
 
 
+    def update_20100621(self):
+        # Now product_model is a PathDatatype (Abspath)
+        product_model = self.get_property('product_model')
+        shop = get_shop(self)
+        model = shop.get_resource('products-models/%s' % product_model)
+        self.set_property('product_model', model.get_abspath(), with_dynamic=False)
+
+
+
+
 class Products(ShopFolder):
 
     class_id = 'products'
@@ -1001,8 +919,6 @@ class Products(ShopFolder):
             print '=================='
 
 
-
-
 # Product class depents on CrossSellingTable class and vice versa
 CrossSellingTable.orderable_classes = Product
 
@@ -1015,6 +931,7 @@ register_field('has_images', Boolean(is_indexed=True, is_stored=True))
 register_field('has_reduction', Boolean(is_indexed=True))
 register_field('is_buyable', Boolean(is_indexed=True))
 register_field('ctime', DateTime(is_stored=True, is_indexed=True))
+register_field('data', Unicode(is_indexed=True))
 # XXX xapian can't sort decimal
 register_field('stored_price', Integer(is_indexed=False, is_stored=True))
 

@@ -16,12 +16,12 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import PathDataType, String
+from itools.datatypes import PathDataType
 from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.folder import Folder
-from ikaaro.forms import HTMLBody, ImageSelectorWidget, RTEWidget
+from ikaaro.forms import XHTMLBody, ImageSelectorWidget, RTEWidget
 from ikaaro.registry import register_resource_class
 
 # Import from itws
@@ -57,7 +57,7 @@ class Manufacturer(Folder):
 
     # Edit configuration
     edit_show_meta = True
-    edit_schema = {'data': HTMLBody(mandatory=True, multilingual=True),
+    edit_schema = {'data': XHTMLBody(mandatory=True, multilingual=True),
                    'photo': PathDataType(mandatory=True)}
 
     edit_widgets = [
@@ -65,12 +65,10 @@ class Manufacturer(Folder):
             RTEWidget('data', title=MSG(u'Data'))]
 
 
-    # XXX Get links / update_links
-
     @classmethod
     def get_metadata_schema(cls):
-        return merge_dicts(cls.get_metadata_schema(),
-                           data=String,
+        return merge_dicts(Folder.get_metadata_schema(),
+                           data=XHTMLBody,
                            photo=PathDataType)
 
 

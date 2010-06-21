@@ -25,7 +25,8 @@ from ikaaro.registry import register_field
 
 # Import from shop
 from modules_views import Modules_View, ShopModule_Edit
-from shop.utils import ShopFolder, get_shop
+from shop.folder import ShopFolder
+from shop.utils import get_shop
 
 
 class ShopModule(ShopFolder):

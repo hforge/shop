@@ -19,7 +19,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import DateTime, Decimal, Unicode, Boolean
-from itools.datatypes import String, Integer, Tokens
+from itools.datatypes import String, Integer, Tokens, PathDataType
 
 # Import from shop
 from enumerate import States, StockOptions
@@ -40,18 +40,18 @@ product_schema = {# General informations
                   # XXX
                   #'categories': String(multiple=True),
                   'reference': String,
-                  'product_model': String,
+                  'product_model': PathDataType,
                   'title': Unicode(multilingual=True),
                   'description': Unicode(multilingual=True),
                   'tags': Tokens,
                   'subject': Unicode(multilingual=True),
-                  'cover': ImagePathDataType(mandatory=True),
+                  'cover': ImagePathDataType(mandatory=True), # XXX PAthDatatype
                   # Shippings
                   'weight': Decimal(default=decimal(0), mandatory=True),
                   'use_this_shipping_way': ShippingsWaysEnumerate,
                   # Manufacturer / supplier
-                  'manufacturer': ManufacturersEnumerate,
-                  'supplier': SuppliersEnumerate(multiple=True),
+                  'manufacturer': ManufacturersEnumerate, # XXX PathDatatype
+                  'supplier': SuppliersEnumerate(multiple=True),  # PathDatatype
                   # Manage stock
                   'stock-handled': Boolean(mandatory=True),
                   'stock-quantity': Integer(default=0, mandatory=True),

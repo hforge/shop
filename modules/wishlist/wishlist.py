@@ -27,7 +27,8 @@ from ikaaro.forms import XHTMLBody
 from ikaaro.registry import register_resource_class
 
 # Import from shop
-from shop.utils import ShopFolder, CurrentFolder_AddImage
+from shop.folder import ShopFolder
+from shop.utils import CurrentFolder_AddImage
 
 # Import from module
 from wishlist_views import WishList_NewInstance

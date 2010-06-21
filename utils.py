@@ -24,11 +24,7 @@ from itools.datatypes import Enumerate
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.folder import Folder
-from ikaaro.folder_views import Folder_Orphans, Folder_BrowseContent
-from ikaaro.folder_views import Folder_PreviewContent
-from ikaaro.revisions_views import DBResource_CommitLog
-from ikaaro.resource_views import DBResource_AddImage, DBResource_Backlinks
+from ikaaro.resource_views import DBResource_AddImage
 
 
 def bool_to_img(value):
@@ -134,17 +130,6 @@ def get_skin_template(context, path1, path2=None):
         prefix = '/ui/shop'
         return resource.get_resource('%s/%s' % (prefix, path1))
     return template
-
-
-class ShopFolder(Folder):
-    """Guest user cannot access to some views of ShopFolder
-    """
-    browse_content = Folder_BrowseContent(access='is_allowed_to_edit')
-    preview_content = Folder_PreviewContent(access='is_allowed_to_edit')
-    orphans = Folder_Orphans(access='is_allowed_to_edit')
-    commit_log = DBResource_CommitLog(access='is_allowed_to_edit')
-    backlinks = DBResource_Backlinks(access='is_allowed_to_edit')
-
 
 
 class CurrentFolder_AddImage(DBResource_AddImage):

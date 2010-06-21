@@ -15,16 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from the Standard Library
-from copy import deepcopy
-
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import PathDataType, Unicode
 from itools.gettext import MSG
-from itools.uri import Path, get_reference
 from itools.web import get_context
 from itools.xapian import AndQuery, PhraseQuery
+from itools.xml import xml_to_text
 
 # Import from ikaaro
 from ikaaro.forms import XHTMLBody, TextWidget, ImageSelectorWidget, RTEWidget
@@ -38,13 +35,13 @@ from itws.views import AutomaticEditView
 # Import from shop
 from categories_views import Category_View, Category_BackofficeView
 from categories_views import Category_Comparator
-from utils import get_shop, ShopFolder
-from editable import Editable
+from folder import ShopFolder
+from utils import get_shop
 from products import Product
 from products.product_views import Product_NewProduct, Products_View
 
 
-class Category(Editable, ShopFolder):
+class Category(ShopFolder):
 
     class_id = 'category'
     class_title = MSG(u'Category')
@@ -71,7 +68,7 @@ class Category(Editable, ShopFolder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
-                           Editable.get_metadata_schema(),
+                           data=XHTMLBody(multilingual=True),
                            breadcrumb_title=Unicode(multilingual=True),
                            image_category=PathDataType(multilingual=True))
 
@@ -91,9 +88,12 @@ class Category(Editable, ShopFolder):
             value = self.get_property('breadcrumb_title', language=language)
             if value:
                 m_breadcrumb_title[language] = value
-
+        # Data
+        data = self.get_property('data')
+        if data is not None:
+            data = xml_to_text(data)
         return merge_dicts(ShopFolder._get_catalog_values(self),
-                           Editable._get_catalog_values(self),
+                           data=data,
                            # XXX Hack to be on sitemap
                            workflow_state='public',
                            m_title=m_title,
@@ -129,72 +129,6 @@ class Category(Editable, ShopFolder):
             PhraseQuery('format', shop.category_class.class_id))
         return len(root.search(query))
 
-
-    def get_links(self):
-        # Use the canonical path instead of the abspath
-        # Warning multilingual property
-        site_root = self.get_site_root()
-        base = self.get_canonical_path()
-        links = []
-        available_languages = site_root.get_property('website_languages')
-        for lang in available_languages:
-            path = self.get_property('image_category', language=lang)
-            if path:
-                links.append(str(base.resolve2(path)))
-        return links
-
-
-
-    def update_links(self,  source, target):
-        # Use the canonical path instead of the abspath
-        # Warning multilingual property
-        site_root = self.get_site_root()
-        base = self.get_canonical_path()
-        base = str(base)
-        resources_new2old = get_context().database.resources_new2old
-        old_base = resources_new2old.get(base, base)
-        old_base = Path(old_base)
-        new_base = Path(base)
-
-        available_languages = site_root.get_property('website_languages')
-        for lang in available_languages:
-            path = self.get_property('image_category', language=lang)
-            if not path:
-                continue
-            path = old_base.resolve2(path)
-            if str(path) == source:
-                # Hit the old name
-                new_path = new_base.get_pathto(target)
-                self.set_property('image_category', str(new_path),
-                                  language=lang)
-
-        get_context().server.change_resource(self)
-
-
-    def update_relative_links(self, source):
-        site_root = self.get_site_root()
-        available_languages = site_root.get_property('website_languages')
-
-        target = self.get_canonical_path()
-        resources_old2new = get_context().database.resources_old2new
-
-        for lang in available_languages:
-            path = self.get_property('image_category', language=lang)
-            if not path:
-                continue
-            ref = get_reference(path)
-            if ref.scheme:
-                continue
-            path = ref.path
-            # Calcul the old absolute path
-            old_abs_path = source.resolve2(path)
-            # Check if the target path has not been moved
-            new_abs_path = resources_old2new.get(old_abs_path, old_abs_path)
-            # Build the new reference with the right path
-            # Absolute path allow to call get_pathto with the target
-            new_ref = deepcopy(ref)
-            new_ref.path = target.get_pathto(new_abs_path)
-            self.set_property('image_category', str(new_ref), language=lang)
 
     #####################################
     ## XXX Hack to change class_views

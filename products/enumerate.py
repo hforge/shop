@@ -35,7 +35,7 @@ class ProductModelsEnumerate(Enumerate):
         context = get_context()
         shop = get_shop(context.resource)
         models = shop.get_resource('products-models')
-        options = [{'name': res.name,
+        options = [{'name': res.get_abspath(),
                     'value': res.get_property('title')}
                            for res in models.get_resources()]
         options.insert(0, {'name': '', 'value': MSG(u'Standard Model')})

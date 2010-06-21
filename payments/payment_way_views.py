@@ -24,11 +24,10 @@ from itools.xapian import AndQuery, PhraseQuery
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.resource_views import DBResource_Edit
-from ikaaro.forms import HTMLBody, ImageSelectorWidget, TextWidget, RTEWidget
+from ikaaro.forms import XHTMLBody, ImageSelectorWidget, TextWidget, RTEWidget
 from ikaaro.forms import BooleanRadio, SelectWidget
 
 # Import from shop
-from shop.editable import Editable_Edit
 from shop.user_group import UserGroup_Enumerate
 
 
@@ -64,16 +63,15 @@ class PaymentWay_EndView(STLView):
 
 
 
-class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
+class PaymentWay_Configure(DBResource_Edit):
 
     access = 'is_admin'
 
-    schema = merge_dicts(Editable_Edit.schema,
-                         title=Unicode(mandatory=True, multilingual=True),
-                         logo=PathDataType(mandatory=True, multilingual=True),
-                         data=HTMLBody(mandatory=True, multilingual=True),
-                         only_this_groups=UserGroup_Enumerate(multiple=True),
-                         enabled=Boolean(mandatory=True))
+    schema = {'title': Unicode(mandatory=True, multilingual=True),
+              'logo': PathDataType(mandatory=True, multilingual=True),
+              'data': XHTMLBody(mandatory=True, multilingual=True),
+              'only_this_groups': UserGroup_Enumerate(multiple=True),
+              'enabled': Boolean(mandatory=True)}
 
 
     widgets = [
@@ -87,9 +85,6 @@ class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
     submit_value = MSG(u'Edit configuration')
 
     def get_value(self, resource, context, name, datatype):
-        if name == 'data':
-            return Editable_Edit.get_value(self, resource, context, name,
-                                           datatype)
         language = resource.get_content_language(context)
         return resource.get_property(name, language=language)
 
@@ -97,13 +92,10 @@ class PaymentWay_Configure(Editable_Edit, DBResource_Edit):
     def action(self, resource, context, form):
         language = resource.get_content_language(context)
         for key, datatype in self.schema.items():
-            if key in ('data'):
-                continue
             if getattr(datatype, 'multilingual', False):
                 resource.set_property(key, form[key], language=language)
             else:
                 resource.set_property(key, form[key])
-        Editable_Edit.action(self, resource, context, form)
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
 
 

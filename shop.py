@@ -31,6 +31,7 @@ from cross_selling import CrossSellingTable
 from datatypes import ImagePathDataType
 from editorial import Shop_EditorialView
 from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
+from folder import ShopFolder
 from manufacturers import Manufacturers, Manufacturer
 from modules import Modules
 from orders import Orders
@@ -47,7 +48,6 @@ from shop_views import Shop_Administration
 from suppliers import Suppliers, Supplier
 from user import ShopUser, Customers
 from user_group import ShopUser_Groups
-from utils import ShopFolder
 
 
 class Shop(ShopFolder):

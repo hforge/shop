@@ -34,7 +34,7 @@ from ikaaro.table import OrderedTableFile
 # Import from shop
 from images_views import PhotoOrderedTable_View, PhotoOrderedTable_AddRecord
 from images_views import PhotoOrderedTable_EditRecord
-from shop.utils import ShopFolder
+from shop.folder import ShopFolder
 
 
 

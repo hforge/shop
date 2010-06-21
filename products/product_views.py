@@ -35,6 +35,7 @@ from ikaaro.buttons import PublishButton, RetireButton
 from ikaaro.exceptions import ConsistencyError
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
+from ikaaro.forms import XHTMLBody, RTEWidget
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
 from ikaaro.utils import get_base_path_query
 from ikaaro.views import CompositeForm, ContextMenu
@@ -54,7 +55,6 @@ from widgets import BarcodeWidget, MiniProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from widgets import StockWidget
 from shop.cart import ProductCart
-from shop.editable import Editable_View, Editable_Edit
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
 from shop.utils import get_non_empty_widgets, get_shop, get_skin_template
@@ -132,7 +132,7 @@ class Product_NewProduct(NewInstance):
 
 
 
-class Product_View(Editable_View, STLForm):
+class Product_View(STLForm):
 
     access = 'is_allowed_to_view'
     title = MSG(u'View')
@@ -208,7 +208,7 @@ class Product_Edit_Right_Panel(ContextMenu):
 
 
 
-class Product_Edit(Editable_Edit, AutoForm):
+class Product_Edit(AutoForm):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'Edit')
@@ -243,6 +243,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         BooleanRadio('is_buyable', title=MSG(u'Buyable by customer ?')),
         TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),
         PriceWidget('pre-tax-price', title=MSG(u'Selling price')),
+        RTEWidget('data', title=MSG(u"Product description"))
         ]
 
 
@@ -257,8 +258,6 @@ class Product_Edit(Editable_Edit, AutoForm):
                                  title=MSG(u'PRO Selling price'),
                                  prefix='pro')
             widgets.append(widget)
-        # Editble widgets
-        widgets.extend(Editable_Edit.widgets)
         # Product model
         if product_model:
             widgets.extend(product_model.get_model_widgets())
@@ -270,19 +269,17 @@ class Product_Edit(Editable_Edit, AutoForm):
     def get_schema(self, resource, context):
         product_model = resource.get_product_model()
         site_root = resource.get_site_root()
-        return merge_dicts(Editable_Edit.schema,
+        return merge_dicts(
                   product_schema,
                   (product_model.get_model_schema() if product_model else {}),
+                  data=XHTMLBody(multilingual=True),
                   category=CategoriesEnumerate,
                   tags=TagsList(site_root=site_root, multiple=True))
 
 
 
     def get_value(self, resource, context, name, datatype):
-        if name == 'data':
-            return Editable_Edit.get_value(self, resource, context, name,
-                                           datatype)
-        elif name == 'tags':
+        if name == 'tags':
             # XXX tuple -> list (enumerate.get_namespace expects list)
             return list(resource.get_property('tags'))
         elif name == 'category':
@@ -304,7 +301,7 @@ class Product_Edit(Editable_Edit, AutoForm):
         # Save properties
         language = resource.get_content_language(context)
         for key, datatype in self.get_schema(resource, context).iteritems():
-            if key in ('data', 'ctime', 'category'):
+            if key in ('ctime', 'category'):
                 continue
             elif issubclass(datatype, Unicode):
                 resource.set_property(key, form[key], language)
@@ -312,7 +309,6 @@ class Product_Edit(Editable_Edit, AutoForm):
                 resource.set_property(key, form[key], language)
             else:
                 resource.set_property(key, form[key])
-        Editable_Edit.action(self, resource, context, form)
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED, goto=goto)
 

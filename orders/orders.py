@@ -47,7 +47,8 @@ from orders_views import Order_Manage, OrdersViewSent, OrdersViewWaitingPayment
 from orders_views import OrdersView, OrdersViewCanceled, OrdersViewArchive
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
-from shop.utils import format_price, ShopFolder, format_for_pdf
+from shop.folder import ShopFolder
+from shop.utils import format_price, format_for_pdf
 
 
 #############################################

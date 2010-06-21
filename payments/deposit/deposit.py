@@ -69,7 +69,7 @@ class Deposit(PaymentWay):
         msg = msg.gettext(percent=percent,
                           original_amount=format_price(total_amount),
                           amount=format_price(amount))
-        return list(XMLParser(msg.encode('utf-8'))) + self.get_xhtml_data()
+        return list(XMLParser(msg.encode('utf-8'))) + self.get_property('data')
 
 
 

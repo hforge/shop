@@ -30,7 +30,7 @@ from payments_views import Payments_ManagePayment, Payments_AddPayment
 
 # Import from shop
 from payment_way import PaymentWay
-from shop.utils import ShopFolder
+from shop.folder import ShopFolder
 from registry import payment_ways_registry
 
 

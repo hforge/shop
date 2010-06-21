@@ -27,7 +27,7 @@ from ikaaro.registry import register_field
 
 # Import from Shop
 from shop.enumerate_table import EnumerateTable_to_Enumerate
-from shop.utils import ShopFolder
+from shop.folder import ShopFolder
 
 
 class DynamicProperty(dict):
@@ -72,7 +72,7 @@ class DynamicFolder(ShopFolder):
         return value, language
 
 
-    def set_property(self, name, value, language=None):
+    def set_property(self, name, value, language=None, with_dynamic=True):
         """Added to handle dynamic properties.
         The value is encoded because metadata won't know about its datatype.
         The multilingual status must be detected to give or not the
@@ -80,27 +80,28 @@ class DynamicFolder(ShopFolder):
         """
 
         # Dynamic property?
-        dynamic_schema = self.get_dynamic_schema()
-        if name in dynamic_schema:
-            datatype = dynamic_schema[name]
-            if getattr(datatype, 'multiple', False):
+        if with_dynamic is True:
+            dynamic_schema = self.get_dynamic_schema()
+            if name in dynamic_schema:
+                datatype = dynamic_schema[name]
+                if getattr(datatype, 'multiple', False):
+                    return ShopFolder.set_property(self, name,
+                                                   Tokens.encode(value))
+                elif getattr(datatype, 'multilingual', False):
+                    # If the value equals the default value
+                    # set the property to None (String's default value)
+                    # to avoid problems during the language negociation
+                    if value == datatype.get_default():
+                        # XXX Should not be hardcoded
+                        # Default value for String datatype is None
+                        value = None
+                    else:
+                        value = datatype.encode(value)
+                    return ShopFolder.set_property(self, name, value, language)
+                # Even if the language was not None, this property is not
+                # multilingual so ignore it.
                 return ShopFolder.set_property(self, name,
-                                               Tokens.encode(value))
-            elif getattr(datatype, 'multilingual', False):
-                # If the value equals the default value
-                # set the property to None (String's default value)
-                # to avoid problems during the language negociation
-                if value == datatype.get_default():
-                    # XXX Should not be hardcoded
-                    # Default value for String datatype is None
-                    value = None
-                else:
-                    value = datatype.encode(value)
-                return ShopFolder.set_property(self, name, value, language)
-            # Even if the language was not None, this property is not
-            # multilingual so ignore it.
-            return ShopFolder.set_property(self, name,
-                                           datatype.encode(value))
+                                               datatype.encode(value))
 
         # Standard property
         schema = self.get_metadata_schema()

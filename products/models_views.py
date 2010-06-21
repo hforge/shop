@@ -82,7 +82,7 @@ class ProductModelSchema_View(OrderedTable_View):
         # Search products
         root = context.root
         site_root = context.resource.get_site_root()
-        product_model = resource.parent.name
+        product_model = resource.parent.get_abspath()
         abspath = site_root.get_canonical_path()
         query = AndQuery(get_base_path_query(str(abspath)),
                          PhraseQuery('product_model', product_model))

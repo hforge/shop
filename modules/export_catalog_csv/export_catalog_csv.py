@@ -21,7 +21,8 @@ from itools.uri import get_reference
 from itools.web import BaseView
 
 # Import from shop
-from shop.utils import ShopFolder, get_shop
+from shop.folder import ShopFolder
+from shop.utils import get_shop
 
 
 class ShopModule_ExportCatalogCSV_View(BaseView):

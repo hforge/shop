@@ -22,7 +22,7 @@ from itools.gettext import MSG
 from itools.web import BaseView, ERROR
 
 # Import from shop
-from shop.utils import ShopFolder
+from shop.folder import ShopFolder
 
 # Import from lpod
 lpod_is_install = True

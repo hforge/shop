@@ -24,7 +24,8 @@ from ikaaro.forms import TextWidget
 from ikaaro.webpage import WebPage
 
 # Import from shop
-from utils import get_shop, ShopFolder
+from folder import ShopFolder
+from utils import get_shop
 
 
 class ShopUser_Groups(ShopFolder):
