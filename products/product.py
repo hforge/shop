@@ -852,7 +852,7 @@ class Product(WorkflowAware, Editable, TagsAware, DynamicFolder):
                 return view_name
 
     default_class_views = ['declinations', 'images',
-                   'order', 'edit_cross_selling', 'delete_product']
+                   'order', 'edit_cross_selling', 'delete_product', 'commit_log']
     class_views = property(get_class_views, None, None, '')
     #######################
     ## Updates methods
