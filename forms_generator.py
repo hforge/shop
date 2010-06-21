@@ -32,17 +32,21 @@ from itws.views import AutomaticEditView
 
 # Import from shop
 from cross_selling_views import AddProduct_View
+from forms import ProductSelectorWidget
 from products.models import get_real_datatype
 from products.enumerate import Datatypes
+
 
 class Widgets(Enumerate):
 
     widgets = {'select': SelectWidget,
                'multiline-widget': MultilineWidget,
+               'product-widget': ProductSelectorWidget,
                'text-widget': TextWidget}
 
     options = [{'name': 'select', 'value': MSG(u'Select Widget')},
                {'name': 'multiline-widget', 'value': MSG(u'Multiline Widget')},
+               {'name': 'product-widget', 'value': MSG(u'Product Widget')},
                {'name': 'text-widget', 'value': MSG(u'Text Widget')}]
 
 
@@ -120,8 +124,8 @@ class ShopForm_Display(AutoForm):
         text = []
         for widget in widgets:
             title = widget.title
-            text.append('*%s* \n %s' % (title, form[widget.name]))
-        text = '\n\n'.join(text)
+            text.append('*%s* \n\n %s' % (title, form[widget.name]))
+        text = '\n\n\n'.join(text)
         root.send_email(to_addr, subject, text=text, subject_with_host=False)
         return resource.get_property('final_message')
 
@@ -145,7 +149,7 @@ class ShopForm(OrderedTable):
     class_title = MSG(u'Shop form')
     class_version = '20090609'
     class_handler = ShopFormTable
-    class_views = ['display', 'edit', 'view', 'add_record'] #XXX We hide for instant
+    class_views = ['display', 'edit'] # 'view', 'add_record'] #XXX We hide for instant
 
     display = ShopForm_Display()
     view = OrderedTable_View(search_template=None)

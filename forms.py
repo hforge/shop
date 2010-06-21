@@ -66,7 +66,7 @@ class ProductSelectorWidget(Widget):
 
     template = list(XMLParser(
         """
-          <span stl:if="not viewbox">
+          <span stl:omit-tag="not viewbox" style="display:none">
             ${widget}
           </span>
           ${viewbox}
@@ -80,12 +80,11 @@ class ProductSelectorWidget(Widget):
         shop = get_shop(context.resource)
         product = context.resource.get_resource(value, soft=True)
         product_class = shop.product_class
+        widget = PathSelectorWidget(self.name,
+                    action=self.action).to_html(datatype, value)
         if product is None or not isinstance(product, product_class):
-            widget = PathSelectorWidget(self.name,
-                        action=self.action).to_html(datatype, value)
             viewbox = None
         else:
-            widget = None
             viewbox = product_class.viewbox.GET(product, context)
         return {'widget': widget,
                 'value': value,
