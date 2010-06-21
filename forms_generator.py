@@ -16,21 +16,34 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Unicode, Boolean, String
+from itools.datatypes import Email, Enumerate, Unicode, Boolean, String
 from itools.gettext import MSG
 from itools.web import get_context
+from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanCheckBox
+from ikaaro.forms import MultilineWidget, RTEWidget, XHTMLBody
 from ikaaro.table import OrderedTable, OrderedTableFile
+from ikaaro.table_views import OrderedTable_View
 
 # Import from itws
 from itws.views import AutomaticEditView
 
 # Import from shop
 from cross_selling_views import AddProduct_View
-from products.models import get_real_datatype, get_default_widget_shop
+from products.models import get_real_datatype
 from products.enumerate import Datatypes
+
+class Widgets(Enumerate):
+
+    widgets = {'select': SelectWidget,
+               'multiline-widget': MultilineWidget,
+               'text-widget': TextWidget}
+
+    options = [{'name': 'select', 'value': MSG(u'Select Widget')},
+               {'name': 'multiline-widget', 'value': MSG(u'Multiline Widget')},
+               {'name': 'text-widget', 'value': MSG(u'Text Widget')}]
 
 
 class ShopForm_Display(AutoForm):
@@ -52,6 +65,14 @@ class ShopForm_Display(AutoForm):
 
     def get_value(self, resource, context, name, datatype):
         return context.query.get(name) or datatype.get_default()
+
+
+    def get_namespace(self, resource, context):
+        namespace = AutoForm.get_namespace(self, resource, context)
+        namespace['required_msg'] = (resource.get_property('introduction') +
+                                     list(XMLParser('<br/><br/>')) +
+                                     list(namespace['required_msg']))
+        return namespace
 
 
     def get_schema(self, resource, context):
@@ -84,15 +105,25 @@ class ShopForm_Display(AutoForm):
             name = get_value(record, 'name')
             datatype = get_real_datatype(handler, record)
             datatype.name = name
-            widget = get_default_widget_shop(datatype)
+            widget = Widgets.widgets[get_value(record, 'widget')]
             title = get_value(record, 'title')
             widget = widget(name, title=title, has_empty_option=False)
             widgets.append(widget)
         return widgets
 
 
-    def action(self, resource, context):
-        return 'ok'
+    def action(self, resource, context, form):
+        root = context.root
+        to_addr = resource.get_property('to_addr')
+        subject = MSG(u'Message from form: "%s"' % resource.get_title()).gettext()
+        widgets = self.get_widgets(resource, context)
+        text = []
+        for widget in widgets:
+            title = widget.title
+            text.append('*%s* \n %s' % (title, form[widget.name]))
+        text = '\n\n'.join(text)
+        root.send_email(to_addr, subject, text=text, subject_with_host=False)
+        return resource.get_property('final_message')
 
 
 
@@ -104,6 +135,7 @@ class ShopFormTable(OrderedTableFile):
         'mandatory': Boolean,
         'multiple': Boolean,
         'datatype': Datatypes(mandatory=True, index='keyword'),
+        'widget': Widgets(mandatory=True),
         }
 
 
@@ -113,23 +145,32 @@ class ShopForm(OrderedTable):
     class_title = MSG(u'Shop form')
     class_version = '20090609'
     class_handler = ShopFormTable
-    class_views = ['display', 'view', 'add_record'] #XXX We hide for instant
+    class_views = ['display', 'edit', 'view', 'add_record'] #XXX We hide for instant
 
     display = ShopForm_Display()
+    view = OrderedTable_View(search_template=None)
     edit = AutomaticEditView()
 
-    #PathSelectorWidget('name', title=MSG(u'Product'), action='add_product')
     add_product = AddProduct_View()
 
     form = [
+        TextWidget('name', title=MSG(u'Name')),
         TextWidget('title', title=MSG(u'Title')),
         BooleanCheckBox('mandatory', title=MSG(u'Mandatory')),
         BooleanCheckBox('multiple', title=MSG(u'Multiple')),
         SelectWidget('datatype', title=MSG(u'Data Type')),
+        SelectWidget('widget', title=MSG(u'Widget')),
         ]
 
-    edit_widgets = [TextWidget('submit_value', title=MSG(u'Submit value'))]
-    edit_schema = {'submit_value': Unicode(multilingual=True)}
+    edit_widgets = [TextWidget('submit_value', title=MSG(u'Submit value')),
+                    TextWidget('to_addr', title=MSG(u'To addr')),
+                    RTEWidget('introduction', title=MSG(u'Introduction')),
+                    RTEWidget('final_message', title=MSG(u'Final message'))]
+
+    edit_schema = {'submit_value': Unicode(multilingual=True, mandatory=True),
+                   'to_addr': Email(mandatory=True),
+                   'introduction': XHTMLBody(multilingual=True),
+                   'final_message': XHTMLBody(multilingual=True)}
 
     @classmethod
     def get_metadata_schema(cls):
