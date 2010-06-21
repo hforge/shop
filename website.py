@@ -57,8 +57,6 @@ class ShopWebSite(NeutralWS):
 
     class_id = 'shop-website'
     class_title = MSG(u'Shop website')
-    class_views = ['view', 'edit', 'edit_rss',
-                   'browse_content', 'control_panel', 'commit_log']
     class_version = '20100601'
     class_skin = '/ui/default_skin'
 
