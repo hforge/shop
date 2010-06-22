@@ -32,7 +32,7 @@ from ikaaro.table_views import Table_AddRecord
 from ikaaro.views import CompositeForm
 
 # Import from itws
-from itws.tags import TagsList
+from itws.tags_views import TagsList
 from itws.utils import DualSelectWidget
 
 # Import from shop
