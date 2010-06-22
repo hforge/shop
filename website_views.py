@@ -76,8 +76,7 @@ class ShopWS_RSS(NeutralWS_RSS):
             value = item_resource.get_property('data')
             value = Unicode.decode(value)
             # Add category
-            site_root = resource.get_site_root()
-            category = resource.parent
+            category = item_resource.parent
             value = u'%s <br/><br/>Catégorie %s' % (value, category.get_title())
             return value
         return NeutralWS_RSS.get_item_value(self, resource, context,
