@@ -6,9 +6,8 @@
 
   <!-- Imports -->
   <stl:block stl:if="activate_lightbox">
-    <!--
-    <script type="text/javascript" src="/ui/common/js/fancybox/jquery.fancybox-1.3.1.pack.js"/>
-    -->
+    <script type="text/javascript" src="/ui/common/js/fancybox/jquery.fancybox-1.3.1.pack.js"
+      stl:if="inject_fancybox"/>
     <!--
     <script type="text/javascript" src="/ui/common/js/fancybox/jquery.easing-1.3.pack.js"/>
     <script type="text/javascript" src="/ui/common/js/fancybox/jquery.mousewheel-3.0.2.pack.js"/>

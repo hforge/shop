@@ -26,6 +26,9 @@ from itools.xmlfile import XMLFile
 from ikaaro.forms import BooleanRadio, TextWidget
 from ikaaro.registry import register_resource_class
 
+# Import from itws
+from itws.utils import is_navigation_mode
+
 # Import from shop
 from shop.modules import ShopModule
 
@@ -51,6 +54,7 @@ class ShopModule_ProductImagesSlider_View(STLView):
         namespace['images'] = [namespace['cover']] if show_cover else []
         namespace['images'] += product.get_images_namespace(context)
         namespace['has_more_than_one_image'] = len(namespace['images']) > 1
+        namespace['inject_fancybox'] = is_navigation_mode(context)
         # Configuration
         namespace['img_width'] = resource.get_property('big_img_width')
         namespace['img_height'] = resource.get_property('big_img_height')
