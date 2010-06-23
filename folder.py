@@ -35,6 +35,9 @@ from ikaaro.webpage import _get_links, _change_link
 # Import from itws
 from itws.tags import TagsAware
 
+# Import from shop
+from datatypes import PathDataTypeEnumerate
+
 
 
 class ShopFolder(Folder):
@@ -72,7 +75,7 @@ class ShopFolder(Folder):
                     if path == None:
                         continue
                     links.append(str(base.resolve2(path)))
-            elif issubclass(datatype, PathDataType):
+            elif issubclass(datatype, (PathDataType, PathDataTypeEnumerate)):
                 if multilingual is True:
                     for language in languages:
                         path = self.get_property(key, language=language)
@@ -117,7 +120,7 @@ class ShopFolder(Folder):
                     events = _change_link(source, target, old_base, new_base, events)
                     events = list(events)
                     self.set_property(key, events)
-            elif issubclass(datatype, PathDataType):
+            elif issubclass(datatype, (PathDataType, PathDataTypeEnumerate)):
                 if multilingual is True:
                     for language in languages:
                         path = self.get_property(key, language=language)
@@ -126,8 +129,7 @@ class ShopFolder(Folder):
                         path = old_base.resolve2(path)
                         if str(path) == source:
                             # Hit the old name
-                            new_path = new_base.get_pathto(target)
-                            self.set_property(key, str(new_path), language=language)
+                            self.set_property(key, str(target), language=language)
                 else:
                     path = self.get_property(key)
                     if not path:
@@ -135,17 +137,15 @@ class ShopFolder(Folder):
                     path = old_base.resolve2(path)
                     if str(path) == source:
                         # Hit the old name
-                        new_path = new_base.get_pathto(target)
-                        self.set_property(key, str(new_path))
+                        self.set_property(key, str(target))
         # Tagaware ?
         if isinstance(self, TagsAware):
             site_root = self.get_site_root()
-            source_path = Path(source)
             tags_base = site_root.get_abspath().resolve2('tags')
-            if tags_base.get_prefix(source_path) == tags_base:
+            if tags_base.get_prefix(source) == tags_base:
                 tags = list(self.get_property('tags'))
-                source_name = source_path.get_name()
-                target_name = Path(new_path).get_name()
+                source_name = source.get_name()
+                target_name = Path(target).get_name()
                 for tag in tags:
                     if tag == source_name:
                         # Hit
@@ -204,7 +204,7 @@ class ShopFolder(Folder):
                     events = rewrite_uris(events, my_func)
                     events = list(events)
                     self.set_property(key, events)
-            elif issubclass(datatype, PathDataType):
+            elif issubclass(datatype, (PathDataType, PathDataTypeEnumerate)):
                 if multilingual is True:
                     for language in languages:
                         path = self.get_property(key, language=language)

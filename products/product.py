@@ -78,7 +78,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     class_id = 'product'
     class_title = MSG(u'Product')
     class_description = MSG(u'A product')
-    class_version = '20100621'
+    class_version = '20100622'
 
     ##################
     # Configuration
@@ -156,7 +156,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Reference
         values['reference'] = self.get_property('reference')
         # Manufacturer
-        values['manufacturer'] = self.get_property('manufacturer')
+        values['manufacturer'] = str(self.get_property('manufacturer'))
         # Supplier
         values['supplier'] = self.get_property('supplier')
         # Product models
@@ -410,7 +410,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
           'cover': self.get_cover_namespace(context),
           'description': self.get_property('description'),
           'href': context.get_link(self),
-          'manufacturer': ManufacturersEnumerate.get_value( self.get_property('manufacturer')),
+          'manufacturer': ManufacturersEnumerate.get_value(self.get_property('manufacturer')),
           'mini-title': reduce_string(title,
                                       shop.product_title_word_treshold,
                                       shop.product_title_phrase_treshold),

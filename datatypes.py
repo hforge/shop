@@ -71,7 +71,13 @@ class ProductPathDataType(PathDataType):
 
 
 
-class DynamicEnumerate(Enumerate):
+class PathDataTypeEnumerate(Enumerate):
+
+    pass
+
+
+
+class DynamicEnumerate(PathDataTypeEnumerate):
 
     path = None
     format = None

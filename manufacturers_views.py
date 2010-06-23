@@ -45,10 +45,9 @@ class Manufacturer_Add(NewInstance):
 
     def action(self, resource, context, form):
         from utils import get_shop
+        shop = get_shop(resource)
         name = form['name']
         # Create the resource
-        shop = get_shop(resource)
-        resource = shop.get_resource('manufacturers')
         cls = shop.manufacturer_class
         child = cls.make_resource(cls, resource, name)
         # The metadata
@@ -71,11 +70,9 @@ class Manufacturers_View(STLView):
 
     def get_namespace(self, resource, context):
         from manufacturers import Manufacturer
-        from utils import get_shop
         namespace = {'manufacturers': [],
                      'title': resource.get_title()}
-        manufacturers = get_shop(resource).get_resource('manufacturers')
-        for resource in manufacturers.search_resources(cls=Manufacturer):
+        for resource in resource.search_resources(cls=Manufacturer):
             namespace['manufacturers'].append(
               {'name': resource.name,
                'title': resource.get_title()})

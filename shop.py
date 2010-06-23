@@ -55,7 +55,7 @@ class Shop(ShopFolder):
     class_id = 'shop'
     class_title = MSG(u'Shop')
     class_views = ['view_cart']
-    class_version = '20100607'
+    class_version = '20100622'
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'customers', 'groups',
@@ -324,6 +324,20 @@ class Shop(ShopFolder):
         if self.get_resource('groups', soft=True) is not None:
             return
         ShopUser_Groups.make_resource(ShopUser_Groups, self, 'groups')
+
+
+    def update_20100622(self):
+        root = self.get_root()
+        search = root.search(format='virtual-manufacturers')
+        resource = root.get_resource(search.get_documents()[0].abspath)
+        metadata = resource.metadata
+        metadata.format = 'manufacturers'
+        metadata.set_changed()
+        for r in self.get_resource('manufacturers').get_resources():
+            print r.name
+            self.parent.move_resource('./shop/manufacturers/%s' % r.name,
+                                      '%s/%s' % (resource.name, r.name))
+
 
 
 register_resource_class(Shop)

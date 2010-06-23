@@ -22,17 +22,16 @@ from itools.gettext import MSG
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.forms import XHTMLBody, ImageSelectorWidget, RTEWidget
-from ikaaro.registry import register_resource_class
 
 # Import from itws
 from itws.views import AutomaticEditView
 
 # Import from shop
+from datatypes import DynamicEnumerate
 from manufacturers_views import Manufacturer_Add
 from manufacturers_views import Manufacturers_View
 from manufacturers_views import Manufacturer_View
-from utils import CurrentFolder_AddImage, get_shop
-from datatypes import DynamicEnumerate
+from utils import CurrentFolder_AddImage
 
 
 
@@ -85,23 +84,3 @@ class Manufacturers(Folder):
 
     def get_document_types(self):
         return [Manufacturer]
-
-
-
-class VirtualManufacturers(Manufacturers):
-
-    class_id = 'virtual-manufacturers'
-
-    def _get_resource(self, name):
-        shop = get_shop(self)
-        manufacturer = shop.get_resource('manufacturers/%s' % name, soft=True)
-        if manufacturer is None:
-            return None
-        # Build another instance with the same properties
-        return Manufacturer(manufacturer.metadata)
-
-
-# Register
-register_resource_class(Manufacturers)
-register_resource_class(VirtualManufacturers)
-register_resource_class(Manufacturer)

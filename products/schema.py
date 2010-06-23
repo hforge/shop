@@ -45,13 +45,13 @@ product_schema = {# General informations
                   'description': Unicode(multilingual=True),
                   'tags': Tokens,
                   'subject': Unicode(multilingual=True),
-                  'cover': ImagePathDataType(mandatory=True), # XXX PAthDatatype
+                  'cover': ImagePathDataType(mandatory=True),
                   # Shippings
                   'weight': Decimal(default=decimal(0), mandatory=True),
                   'use_this_shipping_way': ShippingsWaysEnumerate,
                   # Manufacturer / supplier
-                  'manufacturer': ManufacturersEnumerate, # XXX PathDatatype
-                  'supplier': SuppliersEnumerate(multiple=True),  # PathDatatype
+                  'manufacturer': ManufacturersEnumerate,
+                  'supplier': SuppliersEnumerate(multiple=True),
                   # Manage stock
                   'stock-handled': Boolean(mandatory=True),
                   'stock-quantity': Integer(default=0, mandatory=True),
