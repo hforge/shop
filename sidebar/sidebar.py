@@ -24,6 +24,7 @@ from ikaaro.registry import register_resource_class
 class CategorySidebar(SideBarAware, Folder):
 
     class_id = 'category-sidebar'
+    class_views = ['browse_content']
 
     @staticmethod
     def _make_resource(cls, folder, name, *args,  **kw):
@@ -35,6 +36,7 @@ class CategorySidebar(SideBarAware, Folder):
 class ProductSidebar(SideBarAware, Folder):
 
     class_id = 'product-sidebar'
+    class_views = ['browse_content']
 
     @staticmethod
     def _make_resource(cls, folder, name, *args,  **kw):

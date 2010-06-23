@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+  <div id="filter-by-price">
+    <ul>
+      <li>
+        <input id="range_price_all" type="radio" name="range_price" value="@"
+          checked="${no_range_price_checked}"/><label for="range_price_all">All</label>
+      </li>
+      <li stl:repeat="price prices">
+        <input id="range_price_${price/value}" type="radio" name="range_price" value="${price/value}"
+          checked="${price/checked}"/>
+        <label for="range_price_${price/value}" class="${price/css}" stl:if="not price/min">Less than ${price/max}€</label>
+        <label for="range_price_${price/value}" class="${price/css}" stl:if="not price/max">More than ${price/min}€</label>
+        <stl:block stl:if="price/min">
+          <label for="range_price_${price/value}" class="${price/css}" stl:if="price/max">
+          From ${price/min}€ to ${price/max}€
+          </label>
+        </stl:block>
+      </li>
+    </ul>
+  </div>
+</stl:block>

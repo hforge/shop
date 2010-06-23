@@ -151,3 +151,17 @@ class DatatypeCM_to_INCH(Decimal):
             mesure = u'inch'
             value = format_price(value/inch)
         return u'%s %s' % (value, mesure)
+
+
+class IntegerRange(String):
+
+    @staticmethod
+    def decode(value):
+        value1, value2 = value.split('@')
+        return int(value1) if value1 else None, int(value2) if value2 else None
+
+
+    @staticmethod
+    def encode(value):
+        value1, value2 = value
+        return '%s@%s' % (value1 if value1 else '', value2 if value2 else '')

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h3 class="title">${title}</h3>
+
+  <div class="content">
+
+    <form action="/search/" method="GET">
+      <div id="search-box-nb-results" stl:if="nb_results">
+        ${nb_results} resultats trouvés.
+      </div>
+
+      <div id="search-box-text">
+        <span>Research:</span>
+        <input value="${product_search_text}" name="product_search_text" size="15" class="text" type="text"></input>
+        <button id="search-box-submit" class="submit" type="submit">Ok</button>
+      </div>
+
+      <div class="clear"/>
+
+      <div id="search-box-widget" stl:if="show_list_categories">
+        <span>Categories:</span>
+        <div class="clear"/>
+        ${widget_categories}
+      </div>
+
+      <div class="clear"/>
+
+      <div id="search-box-prices" stl:if="filter_by_price">
+        <span>Price:</span>
+        <div class="clear"/>
+        ${filter_by_price}
+      </div>
+    </form>
+
+  </div>
+
+</stl:block>

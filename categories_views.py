@@ -114,19 +114,16 @@ class Category_View(BrowseFormBatchNumeric):
             PhraseQuery('workflow_state', 'public')]
         # Add query of filter
         for key, datatype in self.get_query_schema().items():
-            if key == 'min_price':
-                query.append(RangeQuery('stored_price',
-                                context.query['min_price'],
-                                context.query['max_price']))
-            elif key == 'max_price':
-                pass
+            value = context.query[key]
+            if key == 'range_price' and value:
+                query.append(RangeQuery('stored_price', value[0], value[1]))
             # TODO Add other filters
         return context.root.search(AndQuery(*query))
 
 
     def get_search_schema(self):
-        return {'min_price': Integer,
-                'max_price': Integer}
+        from datatypes import IntegerRange
+        return {'range_price': IntegerRange}
 
 
     def get_query_schema(self):
