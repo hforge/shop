@@ -19,6 +19,7 @@ from itools.datatypes import Boolean, String, Unicode, Enumerate
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.xapian import OrQuery, PhraseQuery, AndQuery, StartQuery, split_unicode
+from itools.xapian import RangeQuery
 from itools.web import get_context
 
 # Import from ikaaro
@@ -133,6 +134,12 @@ class Shop_ProductSearch(Category_View):
                                 PhraseQuery('data', alternative),
                                 PhraseQuery('text', alternative))
                 query.append(plain_text)
+        # Add query of filter
+        for key, datatype in self.get_query_schema().items():
+            value = context.query[key]
+            if key == 'range_price' and value:
+                query.append(RangeQuery('stored_price', value[0], value[1]))
+            # TODO Add other filters
         results = context.root.search(AndQuery(*query))
         # XXX Hack results
         self.nb_results = len(results)
