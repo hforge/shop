@@ -457,6 +457,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         root = context.root
         shop = get_shop(self)
         namespace = {'name': self.name,
+                     'abspath': self.get_abspath(),
                      'price': self.get_price_namespace()}
         # Get basic informations
         abspath = context.resource.get_abspath()
