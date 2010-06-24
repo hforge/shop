@@ -293,6 +293,10 @@ class Product_Edit(AutoForm):
         # We change category if needed
         if str(resource.parent.get_abspath()) != form['category']:
             target = context.root.get_resource(form['category'])
+            if target.get_resource(resource.name, soft=True) is not None:
+                context.message = ERROR(u"""Impossible to change category:
+                    There's already a product with this name in this category""")
+                return
             target.move_resource(resource.get_abspath(), resource.name)
             goto = '%s/%s' % (context.get_link(target), resource.name)
             resource = target.get_resource(resource.name)
