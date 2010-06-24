@@ -285,7 +285,7 @@ class ProductCart(object):
 
 
     # XXX To improve
-    def get_total_price(self, shop):
+    def get_total_price(self, shop, with_delivery=True, pretty=True):
         context = self.context
         total_price_with_tax = decimal(0)
         total_price_without_tax = decimal(0)
@@ -300,11 +300,15 @@ class ProductCart(object):
             total_price_without_tax += unit_price_without_tax * quantity
             total_weight += product.get_weight(declination) * quantity
         # XXX GEt Shipping price (Hardcoded, fix it)
-        shipping_price = self.get_shipping_ns(shop, context)['price']
-        total_price_with_tax += shipping_price
-        total_price_without_tax += shipping_price
-        return {'with_tax': format_price(total_price_with_tax),
-                'without_tax': format_price(total_price_without_tax)}
+        if with_delivery is True:
+            shipping_price = self.get_shipping_ns(shop, context)['price']
+            total_price_with_tax += shipping_price
+            total_price_without_tax += shipping_price
+        if pretty is True:
+            return {'with_tax': format_price(total_price_with_tax),
+                    'without_tax': format_price(total_price_without_tax)}
+        return {'with_tax': total_price_with_tax,
+                'without_tax': total_price_without_tax}
 
 
     def get_shipping_ns(self, shop, context):

@@ -33,7 +33,7 @@
         <td>
           <form method="POST">
             <input type="hidden" name="shipping" value="${ship/name}"/>
-            <span stl:if="ship/price">${ship/price} €</span>
+            <span stl:if="ship/price">${ship/pretty_price} €</span>
             <span stl:if="not ship/price">Free</span>
             <button type="submit" class="button" id="button-order">Ok</button>
           </form>

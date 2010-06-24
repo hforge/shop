@@ -37,9 +37,10 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
+from shop.cart import ProductCart
 from shop.enumerates import CountriesZonesEnumerate
 from shop.folder import ShopFolder
-from shop.utils import get_shop
+from shop.utils import format_price, get_shop
 from shop.utils_views import SearchTable_View
 
 # Import from shipping
@@ -256,6 +257,14 @@ class ShippingWay(ShopFolder):
                 if p >= value['min'] and p <= value['max']:
                     total_price += value['price']
                     break
+        # Add insurance
+        if self.get_property('insurance') > decimal(0):
+            context = get_context()
+            cart = ProductCart(context)
+            products_price = cart.get_total_price(shop,
+                                with_delivery=False, pretty=False)
+            percent = self.get_property('insurance') / 100
+            total_price += products_price['with_tax'] * percent
         return total_price
 
 
@@ -298,6 +307,7 @@ class ShippingWay(ShopFolder):
         ns = {'name': self.name,
               'img': self.get_logo(context),
               'title': self.get_title(language),
+              'pretty_price': format_price(price),
               'price': price}
         for key in ['description', 'enabled']:
             ns[key] = self.get_property(key, language)

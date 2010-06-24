@@ -14,8 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from decimal import Decimal as decimal
+
 # Import from itools
 from itools.datatypes import Boolean, Unicode, PathDataType, Enumerate
+from itools.datatypes import Decimal
 from itools.gettext import MSG
 
 # Import from products
@@ -38,4 +42,5 @@ delivery_schema = {'title': Unicode,
                    'mode': DeliveryModes(default='weight'),
                    'only_this_models': ProductModelsEnumerate(multiple=True),
                    'only_this_groups': UserGroup_Enumerate(multiple=True),
+                   'insurance': Decimal(default=decimal(0)),
                    'is_free': Boolean}

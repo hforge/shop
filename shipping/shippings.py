@@ -31,6 +31,7 @@ from shippings_views import ShippingsView, shippings_schema
 from shippings_views import Shippings_Configure, Shippings_Details
 from shipping_way import ShippingWay
 from shop.folder import ShopFolder
+from shop.utils import format_price
 
 
 
@@ -125,6 +126,7 @@ class Shippings(ShopFolder):
             'enabled': True,
             'img': context.resource.get_pathto(logo),
             'name': 'default',
+            'pretty_price': format_price(price),
             'price': price}
 
 

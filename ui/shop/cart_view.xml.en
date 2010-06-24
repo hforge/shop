@@ -82,7 +82,7 @@
             Delivery (${ship/title}):<br/>
           </td>
           <td>
-            ${ship/price} €
+            ${ship/pretty_price} €
           </td>
         </tr>
         <tr>
