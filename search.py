@@ -99,13 +99,6 @@ class Shop_ProductSearch(Category_View):
 
 
 
-    def get_query_schema(self):
-        schema = Category_View.get_query_schema(self)
-        schema['sort_by'] = String(default='ctime')
-        schema['reverse'] = Boolean(default=True)
-        return schema
-
-
     def get_items(self, resource, context):
         site_root = resource.get_site_root()
         shop = site_root.get_resource('shop')
