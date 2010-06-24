@@ -48,8 +48,12 @@ class Shop_CategoriesEnumerate(Enumerate):
                  PhraseQuery('parent_path', str(categories.get_abspath()))]
         for brain in root.search(AndQuery(*query)).get_documents():
             categorie = root.get_resource(brain.abspath)
+            nb_products = categorie.get_nb_products(only_public=True)
+            if nb_products == 0:
+                continue
+            small_title = categorie.get_property('breadcrumb_title')
             options.append({'name': brain.abspath,
-                            'value': categorie.get_title()})
+                            'value': small_title or categorie.get_title()})
         return options
 
 
