@@ -59,7 +59,7 @@ class Category_View(BrowseFormBatchNumeric):
             batch = stl(template, namespace)
         items = self.sort_and_batch(resource, context, items)
         # Build namespace
-        namespace = {'batch': batch,
+        namespace = {'batch': list(batch),
                      'title': resource.get_title(),
                      'categories': self.get_sub_categories_namespace(resource, context),
                      'products': [],
