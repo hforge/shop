@@ -20,7 +20,7 @@
   <div id="product-slider-box" stl:if="images">
     <stl:block stl:repeat="img images">
       <stl:block stl:if="repeat/img/start">
-        <a href="${img/href}/;download" id="product-slider-big-a">
+        <a href="${img/href}/;thumb?width=1024&height=768" id="product-slider-big-a">
           <img stl:if="img" id="product-slider-big-img" src="${img/href}/;thumb?width=${img_width}&amp;height=${img_height}"
                title="${img/title}" alt="${img/title}"/>
         </a>
