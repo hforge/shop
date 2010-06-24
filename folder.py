@@ -112,11 +112,15 @@ class ShopFolder(Folder):
                 if multilingual is True:
                     for language in languages:
                         events = self.get_property(key, language=language)
+                        if not events:
+                            continue
                         events = _change_link(source, target, old_base, new_base, events)
                         events = list(events)
                         self.set_property(key, events, language=language)
                 else:
                     events = self.get_property(key)
+                    if not events:
+                        continue
                     events = _change_link(source, target, old_base, new_base, events)
                     events = list(events)
                     self.set_property(key, events)
@@ -196,11 +200,15 @@ class ShopFolder(Folder):
                 if multilingual is True:
                     for language in languages:
                         events = self.get_property(key, language=language)
+                        if not events:
+                            continue
                         events = rewrite_uris(events, my_func)
                         events = list(events)
                         self.set_property(key, events, language=language)
                 else:
                     events = self.get_property(key)
+                    if not events:
+                        continue
                     events = rewrite_uris(events, my_func)
                     events = list(events)
                     self.set_property(key, events)
