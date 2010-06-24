@@ -40,9 +40,9 @@ declination_schema = {'reference': String,
                       'title': Unicode,
                       'stock-quantity': Integer(default=0),
                       'impact-on-price': DeclinationImpact,
-                      'price-impact-value': Decimal,
+                      'price-impact-value': Decimal(default=decimal(0)),
                       'impact-on-weight': DeclinationImpact,
-                      'weight-impact-value': Decimal}
+                      'weight-impact-value': Decimal(default=decimal(0))}
 
 
 declination_widgets = [
