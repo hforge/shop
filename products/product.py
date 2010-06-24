@@ -374,7 +374,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         for language in languages:
             events = self.get_property('data', language=language)
             title = self.get_property('title', language=language)
-            if is_empty(events) is False and len(title.strip()):
+            if events and is_empty(events) is False and len(title.strip()):
                 available_langs.append(language)
         return available_langs
 
