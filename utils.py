@@ -16,12 +16,13 @@
 
 # Import from standard library
 from cStringIO import StringIO
-from tempfile import mkstemp
-from os import close as close_fd, system
 
 # Import from itools
 from itools.datatypes import Enumerate
 from itools.xml import XMLParser
+
+# Import from pyPdf
+from pyPdf import PdfFileWriter, PdfFileReader
 
 # Import from ikaaro
 from ikaaro.resource_views import DBResource_AddImage
@@ -72,17 +73,27 @@ def generate_barcode(format, code):
 
 
 def join_pdfs(list_pdf):
-    # Create temporary file
-    # Join pdfs
-    fd, filename = mkstemp(dir='/tmp', suffix='.pdf')
-    close_fd(fd)
-    cmd = 'pdftk %s cat output %s'
-    cmd = cmd % (' '.join(list_pdf),  filename)
-    system(cmd)
-    pdf_content = open(filename,  'r')
-    pdf = pdf_content.read()
-    pdf_content.close()
-    return pdf
+    n = len(list_pdf)
+    if n == 0:
+        raise ValueError, 'unexpected empty list'
+
+    # Files == 1
+    if n == 1:
+        return open(list_pdf[0]).read()
+
+    # Files > 1
+    pdf_output = PdfFileWriter()
+    for path in list_pdf:
+        input = PdfFileReader(open(path, "rb"))
+        for page in input.pages:
+            pdf_output.addPage(page)
+
+    output = StringIO()
+    try:
+        pdf_output.write(output)
+        return output.getvalue()
+    finally:
+        output.close()
 
 
 def get_non_empty_widgets(schema, widgets):
