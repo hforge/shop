@@ -868,6 +868,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     def update_20100621(self):
         # Now product_model is a PathDatatype (Abspath)
         product_model = self.get_property('product_model')
+        if not product_model:
+            return
         shop = get_shop(self)
         model = shop.get_resource('products-models/%s' % product_model)
         self.set_property('product_model', model.get_abspath(), with_dynamic=False)
