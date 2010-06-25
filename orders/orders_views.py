@@ -229,13 +229,17 @@ class OrdersView(Folder_BrowseContent):
         list_pdf = []
         for id in form['ids']:
             order = resource.get_resource(id)
-            order.generate_pdf_bill(context)
-            order.generate_pdf_order(context)
             pdf = resource.get_resource('%s/%s' % (id, pdf_name), soft=True)
             if pdf is None:
                 continue
-            list_pdf.append(pdf.handler.uri)
-        return join_pdfs(list_pdf)
+            path = context.database.fs.get_absolute_path(pdf.handler.key)
+            list_pdf.append(path)
+        # Join pdf
+        pdf = join_pdfs(list_pdf)
+        # We regenerate pd
+        order.generate_pdf_bill(context)
+        order.generate_pdf_order(context)
+        return pdf
 
 
     def action_merge_bill(self, resource, context, form):
