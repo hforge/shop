@@ -329,7 +329,10 @@ class Shop(ShopFolder):
     def update_20100622(self):
         root = self.get_root()
         search = root.search(format='virtual-manufacturers')
-        resource = root.get_resource(search.get_documents()[0].abspath)
+        results = search.get_documents()
+        if len(results) == 0:
+            return
+        resource = root.get_resource(results[0].abspath)
         metadata = resource.metadata
         metadata.format = 'manufacturers'
         metadata.set_changed()
