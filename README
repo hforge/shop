@@ -1,0 +1,6 @@
+Dependencies ::
+===============
+
+elaphe: Used to generate barcode (http://code.google.com/p/elaphe/)
+ghostscript: Used by elaphe to generate barcode
+pyPdf: To merge PDF
