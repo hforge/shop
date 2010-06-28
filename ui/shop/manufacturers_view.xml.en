@@ -4,6 +4,7 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <h3 class="title">${title}</h3>
   <ul stl:repeat="manufacturer manufacturers">
     <li>
       <a href="${manufacturer/name}">
