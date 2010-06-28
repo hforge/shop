@@ -369,14 +369,15 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         return namespace
 
 
-    def get_available_languages(self, languages):
-        available_langs = []
-        for language in languages:
-            events = self.get_property('data', language=language)
-            title = self.get_property('title', language=language)
-            if events and is_empty(events) is False and len(title.strip()):
-                available_langs.append(language)
-        return available_langs
+    # XXX We should be able to activate it or not
+    #def get_available_languages(self, languages):
+    #    available_langs = []
+    #    for language in languages:
+    #        events = self.get_property('data', language=language)
+    #        title = self.get_property('title', language=language)
+    #        if events and is_empty(events) is False and len(title.strip()):
+    #            available_langs.append(language)
+    #    return available_langs
 
 
     ##################################################
