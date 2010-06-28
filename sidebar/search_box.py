@@ -22,7 +22,6 @@ from itools.web import STLView
 
 # Import from ikaaro
 from ikaaro.folder import Folder
-from ikaaro.forms import SelectRadio
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
@@ -34,6 +33,7 @@ from itws.repository_views import Box_View
 from shop.datatypes import IntegerRange
 from shop.search import Shop_ProductSearch, Shop_CategoriesEnumerate
 from shop.utils import format_price, get_skin_template
+from shop.widgets import SelectRadioList
 
 
 
@@ -98,7 +98,6 @@ class FilterByPriceBox_View(STLView):
 
 class SearchBox_View(Box_View):
 
-    categories_widget = SelectRadio
     show_list_categories = True
 
     query_schema = {
@@ -115,10 +114,9 @@ class SearchBox_View(Box_View):
         query = self.get_query(context)
         # Widget with list of categories
         widget = None
-        if self.show_list_categories:
-            widget = self.categories_widget('category', has_empty_option=False)
-            widget = widget.to_html(Shop_CategoriesEnumerate,
-                                    value=query['category'])
+        widget = SelectRadioList('category', has_empty_option=False)
+        widget = widget.to_html(Shop_CategoriesEnumerate,
+                                value=query['category'])
         # Filter by price
         if resource.get_resource('prices-range', soft=True):
             namespace['filter_by_price'] = FilterByPriceBox_View().GET(resource, context)
