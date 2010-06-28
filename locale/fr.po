@@ -863,11 +863,10 @@ msgid "<g id='4'>${weight}</g> kg"
 msgstr "<g id='8'>${property/title}</g>:"
 
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:13
-#, fuzzy
 msgctxt "label"
 msgid ""
 "<g id='4'>Less than ${price/max}€</g>  <g id='5'>More than ${price/min}€</g>"
-msgstr "<g id='4'>${property/value}</g>  <g id='5'>Inconnu</g>"
+msgstr "<g id='4'>Moins de ${price/max}€</g>  <g id='5'>Plus de ${price/min}€</g>"
 
 #: ../ui/backoffice/orders/orders_states_box.xml.en:29
 msgctxt "span"
@@ -1164,7 +1163,7 @@ msgstr "Afficher le nombre de produits"
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:8
 msgctxt "label"
 msgid "All"
-msgstr ""
+msgstr "Tous"
 
 #: ../cross_selling_views.py:60
 msgid "All categories"
@@ -2357,7 +2356,7 @@ msgstr "Gratuit"
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:17
 msgctxt "label"
 msgid "From ${price/min}€ to ${price/max}€"
-msgstr ""
+msgstr "De ${price/min}€ à ${price/max}€"
 
 #: ../cross_selling_views.py:61
 msgid "From current category"
