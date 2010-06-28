@@ -18,16 +18,26 @@
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import Widget, stl_namespaces
+from ikaaro.forms import SelectRadio, stl_namespaces
 
 
-class SelectRadioList(Widget):
+class SelectRadioList(SelectRadio):
 
-    template_multiple = list(XMLParser("""
+    template = list(XMLParser("""
         <ul>
+          <li stl:if="has_empty_option">
+            <input type="radio" name="${name}" value="" checked="checked"
+              stl:if="none_selected"/>
+            <input type="radio" name="${name}" value=""
+              stl:if="not none_selected"/>
+            <stl:block stl:if="not is_inline"><br/></stl:block>
+          </li>
           <li stl:repeat="option options">
-            <input type="checkbox" name="${name}" id="${id}-${option/name}"
-              value="${option/name}" checked="${option/selected}" />
+            <input type="radio" id="${id}-${option/name}" name="${name}"
+              value="${option/name}" checked="checked"
+              stl:if="option/selected"/>
+            <input type="radio" id="${id}-${option/name}" name="${name}"
+              value="${option/name}" stl:if="not option/selected"/>
             <label for="${id}-${option/name}">${option/value}</label>
             <stl:block stl:if="not is_inline"><br/></stl:block>
           </li>
