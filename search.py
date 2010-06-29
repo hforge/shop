@@ -38,7 +38,7 @@ class Shop_CategoriesEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
-        options = [{'name': '*', 'value': MSG(u'All the site')}]
+        options = [{'name': '*', 'value': MSG(u'The whole site')}]
         context = get_context()
         resource = context.resource
         root = context.root
