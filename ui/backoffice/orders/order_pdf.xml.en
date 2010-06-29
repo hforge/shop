@@ -10,6 +10,7 @@
     <pml:table id="header">
       <pml:tr>
         <pml:td>
+          <br/>
           <pml:img src="${logo}" stl:if="logo" style="float:left"/>
         </pml:td>
         <pml:td>
@@ -86,6 +87,7 @@
           <pml:img src="${product/key}/barcode"/>
         </pml:td>
         <pml:td>
+          <br/>
           <pml:img src="${product/cover/key}" width="100" height="100"
             stl:if="product/cover"/>
         </pml:td>

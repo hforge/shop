@@ -10,6 +10,7 @@
     <pml:table id="header">
       <pml:tr>
         <pml:td>
+          <br/>
           <pml:img src="${logo}" stl:if="logo" style="float:left"/>
         </pml:td>
         <pml:td>

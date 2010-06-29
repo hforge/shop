@@ -533,6 +533,9 @@ class Order(WorkflowAware, ShopFolder):
         # Build namespace
         path = context.database.fs.get_absolute_path(self.handler.key)
         namespace = self.get_namespace(context)
+        for product in namespace['products']:
+            product['cover']['key'] = context.database.fs.get_absolute_path(
+                                           product['cover']['key'])
         namespace['logo'] = shop.get_pdf_logo_key(context)
         namespace['pdf_signature'] = format_for_pdf(shop.get_property('pdf_signature'))
         barcode = self.get_resource('barcode', soft=True)

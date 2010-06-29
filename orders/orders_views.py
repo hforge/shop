@@ -236,7 +236,7 @@ class OrdersView(Folder_BrowseContent):
             list_pdf.append(path)
         # Join pdf
         pdf = join_pdfs(list_pdf)
-        # We regenerate pd
+        # We regenerate pdf
         order.generate_pdf_bill(context)
         order.generate_pdf_order(context)
         return pdf
