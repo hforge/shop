@@ -2,20 +2,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <stl:block xmlns="http://www.w3.org/1999/xhtml" xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <div id="grid-product-items">
-    <img src="${title_image_path}" class="title-image" alt="${title}" stl:if="title_image_path"></img>
-    <stl:block stl:if="not title_image_path">
-      <h3 class="title" stl:if="title">${title}</h3>
-    </stl:block>
-    <div class="clear"></div>
-    <div stl:repeat="item products" class="box grid-product-item">
-      <div class="box-hd"></div>
-      <div class="box-hg"></div>
-      <div class="box-bd"></div>
-      <div class="box-bg"></div>
-      <div class="box-content">${item}</div>
-    </div>
-    <div class="clear"></div>
+  <h3 class="title" stl:if="show_title">${title}</h3>
+  <div class="clear"/>
+  <div class="content">
+    <stl:block stl:repeat="viewbox products">${viewbox}</stl:block>
   </div>
+  <div class="clear"/>
 
 </stl:block>

@@ -16,6 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
+from itools.datatypes import Boolean
 from itools.gettext import MSG
 
 # Import from ikaaro
@@ -30,7 +31,6 @@ from itws.repository_views import Box_View
 # Import from shop
 from shop.categories import Category
 from shop.cross_selling import CrossSellingTable
-from shop.utils_views import RedirectPermanent
 
 
 
@@ -45,19 +45,8 @@ class CrossSellingBox_View(Box_View):
         site_root = resource.get_site_root()
         shop = site_root.get_resource('shop')
         product_class_id = shop.product_class.class_id
-        title = resource.get_property('title')
-        title_image_path = resource.get_property('title_image')
-        if title_image_path:
-            # XXX title image multilingual -> Unicode => String
-            title_image = resource.get_resource(str(title_image_path),
-                                                soft=True)
-            if title_image:
-                title_image_path = context.get_link(title_image)
-                title_image_path = '%s/;download' % title_image_path
-        has_title = (title or title_image_path)
-        namespace = {'title': title,
-                     'has_title': has_title,
-                     'title_image_path': title_image_path,
+        namespace = {'title': resource.get_property('title'),
+                     'show_title': resource.get_property('show_title'),
                      'products': []}
         categories = []
         if isinstance(context.resource, Category):
@@ -77,15 +66,14 @@ class CrossSellingBox(Folder):
     class_version = '20090122'
     class_title = MSG(u'Vertical item cross selling')
     class_description = MSG(u'Boîte de vente liée')
-    class_views = ['edit', 'configure']
+    class_views = ['edit']
     order_path = 'order-products'
     order_class = CrossSellingTable
     __fixed_handlers__ = [order_path]
 
 
-    configure = GoToSpecificDocument(title=MSG(u'Configurer'),
-                                     specific_document=order_path)
-    edit = RedirectPermanent(specific_document=order_path)
+    edit = GoToSpecificDocument(specific_document=order_path,
+                                specific_view='edit?is_admin_popup=1')
     view = CrossSellingBox_View()
 
     @staticmethod
@@ -99,7 +87,7 @@ class CrossSellingBox(Folder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(Folder.get_metadata_schema(),
-                           CrossSellingTable.get_metadata_schema())
+                           show_title=Boolean)
 
 
 register_resource_class(CrossSellingBox)

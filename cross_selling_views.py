@@ -24,10 +24,12 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro import messages
+from ikaaro.buttons import Button
 from ikaaro.forms import AutoForm, BooleanRadio, SelectRadio, TextWidget
 from ikaaro.forms import SelectWidget, Widget, stl_namespaces
+from ikaaro.forms import title_widget
 from ikaaro.future.order import ResourcesOrderedTable_Ordered
-from ikaaro.resource_views import DBResource_AddLink
+from ikaaro.resource_views import DBResource_AddLink, DBResource_Edit
 from ikaaro.table_views import Table_AddRecord
 from ikaaro.views import CompositeForm
 
@@ -102,13 +104,48 @@ cross_selling_schema = {
     }
 
 
-class CrossSelling_Configure(AutoForm):
+class ImprovedAutoForm(AutoForm):
+
+    template = '/ui/common/improve_auto_form.xml'
+
+    def _get_action_namespace(self, resource, context):
+        # (1) Actions (submit buttons)
+        actions = []
+        for button in self.actions:
+            #if button.show(resource, context, []) is False:
+            #    continue
+            if button.confirm:
+                confirm = button.confirm.gettext().encode('utf_8')
+                onclick = 'return confirm("%s");' % confirm
+            else:
+                onclick = None
+            actions.append(
+                {'value': button.name,
+                 'title': button.title,
+                 'class': button.css,
+                 'onclick': onclick})
+
+        return actions
+
+
+    def get_namespace(self, resource, context):
+        namespace = AutoForm.get_namespace(self, resource, context)
+        namespace['actions'] = self._get_action_namespace(resource, context)
+        return namespace
+
+
+
+class CrossSelling_Configure(ImprovedAutoForm):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'Configure cross selling')
 
     shop_configuration = BooleanRadio('use_shop_configuration',
                               title=MSG(u'Use shop configuration'))
+
+    actions = [Button(access='is_allowed_to_edit',
+                      name='configure', title=MSG(u'Configure'))]
+
 
     widgets = [
         BooleanRadio('enabled', title=MSG(u'Enabled')),
@@ -147,10 +184,63 @@ class CrossSelling_Configure(AutoForm):
         return resource.get_property(name)
 
 
-    def action(self, resource, context, form):
+    def action_configure(self, resource, context, form):
         for key in self.get_schema(resource, context).keys():
             resource.set_property(key, form[key])
         return context.come_back(messages.MSG_CHANGES_SAVED)
+
+
+
+class CrossSelling_EditProxy(ImprovedAutoForm):
+
+    title = MSG(u'Edit box title')
+
+    actions = [Button(access='is_allowed_to_edit',
+                      name='default', title=MSG(u'Edit'))]
+
+    schema = {'title': Unicode(multilingual=True),
+              'show_title': Boolean}
+
+    widgets = [title_widget,
+               BooleanRadio('show_title', title=MSG(u'Show title ?'))]
+
+
+    def get_value(self, resource, context, name, datatype):
+        if name in ('title', 'show_title'):
+            language = resource.get_content_language(context)
+            return resource.parent.get_property(name, language=language)
+        return DBResource_Edit.get_value(self, resource, context, name,
+                                         datatype)
+
+
+    def action_default(self, resource, context, form):
+        # Save changes
+        title = form['title']
+        language = resource.get_content_language(context)
+        # Set title to menufolder
+        resource.parent.set_property('title', title, language=language)
+        resource.parent.set_property('show_title', form['show_title'])
+        # Ok
+        context.message = messages.MSG_CHANGES_SAVED
+
+
+
+class CrossSelling_Edit(CompositeForm):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Edit cross selling')
+    subviews = [CrossSelling_EditProxy(),
+                CrossSelling_Configure()]
+
+
+    def get_namespace(self, resource, context):
+        # XXX Force GET to avoid problem in STLForm.get_namespace
+        # side effect unknown
+        real_method = context.method
+        context.method = 'GET'
+        views = [ view.GET(resource, context) for view in self.subviews ]
+        context.method = real_method
+        return {'views': views}
 
 
 

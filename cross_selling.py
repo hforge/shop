@@ -31,7 +31,7 @@ from ikaaro.registry import register_resource_class
 # Import from shop
 from cross_selling_views import AddProduct_View
 from cross_selling_views import CrossSelling_Configure, CrossSelling_TableView
-from cross_selling_views import cross_selling_schema
+from cross_selling_views import CrossSelling_Edit, cross_selling_schema
 from utils import get_shop
 from forms import ProductSelectorWidget
 
@@ -51,6 +51,7 @@ class CrossSellingTable(ResourcesOrderedTable):
 
     # Views
     configure = CrossSelling_Configure()
+    edit = CrossSelling_Edit()
     view_table = CrossSelling_TableView()
     add_product = AddProduct_View() # (XXX used by product selector widget)
     back = GoToSpecificDocument(specific_document='..',
