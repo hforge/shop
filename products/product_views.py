@@ -140,9 +140,12 @@ class Product_View(STLForm):
     scripts = ['/ui/shop/js/declinations.js']
 
     def get_template(self, resource, context):
-        product_model = resource.get_property('product_model')
-        return get_skin_template(context, '/product/product_view_%s.xml' % product_model,
-                                          '/product/product_view.xml')
+        product_model = resource.get_product_model()
+        if product_model is not None:
+            return get_skin_template(context,
+                        '/product/product_view_%s.xml' % product_model.name,
+                        '/product/product_view.xml')
+        return get_skin_template(context, '/product/product_view.xml')
 
 
     def get_schema(self, resource, context):
@@ -360,9 +363,10 @@ class Product_ViewBox(STLView):
     access = True
     title = MSG(u'View Box')
     template = None
+    skin_template = '/product/product_viewbox.xml'
 
     def get_template(self, resource, context):
-        return get_skin_template(context, '/product/product_viewbox.xml')
+        return get_skin_template(context, self.skin_template)
 
 
     def get_namespace(self, resource, context):
@@ -371,8 +375,7 @@ class Product_ViewBox(STLView):
 
 class Product_CrossSellingViewBox(Product_ViewBox):
 
-    def get_template(self, resource, context):
-        return get_skin_template(context, '/product/product_viewbox.xml')
+    skin_template = '/product/product_viewbox_cs.xml'
 
 
 

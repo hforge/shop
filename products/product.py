@@ -84,6 +84,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     # Configuration
     ##################
     viewbox = Product_ViewBox()
+    viewbox_cls = Product_ViewBox
     cross_selling_viewbox = Product_CrossSellingViewBox()
     ##################
 

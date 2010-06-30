@@ -56,8 +56,10 @@ class SideBarCrossSellingBox_View(Box_View):
         else:
             categories = []
         table = resource.get_resource(resource.order_path)
+        viewbox = shop.product_class.viewbox_cls()
+        viewbox.skin_template = '/sidebar/viewbox.xml'
         for product in table.get_products(context, product_class_id, categories):
-            namespace['viewboxes'].append(product.viewbox.GET(product, context))
+            namespace['viewboxes'].append(viewbox.GET(product, context))
         return namespace
 
 

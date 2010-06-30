@@ -44,11 +44,6 @@ class SideBarCrossSellingBox_View(Box_View):
 
     template = '/ui/shop/sidebar/product_cross_selling_box.xml'
 
-    # XXX Sylvain see if needed
-    #from shop.utils import get_skin_template
-    #    def get_template(self, resource, context):
-    #        return get_skin_template(context, '/sidebar/product_cross_selling_box.xml')
-
     def get_namespace(self, resource, context):
         site_root = resource.get_site_root()
         here = context.resource
@@ -62,8 +57,11 @@ class SideBarCrossSellingBox_View(Box_View):
             self.set_view_is_empty(True)
             return namespace
         table = here.get_resource('cross-selling')
+        # Viewbox
+        viewbox = shop.product_class.viewbox_cls()
+        viewbox.skin_template = '/sidebar/viewbox.xml'
         for product in table.get_products(context, product_class_id, categories):
-            namespace['viewboxes'].append(product.viewbox.GET(product, context))
+            namespace['viewboxes'].append(viewbox.GET(product, context))
         return namespace
 
 
