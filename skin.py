@@ -25,7 +25,7 @@ from ikaaro.skins import Skin, register_skin
 from ikaaro.website import WebSite
 
 # Import from itws
-from itws.common import LocationTemplateWithoutTab
+from itws.common import LocationTemplateWithoutTab, CommonLanguagesTemplate
 from itws.ws_neutral import NeutralSkin
 
 # Import from shop
@@ -45,6 +45,13 @@ class ShopLocationTemplate(LocationTemplateWithoutTab):
     def get_template(self):
         context = get_context()
         return get_skin_template(context, '/common/location.xml')
+
+
+class ShopLanguagesTemplate(CommonLanguagesTemplate):
+
+    def get_template(self):
+        context = get_context()
+        return get_skin_template(context, '/common/languages.xml')
 
 
 
@@ -79,6 +86,7 @@ class ShopSkinDynamicProperty(dict):
 
 class ShopSkin(NeutralSkin):
 
+    config = None
     base_styles = ['/ui/shop/style.css']
 
     base_scripts = []
@@ -86,7 +94,7 @@ class ShopSkin(NeutralSkin):
     menu_level = 1
 
     location_template = ShopLocationTemplate
-
+    languages_template = ShopLanguagesTemplate
 
     def get_template_title(self, context):
         here = context.resource
