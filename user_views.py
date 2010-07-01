@@ -107,22 +107,28 @@ class ShopUser_Manage(STLView):
             namespace['user']['base'][key] = user.get_property(key)
         # Additional public schema
         for widget in user_class.public_widgets:
+            datatype = user_class.public_schema[widget.name]
+            value = user.get_property(widget.name)
             namespace['user']['public'].append(
               {'title': widget.title,
-               'value': user.get_property(widget.name)})
+               'value': datatype.encode(value)})
         # Additional private schema
         for widget in user_class.private_widgets:
+            datatype = user_class.private_schema[widget.name]
+            value = user.get_property(widget.name)
             namespace['user']['private'].append(
               {'title': widget.title,
-               'value': user.get_property(widget.name)})
+               'value': datatype.encode(value)})
         # Additional group schema
         user_group = user.get_property('user_group')
         if user_group:
             group = groups[user_group]
             for widget in group.widgets:
+                datatype = group.schema[widget.name]
+                value = user.get_property(widget.name)
                 namespace['user']['group'].append(
                   {'title': widget.title,
-                   'value': user.get_property(widget.name)})
+                   'value': datatype.encode(value)})
 
         # Customer connections
         namespace['connections'] = []
