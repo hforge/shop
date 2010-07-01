@@ -53,6 +53,14 @@ class ShopLanguagesTemplate(CommonLanguagesTemplate):
         context = get_context()
         return get_skin_template(context, '/common/languages.xml')
 
+    def get_namespace(self):
+        namespace = CommonLanguagesTemplate.get_namespace(self)
+        # XXX Hack configuration du skin
+        context = self.context
+        config = context.site_root.get_skin(context).config
+        if config is not None:
+            namespace['show_language_title'] = config.get_value('show_language_title')
+        return namespace
 
 
 class BackofficeSkin(Skin):
@@ -95,6 +103,12 @@ class ShopSkin(NeutralSkin):
 
     location_template = ShopLocationTemplate
     languages_template = ShopLanguagesTemplate
+
+    def __init__(self, key=None, database=None, **kw):
+        # We can add a config file for additional configuration
+        self.config = kw.get('config')
+        super(ShopSkin, self).__init__(key, database)
+
 
     def get_template_title(self, context):
         here = context.resource
