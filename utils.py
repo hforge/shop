@@ -147,3 +147,12 @@ class CurrentFolder_AddImage(DBResource_AddImage):
 
     def get_root(self, context):
         return context.resource
+
+
+class ResourceDynamicProperty(dict):
+
+    resource = None
+    context = None
+
+    def __getitem__(self, key):
+        return self.resource.get_property(key)

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+
+  <table class="new-resource-thumb" stl:repeat="item items">
+    <tr>
+      <td style="width: 48px" valign="top">
+        <a href="${item/href}"><img src="${item/img}"/></a>
+      </td>
+      <td valign="middle">
+        <a href="${item/href}">${item/title}</a>
+      </td>
+    </tr>
+  </table>
+
+
+</stl:block>

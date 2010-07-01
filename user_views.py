@@ -39,21 +39,43 @@ from shop_utils_views import RealRessource_Form
 from orders.orders_views import numero_template
 from orders.workflow import states, states_color
 from user_group import UserGroup_Enumerate, groups
-from utils import bool_to_img, get_shop
+from utils import ResourceDynamicProperty
+from utils import bool_to_img, get_shop, get_skin_template
 from utils_views import SearchTableFolder_View
 
 
 class ShopUser_Profile(STLView):
 
     access = 'is_allowed_to_edit'
-    template = '/ui/shop/shop_user_profile.xml'
     title = MSG(u'My profile')
+
+    def get_template(self, resource, context):
+        return get_skin_template(context, '/user/profile.xml')
+
+
+    base_items = [{'title': MSG(u"Edit my account"),
+                   'href': ';edit_account',
+                   'img': '/ui/icons/48x48/card.png'},
+                  {'title': MSG(u'Edit my preferences'),
+                   'href': ';edit_preferences',
+                   'img': '/ui/icons/48x48/preferences.png'},
+                  {'title': MSG(u'Edit my password'),
+                   'href': ';edit_password',
+                   'img': '/ui/icons/48x48/lock.png'},
+                  {'title': MSG(u'My addresses book'),
+                   'href': ';addresses_book',
+                   'img': '/ui/icons/48x48/tasks.png'},
+                  {'title': MSG(u'Orders history'),
+                   'href': ';orders_view',
+                   'img': '/ui/shop/images/bag_green.png'}]
+
 
     def get_namespace(self, resource, context):
         shop = get_shop(context.site_root)
-        # XXX
-        items = shop.profile_items
-        return {'items': items}
+        dynamic_user_value = ResourceDynamicProperty()
+        dynamic_user_value.resource = resource
+        return {'dynamic_user_value': dynamic_user_value,
+                'items': self.base_items + shop.profile_items}
 
 
 class ShopUser_Manage(STLView):
