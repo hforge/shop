@@ -73,8 +73,9 @@ class ShopWS_RSS(NeutralWS_RSS):
             return NeutralWS_RSS.get_item_value(self, resource, context,
                                                 item, column, site_root)
         if column == 'description':
+            return item_resource.get_property('description')
+            # XXX Fix it
             value = item_resource.get_property('data')
-            # XXX Marche pas
             value = Unicode.decode(value)
             # Add category
             category = item_resource.parent
