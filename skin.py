@@ -29,7 +29,6 @@ from itws.common import LocationTemplateWithoutTab, CommonLanguagesTemplate
 from itws.ws_neutral import NeutralSkin
 
 # Import from shop
-from cart import ProductCart
 from modules import ModuleLoader
 from products import Product
 from utils import get_shop, get_skin_template
@@ -132,10 +131,6 @@ class ShopSkin(NeutralSkin):
 
     def build_namespace(self, context):
         here = context.resource
-        # Init cookie
-        cart = ProductCart(context)
-        cart.init_cookies()
-        # Get base namespace
         shop = get_shop(here)
         site_root = context.resource.get_site_root()
         namespace = NeutralSkin.build_namespace(self, context)
