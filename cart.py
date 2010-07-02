@@ -39,16 +39,18 @@ class ProductCart(object):
 
     def __init__(self, context):
         self.context = context
-        # Init cookies
-        for key in ['products', 'addresses', 'shipping']:
-            if not self.context.get_cookie(key):
-                self.context.set_cookie(key, '', path='/')
         # We load cart
         self.products = self._get_products()
         self.addresses = self._get_addresses()
         self.shipping = self._get_shipping()
         self.id_zone = self._get_id_zone()
 
+
+    def init_cookies(self):
+        # Init cookies
+        for key in ['products', 'addresses', 'shipping']:
+            if not self.context.get_cookie(key):
+                self.context.set_cookie(key, '', path='/')
 
     ######################
     # Namespace
