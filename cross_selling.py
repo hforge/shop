@@ -20,6 +20,7 @@ from random import shuffle
 # Import from itools
 from itools.core import merge_dicts
 from itools.gettext import MSG
+from itools.log import log_warning
 from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery, StartQuery
 
 # Import from ikaaro
@@ -123,7 +124,11 @@ class CrossSellingTable(ResourcesOrderedTable):
             path = get_value(record, 'name')
             names.append(path)
             products_quantity -= 1
-            yield self.get_resource(path)
+            resource = self.get_resource(path, soft=True)
+            if resource is None:
+                log_warning('Error cross selling, %s' % resource.name)
+            elif resource.get_property('state') == 'public':
+                yield resource
 
         if products_quantity <= 0:
             return
