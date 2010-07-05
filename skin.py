@@ -44,14 +44,14 @@ class ShopLocationTemplate(LocationTemplateWithoutTab):
 
     def get_template(self):
         context = get_context()
-        return get_skin_template(context, '/common/location.xml')
+        return get_skin_template(context, '/common/location.xml', is_on_skin=True)
 
 
 class ShopLanguagesTemplate(CommonLanguagesTemplate):
 
     def get_template(self):
         context = get_context()
-        return get_skin_template(context, '/common/languages.xml')
+        return get_skin_template(context, '/common/languages.xml', is_on_skin=True)
 
     def get_namespace(self):
         namespace = CommonLanguagesTemplate.get_namespace(self)
