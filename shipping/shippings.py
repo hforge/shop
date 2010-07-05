@@ -119,12 +119,12 @@ class Shippings(ShopFolder):
         for widget in widgets:
             price += widget['price']
         logo_uri = self.get_property('default_shipping_way_logo')
-        logo = self.get_resource(logo_uri)
+        logo = self.get_resource(logo_uri, soft=True)
         return {
             'title': self.get_property('default_shipping_way_title'),
             'description': self.get_property('default_shipping_way_description'),
             'enabled': True,
-            'img': context.resource.get_pathto(logo),
+            'img': context.resource.get_pathto(logo) if logo else None,
             'name': 'default',
             'pretty_price': format_price(price),
             'price': price}

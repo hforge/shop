@@ -272,7 +272,7 @@ class ShippingWay(ShopFolder):
     def get_logo(self, context):
         logo = self.get_property('logo')
         resource = self.get_resource(logo, soft=True)
-        if resource is None:
+        if resource is None or logo == '.':
             return
         return context.get_link(resource)
 
