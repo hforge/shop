@@ -321,12 +321,16 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         for declination in declinations:
             for name in purchase_options_names:
                 value = declination.get_property(name)
+                if not value:
+                    continue
                 if not values.has_key(name):
                     values[name] = set([])
                 values[name].add(value)
         # Build datatype / widget
         enumerates_folder = shop.get_resource('enumerates')
         for name in purchase_options_names:
+            if values.get(name) is None or len(values[name]) == 0:
+                continue
             enumerate_table = enumerates_folder.get_resource(name)
             datatype = Restricted_EnumerateTable_to_Enumerate(
                           enumerate_name=name, values=values[name])
@@ -349,7 +353,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         """
         purchase_options_schema = self.get_purchase_options_schema()
         for declination in self.search_resources(cls=Declination):
-            value = [kw[x] == declination.get_property(x)
+            value = [kw.get(x) == declination.get_property(x)
                         for x in purchase_options_schema]
             if set(value) == set([True]):
                 return declination.name

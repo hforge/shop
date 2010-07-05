@@ -305,6 +305,10 @@ class Product_Edit(AutoForm):
             resource = target.get_resource(resource.name)
         else:
             goto = None
+        # Set cover as public
+        if form['cover']:
+            cover = resource.get_resource(form['cover'])
+            cover.set_property('state', 'public')
         # Save properties
         language = resource.get_content_language(context)
         for key, datatype in self.get_schema(resource, context).iteritems():
