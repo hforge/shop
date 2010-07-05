@@ -69,6 +69,11 @@ class PhotoOrderedTable_AddRecord(Table_AddRecord):
 
 
     def action_on_success(self, resource, context):
+        # XXX Set image as public
+        form = Table_AddRecord._get_form(self, resource, context)
+        path = form['name']
+        img_resource = resource.get_resource(str(path))
+        img_resource.set_property('state', 'public')
         return context.come_back(MSG(u'New record added.'))
 
 
