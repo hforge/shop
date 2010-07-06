@@ -15,15 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from shop
-from payments import Payments
-from enumerates import PaymentWaysEnumerate
-from registry import register_payment_way
-
-# Register payment ways
-import cash
-import check
-import credit
-import deposit
-import paybox
-import systempay
-import transfer
+from systempay import SystemPay
