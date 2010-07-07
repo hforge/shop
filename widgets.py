@@ -72,3 +72,40 @@ class SelectRadioImages(SelectRadio):
           </li>
         </ul>
         """, stl_namespaces))
+
+
+class SelectRadioColor(SelectRadio):
+
+    template = list(XMLParser("""
+        <ul class="select-radio-color">
+          <li stl:repeat="option options" class="${id}-opt-color">
+            <div id="opt-${id}-${option/name}"
+              style="background-color:${option/color}"
+              title="${option/value}" stl:omit-tag="option/selected">
+            <div id="opt-${id}-${option/name}"
+              style="background-color:${option/color}"
+              title="${option/value}" stl:omit-tag="not option/selected" class="selected">
+              <input
+                type="radio" id="${id}-${option/name}" name="${name}"
+                value="${option/name}" checked="checked"
+                stl:if="option/selected"/>
+              <input
+                type="radio" id="${id}-${option/name}" name="${name}"
+                value="${option/name}" stl:if="not option/selected"/>
+              <span>${option/value}</span>
+            </div>
+            </div>
+          </li>
+        </ul>
+        <script>
+          $(document).ready(function() {
+            $(".${id}-opt-color div").each(function(){
+              $(this).click(function(){
+                $(".${id}-opt-color div").removeClass('selected');
+                $(this).addClass('selected');
+                $(this).children('input').attr('checked', 'checked');
+              })
+            });
+          });
+        </script>
+        """, stl_namespaces))

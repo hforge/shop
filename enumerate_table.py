@@ -19,7 +19,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Enumerate, String, Unicode, Integer
 from itools.gettext import MSG
 from itools.handlers import checkid
-from itools.xapian import PhraseQuery
+from itools.xapian import OrQuery, PhraseQuery
 from itools.web import get_context, INFO, ERROR
 
 # Import from ikaaro
@@ -34,6 +34,7 @@ from ikaaro.table_views import Table_AddRecord, Table_EditRecord
 
 # Import from shop
 from utils import get_shop
+from widgets import SelectRadioColor
 
 
 def register_dynamic_enumerates(enumerates_folder):
@@ -139,13 +140,21 @@ class Restricted_EnumerateTable_to_Enumerate(Enumerate):
 class EnumerateTable_to_Enumerate(Enumerate):
 
     @classmethod
+    def get_kw(cls, table, record):
+        get_value = table.handler.get_record_value
+        kw = {'name': str(get_value(record, 'name')),
+              'value': get_value(record, 'title')}
+        for key in table.additional_enumerate_keys:
+            kw[key] = get_value(record, key)
+        return kw
+
+
+    @classmethod
     def get_options(cls):
         shop = get_shop(get_context().resource)
         enumerates_folder = shop.get_resource('enumerates')
         table = enumerates_folder.get_resource(cls.enumerate_name)
-        get_value = table.handler.get_record_value
-        return [{'name': str(get_value(record, 'name')),
-                 'value': get_value(record, 'title')}
+        return [cls.get_kw(table, record)
                 for record in table.handler.get_records_in_order()]
 
 
@@ -197,7 +206,9 @@ class EnumeratesFolder_View(Folder_BrowseContent):
 
 
     def get_items(self, resource, context, *args):
-        args = PhraseQuery('format', EnumerateTable.class_id)
+        args = OrQuery(*[
+            PhraseQuery('format', EnumerateTable.class_id),
+            PhraseQuery('format', EnumerateTableColor.class_id)])
         return Folder_BrowseContent.get_items(self, resource, context, args)
 
 
@@ -228,6 +239,8 @@ class EnumerateTable(OrderedTable):
     class_handler = EnumerateTable_Handler
     class_views = ['view', 'edit', 'add_record']
 
+    widget_cls = SelectWidget
+    additional_enumerate_keys = []
 
     # Views
     view = EnumerateTable_View()
@@ -240,6 +253,34 @@ class EnumerateTable(OrderedTable):
         ]
 
 
+####################################
+## Enumerate Table Color
+####################################
+
+class EnumerateTableColor_Handler(OrderedTableFile):
+
+    record_properties = {
+        'name': String(unique=True, is_indexed=True),
+        'title': Unicode(mandatory=True, multiple=True),
+        'color': String(mandatory=True)
+        }
+
+
+class EnumerateTableColor(EnumerateTable):
+
+    class_id = 'enumerate-table-color'
+    class_title = MSG(u'Enumerate Table Color')
+    class_handler = EnumerateTableColor_Handler
+
+    widget_cls = SelectRadioColor
+    additional_enumerate_keys = ['color']
+
+    form = [
+        HiddenWidget('name', None),
+        TextWidget('title', title=MSG(u'Title')),
+        TextWidget('color', title=MSG(u'Color')),
+        ]
+
 
 class EnumeratesFolder(Folder):
     """ EnumeratesFolder is a folder that
@@ -248,7 +289,7 @@ class EnumeratesFolder(Folder):
 
     class_id = 'enumerates-folder'
     class_title = MSG(u'Enumerates folder')
-    class_views = ['view', 'new_resource?type=enumerate-table']
+    class_views = ['view', 'new_resource']
 
     # Views
     view = EnumeratesFolder_View()
@@ -259,8 +300,9 @@ class EnumeratesFolder(Folder):
 
 
     def get_document_types(self):
-        return [EnumerateTable]
+        return [EnumerateTable]# EnumerateTableColor]
 
 
 register_resource_class(EnumerateTable)
+register_resource_class(EnumerateTableColor)
 register_resource_class(EnumeratesFolder)

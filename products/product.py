@@ -337,7 +337,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
             enumerate_table = enumerates_folder.get_resource(name)
             datatype = Restricted_EnumerateTable_to_Enumerate(
                           enumerate_name=name, values=values[name])
-            widget = SelectWidget(name, has_empty_option=False)
+            widget_cls = enumerate_table.widget_cls
+            widget = widget_cls(name, has_empty_option=False)
             namespace.append(
                 {'title': enumerate_table.get_title(),
                  'html': widget.to_html(datatype, None)})
