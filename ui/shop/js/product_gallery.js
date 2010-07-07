@@ -77,6 +77,8 @@ function set_as_big_thumb(e, preview_images, thumb_width_str, thumb_height_str, 
   new_src = new_src.replace(thumb_width_str, big_width_str);
   new_src = new_src.replace(thumb_height_str, big_height_str);
   $('#product-slider-big-img').attr('src', new_src);
+  // Change title
+  $('#product-slider-big-img').attr('title', e.attr('title'));
   // Change href
   if(has_loupe == true){
     href = new_src.replace(';thumb?', ';download');
