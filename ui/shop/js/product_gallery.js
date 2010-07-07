@@ -1,5 +1,8 @@
 function init_product_gallery(thumb_width, thumb_height, big_width, big_height,
                               change_on_click, has_loupe, activate_lightbox) {
+  function choose(e){
+      set_as_big_thumb(e, preview_images, thumb_width_str, thumb_height_str, big_width_str, big_height_str, has_loupe)
+  };
 
   var preview_images = $('#product-slider-box .product-slider-preview-img');
   var size = preview_images.size();
@@ -16,13 +19,18 @@ function init_product_gallery(thumb_width, thumb_height, big_width, big_height,
 
   for (i=0; i<size; i++) {
     preview = $(preview_images[i]);
+    // Bind choose method
+    preview.bind("choose", function(){
+      choose($(this))
+    });
+    // On click /hover
     if (change_on_click == true){
-      preview.click(function (){
-          set_as_big_thumb($(this), preview_images, thumb_width_str, thumb_height_str, big_width_str, big_height_str, has_loupe)
+      preview.click(function(){
+        choose($(this));
       });
     }else{
-      preview.hover(function (){
-          set_as_big_thumb($(this), preview_images, thumb_width_str, thumb_height_str, big_width_str, big_height_str, has_loupe)
+      preview.hover(function(){
+        choose($(this));
       });
     }
   }

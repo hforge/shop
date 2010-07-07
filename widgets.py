@@ -44,3 +44,31 @@ class SelectRadioList(SelectRadio):
         </ul>
         """, stl_namespaces))
 
+
+class SelectRadioImages(SelectRadio):
+
+    template = list(XMLParser("""
+        <ul style="list-style-type:none;margin:0;padding:0;">
+          <li stl:if="has_empty_option" style="width:110px;height=110px;float:left;">
+            <input id="${id}" type="radio" name="${name}" value="" checked="checked"
+              stl:if="none_selected"/>
+            <input id="${id}" type="radio" name="${name}" value=""
+              stl:if="not none_selected"/>
+            <label for="${id}"
+              style="width:60px;height:60px;display:block;border:1px dashed gray;
+                    padding:20px;">
+              No picture
+            </label>
+          </li>
+          <li style="float:left;width:110px;height=110px;" stl:repeat="option options">
+            <input type="radio" id="${id}-${option/name}" name="${name}"
+              value="${option/name}" checked="checked"
+              stl:if="option/selected"/>
+            <input type="radio" id="${id}-${option/name}" name="${name}"
+              value="${option/name}" stl:if="not option/selected"/>
+            <label for="${id}-${option/name}">
+              <img src="${option/link}/;thumb?width=100&amp;height=100" title=" ${option/value}"/>
+            </label>
+          </li>
+        </ul>
+        """, stl_namespaces))

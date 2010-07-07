@@ -24,7 +24,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate, DateTime
 from itools.datatypes import Integer
 from itools.gettext import MSG
-from itools.uri import resolve_uri2
+from itools.uri import get_uri_name, resolve_uri2
 from itools.web import get_context
 from itools.xml import TEXT, xml_to_text
 
@@ -292,15 +292,18 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
             products['base_product'] = {
                 'price': format_price(self.get_price_with_tax()),
                 'weight': str(self.get_weight()),
+                'image': [],
                 'option': {},
                 'stock': stock_quantity if manage_stock else None}
         # Other products (declinations)
         for declination in declinations:
             stock_quantity = declination.get_quantity_in_stock()
             price = self.get_price_with_tax(id_declination=declination.name)
+            image = declination.get_property('associated-image')
             products[declination.name] = {
               'price': format_price(price),
               'weight': str(declination.get_weight()),
+              'image': get_uri_name(image) if image else None,
               'option': {},
               'stock': stock_quantity if manage_stock else None}
             for name in purchase_options_names:
@@ -535,6 +538,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         if not image:
             return
         return {'href': context.get_link(image),
+                'name': image.name,
                 'key': image.handler.key,
                 'title': image.get_property('title') or self.get_title()}
 
@@ -542,7 +546,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     def get_images_namespace(self, context):
         images = []
         for image in self.get_ordered_photos(context):
-            images.append({'href': context.get_link(image),
+            images.append({'name': image.name,
+                           'href': context.get_link(image),
                            'title': image.get_property('title') or self.get_title()})
         return images
 

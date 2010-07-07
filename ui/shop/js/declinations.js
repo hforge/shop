@@ -67,6 +67,9 @@ function check_products(){
       $("#out-of-stock").hide();
       $("#add-to-cart").show('slow');
     }
+    if(product['image'] != null){
+      $("#product-slider-preview-" + product['image']).trigger('choose');
+    }
   }else{
     $("#out-of-stock").hide();
     $("#quantity-area").hide('slow');

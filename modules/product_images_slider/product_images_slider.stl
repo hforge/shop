@@ -30,7 +30,8 @@
     <div id="product-slider-box-thumbs" stl:if="has_more_than_one_image">
       <a class="product-slider-preview-a" rel="slider-img" href="${img/href}/;download" stl:repeat="img images"
         title="${img/title}">
-        <img stl:if="img" src="${img/href}/;thumb?width=${thumb_width}&amp;height=${thumb_height}"
+        <img stl:if="img" id="product-slider-preview-${img/name}"
+          src="${img/href}/;thumb?width=${thumb_width}&amp;height=${thumb_height}"
           alt="${img/title}" title="${img/title}" class="product-slider-preview-img"/>
       </a>
     </div>

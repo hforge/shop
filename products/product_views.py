@@ -684,6 +684,7 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
             ('checkbox', None),
             ('name', MSG(u'Name')),
             ('barcode', None),
+            ('img', None),
             ('reference', MSG(u'Reference')),
             ('title', MSG(u'Title')),
             ('stock-quantity', MSG(u'Stock quantity')),
@@ -715,6 +716,13 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
             for name, datatype in declination.get_dynamic_schema().items():
                 value = declination.get_property(name)
                 kw[name] = datatype.get_value(value)
+            # Img
+            img = declination.get_property('associated-image')
+            if img:
+                img = context.get_link(context.root.get_resource(img))
+                kw['img'] = XMLParser('<img src="%s/;thumb?width=150&amp;height=150"/>' % img)
+            else:
+                kw['img'] = None
             # Barcode
             shop_uri = context.resource.get_pathto(shop)
             reference = declination.get_property('reference')

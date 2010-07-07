@@ -76,6 +76,19 @@ class PathDataTypeEnumerate(Enumerate):
     pass
 
 
+class ImagesEnumerate(PathDataTypeEnumerate):
+
+
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        resource = context.resource.get_resource('images')
+        return [{'name': res.get_abspath(),
+                 'link': context.get_link(res),
+                 'value': res.get_title()}
+                   for res in resource.get_resources()]
+
+
 
 class DynamicEnumerate(PathDataTypeEnumerate):
 

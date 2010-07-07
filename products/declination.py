@@ -32,8 +32,10 @@ from ikaaro.views_new import NewInstance
 # Import from shop
 from enumerate import DeclinationImpact
 from dynamic_folder import DynamicFolder
-from shop.utils import get_shop
+from shop.datatypes import ImagesEnumerate
 from shop.enumerate_table import EnumerateTable_to_Enumerate
+from shop.utils import get_shop
+from shop.widgets import SelectRadioImages
 
 
 declination_schema = {'reference': String,
@@ -42,7 +44,8 @@ declination_schema = {'reference': String,
                       'impact-on-price': DeclinationImpact,
                       'price-impact-value': Decimal(default=decimal(0)),
                       'impact-on-weight': DeclinationImpact,
-                      'weight-impact-value': Decimal(default=decimal(0))}
+                      'weight-impact-value': Decimal(default=decimal(0)),
+                      'associated-image': ImagesEnumerate}
 
 
 declination_widgets = [
@@ -52,7 +55,8 @@ declination_widgets = [
     SelectWidget('impact-on-price', has_empty_option=False, title=MSG(u'Impact on price')),
     TextWidget('price-impact-value', title=MSG(u'Price impact value')),
     SelectWidget('impact-on-weight', has_empty_option=False, title=MSG(u'Impact on weight')),
-    TextWidget('weight-impact-value', title=MSG(u'Weight impact value'))]
+    TextWidget('weight-impact-value', title=MSG(u'Weight impact value')),
+    SelectRadioImages('associated-image', title=MSG(u'Associated image'))]
 
 
 class Declination_Edit(DBResource_Edit):
