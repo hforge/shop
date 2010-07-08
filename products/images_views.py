@@ -33,24 +33,36 @@ class PhotoOrderedTable_TableView(OrderedTable_View):
     def get_table_columns(self, resource, context):
         columns = OrderedTable_View.get_table_columns(self, resource, context)
         columns = columns[:2]
+        columns.append(('title', MSG(u'Title')))
         columns.append(('image', MSG(u'Image')))
         columns.append(('order', MSG(u'Order')))
-
+        columns.append(('edit', MSG(u'Edit')))
         return columns
 
 
     def get_item_value(self, resource, context, item, column):
         gallery = resource.parent
-        if column == 'image':
+        if column in ['image', 'title', 'edit']:
             image = resource.get_resource(item.name, soft=True)
             if image is None:
+                # XXX Why ?
                 image = gallery.get_resource(item.name, soft=True)
             if image is None:
                 return None
             link = context.get_link(image)
+        if column == 'image':
             src = '%s/;thumb?width=%s&amp;height=%s' % (link, 250, 250)
-            preview = '<img src="%s" />' % src
-            return XMLParser(preview)
+            preview = '<img src="%s" title="%s"/>' % (src, image.get_title())
+            return XMLParser(preview.encode('utf-8'))
+        elif column == 'title':
+            return image.get_title()
+        elif column == 'edit':
+            edit = ("""
+                    <a href="%s/;edit" title="Edit image">
+                      <img src="/ui/icons/16x16/edit.png"/>
+                    </a>
+                    """ % link)
+            return XMLParser(edit)
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
 

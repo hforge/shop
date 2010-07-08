@@ -63,6 +63,7 @@ from shop.modules import ModuleLoader
 from shop.shop_views import Shop_Login, Shop_Register
 from shop.stock.stock_views import Stock_FillStockOut, Stock_Resupply
 from shop.utils import get_shop, format_price, generate_barcode
+from shop.utils import CurrentFolder_AddImage
 
 
 mail_stock_subject_template = MSG(u'Product out of stock')
@@ -126,6 +127,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
             access='is_allowed_to_edit')
     delete_product = Product_Delete()
     order_preview = viewbox
+    add_image = CurrentFolder_AddImage()
 
 
 
