@@ -28,8 +28,10 @@ from ikaaro.folder_views import Folder_PreviewContent, GoToSpecificDocument
 from ikaaro.forms import ImageSelectorWidget
 from ikaaro.future.order import ResourcesOrderedTable
 from ikaaro.registry import register_resource_class
-from ikaaro.resource_views import DBResource_AddImage
 from ikaaro.table import OrderedTableFile
+
+# Import from itws
+from itws.views import ImproveDBResource_AddImage
 
 # Import from shop
 from images_views import PhotoOrderedTable_View, PhotoOrderedTable_AddRecord
@@ -47,7 +49,7 @@ class PhotoOrderedTableFile(OrderedTableFile):
 
 
 
-class PhotoAddImage(DBResource_AddImage):
+class PhotoAddImage(ImproveDBResource_AddImage):
 
     def get_root(self, context):
         return context.resource.parent.get_resource('images')

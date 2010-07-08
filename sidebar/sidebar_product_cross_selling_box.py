@@ -21,16 +21,16 @@ from itools.gettext import MSG
 # Import from ikaaro
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class
-from ikaaro.resource_views import DBResource_AddImage
 
 # Import from itws
 from itws.repository import register_box, Box
 from itws.repository_views import Box_View
+from itws.views import ImproveDBResource_AddImage
 
 
 
 
-class SideBarCrossSellingBox_AddImage(DBResource_AddImage):
+class SideBarCrossSellingBox_AddImage(ImproveDBResource_AddImage):
 
     def get_root(self, context):
         return context.resource

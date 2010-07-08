@@ -24,8 +24,8 @@ from itools.xml import XMLParser
 # Import from pyPdf
 from pyPdf import PdfFileWriter, PdfFileReader
 
-# Import from ikaaro
-from ikaaro.resource_views import DBResource_AddImage
+# Import from itws
+from itws.views import ImproveDBResource_AddImage
 
 
 def bool_to_img(value):
@@ -147,7 +147,7 @@ def get_skin_template(context, path1, path2=None, is_on_skin=False):
     return template
 
 
-class CurrentFolder_AddImage(DBResource_AddImage):
+class CurrentFolder_AddImage(ImproveDBResource_AddImage):
 
     def get_root(self, context):
         return context.resource
