@@ -159,7 +159,7 @@ class Declination(DynamicFolder):
     def get_declination_title(self):
         title = ''
         for key, datatype in self.get_dynamic_schema().items():
-            title += datatype.get_value(self.get_property(key))
+            title += '%s - ' % datatype.get_value(self.get_property(key))
         return title
 
 

@@ -160,6 +160,15 @@
             $("#link_"+ id_line).html(link);
             $("#stock_"+ id_line).val(data.stock_quantity);
             $("#new_quantity_"+ id_line).val(data.stock_quantity);
+            add_lines(data.declinations.length);
+            for (d in data.declinations){
+              var declination = data.declinations[d]
+              var new_id_line = parseInt(id_line) + 1 + parseInt(d);
+              $("#stock_"+ new_id_line).val(declination.stock_quantity);
+              $("#reference_"+ new_id_line).val(declination.reference);
+              $("#link_"+ new_id_line).html(declination.title);
+            }
+
           }else{
             var link = '<img src="/ui/icons/16x16/error.png"/>'
             $("#link_"+ id_line).html(link);

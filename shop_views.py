@@ -55,6 +55,7 @@ from countries import CountriesEnumerate
 from orders.orders_views import Orders_StatesBox
 from payments import PaymentWaysEnumerate
 from payments.payments_views import Payments_ChoosePayment
+from products.declination import Declination
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
 from utils import get_shippings_details, get_skin_template
 
@@ -761,9 +762,16 @@ class Shop_GetProductStock(BaseView):
         if results:
             documents = results.get_documents()
             product = root.get_resource(documents[0].abspath)
+            declinations = []
+            for d in product.search_resources(cls=Declination):
+                declinations.append(
+                    {'reference': d.get_property('reference'),
+                     'title': d.get_declination_title(),
+                     'stock_quantity': d.get_property('stock-quantity')})
             kw = {'exist': True,
                   'title': product.get_title(),
                   'href': context.get_link(product),
+                  'declinations': declinations,
                   'stock_quantity': product.get_property('stock-quantity')}
         else:
             kw = {'exist': False}
