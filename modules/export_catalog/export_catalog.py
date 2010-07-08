@@ -23,6 +23,7 @@ from itools.web import BaseView, ERROR
 
 # Import from shop
 from shop.folder import ShopFolder
+from shop.products.declination import Declination
 
 # Import from lpod
 lpod_is_install = True
@@ -45,25 +46,36 @@ class ShopModule_ExportCatalog_View(BaseView):
         document = odf_new_document_from_type('text')
         body = document.get_body()
         root = context.root
-        table = odf_create_table(u"Table 1", width=4, height=1)
+        table = odf_create_table(u"Table 1", width=5, height=1, style='table-cell')
         for brain in root.search(format='product').get_documents():
+            # Get product
             product = root.get_resource(brain.abspath)
             cover = product.get_resource(product.get_property('cover'))
-            row = odf_create_row(width=4)
+            # Add line
+            row = odf_create_row(width=5)
             cell = odf_create_cell(u"")
             file = context.database.fs.open(cover.handler.key)
             local_uri = document.add_file(file)
             image_frame = odf_create_image_frame(local_uri, size=('5cm', '5cm'),
                 position=('0cm', '0cm'), anchor_type='as-char')
             paragraph = cell.get_element('text:p')
-            paragraph.append_element(image_frame)
-            cell.append_element(paragraph)
+            paragraph.append(image_frame)
+            cell.append(paragraph)
             row.set_cell(0, cell)
             row.set_cell_value(1, brain.reference)
             row.set_cell_value(2, brain.title)
-            row.set_cell_value(3, u'%s €' % brain.stored_price)
+            row.set_cell_value(3, u'%s €' % product.get_price_without_tax())
             table.append_row(row)
-        body.append_element(table)
+            # Get declinations
+            for d in product.search_resources(cls=Declination):
+                price = d.parent.get_price_without_tax(id_declination=d.name, pretty=True)
+                row = odf_create_row(width=5)
+                row.set_cell_value(1, 'reference')
+                row.set_cell_value(2, d.get_declination_title())
+                row.set_cell_value(3, u'%s €' % price)
+                row.set_cell_value(4, d.get_property('stock-quantity'))
+                table.append(row)
+        body.append(table)
         f = StringIO()
         document.save(f)
         content = f.getvalue()
