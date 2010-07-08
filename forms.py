@@ -78,10 +78,13 @@ class ProductSelectorWidget(Widget):
     def get_namespace(self, datatype, value):
         context = get_context()
         shop = get_shop(context.resource)
-        product = context.resource.get_resource(value, soft=True)
         product_class = shop.product_class
         widget = PathSelectorWidget(self.name,
                     action=self.action).to_html(datatype, value)
+        if value is not None:
+            product = context.resource.get_resource(value, soft=True)
+        else:
+            product = None
         if product is None or not isinstance(product, product_class):
             viewbox = None
         else:
