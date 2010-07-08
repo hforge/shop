@@ -82,7 +82,9 @@ class ImagesEnumerate(PathDataTypeEnumerate):
     @classmethod
     def get_options(cls):
         context = get_context()
-        resource = context.resource.get_resource('images')
+        resource = context.resource.get_resource('images', soft=True)
+        if resource is None:
+            resource = context.resource.parent.get_resource('images')
         return [{'name': res.get_abspath(),
                  'link': context.get_link(res),
                  'value': res.get_title()}
