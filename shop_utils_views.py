@@ -51,6 +51,7 @@ class Cart_View(STLView):
 
     def get_namespace(self, resource, context):
         namespace = {'products': [],
+                     'show_ht_price': resource.show_ht_price(context),
                      'see_actions': self.see_actions}
         abspath = resource.get_abspath()
         # Get cart

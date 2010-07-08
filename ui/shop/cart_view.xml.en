@@ -17,7 +17,8 @@
       <tr>
         <th></th>
         <th width="300px">Product</th>
-        <th>Unit Price with tax</th>
+        <th stl:if="show_ht_price">Unit Price without tax</th>
+        <th stl:if="not show_ht_price">Unit Price with tax</th>
         <th>Quantity</th>
         <th>Total Price</th>
         <th id="last" stl:if="see_actions">Remove</th>
@@ -42,7 +43,8 @@
               </ul>
             </stl:block>
           </td>
-          <td>${p/price/unit/with_tax} €</td>
+          <td stl:if="show_ht_price">${p/price/unit/without_tax} €</td>
+          <td stl:if="not show_ht_price">${p/price/unit/with_tax} €</td>
           <td>
             <p stl:if="not see_actions">${p/quantity}</p>
             <table class="table-quantity" stl:if="see_actions">
@@ -69,7 +71,8 @@
               </tr>
             </table>
           </td>
-          <td>${p/price/total/with_tax} €</td>
+          <td stl:if="show_ht_price">${p/price/total/without_tax} €</td>
+          <td stl:if="not show_ht_price">${p/price/total/with_tax} €</td>
           <td stl:if="see_actions">
             <button id="delete-cart" name="action" value="delete" type="submit">
               <span>X</span>

@@ -57,7 +57,8 @@ function check_products(){
     product = products[id_product];
     $("#quantity-area").show('slow');
     $("#missing-declination").hide('slow');
-    $("#price").html(product['price']);
+    $(".price-ht").html(product['price_ht']);
+    $(".price-ttc").html(product['price_ttc']);
     $("#weight").html(product['weight']);
     if (product['stock'] != null && product['stock'] < $("#quantity").val()){
       $("#out-of-stock").show('slow');
@@ -75,7 +76,8 @@ function check_products(){
     $("#quantity-area").hide('slow');
     $("#add-to-cart").hide('slow');
     $("#missing-declination").show('slow');
-    $("#price").html("-");
+    $(".price-ht").html("-");
+    $(".price-ttc").html("-");
     $("#weight").html("-");
   }
 }

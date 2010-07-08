@@ -242,6 +242,19 @@ class Shop(ShopFolder):
         addresses = self.get_resource('addresses').handler
         return addresses.get_record_namespace(id)
 
+    ##############################
+    # Configuration
+    ##############################
+    def show_ht_price(self, context):
+        user = context.user
+        if (context.user and
+            context.user.get_property('user_group') == 'group_pro'):
+            return True
+        return False
+
+    ##############################
+    # Update methods
+    ##############################
 
     def update_20090819(self):
         if self.get_resource('enumerates', soft=True) is not None:

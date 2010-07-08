@@ -31,7 +31,7 @@ from itools.xml import TEXT, xml_to_text
 # Import from ikaaro
 from ikaaro.file import Image
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import SelectWidget, XHTMLBody
+from ikaaro.forms import XHTMLBody
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.utils import reduce_string
 from ikaaro.workflow import WorkflowAware
@@ -71,6 +71,17 @@ mail_stock_body_template = MSG(u"""Hi,
 The product {product_title} is out of stock\n
   {product_uri}\n
 """)
+
+class ConfigurationProperty(dict):
+
+    resource = None
+    context = None
+
+    def __getitem__(self, key):
+        shop = get_shop(self.resource)
+        if key == 'show_ht_price':
+            return shop.show_ht_price(self.context)
+        raise ValueError, 'unknow configuration property'
 
 
 class Product(WorkflowAware, TagsAware, DynamicFolder):
@@ -290,7 +301,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         products = {}
         if len(declinations)==0:
             products['base_product'] = {
-                'price': format_price(self.get_price_with_tax()),
+                'price_ht': format_price(self.get_price_without_tax()),
+                'price_ttc': format_price(self.get_price_with_tax()),
                 'weight': str(self.get_weight()),
                 'image': [],
                 'option': {},
@@ -298,10 +310,12 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Other products (declinations)
         for declination in declinations:
             stock_quantity = declination.get_quantity_in_stock()
-            price = self.get_price_with_tax(id_declination=declination.name)
+            price_ht = self.get_price_without_tax(id_declination=declination.name)
+            price_ttc = self.get_price_with_tax(id_declination=declination.name)
             image = declination.get_property('associated-image')
             products[declination.name] = {
-              'price': format_price(price),
+              'price_ht': format_price(price_ht),
+              'price_ttc': format_price(price_ttc),
               'weight': str(declination.get_weight()),
               'image': get_uri_name(image) if image else None,
               'option': {},
@@ -520,6 +534,11 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Authentificated ?
         ac = self.get_access_control()
         namespace['is_authenticated'] = ac.is_authenticated(context.user, self)
+        # Configuration
+        configuration = ConfigurationProperty()
+        configuration.context = context
+        configuration.resource = self
+        namespace['configuration'] = configuration
         # Shop modules
         shop_module = ModuleLoader()
         shop_module.context = context
