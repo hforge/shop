@@ -25,5 +25,5 @@ import check
 import credit
 import deposit
 import paybox
-import systempay
+#import systempay
 import transfer
