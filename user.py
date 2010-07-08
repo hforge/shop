@@ -203,7 +203,12 @@ class ShopUser(User):
     mail_body_template = MSG(u"Your inscription has been validated")
 
     mail_subject_template_not_enabled = MSG(u"Inscription confirmation - Your account must be validated")
-    mail_body_template_not_enabled = MSG(u"Your inscription is done. Our administrator should validate your account.")
+    mail_body_template_not_enabled = MSG(u"""Hello
+We have received your application to our website as a Professional.
+This request has been forwarded to our service.
+Sincerely,
+The Webmaster""")
+
 
     def send_register_confirmation(self, context):
         if self.get_property('is_enabled') is True:
