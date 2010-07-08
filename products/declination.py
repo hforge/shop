@@ -46,13 +46,14 @@ declination_schema = {'reference': String,
                       'pro-price-impact-value': Decimal(default=decimal(0)),
                       'impact-on-weight': DeclinationImpact,
                       'weight-impact-value': Decimal(default=decimal(0)),
-                      'associated-image': ImagesEnumerate}
+                      #'associated-image': ImagesEnumerate
+                      }
 
 
 declination_widgets = [
     TextWidget('reference', title=MSG(u'Reference')),
     TextWidget('title', title=MSG(u'Title')),
-    SelectRadioImages('associated-image', title=MSG(u'Associated image')),
+    #SelectRadioImages('associated-image', title=MSG(u'Associated image')),
     TextWidget('stock-quantity', title=MSG(u'Stock quantity')),
     SelectWidget('impact-on-weight', has_empty_option=False, title=MSG(u'Impact on weight')),
     TextWidget('weight-impact-value', title=MSG(u'Weight impact value')),
