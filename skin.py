@@ -175,7 +175,7 @@ class ShopSkin(NeutralSkin):
         shop = get_shop(here)
         site_root = here.get_site_root()
         if isinstance(here, site_root.shop_class):
-            return None
+            return site_root.get_resource('shop/shop-sidebar', soft=True)
         elif isinstance(here, shop.product_class):
             if site_root.show_sidebar_on_product is False:
                 return None

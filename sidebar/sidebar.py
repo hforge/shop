@@ -45,6 +45,19 @@ class ProductSidebar(SideBarAware, Folder):
         _cls._make_resource(_cls, folder, name, **kw)
 
 
+class ShopSidebar(SideBarAware, Folder):
+
+    class_id = 'shop-sidebar'
+    class_views = ['browse_content']
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args,  **kw):
+        Folder._make_resource(cls, folder, name, **kw)
+        _cls = SideBarAware
+        _cls._make_resource(_cls, folder, name, **kw)
+
+
+
 register_resource_class(CategorySidebar)
 register_resource_class(ProductSidebar)
-
+register_resource_class(ShopSidebar)
