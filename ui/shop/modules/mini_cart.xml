@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <a href="/shop/;view_cart" title="Your Shopping Cart">
+    Your cart:
+    <span class="ajax_cart_quantity">${nb_products}</span>
+    <span class="ajax_cart_product_txt ${txt_class}">item</span>
+    <span class="ajax_cart_product_txts ${txts_class}">items</span>
+    <span class="ajax_cart_total">${total}</span>€
+  </a>
+
+</stl:block>

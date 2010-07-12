@@ -32,6 +32,7 @@ from ikaaro.utils import get_base_path_query
 from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
+from modules import ModuleLoader
 from utils import get_skin_template, get_shop
 
 
@@ -58,10 +59,15 @@ class Category_View(BrowseFormBatchNumeric):
             namespace = self.get_batch_namespace(resource, context, items)
             batch = stl(template, namespace)
         items = self.sort_and_batch(resource, context, items)
+        # Shop modules
+        shop_module = ModuleLoader()
+        shop_module.context = context
+        shop_module.here = self
         # Build namespace
         namespace = {'batch': list(batch),
                      'title': resource.get_title(),
                      'categories': self.get_sub_categories_namespace(resource, context),
+                     'module': shop_module,
                      'products': [],
                      'description': None}
         # Get products view box
@@ -127,13 +133,48 @@ class Category_View(BrowseFormBatchNumeric):
 
 
     def get_query_schema(self):
-        shop = get_shop(get_context().resource)
         return merge_dicts(BrowseFormBatchNumeric.get_query_schema(self),
                 self.get_search_schema(),
-                batch_size=Integer(default=shop.get_property('categories_batch_size')),
-                sort_by=String(default=shop.get_property('shop_sort_by')),
-                reverse=Boolean(default=shop.get_property('shop_sort_reverse')))
+                batch_size=Integer(default=20),
+                sort_by=String,
+                reverse=Boolean)
 
+
+    def sort_and_batch(self, resource, context, results):
+        shop = get_shop(context.resource)
+        start = context.query['batch_start']
+        context = get_context()
+        # Get sort by from query or from shop default configuration
+        size = shop.get_property('categories_batch_size')
+        if context.uri.query.has_key('sort_by'):
+            sort_by = context.query['sort_by']
+        else:
+            sort_by = shop.get_property('shop_sort_by')
+        if context.uri.query.has_key('reverse'):
+            reverse = context.query['reverse']
+        else:
+            reverse = shop.get_property('shop_sort_reverse')
+        # Get documents
+        items = results.get_documents(sort_by=sort_by, reverse=reverse,
+                                      start=start, size=size)
+
+        # FIXME This must be done in the catalog.
+        if sort_by == 'title':
+            items.sort(cmp=lambda x,y: cmp(x.title, y.title))
+            if reverse:
+                items.reverse()
+
+        # Access Control (FIXME this should be done before batch)
+        user = context.user
+        root = context.root
+        allowed_items = []
+        for item in items:
+            resource = root.get_resource(item.abspath)
+            ac = resource.get_access_control()
+            if ac.is_allowed_to_view(user, resource):
+                allowed_items.append((item, resource))
+
+        return allowed_items
 
 
 
