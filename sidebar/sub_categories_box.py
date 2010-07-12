@@ -47,7 +47,9 @@ class SubCategoriesBox_View(Box_View):
         categories_abspath = str(categories.get_abspath())
         show_nb_products = resource.get_property('show_nb_products')
         show_first_category = resource.get_property('show_first_category')
+        show_second_level = resource.get_property('show_second_level')
         here_real_abspath = str(here.get_abspath())
+        current_level = here_real_abspath.count('/')
 
         if here.metadata.format == 'category':
             here_abspath = str(here.get_abspath())
@@ -76,10 +78,15 @@ class SubCategoriesBox_View(Box_View):
         for index, cat in enumerate(all_categories.get_documents(
                                         sort_by='abspath')):
             # Skip first category --> /categories
-            if index == 0:
+            if index == 0 and show_first_category is False:
                 continue
 
             level = cat.abspath.count('/')
+
+            # Skip second level (if we are not on level /categories/')
+            if level < 4 and show_second_level is False and current_level != 2:
+                continue
+
             # Skip bad level
             if level > max_level_deploy:
                 continue
@@ -135,27 +142,6 @@ class SubCategoriesBox_View(Box_View):
                                        'show_nb_products': show_nb_products,
                                        'css': None})
 
-        if show_first_category:
-            # Add root category entry
-            css = ''
-            if categories_abspath == here_abspath:
-                css = 'active'
-            elif here_real_abspath.startswith(categories_abspath):
-                css = 'in-path'
-            if resource.get_property('use_small_title'):
-                title = categories.get_property('m_breadcrumb_title')
-            else:
-                title = categories.get_title()
-            category_namespace = {'title': title,
-                                  'href': '/categories',
-                                  'sub_tree': tree,
-                                  'nb_products': len(all_products),
-                                  'css': '%s %s' % (css, 'root')}
-
-            tree = stl(tree_template, {'items': [category_namespace],
-                                       'show_nb_products': show_nb_products,
-                                       'css': 'root'})
-
         return {'title': resource.get_title(),
                 'tree': tree}
 
@@ -165,19 +151,26 @@ class SubCategoriesBox(Box):
 
     class_id = 'vertical-item-sub-categories-box'
     class_title = MSG(u'Vertical item that list sub categories')
+    class_version = '20100712'
 
     view = SubCategoriesBox_View()
 
     edit_schema = {'show_first_category': Boolean,
+                   'show_second_level': Boolean,
                    'show_nb_products': Boolean,
                    'use_small_title': Boolean}
 
     edit_widgets = [
         BooleanRadio('show_first_category',
-                                 title=MSG(u'Afficher la 1ére categorie ?')),
+                                 title=MSG(u'Show level 1 ?')),
+        BooleanRadio('show_second_level',
+                                 title=MSG(u'Show level 2 ?')),
         BooleanRadio('show_nb_products',
                      title=MSG(u'Afficher le nombre de produits')),
         BooleanRadio('use_small_title', title=MSG(u'Use small title'))]
+
+    def update_20100712(self):
+        self.set_property('show_second_level',  True)
 
 
 register_resource_class(SubCategoriesBox)
