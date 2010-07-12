@@ -39,9 +39,9 @@
         Configure shop general settings
       </td>
     </tr>
-    <tr>
+    <tr stl:if="manufacturers">
       <td>
-        <a href="./manufacturers/">
+        <a href="${manufacturers}">
           Manufacturers
         </a>
       </td>

@@ -37,7 +37,7 @@ from utils import CurrentFolder_AddImage
 
 class ManufacturersEnumerate(DynamicEnumerate):
 
-    path = 'shop/manufacturers/'
+    path = '/'
     format = 'manufacturer'
     is_abspath = True
 

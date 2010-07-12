@@ -74,6 +74,18 @@ class Shop_Configuration(STLView):
     title = MSG(u'Configuration')
     template = '/ui/backoffice/configuration.xml'
 
+    def get_namespace(self, resource, context):
+        root = context.root
+        # Get pathto manufacturers
+        search = root.search(format='manufacturers')
+        results = search.get_documents()
+        if len(results) == 0:
+            manufacturers = None
+        else:
+            manufacturers = root.get_resource(results[0].abspath)
+            manufacturers = context.get_link(manufacturers)
+        return {'manufacturers': manufacturers}
+
 
 class Shop_Configure(DBResource_Edit):
 

@@ -101,10 +101,16 @@ class DynamicEnumerate(PathDataTypeEnumerate):
     @classmethod
     def get_options(cls):
         context = get_context()
-        resource = context.site_root.get_resource(cls.path)
+        if cls.is_abspath is False:
+            resource = context.site_root.get_resource(cls.path)
+            resources = resource.search_resources(format=cls.format)
+        else:
+            root = context.root
+            resources = [root.get_resource(brain.abspath)
+                          for brain in root.search(format=cls.format).get_documents()]
         return [{'name': res.get_abspath(),
                  'value': res.get_title()}
-                   for res in resource.search_resources(format=cls.format)]
+                   for res in resources]
 
 
     @classmethod
