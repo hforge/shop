@@ -22,6 +22,7 @@ from itools.core import get_abspath
 from itools.gettext import register_domain
 
 # Import from shop
+import root
 import forms_generator
 from shop import Shop
 from website import ShopWebSite
