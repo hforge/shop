@@ -33,7 +33,6 @@ from ikaaro.file import Image
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import XHTMLBody
 from ikaaro.registry import register_resource_class, register_field
-from ikaaro.utils import reduce_string
 from ikaaro.workflow import WorkflowAware
 
 # Import from itws
@@ -63,7 +62,7 @@ from shop.modules import ModuleLoader
 from shop.shop_views import Shop_Login, Shop_Register
 from shop.stock.stock_views import Stock_FillStockOut, Stock_Resupply
 from shop.utils import get_shop, format_price, generate_barcode
-from shop.utils import CurrentFolder_AddImage
+from shop.utils import CurrentFolder_AddImage, MiniTitle
 
 
 mail_stock_subject_template = MSG(u'Product out of stock')
@@ -426,6 +425,10 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         shop_module = ModuleLoader()
         shop_module.context = context
         shop_module.here = self
+        # Minititle
+        mini_title = MiniTitle()
+        mini_title.context = context
+        mini_title.here = self
         # Return namespace
         return {
           'name': self.name,
@@ -437,9 +440,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
           'description': self.get_property('description'),
           'href': context.get_link(self),
           'manufacturer': ManufacturersEnumerate.get_value(self.get_property('manufacturer')),
-          'mini-title': reduce_string(title,
-                                      shop.product_title_word_treshold,
-                                      shop.product_title_phrase_treshold),
+          'mini-title': mini_title,
           'price': self.get_price_namespace(),
           'reference': self.get_property('reference'),
           'title': title}

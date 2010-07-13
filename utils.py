@@ -21,6 +21,9 @@ from cStringIO import StringIO
 from itools.datatypes import Enumerate
 from itools.xml import XMLParser
 
+# Import from ikaaro
+from ikaaro.utils import reduce_string
+
 # Import from pyPdf
 from pyPdf import PdfFileWriter, PdfFileReader
 
@@ -160,3 +163,14 @@ class ResourceDynamicProperty(dict):
 
     def __getitem__(self, key):
         return self.resource.get_property(key)
+
+
+class MiniTitle(dict):
+
+    here = None
+    context = None
+
+    def __getitem__(self, key):
+        title =  self.here.get_property('title')
+        key = int(key)
+        return reduce_string(title, key, key)
