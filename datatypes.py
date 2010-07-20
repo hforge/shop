@@ -205,3 +205,19 @@ class IntegerRange(String):
     def encode(value):
         value1, value2 = value
         return '%s@%s' % (value1 if value1 else '', value2 if value2 else '')
+
+
+
+
+class UserGroup_Enumerate(DynamicEnumerate):
+
+    format = 'user-group'
+    is_abspath = True
+
+
+
+class SkinsEnumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        return shop_skins

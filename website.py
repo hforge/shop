@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.datatypes import Boolean
 from itools.gettext import MSG
 from itools.web import get_context
@@ -29,12 +30,14 @@ from itws.ws_neutral import NeutralWS
 
 # Import from shop
 from categories import Category
+from datatypes import SkinsEnumerate
 from search import ShopSearch
 from shop import Shop
 from shop_views import Shop_Register, Shop_Login
 from shop_utils_views import Cart_Viewbox
 from utils_views import RedirectPermanent
 from website_views import ShopWebSite_View, ShopWS_SiteMap, ShopWS_RSS
+from website_views import ShopWebSite_Configure
 
 
 default_resources = {
@@ -58,12 +61,16 @@ class ShopWebSite(NeutralWS):
     class_id = 'shop-website'
     class_title = MSG(u'Shop website')
     class_version = '20100712'
-    class_skin = '/ui/default_skin'
+    class_skin = '/ui/default_skin/'
 
     __fixed_handlers__ = NeutralWS.__fixed_handlers__ + ['categories', 'shop']
 
+    edit_schema = {}
+    edit_widgets = []
+
     # View
     view = ShopWebSite_View()
+    configure = ShopWebSite_Configure()
     sitemap = ShopWS_SiteMap()
     product_search = RedirectPermanent(specific_document='search')
 
@@ -82,12 +89,6 @@ class ShopWebSite(NeutralWS):
     templates = {}
     cart_preview_class = Cart_Viewbox
     backoffice_rss_news_uri = None
-
-    # Skin configuration
-    show_sidebar_on_product = True
-    show_sidebar_on_category = True
-    show_sidebar_on_homepage = True
-
 
 
     @staticmethod
@@ -111,12 +112,22 @@ class ShopWebSite(NeutralWS):
                                language='en', **kw)
 
 
+    @classmethod
+    def get_metadata_schema(cls):
+        return merge_dicts(
+                  NeutralWS.get_metadata_schema(),
+                  class_skin=SkinsEnumerate)
+
+
     def get_document_types(self):
         return []
 
 
     def get_class_skin(self, context):
-        return self.class_skin
+        class_skin = self.get_property('class_skin')
+        if not class_skin:
+            return self.class_skin
+        return class_skin
 
 
     def get_skin(self, context):

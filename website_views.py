@@ -22,15 +22,31 @@ from itools.web import STLView
 from itools.xapian import PhraseQuery, AndQuery, OrQuery
 
 # Import from ikaaro
+from ikaaro.forms import SelectWidget
 from ikaaro.utils import get_base_path_query
 
 # Import from itws
+from itws.views import AutomaticEditView
 from itws.ws_neutral_views import NeutralWS_RSS, NeutralWS_View
 
 # Import from shop
 from categories import Category
+from datatypes import SkinsEnumerate
 from products import Product
 from utils import get_shop
+
+
+class ShopWebSite_Configure(AutomaticEditView):
+
+    access = 'is_allowed_to_edit'
+
+    base_schema = merge_dicts(AutomaticEditView.base_schema,
+                              class_skin=SkinsEnumerate)
+
+    base_widgets = AutomaticEditView.base_widgets + \
+                   [SelectWidget('class_skin', title=MSG(u'Class skin'),
+                                 has_empty_option=False)]
+
 
 
 class ShopWebSite_View(NeutralWS_View):
