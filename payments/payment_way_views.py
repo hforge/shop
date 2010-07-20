@@ -28,7 +28,7 @@ from ikaaro.forms import XHTMLBody, ImageSelectorWidget, TextWidget, RTEWidget
 from ikaaro.forms import BooleanRadio, SelectWidget
 
 # Import from shop
-from shop.user_group import UserGroup_Enumerate
+from shop.datatypes import UserGroup_Enumerate
 
 
 class PaymentWay_EndView(STLView):

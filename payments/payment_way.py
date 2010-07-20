@@ -30,7 +30,7 @@ from ikaaro.table import Table
 # Import from shop
 from payment_way_views import PaymentWay_RecordView
 from shop.folder import ShopFolder
-from shop.user_group import UserGroup_Enumerate
+from shop.datatypes import UserGroup_Enumerate
 
 
 class PaymentWayBaseTable(BaseTable):
