@@ -18,7 +18,8 @@
 from cStringIO import StringIO
 
 # Import from itools
-from itools.datatypes import Enumerate
+from itools.datatypes import Boolean, Enumerate, String, LanguageTag, Tokens
+from itools.handlers import ConfigFile
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -174,3 +175,15 @@ class MiniTitle(dict):
         title =  self.here.get_property('title')
         key = int(key)
         return reduce_string(title, key, key)
+
+
+
+class ITWSHOPConfig(ConfigFile):
+
+    schema = {
+        'url': String(default=''),
+        'source_language': LanguageTag(default=('en', 'EN')),
+        'target_languages': Tokens(default=(('en', 'EN'),)),
+        'skin_path': String(default=''),
+        'show_language_title': Boolean(default=False)
+    }
