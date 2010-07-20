@@ -18,7 +18,7 @@
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import SelectRadio, stl_namespaces
+from ikaaro.forms import SelectRadio, Widget, stl_namespaces
 
 
 class SelectRadioList(SelectRadio):
@@ -109,3 +109,31 @@ class SelectRadioColor(SelectRadio):
           });
         </script>
         """, stl_namespaces))
+
+
+
+class RangeSlider(Widget):
+
+    template = list(XMLParser("""
+          <input type="text" id="${id}-amount" style="border:0; color:#f6931f; font-weight:bold;" />
+          <div id="${id}"/>
+          <script type="text/javascript" src="/ui/shop/js/jquery.slider.js"/>
+          <script type="text/javascript">
+          $(function() {
+            $("#${id}").slider({
+              range: true,
+              min: 0,
+              max: 5000,
+              values: [0, 10],
+              slide: function(event, ui) {
+                $("#${id}-amount").val(ui.values[0] + ' - ' + ui.values[1]);
+              }
+            });
+          });
+          </script>
+        """, stl_namespaces))
+
+    def get_namespace(self, datatype, value):
+        namespace = Widget.get_namespace(self, datatype, value)
+        namespace['title'] = self.title
+        return namespace
