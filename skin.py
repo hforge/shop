@@ -107,6 +107,7 @@ class ShopSkin(NeutralSkin):
     def __init__(self, key=None, database=None, **kw):
         # We can add a config file for additional configuration
         self.config = kw.get('config')
+        # Super
         super(ShopSkin, self).__init__(key, database)
 
 
@@ -177,16 +178,12 @@ class ShopSkin(NeutralSkin):
         if isinstance(here, site_root.shop_class):
             return site_root.get_resource('shop/shop-sidebar', soft=True)
         elif isinstance(here, shop.product_class):
-            if site_root.show_sidebar_on_product is False:
-                return None
             return site_root.get_resource('product-sidebar')
         elif isinstance(here, shop.category_class):
-            if site_root.show_sidebar_on_category is False:
-                return None
+            sidebar = context.resource.get_resource('sidebar', soft=True)
+            if sidebar:
+                return sidebar
             return site_root.get_resource('category-sidebar')
-        elif (isinstance(here, WebSite) and
-            site_root.show_sidebar_on_homepage is False):
-            return None
         return NeutralSkin.get_sidebar_resource(self, context)
 
 
