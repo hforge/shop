@@ -21,12 +21,14 @@ from decimal import Decimal as decimal
 from itools.datatypes import Boolean, Enumerate, PathDataType, String
 from itools.datatypes import Decimal
 from itools.gettext import MSG
+from itools.uri import Path
 from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.file import Image
 
 # Import from shop
+from registry import shop_skins
 from utils import format_price
 
 
@@ -50,10 +52,12 @@ class Civilite(Enumerate):
 
 class ImagePathDataType(PathDataType):
 
-    default = ''
+    default = None
 
     @staticmethod
     def is_valid(value):
+        if not value:
+            return True
         context = get_context()
         resource = context.resource
         image = resource.get_resource(value, soft=True)
@@ -62,6 +66,21 @@ class ImagePathDataType(PathDataType):
         if not isinstance(image, Image):
             return False
         return True
+
+
+    @staticmethod
+    def decode(value):
+        if not value:
+            return ''
+        return Path(value)
+
+
+    @staticmethod
+    def encode(value):
+        if not value:
+            return ''
+        return str(value)
+
 
 
 class ProductPathDataType(PathDataType):
