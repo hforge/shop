@@ -17,7 +17,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import PathDataType, Unicode
+from itools.datatypes import Unicode
 from itools.gettext import MSG
 from itools.web import get_context
 from itools.xapian import AndQuery, PhraseQuery
@@ -35,6 +35,7 @@ from itws.views import AutomaticEditView
 # Import from shop
 from categories_views import Category_View, Category_BackofficeView
 from categories_views import Category_Comparator
+from datatypes import ImagePathDataType
 from folder import ShopFolder
 from utils import get_shop
 from products import Product
@@ -50,7 +51,7 @@ class Category(ShopFolder):
     edit_show_meta = True
     edit_schema = {'data': XHTMLBody(multilingual=True),
                    'breadcrumb_title': Unicode(multilingual=True),
-                   'image_category': PathDataType(multilingual=True)}
+                   'image_category': ImagePathDataType(multilingual=True)}
     edit_widgets = [
         TextWidget('breadcrumb_title', title=MSG(u'Breadcrumb title')),
         ImageSelectorWidget('image_category',  title=MSG(u'Category image')),
@@ -70,7 +71,7 @@ class Category(ShopFolder):
         return merge_dicts(ShopFolder.get_metadata_schema(),
                            data=XHTMLBody(multilingual=True),
                            breadcrumb_title=Unicode(multilingual=True),
-                           image_category=PathDataType(multilingual=True))
+                           image_category=ImagePathDataType(multilingual=True))
 
 
     def _get_catalog_values(self):
