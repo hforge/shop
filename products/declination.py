@@ -75,7 +75,7 @@ class Declination_Edit(DBResource_Edit):
         widgets = []
         shop = get_shop(resource)
         enumerates_folder = shop.get_resource('enumerates')
-        if shop.has_pro_price is True:
+        if shop.has_pro_price() is True:
             widgets.insert(0, declination_widgets_pro)
         return declination_widgets + widgets
 
@@ -108,7 +108,7 @@ class Declination_NewInstance(NewInstance):
         for name in resource.get_purchase_options_names():
             title = enumerates_folder.get_resource(name).get_title()
             widgets.append(SelectWidget(name, title=title, has_empty_option=False))
-        if shop.has_pro_price is True:
+        if shop.has_pro_price() is True:
             widgets.insert(0, declination_widgets_pro)
         return declination_widgets + widgets
 
@@ -210,7 +210,7 @@ class Declination(DynamicFolder):
 
     def update_20100708(self):
         shop = get_shop(self)
-        if shop.has_pro_price is True:
+        if shop.has_pro_price() is True:
             value = self.get_property('price-impact-value')
             self.set_property('pro-price-impact-value', value)
 

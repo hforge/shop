@@ -256,7 +256,7 @@ class Product_Edit(AutoForm):
         schema = self.get_schema(resource, context)
         widgets = deepcopy(self.base_widgets)
         # Prix pro
-        if shop.has_pro_price is True:
+        if shop.has_pro_price() is True:
             widget = PriceWidget('pro-pre-tax-price',
                                  title=MSG(u'PRO Selling price'),
                                  prefix='pro')

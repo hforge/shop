@@ -38,7 +38,7 @@ from forms import ThreeStateBooleanRadio
 from shop_utils_views import RealRessource_Form
 from orders.orders_views import numero_template
 from orders.workflow import states, states_color
-from user_group import UserGroup_Enumerate, groups
+from datatypes import UserGroup_Enumerate
 from utils import ResourceDynamicProperty
 from utils import bool_to_img, get_shop, get_skin_template
 from utils_views import SearchTableFolder_View
@@ -121,14 +121,14 @@ class ShopUser_Manage(STLView):
                'value': datatype.encode(value)})
         # Additional group schema
         user_group = user.get_property('user_group')
-        if user_group:
-            group = groups[user_group]
-            for widget in group.widgets:
-                datatype = group.schema[widget.name]
-                value = user.get_property(widget.name)
-                namespace['user']['group'].append(
-                  {'title': widget.title,
-                   'value': datatype.encode(value)})
+        #if user_group:
+        #    group = groups[user_group]
+        #    for widget in group.widgets:
+        #        datatype = group.schema[widget.name]
+        #        value = user.get_property(widget.name)
+        #        namespace['user']['group'].append(
+        #          {'title': widget.title,
+        #           'value': datatype.encode(value)})
 
         # Customer connections
         namespace['connections'] = []
@@ -172,18 +172,10 @@ class ShopUser_EditPrivateInformations(AutoForm):
     title = MSG(u'Edit private user informations')
 
     def get_schema(self, resource, context):
-        user_class = get_shop(resource).user_class
-        # Get group
-        user_group = resource.get_property('user_group')
-        if user_group:
-            group_schema = groups[user_group].schema
-        else:
-            group_schema = {}
         # Other schema
-        schema = merge_dicts(user_class.base_schema,
-                             user_class.public_schema,
-                             user_class.private_schema,
-                             group_schema)
+        schema = merge_dicts(resource.base_schema,
+                             resource.get_dynamic_schema(),
+                             user_group=UserGroup_Enumerate)
         del schema['password']
         del schema['user_must_confirm']
         return schema
@@ -191,16 +183,8 @@ class ShopUser_EditPrivateInformations(AutoForm):
 
     def get_widgets(self, resource, context):
         user_class = get_shop(resource).user_class
-        # Get group
-        user_group = resource.get_property('user_group')
-        if user_group:
-            group_widgets = groups[user_group].widgets
-        else:
-            group_widgets = []
-        return (user_class.base_widgets +
-                user_class.public_widgets +
-                user_class.private_widgets +
-                group_widgets)
+        widget_group = [SelectWidget('user_group', title=MSG(u'User group'))]
+        return user_class.base_widgets + widget_group + resource.get_dynamic_widgets()
 
 
     def get_value(self, resource, context, name, datatype):
@@ -221,7 +205,7 @@ class ShopUser_EditAccount(User_EditAccount):
 
     def get_schema(self, resource, context):
         return merge_dicts(RegisterForm.schema,
-                           resource.public_schema,
+                           resource.get_public_dynamic_schema(),
                            gender=Civilite(mandatory=True),
                            phone1=String(mandatory=True),
                            phone2=String)
@@ -229,7 +213,7 @@ class ShopUser_EditAccount(User_EditAccount):
 
 
     def get_widgets(self, resource, context):
-        return resource.base_widgets + resource.public_widgets
+        return resource.base_widgets + resource.get_public_dynamic_widgets()
 
 
     def get_value(self, resource, context, name, datatype):
@@ -302,6 +286,7 @@ class ShopUser_OrdersView(BrowseForm):
             accept = context.accept_language
             return format_datetime(value, accept=accept)
         return BrowseForm.get_item_value(self, resource, context, item, column)
+
 
     def sort_and_batch(self, resource, context, items):
         # Batch
@@ -503,7 +488,8 @@ class Customers_View(SearchTableFolder_View):
         # Base query (search in folder)
         users = resource.get_site_root().get_resource('users')
         abspath = str(users.get_canonical_path())
-        query = [PhraseQuery('parent_path', abspath)]
+        query = [PhraseQuery('parent_path', abspath),
+                 PhraseQuery('format', 'user')]
         return SearchTableFolder_View.get_items(self, resource, context, query=query)
 
 

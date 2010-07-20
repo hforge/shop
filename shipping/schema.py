@@ -24,7 +24,7 @@ from itools.gettext import MSG
 
 # Import from products
 from shop.products.enumerate import ProductModelsEnumerate
-from shop.user_group import UserGroup_Enumerate
+from shop.datatypes import UserGroup_Enumerate
 
 
 class DeliveryModes(Enumerate):

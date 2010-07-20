@@ -49,7 +49,7 @@
           <a href="/categories/">Products</a>
         </li>
         <li>
-          <a href="/shop/customers/">Customers</a>
+          <a href="/users/">Customers</a>
         </li>
         <li>
           <a href="/shop/orders/">Orders</a>
@@ -118,6 +118,10 @@
         </tr>
       </table>
     </div>
+    <br/>
+    <br/>
+    ${languages}
+    <div class="clear"/>
 
   </body>
 </html>

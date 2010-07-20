@@ -214,8 +214,6 @@ class Shop_ViewCart(STLForm):
 class Shop_Register(RegisterForm):
 
     access = True
-    user_is_enabled = True
-    user_group = ''
 
     base_schema = {
         'email': Email(mandatory=True),
@@ -253,14 +251,34 @@ class Shop_Register(RegisterForm):
     def get_schema(self, resource, context):
         shop = get_shop(resource)
         return merge_dicts(self.base_schema,
-                           shop.user_class.public_schema)
+                           self.get_group_schema(context),
+                           shop.user_class.get_public_dynamic_schema())
 
 
     def get_widgets(self, resource, context):
         shop = get_shop(resource)
         return self.base_widgets + \
-               shop.user_class.public_widgets + \
+               shop.user_class.get_public_dynamic_widgets() + \
+               self.get_group_widgets(context) + \
                self.address_widgets
+
+
+    def get_group_abspath(self, context):
+        root = context.root
+        query = [PhraseQuery('format', 'user-group'),
+                 PhraseQuery('name', 'default')]
+        search = root.search(AndQuery(*query))
+        documents = search.get_documents()
+        group = documents[0]
+        return str(group.abspath)
+
+
+    def get_group_schema(self, context):
+        return {}
+
+
+    def get_group_widgets(self, context):
+        return []
 
 
     def action(self, resource, context, form):
@@ -288,7 +306,8 @@ class Shop_Register(RegisterForm):
         user = users.set_user(email, password)
 
         # Set user group (do it befor save_form for dynanic schema)
-        user.set_property('user_group', self.user_group)
+        group_abspath = self.get_group_abspath(context)
+        user.set_property('user_group', group_abspath)
 
         # Save properties
         user.save_form(self.get_schema(resource, context), form)
@@ -319,9 +338,10 @@ class Shop_Register(RegisterForm):
         user.send_register_confirmation(context)
 
         # User is enabled ?
-        user.set_property('is_enabled', self.user_is_enabled)
+        user_is_enabled = self.get_user_is_enabled(resource)
+        user.set_property('is_enabled', user_is_enabled)
 
-        if self.user_is_enabled is False:
+        if user_is_enabled is False:
             # Send mail to webmaster to validate user
             subject = MSG(u'A customer must be validated in your shop').gettext()
             shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
@@ -330,8 +350,11 @@ class Shop_Register(RegisterForm):
                         shop_backoffice_uri=shop_backoffice_uri)
             for to_addr in shop.get_property('order_notification_mails'):
                 root.send_email(to_addr, subject, text=body)
+            # Group
+            group = root.get_resource(group_abspath)
+            goto = '%s/welcome/' % context.get_link(group)
             # Redirect on specific page
-            return context.come_back(msg, goto='/shop/groups/%s/welcome' % self.user_group)
+            return context.come_back(msg, goto=goto)
 
         ########################
         # Do authentification
@@ -352,6 +375,9 @@ class Shop_Register(RegisterForm):
             goto = '/users/%s' % user.name
         return context.come_back(msg, goto)
 
+
+    def get_user_is_enabled(self, resource):
+        return True
 
 
 class Shop_Login(STLForm):

@@ -17,6 +17,7 @@
 # Import from itools
 from itools.datatypes import Email, Unicode, Boolean, Integer, String
 from itools.gettext import MSG
+from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class
@@ -68,13 +69,6 @@ class Shop(ShopFolder):
     # Shop configuration
     ####################################
 
-    # Reduce string (for product mini-title)
-    product_title_word_treshold = 50
-    product_title_phrase_treshold= 150
-
-    # Pro price
-    has_pro_price = False
-
     # XXX
     profile_items = []
 
@@ -88,7 +82,6 @@ class Shop(ShopFolder):
     payments_class = ShopPayments
     supplier_class = Supplier
     user_class = ShopUser
-    user_groups_class = []
 
     ####################################
     ## Views
@@ -247,10 +240,19 @@ class Shop(ShopFolder):
     ##############################
     def show_ht_price(self, context):
         user = context.user
-        if (context.user and
-            context.user.get_property('user_group') == 'group_pro'):
-            return True
+        if context.user:
+            group = context.user.get_group(context)
+            return group.get_property('show_ht_price')
         return False
+
+
+    def has_pro_price(self):
+        # XXX Improve in future
+        root = self.get_root()
+        query = [PhraseQuery('format', 'user-group'),
+                 PhraseQuery('name', 'pro')]
+        search = root.search(AndQuery(*query))
+        return len(search) > 0
 
     ##############################
     # Update methods

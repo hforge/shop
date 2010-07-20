@@ -20,28 +20,32 @@ from datetime import datetime
 # Import from itools
 from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
-from itools.datatypes import Boolean, String, Unicode, DateTime, Tokens
+from itools.datatypes import Boolean, String, Unicode, DateTime
 from itools.gettext import MSG
 from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import BooleanRadio, SelectRadio, SelectWidget, TextWidget
+from ikaaro.forms import SelectRadio, SelectWidget, TextWidget
+from ikaaro.forms import BooleanCheckBox
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
+from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.user import User, UserFolder
 
 # Import from shop
+from products.models import get_real_datatype, get_default_widget_shop
+from products.enumerate import Datatypes
 from user_views import ShopUser_Profile
 from user_views import ShopUser_EditAccount
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView
 from user_views import Customers_View, AuthentificationLogs_View
 from user_views import ShopUser_EditPrivateInformations, ShopUser_Manage
-from user_group import UserGroup_Enumerate
+from datatypes import UserGroup_Enumerate
 from addresses_views import Addresses_Book
-from user_group import groups
+from products.dynamic_folder import DynamicFolder
 from utils import get_shop
 from datatypes import Civilite
 
@@ -67,12 +71,72 @@ class AuthentificationLogs(Table):
 
 
 
+class CustomerSchemaTable(OrderedTableFile):
+
+    record_properties = {
+        'name': String(unique=True, is_indexed=True),
+        'title': Unicode(mandatory=True, multiple=True),
+        'mandatory': Boolean,
+        'multiple': Boolean,
+        'datatype': Datatypes(mandatory=True, index='keyword'),
+        'default': Unicode,
+        }
+
+
+
+class CustomerSchema(OrderedTable):
+
+    class_id = 'product-model-schema'
+    class_title = MSG(u'Model Schema')
+    class_version = '20090609'
+    class_handler = CustomerSchemaTable
+    class_views = ['view', 'add_record']
+
+    form = [
+        TextWidget('name', title=MSG(u'Name')),
+        TextWidget('title', title=MSG(u'Title')),
+        BooleanCheckBox('mandatory', title=MSG(u'Mandatory')),
+        BooleanCheckBox('multiple', title=MSG(u'Multiple')),
+        SelectWidget('datatype', title=MSG(u'Data Type')),
+        TextWidget('default', title=MSG(u'Default value')),
+        ]
+
+    def get_model_schema(self):
+        schema = {}
+        get_value = self.handler.get_record_value
+        for record in self.handler.get_records_in_order():
+            name = get_value(record, 'name')
+            datatype = get_real_datatype(self.handler, record)
+            default = get_value(record, 'default')
+            if default:
+                datatype.default = default
+            schema[name] = datatype
+        return schema
+
+
+    def get_model_widgets(self):
+        widgets = []
+        get_value = self.handler.get_record_value
+        for record in self.handler.get_records_in_order():
+            name = get_value(record, 'name')
+            datatype = get_real_datatype(self.handler, record)
+            widget = get_default_widget_shop(datatype)
+            title = get_value(record, 'title')
+            widget = widget(name, title=title, has_empty_option=False)
+            widgets.append(widget)
+        return widgets
+
+
+
 class Customers(Folder):
 
     class_id = 'customers'
     class_views = ['view', 'last_connections']
 
-    view = Customers_View()
+    view = GoToSpecificDocument(
+                        title=MSG(u'Customers'),
+                        access='is_allowed_to_add',
+                        specific_document='/users/')
     last_connections = GoToSpecificDocument(
                         title=MSG(u'Last connections'),
                         access='is_allowed_to_add',
@@ -86,22 +150,14 @@ class Customers(Folder):
                     '%s/authentification_logs' % name, *args, **kw)
 
 
-    def _get_resource(self, name):
-        context = get_context()
-        is_admin = self.get_access_control().is_admin(context.user, self)
-        site_root = self.get_site_root()
-        user = site_root.get_resource('/users/' + name, soft=True)
-        if user and is_admin:
-            return ShopUser(user.metadata)
-        return Folder._get_resource(self, name)
 
 
+class ShopUser(User, DynamicFolder):
 
-class ShopUser(User):
-
-    class_version = '20091009'
-    base_class_views = ['profile', 'addresses_book', 'edit_account',
-                        'orders_view', 'edit_preferences', 'edit_password']
+    class_version = '20100720'
+    class_id = 'user'
+    class_views = ['profile', 'addresses_book', 'edit_account',
+                   'orders_view', 'edit_preferences', 'edit_password']
 
     # Views
     manage = ShopUser_Manage()
@@ -136,16 +192,6 @@ class ShopUser(User):
                 TextWidget('phone2', title=MSG(u"Mobile"))]
 
 
-    # Additional public schema / widgets
-    public_schema = {}
-    public_widgets = []
-
-    # Additional private schema / widgets
-    private_schema = {'is_enabled': Boolean,
-                      'user_group': UserGroup_Enumerate}
-    private_widgets = [BooleanRadio('is_enabled', title=MSG(u'Is enabled')),
-                       SelectWidget('user_group', title=MSG(u'User group'))]
-
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         ctime = datetime.now()
@@ -154,16 +200,69 @@ class ShopUser(User):
 
     @classmethod
     def get_metadata_schema(cls):
-        return merge_dicts(cls.base_schema,
-                           cls.public_schema,
-                           cls.private_schema)
+        return merge_dicts(DynamicFolder.get_metadata_schema(),
+                           cls.base_schema,
+                           is_enabled=Boolean,
+                           user_group=UserGroup_Enumerate)
+
+
+    def get_dynamic_schema(self):
+        return merge_dicts(self.get_public_dynamic_schema(),
+                           self.get_private_dynamic_schema(),
+                           self.get_group_dynamic_schema())
+
+
+    def get_dynamic_widgets(self):
+        return (self.get_public_dynamic_widgets() +
+                self.get_private_dynamic_widgets())
+
+
+    @classmethod
+    def get_public_dynamic_schema(cls):
+        users = get_context().root.get_resource('/users')
+        public_schema = users.get_resource('public_schema')
+        return public_schema.get_model_schema()
+
+
+    @classmethod
+    def get_public_dynamic_widgets(cls):
+        users = get_context().root.get_resource('/users')
+        public_schema = users.get_resource('public_schema')
+        return public_schema.get_model_widgets()
+
+
+    @classmethod
+    def get_private_dynamic_schema(cls):
+        users = get_context().root.get_resource('/users')
+        private_schema = users.get_resource('private_schema')
+        return private_schema.get_model_schema()
+
+
+    @classmethod
+    def get_private_dynamic_widgets(cls):
+        users = get_context().root.get_resource('/users')
+        private_schema = users.get_resource('private_schema')
+        return private_schema.get_model_widgets()
+
+
+    def get_group_dynamic_schema(self):
+        user_group = self.get_property('user_group')
+        # XXX Should never be None
+        if not user_group:
+            return {}
+        user_group_schema = self.get_resource('%s/schema' % user_group, soft=True)
+        # XXX Remove after update
+        if user_group_schema is None:
+            return {}
+        return user_group_schema.get_model_schema()
+
 
 
     def _get_catalog_values(self):
         values = User._get_catalog_values(self)
         values['ctime'] = self.get_property('ctime')
         values['last_time'] = self.get_property('last_time')
-        values['user_group'] = self.get_property('user_group')
+        values['user_group'] = str(self.get_property('user_group'))
         values['is_enabled'] = self.get_property('is_enabled')
         return values
 
@@ -172,22 +271,13 @@ class ShopUser(User):
         return []
 
 
-    def get_class_views(self):
-        # HACK Virtual
-        if self.parent.name == 'customers':
-            return ['manage', 'edit_private_informations']
-        return self.base_class_views
-    class_views = property(get_class_views, None, None, '')
-
-
     def save_form(self, schema, form):
-        private_schema = self.private_schema
+        dynamic_schema = self.get_dynamic_schema()
         for key in schema:
             if key in ['password', 'user_must_confirm']:
                 continue
             elif (key not in self.get_metadata_schema() and
-                  key not in self.get_dynamic_schema() and
-                  key not in private_schema):
+                  key not in dynamic_schema):
                 continue
             value = form[key]
             if value is None:
@@ -199,106 +289,56 @@ class ShopUser(User):
             self.set_property(key, value)
 
 
-    mail_subject_template = MSG(u"Inscription confirmation.")
-    mail_body_template = MSG(u"Your inscription has been validated")
-
-    mail_subject_template_not_enabled = MSG(u"Inscription confirmation - Your account must be validated")
-    mail_body_template_not_enabled = MSG(u"""Hello
-We have received your application to our website as a Professional.
-This request has been forwarded to our service.
-Sincerely,
-The Webmaster""")
-
-
     def send_register_confirmation(self, context):
-        if self.get_property('is_enabled') is True:
-            subject = self.mail_subject_template.gettext()
-            text = self.mail_body_template.gettext()
-        else:
-            subject = self.mail_subject_template_not_enabled.gettext()
-            text = self.mail_body_template_not_enabled.gettext()
+        # Get group
+        group = self.get_group(context)
+        # Get mail subject and body
+        subject = group.get_register_mail_subject()
+        text = group.get_register_mail_body()
+        # Send mail
         context.root.send_email(to_addr=self.get_property('email'),
                                 subject=subject, text=text)
 
 
-
-    ###################################
-    ## XXX Dynamic group user
-    ###################################
-    def get_dynamic_schema(self):
+    def get_group(self, context):
+        shop = get_shop(context.resource)
         user_group = self.get_property('user_group')
-        if user_group:
-            return groups[user_group].schema
-        return {}
+        return shop.get_resource(user_group)
 
 
-    def get_property_and_language(self, name, language=None):
-        value, language = User.get_property_and_language(self, name,
-                                                               language)
-
-        # Default properties first (we need "product_model")
-        if name in self.get_metadata_schema():
-            return value, language
-
-        # Dynamic property?
-        dynamic_schema = self.get_dynamic_schema()
-        if name in dynamic_schema:
-            datatype = dynamic_schema[name]
-            # Default value
-            if value is None:
-                value = datatype.get_default()
-            elif getattr(datatype, 'multiple', False):
-                if not isinstance(value, list):
-                    # Decode the property
-                    # Only support list of strings
-                    value = list(Tokens.decode(value))
-                # Else a list was already set by "set_property"
-            else:
-                value = datatype.decode(value)
-
-        return value, language
+    def update_20100719(self):
+        if not self.get_property('user_group'):
+            self.set_property('user_group', 'default')
 
 
-    def set_property(self, name, value, language=None):
-        """Added to handle dynamic properties.
-        The value is encoded because metadata won't know about its datatype.
-        The multilingual status must be detected to give or not the
-        "language" argument.
-        """
-
-        # Dynamic property?
-        dynamic_schema = self.get_dynamic_schema()
-        if name in dynamic_schema:
-            datatype = dynamic_schema[name]
-            if getattr(datatype, 'multiple', False):
-                return User.set_property(self, name,
-                                               Tokens.encode(value))
-            elif getattr(datatype, 'multilingual', False):
-                # If the value equals the default value
-                # set the property to None (String's default value)
-                # to avoid problems during the language negociation
-                if value == datatype.get_default():
-                    # XXX Should not be hardcoded
-                    # Default value for String datatype is None
-                    value = None
-                else:
-                    value = datatype.encode(value)
-                return User.set_property(self, name, value, language)
-            # Even if the language was not None, this property is not
-            # multilingual so ignore it.
-            return User.set_property(self, name,
-                                           datatype.encode(value))
-
-        # Standard property
-        schema = self.get_metadata_schema()
-        datatype = schema[name]
-        if getattr(datatype, 'multilingual', False):
-            return User.set_property(self, name, value, language)
-        return User.set_property(self, name, value)
+    def update_20100720(self):
+        ws_name = self.get_root().search(format='shop-neutral').get_documents()[0].name
+        group = self.get_property('user_group')
+        group = '/%s/shop/groups/%s' % (ws_name, group)
+        self.set_property('user_group', group)
 
 
 
 class ShopUserFolder(UserFolder):
+
+    class_id = 'users'
+    class_views = ['view', 'last_connections']
+    class_version = '20100719'
+
+    view = Customers_View()
+    last_connections = GoToSpecificDocument(
+                        title=MSG(u'Last connections'),
+                        access='is_allowed_to_add',
+                        specific_document='../shop/customers/authentification_logs')
+
+
+    @staticmethod
+    def _make_resource(cls, folder, name, *args, **kw):
+        UserFolder._make_resource(cls, folder, name, *args, **kw)
+        # Customer schema (public/private)
+        cls = CustomerSchema
+        cls._make_resource(cls, folder, '%s/public_schema' % name)
+        cls._make_resource(cls, folder, '%s/private_schema' % name)
 
 
     def set_user(self, email=None, password=None):
@@ -317,6 +357,14 @@ class ShopUserFolder(UserFolder):
 
         # Return the user
         return user
+
+
+    def update_20100719(self):
+        cls = CustomerSchema
+        cls.make_resource(cls, self, 'public_schema')
+        cls.make_resource(cls, self, 'private_schema')
+
+
 
 
 register_resource_class(ShopUser)
