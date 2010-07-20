@@ -276,6 +276,7 @@ class Category_BackofficeView(Folder_BrowseContent):
         ('title', MSG(u'Title')),
         ('nb_sub_categories', MSG(u'Nb sub categories'), None),
         ('nb_products', MSG(u'Nb products'), None),
+        ('nb_backlinks', MSG(u'Nb backlinks'), None),
         ('actions', MSG(u'Actions'), None),
         ]
 
@@ -295,6 +296,10 @@ class Category_BackofficeView(Folder_BrowseContent):
             nb_products = item_resource.get_nb_products()
             uri = '/categories/;browse_content?abspath=%s' % brain.abspath
             return nb_products, uri
+        elif column == 'nb_backlinks':
+            query = PhraseQuery('links', str(item_resource.get_canonical_path()))
+            search = context.root.search(query)
+            return len(search), './%s/;backlinks' % brain.name
         elif column == 'actions':
             return XMLParser("""
                 <a href="./%s/" title="View category">
