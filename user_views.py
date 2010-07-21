@@ -79,9 +79,7 @@ class ShopUser_Profile(STLView):
         # Get modules items
         modules_items = []
         search = context.root.search(is_shop_user_module=True)
-        print 'ok'
         for brain in search.get_documents():
-            print brain.abspath
             shop_user_module = root.get_resource(brain.abspath)
             modules_items.append(
                 {'title': shop_user_module.element_title,
