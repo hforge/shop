@@ -222,10 +222,11 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
             # data (html)
             events = self.get_property('data', language=language)
-            text = [ unicode(value, 'utf-8') for event, value, line in events
-                     if event == TEXT ]
-            if text:
-                texts.append(u' '.join(text))
+            if events:
+                text = [ unicode(value, 'utf-8') for event, value, line in events
+                         if event == TEXT ]
+                if text:
+                    texts.append(u' '.join(text))
 
             # Dynamic properties
             if schema is None:
