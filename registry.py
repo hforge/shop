@@ -61,7 +61,7 @@ def register_shop(package, name):
         project_modules = [f for f in listdir(modules_path)
               if isdir(get_abspath('%s/%s' % (modules_path, f)))]
         for m in project_modules:
-            print '--> Import module %s' % m
+            print '>>> Import module %s' % m
             exec('import %s.%s.modules.%s' % (package, name, m))
     # Print
     print 'URL: ', config.get_value('url')

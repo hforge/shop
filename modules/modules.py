@@ -31,6 +31,8 @@ from shop.utils import get_shop
 
 class ShopModule(ShopFolder):
 
+    class_views = ['edit']
+
     edit = ShopModule_Edit()
 
     item_schema = {}
@@ -45,6 +47,18 @@ class ShopModule(ShopFolder):
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
                            cls.item_schema)
+
+
+
+class ShopModule_User(ShopModule):
+
+    def _get_catalog_values(self):
+        return merge_dicts(ShopModule._get_catalog_values(self),
+                           is_shop_user_module=True)
+
+    def initialize(self, user):
+        cls = self.element_cls
+        cls.make_resource(cls, user, self.element_name)
 
 
 
@@ -77,3 +91,4 @@ class ModuleLoader(dict):
 
 
 register_field('is_shop_module', Boolean(is_indexed=True))
+register_field('is_shop_user_module', Boolean(is_indexed=True))

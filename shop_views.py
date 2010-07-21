@@ -247,7 +247,6 @@ class Shop_Register(RegisterForm):
          TextWidget('town', title=MSG(u"Town")),
          SelectWidget('country', title=MSG(u"Pays"))]
 
-
     def get_schema(self, resource, context):
         shop = get_shop(resource)
         return merge_dicts(self.base_schema,
@@ -341,6 +340,13 @@ class Shop_Register(RegisterForm):
         user_is_enabled = self.get_user_is_enabled(resource)
         user.set_property('is_enabled', user_is_enabled)
 
+        # Create modules if needed
+        search = context.root.search(is_shop_user_module=True)
+        for brain in search.get_documents():
+            shop_user_module = root.get_resource(brain.abspath)
+            shop_user_module.initialize(user)
+
+        # If not enabled redirect on welcome page
         if user_is_enabled is False:
             # Send mail to webmaster to validate user
             subject = MSG(u'A customer must be validated in your shop').gettext()

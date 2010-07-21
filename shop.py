@@ -65,12 +65,6 @@ class Shop(ShopFolder):
                           'shippings', 'countries',
                           'terms-and-conditions-of-use', 'taxes']
 
-    ####################################
-    # Shop configuration
-    ####################################
-
-    # XXX
-    profile_items = []
 
     ###############################
     # Classes to override

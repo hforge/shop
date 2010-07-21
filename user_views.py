@@ -71,11 +71,25 @@ class ShopUser_Profile(STLView):
 
 
     def get_namespace(self, resource, context):
+        root = context.root
         shop = get_shop(context.site_root)
+        # Get dynamic user values
         dynamic_user_value = ResourceDynamicProperty()
         dynamic_user_value.resource = resource
+        # Get modules items
+        modules_items = []
+        search = context.root.search(is_shop_user_module=True)
+        print 'ok'
+        for brain in search.get_documents():
+            print brain.abspath
+            shop_user_module = root.get_resource(brain.abspath)
+            modules_items.append(
+                {'title': shop_user_module.element_title,
+                 'href': shop_user_module.element_name,
+                 'img': shop_user_module.class_icon48})
+        # Build namespace
         return {'dynamic_user_value': dynamic_user_value,
-                'items': self.base_items + shop.profile_items}
+                'items': self.base_items + modules_items}
 
 
 class ShopUser_Manage(STLView):
