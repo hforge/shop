@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
+import datetime
 from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import Boolean, Enumerate, PathDataType, String
-from itools.datatypes import Decimal
+from itools.datatypes import Date, Decimal
 from itools.gettext import MSG
 from itools.uri import Path
 from itools.web import get_context
@@ -221,3 +222,28 @@ class SkinsEnumerate(Enumerate):
     @classmethod
     def get_options(cls):
         return shop_skins
+
+
+class FrenchDate(Date):
+
+    @staticmethod
+    def decode(data):
+        if not data:
+            return None
+        if '-' in data:
+            day, month, year = data.split('-')
+            if int(day) > 31:
+                # Format '%Y-%m-%d'
+                day, year = year, day
+        elif '/' in data:
+            day, month, year = data.split('/')
+
+        day, month, year = int(day), int(month), int(year)
+        return datetime.date(year, month, day)
+
+
+    @staticmethod
+    def encode(value):
+        if value is None:
+            return ''
+        return value.strftime('%d/%m/%Y')

@@ -26,7 +26,7 @@ from itools.web import get_context
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import BooleanRadio, BooleanCheckBox, SelectWidget, TextWidget
 from ikaaro.forms import XHTMLBody, RTEWidget, get_default_widget
-from ikaaro.forms import PathSelectorWidget
+from ikaaro.forms import PathSelectorWidget, ImageSelectorWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable, OrderedTableFile
 
@@ -38,10 +38,12 @@ from models_views import ProductModelSchema_View
 from models_views import ProductModels_View
 from models_views import ProductModel_Configure
 from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
+from shop.datatypes import ImagePathDataType, FrenchDate
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
 from shop.forms import ProductSelectorWidget
+from shop.widgets import FrenchDateWidget
 
 
 real_datatypes = {'string': String,
@@ -51,9 +53,11 @@ real_datatypes = {'string': String,
                   'cm_to_inch': DatatypeCM_to_INCH,
                   'boolean': Boolean,
                   'path': PathDataType,
+                  'image': ImagePathDataType,
                   'product':  ProductPathDataType,
                   'email': Email,
                   'html': XHTMLBody,
+                  'french-date': FrenchDate,
                   'date': ISOCalendarDate}
 
 
@@ -67,8 +71,12 @@ class LinkPathSelectorWidget(PathSelectorWidget):
 def get_default_widget_shop(datatype):
     if issubclass(datatype, Boolean):
         return BooleanRadio
+    elif issubclass(datatype, FrenchDate):
+        return FrenchDateWidget
     elif issubclass(datatype, ProductPathDataType):
         return ProductSelectorWidget
+    elif issubclass(datatype, ImagePathDataType):
+        return ImageSelectorWidget
     elif issubclass(datatype, PathDataType):
         return LinkPathSelectorWidget
     elif issubclass(datatype, XHTMLBody):

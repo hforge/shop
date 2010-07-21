@@ -15,10 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.gettext import MSG
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import SelectRadio, Widget, stl_namespaces
+from ikaaro.forms import DateWidget
 
 
 class SelectRadioList(SelectRadio):
@@ -137,3 +139,9 @@ class RangeSlider(Widget):
         namespace = Widget.get_namespace(self, datatype, value)
         namespace['title'] = self.title
         return namespace
+
+
+class FrenchDateWidget(DateWidget):
+
+    format = '%d/%m/%Y'
+    tip = MSG(u'Format: 12/04/1985')
