@@ -114,12 +114,20 @@ class PhotoOrderedTable(ResourcesOrderedTable):
             ref = get_reference(path)
             if ref.scheme:
                 continue
-            path = str(old_base.resolve2(ref.path))
+            # Strip the view
+            path = ref.path
+            name = path.get_name()
+            if name and name[0] == ';':
+                view = '/' + name
+                path = path[:-1]
+            else:
+                view = ''
+            path = str(old_base.resolve2(path))
             if path == source:
                 # Hit the old name
                 # Build the new reference with the right path
                 new_ref = deepcopy(ref)
-                new_ref.path = str(new_base.get_pathto(target))
+                new_ref.path = str(new_base.get_pathto(target)) + view
                 handler.update_record(record.id, **{'name': str(new_ref)})
 
         get_context().server.change_resource(self)
@@ -139,7 +147,15 @@ class PhotoOrderedTable(ResourcesOrderedTable):
             ref = get_reference(str(path))
             if ref.scheme:
                 continue
-            path = str(ref.path)
+            # Strip the view
+            path = ref.path
+            name = path.get_name()
+            if name and name[0] == ';':
+                view = '/' + name
+                path = path[:-1]
+            else:
+                view = ''
+            path = str(path)
             # Calcul the old absolute path
             old_abs_path = source.resolve2(path)
             # Check if the target path has not been moved
@@ -148,7 +164,7 @@ class PhotoOrderedTable(ResourcesOrderedTable):
             # Build the new reference with the right path
             # Absolute path allow to call get_pathto with the target
             new_ref = deepcopy(ref)
-            new_ref.path = str(target.get_pathto(new_abs_path))
+            new_ref.path = str(target.get_pathto(new_abs_path)) + view
             # Update the record
             handler.update_record(record.id, **{'name': str(new_ref)})
 

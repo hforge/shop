@@ -14,9 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from standard library
-from copy import deepcopy
-
 # Import from itools
 from itools.datatypes import PathDataType
 from itools.stl import rewrite_uris
@@ -59,40 +56,35 @@ class ShopFolder(Folder):
         links = Folder.get_links(self)
         # General informations
         base = self.get_canonical_path()
-        languages = self.get_site_root().get_property('website_languages')
+        site_root = self.get_site_root()
+        languages = site_root.get_property('website_languages')
         # We update XHTMLBody links
         for key, datatype in self.get_metadata_schema().items():
             multilingual = getattr(datatype, 'multilingual', False)
+            langs = languages if multilingual is True else [None]
             if issubclass(datatype, XHTMLBody):
-                if multilingual is True:
-                    for language in languages:
-                        events = self.get_property(key, language=language)
-                        if not events:
-                            continue
-                        links.extend(_get_links(base, events))
-                else:
-                    path = self.get_property(key)
-                    if path == None:
+                for lang in langs:
+                    events = self.get_property(key, language=lang)
+                    if not events:
+                        continue
+                    links.extend(_get_links(base, events))
+            elif issubclass(datatype, PathDataType):
+                # Relative path
+                for lang in langs:
+                    path = self.get_property(key, language=lang)
+                    if path is None:
                         continue
                     links.append(str(base.resolve2(path)))
-            elif issubclass(datatype, (PathDataType, AbsolutePathDataTypeEnumerate)):
-                if multilingual is True:
-                    for language in languages:
-                        path = self.get_property(key, language=language)
-                        if path == None:
-                            continue
-                        links.append(str(base.resolve2(path)))
-                else:
-                    path = self.get_property(key)
-                    if path == None:
+            elif issubclass(datatype, AbsolutePathDataTypeEnumerate):
+                # Absolute path
+                for lang in langs:
+                    path = self.get_property(key, language=lang)
+                    if path is None:
                         continue
-                    links.append(str(base.resolve2(path)))
+                    links.append(str(path))
         # Tagaware ?
         if isinstance(self, TagsAware):
-            site_root = self.get_site_root()
-            tags_base = site_root.get_abspath().resolve2('tags')
-            links.extend([str(tags_base.resolve2(tag))
-                          for tag in self.get_property('tags')])
+            links.extend(TagsAware.get_links(self))
         return links
 
 
@@ -104,67 +96,55 @@ class ShopFolder(Folder):
         old_base = Path(old_base)
         new_base = Path(base)
 
-        languages = self.get_site_root().get_property('website_languages')
+        site_root = self.get_site_root()
+        languages = site_root.get_property('website_languages')
         links = []
         for key, datatype in self.get_metadata_schema().items():
             multilingual = getattr(datatype, 'multilingual', False)
+            langs = languages if multilingual is True else [None]
             if issubclass(datatype, XHTMLBody):
-                if multilingual is True:
-                    for language in languages:
-                        events = self.get_property(key, language=language)
-                        if not events:
-                            continue
-                        events = _change_link(source, target, old_base, new_base, events)
-                        events = list(events)
-                        self.set_property(key, events, language=language)
-                else:
-                    events = self.get_property(key)
+                for lang in langs:
+                    events = self.get_property(key, language=lang)
                     if not events:
                         continue
-                    events = _change_link(source, target, old_base, new_base, events)
+                    events = _change_link(source, target, old_base, new_base,
+                                          events)
                     events = list(events)
-                    self.set_property(key, events)
-            elif issubclass(datatype, (PathDataType, AbsolutePathDataTypeEnumerate)):
-                if multilingual is True:
-                    for language in languages:
-                        path = self.get_property(key, language=language)
-                        if not path:
-                            continue
-                        path = old_base.resolve2(path)
-                        if str(path) == source:
-                            # Hit the old name
-                            self.set_property(key, str(target), language=language)
-                else:
-                    path = self.get_property(key)
-                    if not path:
+                    self.set_property(key, events, language=lang)
+            elif issubclass(datatype, PathDataType):
+                # Relative path
+                for lang in langs:
+                    path = self.get_property(key, language=lang)
+                    if path is None:
                         continue
-                    path = old_base.resolve2(path)
-                    if str(path) == source:
+                    path = str(old_base.resolve2(path))
+                    if path == source:
                         # Hit the old name
-                        self.set_property(key, str(target))
+                        new_path = str(new_base.get_pathto(target))
+                        self.set_property(key, new_path, language=lang)
+            elif issubclass(datatype, AbsolutePathDataTypeEnumerate):
+                # Absolute path
+                for lang in langs:
+                    path = self.get_property(key, language=lang)
+                    if path is None:
+                        continue
+                    path = str(path)
+                    path = resources_new2old.get(path, path)
+                    if path == source:
+                        # Hit the old name
+                        self.set_property(key, str(target), language=lang)
         # Tagaware ?
         if isinstance(self, TagsAware):
-            site_root = self.get_site_root()
-            tags_base = site_root.get_abspath().resolve2('tags')
-            if tags_base.get_prefix(source) == tags_base:
-                tags = list(self.get_property('tags'))
-                source_name = source.get_name()
-                target_name = Path(target).get_name()
-                for tag in tags:
-                    if tag == source_name:
-                        # Hit
-                        index = tags.index(source_name)
-                        tags[index] = target_name
-                        self.set_property('tags', tags)
+            TagsAware.update_links(self, source, target)
 
         # Change resource
         get_context().database.change_resource(self)
 
 
-
     def update_relative_links(self, source):
         target = self.get_canonical_path()
         resources_old2new = get_context().database.resources_old2new
+        resources_new2old = get_context().database.resources_new2old
 
         def my_func(value):
             # Skip empty links, external links and links to '/ui/'
@@ -196,55 +176,38 @@ class ShopFolder(Folder):
         languages = self.get_site_root().get_property('website_languages')
         for key, datatype in self.get_metadata_schema().items():
             multilingual = getattr(datatype, 'multilingual', False)
+            langs = languages if multilingual is True else [None]
             if issubclass(datatype, XHTMLBody):
-                if multilingual is True:
-                    for language in languages:
-                        events = self.get_property(key, language=language)
-                        if not events:
-                            continue
-                        events = rewrite_uris(events, my_func)
-                        events = list(events)
-                        self.set_property(key, events, language=language)
-                else:
-                    events = self.get_property(key)
+                for lang in langs:
+                    events = self.get_property(key, language=lang)
                     if not events:
                         continue
                     events = rewrite_uris(events, my_func)
                     events = list(events)
-                    self.set_property(key, events)
-            elif issubclass(datatype, (PathDataType, AbsolutePathDataTypeEnumerate)):
-                if multilingual is True:
-                    for language in languages:
-                        path = self.get_property(key, language=language)
-                        if not path:
-                            continue
-                        ref = get_reference(path)
-                        if ref.scheme:
-                            continue
-                        path = ref.path
-                        # Calcul the old absolute path
-                        old_abs_path = source.resolve2(path)
-                        # Check if the target path has not been moved
-                        new_abs_path = resources_old2new.get(old_abs_path, old_abs_path)
-                        # Build the new reference with the right path
-                        # Absolute path allow to call get_pathto with the target
-                        new_ref = deepcopy(ref)
-                        new_ref.path = target.get_pathto(new_abs_path)
-                        self.set_property(key, str(new_ref), language=language)
-                else:
-                    path = self.get_property(key)
-                    if not path:
+                    self.set_property(key, events, language=lang)
+            elif issubclass(datatype, PathDataType):
+                # Relative path
+                for lang in langs:
+                    path = self.get_property(key, language=lang)
+                    if path is None:
                         continue
-                    ref = get_reference(path)
-                    if ref.scheme:
-                        continue
-                    path = ref.path
                     # Calcul the old absolute path
                     old_abs_path = source.resolve2(path)
                     # Check if the target path has not been moved
                     new_abs_path = resources_old2new.get(old_abs_path, old_abs_path)
-                    # Build the new reference with the right path
+                    # Build the new path
                     # Absolute path allow to call get_pathto with the target
-                    new_ref = deepcopy(ref)
-                    new_ref.path = target.get_pathto(new_abs_path)
-                    self.set_property(key, str(new_ref))
+                    new_path = str(target.get_pathto(new_abs_path))
+                    self.set_property(key, new_path, language=lang)
+            elif issubclass(datatype, AbsolutePathDataTypeEnumerate):
+                # Absolute path
+                for lang in langs:
+                    path = self.get_property(key, language=lang)
+                    if path is None:
+                        continue
+                    # Calcul the old absolute path
+                    path = str(path)
+                    old_abs_path = resources_new2old.get(path, path)
+                    # Check if the target path has not been moved
+                    new_abs_path = resources_old2new.get(old_abs_path, old_abs_path)
+                    self.set_property(key, new_abs_path, language=lang)
