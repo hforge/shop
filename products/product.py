@@ -907,7 +907,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
             return
         shop = get_shop(self)
         model = shop.get_resource('products-models/%s' % product_model)
-        self.set_property('product_model', model.get_abspath(), with_dynamic=False)
+        self.set_property('product_model', str(model.get_abspath()),
+                          with_dynamic=False)
 
 
 
