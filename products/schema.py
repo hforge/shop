@@ -19,10 +19,10 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import DateTime, Decimal, Unicode, Boolean
-from itools.datatypes import String, Integer, Tokens, PathDataType
+from itools.datatypes import String, Integer, Tokens
 
 # Import from shop
-from enumerate import States, StockOptions
+from enumerate import ProductModelsEnumerate, States, StockOptions
 from taxes import TaxesEnumerate
 from shop.datatypes import ImagePathDataType
 from shop.manufacturers import ManufacturersEnumerate
@@ -40,7 +40,7 @@ product_schema = {# General informations
                   # XXX
                   #'categories': String(multiple=True),
                   'reference': String,
-                  'product_model': PathDataType,
+                  'product_model': ProductModelsEnumerate,
                   'title': Unicode(multilingual=True),
                   'description': Unicode(multilingual=True),
                   'tags': Tokens,
