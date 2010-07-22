@@ -91,12 +91,12 @@ class ProductPathDataType(PathDataType):
 
 
 
-class PathDataTypeEnumerate(Enumerate):
+class AbsolutePathDataTypeEnumerate(Enumerate):
 
     pass
 
 
-class ImagesEnumerate(PathDataTypeEnumerate):
+class ImagesEnumerate(AbsolutePathDataTypeEnumerate):
 
 
     @classmethod
@@ -112,7 +112,7 @@ class ImagesEnumerate(PathDataTypeEnumerate):
 
 
 
-class DynamicEnumerate(PathDataTypeEnumerate):
+class DynamicEnumerate(AbsolutePathDataTypeEnumerate):
 
     path = None
     format = None

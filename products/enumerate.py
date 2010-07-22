@@ -20,12 +20,12 @@ from itools.gettext import MSG
 from itools.web import get_context
 
 # Import from shop
-from shop.datatypes import PathDataTypeEnumerate
+from shop.datatypes import AbsolutePathDataTypeEnumerate
 from shop.utils import get_shop
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 
 
-class ProductModelsEnumerate(PathDataTypeEnumerate):
+class ProductModelsEnumerate(AbsolutePathDataTypeEnumerate):
     """
     List all product models existing.
     Used to select the product model when we create a new product.

@@ -36,7 +36,7 @@ from ikaaro.webpage import _get_links, _change_link
 from itws.tags import TagsAware
 
 # Import from shop
-from datatypes import PathDataTypeEnumerate
+from datatypes import AbsolutePathDataTypeEnumerate
 
 
 
@@ -75,7 +75,7 @@ class ShopFolder(Folder):
                     if path == None:
                         continue
                     links.append(str(base.resolve2(path)))
-            elif issubclass(datatype, (PathDataType, PathDataTypeEnumerate)):
+            elif issubclass(datatype, (PathDataType, AbsolutePathDataTypeEnumerate)):
                 if multilingual is True:
                     for language in languages:
                         path = self.get_property(key, language=language)
@@ -124,7 +124,7 @@ class ShopFolder(Folder):
                     events = _change_link(source, target, old_base, new_base, events)
                     events = list(events)
                     self.set_property(key, events)
-            elif issubclass(datatype, (PathDataType, PathDataTypeEnumerate)):
+            elif issubclass(datatype, (PathDataType, AbsolutePathDataTypeEnumerate)):
                 if multilingual is True:
                     for language in languages:
                         path = self.get_property(key, language=language)
@@ -212,7 +212,7 @@ class ShopFolder(Folder):
                     events = rewrite_uris(events, my_func)
                     events = list(events)
                     self.set_property(key, events)
-            elif issubclass(datatype, (PathDataType, PathDataTypeEnumerate)):
+            elif issubclass(datatype, (PathDataType, AbsolutePathDataTypeEnumerate)):
                 if multilingual is True:
                     for language in languages:
                         path = self.get_property(key, language=language)
