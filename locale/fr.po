@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-07-20 16:07+PMT\n"
+"POT-Creation-Date: 2010-07-22 16:07+PMT\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,7 +105,7 @@ msgctxt "heading"
 msgid "#${reference} - ${title}"
 msgstr "${reference} - ${title}"
 
-#: ../shop_views.py:711
+#: ../shop_views.py:717
 msgid "#%s"
 msgstr ""
 
@@ -633,7 +633,7 @@ msgstr ""
 msgid "%s "
 msgstr ""
 
-#: ../datatypes.py:193
+#: ../datatypes.py:194
 msgid "%s %s"
 msgstr ""
 
@@ -654,6 +654,7 @@ msgstr ""
 msgid "%s €"
 msgstr ""
 
+#: ../ui/shop/product/product_viewbox_cs.xml.en:9
 #: ../ui/shop/product/product_viewbox.xml.en:9
 msgctxt "span"
 msgid "(${price/with_tax} €)"
@@ -845,8 +846,8 @@ msgid ""
 "<g id='2'>${nb_products}</g>  <g id='3'>item</g>  <g id='4'>items</g>  <g "
 "id='5'>${total}</g>€"
 msgstr ""
-"<g id='2'>${nb_products}</g>  <g id='3'>produit</g>  <g id='4'>produits</g>  <g "
-"id='5'>${total}</g>€"
+"<g id='2'>${nb_products}</g>  <g id='3'>produit</g>  <g id='4'>produits</g>  "
+"<g id='5'>${total}</g>€"
 
 #: ../ui/shop/product/product_view.xml.en:21
 msgctxt "span"
@@ -873,7 +874,8 @@ msgstr "<g id='3'>${nb_waiting_payment}</g>  <g id='4'>Paiement en attente</g>"
 msgctxt "span"
 msgid ""
 "<g id='3'>${ship/pretty_price} €</g>  <g id='4'>Free</g>  <g id='5'>Ok</g>"
-msgstr "<g id='3'>${ship/pretty_price} €</g>  <g id='4'>Gratuit</g>  <g id='5'>Ok</g>"
+msgstr ""
+"<g id='3'>${ship/pretty_price} €</g>  <g id='4'>Gratuit</g>  <g id='5'>Ok</g>"
 
 #: ../ui/backoffice/payments/transfer/record_edit.xml.en:12
 #: ../ui/backoffice/payments/cash/record_edit.xml.en:12
@@ -1016,7 +1018,7 @@ msgctxt "link"
 msgid "> Send to a friend"
 msgstr "> Envoyer à un ami"
 
-#: ../shop_views.py:346
+#: ../shop_views.py:352
 msgid "A customer must be validated in your shop"
 msgstr ""
 
@@ -1048,7 +1050,7 @@ msgstr ""
 msgid "AURORE"
 msgstr ""
 
-#: ../products/enumerate.py:134
+#: ../products/enumerate.py:137
 msgid "Accept orders"
 msgstr "Accepte les commandes"
 
@@ -1073,7 +1075,7 @@ msgstr "Titulaire du compte"
 msgid "Action"
 msgstr "Action"
 
-#: ../user_views.py:459 ../categories_views.py:280
+#: ../user_views.py:471 ../categories_views.py:280
 msgid "Actions"
 msgstr "Actions"
 
@@ -1133,7 +1135,7 @@ msgstr "Ajouter une nouveau fournisseur"
 msgid "Add a new zone"
 msgstr "Ajouter une nouvelle zone"
 
-#: ../shop_views.py:778
+#: ../shop_views.py:784
 msgid "Add an address in my address book"
 msgstr "Ajouter une adresse dans mon carnet d'adresses"
 
@@ -1166,7 +1168,7 @@ msgctxt "table cell"
 msgid "Address title"
 msgstr "Nom de l'adresse"
 
-#: ../orders/orders.py:236 ../shop.py:157
+#: ../orders/orders.py:236 ../shop.py:151
 msgid "Addresses"
 msgstr "Adresses"
 
@@ -1282,7 +1284,7 @@ msgid "Bank:"
 msgstr "Banque :"
 
 #: ../orders/orders.py:247 ../orders/orders.py:588 ../orders/orders.py:656
-#: ../products/product.py:753 ../ui/backoffice/orders/order_pdf.xml.en:78
+#: ../products/product.py:754 ../ui/backoffice/orders/order_pdf.xml.en:78
 msgid "Barcode"
 msgstr "Code Barre"
 
@@ -1334,7 +1336,7 @@ msgstr "Adresses de facturation et de livraison"
 msgid "Bill logo"
 msgstr "Logo de la facture"
 
-#: ../products/enumerate.py:114
+#: ../products/enumerate.py:115
 msgid "Boolean"
 msgstr "Booléen"
 
@@ -1371,7 +1373,7 @@ msgstr ""
 msgid "CDGP"
 msgstr ""
 
-#: ../products/enumerate.py:113
+#: ../products/enumerate.py:114
 msgid "CM to INCH"
 msgstr ""
 
@@ -1513,7 +1515,7 @@ msgctxt "heading"
 msgid "Choose delivery"
 msgstr "Choisir le mode de livraison"
 
-#: ../user.py:188 ../shop_views.py:235
+#: ../user.py:195 ../shop_views.py:235
 msgid "Civility"
 msgstr "Civilité"
 
@@ -1591,7 +1593,7 @@ msgctxt "table cell"
 msgid "Compare the selected products"
 msgstr "Comparer les produits séléctionnés"
 
-#: ../shop.py:172
+#: ../shop.py:166
 msgid "Conditions Générales de ventes"
 msgstr ""
 
@@ -1610,7 +1612,7 @@ msgid "Configurations"
 msgstr "Configurations"
 
 #: ../products/models_views.py:134 ../payments/transfer/transfer_views.py:83
-#: ../cross_selling_views.py:147 ../shipping/shippings_views.py:45
+#: ../cross_selling_views.py:149 ../shipping/shippings_views.py:45
 msgid "Configure"
 msgstr "Configurer"
 
@@ -1628,7 +1630,7 @@ msgstr "Configurer l'application"
 msgid "Configure checkpayment module"
 msgstr "Configurer le module de paiement par chèque"
 
-#: ../cross_selling_views.py:141
+#: ../cross_selling_views.py:143
 msgid "Configure cross selling"
 msgstr "Configurer la vente liée"
 
@@ -1683,7 +1685,7 @@ msgstr "Configurer les CGV"
 msgid "Configurer"
 msgstr "Configurer"
 
-#: ../user_views.py:539
+#: ../user_views.py:551
 msgid "Connection Date"
 msgstr "Date de connexion"
 
@@ -1714,7 +1716,7 @@ msgctxt "link"
 msgid "Countries"
 msgstr "Pays"
 
-#: ../shop.py:163 ../shop.py:282 ../countries.py:63
+#: ../shop.py:157 ../shop.py:276 ../countries.py:63
 msgid "Countries Zones"
 msgstr "Zones Pays"
 
@@ -1776,7 +1778,7 @@ msgstr "Montant du credit"
 msgid "Credit payment"
 msgstr "Paiement par credit"
 
-#: ../products/product.py:158 ../shop.py:178 ../shop.py:271
+#: ../products/product.py:158 ../shop.py:172 ../shop.py:265
 msgid "Cross selling"
 msgstr "Vente liée"
 
@@ -1832,7 +1834,7 @@ msgctxt "table cell"
 msgid "Customer payments"
 msgstr "Paiements du client"
 
-#: ../shop.py:151 ../user.py:137
+#: ../shop.py:145 ../user.py:144
 msgid "Customers"
 msgstr "Clients"
 
@@ -1863,11 +1865,11 @@ msgctxt "table cell"
 msgid "Data"
 msgstr "Donnée"
 
-#: ../forms_generator.py:165 ../user.py:100 ../products/models.py:133
+#: ../forms_generator.py:165 ../user.py:101 ../products/models.py:141
 msgid "Data Type"
 msgstr "Type de donnée"
 
-#: ../payments/paybox/paybox_views.py:48 ../products/enumerate.py:119
+#: ../payments/paybox/paybox_views.py:48 ../products/enumerate.py:122
 msgid "Date"
 msgstr ""
 
@@ -1875,7 +1877,7 @@ msgstr ""
 msgid "Date and Time"
 msgstr "Date et heure"
 
-#: ../user_views.py:254
+#: ../user_views.py:266
 msgid "Date and Time of order creation"
 msgstr "Date et heure de création de la commande"
 
@@ -1884,7 +1886,7 @@ msgctxt "table cell"
 msgid "DateTime"
 msgstr "Date et heure"
 
-#: ../products/enumerate.py:112
+#: ../products/enumerate.py:113
 msgid "Decimal"
 msgstr ""
 
@@ -1919,7 +1921,7 @@ msgstr "Déclinaisons"
 msgid "Declinations activated"
 msgstr "Déclinaisons activées"
 
-#: ../products/enumerate.py:96
+#: ../products/enumerate.py:97
 msgid "Decrease"
 msgstr "Diminuer"
 
@@ -1935,7 +1937,7 @@ msgstr "Logo du mode de livraison par défaut"
 msgid "Default shipping way title"
 msgstr "Titre du mode de livraison par défaut"
 
-#: ../user.py:101
+#: ../user.py:102
 msgid "Default value"
 msgstr "Valeur par défaut"
 
@@ -2085,7 +2087,7 @@ msgstr ""
 msgid "E_CARD"
 msgstr ""
 
-#: ../products/images_views.py:39 ../cross_selling_views.py:199
+#: ../products/images_views.py:39 ../cross_selling_views.py:201
 #: ../modules/modules_views.py:57 ../products/product_views.py:217
 #: ../suppliers_views.py:79 ../shipping/shipping_way_views.py:38
 msgid "Edit"
@@ -2101,7 +2103,7 @@ msgctxt "link"
 msgid "Edit CSS"
 msgstr "Modifier la CSS"
 
-#: ../shop_views.py:760 ../addresses_views.py:69
+#: ../shop_views.py:766 ../addresses_views.py:69
 msgid "Edit address"
 msgstr "Modifier l'adresse"
 
@@ -2110,7 +2112,7 @@ msgctxt "link"
 msgid "Edit address"
 msgstr "Modifier l'adresse"
 
-#: ../cross_selling_views.py:196
+#: ../cross_selling_views.py:198
 msgid "Edit box title"
 msgstr "Modifier le titre de la bôite"
 
@@ -2118,7 +2120,7 @@ msgstr "Modifier le titre de la bôite"
 msgid "Edit configuration"
 msgstr "Editer la configuration"
 
-#: ../products/product.py:125 ../cross_selling_views.py:231
+#: ../products/product.py:125 ../cross_selling_views.py:233
 msgid "Edit cross selling"
 msgstr "Modifier la vente liée"
 
@@ -2149,7 +2151,7 @@ msgstr "Modifier mon mot de passe"
 msgid "Edit my preferences"
 msgstr "Modifier mes préférences"
 
-#: ../user_views.py:172
+#: ../user_views.py:184
 msgid "Edit private user informations"
 msgstr "Modifier les informations privées sur l'utilisateur"
 
@@ -2173,8 +2175,8 @@ msgctxt "heading"
 msgid "Editorial content"
 msgstr "Contenu éditorial"
 
-#: ../user_views.py:456 ../user_views.py:477 ../suppliers_views.py:43
-#: ../user.py:187 ../shop_views.py:234 ../products/enumerate.py:117
+#: ../user_views.py:468 ../user_views.py:489 ../suppliers_views.py:43
+#: ../user.py:194 ../shop_views.py:234 ../products/enumerate.py:119
 msgid "Email"
 msgstr ""
 
@@ -2187,7 +2189,7 @@ msgstr ""
 msgid "Email of your friend"
 msgstr "Adresse mail du destinataire"
 
-#: ../countries.py:141 ../cross_selling_views.py:151
+#: ../countries.py:141 ../cross_selling_views.py:153
 msgid "Enabled"
 msgstr "Activer"
 
@@ -2196,7 +2198,7 @@ msgstr "Activer"
 msgid "Enabled ?"
 msgstr "Actif ?"
 
-#: ../user_views.py:452
+#: ../user_views.py:464
 msgid "Enabled?"
 msgstr "Actif?"
 
@@ -2216,7 +2218,7 @@ msgstr "Table des énumérations de couleur"
 msgid "Enumerate preview"
 msgstr "Aperçu de l'énumération"
 
-#: ../shop.py:166
+#: ../shop.py:160
 msgid "Enumerates"
 msgstr "Enumérations"
 
@@ -2315,19 +2317,19 @@ msgstr ""
 msgid "Export shop catalog to OpenDocument"
 msgstr ""
 
-#: ../cross_selling_views.py:165
+#: ../cross_selling_views.py:167
 msgid "Extend products associated to this tags"
 msgstr ""
 
-#: ../cross_selling_views.py:158
+#: ../cross_selling_views.py:160
 msgid "Extend with products from categories..."
 msgstr "Compléter avec des produits de la catégorie..."
 
-#: ../cross_selling_views.py:156
+#: ../cross_selling_views.py:158
 msgid "Extend with products that contains this title"
 msgstr "Compléter avec les produits qui contiennent ce titre"
 
-#: ../cross_selling_views.py:161
+#: ../cross_selling_views.py:163
 msgid "Extend with promotion ?"
 msgstr "Compléter avec des promotions ?"
 
@@ -2344,7 +2346,7 @@ msgstr "Numéro de facture"
 msgid "Fax"
 msgstr "Fax"
 
-#: ../products/enumerate.py:115
+#: ../products/enumerate.py:116
 msgid "File"
 msgstr "Fichier"
 
@@ -2378,13 +2380,17 @@ msgstr "Filtrer"
 msgid "Final message"
 msgstr "Message final"
 
-#: ../user_views.py:454 ../user_views.py:475 ../user.py:190
+#: ../user_views.py:466 ../user_views.py:487 ../user.py:197
 #: ../shop_views.py:237 ../addresses.py:110
 msgid "Firstname"
 msgstr "Prénom"
 
 #: ../editorial.py:42
 msgid "Format"
+msgstr ""
+
+#: ../widgets.py:147
+msgid "Format: 12/04/1985"
 msgstr ""
 
 #: ../utils_views.py:66 ../utils_views.py:126
@@ -2401,6 +2407,10 @@ msgctxt "div"
 msgid "Free"
 msgstr "Gratuit"
 
+#: ../products/enumerate.py:121
+msgid "French Date"
+msgstr ""
+
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:17
 msgctxt "label"
 msgid "From ${price/min}€ to ${price/max}€"
@@ -2410,7 +2420,7 @@ msgstr "De ${price/min}€ à ${price/max}€"
 msgid "From current category"
 msgstr "De la catégorie courante"
 
-#: ../user_views.py:453
+#: ../user_views.py:465
 msgid "Gender"
 msgstr "Genre"
 
@@ -2461,7 +2471,7 @@ msgctxt "form"
 msgid "Goto reference:"
 msgstr "Aller à la référence:"
 
-#: ../products/enumerate.py:118
+#: ../products/enumerate.py:120
 msgid "HTML"
 msgstr ""
 
@@ -2593,7 +2603,7 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: ../user_views.py:451 ../user_views.py:472
+#: ../user_views.py:463 ../user_views.py:484
 #: ../payments/paybox/paybox_views.py:47 ../payments/payments_views.py:146
 msgid "Id"
 msgstr ""
@@ -2649,11 +2659,11 @@ msgstr ""
 "Si vous voulez ajouter une adresse dans votre carnet d'adresses, <g "
 "id='8'>cliquez ici.</g>"
 
-#: ../products/images_views.py:37
+#: ../products/images_views.py:37 ../products/enumerate.py:117
 msgid "Image"
 msgstr ""
 
-#: ../products/images.py:160
+#: ../products/images.py:176
 msgid "Images folder"
 msgstr "Dossier images"
 
@@ -2694,7 +2704,7 @@ msgstr "En préparation"
 msgid "Incident in the initiating domain"
 msgstr "Incident domaine initiateur"
 
-#: ../products/enumerate.py:95
+#: ../products/enumerate.py:96
 msgid "Increase"
 msgstr "Augmenter"
 
@@ -2702,7 +2712,7 @@ msgstr "Augmenter"
 msgid "Inscription confirmation."
 msgstr "Confirmation d'inscription"
 
-#: ../shop_views.py:285
+#: ../shop_views.py:284
 msgid "Inscription ok"
 msgstr ""
 
@@ -2714,13 +2724,13 @@ msgstr "Provision insuffisante ou crédit dépassé"
 msgid "Insurance %"
 msgstr ""
 
-#: ../products/enumerate.py:111
+#: ../products/enumerate.py:112
 msgid "Integer"
 msgstr "Entier"
 
 #: ../root.py:67
 msgid "Internal server error"
-msgstr ""
+msgstr "Erreur interne du serveur"
 
 #: ../forms_generator.py:171
 msgid "Introduction"
@@ -2775,7 +2785,7 @@ msgstr "Facture numéro:"
 msgid "Is buyable ?"
 msgstr "Est achetable ?"
 
-#: ../user_views.py:473 ../countries_views.py:40
+#: ../user_views.py:485 ../countries_views.py:40
 msgid "Is enabled ?"
 msgstr "Actif ?"
 
@@ -2829,11 +2839,11 @@ msgstr ""
 msgid "Last Modified"
 msgstr "Derniére modification"
 
-#: ../user_views.py:458
+#: ../user_views.py:470
 msgid "Last connection Date"
 msgstr "Date de derniére connexion"
 
-#: ../user.py:141 ../user.py:330
+#: ../user.py:148 ../user.py:337
 msgid "Last connections"
 msgstr "Derniéres connexions"
 
@@ -2841,7 +2851,7 @@ msgstr "Derniéres connexions"
 msgid "Last product"
 msgstr "Dernier produit"
 
-#: ../user_views.py:455 ../user_views.py:476 ../user.py:189
+#: ../user_views.py:467 ../user_views.py:488 ../user.py:196
 #: ../shop_views.py:236 ../addresses.py:111
 msgid "Lastname"
 msgstr "Nom"
@@ -2886,7 +2896,7 @@ msgctxt "link"
 msgid "Log out"
 msgstr "Déconnexion"
 
-#: ../shop_views.py:386
+#: ../shop_views.py:392
 msgid "Login"
 msgstr "Se connecter"
 
@@ -2907,7 +2917,7 @@ msgstr "Carte perdue"
 msgid "Loupe on products"
 msgstr "Afficher la loupe"
 
-#: ../datatypes.py:47
+#: ../datatypes.py:48
 msgid "M."
 msgstr ""
 
@@ -2916,7 +2926,7 @@ msgctxt "heading"
 msgid "Manage Payment"
 msgstr "Gérer le paiement"
 
-#: ../user_views.py:84
+#: ../user_views.py:96
 msgid "Manage customer"
 msgstr "Gérer l'utilisateur"
 
@@ -2977,7 +2987,7 @@ msgctxt "table cell"
 msgid "Manage/Edit payment"
 msgstr "Gérer/Modifier le paiement"
 
-#: ../forms_generator.py:163 ../user.py:98 ../products/models.py:129
+#: ../forms_generator.py:163 ../user.py:99 ../products/models.py:137
 msgid "Mandatory"
 msgstr "Obligatoire"
 
@@ -2989,7 +2999,7 @@ msgstr "Constructeur"
 msgid "Manufacturer / Creator"
 msgstr "Constructeur / Créateur"
 
-#: ../shop.py:133 ../manufacturers.py:79
+#: ../shop.py:127 ../manufacturers.py:79
 msgid "Manufacturers"
 msgstr "Constructeurs"
 
@@ -3055,15 +3065,15 @@ msgctxt "paragraph"
 msgid "Missing declination, please select another options"
 msgstr "Déclinaison manquante, veuillez modifier les options sélectionnées"
 
-#: ../datatypes.py:49
+#: ../datatypes.py:50
 msgid "Mlle"
 msgstr ""
 
-#: ../datatypes.py:48
+#: ../datatypes.py:49
 msgid "Mme"
 msgstr ""
 
-#: ../user.py:192 ../shop_views.py:241
+#: ../user.py:199 ../shop_views.py:241
 msgid "Mobile"
 msgstr ""
 
@@ -3085,11 +3095,11 @@ msgstr ""
 msgid "Mode autorisation uniquement."
 msgstr ""
 
-#: ../user.py:90 ../products/models.py:118
+#: ../products/models.py:126
 msgid "Model Schema"
 msgstr "Schéma du modèle"
 
-#: ../products/models.py:180
+#: ../products/models.py:188
 msgid "Model schema"
 msgstr "Schéma du modèle"
 
@@ -3105,7 +3115,7 @@ msgstr ""
 msgid "Module wishlist"
 msgstr ""
 
-#: ../shop.py:136 ../modules/modules_views.py:32 ../modules/modules.py:54
+#: ../shop.py:130 ../modules/modules_views.py:32 ../modules/modules.py:68
 msgid "Modules"
 msgstr "Modules"
 
@@ -3118,11 +3128,11 @@ msgstr ""
 msgid "Multiline Widget"
 msgstr "Widget multilignes"
 
-#: ../products/models.py:131
+#: ../products/models.py:139
 msgid "Multilingual"
 msgstr "Multilingue"
 
-#: ../forms_generator.py:164 ../user.py:99 ../products/models.py:130
+#: ../forms_generator.py:164 ../user.py:100 ../products/models.py:138
 msgid "Multiple"
 msgstr ""
 
@@ -3131,7 +3141,7 @@ msgctxt "link"
 msgid "My account"
 msgstr "Mon compte"
 
-#: ../shop_views.py:750 ../addresses_views.py:32
+#: ../shop_views.py:756 ../addresses_views.py:32
 msgid "My address book"
 msgstr "Mon carnet d'adresses"
 
@@ -3155,7 +3165,7 @@ msgid "My profile"
 msgstr "Mon profil"
 
 #: ../manufacturers_views.py:41 ../user_group.py:131 ../products/images.py:74
-#: ../categories_views.py:275 ../editorial.py:40 ../user.py:96
+#: ../categories_views.py:275 ../editorial.py:40 ../user.py:97
 #: ../products/product_views.py:75 ../products/product_views.py:685
 #: ../forms_generator.py:161 ../suppliers_views.py:53
 #: ../suppliers_views.py:109
@@ -3214,7 +3224,7 @@ msgstr "Nouveau paiement ajouté !"
 msgid "New photo"
 msgstr "Nouvelle photo"
 
-#: ../products/images_views.py:89 ../cross_selling_views.py:301
+#: ../products/images_views.py:89 ../cross_selling_views.py:303
 msgid "New record added."
 msgstr "Nouveau enregistrement ajouté."
 
@@ -3228,7 +3238,7 @@ msgctxt "heading"
 msgid "News"
 msgstr "Actualités"
 
-#: ../shipping/shippings_views.py:103 ../products/models.py:237
+#: ../shipping/shippings_views.py:103 ../products/models.py:245
 msgid "No"
 msgstr "Non"
 
@@ -3241,7 +3251,7 @@ msgctxt "paragraph"
 msgid "No order"
 msgstr "Pas de commande"
 
-#: ../enumerates.py:28 ../products/enumerate.py:94
+#: ../enumerates.py:28 ../products/enumerate.py:95
 msgid "None"
 msgstr "Aucun"
 
@@ -3253,7 +3263,7 @@ msgstr "Carte non autorisée"
 msgid "Not the same card used for the first payment"
 msgstr ""
 
-#: ../cross_selling_views.py:152
+#: ../cross_selling_views.py:154
 msgid "Numbers of products"
 msgstr "Nombre de produits"
 
@@ -3315,7 +3325,7 @@ msgid "Operation successful"
 msgstr "Opération réussie"
 
 #: ../orders/orders.py:141 ../products/images_views.py:38
-#: ../cross_selling_views.py:286 ../enumerate_table.py:67
+#: ../cross_selling_views.py:288 ../enumerate_table.py:67
 #: ../ui/backoffice/orders/order_pdf.xml.en:5
 msgid "Order"
 msgstr "Position"
@@ -3352,7 +3362,7 @@ msgctxt "table cell"
 msgid "Order has not been sent."
 msgstr "La commande n'a pas été envoyée."
 
-#: ../user_views.py:245
+#: ../user_views.py:257
 msgid "Order history"
 msgstr "Historique des commandes"
 
@@ -3361,7 +3371,7 @@ msgctxt "table cell"
 msgid "Order history:"
 msgstr "Historique des commandes:"
 
-#: ../user_views.py:251
+#: ../user_views.py:263
 msgid "Order id"
 msgstr "Id commande"
 
@@ -3397,7 +3407,7 @@ msgctxt "heading"
 msgid "Order number:"
 msgstr "Commande numéro:"
 
-#: ../products/product.py:154 ../products/product.py:807
+#: ../products/product.py:154 ../products/product.py:808
 msgid "Order photos"
 msgstr "Ordonner les photos"
 
@@ -3421,7 +3431,7 @@ msgctxt "table cell"
 msgid "Order state"
 msgstr "État de la commande"
 
-#: ../shop_views.py:484 ../shop_views.py:618
+#: ../shop_views.py:490 ../shop_views.py:624
 msgid "Order summary"
 msgstr "Information générales sur la commande"
 
@@ -3429,7 +3439,7 @@ msgstr "Information générales sur la commande"
 msgid "Order title"
 msgstr "Titre 'Commander'"
 
-#: ../orders/orders.py:604 ../shop.py:148
+#: ../orders/orders.py:604 ../shop.py:142
 msgid "Orders"
 msgstr "Commandes"
 
@@ -3644,7 +3654,7 @@ msgstr "Le paiement est validé."
 msgid "Payment mode"
 msgstr "Mode de paiement"
 
-#: ../shop.py:130
+#: ../shop.py:124
 msgid "Payment module"
 msgstr "Module de paiement"
 
@@ -3705,7 +3715,7 @@ msgstr ""
 msgid "Phone"
 msgstr "Téléphone"
 
-#: ../user.py:191 ../shop_views.py:240
+#: ../user.py:198 ../shop_views.py:240
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
@@ -3764,7 +3774,7 @@ msgstr "Présentation"
 msgid "Presentation of your wishlist"
 msgstr "Présentation de votre liste de cadeaux"
 
-#: ../cross_selling_views.py:288
+#: ../cross_selling_views.py:290
 msgid "Preview"
 msgstr "Aperçu"
 
@@ -3822,7 +3832,7 @@ msgstr "Prix"
 msgid "Print product"
 msgstr "Imprimer"
 
-#: ../products/enumerate.py:79
+#: ../products/enumerate.py:80
 msgid "Private"
 msgstr "Privé"
 
@@ -3853,11 +3863,11 @@ msgctxt "table cell"
 msgid "Product"
 msgstr "Produit"
 
-#: ../products/models.py:158
+#: ../products/models.py:166
 msgid "Product Model"
 msgstr "Modèle de produit"
 
-#: ../shop.py:145 ../products/models.py:258
+#: ../shop.py:139 ../products/models.py:266
 msgid "Product Models"
 msgstr "Modèles de produits"
 
@@ -3924,8 +3934,8 @@ msgstr "Nom du produit"
 msgid "Product title"
 msgstr "Nom du produit"
 
-#: ../orders/orders.py:121 ../orders/orders.py:225 ../products/product.py:917
-#: ../shop.py:142 ../stock/resupply.py:44
+#: ../orders/orders.py:121 ../orders/orders.py:225 ../products/product.py:918
+#: ../shop.py:136 ../stock/resupply.py:44
 msgid "Products"
 msgstr "Produits"
 
@@ -3949,7 +3959,7 @@ msgctxt "link"
 msgid "Products models"
 msgstr "Modèles de produit"
 
-#: ../products/enumerate.py:78
+#: ../products/enumerate.py:79
 msgid "Public"
 msgstr ""
 
@@ -4069,11 +4079,11 @@ msgstr "Référence"
 msgid "Reference found !"
 msgstr "Référence trouvée !"
 
-#: ../products/enumerate.py:131
+#: ../products/enumerate.py:134
 msgid "Refuse orders but product remain public"
 msgstr "Refuser les commandes mais garder le produit \"public\""
 
-#: ../products/enumerate.py:133
+#: ../products/enumerate.py:136
 msgid "Refuse orders. Product becomes private"
 msgstr "Refuser les commandes. Le produit devient privé."
 
@@ -4094,7 +4104,7 @@ msgstr "Corps du mail d'inscription"
 msgid "Register mail subject"
 msgstr ""
 
-#: ../user_views.py:457
+#: ../user_views.py:469
 msgid "Registration Date"
 msgstr "Date d'inscription"
 
@@ -4243,7 +4253,7 @@ msgstr "Vu ?"
 msgid "Select Widget"
 msgstr "Widget list déroulante"
 
-#: ../cross_selling_views.py:167
+#: ../cross_selling_views.py:169
 msgid "Selection"
 msgstr "Sélection"
 
@@ -4290,7 +4300,7 @@ msgstr "Passer les commandes sélectionnées en status 'Annulé'"
 msgid "Set as sent"
 msgstr "Passer les commandes sélectionnées en status 'Envoyé'"
 
-#: ../shop.py:169 ../shipping/shipping_way.py:145 ../shipping/shippings.py:41
+#: ../shop.py:163 ../shipping/shipping_way.py:145 ../shipping/shippings.py:41
 msgid "Shipping"
 msgstr "Livraison"
 
@@ -4346,7 +4356,7 @@ msgstr "Boutique"
 msgid "Shop payment Module"
 msgstr "Module de paiement du shop"
 
-#: ../products/enumerate.py:116
+#: ../products/enumerate.py:118
 msgid "Shop product"
 msgstr "Produit de la boutique"
 
@@ -4397,7 +4407,7 @@ msgstr ""
 msgid "Show sub categories ?"
 msgstr "Montrer les sous-catégories ?"
 
-#: ../cross_selling_views.py:205
+#: ../cross_selling_views.py:207
 msgid "Show title ?"
 msgstr "Afficher le titre ?"
 
@@ -4423,11 +4433,11 @@ msgstr "Trier les produits par ..."
 msgid "Standard"
 msgstr "Standard"
 
-#: ../products/enumerate.py:41
+#: ../products/enumerate.py:42
 msgid "Standard Model"
 msgstr "Modèle standard"
 
-#: ../cross_selling_views.py:287 ../user_views.py:253
+#: ../cross_selling_views.py:289 ../user_views.py:265
 #: ../payments/payments_views.py:153 ../editorial.py:43
 #: ../products/product_views.py:409 ../products/product_views.py:428
 #: ../shipping/shipping_way.py:72 ../orders/orders_views.py:112
@@ -4474,7 +4484,7 @@ msgstr "La quantité en stock a été mis à jour"
 msgid "Stolen card"
 msgstr "Carte volée"
 
-#: ../products/enumerate.py:109
+#: ../products/enumerate.py:110
 msgid "String"
 msgstr ""
 
@@ -4501,7 +4511,7 @@ msgstr "Récapitulatif"
 msgid "Supplier"
 msgstr ""
 
-#: ../shop.py:139 ../suppliers.py:67
+#: ../shop.py:133 ../suppliers.py:67
 msgid "Suppliers"
 msgstr ""
 
@@ -4531,11 +4541,11 @@ msgctxt "table cell"
 msgid "TAX"
 msgstr ""
 
-#: ../shop.py:181
+#: ../shop.py:175
 msgid "TVA"
 msgstr ""
 
-#: ../cross_selling_views.py:154
+#: ../cross_selling_views.py:156
 msgid "Table"
 msgstr "Table"
 
@@ -4556,7 +4566,7 @@ msgctxt "table cell"
 msgid "Tax:"
 msgstr "TVA:"
 
-#: ../products/taxes.py:58 ../shop.py:182
+#: ../products/taxes.py:58 ../shop.py:176
 msgid "Taxes"
 msgstr "Taxes"
 
@@ -4570,7 +4580,7 @@ msgctxt "link"
 msgid "Terms and conditions of use"
 msgstr "Conditions d'utilisations"
 
-#: ../shop.py:173
+#: ../shop.py:167
 msgid "Terms and conditions of user"
 msgstr "Conditions d'utilisations"
 
@@ -4595,15 +4605,15 @@ msgstr "La connection au centre d'autorisation a échoué"
 msgid "The order is in preparation"
 msgstr "La commande est en préparation"
 
-#: ../shop_views.py:436
+#: ../shop_views.py:442
 msgid "The password is wrong."
 msgstr "Le mot de passe est incorrect"
 
-#: ../shop_views.py:294
+#: ../shop_views.py:293
 msgid "The two passwords are different."
 msgstr "Les deux mots de passe sont différents."
 
-#: ../shop_views.py:429
+#: ../shop_views.py:435
 msgid "The user \"{username}\" does not exist."
 msgstr "L'utilisateur \"{username}\" n'existe pas, veuillez vous inscrire."
 
@@ -4632,7 +4642,7 @@ msgstr ""
 msgid "There are {n} categories"
 msgstr "Il y a {n} categories"
 
-#: ../user_views.py:444
+#: ../user_views.py:456
 msgid "There are {n} customers"
 msgstr "Il y a {n} clients"
 
@@ -4672,7 +4682,7 @@ msgstr "Il y a {n} produits"
 msgid "There is 1 category"
 msgstr "Il y a 1 catégorie"
 
-#: ../user_views.py:443
+#: ../user_views.py:455
 msgid "There is 1 customer"
 msgstr "Il y a 1 client"
 
@@ -4712,7 +4722,7 @@ msgstr "Il y a une commande."
 msgid "This box allow to configure cross selling"
 msgstr "Cette boîte permet de configurer la vente liée"
 
-#: ../user_views.py:231 ../shop_views.py:301
+#: ../user_views.py:243 ../shop_views.py:300
 msgid "This email address is already used."
 msgstr "Cette adresse email est déjà utilisée."
 
@@ -4730,7 +4740,7 @@ msgid "Time-out > 15 mn before validation by the buyer"
 msgstr "Temps d'attente > 15 mn par l'acheteur"
 
 #: ../products/models_views.py:54 ../products/models_views.py:140
-#: ../manufacturers_views.py:42 ../cross_selling_views.py:285
+#: ../manufacturers_views.py:42 ../cross_selling_views.py:287
 #: ../payments/payment_way_views.py:78 ../suppliers_views.py:39
 #: ../suppliers_views.py:110 ../orders/orders.py:129
 #: ../categories_views.py:276 ../editorial.py:41
@@ -4741,8 +4751,8 @@ msgstr "Temps d'attente > 15 mn par l'acheteur"
 #: ../products/product_views.py:404 ../products/product_views.py:424
 #: ../products/product_views.py:545 ../products/product_views.py:689
 #: ../shipping/shipping_way_views.py:45 ../forms_generator.py:162
-#: ../products/images_views.py:36 ../user.py:97 ../products/declination.py:55
-#: ../modules/wishlist/wishlist_views.py:136 ../products/models.py:128
+#: ../products/images_views.py:36 ../user.py:98 ../products/declination.py:55
+#: ../modules/wishlist/wishlist_views.py:136 ../products/models.py:136
 #: ../user_group.py:132
 msgid "Title"
 msgstr "Titre"
@@ -4772,7 +4782,7 @@ msgctxt "paragraph"
 msgid "To confirm the deletion, click here:"
 msgstr "Pour confirmer la suppression, cliquez ici :"
 
-#: ../shop_views.py:644
+#: ../shop_views.py:650
 msgid "To continue, you have to validate the terms of sales!"
 msgstr ""
 "Pour continuer, vous devez accepter les conditions générales de vente !"
@@ -4842,7 +4852,7 @@ msgctxt "b"
 msgid "Total amount:"
 msgstr "Montant total"
 
-#: ../user_views.py:252 ../orders/orders_views.py:113
+#: ../user_views.py:264 ../orders/orders_views.py:113
 msgid "Total price"
 msgstr "Prix total"
 
@@ -4918,7 +4928,7 @@ msgctxt "table cell"
 msgid "URL"
 msgstr ""
 
-#: ../products/enumerate.py:110
+#: ../products/enumerate.py:111
 msgid "Unicode"
 msgstr ""
 
@@ -4986,7 +4996,7 @@ msgctxt "link"
 msgid "Update stock"
 msgstr "Mettre à jour le stock"
 
-#: ../cross_selling_views.py:144
+#: ../cross_selling_views.py:146
 msgid "Use shop configuration"
 msgstr "Utiliser la configuration de la boutique"
 
@@ -5007,11 +5017,11 @@ msgstr "Adresses de l'utilisateur"
 msgid "User do not exist"
 msgstr "L'utilisateur n'existe pas"
 
-#: ../user_views.py:186 ../user_views.py:474 ../user_group.py:64
+#: ../user_views.py:198 ../user_views.py:486 ../user_group.py:64
 msgid "User group"
 msgstr "Groupe de l'utilisateur"
 
-#: ../shop.py:154 ../user_group.py:140
+#: ../shop.py:148 ../user_group.py:140
 msgid "User groups"
 msgstr "Groupes utilisateur"
 
@@ -5022,6 +5032,11 @@ msgstr "ID utilisateur"
 #: ../user_group.py:76
 msgid "User is enabled ?"
 msgstr "L'utilisateur est actif ?"
+
+#: ../user.py:91
+#, fuzzy
+msgid "User schema"
+msgstr "Schéma du modèle"
 
 #: ../ui/backoffice/orders/order_facture.xml.en:89
 msgid "VAT"
@@ -5054,7 +5069,7 @@ msgid "Vertical item that list sub categories"
 msgstr ""
 
 #: ../products/models_views.py:45 ../manufacturers_views.py:65
-#: ../manufacturers_views.py:87 ../user_views.py:303 ../user_views.py:441
+#: ../manufacturers_views.py:87 ../user_views.py:315 ../user_views.py:453
 #: ../editorial.py:32 ../products/product_views.py:138
 #: ../enumerate_table.py:191
 #: ../sidebar/sidebar_product_cross_selling_box.py:43
@@ -5081,7 +5096,7 @@ msgstr "Voir les categories"
 msgid "View category"
 msgstr "Voir la categorie"
 
-#: ../products/models.py:162
+#: ../products/models.py:170
 msgid "View model details"
 msgstr "Voir les détails du modèle"
 
@@ -5099,7 +5114,7 @@ msgstr "Voir le produit dans le frontoffice"
 msgid "View products"
 msgstr "Voirs les produits"
 
-#: ../products/models.py:132
+#: ../products/models.py:140
 msgid "Visible"
 msgstr ""
 
@@ -5125,10 +5140,20 @@ msgctxt "form"
 msgid "We are waiting for the customer check."
 msgstr "Nous attendons le chèque du client"
 
+#: ../ui/shop/internal_server_error.xml.en:7
+msgctxt "heading"
+msgid "We're sorry, but something went wrong."
+msgstr "Nous sommes désolé mais une erreur a été rencontrée."
+
 #: ../ui/backoffice/orders/order_manage.xml.en:235
 msgctxt "paragraph"
 msgid "We're waiting for customer payment"
 msgstr "En attente du paiement client"
+
+#: ../ui/shop/internal_server_error.xml.en:8
+msgid ""
+"We've been notified about this issue and we'll take a look at it shortly."
+msgstr "Nous avons été prévenu de ce probléme et allons le corriger rapidement."
 
 #: ../shop_views.py:109
 msgid "Website backoffice uri"
@@ -5162,7 +5187,7 @@ msgctxt "link"
 msgid "Welcome in the backoffice of your shop"
 msgstr "Bienvenue dans le backoffice de votre boutique"
 
-#: ../shop_views.py:472
+#: ../shop_views.py:478
 msgid "Welcome!"
 msgstr "Bienvenue!"
 
@@ -5205,7 +5230,7 @@ msgctxt "span"
 msgid "X"
 msgstr ""
 
-#: ../shipping/shippings_views.py:103 ../products/models.py:235
+#: ../shipping/shippings_views.py:103 ../products/models.py:243
 msgid "Yes"
 msgstr "Oui"
 
@@ -5257,7 +5282,7 @@ msgctxt "title attribute"
 msgid "Your Shopping Cart"
 msgstr ""
 
-#: ../shop_views.py:445
+#: ../shop_views.py:451
 msgid ""
 "Your account isn't validated,\n"
 "                please contact the webmaster"
@@ -5265,11 +5290,11 @@ msgstr ""
 "Votre compte n'a pas été validé,\n"
 "                veuillez contacter le webmaster"
 
-#: ../shop_views.py:321
+#: ../shop_views.py:320
 msgid "Your address"
 msgstr "Votre adresse"
 
-#: ../user_views.py:317 ../user_views.py:391
+#: ../user_views.py:329 ../user_views.py:403
 msgid "Your are not authorized to view this ressource"
 msgstr "Vous n'êtes pas autorisé à voir cette ressource"
 
@@ -5329,7 +5354,7 @@ msgstr ""
 msgid "Your inscription has been validated"
 msgstr "Votre inscription a été validée"
 
-#: ../user_views.py:383 ../orders/orders_views.py:471
+#: ../user_views.py:395 ../orders/orders_views.py:471
 msgid "Your message has been sent"
 msgstr "Votre message a été envoyé"
 
@@ -5408,15 +5433,15 @@ msgctxt "b"
 msgid "at the following address:"
 msgstr "à l'adresse suivante :"
 
-#: ../datatypes.py:188
+#: ../datatypes.py:189
 msgid "cm"
 msgstr ""
 
-#: ../shop.py:160
+#: ../shop.py:154
 msgid "countries"
 msgstr "pays"
 
-#: ../datatypes.py:191
+#: ../datatypes.py:192
 msgid "inch"
 msgstr ""
 
@@ -5424,7 +5449,7 @@ msgstr ""
 msgid "s"
 msgstr ""
 
-#: ../user_views.py:538
+#: ../user_views.py:550
 msgid "user"
 msgstr "Utilisateur"
 
