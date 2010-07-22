@@ -121,14 +121,12 @@ class ShopWS_SiteMap(STLView):
         for category in resource.search_resources(cls=Category):
             href = context.get_link(category)
             sub_tree = self.build_tree(category, context, level - 1)
-            img = None
             img_path = category.get_property('image_category')
-            if img_path.get_name():
-                try:
-                    img = category.get_resource(img_path)
-                    img = context.get_link(img)
-                except LookupError:
-                    pass
+            if img_path:
+                img = category.get_resource(img_path)
+                img = context.get_link(img)
+            else:
+                img = None
             nb_products = category.get_nb_products(only_public=True)
             category_tree = {'title': category.get_title(),
                              'href': href,
