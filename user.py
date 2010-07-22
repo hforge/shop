@@ -87,8 +87,8 @@ class CustomerSchemaTable(OrderedTableFile):
 
 class CustomerSchema(OrderedTable):
 
-    class_id = 'product-model-schema'
-    class_title = MSG(u'Model Schema')
+    class_id = 'user-schema'
+    class_title = MSG(u'User schema')
     class_version = '20090609'
     class_handler = CustomerSchemaTable
     class_views = ['view', 'add_record']
