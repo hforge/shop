@@ -251,13 +251,13 @@ class Shop_Register(RegisterForm):
         shop = get_shop(resource)
         return merge_dicts(self.base_schema,
                            self.get_group_schema(context),
-                           shop.user_class.get_public_dynamic_schema())
+                           shop.user_class.get_public_dynamic_schema(register=True))
 
 
     def get_widgets(self, resource, context):
         shop = get_shop(resource)
         return self.base_widgets + \
-               shop.user_class.get_public_dynamic_widgets() + \
+               shop.user_class.get_public_dynamic_widgets(register=True) + \
                self.get_group_widgets(context) + \
                self.address_widgets
 

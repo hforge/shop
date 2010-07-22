@@ -237,7 +237,6 @@ class FrenchDate(Date):
                 day, year = year, day
         elif '/' in data:
             day, month, year = data.split('/')
-
         day, month, year = int(day), int(month), int(year)
         return datetime.date(year, month, day)
 

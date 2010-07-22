@@ -79,6 +79,7 @@ class CustomerSchemaTable(OrderedTableFile):
         'mandatory': Boolean,
         'multiple': Boolean,
         'datatype': Datatypes(mandatory=True, index='keyword'),
+        'show_on_register': Boolean,
         'default': Unicode,
         }
 
@@ -101,11 +102,14 @@ class CustomerSchema(OrderedTable):
         TextWidget('default', title=MSG(u'Default value')),
         ]
 
-    def get_model_schema(self):
+    def get_model_schema(self, register=False):
         schema = {}
         get_value = self.handler.get_record_value
         for record in self.handler.get_records_in_order():
             name = get_value(record, 'name')
+            show_on_register = get_value(record, 'show_on_register')
+            if register is True and show_on_register is False:
+                continue
             datatype = get_real_datatype(self.handler, record)
             default = get_value(record, 'default')
             if default:
@@ -114,11 +118,14 @@ class CustomerSchema(OrderedTable):
         return schema
 
 
-    def get_model_widgets(self):
+    def get_model_widgets(self, register=False):
         widgets = []
         get_value = self.handler.get_record_value
         for record in self.handler.get_records_in_order():
             name = get_value(record, 'name')
+            show_on_register = get_value(record, 'show_on_register')
+            if register is True and show_on_register is False:
+                continue
             datatype = get_real_datatype(self.handler, record)
             widget = get_default_widget_shop(datatype)
             title = get_value(record, 'title')
@@ -218,17 +225,17 @@ class ShopUser(User, DynamicFolder):
 
 
     @classmethod
-    def get_public_dynamic_schema(cls):
+    def get_public_dynamic_schema(cls, register=False):
         users = get_context().root.get_resource('/users')
         public_schema = users.get_resource('public_schema')
-        return public_schema.get_model_schema()
+        return public_schema.get_model_schema(register=register)
 
 
     @classmethod
-    def get_public_dynamic_widgets(cls):
+    def get_public_dynamic_widgets(cls, register=False):
         users = get_context().root.get_resource('/users')
         public_schema = users.get_resource('public_schema')
-        return public_schema.get_model_widgets()
+        return public_schema.get_model_widgets(register=register)
 
 
     @classmethod
