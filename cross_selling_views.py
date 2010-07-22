@@ -79,14 +79,16 @@ class CrossSelling_Widget(Widget):
     template = list(XMLParser(
         """
         Show the ${nb_products} product(s) of the
-        <a href=";view_table" target="_blank">table</a><br/><br/>
+        <a href="${href}" target="_blank">table</a><br/><br/>
         """, stl_namespaces))
 
     def get_namespace(self, datatype, value):
         namespace = Widget.get_namespace(self, datatype, value)
         # Get nb products in table
-        resource = get_context().resource
+        context = get_context()
+        resource = context.resource
         namespace['nb_products'] =  resource.handler.get_n_records()
+        namespace['href'] = '%s/;view_table' % context.get_link(resource)
         return namespace
 
 
