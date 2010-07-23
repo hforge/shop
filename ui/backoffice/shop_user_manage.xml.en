@@ -5,7 +5,7 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
 
-  <a href="/shop/customers/">« Go to the customers list</a>
+  <a href="/users/">« Go to the customers list</a>
 
   <table class="order-browse" style="width:300px;float:left">
     <thead>

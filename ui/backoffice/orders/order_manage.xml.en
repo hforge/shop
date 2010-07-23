@@ -52,7 +52,7 @@
           <img src="/ui/backoffice/icons/16x16/users.png"/>
           Customer
         </h2>
-        <a target="_blank" href="/shop/customers/${customer/id}">
+        <a target="_blank" href="/users/${customer/id}">
           ${customer/title}<br/>
           <span stl:if="customer/phone1">${customer/phone1}<br/></span>
           <span stl:if="customer/phone2">${customer/phone2}<br/></span>

@@ -16,7 +16,7 @@
 
           There are
             <span class="counter counter-green">${nb_users}</span>
-          <a href="/shop/customers/">users</a> registered on your website<br/><br/>
+          <a href="/users/">users</a> registered on your website<br/><br/>
 
           There are
             <span class="counter counter-green">${nb_products}</span>

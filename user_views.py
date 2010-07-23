@@ -19,6 +19,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
+from itools.uri import get_uri_name
 from itools.web import STLView, STLForm, INFO, ERROR
 from itools.xapian import PhraseQuery, AndQuery
 from itools.xml import XMLParser
@@ -195,7 +196,8 @@ class ShopUser_EditPrivateInformations(AutoForm):
 
     def get_widgets(self, resource, context):
         user_class = get_shop(resource).user_class
-        widget_group = [SelectWidget('user_group', title=MSG(u'User group'))]
+        widget_group = [SelectWidget('user_group', title=MSG(u'User group'),
+                                     has_empty_option=False)]
         return user_class.base_widgets + widget_group + resource.get_dynamic_widgets()
 
 
@@ -205,7 +207,15 @@ class ShopUser_EditPrivateInformations(AutoForm):
 
     def action(self, resource, context, form):
         # Save changes XXX
-        schema = self.get_schema(resource, context)
+        if get_uri_name(form['user_group']) == 'default':
+            schema = merge_dicts(resource.base_schema,
+                                 resource.get_public_dynamic_schema(),
+                                 resource.get_private_dynamic_schema(),
+                                 user_group=UserGroup_Enumerate)
+            del schema['password']
+            del schema['user_must_confirm']
+        else:
+            schema = self.get_schema(resource, context)
         user = context.root.get_resource('/users/%s' % resource.name)
         user.save_form(schema, form)
         # Message 

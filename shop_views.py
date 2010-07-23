@@ -64,7 +64,7 @@ CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
 
 registration_notification_body = MSG(u"""
     You have to validate user number {name} ({email})\n
-    {shop_backoffice_uri}/shop/customers/{name}/;edit_private_informations\n
+    {shop_backoffice_uri}/users/{name}/;edit_private_informations\n
     """)
 
 

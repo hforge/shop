@@ -148,7 +148,7 @@ class ShopUser_Groups(ShopFolder):
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
         ShopFolder._make_resource(cls, folder, name, *args, **kw)
-        ShopUser_Group._make_resource(cls, folder, '%s/default' % name)
+        ShopUser_Group._make_resource(ShopUser_Group, folder, '%s/default' % name)
 
 
     def get_document_types(self):
