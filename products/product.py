@@ -684,7 +684,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         context = get_context()
         user = context.user
         if (context.user and
-            context.user.get_property('user_group') == 'group_pro'):
+            get_uri_name(context.user.get_property('user_group')) == 'pro'):
             return 'pro-'
         return ''
 
