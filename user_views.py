@@ -119,15 +119,17 @@ class ShopUser_Manage(STLView):
         for key in self.base_fields:
             namespace['user']['base'][key] = user.get_property(key)
         # Additional public schema
-        for widget in user_class.public_widgets:
-            datatype = user_class.public_schema[widget.name]
+        public_schema = user_class.get_public_dynamic_schema()
+        for widget in user_class.get_public_dynamic_widgets():
+            datatype = public_schema[widget.name]
             value = user.get_property(widget.name)
             namespace['user']['public'].append(
               {'title': widget.title,
                'value': datatype.encode(value)})
         # Additional private schema
-        for widget in user_class.private_widgets:
-            datatype = user_class.private_schema[widget.name]
+        private_schema = user_class.get_private_dynamic_schema()
+        for widget in user_class.get_private_dynamic_schema():
+            datatype = private_schema[widget.name]
             value = user.get_property(widget.name)
             namespace['user']['private'].append(
               {'title': widget.title,

@@ -66,6 +66,17 @@ class Category(ShopFolder):
     new_product = Product_NewProduct()
     comparator = Category_Comparator()
 
+
+    @property
+    def class_views(self):
+        context = get_context()
+        # Back-Office
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
+            return ['browse_content', 'view_categories', 'edit']
+        return ['view']
+
+
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
@@ -129,44 +140,6 @@ class Category(ShopFolder):
             base_path_query,
             PhraseQuery('format', shop.category_class.class_id))
         return len(root.search(query))
-
-
-    #####################################
-    ## XXX Hack to change class_views
-    ## To report in ikaaro
-    #####################################
-    def get_class_views(self):
-        context = get_context()
-        # Back-Office
-        hostname = context.uri.authority
-        if hostname[:6] == 'admin.' :
-            return ['browse_content', 'view_categories', 'edit']
-        return ['view']
-
-
-    def get_default_view_name(self):
-        views = self.get_class_views()
-        if not views:
-            return None
-        context = get_context()
-        user = context.user
-        ac = self.get_access_control()
-        for view_name in views:
-            view = getattr(self, view_name, None)
-            if ac.is_access_allowed(user, self, view):
-                return view_name
-        return views[0]
-
-
-    def get_views(self):
-        user = get_context().user
-        ac = self.get_access_control()
-        for name in self.get_class_views():
-            view_name = name.split('?')[0]
-            view = self.get_view(view_name)
-            if ac.is_access_allowed(user, self, view):
-                yield name, view
-
 
 
 register_resource_class(Category)

@@ -98,6 +98,7 @@ class CustomerSchema(OrderedTable):
         TextWidget('title', title=MSG(u'Title')),
         BooleanCheckBox('mandatory', title=MSG(u'Mandatory')),
         BooleanCheckBox('multiple', title=MSG(u'Multiple')),
+        BooleanCheckBox('show_on_register', title=MSG(u'Show on register ?')),
         SelectWidget('datatype', title=MSG(u'Data Type')),
         TextWidget('default', title=MSG(u'Default value')),
         ]
@@ -113,7 +114,7 @@ class CustomerSchema(OrderedTable):
             datatype = get_real_datatype(self.handler, record)
             default = get_value(record, 'default')
             if default:
-                datatype.default = default
+                datatype.default = datatype.decode(default)
             schema[name] = datatype
         return schema
 
@@ -163,8 +164,6 @@ class ShopUser(User, DynamicFolder):
 
     class_version = '20100720'
     class_id = 'user'
-    class_views = ['profile', 'addresses_book', 'edit_account',
-                   'orders_view', 'edit_preferences', 'edit_password']
 
     # Views
     manage = ShopUser_Manage()
@@ -203,6 +202,18 @@ class ShopUser(User, DynamicFolder):
     def _make_resource(cls, folder, name, *args, **kw):
         ctime = datetime.now()
         User._make_resource(cls, folder, name, ctime=ctime, *args, **kw)
+
+    base_class_views = ['profile', 'addresses_book', 'edit_account',
+                        'orders_view', 'edit_preferences', 'edit_password']
+
+    @property
+    def class_views(self):
+        context = get_context()
+        # Back-Office
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
+            return ['manage'] + self.base_class_views
+        return self.base_class_views
 
 
     @classmethod
