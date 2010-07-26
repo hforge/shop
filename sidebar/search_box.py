@@ -18,7 +18,7 @@
 from itools.csv import Table as BaseTable
 from itools.datatypes import Decimal, Unicode
 from itools.gettext import MSG
-from itools.web import STLView
+from itools.web import FormError, STLView
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -111,12 +111,15 @@ class SearchBox_View(Box_View):
 
     def get_namespace(self, resource, context):
         namespace = {}
-        query = self.get_query(context)
+        try:
+            query = self.get_query(context)
+        except FormError:
+            query = {}
         # Widget with list of categories
         widget = None
         widget = SelectRadioList('category', has_empty_option=False)
         widget = widget.to_html(Shop_CategoriesEnumerate,
-                                value=query['category'])
+                                value=query.get('category'))
         # Filter by price
         if resource.get_resource('prices-range', soft=True):
             namespace['filter_by_price'] = FilterByPriceBox_View().GET(resource, context)
@@ -128,7 +131,7 @@ class SearchBox_View(Box_View):
             nb_results = str(context.view.nb_results)
         # Build namespace
         namespace['title'] = resource.get_title()
-        namespace['product_search_text'] = query['product_search_text']
+        namespace['product_search_text'] = query.get('product_search_text')
         namespace['show_list_categories'] = self.show_list_categories
         namespace['widget_categories'] =  widget
         namespace['nb_results'] = nb_results
