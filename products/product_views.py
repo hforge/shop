@@ -205,8 +205,12 @@ class Product_Edit_Right_Panel(ContextMenu):
         site_root = context.site_root
         frontoffice_uri = '%s/%s' % (shop.get_property('shop_uri'),
                                      site_root.get_pathto(resource))
+        cover = resource.get_cover_namespace(context)
+        if cover:
+            cover = cover['href']
         return {'images': images,
                 'frontoffice_uri': frontoffice_uri,
+                'cover_uri': cover,
                 'nb_photos': len(images)}
 
 

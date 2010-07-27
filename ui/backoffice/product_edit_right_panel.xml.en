@@ -46,6 +46,11 @@
           Manage photos
         </a>
       </li>
+      <li stl:if="cover_uri">
+        <a href="${cover_uri}">
+          Edit cover
+        </a>
+      </li>
     </ul>
     <div style="padding:5px;text-align:center;width:215px" id="gallery">
       <a href="${image/href}/?size=128&amp;width=1024&amp;height=1024" stl:repeat="image images"
