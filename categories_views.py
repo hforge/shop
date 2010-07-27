@@ -24,7 +24,7 @@ from itools.xapian import PhraseQuery, AndQuery, RangeQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.buttons import RemoveButton
+from ikaaro.buttons import RenameButton, RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.utils import get_base_path_query
 
@@ -267,8 +267,11 @@ class Category_BackofficeView(Folder_BrowseContent):
 
     search_template = '/ui/backoffice/category_view.xml'
 
+
+
     table_actions = [RemoveButton(
-        title=MSG(u'Remove category, sub-categories, and associated products'))]
+        title=MSG(u'Remove category, sub-categories, and associated products')),
+        RenameButton()]
 
     table_columns = [
         ('checkbox', None),
