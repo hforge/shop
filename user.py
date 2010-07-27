@@ -232,7 +232,8 @@ class ShopUser(User, DynamicFolder):
 
     def get_dynamic_widgets(self):
         return (self.get_public_dynamic_widgets() +
-                self.get_private_dynamic_widgets())
+                self.get_private_dynamic_widgets() +
+                self.get_group_dynamic_widgets())
 
 
     @classmethod
@@ -274,6 +275,17 @@ class ShopUser(User, DynamicFolder):
             return {}
         return user_group_schema.get_model_schema()
 
+
+    def get_group_dynamic_widgets(self):
+        user_group = self.get_property('user_group')
+        # XXX Should never be None
+        if not user_group:
+            return {}
+        user_group_schema = self.get_resource('%s/schema' % user_group, soft=True)
+        # XXX Remove after update
+        if user_group_schema is None:
+            return {}
+        return user_group_schema.get_model_widgets()
 
 
     def _get_catalog_values(self):
