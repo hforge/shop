@@ -3174,11 +3174,11 @@ msgstr "Nom"
 
 #: ../modules/categories_sort/categories_sort.py:37
 msgid "Name: A to Z"
-msgstr ""
+msgstr "Titre: A à Z"
 
 #: ../modules/categories_sort/categories_sort.py:38
 msgid "Name: Z to A"
-msgstr ""
+msgstr "Titre: Z à A"
 
 #: ../categories_views.py:279
 msgid "Nb backlinks"
@@ -3818,7 +3818,7 @@ msgstr "Prix"
 
 #: ../modules/categories_sort/categories_sort.py:36
 msgid "Price: highest first"
-msgstr ""
+msgstr "Prix: du + au - cher"
 
 #: ../modules/categories_sort/categories_sort.py:35
 msgid "Price: lowest first"
