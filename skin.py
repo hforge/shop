@@ -180,7 +180,11 @@ class ShopSkin(NeutralSkin):
         elif isinstance(here, shop.product_class):
             return site_root.get_resource('product-sidebar')
         elif isinstance(here, shop.category_class):
-            sidebar = context.resource.get_resource('sidebar', soft=True)
+            cat = here
+            sidebar = None
+            while cat.name != 'categories' and sidebar is None:
+                sidebar = cat.get_resource('sidebar', soft=True)
+                cat = cat.parent
             if sidebar:
                 return sidebar
             return site_root.get_resource('category-sidebar')
