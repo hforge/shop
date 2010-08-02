@@ -24,6 +24,7 @@ from ikaaro.skins import register_skin
 from sidebar import CategorySidebar, ProductSidebar, ShopSidebar
 from cart_box import CartBox
 from cross_selling_box import CrossSellingBox
+from filter_box import FilterBox
 from sidebar_cross_selling_box import SideBarCrossSellingBox
 from sidebar_product_cross_selling_box import SideBarProductCrossSellingBox
 from login_box import LoginBox
