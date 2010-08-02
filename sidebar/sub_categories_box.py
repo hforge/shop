@@ -49,6 +49,7 @@ class SubCategoriesBox_View(Box_View):
         show_first_category = resource.get_property('show_first_category')
         show_second_level = resource.get_property('show_second_level')
         here_real_abspath = str(here.get_abspath())
+        here_parent_abspath = here.parent.get_abspath()
         current_level = here_real_abspath.count('/')
 
         if here.metadata.format == 'category':
@@ -84,7 +85,10 @@ class SubCategoriesBox_View(Box_View):
             level = cat.abspath.count('/')
 
             # Skip second level (if we are not on level /categories/')
-            if level < 4 and show_second_level is False and current_level != 2:
+            if (show_second_level is False and current_level > 2 and
+                level == 3 and
+                not here_real_abspath == cat.abspath and
+                not here_parent_abspath == cat.abspath):
                 continue
 
             # Skip bad level
