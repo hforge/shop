@@ -77,7 +77,6 @@ class ShopWebSite(NeutralWS):
 
     # Shop configuration
     shop_class = Shop
-    templates = {}
     cart_preview_class = Cart_Viewbox
     backoffice_rss_news_uri = None
 
@@ -87,17 +86,14 @@ class ShopWebSite(NeutralWS):
         root = get_context().resource
         NeutralWS._make_resource(cls, folder, name, **kw)
         website = root.get_resource(name)
-        # Configuration des langues
+        # Languages (En and Fr)
         metadata = website.metadata
-        metadata.set_property('website_languages', ('fr', 'en'))
+        metadata.set_property('website_languages', ('en', 'fr', ))
 
-        # Site public
+        # Website is open
         metadata.set_property('website_is_open', True)
 
-        # Configuration des sites
-        metadata.set_property('vhosts', ('shop', 'shop.com'))
-
-        # Ressources par défaut
+        # Default resources
         for name2, (cls, kw) in default_resources.items():
             cls._make_resource(cls, folder, '%s/%s' % (name, name2),
                                language='en', **kw)
