@@ -41,9 +41,9 @@ from website_views import ShopWebSite_Configure
 
 
 default_resources = {
-    'shop': (Shop, {'title': {'en': u'Shop'}, 'state':'public'}),
     'categories': (Category, {'title': {'en': u"Categories"}}),
-    'seach': (ShopSearch, {'title': {'en': u'Search'}}),
+    'search': (ShopSearch, {'title': {'en': u'Search'}}),
+    'shop': (Shop, {'title': {'en': u'Shop'}, 'state':'public'}),
 }
 
 
