@@ -25,7 +25,6 @@ from ikaaro.registry import register_resource_class, register_document_type
 from ikaaro.website import WebSite
 
 # Import from itws
-from itws.sitemap import SiteMap, SiteMapView
 from itws.ws_neutral import NeutralWS
 
 # Import from shop
@@ -45,15 +44,6 @@ default_resources = {
     'search': (ShopSearch, {'title': {'en': u'Search'}}),
     'shop': (Shop, {'title': {'en': u'Shop'}, 'state':'public'}),
 }
-
-
-# XXX ??
-class ShopXMLSiteMap(SiteMap):
-
-    class_id = 'shop-sitemap'
-
-    view = SiteMapView()
-
 
 
 class ShopWebSite(NeutralWS):
@@ -85,7 +75,6 @@ class ShopWebSite(NeutralWS):
 
     # Shop configuration
     shop_class = Shop
-    sitemap_class = ShopXMLSiteMap
     templates = {}
     cart_preview_class = Cart_Viewbox
     backoffice_rss_news_uri = None
@@ -185,6 +174,12 @@ class ShopWebSite(NeutralWS):
         cls.make_resource(cls, shop, 'shop-sidebar')
 
 
+    def update_20100803(self):
+        resource = self.get_resource('sitemap.xml')
+        metadata = resource.metadata
+        metadata.format = 'sitemap'
+        metadata.set_changed()
+
+
 register_resource_class(ShopWebSite)
 register_document_type(ShopWebSite, WebSite.class_id)
-register_resource_class(ShopXMLSiteMap)
