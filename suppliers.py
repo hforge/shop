@@ -15,21 +15,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Enumerate
+from itools.core import merge_dicts
+from itools.datatypes import Enumerate, Email, Unicode, String
 from itools.gettext import MSG
 from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
+from ikaaro.forms import TextWidget, MultilineWidget
 from ikaaro.registry import register_resource_class
 
+# Import from itws
+from itws.views import AutomaticEditView
+
 # Import from shop
-from suppliers_views import Suppliers_View, Supplier_Add, Supplier_Edit
-from suppliers_views import supplier_schema
+from suppliers_views import Suppliers_View
 from utils import CurrentFolder_AddImage, get_shop
 
 
-
+# XXX use AbspathEnumerate
 class SuppliersEnumerate(Enumerate):
 
     @classmethod
@@ -47,16 +51,31 @@ class Supplier(Folder):
 
     class_id = 'supplier'
     class_title = MSG(u'Supplier')
-    class_views = ['view', 'edit']
+    class_views = ['edit']
 
-    edit = Supplier_Edit()
+    edit = AutomaticEditView()
     add_image = CurrentFolder_AddImage()
-    new_instance = Supplier_Add()
+
+    # Edit views
+    edit_schema = {'address': Unicode(mandatory=True),
+                   'phone': String,
+                   'fax': String,
+                   'email': Email,
+                   'description': Unicode(multilingual=True)}
+
+    edit_widgets = [
+            MultilineWidget('address', title=MSG(u'Address')),
+            TextWidget('phone', title=MSG(u'Phone')),
+            TextWidget('fax', title=MSG(u'Fax')),
+            TextWidget('email', title=MSG(u'Email')),
+            MultilineWidget('description', title=MSG(u'Description'))
+            ]
 
 
     @classmethod
     def get_metadata_schema(cls):
-        return supplier_schema
+        return merge_dicts(Folder.get_metadata_schema(),
+                           cls.edit_schema)
 
 
 
@@ -65,10 +84,9 @@ class Suppliers(Folder):
 
     class_id = 'suppliers'
     class_title = MSG(u'Suppliers')
-    class_views = ['browse_content', 'add']
+    class_views = ['browse_content']
 
     browse_content = Suppliers_View()
-    add = Supplier_Add()
 
     def get_document_types(self):
         return [Supplier]
