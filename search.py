@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean, String, Unicode, Enumerate
+from itools.datatypes import Unicode, Enumerate
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.xapian import OrQuery, PhraseQuery, AndQuery, StartQuery, split_unicode
