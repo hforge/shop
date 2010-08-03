@@ -68,6 +68,8 @@ class ShopWebSite_View(NeutralWS_View):
 
 
 class ShopWS_RSS(NeutralWS_RSS):
+    """ We add products to NeutralWS_RSS items
+    """
 
     access = True
 

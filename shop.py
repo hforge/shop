@@ -33,7 +33,6 @@ from datatypes import ImagePathDataType
 from editorial import Shop_EditorialView
 from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from folder import ShopFolder
-from manufacturers import Manufacturers, Manufacturer
 from modules import Modules
 from orders import Orders
 from products import Products, Product, ProductModels
@@ -60,7 +59,7 @@ class Shop(ShopFolder):
 
     __fixed_handlers__ = ShopFolder.__fixed_handlers__ + ['addresses',
                           'categories', 'customers', 'groups',
-                          'manufacturers', 'orders', 'payments',
+                          'orders', 'payments',
                           'products', 'products-models',
                           'shippings', 'countries',
                           'terms-and-conditions-of-use', 'taxes']
@@ -70,7 +69,6 @@ class Shop(ShopFolder):
     # Classes to override
     # for specific needs
     ###############################
-    manufacturer_class = Manufacturer
     product_class = Product
     category_class = Category
     payments_class = ShopPayments
@@ -122,9 +120,6 @@ class Shop(ShopFolder):
         cls.payments_class._make_resource(cls.payments_class, folder,
                                 '%s/payments' % name,
                                 title={'en': u'Payment module'})
-        # Manufacturers
-        Manufacturers._make_resource(Manufacturers, folder,
-                      '%s/manufacturers' % name, title={'en': u'Manufacturers'})
         # Modules
         Modules._make_resource(Modules, folder,
                       '%s/modules' % name, title={'en': u'Modules'})

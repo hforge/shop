@@ -28,7 +28,6 @@ from itws.views import AutomaticEditView
 
 # Import from shop
 from datatypes import DynamicEnumerate
-from manufacturers_views import Manufacturer_Add
 from manufacturers_views import Manufacturers_View
 from manufacturers_views import Manufacturer_View
 from utils import CurrentFolder_AddImage
@@ -52,7 +51,6 @@ class Manufacturer(Folder):
     view = Manufacturer_View()
     edit = AutomaticEditView()
     add_image = CurrentFolder_AddImage()
-    new_instance = Manufacturer_Add()
 
     # Edit configuration
     edit_show_meta = True
@@ -67,7 +65,7 @@ class Manufacturer(Folder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(Folder.get_metadata_schema(),
-                           data=XHTMLBody,
+                           data=XHTMLBody(multilingual=True),
                            photo=PathDataType)
 
 
@@ -77,10 +75,9 @@ class Manufacturers(Folder):
 
     class_id = 'manufacturers'
     class_title = MSG(u'Manufacturers')
-    class_views = ['view', 'edit', 'add']
+    class_views = ['view', 'edit', 'new_resource?type=manufacturer']
 
     view = Manufacturers_View()
-    add = Manufacturer_Add()
 
     def get_document_types(self):
         return [Manufacturer]

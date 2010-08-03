@@ -30,6 +30,7 @@ from itws.ws_neutral import NeutralWS
 # Import from shop
 from categories import Category
 from datatypes import SkinsEnumerate
+from manufacturers import Manufacturers
 from search import ShopSearch
 from shop import Shop
 from shop_views import Shop_Register, Shop_Login
@@ -41,6 +42,7 @@ from website_views import ShopWebSite_Configure
 
 default_resources = {
     'categories': (Category, {'title': {'en': u"Categories"}}),
+    'manufacturers': (Manufacturers, {'title': {'en': u"Manufacturers"}}),
     'search': (ShopSearch, {'title': {'en': u'Search'}}),
     'shop': (Shop, {'title': {'en': u'Shop'}, 'state':'public'}),
 }

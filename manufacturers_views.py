@@ -23,39 +23,8 @@ from itools.datatypes import Unicode, String
 from itools.web import STLView
 from itools.xapian import AndQuery, PhraseQuery
 
-# Import from ikaaro
-from ikaaro import messages
-from ikaaro.forms import TextWidget
-from ikaaro.views_new import NewInstance
-
 # Import from here
 from utils import get_skin_template
-
-
-class Manufacturer_Add(NewInstance):
-
-    access = 'is_allowed_to_add'
-    title = MSG(u'Add a new manufacturer')
-    schema = {'name': String,
-              'title': Unicode}
-    widgets = [TextWidget('name', title=MSG(u'Name')),
-               TextWidget('title', title=MSG(u'Title'))]
-
-    context_menus = []
-
-    def action(self, resource, context, form):
-        from utils import get_shop
-        shop = get_shop(resource)
-        name = form['name']
-        # Create the resource
-        cls = shop.manufacturer_class
-        child = cls.make_resource(cls, resource, name)
-        # The metadata
-        language = resource.get_content_language(context)
-        child.set_property('title', form['title'], language=language)
-
-        goto = './%s/;edit' % name
-        return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
 
 
 

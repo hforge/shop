@@ -22,7 +22,6 @@ from itools.web import get_context
 # Import from ikaaro
 from ikaaro.future.menu import get_menu_namespace
 from ikaaro.skins import Skin, register_skin
-from ikaaro.website import WebSite
 
 # Import from itws
 from itws.common import LocationTemplateWithoutTab, CommonLanguagesTemplate

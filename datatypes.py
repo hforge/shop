@@ -52,6 +52,10 @@ class Civilite(Enumerate):
 
 
 class ImagePathDataType(PathDataType):
+    """
+    -> We check that the path correspond to an image
+    -> Default value is 'None' not '.'.
+    """
 
     default = None
 
