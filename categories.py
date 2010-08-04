@@ -74,7 +74,7 @@ class Category(ShopFolder):
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
             return ['browse_content', 'view_categories', 'edit']
-        return ['view']
+        return ['view', 'edit']
 
 
     @classmethod
