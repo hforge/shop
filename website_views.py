@@ -26,8 +26,7 @@ from ikaaro.forms import SelectWidget
 from ikaaro.utils import get_base_path_query
 
 # Import from itws
-from itws.views import AutomaticEditView
-from itws.ws_neutral_views import NeutralWS_RSS, NeutralWS_View
+from itws.ws_neutral_views import NeutralWS_RSS, NeutralWS_View, NeutralWS_Edit
 
 # Import from shop
 from categories import Category
@@ -36,16 +35,24 @@ from products import Product
 from utils import get_shop
 
 
-class ShopWebSite_Configure(AutomaticEditView):
+class ShopWebSite_Edit(NeutralWS_Edit):
 
     access = 'is_allowed_to_edit'
 
-    base_schema = merge_dicts(AutomaticEditView.base_schema,
-                              class_skin=SkinsEnumerate)
+    def get_schema(self, resource, context):
+        schema = NeutralWS_Edit.get_schema(self, resource, context)
+        ac = resource.get_access_control()
+        is_admin = ac.is_admin(context.user, resource.parent)
+        schema['class_skin'] = SkinsEnumerate(all_skins=is_admin,
+                                  value=resource.get_property('class_skin'))
+        return schema
 
-    base_widgets = AutomaticEditView.base_widgets + \
-                   [SelectWidget('class_skin', title=MSG(u'Class skin'),
-                                 has_empty_option=False)]
+
+    def get_widgets(self, resource, context):
+        widgets = NeutralWS_Edit.get_widgets(self, resource, context)
+        widgets[-1] = SelectWidget('class_skin', title=MSG(u'Class skin'),
+                                   has_empty_option=False)
+        return widgets
 
 
 

@@ -225,7 +225,10 @@ class SkinsEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
-        return shop_skins
+        options = shop_skins
+        if cls.all_skins is True:
+            return options
+        return [x for x in options if x['name'] == cls.value]
 
 
 class FrenchDate(Date):

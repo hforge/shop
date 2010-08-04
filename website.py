@@ -37,7 +37,7 @@ from shop_views import Shop_Register, Shop_Login
 from shop_utils_views import Cart_Viewbox
 from utils_views import RedirectPermanent
 from website_views import ShopWebSite_View, ShopWS_SiteMap, ShopWS_RSS
-from website_views import ShopWebSite_Configure
+from website_views import ShopWebSite_Edit
 
 
 default_resources = {
@@ -57,12 +57,10 @@ class ShopWebSite(NeutralWS):
 
     __fixed_handlers__ = NeutralWS.__fixed_handlers__ + ['categories', 'shop']
 
-    edit_schema = {}
-    edit_widgets = []
 
     # View
     view = ShopWebSite_View()
-    configure = ShopWebSite_Configure()
+    edit = ShopWebSite_Edit()
     sitemap = ShopWS_SiteMap()
     product_search = RedirectPermanent(specific_document='search')
 
