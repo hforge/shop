@@ -35,7 +35,7 @@ from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from folder import ShopFolder
 from modules import Modules
 from orders import Orders
-from products import Products, Product, ProductModels
+from products import Product, ProductModels
 from products.taxes import Taxes_TableResource, Taxes_TableHandler
 from shipping import Shippings
 from shop_payments import ShopPayments
@@ -46,7 +46,7 @@ from shop_views import Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Shop_GetProductStock, Shop_Configuration
 from shop_views import Shop_Administration
 from suppliers import Suppliers, Supplier
-from user import ShopUser, Customers
+from user import ShopUser
 from user_group import ShopUser_Groups
 
 
@@ -126,18 +126,12 @@ class Shop(ShopFolder):
         # Suppliers
         Suppliers._make_resource(Suppliers, folder,
                       '%s/suppliers' % name, title={'en': u'Suppliers'})
-        # Products
-        Products._make_resource(Products, folder, '%s/products' % name,
-                                title={'en': u'Products'})
         # Product Models
         ProductModels._make_resource(ProductModels, folder, '%s/products-models' % name,
                                     title={'en': u'Product Models'})
         # Orders
         Orders._make_resource(Orders, folder, '%s/orders' % name,
                               title={'en': u'Orders'})
-        # Customers
-        Customers._make_resource(Customers, folder, '%s/customers' % name,
-                                 title={'en': u'Customers'})
         # ShopUser_Groups
         ShopUser_Groups._make_resource(ShopUser_Groups, folder, '%s/groups' % name,
                                         title={'en': u'User groups'})
@@ -293,17 +287,6 @@ class Shop(ShopFolder):
                 handler.add_record({'title': Property(country, language='fr'),
                                     'zone': str(zones.index(zone)),
                                     'enabled': True})
-
-    def update_20091008(self):
-        if self.get_resource('customers', soft=True) is not None:
-            return
-        Customers.make_resource(Customers, self, 'customers')
-
-
-    def update_20091009(self):
-        if self.get_resource('manufacturers', soft=True) is not None:
-            return
-        Manufacturers.make_resource(Manufacturers, self, 'manufacturers')
 
 
     def update_20091110(self):
