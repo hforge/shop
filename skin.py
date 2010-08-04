@@ -98,7 +98,7 @@ class ShopSkin(NeutralSkin):
 
     base_scripts = []
 
-    menu_level = 1
+    menu_level = 2
 
     location_template = ShopLocationTemplate
     languages_template = ShopLanguagesTemplate
