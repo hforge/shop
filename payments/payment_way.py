@@ -28,9 +28,10 @@ from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop
-from payment_way_views import PaymentWay_RecordView
+from payment_way_views import PaymentWay_RecordView, PaymentWay_Configure
 from shop.folder import ShopFolder
 from shop.datatypes import UserGroup_Enumerate
+from shop.utils import CurrentFolder_AddImage
 
 
 class PaymentWayBaseTable(BaseTable):
@@ -92,6 +93,10 @@ class PaymentWayTable(Table):
 class PaymentWay(ShopFolder):
 
     class_id = 'payment_way'
+    class_views = ['configure', 'payments']
+
+    configure = PaymentWay_Configure()
+    add_image = CurrentFolder_AddImage()
 
     logo = None
     payment_table = PaymentWayTable

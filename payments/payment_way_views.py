@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Unicode, PathDataType, Boolean, String
+from itools.datatypes import Unicode, Boolean, String
 from itools.gettext import MSG
 from itools.web import STLView
 from itools.xapian import AndQuery, PhraseQuery
@@ -28,7 +28,7 @@ from ikaaro.forms import XHTMLBody, ImageSelectorWidget, TextWidget, RTEWidget
 from ikaaro.forms import BooleanRadio, SelectWidget
 
 # Import from shop
-from shop.datatypes import UserGroup_Enumerate
+from shop.datatypes import UserGroup_Enumerate, ImagePathDataType
 
 
 class PaymentWay_EndView(STLView):
@@ -68,7 +68,7 @@ class PaymentWay_Configure(DBResource_Edit):
     access = 'is_admin'
 
     schema = {'title': Unicode(mandatory=True, multilingual=True),
-              'logo': PathDataType(mandatory=True, multilingual=True),
+              'logo': ImagePathDataType(mandatory=True, multilingual=True),
               'data': XHTMLBody(mandatory=True, multilingual=True),
               'only_this_groups': UserGroup_Enumerate(multiple=True),
               'enabled': Boolean(mandatory=True)}
