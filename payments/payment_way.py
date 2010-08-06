@@ -18,7 +18,7 @@
 from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
 from itools.datatypes import Boolean, String, Decimal
-from itools.datatypes import PathDataType, Unicode
+from itools.datatypes import Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 
@@ -30,7 +30,7 @@ from ikaaro.table import Table
 # Import from shop
 from payment_way_views import PaymentWay_RecordView, PaymentWay_Configure
 from shop.folder import ShopFolder
-from shop.datatypes import UserGroup_Enumerate
+from shop.datatypes import ImagePathDataType, UserGroup_Enumerate
 from shop.utils import CurrentFolder_AddImage
 
 
@@ -112,7 +112,7 @@ class PaymentWay(ShopFolder):
                            title=Unicode(multilingual=True),
                            enabled=Boolean(default=True),
                            only_this_groups=UserGroup_Enumerate(multiple=True),
-                           logo=PathDataType(multilingual=True))
+                           logo=ImagePathDataType(multilingual=True))
 
 
     @staticmethod
