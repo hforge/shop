@@ -65,7 +65,7 @@ class ProductCart(object):
             # Get product
             product = context.root.get_resource(product_cart['name'], soft=True)
             # Check product is buyable
-            if not product or not product.is_buyable():
+            if not product or not product.is_buyable(context):
                 continue
             quantity = product_cart['quantity']
             id_declination = product_cart['declination']
@@ -108,7 +108,7 @@ class ProductCart(object):
             id, name, quantity, declination = data.split('|')
             # Check product exist
             product = self.context.root.get_resource(name, soft=True)
-            if not product or not product.is_buyable():
+            if not product or not product.is_buyable(self.context):
                 continue
             # Add product
             products.append({'id': id,

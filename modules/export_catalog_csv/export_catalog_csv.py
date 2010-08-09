@@ -40,7 +40,7 @@ class ShopModule_ExportCatalogCSV_View(BaseView):
         format = shop.product_class.class_id
         for brain in root.search(format=format).get_documents():
             product = root.get_resource(brain.abspath)
-            if product.is_buyable() is False:
+            if product.is_buyable(context) is False:
                 continue
             line = [brain.title.encode('utf-8'),
                     product.get_property('description').encode('utf-8'),

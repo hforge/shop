@@ -89,7 +89,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     class_id = 'product'
     class_title = MSG(u'Product')
     class_description = MSG(u'A product')
-    class_version = '20100622'
+    class_version = '20100809'
 
     ##################
     # Configuration
@@ -184,8 +184,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         values['ctime'] = self.get_property('ctime')
         # Promotion
         values['has_reduction'] = self.get_property('has_reduction')
-        # Is buyable ?
-        values['is_buyable'] = self.is_buyable()
+        # not_buyable_by_groups
+        values['not_buyable_by_groups'] = self.get_property('not_buyable_by_groups')
 
         return values
 
@@ -532,7 +532,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         namespace['images'] = self.get_images_namespace(context)
         namespace['has_more_than_one_image'] = len(namespace['images']) > 1
         # Product is buyable
-        namespace['is_buyable'] = self.is_buyable()
+        namespace['is_buyable'] = self.is_buyable(context)
         # Cross selling
         namespace['cross_selling'] = self.get_cross_selling_namespace(context)
         # Authentificated ?
@@ -663,11 +663,15 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     #####################
     ## API
     #####################
-    def is_buyable(self, quantity=1):
+    def is_buyable(self, context, quantity=1):
+        if context.user:
+            group_name = str(context.user.get_property('user_group'))
+        else:
+            shop = get_shop(self)
+            group_name = '%s/groups/default' % shop.get_abspath()
         return (self.get_price_without_tax() != decimal(0) and
-                self.get_property('is_buyable') is True and
-                self.get_statename() == 'public' and
-                self.is_in_stock_or_ignore_stock(quantity))
+                group_name not in self.get_property('not_buyable_by_groups') and
+                self.get_statename() == 'public')
 
 
     def get_reference(self, id_declination=None):
@@ -911,6 +915,14 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                           with_dynamic=False)
 
 
+    def update_20100809(self):
+        is_buyable = self.get_property('is_buyable')
+        self.del_property('is_buyable')
+        shop = get_shop(self)
+        group_name = '%s/groups/default' % shop.get_abspath()
+        if is_buyable is False:
+            self.set_property('not_buyable_by_groups', [group_name])
+
 
 
 class Products(ShopFolder):
@@ -958,6 +970,7 @@ class Products(ShopFolder):
             print '=================='
 
 
+
 # Product class depents on CrossSellingTable class and vice versa
 CrossSellingTable.orderable_classes = Product
 
@@ -968,7 +981,7 @@ register_field('supplier', Unicode(is_indexed=True, multiple=True))
 register_field('product_model', String(is_indexed=True, is_stored=True))
 register_field('has_images', Boolean(is_indexed=True, is_stored=True))
 register_field('has_reduction', Boolean(is_indexed=True))
-register_field('is_buyable', Boolean(is_indexed=True, is_stored=True))
+register_field('not_buyable_by_groups', String(is_indexed=True, multiple=True))
 register_field('ctime', DateTime(is_stored=True, is_indexed=True))
 register_field('data', Unicode(is_indexed=True))
 # XXX xapian can't sort decimal

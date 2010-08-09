@@ -20,7 +20,7 @@ from itools.datatypes import Boolean, String, Integer
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import STLView, get_context
-from itools.xapian import PhraseQuery, AndQuery, RangeQuery
+from itools.xapian import PhraseQuery, AndQuery, RangeQuery, NotQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -118,6 +118,14 @@ class Category_View(BrowseFormBatchNumeric):
             get_base_path_query(str(abspath)),
             PhraseQuery('format', shop.product_class.class_id),
             PhraseQuery('workflow_state', 'public')]
+        # Is buyable ?
+        if shop.get_property('hide_not_buyable_products') is True:
+            if context.user:
+                group_name = str(context.user.get_property('user_group'))
+            else:
+                group_name = '%s/groups/default' % shop.get_abspath()
+            q = PhraseQuery('not_buyable_by_groups', group_name)
+            query.append(NotQuery(q))
         # Add query of filter
         for key, datatype in self.get_query_schema().items():
             value = context.query[key]

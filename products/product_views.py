@@ -35,7 +35,7 @@ from ikaaro.buttons import PublishButton, RetireButton
 from ikaaro.exceptions import ConsistencyError
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
-from ikaaro.forms import XHTMLBody, RTEWidget
+from ikaaro.forms import XHTMLBody, RTEWidget, SelectRadio
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
 from ikaaro.utils import get_base_path_query
 from ikaaro.views import CompositeForm, ContextMenu
@@ -55,6 +55,7 @@ from widgets import BarcodeWidget, MiniProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from widgets import StockWidget
 from shop.cart import ProductCart
+from shop.datatypes import UserGroup_Enumerate
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
 from shop.utils import get_non_empty_widgets, get_shop, get_skin_template
@@ -168,7 +169,7 @@ class Product_View(STLForm):
         """ Add to cart """
         cart = ProductCart(context)
         # Check if we can add to cart
-        if not resource.is_buyable():
+        if not resource.is_buyable(context):
             msg = MSG(u"This product isn't buyable")
             return context.come_back(msg)
         # Get purchase options
@@ -247,7 +248,7 @@ class Product_Edit(AutoForm):
         # Stock
         StockWidget('stock-quantity', title=MSG(u'Handle stocks ?')),
         # Price
-        BooleanRadio('is_buyable', title=MSG(u'Buyable by customer ?')),
+        SelectRadio('not_buyable_by_groups', title=MSG(u'Not buyable by this groups of customers:')),
         TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),
         PriceWidget('pre-tax-price', title=MSG(u'Selling price')),
         RTEWidget('data', title=MSG(u"Product description"))
@@ -281,14 +282,15 @@ class Product_Edit(AutoForm):
                   (product_model.get_model_schema() if product_model else {}),
                   data=XHTMLBody(multilingual=True),
                   category=CategoriesEnumerate,
+                  not_buyable_by_groups=UserGroup_Enumerate(multiple=True),
                   tags=TagsList(site_root=site_root, multiple=True))
 
 
 
     def get_value(self, resource, context, name, datatype):
-        if name == 'tags':
+        if name in ('tags', 'not_buyable_by_groups'):
             # XXX tuple -> list (enumerate.get_namespace expects list)
-            return list(resource.get_property('tags'))
+            return list(resource.get_property(name))
         elif name == 'category':
             return str(resource.parent.get_abspath())
         language = resource.get_content_language(context)

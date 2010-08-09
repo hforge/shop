@@ -66,7 +66,7 @@ class Cart_View(STLView):
             # Get product
             product = products.get_resource(product_cart['name'], soft=True)
             # Check product is buyable
-            if not product or not product.is_buyable():
+            if not product or not product.is_buyable(context):
                 continue
             quantity = product_cart['quantity']
             declination = product_cart['declination']

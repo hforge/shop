@@ -184,6 +184,7 @@ class Shop(ShopFolder):
         schema['pdf_signature'] = Unicode
         schema['barcode_format'] = BarcodesFormat
         schema['show_sub_categories'] = Boolean
+        schema['hide_not_buyable_products'] = Boolean
         return schema
 
 

@@ -24,7 +24,7 @@ from itools.datatypes import String, Integer, Tokens
 # Import from shop
 from enumerate import ProductModelsEnumerate, States, StockOptions
 from taxes import TaxesEnumerate
-from shop.datatypes import ImagePathDataType
+from shop.datatypes import ImagePathDataType, UserGroup_Enumerate
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
 from shop.shipping.enumerates import ShippingsWaysEnumerate
@@ -37,8 +37,11 @@ from shop.shipping.enumerates import ShippingsWaysEnumerate
 
 product_schema = {# General informations
                   'state': States(mandatory=True, default='public'),
-                  # XXX
+                  #########################
+                  # XXX to remove
+                  'is_buyable': Boolean(default=True),
                   #'categories': String(multiple=True),
+                  #########################
                   'reference': String,
                   'product_model': ProductModelsEnumerate,
                   'title': Unicode(multilingual=True),
@@ -58,7 +61,7 @@ product_schema = {# General informations
                   'stock-option': StockOptions(mandatory=True, default='accept'),
                   'resupply-quantity': Integer(default=0),
                   'sold-quantity': Integer(default=0),
-                  'is_buyable': Boolean(default=True),
+                  'not_buyable_by_groups': Tokens,
                   'purchase-price': Decimal,
                   # Price
                   'pre-tax-price': Decimal(default=decimal(0), mandatory=True),

@@ -82,8 +82,14 @@ class CrossSellingTable(ResourcesOrderedTable):
 
         # Base query
         query = [PhraseQuery('format', product_format),
-                 PhraseQuery('workflow_state', 'public'),
-                 PhraseQuery('is_buyable', True)]
+                 PhraseQuery('workflow_state', 'public')]
+        # Do not show now buyable products
+        if context.user:
+            group_name = str(context.user.get_property('user_group'))
+        else:
+            group_name = '%s/groups/default' % shop.get_abspath()
+        q = PhraseQuery('not_buyable_by_groups', group_name)
+        query.append(NotQuery(q))
         # Excluded products query
         if excluded_products:
             exclude_query = OrQuery(*[ PhraseQuery('abspath', str(abspath))
