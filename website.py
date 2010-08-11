@@ -48,6 +48,7 @@ default_resources = {
 }
 
 
+
 class ShopWebSite(NeutralWS):
 
     class_id = 'shop-website'

@@ -17,6 +17,7 @@
 # Import from itools
 from itools.datatypes import Email, Unicode, Boolean, Integer, String
 from itools.gettext import MSG
+from itools.web import get_context
 from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
@@ -26,6 +27,7 @@ from ikaaro.webpage import WebPage
 # Import from project
 from enumerate_table import EnumeratesFolder
 from addresses import Addresses
+from catalog import register_dynamic_fields
 from categories import Category
 from countries import Countries, CountriesZones
 from cross_selling import CrossSellingTable
@@ -48,6 +50,9 @@ from shop_views import Shop_Administration
 from suppliers import Suppliers, Supplier
 from user import ShopUser
 from user_group import ShopUser_Groups
+
+
+catalog_is_initialize = False
 
 
 class Shop(ShopFolder):
@@ -111,6 +116,16 @@ class Shop(ShopFolder):
     show_recapitulatif = Shop_ShowRecapitulatif()
 
     # 6) Payment end (Define in payments views)
+
+    def __init__(self, metadata):
+        # XXX Hack
+        # Register dynamic catalog fields
+        global catalog_is_initialize
+        if catalog_is_initialize is False:
+            catalog_is_initialize = True
+            register_dynamic_fields(get_context())
+        # Super
+        super(Shop, self).__init__(metadata)
 
 
     @staticmethod

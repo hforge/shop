@@ -47,14 +47,15 @@ from itws.utils import DualSelectWidget
 from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
-from enumerate import ProductModelsEnumerate, CategoriesEnumerate, States
 from declination import Declination, Declination_NewInstance
+from enumerate import ProductModelsEnumerate, CategoriesEnumerate, States
 from schema import product_schema
 from taxes import PriceWidget
 from widgets import BarcodeWidget, MiniProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from widgets import StockWidget
 from shop.cart import ProductCart
+from shop.catalog import dynamic_fields
 from shop.datatypes import UserGroup_Enumerate
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
@@ -454,9 +455,19 @@ class Products_View(BrowseFormBatchNumeric):
         return namespace
 
 
+    def get_search_schema(self):
+        # Dynamic search schema
+        site_root = get_context().resource.get_site_root()
+        dynamic_search_schema = {}
+        for key in dynamic_fields[site_root.name]:
+            dynamic_search_schema[key] = String
+        return merge_dicts(self.search_schema,
+                           dynamic_search_schema)
+
+
     def get_query_schema(self):
         return merge_dicts(BrowseFormBatchNumeric.get_query_schema(self),
-                           self.search_schema,
+                           self.get_search_schema(),
                            batch_size=Integer(default=50),
                            sort_by=String(default='mtime'))
 
@@ -471,7 +482,7 @@ class Products_View(BrowseFormBatchNumeric):
                 get_base_path_query(str(abspath)),
                 PhraseQuery('format', format)]
         # Search query
-        for key in self.search_schema.keys():
+        for key in self.get_search_schema().keys():
             value = context.get_form_value(key)
             if not value:
                 continue

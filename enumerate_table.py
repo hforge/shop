@@ -27,7 +27,6 @@ from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import TextWidget, SelectWidget, HiddenWidget
 from ikaaro.registry import register_resource_class
-from ikaaro.registry import get_register_fields, register_field
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.table_views import OrderedTable_View
 from ikaaro.table_views import Table_AddRecord, Table_EditRecord
@@ -35,15 +34,6 @@ from ikaaro.table_views import Table_AddRecord, Table_EditRecord
 # Import from shop
 from utils import get_shop
 from widgets import SelectRadioColor
-
-
-def register_dynamic_enumerates(enumerates_folder):
-    register_fields = get_register_fields()
-    for enum in enumerates_folder.get_resources():
-        register_key = 'dynamic_enumerate_%s' % enum.name
-        if register_key not in register_fields:
-            register_field(register_key, String(is_indexed=True))
-
 
 
 class Enumerate_ListEnumerateTable(Enumerate):
@@ -87,12 +77,10 @@ class EnumerateTable_View(OrderedTable_View):
         elif column == 'count':
             get_value = resource.handler.get_record_value
             name = get_value(item, 'name')
-            query = PhraseQuery('dynamic_enumerate_%s' % resource.name, name)
-            try:
-                return len(context.root.search(query))
-            except KeyError:
-                register_dynamic_enumerates(resource.parent)
-                return len(context.root.search(query))
+            register_key = 'DFT-%s' % resource.name
+            query = PhraseQuery(register_key, name)
+            quantity = len(context.root.search(query))
+            return quantity, '/categories/?%s=%s' % (register_key, name)
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
 
@@ -112,7 +100,7 @@ class EnumerateTable_View(OrderedTable_View):
             record_value = get_value(record, 'name')
             title = get_value(record, 'title')
             # References ?
-            query = PhraseQuery('dynamic_enumerate_%s' % resource.name,
+            query = PhraseQuery('DFT-%s' % resource.name,
                                 record_value)
             nb_references = len(context.root.search(query))
             if nb_references > 0:
