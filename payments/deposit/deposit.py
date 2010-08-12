@@ -50,12 +50,17 @@ class Deposit(PaymentWay):
 
     def _show_payment_form(self, context, payment):
         percent = self.get_property('percent')
-        payment['mode'] = 'paybox' # XXX (Can have another name ?)
         if self.get_property('pay_tax'):
-            payment['amount'] = payment['amount'] * (percent / decimal('100.0'))
+            total_price = payment['amount'] * (percent / decimal('100.0'))
         else:
-            payment['amount'] = payment['amount_without_tax'] * (percent / decimal('100.0'))
-        return self.parent.show_payment_form(context, payment)
+            total_price = payment['amount_without_tax'] * (percent / decimal('100.0'))
+        from shop.payments.payments_views import Payments_ChoosePayment
+        from shop.utils import format_price
+        total_price = {'with_tax': format_price(total_price),
+                       'without_tax': format_price(total_price)}
+        view = Payments_ChoosePayment(total_price=total_price)
+        payments = self.parent
+        return view.GET(payments, context)
 
 
     def get_payment_way_description(self, context, total_amount):
