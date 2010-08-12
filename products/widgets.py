@@ -164,8 +164,10 @@ class StockWidget(Widget):
         options_widget = SelectRadio('stock-option', css='stock-option',
                                 has_empty_option=False)
         stock_quantity = here.get_property('stock-quantity')
-
+        # Has declination
+        has_declination = len(list(here.search_resources(cls=Declination))) > 0
         return {'stock-handled': handled_widget.to_html(Boolean, stock_handled),
+                'has_declination': has_declination,
                 'stock-quantity': stock_quantity,
                 'stock-option': options_widget.to_html(StockOptions,
                     stock_option_value)}
