@@ -29,7 +29,7 @@
         Retail price with tax:<br/>
           <input type="text" id="${widget_name}retail-price" name="${prefix}retail-price"/>€<br/>
         Final retail price:<br/>
-          <span style="font-weight:bold" id="${widget_name}final-retail-price"></span> €
+          <span style="font-weight:bold" id="${widget_name}final-retail-price" class="final-retail-price"></span> €
       </td>
       <td style="padding:10px">
       &nbsp;
@@ -46,7 +46,7 @@
         Reduce retail price with tax:<br/>
           <input type="text" id="${widget_name}reduce-retail-price" name="${prefix}reduce-retail-price"/>€<br/>
         Reduce final retail price:<br/>
-          <span style="font-weight:bold" id="${widget_name}reduce-final-retail-price"></span> €
+          <span style="font-weight:bold" id="${widget_name}reduce-final-retail-price" class="final-retail-price"></span> €
       </td>
     </tr>
   </table>

@@ -587,7 +587,7 @@ button::-webkit-focus-inner {
 }
 
 /* Product edit */
-#final-retail-price, #reduce-final-retail-price{
+.final-retail-price{
   font-size: 30px;
 }
 
@@ -596,6 +596,7 @@ button::-webkit-focus-inner {
 }
 
 .strikethrough{
+  color: red;
   text-decoration: line-through;
 }
 
