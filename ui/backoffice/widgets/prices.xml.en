@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <p class="tabme">
+    <a href="#price-group-${group/id}" onclick="tabme_show(event, this)"
+      stl:repeat="group groups">
+      Price ${group/value}
+    </a>
+  </p>
+
+  <div id="price-group-${group/id}"
+    stl:repeat="group groups">
+    Not buyable:<br/>
+    <input name="not_buyable_by_groups"
+        type="checkbox" value="${group/name}" checked="${group/not_buyable}"/>
+    <br/>
+    ${group/widget}
+  </div>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      tabme();
+    })
+  </script>
+
+
+</stl:block>

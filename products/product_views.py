@@ -50,7 +50,7 @@ from itws.views import BrowseFormBatchNumeric
 from declination import Declination, Declination_NewInstance
 from enumerate import ProductModelsEnumerate, CategoriesEnumerate, States
 from schema import product_schema
-from taxes import PriceWidget
+from taxes import PricesWidget
 from widgets import BarcodeWidget, MiniProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from widgets import StockWidget
@@ -249,24 +249,16 @@ class Product_Edit(AutoForm):
         # Stock
         StockWidget('stock-quantity', title=MSG(u'Handle stocks ?')),
         # Price
-        SelectRadio('not_buyable_by_groups', title=MSG(u'Not buyable by this groups of customers:')),
         TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),
-        PriceWidget('pre-tax-price', title=MSG(u'Selling price')),
+        PricesWidget('pre-tax-price', title=MSG(u'Prices')),
         RTEWidget('data', title=MSG(u"Product description"))
         ]
 
 
     def get_widgets(self, resource, context):
         product_model = resource.get_product_model()
-        shop = get_shop(resource)
         schema = self.get_schema(resource, context)
         widgets = deepcopy(self.base_widgets)
-        # Prix pro
-        if shop.has_pro_price() is True:
-            widget = PriceWidget('pro-pre-tax-price',
-                                 title=MSG(u'PRO Selling price'),
-                                 prefix='pro')
-            widgets.append(widget)
         # Product model
         if product_model:
             widgets.extend(product_model.get_model_widgets())

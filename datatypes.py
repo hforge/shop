@@ -132,7 +132,7 @@ class DynamicEnumerate(AbsolutePathDataTypeEnumerate):
             root = context.root
             resources = [root.get_resource(brain.abspath)
                           for brain in root.search(format=cls.format).get_documents()]
-        return [{'name': res.get_abspath(),
+        return [{'name': str(res.get_abspath()),
                  'value': res.get_title()}
                    for res in resources]
 

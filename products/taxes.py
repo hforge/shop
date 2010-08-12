@@ -17,6 +17,7 @@
 # Import from itools
 from itools.datatypes import Enumerate, Decimal, Boolean
 from itools.gettext import MSG
+from itools.uri import get_uri_name
 from itools.web import get_context
 
 # Import from ikaaro
@@ -28,6 +29,7 @@ from ikaaro.buttons import OrderUpButton, OrderDownButton
 from ikaaro.buttons import OrderBottomButton, OrderTopButton
 
 # Import from shop
+from shop.datatypes import UserGroup_Enumerate
 from shop.utils import get_shop
 
 
@@ -79,8 +81,6 @@ class PriceWidget(Widget):
         context = get_context()
         submit = (context.method == 'POST')
         prefix = self.prefix
-        if prefix:
-            prefix = '%s-' % prefix
         if submit:
             tax_value = context.get_form_value('%stax' % prefix, type=TaxesEnumerate)
             has_reduction = context.get_form_value('%shas_reduction' % prefix, type=Boolean)
@@ -97,6 +97,37 @@ class PriceWidget(Widget):
                 'reduce-pre-tax-price': reduce_pre_tax_price,
                 'has_reduction': has_reduction,
                 'taxes': taxes.to_html(TaxesEnumerate, tax_value)}
+
+
+class PricesWidget(Widget):
+
+    template = 'ui/backoffice/widgets/prices.xml'
+
+    def get_template(self, datatype, value):
+        context = get_context()
+        handler = context.root.get_resource(self.template)
+        return handler.events
+
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        namespace = {'groups': []}
+        not_buyable_by_groups = context.resource.get_property('not_buyable_by_groups')
+        for group in UserGroup_Enumerate.get_options():
+            prefix = ''
+            group['id'] = get_uri_name(group['name'])
+            if group['id'] != 'default':
+                prefix = '%s-' % group['id']
+            group['not_buyable'] = group['name'] in not_buyable_by_groups
+            widget_name = '%spre-tax-price' % prefix
+            value = context.resource.get_property(widget_name)
+            group['widget'] = PriceWidget(widget_name,
+                                prefix=prefix).to_html(None, value)
+            namespace['groups'].append(group)
+        return namespace
+
+
+
 
 
 register_resource_class(Taxes_TableResource)
