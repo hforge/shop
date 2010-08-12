@@ -20,6 +20,7 @@ from itools.datatypes import Unicode
 from itools.gettext import MSG
 from itools.web import STLView
 from itools.xapian import PhraseQuery, AndQuery, OrQuery
+from itools.xml import xml_to_text
 
 # Import from ikaaro
 from ikaaro.forms import SelectWidget
@@ -98,13 +99,15 @@ class ShopWS_RSS(NeutralWS_RSS):
             return NeutralWS_RSS.get_item_value(self, resource, context,
                                                 item, column, site_root)
         if column == 'description':
-            return item_resource.get_property('description')
-            # XXX Fix it
             value = item_resource.get_property('data')
-            value = Unicode.decode(value)
+            if value:
+                value = unicode(xml_to_text(value))
+                value += u'<br/><br/>'
+            else:
+                value = ''
             # Add category
             category = item_resource.parent
-            value = u'%s <br/><br/>Catégorie %s' % (value, category.get_title())
+            value += u'Catégorie %s' % category.get_title()
             return value
         return NeutralWS_RSS.get_item_value(self, resource, context,
                                             item, column, site_root)

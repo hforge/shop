@@ -90,7 +90,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     class_id = 'product'
     class_title = MSG(u'Product')
     class_description = MSG(u'A product')
-    class_version = '20100809'
+    class_version = '20100812'
 
     ##################
     # Configuration
@@ -219,6 +219,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         values['stored_price'] = int(self.get_price_with_tax() * 100)
         # Creation time
         values['ctime'] = self.get_property('ctime')
+        # Publication date
+        values['date_of_writing'] = self.get_property('date_of_writing')
         # Promotion
         values['has_reduction'] = self.get_property('has_reduction')
         # not_buyable_by_groups
@@ -964,6 +966,13 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         group_name = '%s/groups/default' % shop.get_abspath()
         if is_buyable is False:
             self.set_property('not_buyable_by_groups', [group_name])
+
+
+    def update_20100812(self):
+        # Set date_of_writing = ctime
+        if self.get_property('state') == 'public':
+            ctime = self.get_property('ctime')
+            self.set_property('date_of_writing', ctime)
 
 
 
