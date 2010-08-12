@@ -145,6 +145,24 @@ class EnumerateTable_to_Enumerate(Enumerate):
         return [cls.get_kw(table, record)
                 for record in table.handler.get_records_in_order()]
 
+    @classmethod
+    def get_value(cls, name, default=None):
+        shop = get_shop(get_context().resource)
+        enumerates_folder = shop.get_resource('enumerates')
+        table = enumerates_folder.get_resource(cls.enumerate_name)
+        record = table.handler.search(name=name)[0]
+        return cls.get_kw(table, record)['value']
+
+
+    @classmethod
+    def to_text(cls, name, languages):
+        shop = get_shop(get_context().resource)
+        enumerates_folder = shop.get_resource('enumerates')
+        table = enumerates_folder.get_resource(cls.enumerate_name)
+        record = table.handler.search(name=name)[0]
+        values = [table.handler.get_record_value(record, 'title', lang) for lang
+                    in languages]
+        return u' '.join(values)
 
 
 

@@ -246,9 +246,11 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         result = {}
         languages = self.get_site_root().get_property('website_languages')
         product_model = self.get_product_model()
-        schema = None
+        schema = {}
         if product_model:
             schema = product_model.get_model_schema()
+        purchase_options_schema = self.get_purchase_options_schema()
+        declinations = list(self.search_resources(cls=Declination))
 
         for language in languages:
             texts = result.setdefault(language, [])
@@ -264,10 +266,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                          if event == TEXT ]
                 if text:
                     texts.append(u' '.join(text))
-
             # Dynamic properties
-            if schema is None:
-                continue
             for key, datatype in schema.iteritems():
                 value = self.get_property(key)
                 if value:
@@ -292,6 +291,12 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                         text = ' '.join(values)
                     if text:
                         texts.append(text)
+        # Purchase options
+        for declination in declinations:
+            for key, datatype in purchase_options_schema.iteritems():
+                name = declination.get_property(key)
+                value = datatype.to_text(name, languages)
+                texts.append(value)
 
         # Join
         for language, texts in result.iteritems():
