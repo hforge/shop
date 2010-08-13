@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from pprint import pprint
+
 # Import from itools
 from itools.datatypes import String
 
@@ -25,6 +28,12 @@ dynamic_fields = {}
 
 def register_dynamic_fields(context):
     root = context.root
+    if not context.database.catalog:
+        print '==========================='
+        print '= You have to index twice ='
+        print '==========================='
+        return
+    # XXX Should not do a search since catalog can be break
     for brain in root.search(format='shop').get_documents():
         shop = root.get_resource(brain.abspath)
         website = shop.parent
@@ -40,8 +49,4 @@ def register_dynamic_fields(context):
             fields.append(register_key)
         dynamic_fields[website.name] = fields
         print '=> %s dynamic fields' % len(fields)
-    from pprint import pprint
     pprint(fields)
-
-
-
