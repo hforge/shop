@@ -426,6 +426,7 @@ class Products_View(BrowseFormBatchNumeric):
     search_widgets = [
         TextWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
+        TextWidget('text', title=MSG(u'Description')),
         SelectWidget('abspath', title=MSG(u'Category')),
         SelectWidget('product_model', title=MSG(u'Product model')),
         SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
@@ -435,6 +436,7 @@ class Products_View(BrowseFormBatchNumeric):
     search_schema = {
         'reference': String,
         'title': Unicode,
+        'text': Unicode,
         'abspath': CategoriesEnumerate,
         'product_model': ProductModelsEnumerate,
         'manufacturer': ManufacturersEnumerate,
