@@ -220,7 +220,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Creation time
         values['ctime'] = self.get_property('ctime')
         # Publication date
-        values['date_of_writing'] = self.get_property('date_of_writing')
+        values['pub_datetime'] = self.get_property('pub_datetime')
         # Promotion
         values['has_reduction'] = self.get_property('has_reduction')
         # not_buyable_by_groups
@@ -969,10 +969,10 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
 
     def update_20100812(self):
-        # Set date_of_writing = ctime
+        # Set pub_datetime = ctime
         if self.get_property('state') == 'public':
             ctime = self.get_property('ctime')
-            self.set_property('date_of_writing', ctime)
+            self.set_property('pub_datetime', ctime)
 
 
 

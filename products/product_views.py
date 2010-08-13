@@ -293,10 +293,10 @@ class Product_Edit(AutoForm):
 
     def action(self, resource, context, form):
         resource.save_barcode(form['reference'])
-        # Set date_of_writing
+        # Set pub_datetime
         if (resource.get_property('state') == 'private' and
             form['state'] == 'public'):
-            self.set_property('date_of_writing', datetime.now())
+            self.set_property('pub_datetime', datetime.now())
         # We change category if needed
         if str(resource.parent.get_abspath()) != form['category']:
             target = context.root.get_resource(form['category'])

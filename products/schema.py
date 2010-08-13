@@ -76,5 +76,5 @@ product_schema = {# General informations
                   # OLD
                   'reduction': Decimal(default=decimal(0)), #XXX old to remove after update
                   # ctime,
-                  'date_of_writing': DateTime,
+                  'pub_datetime': DateTime,
                   'ctime': DateTime}
