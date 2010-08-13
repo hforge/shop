@@ -17,6 +17,7 @@
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean
+from itools.uri import get_uri_name
 from itools.web import get_context
 from itools.xml import XMLParser
 
@@ -24,8 +25,8 @@ from itools.xml import XMLParser
 from ikaaro.forms import BooleanRadio, SelectRadio, Widget, stl_namespaces
 
 # Import from shop
-from declination import Declination
 from enumerate import StockOptions, ProductModelsEnumerate
+from shop.datatypes import UserGroup_Enumerate
 from shop.utils import get_shop
 
 
@@ -127,6 +128,7 @@ class ProductModel_DeletedInformations(Widget):
 
 
     def get_namespace(self, datatype, value):
+        from declination import Declination
         namespace = {'declinations': [],
                      'specific_list_complete': []}
         context = get_context()
@@ -153,6 +155,7 @@ class StockWidget(Widget):
 
 
     def get_namespace(self, datatype, value):
+        from declination import Declination
         context = get_context()
         here = context.resource
         # BooleanRadio for handled
@@ -171,3 +174,183 @@ class StockWidget(Widget):
                 'stock-quantity': stock_quantity,
                 'stock-option': options_widget.to_html(StockOptions,
                     stock_option_value)}
+
+
+class DeclinationPriceWidget(Widget):
+
+    prefix = ''
+
+    template = list(XMLParser("""
+        <style>
+        .disabled{
+          background-color: #F9F9F9;
+          border: 0;
+        }
+        </style>
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <td>Base price HT</td>
+            <td>Base price TTC</td>
+          </tr>
+          <tr>
+            <td>
+              <input type="text" id="${prefix}base_price_ht" class="disabled"
+                name="${prefix}base_price_ht" value="${base_price_ht}" disabled="disabled"/>
+            </td>
+            <td>
+              <input type="text" id="${prefix}base_price_ttc" class="disabled"
+                name="${prefix}base_price_ttc" value="${base_price_ttc}" disabled="disabled"/>
+            </td>
+          </tr>
+          <tr>
+            <td>Impact HT</td>
+            <td>Impact TTC</td>
+          </tr>
+          <tr>
+            <td>
+              <input type="text" id="${prefix}impact_on_price"
+                name="${prefix}impact_on_price" value="${impact-on-price}"/><br/>
+            </td>
+            <td>
+              <input type="text" id="${prefix}impact-on-price-ttc"
+                name="${prefix}impact-on-price-ttc" value=""/><br/>
+            </td>
+          </tr>
+          <tr>
+            <td>Final price HT</td>
+            <td>Final price TTC</td>
+          </tr>
+          <tr>
+            <td>
+              <input type="text" id="${prefix}declination-price-ht"
+                name="${prefix}declination-price-ht" value=""/><br/>
+            </td>
+            <td>
+              <input type="text" id="${prefix}declination-price-ttc"
+                name="${prefix}declination-price-ttc" value=""/><br/>
+            </td>
+          </tr>
+        </table>
+        <script>
+          function setPrice(id, price){
+            $(id).val((isNaN(price) == true) ? '' : (Math.round(price * 1000000) / 1000000));
+          }
+          function calculHTPrice(prefix){
+            var price = parseFloat($("#"+ prefix +"base_price_ht").val());
+            var impact_ht = parseFloat($("#"+ prefix +"impact_on_price").val());
+            var tax = parseFloat('19.6') / 100;
+            var new_price_ht = price + impact_ht;
+            setPrice("#"+ prefix +"declination-price-ht", new_price_ht);
+          }
+          function calculTTCPrice(prefix){
+            var price = parseFloat($("#"+ prefix +"base_price_ht").val());
+            var impact = parseFloat($("#"+ prefix +"impact_on_price").val());
+            var new_price_ht = price + impact;
+            var tax = parseFloat('19.6') / 100;
+            var new_price_ttc = new_price_ht * (tax + 1);
+            setPrice("#"+ prefix +"declination-price-ttc", new_price_ttc);
+          }
+          function changeImpactHT(prefix){
+            var impact_ht = parseFloat($("#"+ prefix +"impact_on_price").val());
+            var tax = parseFloat('19.6') / 100;
+            var impact_ttc= impact_ht * (tax + 1);
+            setPrice("#"+ prefix +"impact-on-price-ttc", impact_ttc);
+          }
+          function changeImpactTTC(prefix){
+            var impact_ttc = parseFloat($("#"+ prefix +"impact-on-price-ttc").val());
+            var tax = parseFloat('19.6') / 100;
+            var impact_ht = impact_ttc / (tax + 1);
+            setPrice("#"+ prefix +"impact_on_price", impact_ht);
+          }
+          function changeFinalHT(prefix){
+            var final_ht = parseFloat($("#"+ prefix +"declination-price-ht").val());
+            var base_ht =  parseFloat($("#"+ prefix +"base_price_ht").val());
+            var impact_ht = final_ht - base_ht;
+            setPrice("#"+ prefix +"impact_on_price", impact_ht);
+          }
+          $("#${prefix}impact_on_price").keyup(function(){
+            calculHTPrice('${prefix}');
+            calculTTCPrice('${prefix}');
+            changeImpactHT('${prefix}');
+          });
+          $("#${prefix}impact-on-price-ttc").keyup(function(){
+            changeImpactTTC('${prefix}');
+            calculHTPrice('${prefix}');
+            calculTTCPrice('${prefix}');
+          });
+          $("#${prefix}declination-price-ht").keyup(function(){
+            changeFinalHT('${prefix}');
+            changeImpactHT('${prefix}');
+            calculTTCPrice('${prefix}');
+          });
+          $("#${prefix}declination-price-ttc").keyup(function(){
+            var final_ttc =  parseFloat($("#${prefix}declination-price-ttc").val());
+            var tax = parseFloat('19.6') / 100;
+            var final_ht = final_ttc / (tax + 1);
+            setPrice("#${prefix}declination-price-ht", final_ht);
+            changeFinalHT('${prefix}');
+            changeImpactHT('${prefix}');
+          });
+          calculHTPrice('${prefix}');
+          calculTTCPrice('${prefix}');
+        </script>
+        """, stl_namespaces))
+
+
+    def get_namespace(self, datatype, value):
+        from declination import Declination
+        # Get product
+        context = get_context()
+        here = context.resource
+        prefix = self.prefix
+        if isinstance(here, Declination):
+            product = here.parent
+            impact_on_price = here.get_property('%simpact_on_price' % prefix)
+        else:
+            product = here
+            impact_on_price = 0
+        # Build namespace
+        base_price_ht = product.get_price_without_tax(prefix=prefix, pretty=False)
+        base_price_ttc = product.get_price_with_tax(prefix=prefix, pretty=True)
+        return {'base_price_ht': base_price_ht,
+                'base_price_ttc': base_price_ttc,
+                'prefix': prefix,
+                'impact-on-price': impact_on_price}
+
+
+
+class DeclinationPricesWidget(Widget):
+
+    template = list(XMLParser("""
+        <p class="tabme">
+          <a href="#price-group-${group/id}" onclick="tabme_show(event, this)"
+            stl:repeat="group groups">
+            Price ${group/value}
+          </a>
+        </p>
+
+        <div id="price-group-${group/id}" stl:repeat="group groups">
+          ${group/widget}
+        </div>
+
+        <script type="text/javascript">
+          $(document).ready(function() {
+            tabme();
+          })
+        </script>""", stl_namespaces))
+
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        namespace = {'groups': []}
+        for group in UserGroup_Enumerate.get_options():
+            prefix = ''
+            group['id'] = get_uri_name(group['name'])
+            if group['id'] != 'default':
+                prefix = '%s-' % group['id']
+            widget_name = '%simpact_on_price' % prefix
+            value = context.resource.get_property(widget_name)
+            group['widget'] = DeclinationPriceWidget(widget_name,
+                                prefix=prefix).to_html(None, value)
+            namespace['groups'].append(group)
+        return namespace

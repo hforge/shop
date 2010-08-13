@@ -737,9 +737,10 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         return ''
 
 
-    def get_tax_value(self):
+    def get_tax_value(self, prefix=None):
         shop = get_shop(self)
-        prefix = self.get_price_prefix()
+        if prefix is None:
+            prefix = self.get_price_prefix()
         # Get zone from cookie
         id_zone = ProductCart(get_context()).id_zone
         # If not define... get default zone
@@ -756,8 +757,9 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
 
     def get_price_without_tax(self, id_declination=None,
-                               with_reduction=True, pretty=False):
-        prefix = self.get_price_prefix()
+                               with_reduction=True, pretty=False, prefix=None):
+        if prefix is None:
+            prefix = self.get_price_prefix()
         # Base price
         if with_reduction is True and self.get_property('%shas_reduction' % prefix):
             price = self.get_property('%sreduce-pre-tax-price' % prefix)
@@ -766,7 +768,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Declination
         if id_declination:
             declination = self.get_resource(id_declination)
-            price = price + declination.get_price_impact()
+            price = price + declination.get_price_impact(prefix)
         # Format price
         if pretty is True:
             return format_price(price)
@@ -774,10 +776,10 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
 
     def get_price_with_tax(self, id_declination=None,
-                            with_reduction=True, pretty=False):
+                            with_reduction=True, pretty=False, prefix=None):
         price = self.get_price_without_tax(id_declination,
-                    with_reduction=with_reduction)
-        price = price * self.get_tax_value()
+                    with_reduction=with_reduction, prefix=prefix)
+        price = price * self.get_tax_value(prefix=prefix)
         # Format price
         if pretty is True:
             return format_price(price)
@@ -808,30 +810,17 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     #######################
     ## Class views
     #######################
-    def get_class_views(self):
+    default_class_views = ['declinations', 'images',
+                   'order', 'edit_cross_selling', 'delete_product', 'commit_log']
+
+    @property
+    def class_views(self):
         context = get_context()
         # Back-Office
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
-            return ['edit', 'view'] + self.default_class_views
+            return ['edit'] + self.default_class_views
         return ['view', 'edit'] + self.default_class_views
-
-
-    def get_default_view_name(self):
-        views = self.get_class_views()
-        if not views:
-            return None
-        context = get_context()
-        user = context.user
-        ac = self.get_access_control()
-        for view_name in views:
-            view = getattr(self, view_name, None)
-            if ac.is_access_allowed(user, self, view):
-                return view_name
-
-    default_class_views = ['declinations', 'images',
-                   'order', 'edit_cross_selling', 'delete_product', 'commit_log']
-    class_views = property(get_class_views, None, None, '')
 
 
     def get_links(self):

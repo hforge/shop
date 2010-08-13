@@ -32,21 +32,30 @@ from ikaaro.views_new import NewInstance
 # Import from shop
 from enumerate import DeclinationImpact
 from dynamic_folder import DynamicFolder
+from widgets import DeclinationPricesWidget
 from shop.datatypes import ImagesEnumerate
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.utils import get_shop
 from shop.widgets import SelectRadioImages
 
 
-declination_schema = {'reference': String,
+declination_schema = {#General informations
+                      'reference': String,
                       'title': Unicode,
+                      # Stock
                       'stock-quantity': Integer(default=0),
-                      'impact-on-price': DeclinationImpact,
-                      'price-impact-value': Decimal(default=decimal(0)),
-                      'pro-price-impact-value': Decimal(default=decimal(0)),
+                      # Weight
                       'impact-on-weight': DeclinationImpact,
                       'weight-impact-value': Decimal(default=decimal(0)),
+                      # Price
+                      'impact_on_price': Decimal(default=decimal(0)),
+                      'pro-impact_on_price': Decimal(default=decimal(0)),
+                      # Associated images
                       #'associated-image': ImagesEnumerate
+                      # XXX Old to delete
+                      'pro-price-impact-value': Decimal(default=decimal(0)),
+                      'impact-on-price': DeclinationImpact,
+                      'price-impact-value': Decimal(default=decimal(0)),
                       }
 
 
@@ -57,11 +66,7 @@ declination_widgets = [
     TextWidget('stock-quantity', title=MSG(u'Stock quantity')),
     SelectWidget('impact-on-weight', has_empty_option=False, title=MSG(u'Impact on weight')),
     TextWidget('weight-impact-value', title=MSG(u'Weight impact value')),
-    SelectWidget('impact-on-price', has_empty_option=False, title=MSG(u'Impact on price')),
-    TextWidget('price-impact-value', title=MSG(u'Price impact value'))]
-
-declination_widgets_pro = TextWidget('pro-price-impact-value',
-                                      title=MSG(u'Price impact value for PRO'))
+    DeclinationPricesWidget('impact_on_price', title=MSG(u'Price'))]
 
 
 class Declination_Edit(DBResource_Edit):
@@ -70,15 +75,7 @@ class Declination_Edit(DBResource_Edit):
     title = MSG(u'Edit declination')
 
     schema = declination_schema
-
-    def get_widgets(self, resource, context):
-        widgets = []
-        shop = get_shop(resource)
-        enumerates_folder = shop.get_resource('enumerates')
-        if shop.has_pro_price() is True:
-            widgets.insert(0, declination_widgets_pro)
-        return declination_widgets + widgets
-
+    widgets = declination_widgets
 
     def action(self, resource, context, form):
         for key in self.schema.keys():
@@ -108,8 +105,6 @@ class Declination_NewInstance(NewInstance):
         for name in resource.get_purchase_options_names():
             title = enumerates_folder.get_resource(name).get_title()
             widgets.append(SelectWidget(name, title=title, has_empty_option=False))
-        if shop.has_pro_price() is True:
-            widgets.insert(0, declination_widgets_pro)
         return declination_widgets + widgets
 
 
@@ -141,7 +136,7 @@ class Declination(DynamicFolder):
     class_id = 'product-declination'
     class_title = MSG(u'Declination')
     class_views = ['edit']
-    class_version = '20100708'
+    class_version = '20100813'
 
     new_instance = Declination_NewInstance()
 
@@ -179,16 +174,10 @@ class Declination(DynamicFolder):
         return self.get_property('reference')
 
 
-    def get_price_impact(self):
-        prefix = self.parent.get_price_prefix()
-        price_impact = self.get_property('impact-on-price')
-        price_value = self.get_property('%sprice-impact-value' % prefix)
-        if price_impact == 'increase':
-            return price_value
-        elif price_impact == 'decrease':
-            return -price_value
-        else:
-            return decimal(0)
+    def get_price_impact(self, prefix):
+        if prefix is None:
+            prefix = self.parent.get_price_prefix()
+        return self.get_property('%simpact_on_price' % prefix)
 
 
     def get_weight(self):
@@ -214,6 +203,15 @@ class Declination(DynamicFolder):
             value = self.get_property('price-impact-value')
             self.set_property('pro-price-impact-value', value)
 
+
+    def update_20100813(self):
+        for prefix in ['', 'pro-']:
+            value = self.get_property('%sprice-impact-value' % prefix)
+            if self.get_property('impact-on-price') != 'increase':
+                value = -value
+            self.set_property('%simpact_on_price' % prefix, value)
+            self.del_property('%sprice-impact-value' % prefix)
+            self.del_property('impact-on-price')
 
 
 register_resource_class(Declination)

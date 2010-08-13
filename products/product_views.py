@@ -698,13 +698,11 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
 
     base_columns = [
             ('checkbox', None),
-            ('name', MSG(u'Name')),
             ('barcode', None),
             ('img', None),
             ('reference', MSG(u'Reference')),
             ('title', MSG(u'Title')),
             ('stock-quantity', MSG(u'Stock quantity')),
-            ('price', MSG(u'Price (HT)')),
             ('weight', MSG(u'Weight'))]
 
     table_actions = [RemoveButton]
@@ -725,8 +723,7 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
         for declination in resource.search_resources(cls=Declination):
             name = declination.name
             kw = {'checkbox': (name, True),
-                  'name': (name, name),
-                  'title': declination.get_property('title')}
+                  'title': (declination.get_property('title'), name)}
             for key in ['reference', 'stock-quantity']:
                 kw[key] = declination.get_property(key)
             for name, datatype in declination.get_dynamic_schema().items():
@@ -744,16 +741,6 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
             reference = declination.get_property('reference')
             kw['barcode'] = XMLParser('<img src="%s/;barcode?reference=%s"/>' %
                                       (shop_uri, reference))
-            # Price XXX To simplify (use declination API)
-            base_price = resource.get_price_without_tax(
-                            id_declination=declination.name, pretty=False)
-            price_impact = declination.get_property('impact-on-price')
-            price_value = declination.get_property('price-impact-value')
-            kw['price'] = u'%s HT' % base_price
-            if price_impact == 'increase':
-                kw['price'] += u' (+ %s €)' % price_value
-            elif price_impact == 'decrease':
-                kw['price'] += u' (- %s €)' % price_value
             # Weight
             base_weight = resource.get_property('weight')
             weight_impact = declination.get_property('impact-on-weight')
