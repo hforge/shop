@@ -22,6 +22,7 @@ from itools.web import BaseView
 
 # Import from shop
 from shop.folder import ShopFolder
+from shop.products.declination import Declination
 from shop.utils import get_shop
 
 
@@ -34,19 +35,65 @@ class ShopModule_ExportCatalogCSV_View(BaseView):
         shop = get_shop(resource)
         shop_uri = get_reference(shop.get_property('shop_uri'))
         categories_uri = str(shop_uri.resolve('/categories'))
-        csv = CSVFile()
-        header = ['title', 'description', 'price', 'link']
-        csv.add_row(header)
-        format = shop.product_class.class_id
-        for brain in root.search(format=format).get_documents():
-            product = root.get_resource(brain.abspath)
-            if product.is_buyable(context) is False:
-                continue
-            line = [brain.title.encode('utf-8'),
-                    product.get_property('description').encode('utf-8'),
-                    product.get_price_with_tax(pretty=True),
-                    product.handler.key]
-            csv.add_row(line)
+        from lpod.document import odf_new_document_from_type
+        from lpod.table import odf_create_table, import_from_csv
+        from cStringIO import StringIO
+        document = odf_new_document_from_type('spreadsheet')
+        body = document.get_body()
+        models = shop.get_resource('products-models').get_resources()
+        for product_model in models:
+            csv = CSVFile()
+            lines = []
+            table = odf_create_table(product_model.get_title())
+            search = root.search(product_model=str(product_model.get_abspath()))
+            declination_schema = None
+            for brain in search.get_documents():
+                  product = root.get_resource(brain.abspath)
+                  if declination_schema is None:
+                      declination_schema = product.get_purchase_options_schema()
+                  for d in product.search_resources(cls=Declination):
+                      line = [product.get_property('reference'),
+                              product.get_title().encode('utf-8')]
+                      for key, datatype in declination_schema.items():
+                          try:
+                              value = datatype.get_value(d.get_property(key))
+                          except:
+                              value = 'XXX'
+                          line.append(value.encode('utf-8'))
+                      # Price
+                      line.append(product.get_price_with_tax(pretty=True, id_declination=d.name, prefix=''))
+                      line.append(product.get_price_with_tax(pretty=True, id_declination=d.name, prefix='pro-'))
+                      # Stock
+                      line.append(str(d.get_quantity_in_stock()))
+                      # Add row
+                      #csv.add_row(line)
+                      lines.append(','.join(line))
+            data = '\n'.join(lines)
+            table = import_from_csv(StringIO(data), product_model.get_title())
+            body.append(table)
+        # Extport as ods
+        f = StringIO()
+        document.save(f)
+        content = f.getvalue()
+        f.close()
+        context.set_content_type('application/vnd.oasis.opendocument.spreadsheet')
+        context.set_content_disposition('attachment', 'export.ods')
+        return content
+        #header = ['reference', 'product-title', 'declination-title', 'price', 'stock']
+        #csv.add_row(header)
+        #format = shop.product_class.class_id
+        #for brain in root.search(format=format).get_documents():
+        #    product = root.get_resource(brain.abspath)
+        #    try:
+        #        for d in product.search_resources(cls=Declination):
+        #            line = [product.get_property('reference'),
+        #                    product.get_title().encode('utf-8'),
+        #                    d.get_declination_title().encode('utf-8'),
+        #                    product.get_price_with_tax(pretty=True, id_declination=d.name),
+        #                    str(product.get_quantity_in_stock())]
+        #            csv.add_row(line)
+        #    except:
+        #        pass
         # Set response type
         context.set_content_type('text/csv')
         context.set_content_disposition('attachment; filename=export.csv')
