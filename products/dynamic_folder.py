@@ -23,6 +23,7 @@ from itools.datatypes import String, Tokens
 
 # Import from Shop
 from shop.enumerate_table import EnumerateTable_to_Enumerate
+from shop.listeners import alert_listerners
 from shop.folder import ShopFolder
 
 
@@ -74,6 +75,10 @@ class DynamicFolder(ShopFolder):
         The multilingual status must be detected to give or not the
         "language" argument.
         """
+        # Alert
+        old_value = self.get_property(name)
+        new_value = value
+        alert_listerners('set_property', self, self.class_id, name, old_value, new_value)
 
         # Dynamic property?
         if with_dynamic is True:

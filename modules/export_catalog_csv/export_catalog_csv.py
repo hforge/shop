@@ -21,7 +21,7 @@ from itools.uri import get_reference
 from itools.web import BaseView
 
 # Import from shop
-from shop.folder import ShopFolder
+from shop.modules import ShopModule
 from shop.products.declination import Declination
 from shop.utils import get_shop
 
@@ -101,7 +101,7 @@ class ShopModule_ExportCatalogCSV_View(BaseView):
 
 
 
-class ShopModule_ExportCatalogCSV(ShopFolder):
+class ShopModule_ExportCatalogCSV(ShopModule):
 
     class_id = 'shop_module_export_catalog_csv'
     class_title = MSG(u'Export Catalog')

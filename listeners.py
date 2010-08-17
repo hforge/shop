@@ -15,14 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from modules import Modules, ShopModule, ShopModule_User, ModuleLoader
+listeners = {}
 
-import categories_sort
-import export_catalog
-import export_catalog_csv
-import mini_cart
-import facebook_like
-import google_analytics
-import product_images_slider
-import stock
-import wishlist
+def register_listener(class_id, property_name, listener):
+    print '=> Register listener (%s,%s)' % (class_id, property_name)
+    if not listeners.has_key((class_id, property_name)):
+        listeners[(class_id, property_name)] = []
+    listeners[(class_id, property_name)].append(listener)
+
+
+
+def alert_listerners(action, resource, class_id, property_name, old_value, new_value):
+    for listerner in listeners.get((class_id, property_name), []):
+        listerner.alert(action, resource, class_id, property_name, old_value, new_value)

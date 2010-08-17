@@ -20,7 +20,7 @@ from itools.web import STLView
 
 # Import from shop
 from shop.cart import ProductCart
-from shop.folder import ShopFolder
+from shop.modules import ShopModule
 from shop.utils import get_shop, get_skin_template
 
 
@@ -50,7 +50,7 @@ class ShopModule_MiniCart_View(STLView):
 
 
 
-class ShopModule_MiniCart(ShopFolder):
+class ShopModule_MiniCart(ShopModule):
 
     class_id = 'shop_module_mini_cart'
     class_title = MSG(u'Mini cart')

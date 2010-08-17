@@ -118,14 +118,15 @@ class Shop(ShopFolder):
     # 6) Payment end (Define in payments views)
 
     def __init__(self, metadata):
+        # Super
+        super(Shop, self).__init__(metadata)
         # XXX Hack
         # Register dynamic catalog fields
         global catalog_is_initialize
         if catalog_is_initialize is False:
             catalog_is_initialize = True
             register_dynamic_fields(get_context())
-        # Super
-        super(Shop, self).__init__(metadata)
+            modules = self.get_resource('shop/modules')
 
 
     @staticmethod

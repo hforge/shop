@@ -22,7 +22,7 @@ from itools.gettext import MSG
 from itools.web import BaseView, ERROR
 
 # Import from shop
-from shop.folder import ShopFolder
+from shop.modules import ShopModule
 from shop.products.declination import Declination
 
 # Import from lpod
@@ -87,7 +87,7 @@ class ShopModule_ExportCatalog_View(BaseView):
 
 
 
-class ShopModule_ExportCatalog(ShopFolder):
+class ShopModule_ExportCatalog(ShopModule):
 
     class_id = 'shop_module_export_catalog'
     class_title = MSG(u'Export Catalog')

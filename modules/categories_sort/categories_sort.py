@@ -26,7 +26,7 @@ from itools.web import STLView, get_context
 from ikaaro.forms import SelectWidget
 
 # Import from shop
-from shop.folder import ShopFolder
+from shop.modules import ShopModule
 from shop.utils import get_skin_template
 
 
@@ -67,7 +67,7 @@ class ShopModule_CategoriesSortView(STLView):
 
 
 
-class ShopModule_CategoriesSort(ShopFolder):
+class ShopModule_CategoriesSort(ShopModule):
 
     class_id = 'shop_module_categories_sort'
     class_title = MSG(u'Categories Sort')

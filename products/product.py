@@ -61,7 +61,7 @@ from shop.folder import ShopFolder
 from shop.manufacturers import ManufacturersEnumerate
 from shop.modules import ModuleLoader
 from shop.shop_views import Shop_Login, Shop_Register
-from shop.stock.stock_views import Stock_FillStockOut, Stock_Resupply
+from shop.stock.stock_views import Stock_FillStockOut
 from shop.utils import get_shop, format_price, generate_barcode
 from shop.utils import CurrentFolder_AddImage, MiniTitle
 
@@ -978,7 +978,6 @@ class Products(ShopFolder):
     browse_content = Products_View()
     stock = Products_Stock()
     stock_out = Stock_FillStockOut()
-    stock_resupply = Stock_Resupply()
     new_product = Product_NewProduct()
 
 
