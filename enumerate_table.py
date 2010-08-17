@@ -147,6 +147,8 @@ class EnumerateTable_to_Enumerate(Enumerate):
 
     @classmethod
     def get_value(cls, name, default=None):
+        if name is None:
+            return None
         shop = get_shop(get_context().resource)
         enumerates_folder = shop.get_resource('enumerates')
         table = enumerates_folder.get_resource(cls.enumerate_name)
@@ -156,6 +158,8 @@ class EnumerateTable_to_Enumerate(Enumerate):
 
     @classmethod
     def to_text(cls, name, languages):
+        if name is None:
+            return None
         shop = get_shop(get_context().resource)
         enumerates_folder = shop.get_resource('enumerates')
         table = enumerates_folder.get_resource(cls.enumerate_name)
