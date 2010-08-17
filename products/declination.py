@@ -25,7 +25,7 @@ from itools.gettext import MSG
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.forms import TextWidget, SelectWidget
-from ikaaro.registry import register_resource_class
+from ikaaro.registry import register_resource_class, register_field
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.views_new import NewInstance
 
@@ -152,6 +152,12 @@ class Declination(DynamicFolder):
                            declination_schema)
 
 
+    def _get_catalog_values(self):
+        return merge_dicts(DynamicFolder._get_catalog_values(self),
+                           declination_title=self.get_declination_title(),
+                           stock_quantity=self.get_property('stock-quantity'))
+
+
     def get_declination_title(self):
         title = ''
         for key, datatype in self.get_dynamic_schema().items():
@@ -210,8 +216,10 @@ class Declination(DynamicFolder):
             if self.get_property('impact-on-price') != 'increase':
                 value = -value
             self.set_property('%simpact_on_price' % prefix, value)
-            self.del_property('%sprice-impact-value' % prefix)
-            self.del_property('impact-on-price')
+        self.del_property('%sprice-impact-value' % prefix)
+        self.del_property('impact-on-price')
+
 
 
 register_resource_class(Declination)
+register_field('declination_title', Unicode(is_indexed=True, is_stored=True))

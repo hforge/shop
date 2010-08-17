@@ -6,7 +6,8 @@
 
   <h1>Manage my stock</h1>
 
-  <h2>Update stock</h2>
+  ${search}
+  <!--
     <form id="form-add-on-stock">
     <table border="0" style="width:200px">
       <thead>
@@ -30,23 +31,42 @@
       </tr>
     </table>
     </form>
+    -->
+  <style>
+    .button-update{
+      float: right;
+    }
+    .line{
+      background-color: #FBFBFB;
+    }
 
-  <h2>My current stock updates</h2>
+    .declination-line{
+      background-color: #FFF;
+    }
+  </style>
 
-  <form method="POST">
+  <form method="POST" stl:if="lines">
 
-    <table border="0" id="browse-list" style="width:700px">
+    <p>
+      <button type="submit" class="button-ok button-update">
+        Update
+      </button><br/><br/>
+      <div class="clear"/>
+    </p>
+
+    <table border="0" id="browse-list" style="width:100%">
       <thead>
         <tr>
           <th>
+            <!--
             <img src="/ui/icons/16x16/add.png"
               onclick="add_line()"/>
+            -->
           </th>
           <th>Reference</th>
-          <th>Stock</th>
-          <!--<th></th>-->
-          <th>New stock</th>
-          <th style="width:400px">Product</th>
+          <th>Product</th>
+          <th style="width:50px">Stock</th>
+          <th style="width:50px">New stock</th>
         </tr>
       </thead>
       <!-- Model line -->
@@ -70,36 +90,71 @@
           <td id="link_#numero#"/>
         </tr>
       <!-- End model line -->
-      <tr class="line" stl:repeat="line lines">
-        <td>${line/id}</td>
-        <td>
-          <input type="text" id="reference_${line/id}" name="reference_${line/id}"
-            onchange="check_line('${line/id}');" value="${line/reference}"/>
-        </td>
-        <td>
-          <input type="text" id="stock_${line/id}" name="stock_${line/id}"
-            value="${line/stock_quantity}" size="6" disabled="disabled"/>
-        </td>
-        <td>
-          <input type="text" name="new_stock_${line/id}" size="6"
-            value=""/>
-        </td>
-        <td id="link_${line/id}">
-          <a href="${line/href}">
+      <stl:block stl:repeat="line lines">
+        <tr class="line">
+          <td>${line/id}</td>
+          <td>
+            <input type="hidden" id="reference_${line/id}" name="reference_${line/id}"
+              onchange="check_line('${line/id}');" value="${line/reference}"/>
+            ${line/reference}
+            <input type="hidden" id="nb_declinations_${line/id}"
+                name="nb_declinations_${line/id}" value="${line/nb_declinations}"/>
+          </td>
+          <td>
+            <!--<a href="${line/href}" tabindex="50000">-->
             ${line/title}
-          </a>
-        </td>
-      </tr>
+            <!--</a>-->
+          </td>
+          <stl:block stl:if="line/has_declination">
+            <td>-</td>
+            <td>-</td>
+          </stl:block>
+          <stl:block stl:if="not line/has_declination">
+            <td>
+              <input type="text" id="stock_${line/id}"
+                name="stock_${line/id}"
+                value="${line/stock_quantity}" size="6" disabled="disabled"/>
+              </td>
+            <td>
+              <input type="text"
+                name="new_stock_${line/id}" size="6"
+                value=""/>
+            </td>
+          </stl:block>
+        </tr>
+        <tr stl:repeat="declination line/declinations" class="declination-line">
+          <td/>
+          <td>
+            <input type="hidden" id="name_${line/id}_${declination/id}"
+              name="name_${line/id}_${declination/id}"
+              value="${declination/name}"/>
+          </td>
+          <td>${declination/title}</td>
+          <td>
+            <input type="text" id="stock_${line/id}_${declination/id}"
+              name="stock_${line/id}_${declination/id}"
+              value="${declination/stock_quantity}" size="6" disabled="disabled"/>
+          </td>
+          <td>
+            <input type="text"
+              name="new_stock_${line/id}_${declination/id}" size="6"
+              value=""/>
+          </td>
+        </tr>
+      </stl:block>
     </table>
 
     <p>
-      <input type="hidden" id="references_number" name="references_number"/>
-      <button type="submit" class="button-ok" name="action" value="validate">
-        Update stock
+      <input type="hidden" id="references_number" name="references_number"
+        value="${references_number}"/>
+      <button type="submit" class="button-ok button-update">
+        Update
       </button>
+      <div class="clear"/>
     </p>
   </form>
 
+  <!--
   <script>
     <![CDATA[
     Array.prototype.has = function(value) {
@@ -186,5 +241,6 @@
     });
     ]]>
   </script>
+  -->
 
 </stl:block>

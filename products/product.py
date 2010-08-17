@@ -209,6 +209,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         values['manufacturer'] = str(self.get_property('manufacturer'))
         # Supplier
         values['supplier'] = self.get_property('supplier')
+        # Stock quantity
+        values['stock_quantity'] = self.get_property('stock-quantity')
         # Product models
         values['product_model'] = str(self.get_property('product_model'))
         # Images
@@ -1016,6 +1018,7 @@ CrossSellingTable.orderable_classes = Product
 
 # Register fields
 register_field('reference', String(is_indexed=True, is_stored=True))
+register_field('stock_quantity', Integer(is_indexed=True, is_stored=True))
 register_field('manufacturer', Unicode(is_indexed=True))
 register_field('supplier', Unicode(is_indexed=True, multiple=True))
 register_field('product_model', String(is_indexed=True, is_stored=True))

@@ -8,7 +8,8 @@
 
   <table class="zone-stock" style="padding:5px;margin: 5px 20px;border: 1px solid gray;">
     <tr>
-      <td stl:if="not has_declination">
+      <td>
+      stl:if="not has_declination"
         Quantity in stock:<br />
         <input type="text" id="stock-quantity" name="stock-quantity" value="${stock-quantity}"/><br/>
       </td>
