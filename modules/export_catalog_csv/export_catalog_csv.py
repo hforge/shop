@@ -14,11 +14,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from cStringIO import StringIO
+
 # Import from itools
 from itools.csv import CSVFile
 from itools.gettext import MSG
 from itools.uri import get_reference
 from itools.web import BaseView
+
+# Import from lpod
+lpod_is_install = True
+try:
+    from lpod.document import odf_new_document_from_type
+    from lpod.table import odf_create_table, import_from_csv
+except:
+    lpod_is_install = False
 
 # Import from shop
 from shop.modules import ShopModule
@@ -31,13 +42,13 @@ class ShopModule_ExportCatalogCSV_View(BaseView):
     access = 'is_admin'
 
     def GET(self, resource, context):
+        if lpod_is_install is False:
+            msg = ERROR(u'Please install LPOD')
+            return context.come_back(msg)
         root = context.root
         shop = get_shop(resource)
         shop_uri = get_reference(shop.get_property('shop_uri'))
         categories_uri = str(shop_uri.resolve('/categories'))
-        from lpod.document import odf_new_document_from_type
-        from lpod.table import odf_create_table, import_from_csv
-        from cStringIO import StringIO
         document = odf_new_document_from_type('spreadsheet')
         body = document.get_body()
         models = shop.get_resource('products-models').get_resources()
@@ -55,10 +66,7 @@ class ShopModule_ExportCatalogCSV_View(BaseView):
                       line = [product.get_property('reference'),
                               product.get_title().encode('utf-8')]
                       for key, datatype in declination_schema.items():
-                          try:
-                              value = datatype.get_value(d.get_property(key))
-                          except:
-                              value = 'XXX'
+                          value = datatype.get_value(d.get_property(key)) or ''
                           line.append(value.encode('utf-8'))
                       # Price
                       line.append(product.get_price_with_tax(pretty=True, id_declination=d.name, prefix=''))
