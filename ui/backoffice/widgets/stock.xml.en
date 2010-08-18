@@ -9,9 +9,10 @@
   <table class="zone-stock" style="padding:5px;margin: 5px 20px;border: 1px solid gray;">
     <tr>
       <td>
-      stl:if="not has_declination"
-        Quantity in stock:<br />
-        <input type="text" id="stock-quantity" name="stock-quantity" value="${stock-quantity}"/><br/>
+        <div style="display:none" stl:omit-tag="not has_declination">
+          Quantity in stock:<br />
+          <input type="text" id="stock-quantity" name="stock-quantity" value="${stock-quantity}"/><br/>
+        </div>
       </td>
     </tr>
     <tr class="zone-stock">
