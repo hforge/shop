@@ -361,6 +361,7 @@ class Product_Delete(STLForm):
         try:
             resource.parent.del_resource(resource.name)
         except ConsistencyError:
+            # TODO improve message
             context.message = ERROR(u"You can't delete this product")
             return
         return context.come_back(INFO(u'Product deleted !'), goto='../')
