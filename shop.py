@@ -48,7 +48,7 @@ from shop_views import Shop_ShowRecapitulatif, Shop_EditAddressProgress
 from shop_views import Shop_GetProductStock, Shop_Configuration
 from shop_views import Shop_Administration
 from suppliers import Suppliers, Supplier
-from user import ShopUser
+from user import ShopUser, Customers
 from user_group import ShopUser_Groups
 
 
@@ -142,6 +142,9 @@ class Shop(ShopFolder):
         # Suppliers
         Suppliers._make_resource(Suppliers, folder,
                       '%s/suppliers' % name, title={'en': u'Suppliers'})
+        # Customers
+        Customers._make_resource(Customers, folder,
+                      '%s/customers' % name, title={'en': u'Customers'})
         # Product Models
         ProductModels._make_resource(ProductModels, folder, '%s/products-models' % name,
                                     title={'en': u'Product Models'})

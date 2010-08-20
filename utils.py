@@ -24,6 +24,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.utils import reduce_string
+from ikaaro.website import WebSite
 
 # Import from pyPdf
 from pyPdf import PdfFileWriter, PdfFileReader
@@ -141,7 +142,10 @@ def get_skin_template(context, path1, path2=None, is_on_skin=False):
         site_root =  context.site_root
     else:
         site_root = resource.get_site_root()
-    prefix = site_root.get_class_skin(context)
+    if site_root == context.root:
+        prefix = 'ui/aruni'
+    else:
+        prefix = site_root.get_class_skin(context)
     template = resource.get_resource('%s/%s' % (prefix, path1), soft=True)
     if template is None and path2 != None:
         template = resource.get_resource('%s/%s' % (prefix, path2), soft=True)

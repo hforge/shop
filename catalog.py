@@ -49,4 +49,4 @@ def register_dynamic_fields(context):
             fields.append(register_key)
         dynamic_fields[website.name] = fields
         print '=> %s dynamic fields' % len(fields)
-    pprint(fields)
+        pprint(fields)
