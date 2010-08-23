@@ -296,7 +296,7 @@ class Product_Edit(AutoForm):
         # Set pub_datetime
         if (resource.get_property('state') == 'private' and
             form['state'] == 'public'):
-            self.set_property('pub_datetime', datetime.now())
+            resource.set_property('pub_datetime', datetime.now())
         # We change category if needed
         if str(resource.parent.get_abspath()) != form['category']:
             target = context.root.get_resource(form['category'])
