@@ -56,15 +56,13 @@ class Cart_View(STLView):
         abspath = resource.get_abspath()
         # Get cart
         cart = ProductCart(context)
-        # Get products
-        products = resource.get_resource('products')
         # Get products informations
         total_weight = decimal(0)
         total = {'with_tax': decimal(0),
                  'without_tax': decimal(0)}
         for product_cart in cart.products:
             # Get product
-            product = products.get_resource(product_cart['name'], soft=True)
+            product = context.root.get_resource(product_cart['name'], soft=True)
             # Check product is buyable
             if not product or not product.is_buyable(context):
                 continue
