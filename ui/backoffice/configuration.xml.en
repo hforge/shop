@@ -51,6 +51,16 @@
     </tr>
     <tr>
       <td>
+        <a href="/shop/groups/">
+          Groups
+        </a>
+      </td>
+      <td>
+        Configure groups
+      </td>
+    </tr>
+    <tr>
+      <td>
         <a href="./suppliers/">
           Suppliers
         </a>

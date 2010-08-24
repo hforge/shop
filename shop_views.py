@@ -64,7 +64,7 @@ CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
 
 registration_notification_body = MSG(u"""
     You have to validate user number {name} ({email})\n
-    {shop_backoffice_uri}/users/{name}/;edit_private_informations\n
+    {shop_backoffice_uri}/users/{name}/;edit_group\n
     """)
 
 
@@ -250,37 +250,45 @@ class Shop_Register(RegisterForm):
          TextWidget('town', title=MSG(u"Town")),
          SelectWidget('country', title=MSG(u"Pays"))]
 
+
+    def get_title(self, context):
+        group = self.get_group(context)
+        return group.get_property('register_title') or MSG(u'Register')
+
+
     def get_schema(self, resource, context):
-        shop = get_shop(resource)
+        group = self.get_group(context)
         return merge_dicts(self.base_schema,
-                           self.get_group_schema(context),
-                           shop.user_class.get_public_dynamic_schema(register=True))
+                           group.get_dynamic_schema())
 
 
     def get_widgets(self, resource, context):
-        shop = get_shop(resource)
+        group = self.get_group(context)
         return self.base_widgets + \
-               shop.user_class.get_public_dynamic_widgets(register=True) + \
-               self.get_group_widgets(context) + \
+               group.get_dynamic_widgets() + \
                self.address_widgets
 
 
-    def get_group_abspath(self, context):
+    def get_group(self, context):
         root = context.root
         query = [PhraseQuery('format', 'user-group'),
                  PhraseQuery('name', 'default')]
         search = root.search(AndQuery(*query))
         documents = search.get_documents()
         group = documents[0]
-        return str(group.abspath)
+        return root.get_resource(group.abspath)
 
 
-    def get_group_schema(self, context):
-        return {}
-
-
-    def get_group_widgets(self, context):
-        return []
+    def get_namespace(self, resource, context):
+        namespace = RegisterForm.get_namespace(self, resource, context)
+        # Add register body
+        group = self.get_group(context)
+        register_body = group.get_property('register_body')
+        if register_body is not None:
+            namespace['required_msg'] = (register_body +
+                                         list(XMLParser('<br/><br/>')) +
+                                         list(namespace['required_msg']))
+        return namespace
 
 
     def action(self, resource, context, form):
@@ -308,8 +316,8 @@ class Shop_Register(RegisterForm):
         user = users.set_user(email, password)
 
         # Set user group (do it befor save_form for dynanic schema)
-        group_abspath = self.get_group_abspath(context)
-        user.set_property('user_group', group_abspath)
+        group = self.get_group(context)
+        user.set_property('user_group', str(group.get_abspath()))
 
         # Save properties
         user.save_form(self.get_schema(resource, context), form)
@@ -340,7 +348,7 @@ class Shop_Register(RegisterForm):
         user.send_register_confirmation(context)
 
         # User is enabled ?
-        user_is_enabled = self.get_user_is_enabled(resource)
+        user_is_enabled = group.get_property('user_is_enabled_when_register')
         user.set_property('is_enabled', user_is_enabled)
 
         # Create modules if needed
@@ -360,7 +368,6 @@ class Shop_Register(RegisterForm):
             for to_addr in shop.get_property('order_notification_mails'):
                 root.send_email(to_addr, subject, text=body)
             # Group
-            group = root.get_resource(group_abspath)
             goto = '%s/welcome/' % context.get_link(group)
             # Redirect on specific page
             return context.come_back(msg, goto=goto)
@@ -384,9 +391,6 @@ class Shop_Register(RegisterForm):
             goto = '/users/%s' % user.name
         return context.come_back(msg, goto)
 
-
-    def get_user_is_enabled(self, resource):
-        return True
 
 
 class Shop_Login(STLForm):

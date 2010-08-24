@@ -25,7 +25,7 @@ from itools.xapian import PhraseQuery, AndQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import AutoForm, TextWidget, SelectWidget
+from ikaaro.forms import AutoForm, TextWidget, BooleanRadio, SelectWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.website_views import RegisterForm
@@ -100,9 +100,6 @@ class ShopUser_Manage(STLView):
 
     schema = {'name': String}
 
-    base_fields = ['gender', 'firstname', 'lastname', 'phone1',
-                  'phone2', 'user_language', 'email']
-
     def get_namespace(self, resource, context):
         root = context.root
         # Get user
@@ -110,41 +107,39 @@ class ShopUser_Manage(STLView):
         # Get user class
         shop = get_shop(resource)
         user_class = shop.user_class
+        group = user.get_group(context)
         # Build namespace
-        namespace = {'user': {'base': {},
-                              'public': [],
-                              'private': [],
-                              'group': []}}
-        # Base schema
-        for key in self.base_fields:
-            namespace['user']['base'][key] = user.get_property(key)
-        # Additional public schema
-        public_schema = user_class.get_public_dynamic_schema()
-        for widget in user_class.get_public_dynamic_widgets():
-            datatype = public_schema[widget.name]
-            value = user.get_property(widget.name)
-            namespace['user']['public'].append(
-              {'title': widget.title,
-               'value': datatype.encode(value)})
-        # Additional private schema
-        private_schema = user_class.get_private_dynamic_schema()
-        for widget in user_class.get_private_dynamic_schema():
-            datatype = private_schema[widget.name]
-            value = user.get_property(widget.name)
-            namespace['user']['private'].append(
-              {'title': widget.title,
-               'value': datatype.encode(value)})
-        # Additional group schema
-        user_group = user.get_property('user_group')
-        #if user_group:
-        #    group = groups[user_group]
-        #    for widget in group.widgets:
-        #        datatype = group.schema[widget.name]
-        #        value = user.get_property(widget.name)
-        #        namespace['user']['group'].append(
-        #          {'title': widget.title,
-        #           'value': datatype.encode(value)})
-
+        namespace = {}
+        infos = []
+        for key, title in [('gender', MSG(u'Gender')),
+                           ('firstname', MSG(u'Firstname')),
+                           ('lastname', MSG(u'Lastname')),
+                           ('email', MSG(u'Email')),
+                           ('user_language', MSG(u'User language')),
+                           ('phone1', MSG(u'Phone1')),
+                           ('phone2', MSG(u'Phone2'))]:
+            infos.append({'title': title,
+                          'value': user.get_property(key),
+                          'public': True})
+        # Is enabled ?
+        value = bool_to_img(user.get_property('is_enabled'))
+        infos.append({'title': MSG(u'Enabled ?'),
+                      'value': value,
+                      'public': True})
+        # Group
+        infos.append({'title': MSG(u'Group'),
+                      'value': group.get_title(),
+                      'public': True})
+        # Schema
+        schema = group.get_resource('schema').handler
+        for record in schema.get_records():
+            name = schema.get_record_value(record, 'name')
+            title = schema.get_record_value(record, 'title')
+            public = schema.get_record_value(record, 'is_public')
+            infos.append({'title': title,
+                          'value': user.get_property(name),
+                          'public': public})
+        namespace['infos'] = infos
         # Customer connections
         namespace['connections'] = []
         accept = context.accept_language
@@ -181,45 +176,24 @@ class ShopUser_Manage(STLView):
         return namespace
 
 
-class ShopUser_EditPrivateInformations(AutoForm):
+
+class ShopUser_EditGroup(AutoForm):
 
     access = 'is_admin'
-    title = MSG(u'Edit private user informations')
 
-    def get_schema(self, resource, context):
-        # Other schema
-        schema = merge_dicts(resource.base_schema,
-                             resource.get_dynamic_schema(),
-                             user_group=UserGroup_Enumerate)
-        del schema['password']
-        del schema['user_must_confirm']
-        return schema
-
-
-    def get_widgets(self, resource, context):
-        user_class = get_shop(resource).user_class
-        widget_group = [SelectWidget('user_group', title=MSG(u'User group'),
-                                     has_empty_option=False)]
-        return user_class.base_widgets + widget_group + resource.get_dynamic_widgets()
-
+    schema = {'user_group': UserGroup_Enumerate,
+              'is_enabled': Boolean}
+    widgets = [SelectWidget('user_group', title=MSG(u'User group'),
+                            has_empty_option=False),
+                BooleanRadio('is_enabled', title=MSG(u'Is enabled ?'))]
 
     def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name) or datatype.get_default()
+        return resource.get_property(name)
 
 
     def action(self, resource, context, form):
-        # Save changes XXX
-        if get_uri_name(form['user_group']) == 'default':
-            schema = merge_dicts(resource.base_schema,
-                                 resource.get_public_dynamic_schema(),
-                                 resource.get_private_dynamic_schema(),
-                                 user_group=UserGroup_Enumerate)
-            del schema['password']
-            del schema['user_must_confirm']
-        else:
-            schema = self.get_schema(resource, context)
-        user = context.root.get_resource('/users/%s' % resource.name)
-        user.save_form(schema, form)
+        resource.set_property('user_group', form['user_group'])
+        resource.set_property('is_enabled', form['is_enabled'])
         # Message 
         context.message = MSG_CHANGES_SAVED
 
@@ -228,16 +202,16 @@ class ShopUser_EditPrivateInformations(AutoForm):
 class ShopUser_EditAccount(User_EditAccount):
 
     def get_schema(self, resource, context):
-        return merge_dicts(RegisterForm.schema,
-                           resource.get_public_dynamic_schema(),
-                           gender=Civilite(mandatory=True),
-                           phone1=String(mandatory=True),
-                           phone2=String)
-
+        schema = merge_dicts(resource.base_schema,
+                             resource.get_dynamic_schema())
+        del schema['password']
+        del schema['user_must_confirm']
+        return schema
 
 
     def get_widgets(self, resource, context):
-        return resource.base_widgets + resource.get_public_dynamic_widgets()
+        return (resource.base_widgets +
+                resource.get_dynamic_widgets())
 
 
     def get_value(self, resource, context, name, datatype):
@@ -257,6 +231,7 @@ class ShopUser_EditAccount(User_EditAccount):
         # Save changes XXX
         schema = self.get_schema(resource, context)
         user = context.root.get_resource('/users/%s' % resource.name)
+        # Save informations
         user.save_form(schema, form)
         # Message 
         context.message = MSG_CHANGES_SAVED
@@ -539,10 +514,13 @@ class Customers_View(SearchTableFolder_View):
                 <a href="./%s/" title="View customer">
                   <img src="/ui/icons/16x16/view.png"/>
                 </a>
-                <a href="./%s/;edit_private_informations" title="Edit customer">
+                <a href="./%s/;edit_account" title="Edit customer">
                   <img src="/ui/icons/16x16/edit.png"/>
                 </a>
-                """ % (item_brain.name, item_brain.name))
+                <a href="./%s/;edit_group" title="Edit group">
+                  <img src="/ui/backoffice/images/users.png"/>
+                </a>
+                """ % (item_brain.name, item_brain.name, item_brain.name))
         return item_resource.get_property(column)
 
 

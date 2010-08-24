@@ -21,8 +21,9 @@ from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton, RenameButton
-from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import BooleanRadio, MultilineWidget, TextWidget
+from ikaaro.folder_views import Folder_BrowseContent, GoToSpecificDocument
+from ikaaro.forms import BooleanRadio, MultilineWidget, TextWidget, XHTMLBody
+from ikaaro.forms import RTEWidget
 from ikaaro.webpage import WebPage
 
 # Import from itws
@@ -36,42 +37,34 @@ from user import CustomerSchema
 
 class Group_Register(Shop_Register):
 
-    def get_group_abspath(self, context):
-        return str(context.resource.get_abspath())
-
-
-    def get_group_schema(self, context):
-        schema = context.resource.get_resource('schema')
-        return schema.get_model_schema()
-
-
-    def get_group_widgets(self, context):
-        schema = context.resource.get_resource('schema')
-        return schema.get_model_widgets()
-
-
-    def get_user_is_enabled(self, resource):
-        return resource.get_property('user_is_enabled_when_register')
-
-
+    def get_group(self, context):
+        return context.resource
 
 
 class ShopUser_Group(ShopFolder):
 
     class_id = 'user-group'
-    class_views = ['edit', 'register']
+    class_views = ['edit', 'register', 'schema', 'welcome']
     class_version = '20100719'
     class_title = MSG(u'User group')
 
     edit = AutomaticEditView()
+    schema = GoToSpecificDocument(specific_document='schema',
+                                  title=MSG(u'Schema'))
+    welcome = GoToSpecificDocument(specific_document='welcome',
+                                  title=MSG(u'Edit welcome page'))
     register = Group_Register()
 
-    edit_schema = {'register_mail_subject': Unicode(multilingual=True),
+    edit_schema = {'register_title': Unicode(multilingual=True),
+                   'register_body': XHTMLBody(multilingual=True),
+                   'register_mail_subject': Unicode(multilingual=True),
                    'register_mail_body': Unicode(multilingual=True),
                    'user_is_enabled_when_register': Boolean,
                    'show_ht_price': Boolean}
 
-    edit_widgets = [TextWidget('register_mail_subject', title=MSG(u'Register mail subject')),
+    edit_widgets = [TextWidget('register_title', title=MSG(u'Register view title ?')),
+                    RTEWidget('register_body', title=MSG(u'Register body')),
+                    TextWidget('register_mail_subject', title=MSG(u'Register mail subject')),
                     MultilineWidget('register_mail_body', title=MSG(u'Register mail body')),
                     BooleanRadio('user_is_enabled_when_register', title=MSG(u'User is enabled ?')),
                     BooleanRadio('show_ht_price', title=MSG(u'Show HT price ?'))]
@@ -98,6 +91,16 @@ class ShopUser_Group(ShopFolder):
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
                            cls.edit_schema)
+
+
+    def get_dynamic_schema(self):
+        schema = self.get_resource('schema')
+        return schema.get_model_schema()
+
+
+    def get_dynamic_widgets(self):
+        schema = self.get_resource('schema')
+        return schema.get_model_widgets()
 
 
     def get_register_mail_subject(self):

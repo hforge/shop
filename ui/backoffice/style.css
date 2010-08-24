@@ -476,6 +476,16 @@ padding:3px 0 3px 10px;
   padding-left: 16px;
 }
 
+.button-edit {
+  background-image: url(/ui/icons/16x16/edit.png);
+  padding-left: 16px;
+}
+
+.button-users {
+  background-image: url(/ui/backoffice/images/users.png);
+  padding-left: 16px;
+}
+
 #order-manage-page-backoffice{
   font-size: 15px;
 }

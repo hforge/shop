@@ -5,65 +5,35 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
 
-  <a href="/users/">« Go to the customers list</a>
+  <br/><br/>
 
-  <table class="order-browse" style="width:300px;float:left">
+  <a href="/users/" class="button button-ok">« Go to the customers list</a>
+  <a href="./;edit_account" class="button button-edit">Edit this customer</a>
+  <a href="./;edit_group" class="button button-users">Edit Group/ Validate user</a>
+
+  <br/><br/>
+
+  <table id="browse-list">
     <thead>
       <tr>
-        <th>
+        <th colspan="3">
           <img src="/ui/icons/16x16/view.png"/>
-          Public user informations
+          Customer informations<br/><br/>
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr stl:repeat="info infos">
         <td valign="top">
-          <a href="./;edit_account">
-            <img src="/ui/icons/16x16/edit.png"
-              title="Edit customer account"/>
-          </a><br/>
-          Gender: ${user/base/gender}<br/>
-          Firstname: ${user/base/firstname}<br/>
-          Lastname: ${user/base/lastname}<br/>
-          Email: ${user/base/email}<br/>
-          User Language: ${user/base/user_language}<br/>
-          Phone2: ${user/base/phone2}<br/>
-          Phone1: ${user/base/phone1}<br/>
+          ${info/title}
         </td>
-      </tr>
-      <tr>
-        <td valign="top">
-          <stl:block stl:repeat="info user/public">
-            ${info/title}: ${info/value}<br/>
-          </stl:block>
+        <td>
+          ${info/value}
         </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table class="order-browse" style="width:300px;float:left" stl:if="user/private">
-    <thead>
-      <tr>
-        <th>
-          <img src="/ui/icons/16x16/view.png"/>
-          Private user informations
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td valign="top">
-          <a href="./;edit_private_informations">
-            <img src="/ui/icons/16x16/edit.png"
-              title="Edit customer account"/>
-          </a><br/>
-          <stl:block stl:repeat="info user/private" stl:if="info">
-            ${info/title}: ${info/value}<br/>
-          </stl:block>
-          <stl:block stl:repeat="info user/group" stl:if="info">
-            ${info/title}: ${info/value}<br/>
-          </stl:block>
+        <td>
+          <span stl:if="not info/public">
+            Private
+          </span>
         </td>
       </tr>
     </tbody>
@@ -114,32 +84,19 @@
     </tbody>
   </table>
 
-  <table class="order-browse">
+  <table id="browse-list">
     <thead>
       <tr>
         <th>
           <img src="/ui/icons/16x16/view.png"/>
-          Connection history
+          Connection history<br/><br/>
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr style="height:50px">
-        <td valign="top">
-          <table class="order-sub-browse">
-            <thead>
-              <tr>
-                <th>DateTime</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr stl:repeat="connection connections">
-                <td>
-                  ${connection}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <tr stl:repeat="connection connections">
+        <td>
+          ${connection}
         </td>
       </tr>
     </tbody>

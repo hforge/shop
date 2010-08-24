@@ -136,7 +136,7 @@ class Declination(DynamicFolder):
     class_id = 'product-declination'
     class_title = MSG(u'Declination')
     class_views = ['edit']
-    class_version = '20100813'
+    class_version = '20100818'
 
     new_instance = Declination_NewInstance()
 

@@ -33,16 +33,17 @@ from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.user import User, UserFolder
+from ikaaro.website_views import RegisterForm
 
 # Import from shop
 from products.models import get_real_datatype, get_default_widget_shop
 from products.enumerate import Datatypes
 from user_views import ShopUser_Profile
-from user_views import ShopUser_EditAccount
+from user_views import ShopUser_EditAccount, ShopUser_EditGroup
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView
 from user_views import Customers_View, AuthentificationLogs_View
-from user_views import ShopUser_EditPrivateInformations, ShopUser_Manage
+from user_views import ShopUser_Manage
 from datatypes import UserGroup_Enumerate
 from addresses_views import Addresses_Book
 from products.dynamic_folder import DynamicFolder
@@ -77,6 +78,7 @@ class CustomerSchemaTable(OrderedTableFile):
         'name': String(unique=True, is_indexed=True),
         'title': Unicode(mandatory=True, multiple=True),
         'mandatory': Boolean,
+        'is_public': Boolean,
         'multiple': Boolean,
         'datatype': Datatypes(mandatory=True, index='keyword'),
         'show_on_register': Boolean,
@@ -96,6 +98,7 @@ class CustomerSchema(OrderedTable):
     form = [
         TextWidget('name', title=MSG(u'Name')),
         TextWidget('title', title=MSG(u'Title')),
+        BooleanCheckBox('is_public', title=MSG(u'Is public ?')),
         BooleanCheckBox('mandatory', title=MSG(u'Mandatory')),
         BooleanCheckBox('multiple', title=MSG(u'Multiple')),
         BooleanCheckBox('show_on_register', title=MSG(u'Show on register ?')),
@@ -103,13 +106,22 @@ class CustomerSchema(OrderedTable):
         TextWidget('default', title=MSG(u'Default value')),
         ]
 
-    def get_model_schema(self, register=False):
+    def get_model_schema(self):
         schema = {}
+        context = get_context()
+        ac = self.get_access_control()
+        site_root = context.site_root
+        is_admin = ac.is_admin(context.user, site_root)
         get_value = self.handler.get_record_value
+        is_on_register_view = issubclass(context.view.__class__, RegisterForm)
         for record in self.handler.get_records_in_order():
             name = get_value(record, 'name')
             show_on_register = get_value(record, 'show_on_register')
-            if register is True and show_on_register is False:
+            show_on_register = get_value(record, 'show_on_register')
+            if is_on_register_view is True and show_on_register is False:
+                continue
+            is_public = get_value(record, 'is_public')
+            if not is_admin and is_public is False:
                 continue
             datatype = get_real_datatype(self.handler, record)
             default = get_value(record, 'default')
@@ -119,13 +131,21 @@ class CustomerSchema(OrderedTable):
         return schema
 
 
-    def get_model_widgets(self, register=False):
+    def get_model_widgets(self):
+        context = get_context()
+        ac = self.get_access_control()
+        site_root = context.site_root
+        is_admin = ac.is_admin(context.user, site_root)
+        is_on_register_view = issubclass(context.view.__class__, RegisterForm)
         widgets = []
         get_value = self.handler.get_record_value
         for record in self.handler.get_records_in_order():
             name = get_value(record, 'name')
             show_on_register = get_value(record, 'show_on_register')
-            if register is True and show_on_register is False:
+            if is_on_register_view is True and show_on_register is False:
+                continue
+            is_public = get_value(record, 'is_public')
+            if not is_admin and is_public is False:
                 continue
             datatype = get_real_datatype(self.handler, record)
             widget = get_default_widget_shop(datatype)
@@ -169,7 +189,7 @@ class ShopUser(User, DynamicFolder):
     manage = ShopUser_Manage()
     profile = ShopUser_Profile()
     edit_account = ShopUser_EditAccount()
-    edit_private_informations = ShopUser_EditPrivateInformations()
+    edit_group = ShopUser_EditGroup()
 
     # Orders views
     orders_view = ShopUser_OrdersView()
@@ -224,68 +244,28 @@ class ShopUser(User, DynamicFolder):
                            user_group=UserGroup_Enumerate)
 
 
-    def get_dynamic_schema(self):
-        return merge_dicts(self.get_public_dynamic_schema(),
-                           self.get_private_dynamic_schema(),
-                           self.get_group_dynamic_schema())
-
-
-    def get_dynamic_widgets(self):
-        return (self.get_public_dynamic_widgets() +
-                self.get_private_dynamic_widgets() +
-                self.get_group_dynamic_widgets())
+    @classmethod
+    def get_dynamic_schema(cls):
+        context = get_context()
+        self = context.resource
+        if not isinstance(self, User):
+           self = context.user
+        if self is None:
+            return {}
+        group = self.get_group(context)
+        return group.get_dynamic_schema()
 
 
     @classmethod
-    def get_public_dynamic_schema(cls, register=False):
-        users = get_context().root.get_resource('/users')
-        public_schema = users.get_resource('public_schema')
-        return public_schema.get_model_schema(register=register)
-
-
-    @classmethod
-    def get_public_dynamic_widgets(cls, register=False):
-        users = get_context().root.get_resource('/users')
-        public_schema = users.get_resource('public_schema')
-        return public_schema.get_model_widgets(register=register)
-
-
-    @classmethod
-    def get_private_dynamic_schema(cls):
-        users = get_context().root.get_resource('/users')
-        private_schema = users.get_resource('private_schema')
-        return private_schema.get_model_schema()
-
-
-    @classmethod
-    def get_private_dynamic_widgets(cls):
-        users = get_context().root.get_resource('/users')
-        private_schema = users.get_resource('private_schema')
-        return private_schema.get_model_widgets()
-
-
-    def get_group_dynamic_schema(self):
-        user_group = self.get_property('user_group')
-        # XXX Should never be None
-        if not user_group:
-            return {}
-        user_group_schema = self.get_resource('%s/schema' % user_group, soft=True)
-        # XXX Remove after update
-        if user_group_schema is None:
-            return {}
-        return user_group_schema.get_model_schema()
-
-
-    def get_group_dynamic_widgets(self):
-        user_group = self.get_property('user_group')
-        # XXX Should never be None
-        if not user_group:
-            return {}
-        user_group_schema = self.get_resource('%s/schema' % user_group, soft=True)
-        # XXX Remove after update
-        if user_group_schema is None:
-            return {}
-        return user_group_schema.get_model_widgets()
+    def get_dynamic_widgets(cls):
+        context = get_context()
+        self = context.resource
+        if not isinstance(self, User):
+           self = context.user
+        if self is None:
+            return []
+        group = self.get_group(context)
+        return group.get_dynamic_widgets()
 
 
     def _get_catalog_values(self):
@@ -336,6 +316,10 @@ class ShopUser(User, DynamicFolder):
         return shop.get_resource(user_group)
 
 
+    ###############################################
+    ## Update
+    ###############################################
+
     def update_20100719(self):
         if not self.get_property('user_group'):
             self.set_property('user_group', 'default')
@@ -353,7 +337,7 @@ class ShopUserFolder(UserFolder):
 
     class_id = 'users'
     class_views = ['view', 'last_connections']
-    class_version = '20100719'
+    class_version = '20100823'
 
     view = Customers_View()
     last_connections = GoToSpecificDocument(
@@ -361,14 +345,6 @@ class ShopUserFolder(UserFolder):
                         access='is_allowed_to_add',
                         specific_document='../shop/customers/authentification_logs')
 
-
-    @staticmethod
-    def _make_resource(cls, folder, name, *args, **kw):
-        UserFolder._make_resource(cls, folder, name, *args, **kw)
-        # Customer schema (public/private)
-        cls = CustomerSchema
-        cls._make_resource(cls, folder, '%s/public_schema' % name)
-        cls._make_resource(cls, folder, '%s/private_schema' % name)
 
 
     def set_user(self, email=None, password=None):
@@ -388,11 +364,43 @@ class ShopUserFolder(UserFolder):
         # Return the user
         return user
 
+    ###############################################
+    ## Update
+    ###############################################
 
     def update_20100719(self):
         cls = CustomerSchema
         cls.make_resource(cls, self, 'public_schema')
         cls.make_resource(cls, self, 'private_schema')
+
+
+    def update_20100823(self):
+        from itools.csv import  Property
+        for name in ['public_schema', 'private_schema']:
+            handler = self.get_resource(name).handler
+            print handler.key
+            for record in handler.get_records():
+                kw = {}
+                for key, datatype in record.record_properties.items():
+                    print key, datatype
+                    if key == 'title':
+                        value = handler.get_record_value(record, key, 'fr')
+                        kw[key] =  Property(value, language='fr')
+                    else:
+                        kw[key] = handler.get_record_value(record, key)
+                value = handler.get_record_value(record, key, 'en')
+                kw['is_public'] = name == 'public_schema'
+                from pprint import pprint
+                pprint(kw)
+                for group in ['default', 'pro']:
+                    shop = self.get_resource('../en-fil-indienne').get_resource('shop')
+                    group = shop.get_resource('groups/%s/schema' % group)
+                    value = handler.get_record_value(record, 'title', 'en')
+                    r = group.handler.add_record(kw)
+                    kw['title'] =  Property(value, language='en')
+                    group.handler.update_record(r.id, **kw)
+        self.del_resource('public_schema')
+        self.del_resource('private_schema')
 
 
 
