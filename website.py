@@ -180,3 +180,8 @@ class ShopWebSite(NeutralWS):
 
 register_resource_class(ShopWebSite)
 register_document_type(ShopWebSite, WebSite.class_id)
+
+
+# XXX Add a hack to change login page
+from ikaaro.resource_ import DBResource
+DBResource.login = Shop_Login()
