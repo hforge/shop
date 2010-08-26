@@ -248,6 +248,9 @@ class ShopUser(User, DynamicFolder):
     def get_dynamic_schema(cls):
         context = get_context()
         self = context.resource
+        if issubclass(context.view.__class__, RegisterForm):
+            group = context.view.get_group(context)
+            return group.get_dynamic_schema()
         if not isinstance(self, User):
            self = context.user
         if self is None:
@@ -260,6 +263,9 @@ class ShopUser(User, DynamicFolder):
     def get_dynamic_widgets(cls):
         context = get_context()
         self = context.resource
+        if issubclass(context.view.__class__, RegisterForm):
+            group = context.view.get_group(context)
+            return group.get_dynamic_widgets()
         if not isinstance(self, User):
            self = context.user
         if self is None:
@@ -283,10 +289,11 @@ class ShopUser(User, DynamicFolder):
 
     def save_form(self, schema, form):
         dynamic_schema = self.get_dynamic_schema()
+        metadata_schema = self.get_metadata_schema()
         for key in schema:
             if key in ['password', 'user_must_confirm']:
                 continue
-            elif (key not in self.get_metadata_schema() and
+            elif (key not in metadata_schema and
                   key not in dynamic_schema):
                 continue
             value = form[key]
