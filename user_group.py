@@ -59,6 +59,10 @@ class ShopUser_Group(ShopFolder):
                    'register_body': XHTMLBody(multilingual=True),
                    'register_mail_subject': Unicode(multilingual=True),
                    'register_mail_body': Unicode(multilingual=True),
+                   'validation_mail_subject': Unicode(multilingual=True),
+                   'validation_mail_body': Unicode(multilingual=True),
+                   'invalidation_mail_subject': Unicode(multilingual=True),
+                   'invalidation_mail_body': Unicode(multilingual=True),
                    'user_is_enabled_when_register': Boolean,
                    'show_ht_price': Boolean}
 
@@ -66,6 +70,10 @@ class ShopUser_Group(ShopFolder):
                     RTEWidget('register_body', title=MSG(u'Register body')),
                     TextWidget('register_mail_subject', title=MSG(u'Register mail subject')),
                     MultilineWidget('register_mail_body', title=MSG(u'Register mail body')),
+                    TextWidget('validation_mail_subject', title=MSG(u'Validation mail subject')),
+                    MultilineWidget('validation_mail_body', title=MSG(u'Validation mail body')),
+                    TextWidget('invalidation_mail_subject', title=MSG(u'Invalidation mail subject')),
+                    MultilineWidget('invalidation_mail_body', title=MSG(u'Invalidation mail body')),
                     BooleanRadio('user_is_enabled_when_register', title=MSG(u'User is enabled ?')),
                     BooleanRadio('show_ht_price', title=MSG(u'Show HT price ?'))]
 

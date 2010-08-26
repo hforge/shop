@@ -183,15 +183,32 @@ class ShopUser_EditGroup(AutoForm):
 
     schema = {'user_group': UserGroup_Enumerate,
               'is_enabled': Boolean}
-    widgets = [SelectWidget('user_group', title=MSG(u'User group'),
-                            has_empty_option=False),
-                BooleanRadio('is_enabled', title=MSG(u'Is enabled ?'))]
+    widgets = [
+        SelectWidget('user_group', title=MSG(u'User group'),
+                     has_empty_option=False),
+        BooleanRadio('is_enabled',
+           title=MSG(u'Is enabled ? (On change, an email will be sent to inform user)'))]
+
 
     def get_value(self, resource, context, name, datatype):
         return resource.get_property(name)
 
 
     def action(self, resource, context, form):
+        # Send an email to notify validation/invalidation ?
+        if form['is_enabled'] != resource.get_property('is_enabled'):
+            # Is validation or invalidation ?
+            group = resource.get_group(context)
+            if form['is_enabled'] is True:
+                subject = group.get_property('validation_mail_subject')
+                text = group.get_property('validation_mail_body')
+            else:
+                subject = group.get_property('invalidation_mail_subject')
+                text = group.get_property('invalidation_mail_body')
+            # Send mail
+            context.root.send_email(to_addr=resource.get_property('email'),
+                                    subject=subject, text=text)
+        # Set property
         resource.set_property('user_group', form['user_group'])
         resource.set_property('is_enabled', form['is_enabled'])
         # Message 
