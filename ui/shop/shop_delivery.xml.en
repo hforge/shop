@@ -20,7 +20,7 @@
         <th>Description</th>
         <th>Selection</th>
       </tr>
-      <tr stl:repeat="ship shipping">
+      <tr stl:repeat="ship shipping" id="${ship/name}">
         <td>
           <img src="${ship/img}/;download" stl:if="ship/img"/>
         </td>
