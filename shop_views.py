@@ -460,10 +460,11 @@ class Shop_Login(STLForm):
             return context.come_back(message, goto)
 
         # We log authentification
-        shop = get_shop(resource)
-        logs = shop.get_resource('customers/authentification_logs')
-        logs.log_authentification(user.name)
-        user.set_property('last_time', datetime.now())
+        if resource != context.root:
+            shop = get_shop(resource)
+            logs = shop.get_resource('customers/authentification_logs')
+            logs.log_authentification(user.name)
+            user.set_property('last_time', datetime.now())
 
         # Set cookie
         user.set_auth_cookie(context, password)
