@@ -976,7 +976,6 @@ class Products(ShopFolder):
     # Views
     browse_content = Products_View()
     stock = Products_Stock()
-    stock_out = Stock_FillStockOut()
     new_product = Product_NewProduct()
 
 
