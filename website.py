@@ -35,6 +35,7 @@ from search import ShopSearch
 from shop import Shop
 from shop_views import Shop_Register, Shop_Login
 from shop_utils_views import Cart_Viewbox
+from sidebar import CategorySidebar, ProductSidebar
 from utils_views import RedirectPermanent
 from website_views import ShopWebSite_View, ShopWS_SiteMap, ShopWS_RSS
 from website_views import ShopWebSite_Edit
@@ -45,6 +46,8 @@ default_resources = {
     'manufacturers': (Manufacturers, {'title': {'en': u"Manufacturers"}}),
     'search': (ShopSearch, {'title': {'en': u'Search'}}),
     'shop': (Shop, {'title': {'en': u'Shop'}, 'state':'public'}),
+    'category-sidebar': (CategorySidebar, {'title': {'en': u'Category sidebar'}}),
+    'product-sidebar': (ProductSidebar, {'title': {'en': u'Product sidebar'}}),
 }
 
 
