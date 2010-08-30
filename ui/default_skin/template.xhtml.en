@@ -26,6 +26,9 @@
   <div id="page" class="${page_css_class}">
     <div id="header">
       <div class="login">
+        <a href="/">
+        <img src="/ui/default_skin/images/logo.png" id="logo"/>
+        </a>
         <stl:block stl:if="not user/info">
           <a href="${login}" id="top-menu-login" title="Log in">Log in</a>
         </stl:block>

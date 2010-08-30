@@ -11,7 +11,7 @@
 }
 
 body {
-    background: #eee;
+    background: #F0F0F0 url('/ui/default_skin/images/background.png') repeat-x;
     font-size: 62.5%;
     font-family: "Verdana", "Bitstream Vera Sans", "DejaVu Sans", sans-serif;
 }
@@ -28,13 +28,9 @@ body {
 #page {
     -moz-border-radius: 0 5px 5px 0;
     -webkit-border-radius: 0 5px 5px 0;
-
-    border-color: currentColor #ddd #ddd;
-    border-right: 1px solid #ddd;
-    border-style: none solid solid;
-    border-width: medium 1px 1px;
+    border: 0;
     clear: both;
-    margin: 20px auto;
+    margin: 0px auto;
     position: relative;
     text-align: left;
     width: 960px;
@@ -46,7 +42,7 @@ body {
  * ***********************************************************************/
 #header {
     position: relative;
-    height: 200px;
+    height: 119px;
     background: #1B597A;
 }
 
@@ -64,16 +60,13 @@ body {
 
 /* header toolbar */
 #header .header-toolbar {
-    -moz-border-radius: 0 0 0 5px;
-    -webkit-border-radius: 0 0 0 5px;
-
-    background: #333;
-    color: #000;
-    font-size: 1.1em;
-    padding: 8px;
-    position: absolute;
-    right: 0;
-    top: 0;
+  color: #000;
+  font-size: 1.1em;
+  padding: 8px;
+  right: 0;
+  top: 35px;
+  position: relative;
+  float: right;
 }
 
 /* toolbar link */
@@ -87,6 +80,11 @@ body {
     color: #ddd;
 }
 
+#header #logo{
+  position: relative;
+  top: 15px;
+}
+
 #header .header-toolbar form {
     float: left;
     padding-right: 10px;
@@ -97,6 +95,7 @@ body {
     border: 1px solid #bbb;
     float: left;
     height: 16px;
+    width: 150px;
 }
 
 #header .header-toolbar .button-search {
@@ -146,46 +145,71 @@ body {
 /**************************************************************************
  * MENU
  * ***********************************************************************/
-#nav ul, #nav ul li {
-    float: left;
-    list-style-image: none;
-    list-style-position: outside;
-    list-style-type: none;
-}
-
-#nav ul {
-    bottom: 0;
-    padding-left: 0;
-    margin: 0 20px;
-    position: absolute;
-    white-space: nowrap;
+#nav{
+  width: 100%;
+  background: #F4F4F4 url('/ui/default_skin/images/menu_bg.png') repeat-x;
+  margin: 0;
+  padding: 0;
+  bottom: 0;
+  position: absolute;
+  -moz-border-radius: 5px 5px 0px 0px;
+  height: 40px;
+  border-bottom: 1px solid #D0D0D0;
 }
 
 #nav ul li {
-    margin-right: 4px;
+  float: left;
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  background: transparent url('/ui/default_skin/images/menu_separator.png') no-repeat right center;
+}
+
+#nav ul{
+  padding: 0 4px;
+  margin: 0px;
 }
 
 #nav ul li a {
-    -moz-border-radius: 4px 4px 0 0;
-    -webkit-border-radius: 4px 4px 0 0;
-
+    font-size: 13px;
+    font-family: Arial,sans-serif;
     display: block;
-    font-size: 1em;
-    padding: 5px 15px;
+    padding: 10px;
     text-decoration: none;
-    /* normal style */
-    background: #333;
-    color: #fff;
-}
-
-#nav ul li a:hover {
-    background: #ccc;
+    line-height: 20px;
+    background: transparent;
     color: #000;
 }
 
+#nav ul li a:hover {
+  color: #1B597A;
+  background: #F3F3F3 url('/ui/default_skin/images/menu_separator.png') no-repeat right center;
+}
+
 #nav ul li.in-path a {
-    background: #fff;
-    color: #333;
+  color: #1B597A;
+  font-weight: bold;
+}
+
+/*****/
+/* Sidebar */
+
+.sidebar-box{
+ border: 1px solid #E6E6E6;
+ margin-bottom: 20px;
+}
+
+.sidebar-box h3.title{
+  margin: 0px;
+  padding: 5px;
+  font-size: 14px;
+  color: #1B597A;
+  border-bottom: 1px solid #E6E6E6;
+  background: url("/ui/default_skin/images/menu_bg.png") repeat-x scroll 0 0 #F4F4F4;
+}
+
+.sidebar-box .content{
+  padding: 5px;
 }
 
 /**************************************************************************
