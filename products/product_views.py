@@ -459,7 +459,7 @@ class Products_View(BrowseFormBatchNumeric):
         # Dynamic search schema
         site_root = get_context().resource.get_site_root()
         dynamic_search_schema = {}
-        for key in dynamic_fields[site_root.name]:
+        for key in dynamic_fields.get(site_root.name, []):
             dynamic_search_schema[key] = String
         return merge_dicts(self.search_schema,
                            dynamic_search_schema)
