@@ -23,8 +23,10 @@ from itools.web import get_context
 # Import from ikaaro
 from ikaaro.registry import register_resource_class, register_document_type
 from ikaaro.website import WebSite
+from ikaaro.wiki import WikiFolder
 
 # Import from itws
+from itws.tracker import ITWSTracker
 from itws.ws_neutral import NeutralWS
 
 # Import from shop
@@ -43,11 +45,13 @@ from website_views import ShopWebSite_Edit
 
 default_resources = {
     'categories': (Category, {'title': {'en': u"Categories"}}),
+    'category-sidebar': (CategorySidebar, {'title': {'en': u'Category sidebar'}}),
     'manufacturers': (Manufacturers, {'title': {'en': u"Manufacturers"}}),
+    'product-sidebar': (ProductSidebar, {'title': {'en': u'Product sidebar'}}),
     'search': (ShopSearch, {'title': {'en': u'Search'}}),
     'shop': (Shop, {'title': {'en': u'Shop'}, 'state':'public'}),
-    'category-sidebar': (CategorySidebar, {'title': {'en': u'Category sidebar'}}),
-    'product-sidebar': (ProductSidebar, {'title': {'en': u'Product sidebar'}}),
+    'tracker': (ITWSTracker, {}),
+    'wiki': (WikiFolder, {}),
 }
 
 
@@ -97,8 +101,7 @@ class ShopWebSite(NeutralWS):
 
         # Default resources
         for name2, (cls, kw) in default_resources.items():
-            cls._make_resource(cls, folder, '%s/%s' % (name, name2),
-                               language='en', **kw)
+            cls._make_resource(cls, folder, '%s/%s' % (name, name2), **kw)
 
 
     @classmethod
