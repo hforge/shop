@@ -251,6 +251,15 @@ class Shop_Register(RegisterForm):
          SelectWidget('country', title=MSG(u"Pays"))]
 
 
+    def GET(self, resource, context):
+        # If a user is connected redirect on his account
+        if context.user is not None:
+            link = context.get_link(context.user)
+            return context.uri.resolve(link)
+        # RegisterForm
+        return RegisterForm.GET(self, resource, context)
+
+
     def get_title(self, context):
         group = self.get_group(context)
         return group.get_property('register_title') or MSG(u'Register')
