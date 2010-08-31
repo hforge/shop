@@ -16,9 +16,11 @@
 
 # Import from standard library
 from cStringIO import StringIO
+from datetime import datetime, timedelta
 
 # Import from itools
 from itools.datatypes import Boolean, Enumerate, String, LanguageTag, Tokens
+from itools.gettext import MSG
 from itools.handlers import ConfigFile
 from itools.xml import XMLParser
 
@@ -153,6 +155,32 @@ def get_skin_template(context, path1, path2=None, is_on_skin=False):
         prefix = '/ui/shop'
         return resource.get_resource('%s/%s' % (prefix, path1))
     return template
+
+
+def datetime_to_ago(a_datetime):
+    delta = (datetime.now() - a_datetime)
+    if delta < timedelta(seconds=60):
+        return MSG(u'Less than a minute ago')
+    elif delta < timedelta(seconds=120):
+        return MSG(u'about a minute ago.')
+    elif delta < timedelta(hours=1):
+        x = delta.seconds / 60
+        return MSG(u'{x} minutes ago.').gettext(x=x)
+    elif delta < timedelta(hours=2):
+        return MSG(u'about an hour ago.')
+    elif delta < timedelta(hours=24):
+        x = delta.seconds / 3600
+        return MSG(u'about {x} hours ago.').gettext(x=x)
+    elif delta < timedelta(days=2):
+        return MSG(u'1 day ago.')
+    elif delta < timedelta(days=8):
+        return MSG(u'{x} days ago.').gettext(x=delta.days)
+    elif delta < timedelta(days=30*60):
+        x = delta.days / 7
+        return MSG(u'{x} weeks ago.').gettext(x=x)
+    x = delta.days / (7*30)
+    return MSG(u'{x} month ago.').gettext(x=x)
+
 
 
 class CurrentFolder_AddImage(ImproveDBResource_AddImage):

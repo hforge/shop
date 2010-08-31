@@ -4,44 +4,73 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <div id="administration-panel">
 
-  <div id="statistics">
-    <h1>Statistics</h1>
-    <table cellpadding="0" cellspacing="0">
-      <tr>
-        <td valign="top">
-          There are
-            <span class="counter counter-green">${nb_issues}</span>
-          issues assigned to you on the <a href="/tracker">tracker</a><br/><br/>
+  <h1>Administration panel</h1>
 
-          There are
-            <span class="counter counter-green">${nb_users}</span>
-          <a href="/users/">users</a> registered on your website<br/><br/>
+  <table cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="33%">
 
-          There are
-            <span class="counter counter-green">${nb_products}</span>
-          <a href="/categories/">products</a> on your shop<br/>
-        </td>
-        <td>
-        </td>
-        <td style="width: 400px">
-          ${orders_states_box}
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div class="clear"/>
+        <fieldset id="last-products">
+          <legend>
+            <span>Last products</span>
+          </legend>
+          <ul>
+            <li stl:repeat="product products">
+              <a href="${product/link}">${product/title}</a>
+              <span class="ago">(${product/ago})</span>
+            </li>
+          </ul>
+        </fieldset>
 
-  <!-- News -->
-  <div id="news" stl:if="news">
-    <h1>News</h1>
-    <div class="a-news" stl:repeat="n news">
-      <h2>
-        [${n/pubDate}]
-        <a href="n/link">${n/title}</a>
-      </h2>
-      <p>${n/description}</p>
-    </div>
+        <fieldset id="last-orders" style="display:none">
+          <legend>
+            <span>
+            Last orders
+            </span>
+          </legend>
+          <ul>
+            <li stl:repeat="order orders">
+              <a href="${order/link}">${order/title}</a>
+            </li>
+          </ul>
+        </fieldset>
+      </td>
+      <td width="33%">
+        <fieldset>
+          <legend>
+            <img src="/ui/tracker/tracker16.png"/>
+            Last issues
+          </legend>
+          <ul>
+            <li stl:repeat="issue issues">
+              <span>#${issue/name}</span>
+              <a href="${issue/link}">${issue/title}</a>
+              <span class="ago">(${issue/ago})</span>
+            </li>
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <legend>
+            <img src="/ui/news/icons/16x16/news_folder.png"/>
+            Last News
+          </legend>
+          <ul>
+            <li stl:repeat="n news">
+              <a href="${n/link}" target="_blank">${n/title}</a>
+              <span class="ago">(${n/ago})</span>
+            </li>
+          </ul>
+        </fieldset>
+
+      </td>
+      <td width="33%">
+      </td>
+    </tr>
+  </table>
+
   </div>
 
 </stl:block>

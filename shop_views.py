@@ -18,6 +18,7 @@
 from datetime import datetime
 from decimal import Decimal as decimal
 from json import dumps
+from urllib import urlopen
 
 # Import from itools
 from itools.core import merge_dicts
@@ -57,7 +58,7 @@ from payments import PaymentWaysEnumerate
 from payments.payments_views import Payments_ChoosePayment
 from products.declination import Declination
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
-from utils import get_shippings_details, get_skin_template
+from utils import datetime_to_ago, get_shippings_details, get_skin_template
 
 
 CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
@@ -851,15 +852,16 @@ class Shop_Administration(STLView):
             return []
         # Flux de news RSS
         try:
-            f = vfs.open(url)
+            f = urlopen(url)
         except Exception:
             return []
         try:
             feed = RSSFile(string=f.read())
-        except XMLError:
+        except (XMLError, IndexError):
             return []
         rss_news = []
-        for item in feed.items[:2]:
+        for item in feed.items[:5]:
+            item['ago'] = datetime_to_ago(item['pubDate'])
             if item.get('pubDate'):
                 item['pubDate'] = format_date(item['pubDate'], context.accept_language)
             else:
@@ -869,26 +871,25 @@ class Shop_Administration(STLView):
         return rss_news
 
 
-    def get_nb_users(self, resource, context):
-          return len(context.root.search(format=resource.user_class.class_id))
-
-
-    def get_nb_products(self, resource, context):
-          return len(context.root.search(format=resource.product_class.class_id))
-
-
-    def get_nb_issues_for_me(self, resource, context):
-          # XXX Not sure for tracker state ids (3 = close) ?
-          query = [PhraseQuery('format', 'issue'),
-                   NotQuery(PhraseQuery('state', 3)),
-                   PhraseQuery('assigned_to', context.user.name)]
-          return len(context.root.search(AndQuery(*query)))
+    def get_last_resources(self, context, class_id, quantity=5):
+        here_abspath = context.resource.get_abspath()
+        root = context.root
+        search = root.search(format=class_id)
+        resources = search.get_documents(sort_by='mtime', reverse=True)[:quantity]
+        resources = [{'name': x.name,
+                      'title': x.title,
+                      'ago': datetime_to_ago(x.mtime),
+                      'link': here_abspath.get_pathto(x.abspath)} for x in resources]
+        return resources
 
 
     def get_namespace(self, resource, context):
+        site_root = context.site_root
+        # Orders
         orders = resource.get_resource('orders')
+        # Return namespace
         return {'news': self.get_rss_news(context),
-                'nb_users': self.get_nb_users(resource, context),
-                'nb_products': self.get_nb_products(resource, context),
-                'nb_issues': self.get_nb_issues_for_me(resource, context),
-                'orders_states_box': Orders_StatesBox().GET(orders, context)}
+                # Last resources created
+                'products': self.get_last_resources(context, 'product', 13),
+                'issues': self.get_last_resources(context,'itws-issue'),
+                'orders': self.get_last_resources(context, 'order')}

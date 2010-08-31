@@ -226,7 +226,6 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         values['has_reduction'] = self.get_property('has_reduction')
         # not_buyable_by_groups
         values['not_buyable_by_groups'] = self.get_property('not_buyable_by_groups')
-
         return values
 
 
