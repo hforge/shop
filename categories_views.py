@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from operator import itemgetter
+
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Integer
@@ -89,24 +92,26 @@ class Category_View(BrowseFormBatchNumeric):
 
     def get_sub_categories_namespace(self, resource, context):
         from categories import Category
-        namespace = []
+        categories = []
         for cat in resource.search_resources(cls=Category):
             nb_products = cat.get_nb_products(only_public=True)
             if nb_products == 0:
                 continue
             img = cat.get_property('image_category')
             path_cat = resource.get_pathto(cat)
-            namespace.append(
+            categories.append(
                 {'name': cat.name,
                  'link': context.get_link(cat),
                  'title': cat.get_title(),
                  'css': None,
                  'nb_products': nb_products,
                  'img': str(path_cat.resolve2(img)) if img else None})
-        if namespace:
-            namespace[0]['css'] = 'start'
-            namespace[-1]['css'] = 'end'
-        return namespace
+        if categories:
+            categories[0]['css'] = 'start'
+            categories[-1]['css'] = 'end'
+        # Sort
+        categories.sort(key=itemgetter('title'))
+        return categories
 
 
 
