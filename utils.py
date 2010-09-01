@@ -182,6 +182,11 @@ def datetime_to_ago(a_datetime):
     return MSG(u'{x} month ago.').gettext(x=x)
 
 
+def get_group_name(shop, context):
+    if context.user:
+        return str(context.user.get_property('user_group'))
+    return '%s/groups/default' % shop.get_abspath()
+
 
 class CurrentFolder_AddImage(ImproveDBResource_AddImage):
 

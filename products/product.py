@@ -61,7 +61,7 @@ from shop.folder import ShopFolder
 from shop.manufacturers import ManufacturersEnumerate
 from shop.modules import ModuleLoader
 from shop.shop_views import Shop_Login, Shop_Register
-from shop.utils import get_shop, format_price, generate_barcode
+from shop.utils import get_shop, get_group_name, format_price, generate_barcode
 from shop.utils import CurrentFolder_AddImage, MiniTitle
 
 
@@ -708,11 +708,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     ## API
     #####################
     def is_buyable(self, context, quantity=1):
-        if context.user:
-            group_name = str(context.user.get_property('user_group'))
-        else:
-            shop = get_shop(self)
-            group_name = '%s/groups/default' % shop.get_abspath()
+        shop = get_shop(self)
+        group_name = get_group_name(shop, context)
         return (self.get_price_without_tax() != decimal(0) and
                 group_name not in self.get_property('not_buyable_by_groups') and
                 self.get_statename() == 'public')

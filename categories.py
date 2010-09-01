@@ -20,7 +20,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Unicode
 from itools.gettext import MSG
 from itools.web import get_context
-from itools.xapian import AndQuery, PhraseQuery
+from itools.xapian import AndQuery, NotQuery, PhraseQuery
 from itools.xml import xml_to_text
 
 # Import from ikaaro
@@ -37,7 +37,7 @@ from categories_views import Category_View, Category_BackofficeView
 from categories_views import Category_Comparator
 from datatypes import ImagePathDataType
 from folder import ShopFolder
-from utils import get_shop
+from utils import get_group_name, get_shop
 from products import Product
 from products.product_views import Product_NewProduct, Products_View
 
@@ -122,12 +122,15 @@ class Category(ShopFolder):
         shop = get_shop(self)
         abspath = self.get_canonical_path()
         base_path_query = get_base_path_query(str(abspath))
-        query = AndQuery(
-            base_path_query,
-            PhraseQuery('format', shop.product_class.class_id))
+        query = [base_path_query,
+                 PhraseQuery('format', shop.product_class.class_id)]
+        if shop.get_property('hide_not_buyable_products') is True:
+            context = get_context()
+            group_name = get_group_name(shop, context)
+            query.append(NotQuery(PhraseQuery('not_buyable_by_groups', group_name)))
         if only_public is True:
-            query.atoms.append(PhraseQuery('workflow_state', 'public'))
-        return len(root.search(query))
+            query.append(PhraseQuery('workflow_state', 'public'))
+        return len(root.search(AndQuery(*query)))
 
 
     def get_nb_categories(self):

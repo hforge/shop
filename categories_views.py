@@ -36,7 +36,7 @@ from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
 from modules import ModuleLoader
-from utils import get_skin_template, get_shop
+from utils import get_group_name, get_skin_template, get_shop
 
 
 
@@ -125,10 +125,7 @@ class Category_View(BrowseFormBatchNumeric):
             PhraseQuery('workflow_state', 'public')]
         # Is buyable ?
         if shop.get_property('hide_not_buyable_products') is True:
-            if context.user:
-                group_name = str(context.user.get_property('user_group'))
-            else:
-                group_name = '%s/groups/default' % shop.get_abspath()
+            group_name = get_group_name(shop, context)
             q = PhraseQuery('not_buyable_by_groups', group_name)
             query.append(NotQuery(q))
         # Add query of filter
