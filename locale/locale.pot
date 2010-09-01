@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-08-31 17:08+CET\n"
+"POT-Creation-Date: 2010-09-01 13:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -243,7 +243,7 @@ msgid "Action"
 msgstr ""
 
 #: ../user_views.py:475
-#: ../categories_views.py:291
+#: ../categories_views.py:293
 msgid "Actions"
 msgstr ""
 
@@ -386,7 +386,7 @@ msgstr ""
 #: ../orders/orders.py:247
 #: ../orders/orders.py:588
 #: ../orders/orders.py:656
-#: ../products/product.py:804
+#: ../products/product.py:801
 #: ../ui/backoffice/orders/order_pdf.xml.en:78
 msgid "Barcode"
 msgstr ""
@@ -1066,7 +1066,7 @@ msgstr ""
 msgid "Error, payment module can't be load"
 msgstr ""
 
-#: ../categories_views.py:219
+#: ../categories_views.py:221
 msgid "Error: product invalid"
 msgstr ""
 
@@ -1718,7 +1718,7 @@ msgstr ""
 
 #: ../user_group.py:142
 #: ../products/images.py:74
-#: ../categories_views.py:286
+#: ../categories_views.py:288
 #: ../editorial.py:40
 #: ../user.py:99
 #: ../products/product_views.py:78
@@ -1735,15 +1735,15 @@ msgstr ""
 msgid "Name: Z to A"
 msgstr ""
 
-#: ../categories_views.py:290
+#: ../categories_views.py:292
 msgid "Nb backlinks"
 msgstr ""
 
-#: ../categories_views.py:289
+#: ../categories_views.py:291
 msgid "Nb products"
 msgstr ""
 
-#: ../categories_views.py:288
+#: ../categories_views.py:290
 msgid "Nb sub categories"
 msgstr ""
 
@@ -1890,7 +1890,7 @@ msgid "Order number:"
 msgstr ""
 
 #: ../products/product.py:154
-#: ../products/product.py:845
+#: ../products/product.py:842
 msgid "Order photos"
 msgstr ""
 
@@ -2136,7 +2136,7 @@ msgstr ""
 msgid "Please install LPOD"
 msgstr ""
 
-#: ../categories_views.py:208
+#: ../categories_views.py:210
 msgid "Please select products to compare"
 msgstr ""
 
@@ -2285,7 +2285,7 @@ msgstr ""
 #: ../modules/stock/stock.py:61
 #: ../orders/orders.py:121
 #: ../orders/orders.py:225
-#: ../products/product.py:971
+#: ../products/product.py:968
 msgid "Products"
 msgstr ""
 
@@ -2415,7 +2415,7 @@ msgstr ""
 msgid "Registration Date"
 msgstr ""
 
-#: ../categories_views.py:281
+#: ../categories_views.py:283
 msgid "Remove category, sub-categories, and associated products"
 msgstr ""
 
@@ -2790,7 +2790,7 @@ msgstr ""
 msgid "The {id} record is missing."
 msgstr ""
 
-#: ../categories_views.py:272
+#: ../categories_views.py:274
 msgid "There are {n} categories"
 msgstr ""
 
@@ -2830,7 +2830,7 @@ msgstr ""
 msgid "There are {n} products"
 msgstr ""
 
-#: ../categories_views.py:271
+#: ../categories_views.py:273
 msgid "There is 1 category"
 msgstr ""
 
@@ -2899,7 +2899,7 @@ msgstr ""
 #: ../payments/payment_way_views.py:78
 #: ../suppliers_views.py:34
 #: ../orders/orders.py:129
-#: ../categories_views.py:287
+#: ../categories_views.py:289
 #: ../editorial.py:41
 #: ../shipping/shippings_views.py:90
 #: ../modules/modules_views.py:39
@@ -2951,7 +2951,7 @@ msgstr ""
 msgid "Too many attempts at secret card"
 msgstr ""
 
-#: ../categories_views.py:206
+#: ../categories_views.py:208
 msgid "Too many products to compare"
 msgstr ""
 
@@ -3148,11 +3148,11 @@ msgstr ""
 msgid "View Cart"
 msgstr ""
 
-#: ../categories_views.py:269
+#: ../categories_views.py:271
 msgid "View categories"
 msgstr ""
 
-#: ../categories_views.py:43
+#: ../categories_views.py:46
 msgid "View category"
 msgstr ""
 
@@ -3253,7 +3253,7 @@ msgstr ""
 msgid "You can write a message for your friend"
 msgstr ""
 
-#: ../categories_views.py:225
+#: ../categories_views.py:227
 msgid "You can't compare this products."
 msgstr ""
 
@@ -4129,6 +4129,11 @@ msgctxt "link"
 msgid "<g id='1'> Order </g>  <g id='2'> Clear the cart </g>"
 msgstr ""
 
+#: ../ui/shop/modules/mini_cart.xml.en:7
+msgctxt "link"
+msgid "<g id='1'> Your cart: <g id='2'>${nb_products}</g>  <g id='3'>item</g>  <g id='4'>items</g>  <g id='5'>${total}</g>€ </g>  <g id='6'> Your cart is empty </g>"
+msgstr ""
+
 #: ../ui/backoffice/administration.xml.en:62
 msgctxt "link"
 msgid "<g id='11'>${n/title}</g>  <g id='12'>(${n/ago})</g>"
@@ -4487,11 +4492,6 @@ msgctxt "link"
 msgid "Wiki"
 msgstr ""
 
-#: ../ui/shop/modules/mini_cart.xml.en:8
-msgctxt "link"
-msgid "Your cart:"
-msgstr ""
-
 #: ../ui/backoffice/configuration.xml.en:95
 msgctxt "link"
 msgid "Zones"
@@ -4722,11 +4722,6 @@ msgstr ""
 #: ../ui/shop/product/product_view.xml.en:96
 msgctxt "span"
 msgid "<g id='13'>${property/value}</g>  <g id='14'>Unknow</g>"
-msgstr ""
-
-#: ../ui/shop/modules/mini_cart.xml.en:9
-msgctxt "span"
-msgid "<g id='2'>${nb_products}</g>  <g id='3'>item</g>  <g id='4'>items</g>  <g id='5'>${total}</g>€"
 msgstr ""
 
 #: ../ui/shop/product/product_view.xml.en:21

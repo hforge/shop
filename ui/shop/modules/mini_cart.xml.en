@@ -4,12 +4,16 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <a class="mini-cart" href="/shop/;view_cart" title="Your Shopping Cart">
+  <a class="mini-cart" href="/shop/;view_cart" title="Your Shopping Cart" stl:if="nb_products">
     Your cart:
     <span class="ajax_cart_quantity">${nb_products}</span>
     <span class="ajax_cart_product_txt ${txt_class}" style="display:none">item</span>
     <span class="ajax_cart_product_txts ${txts_class}">items</span>
     <span class="ajax_cart_total">${total}</span>€
+  </a>
+
+  <a class="mini-cart" stl:if="not nb_products">
+    Your cart is empty
   </a>
 
 </stl:block>
