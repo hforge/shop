@@ -163,10 +163,10 @@ def datetime_to_ago(a_datetime):
         return MSG(u'Less than a minute ago')
     elif delta < timedelta(seconds=120):
         return MSG(u'about a minute ago.')
-    elif delta < timedelta(hours=1):
+    elif delta < timedelta(seconds=60*60):
         x = delta.seconds / 60
         return MSG(u'{x} minutes ago.').gettext(x=x)
-    elif delta < timedelta(hours=2):
+    elif delta < timedelta(hours=1):
         return MSG(u'about an hour ago.')
     elif delta < timedelta(hours=24):
         x = delta.seconds / 3600
