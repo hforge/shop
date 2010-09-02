@@ -741,7 +741,7 @@ msgid ""
 "empty </g>"
 msgstr ""
 "<g id='1'> Votre panier : <g id='2'>${nb_products}</g>  <g id='3'>produit</g>  <g "
-"id='4'>produtits</g>  <g id='5'>${total}</g>€ </g>  <g id='6'> Votre panier "
+"id='4'>produits</g>  <g id='5'>${total}</g>€ </g>  <g id='6'> Votre panier "
 "est vide </g>"
 
 #: ../ui/backoffice/orders/orders_states_box.xml.en:17
