@@ -27,7 +27,7 @@ from itools.stl import stl
 from ikaaro.forms import MultilineWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.resource_views import DBResource_Edit
-from ikaaro.root import Root
+from ikaaro.root import Root as BaseRoot
 
 # Import from shop
 from utils import get_skin_template
@@ -48,7 +48,7 @@ class ShopRoot_Edit(DBResource_Edit):
 
 
 
-class ShopRoot(Root):
+class Root(BaseRoot):
 
     class_id = 'iKaaro'
 
@@ -57,7 +57,7 @@ class ShopRoot(Root):
     @classmethod
     def get_metadata_schema(cls):
         # XXX Administrator must be a role
-        return merge_dicts(Root.get_metadata_schema(),
+        return merge_dicts(BaseRoot.get_metadata_schema(),
                            administrators=Email(multiple=True))
 
 
