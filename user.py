@@ -383,6 +383,11 @@ class ShopUserFolder(UserFolder):
 
     def update_20100823(self):
         from itools.csv import  Property
+        # GEt shop
+        root = self.get_root()
+        brain = root.search(format='shop').get_documents()[0]
+        shop = root.get_resource(brain.abspath)
+        # do update
         for name in ['public_schema', 'private_schema']:
             handler = self.get_resource(name).handler
             print handler.key
@@ -399,8 +404,10 @@ class ShopUserFolder(UserFolder):
                 kw['is_public'] = name == 'public_schema'
                 from pprint import pprint
                 pprint(kw)
-                for group in ['default', 'pro']:
-                    shop = self.get_resource('../en-fil-indienne').get_resource('shop')
+                groups = ['default']
+                if shop.has_pro_price() is True:
+                    groups.append('pro')
+                for group in groups:
                     group = shop.get_resource('groups/%s/schema' % group)
                     value = handler.get_record_value(record, 'title', 'en')
                     r = group.handler.add_record(kw)

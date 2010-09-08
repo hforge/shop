@@ -174,15 +174,19 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                 if register_key not in register_fields:
                     register_field(register_key, String(is_indexed=True))
                 if datatype.multiple is True:
-                    values[register_key] = self.get_property(key)
+                    values[register_key] = ' '.join(self.get_property(key))
                 else:
-                    values[register_key] = [self.get_property(key)]
+                    values[register_key] = self.get_property(key)
         # Index declinations
         declinations = list(self.search_resources(cls=Declination))
         for key in model.get_property('declinations_enumerates'):
             declinations_values = set()
             for declination in declinations:
-                declinations_values.add(declination.get_property(key))
+                value = declination.get_property(key)
+                if isinstance(value, list):
+                    declinations_values.union(value)
+                else:
+                    declinations_values.add(value)
             register_key = 'DFT-%s' % key
             if register_key not in register_fields:
                 register_field(register_key, String(is_indexed=True, multiple=True))

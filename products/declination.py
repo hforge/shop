@@ -211,7 +211,11 @@ class Declination(DynamicFolder):
 
 
     def update_20100813(self):
-        for prefix in ['', 'pro-']:
+        prefixs = ['']
+        shop = get_shop(self)
+        if shop.has_pro_price() is True:
+            prefixs.append('pro-')
+        for prefix in prefixs:
             value = self.get_property('%sprice-impact-value' % prefix)
             if self.get_property('impact-on-price') != 'increase':
                 value = -value
