@@ -1,9 +1,17 @@
 Dependencies
 =================
 
+On hforge websites:
+
  - iTools http://www.hforge.org/itools/
  - iKaaro http://www.hforge.org/ikaaro/
  - iTws   http://www.hforge.org/itws/
+
+Other depedencies:
+
+  elaphe: Used to generate barcode (http://code.google.com/p/elaphe/)
+  ghostscript: Used by elaphe to generate barcode
+  pyPdf: To merge PDF
 
 Installation
 =================
