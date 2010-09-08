@@ -149,7 +149,11 @@ class EnumerateTable_to_Enumerate(Enumerate):
     def get_value(cls, name, default=None):
         if name is None:
             return None
-        shop = get_shop(get_context().resource)
+        here = get_context().resource
+        # XXX Hack for icms-update (context.resource is None)
+        if here is None:
+            return None
+        shop = get_shop(here)
         enumerates_folder = shop.get_resource('enumerates')
         table = enumerates_folder.get_resource(cls.enumerate_name)
         record = table.handler.search(name=name)[0]
