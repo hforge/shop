@@ -35,6 +35,21 @@ shop_skins = []
 def get_shops():
     return shops
 
+####################################
+## XXX Hardcoded !!
+####################################
+
+def register_shop_skin(title, package, path, name, config=None):
+    from skin import ShopSkin
+    path = '../%s/%s' % (package, path)
+    path = get_abspath(path)
+    print path
+    # Register skin
+    register_skin(name, ShopSkin(path, config=config))
+    shop_skins.append({'name': '/ui/%s' % name,
+                       'value': title})
+
+
 
 def register_shop(package, name):
     from skin import ShopSkin
@@ -44,15 +59,11 @@ def register_shop(package, name):
     shops.append(name)
     # Import project
     exec('import %s.%s' % (package, name))
-    # Load setup.conf
+    # Get config
     config_path = get_abspath('%s/setup.conf' % base_path)
     config = ro_database.get_handler(config_path, ITWSHOPConfig)
     # Register skin
-    skin_path = config.get_value('skin_path')
-    path = get_abspath('%s/ui/%s' % (base_path, skin_path))
-    register_skin(name, ShopSkin(path, config=config))
-    shop_skins.append({'name': '/ui/%s' % name,
-                       'value': name})
+    register_shop_skin(u'Skin %s' % name, package, '%s/ui/' % name, name, config)
     # Register domain for i18n
     register_domain(name, get_abspath('%s/locale' % base_path))
     # Register modules

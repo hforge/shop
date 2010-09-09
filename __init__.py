@@ -19,11 +19,12 @@ from itools import get_version
 from itools.core import get_abspath
 
 # Import from ikaaro
-from itools.gettext import register_domain
+from itools.gettext import MSG, register_domain
 
 # Import from shop
 from root import Root
 import forms_generator
+from registry import register_shop_skin
 from shop import Shop
 from website import ShopWebSite
 
@@ -41,3 +42,7 @@ __version__ = get_version()
 # Register the shop domain
 path = get_abspath('locale')
 register_domain('shop', path)
+
+# Register default skin
+register_shop_skin(MSG(u'Default Skin'),
+    'shop', 'ui/default_skin/', 'default_skin')

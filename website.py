@@ -129,8 +129,12 @@ class ShopWebSite(NeutralWS):
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
             return self.get_resource('/ui/backoffice/')
-        # Fron-Office
-        return self.get_resource(self.get_class_skin(context))
+        # Front-Office
+        class_skin = self.get_class_skin(context)
+        skin = self.get_resource(class_skin, soft=True)
+        if skin is None:
+            skin = self.get_resource('/ui/default_skin/')
+        return skin
 
     #############################
     # ACL
