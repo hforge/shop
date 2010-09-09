@@ -37,6 +37,27 @@ body {
     background: #fff;
 }
 
+/*****************************
+ * Viewbox
+ ******************************/
+
+.product-view-box {
+  width: 150px;
+  height: 210px;
+  margin: 2px;
+}
+
+.product-view-box .product-title h2{
+  width: 30px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.product-view-box .product-title h2 a{
+  text-decoration: none;
+}
+
+
 /**************************************************************************
  * HEADER
  * ***********************************************************************/
