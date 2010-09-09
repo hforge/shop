@@ -184,7 +184,9 @@ def datetime_to_ago(a_datetime):
 
 def get_group_name(shop, context):
     if context.user:
-        return str(context.user.get_property('user_group'))
+        user_group = context.user.get_property('user_group')
+        if user_group:
+            return str(user_group)
     return '%s/groups/default' % shop.get_abspath()
 
 

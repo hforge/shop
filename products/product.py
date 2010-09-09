@@ -730,10 +730,10 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
 
     def get_price_prefix(self):
+        shop = get_shop(self)
         context = get_context()
-        user = context.user
-        if (context.user and
-            get_uri_name(context.user.get_property('user_group')) == 'pro'):
+        group_name = get_group_name(shop, context)
+        if get_uri_name(group_name) == 'pro':
             return 'pro-'
         return ''
 

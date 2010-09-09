@@ -33,7 +33,7 @@ from ikaaro.registry import register_resource_class
 from cross_selling_views import AddProduct_View
 from cross_selling_views import CrossSelling_Configure, CrossSelling_TableView
 from cross_selling_views import CrossSelling_Edit, cross_selling_schema
-from utils import get_shop
+from utils import get_group_name, get_shop
 from forms import ProductSelectorWidget
 
 
@@ -84,10 +84,7 @@ class CrossSellingTable(ResourcesOrderedTable):
         query = [PhraseQuery('format', product_format),
                  PhraseQuery('workflow_state', 'public')]
         # Do not show now buyable products
-        if context.user:
-            group_name = str(context.user.get_property('user_group'))
-        else:
-            group_name = '%s/groups/default' % shop.get_abspath()
+        group_name = get_group_name(shop, context)
         q = PhraseQuery('not_buyable_by_groups', group_name)
         query.append(NotQuery(q))
         # Excluded products query
