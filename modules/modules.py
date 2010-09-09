@@ -101,8 +101,8 @@ class ModuleLoader(dict):
         shop = get_shop(self.context.resource)
         module = shop.get_resource('modules/%s' % key, soft=True)
         if module is None:
-            return 'ok'
-            raise ValueError, 'Module do no exist'
+            # XXX Log it
+            return MSG(u'Module {name} not initialized').gettext(name=key)
         return module.render(self.here, self.context)
 
 
