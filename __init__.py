@@ -46,3 +46,6 @@ register_domain('shop', path)
 # Register default skin
 register_shop_skin(MSG(u'Default Skin'),
     'shop', 'ui/default_skin/', 'default_skin')
+
+register_shop_skin(MSG(u'Skin number 2'),
+    'shop', 'ui/skin2/', 'skin2')
