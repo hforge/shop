@@ -50,7 +50,7 @@ Initialiaze instance:
 
 ::
 
-  $ ./bin/icms-init.py shop.localhost
+  $ ./bin/icms-init.py -r shop shop.localhost
 
     Type your email address: admin@localhost.com
     *
@@ -62,15 +62,6 @@ Initialiaze instance:
     * To start the new instance type:
     *   icms-start.py shop.localhost
     *
-
-Edit config file and file modules with "shop, itws":
-
-::
-
-  $ vi shop.localhost/config.conf
-
-    > modules = shop itws
-
 
 Start instance
 ===================
