@@ -78,8 +78,10 @@ class EnumerateTable_View(OrderedTable_View):
             get_value = resource.handler.get_record_value
             name = get_value(item, 'name')
             register_key = 'DFT-%s' % resource.name
-            query = PhraseQuery(register_key, name)
-            quantity = len(context.root.search(query))
+            # XXX
+            #query = PhraseQuery(register_key, name)
+            #quantity = len(context.root.search(query))
+            quantity = '-'
             return quantity, '/categories/?%s=%s' % (register_key, name)
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
