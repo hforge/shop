@@ -49,12 +49,16 @@ class CrossSellingBox_View(Box_View):
                      'show_title': resource.get_property('show_title'),
                      'products': []}
         categories = []
+        excluded_products = []
         if isinstance(context.resource, Category):
             categories = [context.resource]
         elif isinstance(context.resource, shop.product_class):
             categories = [context.resource.parent]
+            excluded_products = [context.resource.get_abspath()]
         table = resource.get_resource(resource.order_path)
-        for product in table.get_products(context, product_class_id, categories):
+        products = table.get_products(context, product_class_id, categories,
+                                      excluded_products=excluded_products)
+        for product in products:
             namespace['products'].append(product.viewbox.GET(product, context))
 
         # Do not display empty box
