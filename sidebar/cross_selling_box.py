@@ -56,6 +56,13 @@ class CrossSellingBox_View(Box_View):
         table = resource.get_resource(resource.order_path)
         for product in table.get_products(context, product_class_id, categories):
             namespace['products'].append(product.viewbox.GET(product, context))
+
+        # Do not display empty box
+        ac = resource.get_access_control()
+        is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
+        if len(namespace['products']) == 0 and is_allowed_to_edit is False:
+            self.set_view_is_empty(True)
+
         return namespace
 
 
