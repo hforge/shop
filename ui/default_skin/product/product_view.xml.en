@@ -11,28 +11,37 @@
   </div>
 
   <form id="buy-form" method="post" stl:if="is_buyable">
-    <ul id="product-purchase-options" stl:if="purchase_options">
-      <li stl:repeat="widget purchase_options">
-        ${widget/title}
-        ${widget/html}
-      </li>
-    </ul>
-    <br/>
-    Prix : <span id="price">${price/with_tax}</span> € TTC<br/>
-    Weight: <span id="weight">${weight}</span> kg
-    <p id="quantity-area">
-      Quantity: <input id="quantity" name="quantity" type="text" size="3" value="1" />
-    </p>
-    <p id="add-to-cart">
-    <button type="submit" class="button-ok" name="action"
-      value="add_to_cart">Add to cart</button>
-    </p>
-    <p id="missing-declination">
-      Missing declination, please select another options
-    </p>
-    <p id="out-of-stock">
-     Out of stock. (Only <span id="quantity-in-stock">X</span> products in stock)
-    </p>
+    <h3 class="title">Caractéristiques</h3>
+    <div class="content">
+      <ul id="product-purchase-options" stl:if="purchase_options">
+        <li stl:repeat="widget purchase_options">
+          ${widget/title}
+          ${widget/html}
+        </li>
+      </ul>
+      <br/>
+      <span class="label">Price : </span>
+      <span id="price">${price/with_tax}</span>
+      <span class="suffix">€ TTC</span>
+      <br/>
+      <span class="label">Weight: </span>
+      <span id="weight">${weight}</span>
+      <span class="suffix">kg</span>
+      <br/>
+      <p id="quantity-area">
+        Quantity: <input id="quantity" name="quantity" type="text" size="3" value="1" />
+      </p>
+      <p id="add-to-cart">
+      <button type="submit" class="button-ok" name="action"
+        value="add_to_cart">Add to cart</button>
+      </p>
+      <p id="missing-declination">
+        Missing declination, please select another options
+      </p>
+      <p id="out-of-stock">
+       Out of stock. (Only <span id="quantity-in-stock">X</span> products in stock)
+      </p>
+    </div>
   </form>
   <!--
   <div class="clear"/>
@@ -41,12 +50,12 @@
   <ul class="action-links">
     <li>
       <a href="./;send_to_friend">
-        > Send to a friend
+        Send to a friend
       </a>
     </li>
     <li>
       <a href="./;print_product" onclick="javascript:popup(this.href, 800, 600); return false;">
-        > Print product
+        Print product
       </a>
     </li>
   </ul>
