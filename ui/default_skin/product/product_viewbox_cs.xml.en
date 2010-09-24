@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+  <div class="product-view-box">
+    <div class="product-title">
+      <h2>
+        <a href="${href}" title="${title}">${title}</a>
+        <span class="price">
+          (${price/with_tax} €)
+        </span>
+      </h2>
+    </div>
+    <div class="description-wrapper">
+      <a stl:if="cover" href="${href}" title="${title}">
+        <img class="cover"
+             src="${cover/href}/;thumb?width=90&amp;height=90"
+             alt="${title}" />
+      </a>
+      <br/>
+      <p class="description">${description}</p>
+    </div>
+  </div>
+</stl:block>

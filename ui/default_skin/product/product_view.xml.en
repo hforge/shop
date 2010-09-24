@@ -117,7 +117,7 @@
   <br/>
 
   <div class="cross-selling" stl:if="cross_selling">
-    <h1>Cross selling</h1>
+    <h1>Vous aimerez aussi</h1>
     <div id="list-products">
       <stl:block stl:repeat="product cross_selling">
         ${product}
