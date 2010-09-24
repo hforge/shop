@@ -47,7 +47,7 @@ from user_views import ShopUser_Manage
 from datatypes import UserGroup_Enumerate
 from addresses_views import Addresses_Book
 from products.dynamic_folder import DynamicFolder
-from utils import get_shop
+from utils import get_shop, get_group_name
 from datatypes import Civilite
 
 
@@ -319,8 +319,8 @@ class ShopUser(User, DynamicFolder):
 
     def get_group(self, context):
         shop = get_shop(context.resource)
-        user_group = self.get_property('user_group')
-        return shop.get_resource(user_group)
+        group_name = get_group_name(shop, context)
+        return shop.get_resource(group_name)
 
 
     ###############################################
