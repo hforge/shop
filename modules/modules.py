@@ -104,8 +104,9 @@ class ModuleLoader(dict):
             # XXX Log it
             ac = shop.get_access_control()
             user = self.context.user
-            if ac.is_admin(user, shop):
-                return MSG(u'Module {name} not initialized').gettext(name=key)
+            if ac.is_admin(user, shop) is False:
+                return None
+            return MSG(u'Module {name} not initialized').gettext(name=key)
         return module.render(self.here, self.context)
 
 
