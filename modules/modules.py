@@ -102,7 +102,10 @@ class ModuleLoader(dict):
         module = shop.get_resource('modules/%s' % key, soft=True)
         if module is None:
             # XXX Log it
-            return MSG(u'Module {name} not initialized').gettext(name=key)
+            ac = shop.get_access_control()
+            user = self.context.user
+            if ac.is_admin(user, shop):
+                return MSG(u'Module {name} not initialized').gettext(name=key)
         return module.render(self.here, self.context)
 
 
