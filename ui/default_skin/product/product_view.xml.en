@@ -11,7 +11,7 @@
   </div>
 
   <form id="buy-form" method="post" stl:if="is_buyable">
-    <ul id="product-purchase-options">
+    <ul id="product-purchase-options" stl:if="purchase_options">
       <li stl:repeat="widget purchase_options">
         ${widget/title}
         ${widget/html}
@@ -34,7 +34,9 @@
      Out of stock. (Only <span id="quantity-in-stock">X</span> products in stock)
     </p>
   </form>
-
+  <!--
+  <div class="clear"/>
+  -->
 
   <ul class="action-links">
     <li>
@@ -52,6 +54,7 @@
   <div class="clear"/>
 
   <table cellpadding="0" cellspacing="0" id="product-details">
+    <!--
     <tr stl:if="cover">
       <th>Cover</th>
       <td>
@@ -60,7 +63,8 @@
           alt="${title}"/></a>
       </td>
     </tr>
-    <tr>
+    -->
+    <tr stl:if="reference">
       <th>Reference</th>
       <td>${reference}</td>
     </tr>
@@ -68,14 +72,15 @@
       <th>Title</th>
       <td>${title}</td>
     </tr>
-    <tr>
+    <tr stl:if="description">
       <th>Description</th>
       <td>${description}</td>
     </tr>
-    <tr>
+    <tr stl:if="data">
       <th>Data</th>
       <td>${data}</td>
     </tr>
+    <!--
     <tr>
       <th>Keywords</th>
       <td>${subject}</td>
@@ -88,6 +93,7 @@
       <th>Weight</th>
       <td>${weight} Kg</td>
     </tr>
+    -->
     <tr stl:if="specific_list">
       <th>Product model informations</th>
       <td>
