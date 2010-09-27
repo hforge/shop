@@ -302,7 +302,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
             for key, datatype in purchase_options_schema.iteritems():
                 name = declination.get_property(key)
                 value = datatype.to_text(name, languages)
-                texts.append(value)
+                if value:
+                    texts.append(value)
 
         # Join
         for language, texts in result.iteritems():
