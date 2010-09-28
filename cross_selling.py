@@ -129,7 +129,7 @@ class CrossSellingTable(ResourcesOrderedTable):
             products_quantity -= 1
             resource = self.get_resource(path, soft=True)
             if resource is None:
-                log_warning('Error cross selling, %s' % resource.name)
+                log_warning('Error cross selling, %s' % path)
             elif resource.get_property('state') == 'public':
                 yield resource
 
