@@ -45,7 +45,7 @@ class CrossSellingTable(ResourcesOrderedTable):
     class_title = MSG(u'Cross-Selling Table')
     class_description = MSG(u'This box allow to configure cross selling')
     class_handler = ResourcesOrderedTableFile
-    class_version = '20100601'
+    class_version = '20100928'
     class_views = ['configure', 'back']
 
     form = [ProductSelectorWidget('name', title=MSG(u'Product'))]
@@ -65,7 +65,7 @@ class CrossSellingTable(ResourcesOrderedTable):
 
 
     def get_order_root(self):
-        return self
+        return self.get_root()
 
 
     def get_products(self, context, product_format,
@@ -192,6 +192,31 @@ class CrossSellingTable(ResourcesOrderedTable):
             else:
                 handler.del_record(record.id)
                 print '===> delete'
+
+
+    def update_20100928(self):
+        # Some cross selling are broken fix it.
+        # Now we use product abspath (from root, not from cross selling)
+        shop = get_shop(self)
+        root = self.get_root()
+        handler = self.handler
+        get_value = handler.get_record_value
+        for record in handler.get_records():
+            name = get_value(record, 'name')
+            product = self.get_resource(name, soft=True)
+            if product is None:
+                base_name = name
+                site_root = self.get_site_root()
+                name = '/%s/%s' % (site_root.name, name)
+                product = self.get_resource(name, soft=True)
+                if product is None:
+                    base_name = base_name.replace('../', '')
+                    name = '/%s/categories/%s' % (site_root.name, base_name)
+                    print name
+                    product = self.get_resource(name, soft=True)
+                    if product is None:
+                        raise ValueError
+            handler.update_record(record.id, **{'name': str(product.get_abspath())})
 
 
 
