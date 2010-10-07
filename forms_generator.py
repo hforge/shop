@@ -23,7 +23,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanCheckBox
-from ikaaro.forms import MultilineWidget, RTEWidget, XHTMLBody
+from ikaaro.forms import RTEWidget, XHTMLBody
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.table_views import OrderedTable_View
 
@@ -32,22 +32,29 @@ from itws.views import AutomaticEditView
 
 # Import from shop
 from cross_selling_views import AddProduct_View
-from forms import ProductSelectorWidget
 from products.models import get_real_datatype
 from products.enumerate import Datatypes
+from registry import shop_widgets
 
 
 class Widgets(Enumerate):
 
-    widgets = {'select': SelectWidget,
-               'multiline-widget': MultilineWidget,
-               'product-widget': ProductSelectorWidget,
-               'text-widget': TextWidget}
 
-    options = [{'name': 'select', 'value': MSG(u'Select Widget')},
-               {'name': 'multiline-widget', 'value': MSG(u'Multiline Widget')},
-               {'name': 'product-widget', 'value': MSG(u'Product Widget')},
-               {'name': 'text-widget', 'value': MSG(u'Text Widget')}]
+    @classmethod
+    def get_options(cls):
+        options = []
+        for name, title, widget in shop_widgets:
+            options.append({'name': name, 'value': title})
+        return options
+
+
+    @classmethod
+    def get_widget(cls, widget_name):
+        for name, title, widget in shop_widgets:
+            if name == widget_name:
+                return widget
+        raise ValueError
+
 
 
 class ShopForm_Display(AutoForm):
@@ -109,7 +116,7 @@ class ShopForm_Display(AutoForm):
             name = get_value(record, 'name')
             datatype = get_real_datatype(handler, record)
             datatype.name = name
-            widget = Widgets.widgets[get_value(record, 'widget')]
+            widget = Widgets.get_widget(get_value(record, 'widget'))
             title = get_value(record, 'title')
             widget = widget(name, title=title, has_empty_option=False)
             widgets.append(widget)

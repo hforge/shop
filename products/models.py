@@ -43,6 +43,7 @@ from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
 from shop.forms import ProductSelectorWidget
+from shop.registry import shop_datatypes
 from shop.widgets import FrenchDateWidget
 
 
@@ -97,6 +98,10 @@ def get_real_datatype(schema_handler, record):
     # Get real datatype from real_datatypes dict
     if real_datatypes.has_key(datatype):
         return real_datatypes[datatype](**kw)
+    # Is a registered datatype ?
+    for name, title, cls_datatype in shop_datatypes:
+        if name == datatype:
+            return cls_datatype(**kw)
     # It's an TableEnumerate
     kw['enumerate_name'] = get_value(record, 'datatype')
     return EnumerateTable_to_Enumerate(**kw)

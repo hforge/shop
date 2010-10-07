@@ -20,24 +20,28 @@ from os.path import isdir, exists, join as join_paths
 
 # Import from itools
 from itools.core import get_abspath
-from itools.gettext import register_domain
+from itools.gettext import MSG, register_domain
 from itools.handlers import ro_database
 
 # Import from ikaaro
+from ikaaro.forms import SelectWidget, MultilineWidget, TextWidget
 from ikaaro.skins import register_skin
 
 # Import from itws
+from forms import ProductSelectorWidget
 from utils import ITWSHOPConfig
+
+
+####################################
+## Register shop / skin
+## XXX Hardcoded !!
+####################################
 
 shops = []
 shop_skins = []
 
 def get_shops():
     return shops
-
-####################################
-## XXX Hardcoded !!
-####################################
 
 def register_shop_skin(title, package, path, name, config=None):
     from skin import ShopSkin
@@ -76,3 +80,24 @@ def register_shop(package, name):
             exec('import %s.%s.modules.%s' % (package, name, m))
     # Print
     print 'URL: ', config.get_value('url')
+
+
+####################################
+## Register widgets
+####################################
+
+shop_widgets = [('select', MSG(u'Select Widget'), SelectWidget),
+                ('multiline-widget', MSG(u'Multiline Widget'), MultilineWidget),
+                ('product-widget', MSG(u'Product Widget'), ProductSelectorWidget),
+                ('text-widget', MSG(u'Text Widget'),  TextWidget)]
+
+def register_widget(name, title, widget):
+    shop_widgets.append((name, title, widget))
+
+####################################
+## Register datatypes
+####################################
+
+shop_datatypes = []
+def register_datatype(name, title, datatype):
+    shop_datatypes.append((name, title, datatype))

@@ -23,6 +23,7 @@ from itools.web import get_context
 from shop.datatypes import AbsolutePathDataTypeEnumerate
 from shop.utils import get_shop
 from shop.enumerate_table import Enumerate_ListEnumerateTable
+from shop.registry import shop_datatypes
 
 
 class ProductModelsEnumerate(AbsolutePathDataTypeEnumerate):
@@ -124,7 +125,12 @@ class Datatypes(Enumerate):
 
     @classmethod
     def get_options(cls):
-        return cls.base_options + Enumerate_ListEnumerateTable.get_options()
+        options = []
+        for name, title, widget in shop_datatypes:
+            options.append({'name': name, 'value': title})
+        return (cls.base_options +
+                Enumerate_ListEnumerateTable.get_options() +
+                options)
 
 
 class StockOptions(Enumerate):
