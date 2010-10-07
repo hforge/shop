@@ -27,10 +27,9 @@ from itools.datatypes import Boolean, MultiLinesTokens
 from itools.gettext import MSG
 from itools.i18n import format_date
 from itools.uri import get_reference, get_uri_path
-from itools.fs import vfs
 from itools.rss import RSSFile
 from itools.web import BaseView, STLForm, STLView, ERROR, INFO
-from itools.xapian import AndQuery, NotQuery, PhraseQuery
+from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLError, XMLParser
 
 # Import from ikaaro
@@ -53,7 +52,6 @@ from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from utils import get_shop, format_price
 from cart import ProductCart
 from countries import CountriesEnumerate
-from orders.orders_views import Orders_StatesBox
 from payments import PaymentWaysEnumerate
 from payments.payments_views import Payments_ChoosePayment
 from products.declination import Declination
@@ -642,7 +640,7 @@ class Shop_ShowRecapitulatif(STLForm):
     title = MSG(u'Order summary')
     template = '/ui/shop/shop_recapitulatif.xml'
 
-    schema = {'payment': String, # XXX #PaymentWaysEnumerate(mandatory=True),
+    schema = {'payment': String(mandatory=True), # XXX #PaymentWaysEnumerate(mandatory=True),
               'cgv': Boolean} # XXX (mandatory=True)}
 
     def GET(self, resource, context):
