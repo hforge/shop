@@ -611,8 +611,6 @@ class Product_Print(STLView):
     access = True
     title = MSG(u"Print product")
 
-    meta = [('robots', 'noindex, follow', None)]
-
     def get_template(self, resource, context):
         return get_skin_template(context, '/product/print.xml')
 

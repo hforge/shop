@@ -7,6 +7,7 @@
   <head>
     <title>${title}</title>
     <link rel="stylesheet" href="${style}" stl:repeat="style styles" type="text/css"></link>
+    <meta name="robots" content="noindex,nofollow" />
   </head>
 
   <body class="print">
