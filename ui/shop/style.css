@@ -613,3 +613,8 @@ input[type="image"]{
 .context-menu label {
   width: 90% !important;
 }
+
+#tag-view .item {
+  padding: 0;
+  border: 0;
+}
