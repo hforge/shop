@@ -215,7 +215,8 @@ class CrossSellingTable(ResourcesOrderedTable):
                     print name
                     product = self.get_resource(name, soft=True)
                     if product is None:
-                        raise ValueError
+                        return
+                        #raise ValueError
             handler.update_record(record.id, **{'name': str(product.get_abspath())})
 
 
