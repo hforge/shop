@@ -55,6 +55,7 @@
       ${message}
       <div id="contentbar">${body}</div>
       <div id="sidebar" stl:if="sidebar">
+        ${cart_preview}
         <stl:block stl:repeat="menu context_menus">
           ${menu}<br/>
         </stl:block>
