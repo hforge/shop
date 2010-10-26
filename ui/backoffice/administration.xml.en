@@ -52,6 +52,19 @@
           </ul>
         </fieldset>
 
+
+      </td>
+      <td width="33%">
+
+        <fieldset stl:if="announce">
+          <legend>
+            <img src="/ui/news/icons/16x16/news_folder.png"/>
+            Announce
+          </legend>
+          ${announce}
+        </fieldset>
+
+
         <fieldset>
           <legend>
             <img src="/ui/news/icons/16x16/news_folder.png"/>
@@ -65,8 +78,6 @@
           </ul>
         </fieldset>
 
-      </td>
-      <td width="33%">
       </td>
     </tr>
   </table>

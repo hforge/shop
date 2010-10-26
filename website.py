@@ -85,6 +85,7 @@ class ShopWebSite(NeutralWS):
     shop_class = Shop
     cart_preview_class = Cart_Viewbox
     backoffice_rss_news_uri = None
+    backoffice_announce_uri = None
 
 
     @staticmethod

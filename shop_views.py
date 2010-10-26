@@ -881,13 +881,28 @@ class Shop_Administration(STLView):
         return resources
 
 
+    def get_announce(self, context):
+        url = getattr(context.site_root, 'backoffice_announce_uri', None)
+        if url is None:
+            return None
+        try:
+            f = urlopen(url)
+            data = XMLParser(f.read())
+        except Exception, e:
+            return None
+        if f.code == 404:
+            return None
+        return data
+
+
     def get_namespace(self, resource, context):
         site_root = context.site_root
         # Orders
         orders = resource.get_resource('orders')
         # Return namespace
         return {'news': self.get_rss_news(context),
+                'announce': self.get_announce(context),
                 # Last resources created
                 'products': self.get_last_resources(context, 'product', 13),
-                'issues': self.get_last_resources(context,'itws-issue'),
+                'issues': self.get_last_resources(context,'itws-issue', 13),
                 'orders': self.get_last_resources(context, 'order')}
