@@ -65,7 +65,7 @@ class CrossSellingTable(ResourcesOrderedTable):
 
 
     def get_order_root(self):
-        return self.get_root()
+        return self
 
 
     def get_products(self, context, product_format,
@@ -196,7 +196,6 @@ class CrossSellingTable(ResourcesOrderedTable):
 
     def update_20100928(self):
         # Some cross selling are broken fix it.
-        # Now we use product abspath (from root, not from cross selling)
         shop = get_shop(self)
         root = self.get_root()
         handler = self.handler
