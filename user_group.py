@@ -44,7 +44,7 @@ class Group_Register(Shop_Register):
 class ShopUser_Group(ShopFolder):
 
     class_id = 'user-group'
-    class_views = ['edit', 'register', 'schema', 'welcome']
+    class_views = ['edit', 'goto_categories', 'register', 'schema', 'welcome']
     class_version = '20100719'
     class_title = MSG(u'User group')
 
@@ -53,6 +53,9 @@ class ShopUser_Group(ShopFolder):
                                   title=MSG(u'Schema'))
     welcome = GoToSpecificDocument(specific_document='welcome',
                                   title=MSG(u'Edit welcome page'))
+    goto_categories = GoToSpecificDocument(
+            specific_document='../../../categories',
+            title=MSG(u'Revenir aux catégories'))
     register = Group_Register()
 
     edit_schema = {'register_title': Unicode(multilingual=True),
