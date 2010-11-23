@@ -75,6 +75,7 @@ class SideBarCrossSellingBox(Folder):
     __fixed_handlers__ = [order_path]
 
     edit_schema = {}
+    edit_widgets = []
 
     item_widgets = []
 
