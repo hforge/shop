@@ -101,9 +101,9 @@
                 name="nb_declinations_${line/id}" value="${line/nb_declinations}"/>
           </td>
           <td>
-            <!--<a href="${line/href}" tabindex="50000">-->
+            <a href="${line/href}" tabindex="50000">
             ${line/title}
-            <!--</a>-->
+            </a>
           </td>
           <stl:block stl:if="line/has_declination">
             <td>-</td>
