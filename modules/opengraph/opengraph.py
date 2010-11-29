@@ -48,8 +48,9 @@ class ShopModule_Opengraph(ShopModule):
         thumb = None
         if hasattr(context.resource, 'get_preview_thumbnail'):
             thumb = context.resource.get_preview_thumbnail()
-            thumb = '%s%s/;download' % (context.uri.resolve('/'),
-                                        context.get_link(thumb))
+            if thumb:
+                thumb = '%s%s/;download' % (context.uri.resolve('/'),
+                                            context.get_link(thumb))
         return [
           {'property': 'og:title', 'content': resource.get_title()},
           {'property': 'og:description',
