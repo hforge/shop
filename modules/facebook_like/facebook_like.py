@@ -95,4 +95,5 @@ class ShopModule_FacebookLike(ShopModule):
 
 
 
+
 register_resource_class(ShopModule_FacebookLike)

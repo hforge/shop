@@ -603,11 +603,15 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     #####################
     # Images
     #####################
-    def get_cover_namespace(self, context):
+    def get_preview_thumbnail(self):
         cover = self.get_property('cover')
-        image = None
-        if cover:
-            image = self.get_resource(cover, soft=True)
+        if not cover:
+            return None
+        return self.get_resource(cover, soft=True)
+
+
+    def get_cover_namespace(self, context):
+        image = self.get_preview_thumbnail()
         if not image:
             return
         return {'href': context.get_link(image),
