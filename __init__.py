@@ -30,6 +30,7 @@ from website import ShopWebSite
 
 # Import from package
 import delete
+import feed_views
 import modules
 import sidebar
 import skin
