@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.core import merge_dicts
 from itools.datatypes import Unicode, Boolean, String
 from itools.gettext import MSG
 from itools.web import STLView
@@ -38,16 +37,12 @@ class PaymentWay_EndView(STLView):
     query_schema = {'ref': String}
 
     def get_namespace(self, resource, context):
-        payments = resource.parent
         ref = context.query['ref']
-        # Top view
-        top_view = None
-        if payments.end_view_top:
-            top_view = payments.end_view_top.GET(resource, context)
         if ref is None:
             return {'ref': MSG(u'-'),
                     'amount': None,
-                    'top_view': top_view}
+                    'top_view': None}
+        # Get informations about payment
         payment_handler = resource.get_resource('payments').handler
         query = [PhraseQuery('ref', ref),
                  PhraseQuery('user', context.user.name)]
@@ -56,6 +51,12 @@ class PaymentWay_EndView(STLView):
             raise ValueError, u'Payment invalid'
         record = results[0]
         amount = payment_handler.get_record_value(record, 'amount')
+        # Get top view
+        resource_validator = payment_handler.get_record_value(record, 'resource_validator')
+        resource_validator = context.root.get_resource(resource_validator)
+        top_view = None
+        if resource_validator.end_view_top:
+            top_view = resource_validator.end_view_top.GET(resource, context)
         return {'ref': context.query['ref'],
                 'amount': '%.2f €' % amount,
                 'top_view': top_view}

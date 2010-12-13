@@ -22,12 +22,12 @@ from operator import itemgetter
 from itools.datatypes import String, Boolean, Integer, Decimal, Unicode
 from itools.gettext import MSG
 from itools.xml import XMLParser
-from itools.web import ERROR, FormError, STLForm
+from itools.web import ERROR, FormError, STLForm, get_context
 from itools.web.views import process_form
 from itools.xapian import PhraseQuery
 
 # Import from ikaaro
-from ikaaro.forms import AutoForm, SelectWidget
+from ikaaro.forms import AutoForm, SelectWidget, Widget, stl_namespaces
 from ikaaro.forms import BooleanCheckBox, TextWidget, MultilineWidget
 from ikaaro.views import BrowseForm, SearchForm
 
@@ -289,6 +289,65 @@ class Payments_ChoosePayment(STLForm):
         namespace = {'payments': [],
                      'total_price': total_price}
         for mode in resource.search_resources(cls=PaymentWay):
+            logo = mode.get_property('logo')
+            if logo:
+                logo = mode.get_resource(logo, soft=True)
+            shipping_groups = mode.get_property('only_this_groups')
+            user_group = context.user.get_property('user_group')
+            if len(shipping_groups)>0 and user_group not in shipping_groups:
+                continue
+            namespace['payments'].append(
+                {'name': mode.name,
+                 'value': mode.get_title(),
+                 'description': mode.get_payment_way_description(context, total_price),
+                 'logo': str(context.resource.get_pathto(logo)) if logo else None,
+                 'enabled': mode.is_enabled(context)})
+        return namespace
+
+
+
+class Payment_Widget(Widget):
+
+    total_price = {'with_tax': decimal('0'),
+                   'without_tax': decimal('0')}
+
+    title1 = MSG(u'Amount to pay ?')
+    title2 = MSG(u'Please choose a payment mode')
+
+    template = list(XMLParser("""
+      <h2>${title1}</h2>
+
+      <input type="text" name="amount" value="${total_price/with_tax}" size="6"/> €
+
+      <h2>${title2}</h2>
+
+      <table cellpadding="5px" cellspacing="0">
+        <tr stl:repeat="payment payments" stl:if="payment/enabled">
+          <td valign="top">
+            <input type="radio" name="payment"
+              id="payment-${payment/name}" value="${payment/name}"/>
+          </td>
+          <td valign="top">
+            ${payment/value}<br/><br/>
+            <img stl:if="payment/logo" src="${payment/logo}/;download"/>
+          </td>
+          <td style="width:400px;vertical-align:top;">
+            ${payment/description}
+          </td>
+        </tr>
+      </table>
+      """, stl_namespaces))
+
+
+    def get_namespace(self, datatype, value):
+        context = get_context()
+        total_price = self.total_price
+        namespace = {'payments': [],
+                     'title1': self.title1,
+                     'title2': self.title2,
+                     'total_price': total_price}
+        payments = get_shop(context.resource).get_resource('payments')
+        for mode in payments.search_resources(cls=PaymentWay):
             logo = mode.get_property('logo')
             if logo:
                 logo = mode.get_resource(logo, soft=True)

@@ -18,6 +18,7 @@
 from modules import Modules, ShopModule, ShopModule_User, ModuleLoader
 
 import categories_sort
+import effiliation
 import export_catalog
 import export_catalog_csv
 import mini_cart

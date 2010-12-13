@@ -36,18 +36,6 @@ class ShopPayments_PayView(STLView):
         return {'progress': progress.GET(resource, context), 'body': self.body}
 
 
-class ShopPayments_EndViewTop(STLView):
-
-    template = '/ui/shop/payments_end.xml'
-
-    query_schema = {'ref': String}
-
-    def get_namespace(self, resource, context):
-        progress = Shop_Progress(index=6, title=MSG(u'Payment end'))
-        return {'ref': context.query['ref'],
-                'progress': progress.GET(resource, context),
-                'user_name': context.user.name}
-
 
 class ShopPayments(Payments):
 
@@ -56,7 +44,6 @@ class ShopPayments(Payments):
 
     # Configure
     pay_view = ShopPayments_PayView
-    end_view_top = ShopPayments_EndViewTop()
 
 
 

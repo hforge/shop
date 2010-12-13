@@ -6,9 +6,22 @@
 
 
   <h1>${title}</h1>
+  <a href="./;donate" class="wishlist-button">Click here to make a donation</a>
 
   ${data}
 
-  <a href="./;donate" class="wishlist-button">Click here to make a donation</a>
+  <stl:block stl:if="is_owner_or_admin">
+    <h2>Administrate the list</h2>
+    <table cellpadding="5" cellspacing="5">
+      <tr>
+        <th>Owner</th>
+        <td>${user}</td>
+      </tr>
+      <tr>
+        <th>Money available</th>
+        <td>${amount_available} €</td>
+      </tr>
+    </table>
+  </stl:block>
 
 </stl:block>

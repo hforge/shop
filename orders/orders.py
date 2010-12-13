@@ -45,6 +45,7 @@ from shop.utils import get_shop
 from messages import Messages_TableResource
 from orders_views import Order_Manage, OrdersViewSent, OrdersViewWaitingPayment
 from orders_views import OrdersView, OrdersViewCanceled, OrdersViewArchive
+from orders_views import ShopPayments_EndViewTop
 from workflow import order_workflow
 from shop.products.taxes import TaxesEnumerate
 from shop.folder import ShopFolder
@@ -149,6 +150,7 @@ class Order(WorkflowAware, ShopFolder):
 
     # Views
     manage = Order_Manage()
+    end_view_top = ShopPayments_EndViewTop()
 
 
     @classmethod

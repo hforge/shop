@@ -16,6 +16,7 @@
 
 # Import from shop
 from payments import Payments
+from payments_views import Payment_Widget
 from enumerates import PaymentWaysEnumerate
 from registry import register_payment_way
 

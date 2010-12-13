@@ -21,8 +21,10 @@ from datetime import datetime
 from itools.core import merge_dicts
 from itools.datatypes import DateTime, String
 from itools.gettext import MSG
+from itools.web import get_context
 
 # Import from ikaaro
+from ikaaro.access import AccessControl
 from ikaaro.forms import XHTMLBody
 from ikaaro.registry import register_resource_class
 
@@ -34,6 +36,9 @@ from shop.utils import CurrentFolder_AddImage
 from wishlist_views import WishList_NewInstance
 from wishlist_views import ShopModule_WishListView, ShopModule_WishList_Edit
 from wishlist_views import WishList_View, WishList_Edit, WishList_Donate
+from wishlist_views import ShopModule_WishList_PaymentsEndViewTop
+from shop.payments.credit import CreditPayment
+from shop.utils import get_shop
 
 
 
@@ -62,6 +67,8 @@ class WishList(ShopFolder):
     def _make_resource(cls, folder, name, ctime=None, *args, **kw):
         if ctime is None:
             ctime = datetime.now()
+        context = get_context()
+        kw['owner'] = context.user.name
         ShopFolder._make_resource(cls, folder, name, ctime=ctime, *args,
                                      **kw)
 
@@ -72,7 +79,7 @@ class WishList(ShopFolder):
 
 
 
-class ShopModule_WishList(ShopFolder):
+class ShopModule_WishList(AccessControl, ShopFolder):
 
     class_id = 'shop-module-wishlist'
     class_title = MSG(u'Module wishlist')
@@ -83,6 +90,7 @@ class ShopModule_WishList(ShopFolder):
     edit = ShopModule_WishList_Edit()
 
     add_image = CurrentFolder_AddImage()
+    end_view_top = ShopModule_WishList_PaymentsEndViewTop()
 
     def get_document_types(self):
         return [WishList]
@@ -98,13 +106,45 @@ class ShopModule_WishList(ShopFolder):
         """Payments module call this method when a payment is validated"""
         payments_table = payment_way.get_resource('payments').handler
         record = payments_table.get_record(id_record)
+        # Get amount of gift
+        amount = payments_table.get_record_value(record, 'amount')
+        # Get wishlist
         ref = payments_table.get_record_value(record, 'ref')
-        print ref, '@@@@@@@@'
-        #order = shop.get_resource('orders/%s' % ref)
-        # 3) Set order as payed (so generate bill)
-        #order.set_as_payed(context)
+        # Get name of user that made the gift
+        user_made_gift = payments_table.get_record_value(record, 'user')
+        # Get wishlist oner to credit money
+        wishlist = self.get_resource(ref)
+        owner = wishlist.get_property('owner')
+        # Create a descript
+        description = MSG(u'Gift made by user {user_name} ({user_title})')
+        description = description.gettext(user_name=user_made_gift,
+                          user_title=context.root.get_user_title(owner))
+        # Add amount to credit available for user
+        payments = get_shop(context.resource).get_resource('payments')
+        credit_payment_way = list(payments.search_resources(cls=CreditPayment))[0]
+        users_credit = credit_payment_way.get_resource('users-credit')
+        users_credit.add_new_record({'user': owner,
+                                     'amount': amount,
+                                     'description': description})
 
 
+    #############################
+    # ACL
+    #############################
+    def is_allowed_to_view(self, user, resource):
+        is_invited = False
+        is_owner_or_admin = self.is_owner_or_admin(user, resource)
+        return is_owner_or_admin or is_invited
+
+
+    def is_owner_or_admin(self, user, resource):
+        if not user:
+            return False
+        # Admins are all powerfull
+        #if self.is_admin(user, resource):
+        #    return True
+        owner = resource.get_property('owner')
+        return owner == user.name
 
 
 register_resource_class(ShopModule_WishList)

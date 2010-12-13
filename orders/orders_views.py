@@ -33,10 +33,11 @@ from ikaaro.forms import SelectWidget
 
 # Import from shop
 from workflow import Order_Transitions, states, states_color
+from shop.datatypes import Civilite
 from shop.payments.enumerates import PaymentWaysEnumerate
 from shop.payments.payments_views import Payments_EditablePayment
 from shop.shipping.shipping_way import ShippingWaysEnumerate
-from shop.datatypes import Civilite
+from shop.shop_utils_views import Shop_Progress
 from shop.utils import get_shop, join_pdfs
 
 
@@ -500,3 +501,16 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         return add_record_view.add_shipping(resource, shipping_way,
                     context, form)
 
+
+
+class ShopPayments_EndViewTop(STLView):
+
+    template = '/ui/shop/payments_end.xml'
+
+    query_schema = {'ref': String}
+
+    def get_namespace(self, resource, context):
+        progress = Shop_Progress(index=6, title=MSG(u'Payment end'))
+        return {'ref': context.query['ref'],
+                'progress': progress.GET(resource, context),
+                'user_name': context.user.name}

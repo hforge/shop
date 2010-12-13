@@ -19,7 +19,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.csv import Table as BaseTable
-from itools.datatypes import Decimal, String
+from itools.datatypes import Decimal, String, Unicode
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.xml import XMLParser
@@ -39,8 +39,9 @@ from shop.payments.registry import register_payment_way
 class CreditAvailable_Basetable(BaseTable):
 
     record_properties = {
-        'user': String(is_indexed=True, unique=True),
-        'amount': Decimal}
+        'user': String(is_indexed=True),
+        'amount': Decimal,
+        'description': Unicode}
 
 
 class CreditAvailable_Table(Table):
@@ -49,7 +50,8 @@ class CreditAvailable_Table(Table):
     class_handler = CreditAvailable_Basetable
 
     form = [TextWidget('user', title=MSG(u'User id')),
-            TextWidget('amount', title=MSG(u'Credit amount'))]
+            TextWidget('amount', title=MSG(u'Credit amount')),
+            TextWidget('description', title=MSG(u'Description'))]
 
 
 class CreditPayment(PaymentWay):
@@ -68,22 +70,27 @@ class CreditPayment(PaymentWay):
             '%s/users-credit' % name)
 
 
-    def get_credit_available_for_user(self, user):
+    def get_credit_available_for_user(self, user_name):
         users_credit = self.get_resource('users-credit').handler
-        results = users_credit.search(user=user.name)
+        results = users_credit.search(user=user_name)
         if len(results) == 0:
             return decimal('0.0')
-        record = results[0]
-        return users_credit.get_record_value(record, 'amount')
+        credit = decimal('0.0')
+        for record in results:
+            credit += users_credit.get_record_value(record, 'amount')
+        return credit
 
 
     def create_payment(self, context, payment):
         # Add the payment by credit
+        # XXX We have to check if credit >= amount
         payments = self.get_resource('payments').handler
-        credit = self.get_credit_available_for_user(context.user)
-        record = payments.add_record({'ref': payment['ref'],
-                                      'amount': credit,
-                                      'user': context.user.name})
+        #credit = self.get_credit_available_for_user(context.user)
+        record = payments.add_record(
+            {'ref': payment['ref'],
+             'amount': payment['amount'],
+             'user': context.user.name,
+             'resource_validator': payment['resource_validator']})
         # The payment is automatically validated
         self.set_payment_as_ok(record.id, context)
         return record
@@ -93,7 +100,7 @@ class CreditPayment(PaymentWay):
         if not self.get_property('enabled'):
             return False
         # Only enabled if credit > 0
-        amount_available = self.get_credit_available_for_user(context.user)
+        amount_available = self.get_credit_available_for_user(context.user.name)
         return amount_available > decimal('0.0')
 
 
@@ -113,7 +120,7 @@ class CreditPayment(PaymentWay):
 
     def get_payment_way_description(self, context, total_amount):
         total_amount = decimal(total_amount['with_tax'])
-        amount_available = self.get_credit_available_for_user(context.user)
+        amount_available = self.get_credit_available_for_user(context.user.name)
         remaining_amount = amount_available - total_amount
         if remaining_amount < decimal('0'):
             remaining_amount = decimal('0')
@@ -126,7 +133,7 @@ class CreditPayment(PaymentWay):
 
 
     def _show_payment_form(self, context, payment):
-        amount_available = self.get_credit_available_for_user(context.user)
+        amount_available = self.get_credit_available_for_user(context.user.name)
         remaining_to_pay = payment['amount'] - amount_available
         # Partial payment
         if remaining_to_pay > decimal('0'):

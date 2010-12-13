@@ -14,11 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from decimal import Decimal as decimal
+
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Unicode, Decimal, String
 from itools.gettext import MSG
 from itools.web import STLView, get_context
+from itools.xapian import PhraseQuery
 
 # Import from ikaaro
 from ikaaro import messages
@@ -28,7 +32,10 @@ from ikaaro.resource_views import DBResource_Edit
 from ikaaro.views_new import NewInstance
 
 # Import from shop
-from shop.payments.payments_views import Payments_ChoosePayment
+from shop.feed_views import Feed_View
+from shop.payments.payments_views import Payment_Widget
+from shop.payments.credit import CreditPayment
+from shop.utils import get_shop
 
 
 class WishList_Donate(AutoForm):
@@ -40,21 +47,16 @@ class WishList_Donate(AutoForm):
 
     schema = {'amount': Decimal(mandatory=True),
               'payment': String}
-    widgets = [TextWidget('amount', title=MSG(u'Amount of the gift (Ex: 50€)'))]
+    widgets = [Payment_Widget('amount',
+                  total_price = {'with_tax': decimal('50'),
+                                 'without_tax': decimal('0')},
+                  title=MSG(u'Amount of the gift (Ex: 50€)'))]
 
 
     def action(self, resource, context, form):
-        # Choose payments
-        payments = context.site_root.get_resource('shop/payments')
-        total_price = form['amount']
-        view = Payments_ChoosePayment(total_price=total_price,
-                                      resource_validator=resource.parent.get_abspath())
-        return view.GET(payments, context)
-
-
-    def action_pay(self, resource, context, form):
+        # Ref of payment equals to ref of wishlist
         # Show payment form
-        kw = {'ref': '0',
+        kw = {'ref': resource.name,
               'amount': form['amount'],
               'mode': form['payment'],
               'resource_validator': str(resource.parent.get_abspath())}
@@ -115,12 +117,21 @@ class WishList_Edit(DBResource_Edit):
 class WishList_View(STLView):
 
     title = MSG(u'View')
-    access = 'is_allowed_to_edit'
+    access = 'is_owner_or_admin'
     template = '/ui/modules/wishlist/wishlist_view.xml'
 
     def get_namespace(self, resource, context):
+        payments = get_shop(resource).get_resource('payments')
+        credit = list(payments.search_resources(cls=CreditPayment))[0]
+        owner = resource.get_property('owner')
+        amount_available = credit.get_credit_available_for_user(owner)
+        ac = resource.get_access_control()
+        is_owner_or_admin = ac.is_owner_or_admin(context.user, resource)
         return {'title': resource.get_property('title'),
-                'data': resource.get_property('data')}
+                'data': resource.get_property('data'),
+                'amount_available': amount_available,
+                'is_owner_or_admin': is_owner_or_admin,
+                'user': context.root.get_user_title(owner)}
 
 
 
@@ -159,12 +170,35 @@ class ShopModule_WishList_Edit(DBResource_Edit):
 
 
 
-class ShopModule_WishListView(STLView):
+class ShopModule_WishListView(Feed_View):
 
     access = True
     title = MSG(u'View')
-    template = '/ui/modules/wishlist/view.xml'
+    view_name = 'wishlists_view'
+
+    search_template = None
+    content_template = '/ui/modules/wishlist/view.xml'
+
+    def get_content_namespace(self, resource, context, items):
+        namespace = Feed_View.get_content_namespace(self, resource, context, items)
+        namespace['title'] = resource.get_title()
+        namespace['data' ] = resource.get_property('data')
+        return namespace
+
+
+    def get_items(self, resource, context, *args):
+        args = list(args)
+        args.append(PhraseQuery('format', 'wishlist'))
+        return Feed_View.get_items(self, resource, context, *args)
+
+
+
+class ShopModule_WishList_PaymentsEndViewTop(STLView):
+
+    template = '/ui/modules/wishlist/payments_end.xml'
+
+    query_schema = {'ref': String}
 
     def get_namespace(self, resource, context):
-        return {'title': resource.get_title(),
-                'data': resource.get_property('data')}
+        return {'ref': context.query['ref'],
+                'user_name': context.user.name}

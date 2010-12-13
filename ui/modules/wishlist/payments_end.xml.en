@@ -4,16 +4,6 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>${title}</h1>
-
-  ${data}
-
-  <stl:block stl:if="items">
-    <h1>My wishlisht</h1>
-    <div class="item" stl:repeat="item items">
-      <h3><a href="${item/link}">${item/title}</a></h3>
-      <p>${item/description}</p>
-    </div>
-  </stl:block>
+  Your gift has been registered. Thank's !
 
 </stl:block>
