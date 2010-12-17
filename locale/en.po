@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-17 09:12+CET\n"
+"POT-Creation-Date: 2010-12-17 14:12+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,7 +87,11 @@ msgid "#numero#"
 msgstr ""
 
 #: ../ui/backoffice/payments/transfer/record_view.xml.en:11
-#: ../ui/backoffice/payments/transfer/end.xml.en:12
+msgid "${RIB}<x id='1'/> IBAN:"
+msgstr ""
+
+#: ../ui/backoffice/payments/transfer/end.xml.en:15
+msgctxt "div"
 msgid "${RIB}<x id='1'/> IBAN:"
 msgstr ""
 
@@ -112,9 +116,10 @@ msgctxt "table cell"
 msgid "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:22
+#: ../ui/modules/wishlist/wishlist_administrate.xml.en:36
 msgctxt "table cell"
-msgid "${amount_available} €"
+msgid ""
+"${amount_available} € (All Gift are accumulated as Gift Vouchers in our shop)"
 msgstr ""
 
 #: ../ui/backoffice/payments/paybox/record_edit.xml.en:12
@@ -280,6 +285,11 @@ msgstr ""
 #: ../ui/backoffice/orders/order_view.xml.en:125
 msgctxt "b"
 msgid "${message/ts} - ${message/author}:"
+msgstr ""
+
+#: ../ui/modules/wishlist/wishlist_administrate.xml.en:25
+msgctxt "table cell"
+msgid "${nb_emails} <g id='1'> (Please invite your friends) </g>"
 msgstr ""
 
 #: ../ui/backoffice/shop_user_manage.xml.en:110
@@ -458,11 +468,9 @@ msgctxt "table cell"
 msgid "${taxes}<x id='2'/> Has reduction ?"
 msgstr ""
 
-#: ../ui/backoffice/payments/check/end.xml.en:7
-msgctxt "b"
-msgid ""
-"${top_view} <g id='1'>To finalize your payment, please send us your check "
-"ordered to ${to}<x id='2'/> at the following address:</g>"
+#: ../ui/modules/wishlist/wishlist_view.xml.en:9
+msgctxt "heading"
+msgid "${title} <g id='1'>  <x id='2'/>  </g>"
 msgstr ""
 
 #: ../ui/shop/cart_view.xml.en:101
@@ -676,7 +684,7 @@ msgctxt "span"
 msgid "<g id='1'>${nb_open}</g>  <g id='2'>Open</g>"
 msgstr ""
 
-#: ../ui/backoffice/payments/paybox/end.xml.en:11
+#: ../ui/backoffice/payments/paybox/end.xml.en:14
 msgctxt "b"
 msgid "<g id='1'>${state}</g>  <g id='2'>Unknow state</g>"
 msgstr ""
@@ -691,11 +699,6 @@ msgctxt "span"
 msgid ""
 "<g id='1'><g id='2'>${lang/name}</g></g>  <g id='3'><g id='4'>${lang/value}</"
 "g></g>"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:9
-msgctxt "link"
-msgid "<g id='1'>Click here to make a donation</g> ${data}"
 msgstr ""
 
 #: ../ui/shop/modules/categories_sort.xml.en:9
@@ -964,7 +967,7 @@ msgstr ""
 msgid "A product is out of stock"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:48
+#: ../modules/wishlist/wishlist.py:56
 msgid "A wishlist"
 msgstr ""
 
@@ -1027,6 +1030,12 @@ msgstr ""
 msgid "Add Record"
 msgstr ""
 
+#: ../ui/modules/wishlist/wishlist_view.xml.en:20
+msgctxt "div"
+msgid ""
+"Add a description and photos here, <g id='3'>by editing your wishlist</g>"
+msgstr ""
+
 #: ../modules/loupe_on_products/loupe_on_products.py:29
 msgid "Add a loupe on products view"
 msgstr ""
@@ -1085,11 +1094,6 @@ msgstr ""
 
 #: ../orders/orders.py:238 ../shop.py:159
 msgid "Addresses"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:14
-msgctxt "heading"
-msgid "Administrate the list"
 msgstr ""
 
 #: ../ui/backoffice/administration.xml.en:11
@@ -1170,9 +1174,9 @@ msgstr ""
 msgid "Amount to pay ?"
 msgstr ""
 
-#: ../ui/backoffice/payments/cash/end.xml.en:9
+#: ../ui/backoffice/payments/cash/end.xml.en:12
 #: ../ui/backoffice/payments/check/record_view.xml.en:7
-#: ../ui/backoffice/payments/transfer/end.xml.en:9
+#: ../ui/backoffice/payments/transfer/end.xml.en:12
 #: ../ui/backoffice/payments/transfer/record_view.xml.en:7
 #: ../ui/backoffice/payments/cash/record_view.xml.en:7
 msgctxt "heading"
@@ -1492,6 +1496,11 @@ msgctxt "link"
 msgid "Click here to get more informations."
 msgstr ""
 
+#: ../ui/modules/wishlist/wishlist_view.xml.en:24
+msgctxt "link"
+msgid "Click here to make a donation"
+msgstr ""
+
 #: ../payments/paybox/enumerates.py:149 ../payments/systempay/enumerates.py:66
 msgid "Client cancellation"
 msgstr ""
@@ -1734,6 +1743,11 @@ msgstr ""
 msgid "Creation date"
 msgstr ""
 
+#: ../modules/wishlist/wishlist_views.py:83
+#: ../modules/wishlist/wishlist_views.py:84
+msgid "Creation of new wishlist"
+msgstr ""
+
 #: ../payments/credit/credit.py:53
 msgid "Credit amount"
 msgstr ""
@@ -1974,12 +1988,13 @@ msgstr ""
 #: ../payments/payments_views.py:262
 #: ../ui/backoffice/orders/order_facture.xml.en:84
 #: ../shipping/withdrawal.py:96 ../shipping/shipping_way_views.py:47
-#: ../shipping/shipping_way.py:76 ../modules/wishlist/wishlist_views.py:148
+#: ../shipping/shipping_way.py:76 ../modules/wishlist/wishlist_views.py:181
 #: ../payments/payment_way.py:60
 msgid "Description"
 msgstr ""
 
 #: ../ui/skin2/product/product_view.xml.en:72
+#: ../ui/modules/wishlist/wishlist_administrate.xml.en:15
 #: ../ui/shop/shop_delivery.xml.en:20 ../ui/shop/product/print.xml.en:40
 #: ../ui/backoffice/configuration.xml.en:13
 #: ../ui/shop/product/product_view.xml.en:72
@@ -2007,9 +2022,9 @@ msgstr ""
 msgid "Do it"
 msgstr ""
 
-#: ../ui/backoffice/payments/cash/end.xml.en:13
+#: ../ui/backoffice/payments/cash/end.xml.en:16
 #: ../ui/backoffice/payments/check/record_view.xml.en:13
-#: ../ui/backoffice/payments/transfer/end.xml.en:15
+#: ../ui/backoffice/payments/transfer/end.xml.en:18
 #: ../ui/backoffice/payments/transfer/record_view.xml.en:14
 #: ../ui/backoffice/payments/cash/record_view.xml.en:12
 msgctxt "heading"
@@ -2026,7 +2041,8 @@ msgstr ""
 msgid "Dollar"
 msgstr ""
 
-#: ../ui/backoffice/payments/check/end.xml.en:13
+#: ../ui/backoffice/payments/check/end.xml.en:16
+msgctxt "div"
 msgid "Don't forget to recall the information mentionned below"
 msgstr ""
 
@@ -2049,6 +2065,10 @@ msgctxt "label"
 msgid "E-mail Address"
 msgstr ""
 
+#: ../modules/wishlist/wishlist_views.py:107
+msgid "E-mail of people to invite"
+msgstr ""
+
 #: ../payments/paybox/enumerates.py:84
 msgid "EUROCARD_MASTERCARD"
 msgstr ""
@@ -2060,6 +2080,11 @@ msgstr ""
 #: ../products/product_views.py:224 ../modules/modules_views.py:57
 #: ../cross_selling_views.py:201 ../shipping/shipping_way_views.py:38
 #: ../products/images_views.py:39
+msgid "Edit"
+msgstr ""
+
+#: ../ui/modules/wishlist/wishlist_view.xml.en:11
+msgctxt "title attribute"
 msgid "Edit"
 msgstr ""
 
@@ -2435,7 +2460,12 @@ msgstr ""
 msgid "Genre"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:119
+#: ../ui/modules/wishlist/wishlist_administrate.xml.en:33
+msgctxt "table cell"
+msgid "Gift Vouchers"
+msgstr ""
+
+#: ../modules/wishlist/wishlist.py:153
 msgid "Gift made by user {user_name} ({user_title})"
 msgstr ""
 
@@ -2682,6 +2712,15 @@ msgstr ""
 
 #: ../products/enumerate.py:97
 msgid "Increase"
+msgstr ""
+
+#: ../modules/wishlist/wishlist_views.py:153
+msgid "Informations"
+msgstr ""
+
+#: ../ui/modules/wishlist/wishlist_administrate.xml.en:7
+msgctxt "heading"
+msgid "Informations about the wishlist"
 msgstr ""
 
 #: ../user_group.py:121
@@ -3149,7 +3188,7 @@ msgstr ""
 msgid "Module effiliation"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:85
+#: ../modules/wishlist/wishlist.py:119
 msgid "Module wishlist"
 msgstr ""
 
@@ -3159,11 +3198,6 @@ msgstr ""
 
 #: ../shop.py:141 ../modules/modules_views.py:32 ../modules/modules.py:74
 msgid "Modules"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:21
-msgctxt "table cell"
-msgid "Money available"
 msgstr ""
 
 #: ../ui/vertical_depot/login_box.xml.en:18
@@ -3207,7 +3241,7 @@ msgstr ""
 
 #: ../ui/modules/wishlist/view.xml.en:12
 msgctxt "heading"
-msgid "My wishlisht"
+msgid "My wishlist"
 msgstr ""
 
 #: ../user_group.py:145 ../products/images.py:74 ../categories_views.py:288
@@ -3305,6 +3339,11 @@ msgstr ""
 
 #: ../payments/paybox/enumerates.py:130 ../payments/systempay/enumerates.py:47
 msgid "Not the same card used for the first payment"
+msgstr ""
+
+#: ../ui/modules/wishlist/wishlist_administrate.xml.en:23
+msgctxt "table cell"
+msgid "Numbers of invitations"
 msgstr ""
 
 #: ../cross_selling_views.py:154
@@ -3458,9 +3497,9 @@ msgctxt "link"
 msgid "Order photos to show"
 msgstr ""
 
-#: ../ui/backoffice/payments/check/end.xml.en:15
-#: ../ui/backoffice/payments/transfer/end.xml.en:18
-#: ../ui/backoffice/payments/cash/end.xml.en:16
+#: ../ui/backoffice/payments/check/end.xml.en:18
+#: ../ui/backoffice/payments/transfer/end.xml.en:21
+#: ../ui/backoffice/payments/cash/end.xml.en:19
 #: ../ui/backoffice/payments/cash/record_view.xml.en:15
 #: ../ui/backoffice/payments/check/record_view.xml.en:16
 #: ../ui/backoffice/payments/transfer/record_view.xml.en:17
@@ -3506,7 +3545,7 @@ msgctxt "link"
 msgid "Overview"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:17
+#: ../ui/modules/wishlist/wishlist_administrate.xml.en:19
 msgctxt "table cell"
 msgid "Owner"
 msgstr ""
@@ -3711,7 +3750,7 @@ msgstr ""
 msgid "Payment refused"
 msgstr ""
 
-#: ../ui/backoffice/payments/paybox/end.xml.en:10
+#: ../ui/backoffice/payments/paybox/end.xml.en:13
 msgctxt "div"
 msgid "Payment state:"
 msgstr ""
@@ -3799,6 +3838,11 @@ msgstr ""
 msgid "Please install LPOD"
 msgstr ""
 
+#: ../ui/modules/wishlist/view.xml.en:15
+msgctxt "link"
+msgid "Please log-in to see your wishlist."
+msgstr ""
+
 #: ../categories_views.py:210
 msgid "Please select products to compare"
 msgstr ""
@@ -3824,11 +3868,11 @@ msgstr ""
 msgid "Prefer use this shipping way"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:150
+#: ../modules/wishlist/wishlist_views.py:183
 msgid "Presentation"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:98
+#: ../modules/wishlist/wishlist_views.py:108
 msgid "Presentation of your wishlist"
 msgstr ""
 
@@ -4082,7 +4126,11 @@ msgid "RIB"
 msgstr ""
 
 #: ../ui/backoffice/payments/transfer/record_view.xml.en:11
-#: ../ui/backoffice/payments/transfer/end.xml.en:12
+msgid "RIB:"
+msgstr ""
+
+#: ../ui/backoffice/payments/transfer/end.xml.en:15
+msgctxt "div"
 msgid "RIB:"
 msgstr ""
 
@@ -4471,7 +4519,7 @@ msgid "Shop website"
 msgstr ""
 
 #: ../modules/wishlist/wishlist_views.py:75
-#: ../modules/wishlist/wishlist_views.py:97
+#: ../modules/wishlist/wishlist_views.py:106
 msgid "Short description"
 msgstr ""
 
@@ -4606,7 +4654,7 @@ msgstr ""
 msgid "String"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:149
+#: ../modules/wishlist/wishlist_views.py:182
 msgid "Subject"
 msgstr ""
 
@@ -4710,7 +4758,8 @@ msgstr ""
 msgid "Text Widget"
 msgstr ""
 
-#: ../ui/modules/wishlist/payments_end.xml.en:7
+#: ../ui/modules/wishlist/payments_end.xml.en:10
+msgctxt "paragraph"
 msgid "Thank's !"
 msgstr ""
 
@@ -4826,6 +4875,11 @@ msgstr ""
 msgid "There is 1 product model."
 msgstr ""
 
+#: ../ui/modules/wishlist/view.xml.en:20
+msgctxt "div"
+msgid "There's no wishlist."
+msgstr ""
+
 #: ../orders/orders_views.py:127
 msgid "There's one order."
 msgstr ""
@@ -4862,20 +4916,21 @@ msgstr ""
 #: ../products/product_views.py:429 ../products/product_views.py:562
 #: ../products/product_views.py:707 ../shipping/shipping_way_views.py:45
 #: ../forms_generator.py:169 ../products/images_views.py:36 ../user.py:100
-#: ../products/declination.py:64 ../modules/wishlist/wishlist_views.py:147
+#: ../products/declination.py:64 ../modules/wishlist/wishlist_views.py:180
 #: ../products/models.py:141 ../user_group.py:146
 msgid "Title"
 msgstr ""
 
+#: ../ui/shop/product/product_view.xml.en:68
 #: ../ui/skin2/product/product_view.xml.en:68
 #: ../ui/backoffice/product_view.xml.en:42
-#: ../ui/shop/product/product_view.xml.en:68
+#: ../ui/modules/wishlist/wishlist_administrate.xml.en:11
 msgctxt "table cell"
 msgid "Title"
 msgstr ""
 
 #: ../modules/wishlist/wishlist_views.py:74
-#: ../modules/wishlist/wishlist_views.py:96
+#: ../modules/wishlist/wishlist_views.py:105
 msgid "Title of your wishlist"
 msgstr ""
 
@@ -4897,14 +4952,14 @@ msgstr ""
 msgid "To continue, you have to validate the terms of sales!"
 msgstr ""
 
-#: ../ui/backoffice/payments/cash/end.xml.en:10
+#: ../ui/backoffice/payments/cash/end.xml.en:13
 #: ../ui/backoffice/payments/cash/record_view.xml.en:9
 msgctxt "heading"
 msgid "To finalize your payment, please come at our shop:"
 msgstr ""
 
 #: ../ui/backoffice/payments/transfer/record_view.xml.en:9
-#: ../ui/backoffice/payments/transfer/end.xml.en:10
+#: ../ui/backoffice/payments/transfer/end.xml.en:13
 msgctxt "heading"
 msgid ""
 "To finalize your payment, please execute the bank transfer to the following "
@@ -4914,6 +4969,13 @@ msgstr ""
 #: ../ui/backoffice/payments/check/record_view.xml.en:9
 msgctxt "heading"
 msgid "To finalize your payment, please send us your check ordered to ${to}"
+msgstr ""
+
+#: ../ui/backoffice/payments/check/end.xml.en:12
+msgctxt "b"
+msgid ""
+"To finalize your payment, please send us your check ordered to ${to}<x "
+"id='2'/> at the following address:"
 msgstr ""
 
 #: ../ui/modules/stock/pdf_resupply.xml.en:25
@@ -4953,7 +5015,7 @@ msgctxt "table cell"
 msgid "Total Price"
 msgstr ""
 
-#: ../ui/backoffice/payments/check/end.xml.en:16
+#: ../ui/backoffice/payments/check/end.xml.en:19
 msgctxt "b"
 msgid "Total amount:"
 msgstr ""
@@ -5183,8 +5245,8 @@ msgstr ""
 #: ../enumerate_table.py:211
 #: ../sidebar/sidebar_product_cross_selling_box.py:43 ../suppliers_views.py:28
 #: ../sidebar/cross_selling_box.py:40 ../feed_views/base.py:36
-#: ../website_views.py:62 ../modules/wishlist/wishlist_views.py:119
-#: ../modules/wishlist/wishlist_views.py:176
+#: ../website_views.py:62 ../modules/wishlist/wishlist_views.py:139
+#: ../modules/wishlist/wishlist_views.py:208
 #: ../sidebar/sidebar_cross_selling_box.py:40
 msgid "View"
 msgstr ""
@@ -5365,6 +5427,11 @@ msgstr ""
 msgid "You are not authorized to do that !"
 msgstr ""
 
+#: ../ui/modules/wishlist/view.xml.en:20
+msgctxt "div"
+msgid "You can <g id='3'>create a new one</g>."
+msgstr ""
+
 #: ../ui/shop/payments_end.xml.en:16
 msgctxt "paragraph"
 msgid "You can see all your orders <g id='3'>here.</g>"
@@ -5457,6 +5524,12 @@ msgid ""
 msgstr ""
 
 #: ../ui/modules/wishlist/payments_end.xml.en:7
+msgctxt "heading"
+msgid "Your gift has been registered."
+msgstr ""
+
+#: ../ui/modules/wishlist/payments_end.xml.en:10
+msgctxt "paragraph"
 msgid "Your gift has been registered."
 msgstr ""
 
