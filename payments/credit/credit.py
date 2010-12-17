@@ -151,10 +151,9 @@ class CreditPayment(PaymentWay):
                 kw = {'amount': new_amount}
                 users_credit.update_recod(record.id, **kw)
             # Encapsulate in pay view
-            view =  Payments_ChoosePayment(total_price=remaining_to_pay)
-            payments = self.parent
-            view = payments.pay_view(body=view.GET(payments, context))
-            return view.GET(self, context)
+            payment['mode'] = 'paybox' # XXX (Can have another name ?)
+            payment['amount'] = remaining_to_pay
+            return self.parent.show_payment_form(context, payment)
         # Complete payment
         return PaymentWay._show_payment_form(self, context, payment)
 

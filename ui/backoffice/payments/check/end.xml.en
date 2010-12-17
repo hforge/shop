@@ -4,15 +4,20 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <div id="payment-end-top">
   ${top_view}
+  </div>
 
-  <b>To finalize your payment, please send us your check ordered to ${to}<br/>
-    at the following address:</b>
-  <div class="checkpayment-address">${address}</div>
-  <br/>
-  Don't forget to recall the information mentionned below<br/>
-  <ul>
-    <li><b>Order reference:</b> ${ref}</li>
-    <li><b>Total amount:</b> ${amount}</li>
-  </ul>
+  <div id="payment-end-informations">
+    <b>To finalize your payment, please send us your check ordered to ${to}<br/>
+      at the following address:</b>
+    <div class="checkpayment-address">${address}</div>
+    <br/>
+    Don't forget to recall the information mentionned below<br/>
+    <ul>
+      <li><b>Order reference:</b> ${ref}</li>
+      <li><b>Total amount:</b> ${amount}</li>
+    </ul>
+  </div>
+
 </stl:block>

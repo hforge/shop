@@ -4,6 +4,10 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  Your gift has been registered. Thank's !
+  <h1>Your gift has been registered.</h1>
+
+  <p>
+  Thank's ! Your gift has been registered.
+  </p>
 
 </stl:block>

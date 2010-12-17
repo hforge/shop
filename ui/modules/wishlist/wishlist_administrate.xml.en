@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <h2>Informations about the wishlist</h2>
+
+  <table cellpadding="5" cellspacing="5">
+    <tr>
+      <th>Title</th>
+      <td>${title}</td>
+    </tr>
+    <tr>
+      <th>Description</th>
+      <td>${description}</td>
+    </tr>
+    <tr>
+      <th>Owner</th>
+      <td>${user}</td>
+    </tr>
+    <tr>
+      <th>Numbers of invitations</th>
+      <td>
+        ${nb_emails}
+        <a stl:if="not nb_emails" href="./;edit">
+          (Please invite your friends)
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Gift Vouchers
+      </th>
+      <td>
+        ${amount_available} €
+        (All Gift are accumulated as Gift Vouchers in our shop)
+      </td>
+    </tr>
+  </table>
+
+</stl:block>

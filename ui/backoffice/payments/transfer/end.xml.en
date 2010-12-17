@@ -4,17 +4,22 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  ${top_view}
+  <div id="payment-end-top">
+    ${top_view}
+  </div>
 
-  <h3>Amount: ${amount}</h3>
-  <h3>To finalize your payment, please execute the bank transfer to the
-    following account:</h3>
-  RIB: ${RIB}<br/>
-  IBAN: ${IBAN}<br/>
-  <br/>
-  <h3>Do not forget to recall the information mentionned below in any
-    communications:</h3>
-  <ul>
-    <li><b>Order reference: ${ref}</b></li>
-  </ul>
+  <div id="payment-end-informations">
+    <h3>Amount: ${amount}</h3>
+    <h3>To finalize your payment, please execute the bank transfer to the
+      following account:</h3>
+    RIB: ${RIB}<br/>
+    IBAN: ${IBAN}<br/>
+    <br/>
+    <h3>Do not forget to recall the information mentionned below in any
+      communications:</h3>
+    <ul>
+      <li><b>Order reference: ${ref}</b></li>
+    </ul>
+  </div>
+
 </stl:block>

@@ -37,20 +37,29 @@ from wishlist_views import WishList_NewInstance
 from wishlist_views import ShopModule_WishListView, ShopModule_WishList_Edit
 from wishlist_views import WishList_View, WishList_Edit, WishList_Donate
 from wishlist_views import ShopModule_WishList_PaymentsEndViewTop
+from wishlist_views import WishList_Administrate
 from shop.payments.credit import CreditPayment
 from shop.utils import get_shop
 
 
 
-class WishList(ShopFolder):
+class WishList(AccessControl, ShopFolder):
+    """
+    XXX module not finalized.
+    TODO:
+      - Invite people mechanism.
+      - Real "shop vouchurs" on payment.
+      - Show list of people that give money.
+    """
 
     class_id = 'wishlist'
     class_title = MSG(u'A wishlist')
-    class_views = ['view', 'edit', 'donate']
+    class_views = ['view', 'edit', 'administrate', 'donate']
 
     view = WishList_View()
     edit = WishList_Edit()
     donate = WishList_Donate()
+    administrate = WishList_Administrate()
     new_instance = WishList_NewInstance()
 
     add_image = CurrentFolder_AddImage()
@@ -60,6 +69,7 @@ class WishList(ShopFolder):
         return merge_dicts(ShopFolder.get_metadata_schema(),
                            owner=String,
                            ctime=DateTime,
+                           emails=String(multiple=True),
                            data=XHTMLBody)
 
 
@@ -78,8 +88,32 @@ class WishList(ShopFolder):
                            ctime=self.get_property('ctime'))
 
 
+    #############################
+    # ACL
+    #############################
+    def is_allowed_to_view(self, user, resource):
+        is_owner_or_admin = self.is_owner_or_admin(user, resource)
+        # Is invited  ?
+        is_invited = False
+        if user:
+            email = user.get_property('email')
+            is_invited = email in resource.get_property('emails')
+        return is_owner_or_admin or is_invited
 
-class ShopModule_WishList(AccessControl, ShopFolder):
+
+    def is_owner_or_admin(self, user, resource):
+        if not user:
+            return False
+        # Admins are all powerfull
+        if self.is_admin(user, resource):
+            return True
+        owner = resource.get_property('owner')
+        return owner == user.name
+
+
+
+
+class ShopModule_WishList(ShopFolder):
 
     class_id = 'shop-module-wishlist'
     class_title = MSG(u'Module wishlist')
@@ -126,25 +160,6 @@ class ShopModule_WishList(AccessControl, ShopFolder):
         users_credit.add_new_record({'user': owner,
                                      'amount': amount,
                                      'description': description})
-
-
-    #############################
-    # ACL
-    #############################
-    def is_allowed_to_view(self, user, resource):
-        is_invited = False
-        is_owner_or_admin = self.is_owner_or_admin(user, resource)
-        return is_owner_or_admin or is_invited
-
-
-    def is_owner_or_admin(self, user, resource):
-        if not user:
-            return False
-        # Admins are all powerfull
-        #if self.is_admin(user, resource):
-        #    return True
-        owner = resource.get_property('owner')
-        return owner == user.name
 
 
 register_resource_class(ShopModule_WishList)

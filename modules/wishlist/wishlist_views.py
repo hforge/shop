@@ -67,7 +67,7 @@ class WishList_Donate(AutoForm):
 
 class WishList_NewInstance(NewInstance):
 
-    access = True
+    access = 'is_authenticated'
 
     schema = merge_dicts(NewInstance.schema,
                          description=Unicode)
@@ -76,6 +76,14 @@ class WishList_NewInstance(NewInstance):
 
 
     def get_new_resource_name(self, form):
+        # XXX Send an email to administrators. (To prevent errors of module)
+        context = get_context()
+        root = context.root
+        for email in root.get_property('administrators'):
+            subject = MSG(u'Creation of new wishlist').gettext()
+            text = MSG(u'Creation of new wishlist').gettext()
+            root.send_email(email, subject, text=text)
+        # Get new resource name
         root = get_context().root
         search = root.search(format='wishlist')
         wishlists = search.get_documents(sort_by='ctime', reverse=True)
@@ -91,10 +99,12 @@ class WishList_Edit(DBResource_Edit):
 
     schema = {'title': Unicode,
               'description': Unicode,
+              'emails': String,
               'data': XHTMLBody}
 
     widgets = [TextWidget('title', title=MSG(u'Title of your wishlist')),
                MultilineWidget('description', title=MSG(u'Short description')),
+               MultilineWidget('emails', title=MSG(u'E-mail of people to invite')),
                RTEWidget('data', title=MSG(u"Presentation of your wishlist"))]
 
 
@@ -102,13 +112,23 @@ class WishList_Edit(DBResource_Edit):
         language = resource.get_content_language(context)
         if name == 'data':
             return resource.get_property(name, language)
+        elif name == 'emails':
+            emails = resource.get_property('emails')
+            return '\n'.join(emails)
         return DBResource_Edit.get_value(self, resource, context, name,
                                          datatype)
 
 
     def action(self, resource, context, form):
         for key in self.schema:
-            resource.set_property(key, form[key])
+            if key == 'emails':
+                emails = form['emails']
+                emails = [ x.strip() for x in emails.splitlines() ]
+                emails = [ x for x in emails if x ]
+                resource.set_property('emails', emails)
+            else:
+                resource.set_property(key, form[key])
+
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
 
@@ -117,20 +137,33 @@ class WishList_Edit(DBResource_Edit):
 class WishList_View(STLView):
 
     title = MSG(u'View')
-    access = 'is_owner_or_admin'
+    access = 'is_allowed_to_view'
     template = '/ui/modules/wishlist/wishlist_view.xml'
+
+    def get_namespace(self, resource, context):
+        ac = resource.get_access_control()
+        is_owner_or_admin = ac.is_owner_or_admin(context.user, resource)
+        return {'title': resource.get_property('title'),
+                'data': resource.get_property('data'),
+                'is_owner_or_admin': is_owner_or_admin}
+
+
+class WishList_Administrate(STLView):
+
+    title = MSG(u'Informations')
+    access = 'is_owner_or_admin'
+    template = '/ui/modules/wishlist/wishlist_administrate.xml'
 
     def get_namespace(self, resource, context):
         payments = get_shop(resource).get_resource('payments')
         credit = list(payments.search_resources(cls=CreditPayment))[0]
         owner = resource.get_property('owner')
         amount_available = credit.get_credit_available_for_user(owner)
-        ac = resource.get_access_control()
-        is_owner_or_admin = ac.is_owner_or_admin(context.user, resource)
+        emails = resource.get_property('emails')
         return {'title': resource.get_property('title'),
-                'data': resource.get_property('data'),
+                'description': resource.get_property('description'),
+                'nb_emails': len(emails),
                 'amount_available': amount_available,
-                'is_owner_or_admin': is_owner_or_admin,
                 'user': context.root.get_user_title(owner)}
 
 
@@ -157,7 +190,6 @@ class ShopModule_WishList_Edit(DBResource_Edit):
         return DBResource_Edit.get_value(self, resource, context, name,
                                          datatype)
 
-
     def action(self, resource, context, form):
         language = resource.get_content_language(context)
         for key, datatype in self.schema.items():
@@ -169,20 +201,26 @@ class ShopModule_WishList_Edit(DBResource_Edit):
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
 
 
-
 class ShopModule_WishListView(Feed_View):
 
     access = True
+
     title = MSG(u'View')
     view_name = 'wishlists_view'
 
     search_template = None
     content_template = '/ui/modules/wishlist/view.xml'
 
+    batch_size = 0
+    show_first_batch = False
+    show_second_batch = False
+
     def get_content_namespace(self, resource, context, items):
+        ac = resource.get_access_control()
         namespace = Feed_View.get_content_namespace(self, resource, context, items)
         namespace['title'] = resource.get_title()
         namespace['data' ] = resource.get_property('data')
+        namespace['is_authenticated'] = ac.is_authenticated(context.user, self)
         return namespace
 
 

@@ -4,12 +4,16 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  ${top_view}
+  <div id="payment-end-top">
+    ${top_view}
+  </div>
 
-  <div id="payment-state">
-    Payment state:
-    <b stl:if="state">${state}</b>
-    <b stl:if="not state">Unknow state</b><br/><br/>
+  <div id="payment-end-informations">
+    <div id="payment-state">
+      Payment state:
+      <b stl:if="state">${state}</b>
+      <b stl:if="not state">Unknow state</b><br/><br/>
+    </div>
   </div>
 
 </stl:block>
