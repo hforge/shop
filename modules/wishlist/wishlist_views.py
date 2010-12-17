@@ -41,7 +41,7 @@ from shop.utils import get_shop
 class WishList_Donate(AutoForm):
 
     title = MSG(u'Donate')
-    access = 'is_allowed_to_edit'
+    access = 'is_authenticated'
 
     submit_value = MSG(u'Do it')
 
@@ -95,7 +95,7 @@ class WishList_NewInstance(NewInstance):
 
 class WishList_Edit(DBResource_Edit):
 
-    access = 'is_owner_or_admin'
+    access = 'is_allowed_to_edit'
 
     schema = {'title': Unicode,
               'description': Unicode,
@@ -142,16 +142,16 @@ class WishList_View(STLView):
 
     def get_namespace(self, resource, context):
         ac = resource.get_access_control()
-        is_owner_or_admin = ac.is_owner_or_admin(context.user, resource)
+        is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
         return {'title': resource.get_property('title'),
                 'data': resource.get_property('data'),
-                'is_owner_or_admin': is_owner_or_admin}
+                'is_allowed_to_edit': is_allowed_to_edit}
 
 
 class WishList_Administrate(STLView):
 
     title = MSG(u'Informations')
-    access = 'is_owner_or_admin'
+    access = 'is_allowed_to_edit'
     template = '/ui/modules/wishlist/wishlist_administrate.xml'
 
     def get_namespace(self, resource, context):

@@ -30,7 +30,7 @@ from ikaaro.registry import register_resource_class
 
 # Import from shop
 from shop.folder import ShopFolder
-from shop.utils import CurrentFolder_AddImage
+from shop.utils import CurrentFolder_AddImage, CurrentFolder_AddLink
 
 # Import from module
 from wishlist_views import WishList_NewInstance
@@ -63,6 +63,7 @@ class WishList(AccessControl, ShopFolder):
     new_instance = WishList_NewInstance()
 
     add_image = CurrentFolder_AddImage()
+    add_link = CurrentFolder_AddLink()
 
     @classmethod
     def get_metadata_schema(cls):
@@ -92,16 +93,16 @@ class WishList(AccessControl, ShopFolder):
     # ACL
     #############################
     def is_allowed_to_view(self, user, resource):
-        is_owner_or_admin = self.is_owner_or_admin(user, resource)
         # Is invited  ?
-        is_invited = False
-        if user:
+        if user and isinstance(resource, WishList):
+            is_allowed_to_edit = self.is_allowed_to_edit(user, resource)
             email = user.get_property('email')
             is_invited = email in resource.get_property('emails')
-        return is_owner_or_admin or is_invited
+            return is_invited or is_allowed_to_edit
+        return AccessControl.is_allowed_to_view(self, user, resource)
 
 
-    def is_owner_or_admin(self, user, resource):
+    def is_allowed_to_edit(self, user, resource):
         if not user:
             return False
         # Admins are all powerfull

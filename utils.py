@@ -25,6 +25,7 @@ from itools.handlers import ConfigFile
 from itools.xml import XMLParser
 
 # Import from ikaaro
+from ikaaro.resource_views import DBResource_AddLink
 from ikaaro.utils import reduce_string
 from ikaaro.website import WebSite
 
@@ -191,6 +192,12 @@ def get_group_name(shop, context):
 
 
 class CurrentFolder_AddImage(ImproveDBResource_AddImage):
+
+    def get_root(self, context):
+        return context.resource
+
+
+class CurrentFolder_AddLink(DBResource_AddLink):
 
     def get_root(self, context):
         return context.resource

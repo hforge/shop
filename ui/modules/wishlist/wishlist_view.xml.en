@@ -7,8 +7,11 @@
 
   <h1>
     ${title}
-    <a href="./;edit" stl:if="is_owner_or_admin">
+    <a href="./;edit" stl:if="is_allowed_to_edit">
       <img src="/ui/icons/16x16/edit.png" title="Edit"/>
+    </a>
+    <a href="./;administrate" stl:if="is_allowed_to_edit">
+      <img src="/ui/icons/16x16/help.png" title="Informations"/>
     </a>
   </h1>
 
