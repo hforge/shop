@@ -50,6 +50,7 @@ add_trans = order_workflow.add_trans
 states = {
   '': MSG(u'Unknow'),
   'open': MSG(u'Waiting payment'),
+  'partial_payment': MSG(u'Partial payment'),
   'payment_ok': MSG(u'Payment validated'),
   'preparation': MSG(u'Order in preparation'),
   'out_stock': MSG(u'A product is out of stock'),
@@ -65,6 +66,7 @@ states_color = {
   '': None,
   'open': '#BF0000',
   'payment_ok': '#008000',
+  'partial_payment': '#75906E',
   'preparation': '#5154FF',
   'out_stock': '#C878D8',
   'delivery': '#FFC500',
@@ -76,6 +78,8 @@ states_color = {
 # Transition:
 transitions = [
   ('open', 'payment_ok', MSG(u'Validate the payment')),
+  ('open', 'partial_payment', MSG(u'Set as partial payment')),
+  ('partial_payment', 'payment_ok', MSG(u'Complete the payment')),
   ('payment_ok', 'preparation', MSG(u'The order is in preparation')),
   ('payment_ok', 'out_stock', MSG(u'A product is out of stock')),
   ('payment_ok', 'cancel', MSG(u'Cancel the order')),

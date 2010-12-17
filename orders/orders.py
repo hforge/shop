@@ -426,7 +426,6 @@ class Order(WorkflowAware, ShopFolder):
     def onenter_cancel(self):
         # XXX We have to send email to inform customer ?
         # Update products stock values
-        shop = get_shop(self)
         context = get_context()
         order_products = self.get_resource('products')
         get_value = order_products.handler.get_record_value
@@ -446,7 +445,13 @@ class Order(WorkflowAware, ShopFolder):
     ##################################################
     def set_payment_as_ok(self, payment_way, id_record, context):
         # XXX Partial payment
-        self.set_as_payed(context)
+        payments = payment_way.get_resource('payments').handler
+        record = payments.get_record(id_record)
+        amount = payments.get_record_value(record, 'amount')
+        if amount < self.get_property('total_price'):
+            self.make_transition('open_to_partial_payment')
+        else:
+            self.set_as_payed(context)
 
 
     def set_as_payed(self, context):

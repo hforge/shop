@@ -83,10 +83,11 @@ class CreditPayment(PaymentWay):
         # Add the payment by credit
         # XXX We have to check if credit >= amount
         payments = self.get_resource('payments').handler
-        #credit = self.get_credit_available_for_user(context.user)
+        amount_available = self.get_credit_available_for_user(context.user.name)
+        amount_payed = min(payment['amount'], amount_available)
         record = payments.add_record(
             {'ref': payment['ref'],
-             'amount': payment['amount'],
+             'amount': amount_payed,
              'user': context.user.name,
              'resource_validator': payment['resource_validator']})
         # The payment is automatically validated
