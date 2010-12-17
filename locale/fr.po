@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-17 14:12+CET\n"
+"POT-Creation-Date: 2010-12-17 15:12+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -532,9 +532,12 @@ msgid "${taxes}<x id='2'/> Has reduction ?"
 msgstr "${taxes} <x id='2'/> Avec réduction ?"
 
 #: ../ui/modules/wishlist/wishlist_view.xml.en:9
+#, fuzzy
 msgctxt "heading"
-msgid "${title} <g id='1'>  <x id='2'/>  </g>"
-msgstr "${title} <g id='1'>  <x id='2'/>  </g>"
+msgid "${title} <g id='1'>  <x id='2'/>  </g>  <g id='3'>  <x id='4'/>  </g>"
+msgstr ""
+"Commande numéro #${order/id} <g id='3'>  <x id='4'/>  </g>  <g id='5'>  <x "
+"id='6'/>  </g>"
 
 #: ../ui/shop/cart_view.xml.en:101
 #, fuzzy
@@ -619,7 +622,6 @@ msgstr ""
 msgid "%s €"
 msgstr ""
 
-#: ../ui/shop/product/product_viewbox_cs.xml.en:9
 #: ../ui/shop/product/product_viewbox.xml.en:9
 msgctxt "span"
 msgid "(${price/with_tax} €)"
@@ -676,7 +678,7 @@ msgctxt "table cell"
 msgid "0€"
 msgstr "0 €"
 
-#: ../utils.py:175
+#: ../utils.py:176
 msgid "1 day ago."
 msgstr "Il y a un jour."
 
@@ -1082,7 +1084,7 @@ msgstr "Un produit n'est plus disponible en stock"
 
 #: ../modules/wishlist/wishlist.py:56
 msgid "A wishlist"
-msgstr ""
+msgstr "Une liste"
 
 #: ../payments/paybox/enumerates.py:86
 msgid "AMEX"
@@ -1143,11 +1145,11 @@ msgstr "Ajouter"
 msgid "Add Record"
 msgstr "Ajouter un nouveau enregistrement"
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:20
+#: ../ui/modules/wishlist/wishlist_view.xml.en:23
 msgctxt "div"
 msgid ""
-"Add a description and photos here, <g id='3'>by editing your wishlist</g>"
-msgstr ""
+"Add a description and photos here, <g id='5'>by editing your wishlist</g>"
+msgstr "Ajoutez une description et des photos ici <g id='5'>en éditant votre liste</g>"
 
 #: ../modules/loupe_on_products/loupe_on_products.py:29
 msgid "Add a loupe on products view"
@@ -1611,7 +1613,7 @@ msgctxt "link"
 msgid "Click here to get more informations."
 msgstr "Cliquez ici pour avoir plus d'informations"
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:24
+#: ../ui/modules/wishlist/wishlist_view.xml.en:27
 msgctxt "link"
 msgid "Click here to make a donation"
 msgstr "Cliquez ici pour ajouter de l'argent à la liste"
@@ -1850,6 +1852,10 @@ msgctxt "link"
 msgid "Create a new product"
 msgstr "Créer un nouveau produit"
 
+#: ../modules/wishlist/wishlist_views.py:71
+msgid "Create a wishlist"
+msgstr "Créer une nouvelle liste"
+
 #: ../products/product_views.py:411
 msgid "Creation Time"
 msgstr "Date de création"
@@ -1858,8 +1864,8 @@ msgstr "Date de création"
 msgid "Creation date"
 msgstr "Date de création"
 
-#: ../modules/wishlist/wishlist_views.py:83
 #: ../modules/wishlist/wishlist_views.py:84
+#: ../modules/wishlist/wishlist_views.py:85
 msgid "Creation of new wishlist"
 msgstr "Créer une nouvelle liste"
 
@@ -2103,7 +2109,7 @@ msgstr "Module de paiement par accompte"
 #: ../payments/payments_views.py:262
 #: ../ui/backoffice/orders/order_facture.xml.en:84
 #: ../shipping/withdrawal.py:96 ../shipping/shipping_way_views.py:47
-#: ../shipping/shipping_way.py:76 ../modules/wishlist/wishlist_views.py:181
+#: ../shipping/shipping_way.py:76 ../modules/wishlist/wishlist_views.py:182
 #: ../payments/payment_way.py:60
 msgid "Description"
 msgstr ""
@@ -2135,7 +2141,7 @@ msgstr "Jours de différés (Sur deux digits ex: 04)"
 
 #: ../modules/wishlist/wishlist_views.py:46
 msgid "Do it"
-msgstr ""
+msgstr "Ok"
 
 #: ../ui/backoffice/payments/cash/end.xml.en:16
 #: ../ui/backoffice/payments/check/record_view.xml.en:13
@@ -2182,7 +2188,7 @@ msgctxt "label"
 msgid "E-mail Address"
 msgstr "Adresse mail"
 
-#: ../modules/wishlist/wishlist_views.py:107
+#: ../modules/wishlist/wishlist_views.py:108
 msgid "E-mail of people to invite"
 msgstr ""
 
@@ -2584,7 +2590,7 @@ msgctxt "table cell"
 msgid "Gift Vouchers"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:153
+#: ../modules/wishlist/wishlist.py:154
 msgid "Gift made by user {user_name} ({user_title})"
 msgstr "Cadeau de {user_name} (${user_title})"
 
@@ -2856,7 +2862,13 @@ msgstr "Incident domaine initiateur"
 msgid "Increase"
 msgstr "Augmenter"
 
-#: ../modules/wishlist/wishlist_views.py:153
+#: ../modules/wishlist/wishlist_views.py:154
+msgid "Informations"
+msgstr "Informations"
+
+#: ../ui/modules/wishlist/wishlist_view.xml.en:14
+#, fuzzy
+msgctxt "title attribute"
 msgid "Informations"
 msgstr "Informations"
 
@@ -3055,7 +3067,7 @@ msgstr "Apparence"
 msgid "Le ${creation_date}"
 msgstr "Le ${creation_date}"
 
-#: ../utils.py:163
+#: ../utils.py:164
 msgid "Less than a minute ago"
 msgstr "Il y a moins d'une minute."
 
@@ -3331,7 +3343,7 @@ msgstr ""
 msgid "Module effiliation"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:119
+#: ../modules/wishlist/wishlist.py:120
 msgid "Module wishlist"
 msgstr ""
 
@@ -4014,11 +4026,11 @@ msgstr "Prix d'achat HT"
 msgid "Prefer use this shipping way"
 msgstr "Utiliser de préférence ce mode de livraison:"
 
-#: ../modules/wishlist/wishlist_views.py:183
+#: ../modules/wishlist/wishlist_views.py:184
 msgid "Presentation"
 msgstr "Présentation"
 
-#: ../modules/wishlist/wishlist_views.py:108
+#: ../modules/wishlist/wishlist_views.py:109
 msgid "Presentation of your wishlist"
 msgstr "Présentation de votre liste de cadeaux"
 
@@ -4667,8 +4679,8 @@ msgstr "Produit de la boutique"
 msgid "Shop website"
 msgstr "Boutique en ligne"
 
-#: ../modules/wishlist/wishlist_views.py:75
-#: ../modules/wishlist/wishlist_views.py:106
+#: ../modules/wishlist/wishlist_views.py:76
+#: ../modules/wishlist/wishlist_views.py:107
 msgid "Short description"
 msgstr "Petite description"
 
@@ -4803,7 +4815,7 @@ msgstr "Carte volée"
 msgid "String"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:182
+#: ../modules/wishlist/wishlist_views.py:183
 msgid "Subject"
 msgstr ""
 
@@ -5065,7 +5077,7 @@ msgstr "Temps d'attente > 15 mn par l'acheteur"
 #: ../products/product_views.py:429 ../products/product_views.py:562
 #: ../products/product_views.py:707 ../shipping/shipping_way_views.py:45
 #: ../forms_generator.py:169 ../products/images_views.py:36 ../user.py:100
-#: ../products/declination.py:64 ../modules/wishlist/wishlist_views.py:180
+#: ../products/declination.py:64 ../modules/wishlist/wishlist_views.py:181
 #: ../products/models.py:141 ../user_group.py:146
 msgid "Title"
 msgstr "Titre"
@@ -5078,8 +5090,8 @@ msgctxt "table cell"
 msgid "Title"
 msgstr "Titre"
 
-#: ../modules/wishlist/wishlist_views.py:74
-#: ../modules/wishlist/wishlist_views.py:105
+#: ../modules/wishlist/wishlist_views.py:75
+#: ../modules/wishlist/wishlist_views.py:106
 msgid "Title of your wishlist"
 msgstr "Titre de votre liste de cadeaux"
 
@@ -5131,8 +5143,8 @@ msgid ""
 "To finalize your payment, please send us your check ordered to ${to}<x "
 "id='2'/> at the following address:"
 msgstr ""
-"Pour finaliser votre paiement, veuillez nous envoyer "
-"votre chèque libellé à l'ordre de<x id='2'/> à l'adresse suivante :"
+"Pour finaliser votre paiement, veuillez nous envoyer votre chèque libellé à "
+"l'ordre de<x id='2'/> à l'adresse suivante :"
 
 #: ../ui/modules/stock/pdf_resupply.xml.en:25
 msgid "To:"
@@ -5402,8 +5414,8 @@ msgstr ""
 #: ../enumerate_table.py:211
 #: ../sidebar/sidebar_product_cross_selling_box.py:43 ../suppliers_views.py:28
 #: ../sidebar/cross_selling_box.py:40 ../feed_views/base.py:36
-#: ../website_views.py:62 ../modules/wishlist/wishlist_views.py:139
-#: ../modules/wishlist/wishlist_views.py:208
+#: ../website_views.py:62 ../modules/wishlist/wishlist_views.py:140
+#: ../modules/wishlist/wishlist_views.py:209
 #: ../sidebar/sidebar_cross_selling_box.py:40
 msgid "View"
 msgstr "Voir"
@@ -5588,7 +5600,7 @@ msgstr "Vous n'êtes pas autorisé à faire cela !"
 #: ../ui/modules/wishlist/view.xml.en:20
 msgctxt "div"
 msgid "You can <g id='3'>create a new one</g>."
-msgstr ""
+msgstr "Vous pouvez <g id='3'>en créer une nouvelle</g>."
 
 #: ../ui/shop/payments_end.xml.en:16
 msgctxt "paragraph"
@@ -5787,15 +5799,15 @@ msgstr ""
 msgid "[Error] Unknow reference %s"
 msgstr "[Erreur] Référence inconnue %s"
 
-#: ../utils.py:165
+#: ../utils.py:166
 msgid "about a minute ago."
 msgstr "Il y a moins d'une minute"
 
-#: ../utils.py:170
+#: ../utils.py:171
 msgid "about an hour ago."
 msgstr "Il y a moins d'une heure"
 
-#: ../utils.py:173
+#: ../utils.py:174
 msgid "about {x} hours ago."
 msgstr "Il y a moins de {x} heures."
 
@@ -5836,19 +5848,19 @@ msgstr ""
 msgid "{my_name} advice you this product: {product_title}"
 msgstr "{my_name} vous conseille ce produit : {product_title}"
 
-#: ../utils.py:177
+#: ../utils.py:178
 msgid "{x} days ago."
 msgstr "Il y a {x} jours."
 
-#: ../utils.py:168
+#: ../utils.py:169
 msgid "{x} minutes ago."
 msgstr "Il y a {x} minutes."
 
-#: ../utils.py:182
+#: ../utils.py:183
 msgid "{x} month ago."
 msgstr "Il y a {x} mois."
 
-#: ../utils.py:180
+#: ../utils.py:181
 msgid "{x} weeks ago."
 msgstr "Il y a {x} mois."
 
@@ -6013,6 +6025,10 @@ msgstr "€<x id='31'/> Prix de vente réduit final:"
 #~ msgctxt "paragraph"
 #~ msgid "${ref}<x id='3'/> amount:"
 #~ msgstr "${ref}<x id='3'/> montant:"
+
+#~ msgctxt "heading"
+#~ msgid "${title} <g id='1'>  <x id='2'/>  </g>"
+#~ msgstr "${title} <g id='1'>  <x id='2'/>  </g>"
 
 #~ msgctxt "table cell"
 #~ msgid "${user/base/email}<x id='9'/> User Language:"

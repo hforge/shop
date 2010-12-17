@@ -68,6 +68,7 @@ class WishList_Donate(AutoForm):
 class WishList_NewInstance(NewInstance):
 
     access = 'is_authenticated'
+    title = MSG(u'Create a wishlist')
 
     schema = merge_dicts(NewInstance.schema,
                          description=Unicode)

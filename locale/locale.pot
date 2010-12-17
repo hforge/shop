@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-17 14:12+CET\n"
+"POT-Creation-Date: 2010-12-17 15:12+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,7 +170,7 @@ msgstr ""
 msgid "/"
 msgstr ""
 
-#: ../utils.py:175
+#: ../utils.py:176
 msgid "1 day ago."
 msgstr ""
 
@@ -709,6 +709,10 @@ msgstr ""
 msgid "Create a new product"
 msgstr ""
 
+#: ../modules/wishlist/wishlist_views.py:71
+msgid "Create a wishlist"
+msgstr ""
+
 #: ../products/product_views.py:411
 msgid "Creation Time"
 msgstr ""
@@ -717,8 +721,8 @@ msgstr ""
 msgid "Creation date"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:83
 #: ../modules/wishlist/wishlist_views.py:84
+#: ../modules/wishlist/wishlist_views.py:85
 msgid "Creation of new wishlist"
 msgstr ""
 
@@ -892,7 +896,7 @@ msgstr ""
 #: ../shipping/withdrawal.py:96
 #: ../shipping/shipping_way_views.py:47
 #: ../shipping/shipping_way.py:76
-#: ../modules/wishlist/wishlist_views.py:181
+#: ../modules/wishlist/wishlist_views.py:182
 #: ../payments/payment_way.py:60
 msgid "Description"
 msgstr ""
@@ -919,7 +923,7 @@ msgstr ""
 msgid "Donate"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:107
+#: ../modules/wishlist/wishlist_views.py:108
 msgid "E-mail of people to invite"
 msgstr ""
 
@@ -1238,7 +1242,7 @@ msgstr ""
 msgid "Genre"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:153
+#: ../modules/wishlist/wishlist.py:154
 msgid "Gift made by user {user_name} ({user_title})"
 msgstr ""
 
@@ -1379,7 +1383,7 @@ msgstr ""
 msgid "Increase"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:153
+#: ../modules/wishlist/wishlist_views.py:154
 msgid "Informations"
 msgstr ""
 
@@ -1551,7 +1555,7 @@ msgstr ""
 msgid "Le ${creation_date}"
 msgstr ""
 
-#: ../utils.py:163
+#: ../utils.py:164
 msgid "Less than a minute ago"
 msgstr ""
 
@@ -1724,7 +1728,7 @@ msgstr ""
 msgid "Module effiliation"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:119
+#: ../modules/wishlist/wishlist.py:120
 msgid "Module wishlist"
 msgstr ""
 
@@ -2214,11 +2218,11 @@ msgstr ""
 msgid "Prefer use this shipping way"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:183
+#: ../modules/wishlist/wishlist_views.py:184
 msgid "Presentation"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:108
+#: ../modules/wishlist/wishlist_views.py:109
 msgid "Presentation of your wishlist"
 msgstr ""
 
@@ -2659,8 +2663,8 @@ msgstr ""
 msgid "Shop website"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:75
-#: ../modules/wishlist/wishlist_views.py:106
+#: ../modules/wishlist/wishlist_views.py:76
+#: ../modules/wishlist/wishlist_views.py:107
 msgid "Short description"
 msgstr ""
 
@@ -2768,7 +2772,7 @@ msgstr ""
 msgid "String"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:182
+#: ../modules/wishlist/wishlist_views.py:183
 msgid "Subject"
 msgstr ""
 
@@ -3008,14 +3012,14 @@ msgstr ""
 #: ../products/images_views.py:36
 #: ../user.py:100
 #: ../products/declination.py:64
-#: ../modules/wishlist/wishlist_views.py:180
+#: ../modules/wishlist/wishlist_views.py:181
 #: ../products/models.py:141
 #: ../user_group.py:146
 msgid "Title"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:74
-#: ../modules/wishlist/wishlist_views.py:105
+#: ../modules/wishlist/wishlist_views.py:75
+#: ../modules/wishlist/wishlist_views.py:106
 msgid "Title of your wishlist"
 msgstr ""
 
@@ -3222,8 +3226,8 @@ msgstr ""
 #: ../sidebar/cross_selling_box.py:40
 #: ../feed_views/base.py:36
 #: ../website_views.py:62
-#: ../modules/wishlist/wishlist_views.py:139
-#: ../modules/wishlist/wishlist_views.py:208
+#: ../modules/wishlist/wishlist_views.py:140
+#: ../modules/wishlist/wishlist_views.py:209
 #: ../sidebar/sidebar_cross_selling_box.py:40
 msgid "View"
 msgstr ""
@@ -3451,15 +3455,15 @@ msgstr ""
 msgid "[Error] Unknow reference %s"
 msgstr ""
 
-#: ../utils.py:165
+#: ../utils.py:166
 msgid "about a minute ago."
 msgstr ""
 
-#: ../utils.py:170
+#: ../utils.py:171
 msgid "about an hour ago."
 msgstr ""
 
-#: ../utils.py:173
+#: ../utils.py:174
 msgid "about {x} hours ago."
 msgstr ""
 
@@ -3497,19 +3501,19 @@ msgstr ""
 msgid "{my_name} advice you this product: {product_title}"
 msgstr ""
 
-#: ../utils.py:177
+#: ../utils.py:178
 msgid "{x} days ago."
 msgstr ""
 
-#: ../utils.py:168
+#: ../utils.py:169
 msgid "{x} minutes ago."
 msgstr ""
 
-#: ../utils.py:182
+#: ../utils.py:183
 msgid "{x} month ago."
 msgstr ""
 
-#: ../utils.py:180
+#: ../utils.py:181
 msgid "{x} weeks ago."
 msgstr ""
 
@@ -3750,9 +3754,9 @@ msgctxt "div"
 msgid "6<g id='6'>Confirmation</g>"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:20
+#: ../ui/modules/wishlist/wishlist_view.xml.en:23
 msgctxt "div"
-msgid "Add a description and photos here, <g id='3'>by editing your wishlist</g>"
+msgid "Add a description and photos here, <g id='5'>by editing your wishlist</g>"
 msgstr ""
 
 #: ../ui/vertical_depot/login_box.xml.en:31
@@ -3889,7 +3893,7 @@ msgstr ""
 
 #: ../ui/modules/wishlist/wishlist_view.xml.en:9
 msgctxt "heading"
-msgid "${title} <g id='1'>  <x id='2'/>  </g>"
+msgid "${title} <g id='1'>  <x id='2'/>  </g>  <g id='3'>  <x id='4'/>  </g>"
 msgstr ""
 
 #: ../ui/shop/product/print.xml.en:16
@@ -4404,7 +4408,7 @@ msgctxt "link"
 msgid "Click here to get more informations."
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:24
+#: ../ui/modules/wishlist/wishlist_view.xml.en:27
 msgctxt "link"
 msgid "Click here to make a donation"
 msgstr ""
@@ -4921,7 +4925,6 @@ msgctxt "span"
 msgid "${price/price} €"
 msgstr ""
 
-#: ../ui/shop/product/product_viewbox_cs.xml.en:9
 #: ../ui/shop/product/product_viewbox.xml.en:9
 msgctxt "span"
 msgid "(${price/with_tax} €)"
@@ -5843,6 +5846,11 @@ msgstr ""
 #: ../ui/shop/cart_view.xml.en:66
 msgctxt "title attribute"
 msgid "Impossible to add product in cart"
+msgstr ""
+
+#: ../ui/modules/wishlist/wishlist_view.xml.en:14
+msgctxt "title attribute"
+msgid "Informations"
 msgstr ""
 
 #: ../ui/skin2/template.xhtml.en:33
