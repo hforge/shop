@@ -445,6 +445,7 @@ class Order(WorkflowAware, ShopFolder):
     # XXX We have to delete it ?
     ##################################################
     def set_payment_as_ok(self, payment_way, id_record, context):
+        # XXX Partial payment
         self.set_as_payed(context)
 
 
