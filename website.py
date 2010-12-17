@@ -112,10 +112,6 @@ class ShopWebSite(NeutralWS):
                   class_skin=SkinsEnumerate)
 
 
-    def get_document_types(self):
-        return []
-
-
     def get_class_skin(self, context):
         class_skin = self.get_property('class_skin')
         if not class_skin:
