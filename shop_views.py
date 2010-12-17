@@ -52,6 +52,7 @@ from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from utils import get_shop, format_price
 from cart import ProductCart
 from countries import CountriesEnumerate
+from modules import ModuleLoader
 from payments import PaymentWaysEnumerate
 from payments.payments_views import Payments_ChoosePayment
 from products.declination import Declination
@@ -888,7 +889,7 @@ class Shop_Administration(STLView):
         try:
             f = urlopen(url)
             data = XMLParser(f.read())
-        except Exception, e:
+        except Exception:
             return None
         if f.code == 404:
             return None
@@ -896,12 +897,14 @@ class Shop_Administration(STLView):
 
 
     def get_namespace(self, resource, context):
-        site_root = context.site_root
-        # Orders
-        orders = resource.get_resource('orders')
+        # Modules
+        shop_module = ModuleLoader()
+        shop_module.context = context
+        shop_module.here = context.resource
         # Return namespace
         return {'news': self.get_rss_news(context),
                 'announce': self.get_announce(context),
+                'module': shop_module,
                 # Last resources created
                 'products': self.get_last_resources(context, 'product', 13),
                 'issues': self.get_last_resources(context,'itws-issue', 13),
