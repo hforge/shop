@@ -1149,7 +1149,9 @@ msgstr "Ajouter un nouveau enregistrement"
 msgctxt "div"
 msgid ""
 "Add a description and photos here, <g id='5'>by editing your wishlist</g>"
-msgstr "Ajoutez une description et des photos ici <g id='5'>en éditant votre liste</g>"
+msgstr ""
+"Ajoutez une description et des photos ici <g id='5'>en éditant votre liste</"
+"g>"
 
 #: ../modules/loupe_on_products/loupe_on_products.py:29
 msgid "Add a loupe on products view"
@@ -1240,6 +1242,10 @@ msgstr "État avancé"
 #: ../sidebar/sub_categories_box.py:173
 msgid "Afficher le nombre de produits"
 msgstr "Afficher le nombre de produits"
+
+#: ../ui/backoffice/payments/credit/description.xml.en:17
+msgid "After this payment, you will have a credit of ${remaining_amount}€."
+msgstr "Après ce paiement, il vous restera ${remaining_amount}€ en bon d'achat."
 
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:8
 msgctxt "label"
@@ -1345,7 +1351,7 @@ msgctxt "label"
 msgid "Bank:"
 msgstr "Banque :"
 
-#: ../orders/orders.py:249 ../orders/orders.py:590 ../orders/orders.py:658
+#: ../orders/orders.py:249 ../orders/orders.py:591 ../orders/orders.py:659
 #: ../products/product.py:810 ../ui/backoffice/orders/order_pdf.xml.en:78
 msgid "Barcode"
 msgstr "Code Barre"
@@ -1368,7 +1374,7 @@ msgctxt "div"
 msgid "Bienvenue ${user/title} !"
 msgstr ""
 
-#: ../orders/orders.py:552 ../orders/orders.py:577
+#: ../orders/orders.py:553 ../orders/orders.py:578
 #: ../ui/backoffice/orders/order_facture.xml.en:5
 msgid "Bill"
 msgstr "Facture"
@@ -1869,11 +1875,11 @@ msgstr "Date de création"
 msgid "Creation of new wishlist"
 msgstr "Créer une nouvelle liste"
 
-#: ../payments/credit/credit.py:53
+#: ../payments/credit/credit.py:51
 msgid "Credit amount"
 msgstr "Montant du credit"
 
-#: ../payments/credit/credit.py:60
+#: ../payments/credit/credit.py:58
 msgid "Credit payment"
 msgstr "Paiement par credit"
 
@@ -2101,7 +2107,7 @@ msgstr ""
 msgid "Deposit payment module"
 msgstr "Module de paiement par accompte"
 
-#: ../payments/credit/credit.py:54 ../ui/backoffice/orders/order_pdf.xml.en:80
+#: ../payments/credit/credit.py:52 ../ui/backoffice/orders/order_pdf.xml.en:80
 #: ../payments/payment_way_views.py:82 ../categories.py:58
 #: ../products/product_views.py:240 ../products/product_views.py:430
 #: ../suppliers.py:71 ../shipping/shippings_views.py:91
@@ -3678,7 +3684,7 @@ msgstr "Information générales sur la commande"
 msgid "Order title"
 msgstr "Titre 'Commander'"
 
-#: ../orders/orders.py:606 ../shop.py:153
+#: ../orders/orders.py:607 ../shop.py:153
 msgid "Orders"
 msgstr "Commandes"
 
@@ -4757,6 +4763,20 @@ msgctxt "button"
 msgid "So click here"
 msgstr "Donc cliquez ici"
 
+#: ../ui/backoffice/payments/credit/description.xml.en:15
+msgctxt "b"
+msgid "So you have to pay <g id='5'>0€</g>"
+msgstr "Vous devez donc payer <g id='5'>0€</g>"
+
+#: ../ui/backoffice/payments/credit/description.xml.en:11
+msgctxt "b"
+msgid ""
+"So you just have to pay <g id='4'>${amount_to_pay}€</g> (${total_amount}€ - "
+"${amount_available}€)"
+msgstr ""
+"Vous devez donc payer uniquement <g id='4'>${amount_to_pay}€</g> (${total_amount}€ - "
+"${amount_available}€)"
+
 #: ../shop_views.py:118
 msgid "Sort products by ..."
 msgstr "Trier les produits par ..."
@@ -5353,7 +5373,7 @@ msgstr "Groupe de l'utilisateur"
 msgid "User groups"
 msgstr "Groupes utilisateur"
 
-#: ../payments/credit/credit.py:52 ../payments/payment_way.py:56
+#: ../payments/credit/credit.py:50 ../payments/payment_way.py:56
 msgid "User id"
 msgstr "ID utilisateur"
 
@@ -5601,6 +5621,15 @@ msgstr "Vous n'êtes pas autorisé à faire cela !"
 msgctxt "div"
 msgid "You can <g id='3'>create a new one</g>."
 msgstr "Vous pouvez <g id='3'>en créer une nouvelle</g>."
+
+#: ../ui/backoffice/payments/credit/description.xml.en:8
+msgctxt "b"
+msgid ""
+"You can choose to pay with the credit available in your account<x id='1'/> "
+"You have <g id='2'>${amount_available}€</g> available in your account"
+msgstr ""
+"Vous pouvez choisir de payer avec le crédit disponible en bon d'achats<x id='1'/> "
+"Vous disposez de <g id='2'>${amount_available}€</g> en bon d'achats"
 
 #: ../ui/shop/payments_end.xml.en:16
 msgctxt "paragraph"

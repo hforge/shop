@@ -322,6 +322,10 @@ msgstr ""
 msgid "Afficher le nombre de produits"
 msgstr ""
 
+#: ../ui/backoffice/payments/credit/description.xml.en:17
+msgid "After this payment, you will have a credit of ${remaining_amount}€."
+msgstr ""
+
 #: ../cross_selling_views.py:62
 msgid "All categories"
 msgstr ""
@@ -391,8 +395,8 @@ msgid "Bank"
 msgstr ""
 
 #: ../orders/orders.py:249
-#: ../orders/orders.py:590
-#: ../orders/orders.py:658
+#: ../orders/orders.py:591
+#: ../orders/orders.py:659
 #: ../products/product.py:810
 #: ../ui/backoffice/orders/order_pdf.xml.en:78
 msgid "Barcode"
@@ -406,8 +410,8 @@ msgstr ""
 msgid "Batch size for categories ?"
 msgstr ""
 
-#: ../orders/orders.py:552
-#: ../orders/orders.py:577
+#: ../orders/orders.py:553
+#: ../orders/orders.py:578
 #: ../ui/backoffice/orders/order_facture.xml.en:5
 msgid "Bill"
 msgstr ""
@@ -726,11 +730,11 @@ msgstr ""
 msgid "Creation of new wishlist"
 msgstr ""
 
-#: ../payments/credit/credit.py:53
+#: ../payments/credit/credit.py:51
 msgid "Credit amount"
 msgstr ""
 
-#: ../payments/credit/credit.py:60
+#: ../payments/credit/credit.py:58
 msgid "Credit payment"
 msgstr ""
 
@@ -881,7 +885,7 @@ msgstr ""
 msgid "Deposit payment module"
 msgstr ""
 
-#: ../payments/credit/credit.py:54
+#: ../payments/credit/credit.py:52
 #: ../ui/backoffice/orders/order_pdf.xml.en:80
 #: ../payments/payment_way_views.py:82
 #: ../categories.py:58
@@ -1961,7 +1965,7 @@ msgstr ""
 msgid "Order title"
 msgstr ""
 
-#: ../orders/orders.py:606
+#: ../orders/orders.py:607
 #: ../shop.py:153
 msgid "Orders"
 msgstr ""
@@ -3163,7 +3167,7 @@ msgstr ""
 msgid "User groups"
 msgstr ""
 
-#: ../payments/credit/credit.py:52
+#: ../payments/credit/credit.py:50
 #: ../payments/payment_way.py:56
 msgid "User id"
 msgstr ""
@@ -3583,6 +3587,16 @@ msgctxt "b"
 msgid "Order reference:"
 msgstr ""
 
+#: ../ui/backoffice/payments/credit/description.xml.en:15
+msgctxt "b"
+msgid "So you have to pay <g id='5'>0€</g>"
+msgstr ""
+
+#: ../ui/backoffice/payments/credit/description.xml.en:11
+msgctxt "b"
+msgid "So you just have to pay <g id='4'>${amount_to_pay}€</g> (${total_amount}€ - ${amount_available}€)"
+msgstr ""
+
 #: ../ui/backoffice/payments/check/end.xml.en:12
 msgctxt "b"
 msgid "To finalize your payment, please send us your check ordered to ${to}<x id='2'/> at the following address:"
@@ -3606,6 +3620,11 @@ msgstr ""
 #: ../ui/backoffice/payments/choose_payment.xml.en:12
 msgctxt "b"
 msgid "Total to pay:"
+msgstr ""
+
+#: ../ui/backoffice/payments/credit/description.xml.en:8
+msgctxt "b"
+msgid "You can choose to pay with the credit available in your account<x id='1'/> You have <g id='2'>${amount_available}€</g> available in your account"
 msgstr ""
 
 #: ../ui/backoffice/payments/check/record_view.xml.en:10

@@ -22,17 +22,15 @@ from itools.csv import Table as BaseTable
 from itools.datatypes import Decimal, String, Unicode
 from itools.gettext import MSG
 from itools.stl import stl
-from itools.xml import XMLParser
 
 # Import from ikaaro
-from ikaaro.forms import stl_namespaces, TextWidget
+from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop.payments
 from shop.payments.payment_way import PaymentWay
 from shop.payments.payment_way_views import PaymentWay_Configure
-from shop.payments.payments_views import Payments_ChoosePayment
 from shop.payments.registry import register_payment_way
 
 
@@ -104,20 +102,6 @@ class CreditPayment(PaymentWay):
         return amount_available > decimal('0.0')
 
 
-    description = list(XMLParser("""
-         You can choose to pay with the credit available in your account<br/>
-         You have <b>${amount_available}€</b> available in your account<br/>
-         <stl:block stl:if="has_to_complete_payment">
-           So you just have to pay <b>${amount_to_pay}€</b>
-           (${total_amount}€ - ${amount_available}€)
-         </stl:block>
-         <stl:block stl:if="not has_to_complete_payment">
-           So you have to pay <b>0€</b>
-         </stl:block><br/>
-         After this payment, you will have a credit of ${remaining_amount}€.
-         """, stl_namespaces))
-
-
     def get_payment_way_description(self, context, total_amount):
         total_amount = decimal(total_amount['with_tax'])
         amount_available = self.get_credit_available_for_user(context.user.name)
@@ -129,7 +113,9 @@ class CreditPayment(PaymentWay):
                      'amount_to_pay': total_amount-amount_available,
                      'remaining_amount': remaining_amount,
                      'total_amount': total_amount}
-        return stl(events=self.description, namespace=namespace)
+        description_template = self.get_resource(
+            '/ui/backoffice/payments/credit/description.xml')
+        return stl(description_template, namespace=namespace)
 
 
     def _show_payment_form(self, context, payment):

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+
+   You can choose to pay with the credit available in your account<br/>
+   You have <b>${amount_available}€</b> available in your account<br/>
+   <stl:block stl:if="has_to_complete_payment">
+     So you just have to pay <b>${amount_to_pay}€</b>
+     (${total_amount}€ - ${amount_available}€)
+   </stl:block>
+   <stl:block stl:if="not has_to_complete_payment">
+     So you have to pay <b>0€</b>
+   </stl:block><br/>
+   After this payment, you will have a credit of ${remaining_amount}€.
+
+
+</stl:block>
