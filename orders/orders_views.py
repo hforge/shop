@@ -238,8 +238,8 @@ class OrdersView(Folder_BrowseContent):
         # Join pdf
         pdf = join_pdfs(list_pdf)
         # We regenerate pdf
-        order.generate_pdf_bill(context)
-        order.generate_pdf_order(context)
+        #order.generate_pdf_bill(context)
+        #order.generate_pdf_order(context)
         return pdf
 
 
