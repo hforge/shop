@@ -138,12 +138,14 @@ class Paybox(PaymentWay):
         kw['PBX_RUF1'] = 'POST'
         kw['PBX_RETOUR'] = "ref:R\;transaction:T\;autorisation:A\;amount:M\;advance_state:E\;payment:P\;carte:C\;sign:K"
         # PBX Retour uri
+        base_uri = context.uri.resolve(context.get_link(self))
         for option in PBXState.get_options():
             key = option['pbx']
             state = option['name']
-            base_uri = context.uri.resolve(context.get_link(self))
             uri = '%s/;end?state=%s' % (base_uri, state)
             kw[key] = '"%s"' % uri
+        # PBX_REPONDRE_A (Url to call to set payment status)
+        kw['PBX_REPONDRE_A'] = '"%s/;confirm_payment"' % base_uri
         # Configuration
         for key in ['PBX_SITE', 'PBX_IDENTIFIANT',
                     'PBX_RANG', 'PBX_DIFF', 'PBX_AUTOSEULE']:
