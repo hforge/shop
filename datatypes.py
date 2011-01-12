@@ -284,6 +284,7 @@ class UE_VAT_Datatype(String):
     @classmethod
     def is_valid(cls, value):
         # http://ec.europa.eu/taxation_customs/vies/faqvies.do
+        value = value.replace(" ", "")
         regexp = r"""^(
                      AT ?U[0-9]{7}| # Austria
                      BE ?[0-9]{10}| # Belgium
