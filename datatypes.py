@@ -16,6 +16,7 @@
 
 # Import from standard library
 import datetime
+import re
 from decimal import Decimal as decimal
 
 # Import from itools
@@ -29,7 +30,7 @@ from itools.web import get_context
 from ikaaro.file import Image
 
 # Import from shop
-from registry import shop_skins
+from registry import shop_skins, register_datatype
 from utils import format_price
 
 
@@ -253,3 +254,68 @@ class FrenchDate(Date):
         if value is None:
             return ''
         return value.strftime('%d/%m/%Y')
+
+
+
+class SIREN_Datatype(String):
+
+    @classmethod
+    def is_valid(cls, value):
+        # Luhn Algo
+        # http://fr.wikipedia.org/wiki/Luhn
+        if len(value) != 14:
+            return False
+        total = 0
+        for i, c in enumerate(value):
+            digit = int(c)
+            if i % 2 == 0:
+                # Pair
+                digit = digit * 2
+            if digit > 9:
+                digit = digit - 9
+            total += digit
+        return (total % 10) == 0
+
+
+
+class UE_VAT_Datatype(String):
+
+    @classmethod
+    def is_valid(cls, value):
+        # http://ec.europa.eu/taxation_customs/vies/faqvies.do
+        regexp = r"""^(
+                     AT ?U[0-9]{7}| # Austria
+                     BE ?[0-9]{10}| # Belgium
+                     BG ?[0-9]{9,10}| # Bulgaria
+                     CY ?[0-9]{8}[A-Z]{1}| # Cyprius
+                     CZ ?[0-9]{8,10}| # Czech Republic
+                     DE ?[0-9]{9}| # Germany
+                     DK ?[0-9]{8}| # Denmark
+                     EE ?[0-9]{9}| # Estoniag
+                     EL ?[0-9]{9}| # Greece
+                     ES ?[0-9A-Z]{9}| # Spain
+                     FI ?[0-9]{8}| # Finland
+                     FR ?[0-9A-Z]{11}| # France
+                     GB ?[0-9]{9,12}|GB ?[0-9A-Z]{5}| # United Kingdom
+                     HU ?[0-9]{8}| # Hungary
+                     IE ?[0-9A-Z]{8}| # Ireland
+                     IT ?[0-9]{11}| # Italy
+                     LT ?([0-9]{9}|[0-9]{12})| # Lithuania
+                     LU ?[0-9]{8}| # Luxembourg
+                     LV ?[0-9]{11}| # Latvia
+                     MT ?[0-9]{8}| # Malta
+                     NL ?[0-9B]{12}| # The Netherlands
+                     PL ?[0-9]{10}| # Poland
+                     PT ?[0-9]{9}| # Portugal
+                     RO ?[0-9]{2,10}| # Romania
+                     SE ?[0-9]{12}| # Sweden
+                     SI ?[0-9]{8}| # Slovenia
+                     SK ?[0-9]{10} # Slovakia
+                     )$"""
+        prog = re.compile(regexp, re.X) # Verbose
+        return prog.match(value) != None
+
+
+
+register_datatype('siren', MSG(u'SIREN'), SIREN_Datatype)
+register_datatype('ue_vat', MSG(u'UE VAT'), UE_VAT_Datatype)
