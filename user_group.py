@@ -132,6 +132,14 @@ class ShopUser_Group(ShopFolder):
         return MSG(u"Your inscription has been validated").gettext()
 
 
+    def get_prefix(self):
+        # Price prefix
+        # XXX for future we should add group property to price
+        if self.name == 'default':
+            return ''
+        return '%s-' % self.name
+
+
     def update_20100719(self):
         cls = CustomerSchema
         cls.make_resource(cls, self, 'schema')

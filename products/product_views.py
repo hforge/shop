@@ -716,15 +716,33 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
         columns = []
         shop = get_shop(resource)
         enumerates_folder = shop.get_resource('enumerates')
+        # Purchase options columns
         for name in resource.get_purchase_options_names():
             title = enumerates_folder.get_resource(name).get_title()
             columns.append((name, title))
+        # Groups price
+        for group in UserGroup_Enumerate.get_options():
+            group = context.root.get_resource(group['name'])
+            if group.get_property('use_default_price') is True:
+                continue
+            if group.get_property('show_ht_price'):
+                tax = 'HT'
+            else:
+                tax = 'TTC'
+            title = MSG(u'Price {g} {t}').gettext(g=group.get_title(), t=tax)
+            columns.append(('price-%s' % group.name, title))
         return self.base_columns + columns
 
 
     def get_items(self, resource, context):
         shop = get_shop(resource)
         items = []
+        groups = []
+        # Get list of groups
+        for option in UserGroup_Enumerate.get_options():
+            group = context.root.get_resource(option['name'])
+            groups.append(group)
+        # Get all declinations
         for declination in resource.search_resources(cls=Declination):
             name = declination.name
             kw = {'checkbox': (name, True),
@@ -758,6 +776,18 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
             elif weight_impact == 'decrease':
                 kw['weight'] = u'%s kg' % (base_weight - weight_value)
                 kw['weight'] += u' (- %s kg)' % (base_weight - weight_value)
+            # Price
+            for group in groups:
+                if group.get_property('use_default_price') is True:
+                    continue
+                k_price = {'id_declination': declination.name,
+                           'prefix': group.get_prefix(),
+                           'pretty': True}
+                if group.get_property('show_ht_price'):
+                    price = resource.get_price_without_tax(**k_price)
+                else:
+                    price = resource.get_price_with_tax(**k_price)
+                kw['price-%s' % group.name] = price
             # Default ?
             is_default = declination.get_property('is_default')
             kw['is_default'] = bool_to_img(is_default)
