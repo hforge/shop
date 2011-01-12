@@ -60,7 +60,7 @@ from shop.catalog import dynamic_fields
 from shop.datatypes import UserGroup_Enumerate
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
-from shop.utils import get_non_empty_widgets, get_shop, get_skin_template
+from shop.utils import bool_to_img, get_non_empty_widgets, get_shop, get_skin_template
 
 
 class Product_NewProduct(NewInstance):
@@ -703,6 +703,7 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
             ('checkbox', None),
             ('barcode', None),
             ('img', None),
+            ('is_default', MSG(u'Default ?')),
             ('reference', MSG(u'Reference')),
             ('title', MSG(u'Title')),
             ('stock-quantity', MSG(u'Stock quantity')),
@@ -756,6 +757,9 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
             elif weight_impact == 'decrease':
                 kw['weight'] = u'%s kg' % (base_weight - weight_value)
                 kw['weight'] += u' (- %s kg)' % (base_weight - weight_value)
+            # Default ?
+            is_default = declination.get_property('is_default')
+            kw['is_default'] = bool_to_img(is_default)
             items.append(kw)
         return items
 

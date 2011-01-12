@@ -357,6 +357,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                 'weight': str(self.get_weight()),
                 'image': [],
                 'option': {},
+                'is_default': True,
                 'stock': stock_quantity if manage_stock else None}
         # Other products (declinations)
         for declination in declinations:
@@ -369,6 +370,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
               'price_ttc': format_price(price_ttc),
               'weight': str(declination.get_weight()),
               'image': get_uri_name(image) if image else None,
+              'is_default': declination.get_property('is_default'),
               'option': {},
               'stock': stock_quantity if manage_stock else None}
             for name in purchase_options_names:

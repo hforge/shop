@@ -1,6 +1,7 @@
 // Add trigger on each select:
 // on change we have to check products
 $(document).ready(function() {
+
   $("#quantity").keyup(function(){
      check_products();
   }).trigger('keyup');
@@ -10,6 +11,8 @@ $(document).ready(function() {
       check_products();
     }).trigger('change');
   });
+
+  set_default_declination();
 
 });
 
@@ -43,6 +46,21 @@ function get_dict_size(dict){
   var count = 0;
   for (k in dict) count++;
   return count;
+}
+
+function set_default_declination(){
+  // Search default product and set values
+  for(id_product in products){
+    if(products[id_product]['is_default'] == true){
+      product_options = products[id_product]['option'];
+      for(key in product_options){
+        value = product_options[key];
+        $("#" + key).val(value);
+      }
+    }
+  }
+  // Select product
+  check_products();
 }
 
 function check_products(){

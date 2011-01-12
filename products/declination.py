@@ -19,12 +19,12 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import String, Unicode, Integer, Decimal
+from itools.datatypes import Boolean, String, Unicode, Integer, Decimal
 from itools.gettext import MSG
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import TextWidget, SelectWidget
+from ikaaro.forms import BooleanRadio, TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.views_new import NewInstance
@@ -42,6 +42,8 @@ from shop.widgets import SelectRadioImages
 declination_schema = {#General informations
                       'reference': String,
                       'title': Unicode,
+                      # Default declination ?
+                      'is_default': Boolean,
                       # Stock
                       'stock-quantity': Integer(default=0),
                       # Weight
@@ -62,6 +64,7 @@ declination_schema = {#General informations
 declination_widgets = [
     TextWidget('reference', title=MSG(u'Reference')),
     TextWidget('title', title=MSG(u'Title')),
+    BooleanRadio('is_default', title=MSG(u'Is default ?')),
     #SelectRadioImages('associated-image', title=MSG(u'Associated image')),
     TextWidget('stock-quantity', title=MSG(u'Stock quantity')),
     SelectWidget('impact-on-weight', has_empty_option=False, title=MSG(u'Impact on weight')),
