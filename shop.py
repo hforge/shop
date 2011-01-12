@@ -227,7 +227,6 @@ class Shop(ShopFolder):
     ##############################
     def get_user_main_address(self, user_name):
         # TODO: user can define his default address
-        ns_addresses = []
         addresses = self.get_resource('addresses').handler
         for record in addresses.search(user=str(user_name)):
             return record
@@ -242,7 +241,6 @@ class Shop(ShopFolder):
     # Configuration
     ##############################
     def show_ht_price(self, context):
-        user = context.user
         if context.user:
             group = context.user.get_group(context)
             return group.get_property('show_ht_price')
