@@ -90,6 +90,7 @@ class Declination_Edit(DBResource_Edit):
 class Declination_NewInstance(NewInstance):
 
     title = MSG(u'Create a new declination')
+    context_menus = []
 
 
     def get_schema(self, resource, context):

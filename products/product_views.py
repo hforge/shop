@@ -34,12 +34,12 @@ from ikaaro import messages
 from ikaaro.buttons import RemoveButton, RenameButton, CopyButton, PasteButton
 from ikaaro.buttons import PublishButton, RetireButton
 from ikaaro.exceptions import ConsistencyError
-from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanRadio
+from ikaaro.forms import AutoForm, SelectWidget, TextWidget
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
-from ikaaro.forms import XHTMLBody, RTEWidget, SelectRadio
+from ikaaro.forms import XHTMLBody, RTEWidget
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
 from ikaaro.utils import get_base_path_query
-from ikaaro.views import CompositeForm, ContextMenu
+from ikaaro.views import ContextMenu
 from ikaaro.views_new import NewInstance
 
 # Import from itws
@@ -48,7 +48,7 @@ from itws.utils import DualSelectWidget
 from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
-from declination import Declination, Declination_NewInstance
+from declination import Declination
 from enumerate import ProductModelsEnumerate, CategoriesEnumerate, States
 from schema import product_schema
 from taxes import PricesWidget
@@ -698,6 +698,7 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
     batch_msg2 = MSG(u"There are {n} declinations.")
 
     search_template = None
+    context_menus = []
 
     base_columns = [
             ('checkbox', None),
@@ -773,14 +774,3 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
 
     def get_item_value(self, resource, context, item, column):
         return item[column]
-
-
-
-class Product_Declinations(CompositeForm):
-
-    access = 'is_allowed_to_edit'
-    title = MSG(u'Declinations')
-
-    subviews = [Declination_NewInstance(),
-                Product_DeclinationsView()]
-

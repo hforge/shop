@@ -41,7 +41,7 @@ from itws.tags import TagsAware
 from itws.utils import is_empty
 
 # Import from shop
-from declination import Declination
+from declination import Declination, Declination_NewInstance
 from dynamic_folder import DynamicFolder, DynamicProperty
 from images import PhotoOrderedTable, ImagesFolder
 from product_views import Product_NewProduct, Products_View, Product_ViewBox
@@ -49,7 +49,7 @@ from product_views import Product_CrossSellingViewBox
 from product_views import Product_View, Product_Edit, Product_AddLinkFile
 from product_views import Product_Delete
 from product_views import Product_Print, Product_SendToFriend
-from product_views import Product_Declinations
+from product_views import Product_DeclinationsView
 from product_views import Product_ChangeProductModel, Products_Stock
 from schema import product_schema
 from taxes import TaxesEnumerate
@@ -114,7 +114,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     edit = Product_Edit()
     add_link_file = Product_AddLinkFile()
     change_product_model = Product_ChangeProductModel()
-    declinations = Product_Declinations()
+    declinations = Product_DeclinationsView()
+    new_declination = Declination_NewInstance()
     order = GoToSpecificDocument(specific_document='order-photos',
                                  title=MSG(u'Manage photos'),
                                  access='is_allowed_to_edit')
@@ -764,6 +765,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         return decimal(1)
 
 
+
     def get_price_without_tax(self, id_declination=None,
                                with_reduction=True, pretty=False, prefix=None):
         if prefix is None:
@@ -818,7 +820,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     #######################
     ## Class views
     #######################
-    default_class_views = ['declinations', 'images',
+    default_class_views = ['declinations', 'new_declination', 'images',
                    'order', 'edit_cross_selling', 'delete_product', 'commit_log']
 
     @property
