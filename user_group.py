@@ -67,6 +67,7 @@ class ShopUser_Group(ShopFolder):
                    'invalidation_mail_subject': Unicode(multilingual=True),
                    'invalidation_mail_body': Unicode(multilingual=True),
                    'user_is_enabled_when_register': Boolean,
+                   'hide_price': Boolean,
                    'show_ht_price': Boolean}
 
     edit_widgets = [TextWidget('register_title', title=MSG(u'Register view title ?')),
@@ -78,6 +79,7 @@ class ShopUser_Group(ShopFolder):
                     TextWidget('invalidation_mail_subject', title=MSG(u'Invalidation mail subject')),
                     MultilineWidget('invalidation_mail_body', title=MSG(u'Invalidation mail body')),
                     BooleanRadio('user_is_enabled_when_register', title=MSG(u'User is enabled ?')),
+                    BooleanRadio('hide_price', title=MSG(u'Hide price ?')),
                     BooleanRadio('show_ht_price', title=MSG(u'Show HT price ?'))]
 
 

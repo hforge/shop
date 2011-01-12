@@ -32,7 +32,7 @@
           <th>Product name</th>
           <td>${title}</td>
         </tr>
-        <tr>
+        <tr stl:if="not price/hide_price">
           <th>Price</th>
           <td>${price/with_tax} €</td>
         </tr>

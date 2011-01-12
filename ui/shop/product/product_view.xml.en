@@ -18,7 +18,11 @@
       </li>
     </ul>
     <br/>
+
+    <stl:block stl:if="not price/hide_price">
     Prix : <span id="price">${price/with_tax}</span> € TTC<br/>
+    </stl:block>
+
     Weight: <span id="weight">${weight}</span> kg
     <p id="quantity-area">
       Quantity: <input id="quantity" name="quantity" type="text" size="3" value="1" />
@@ -80,7 +84,7 @@
       <th>Keywords</th>
       <td>${subject}</td>
     </tr>
-    <tr>
+    <tr stl:if="not price/hide_price">
       <th>Price</th>
       <td>${price/with_tax} €</td>
     </tr>
