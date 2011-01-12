@@ -38,13 +38,13 @@ from models_views import ProductModelSchema_View
 from models_views import ProductModels_View
 from models_views import ProductModel_Configure
 from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
-from shop.datatypes import ImagePathDataType, FrenchDate
+from shop.datatypes import ImagePathDataType, FrenchDate, SIRET_Datatype
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
 from shop.forms import ProductSelectorWidget
 from shop.registry import shop_datatypes
-from shop.widgets import FrenchDateWidget
+from shop.widgets import FrenchDateWidget, SIRETWidget
 
 
 real_datatypes = {'string': String,
@@ -59,6 +59,7 @@ real_datatypes = {'string': String,
                   'email': Email,
                   'html': XHTMLBody,
                   'french-date': FrenchDate,
+                  'siret': SIRET_Datatype,
                   'date': ISOCalendarDate}
 
 
@@ -82,6 +83,8 @@ def get_default_widget_shop(datatype):
         return LinkPathSelectorWidget
     elif issubclass(datatype, XHTMLBody):
         return RTEWidget
+    elif issubclass(datatype, SIRET_Datatype):
+        return SIRETWidget
     return get_default_widget(datatype)
 
 

@@ -22,6 +22,9 @@ from itools.xml import XMLParser
 from ikaaro.forms import SelectRadio, Widget, stl_namespaces
 from ikaaro.forms import DateWidget
 
+# Import from shop
+from registry import register_widget
+
 
 class SelectRadioList(SelectRadio):
 
@@ -145,3 +148,18 @@ class FrenchDateWidget(DateWidget):
 
     format = '%d/%m/%Y'
     tip = MSG(u'Format: 12/04/1985')
+
+
+
+class SIRETWidget(Widget):
+
+    template = list(XMLParser("""
+        <input type="text" id="${id}" name="${name}" value="${value}"/>
+        <script type="text/javascript" src="/ui/shop/js/jquery.maskedinput-1.2.2.min.js"/>
+        <script type="text/javascript">
+          $("#${id}").mask("999 999 999 99999");
+        </script>
+        """, stl_namespaces))
+
+
+register_widget('siret',  MSG(u'SIRET Widget'), SIRETWidget)

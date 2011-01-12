@@ -257,12 +257,13 @@ class FrenchDate(Date):
 
 
 
-class SIREN_Datatype(String):
+class SIRET_Datatype(String):
 
     @classmethod
     def is_valid(cls, value):
         # Luhn Algo
         # http://fr.wikipedia.org/wiki/Luhn
+        value = value.replace(" ", "")
         if len(value) != 14:
             return False
         total = 0
@@ -317,5 +318,5 @@ class UE_VAT_Datatype(String):
 
 
 
-register_datatype('siren', MSG(u'SIREN'), SIREN_Datatype)
+register_datatype('siret', MSG(u'SIRET'), SIRET_Datatype)
 register_datatype('ue_vat', MSG(u'UE VAT'), UE_VAT_Datatype)
