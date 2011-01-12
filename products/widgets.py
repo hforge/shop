@@ -17,7 +17,6 @@
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean
-from itools.uri import get_uri_name
 from itools.web import get_context
 from itools.xml import XMLParser
 
@@ -345,7 +344,11 @@ class DeclinationPricesWidget(Widget):
         namespace = {'groups': []}
         for group in UserGroup_Enumerate.get_options():
             prefix = ''
-            group['id'] = get_uri_name(group['name'])
+            abspath = group['name']
+            resource_group = context.root.get_resource(abspath)
+            if resource_group.get_property('use_default_price'):
+                continue
+            group['id'] = resource_group.name
             if group['id'] != 'default':
                 prefix = '%s-' % group['id']
             widget_name = '%simpact_on_price' % prefix
