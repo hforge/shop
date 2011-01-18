@@ -503,7 +503,6 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         has_reduction = self.get_property('has_reduction')
         ns = {'with_tax': self.get_price_with_tax(pretty=True),
               'without_tax':  self.get_price_without_tax(pretty=True),
-              'hide_price': self.hide_price(),
               'has_reduction': has_reduction}
         if has_reduction:
             kw = {'pretty': True, 'with_reduction': False}
@@ -765,13 +764,6 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
             return (tax_value/decimal(100) + 1)
         return decimal(1)
 
-
-    def hide_price(self):
-        context = get_context()
-        if context.user:
-            group = context.user.get_group(context)
-            return group.get_property('hide_price')
-        return False
 
 
     def get_price_without_tax(self, id_declination=None,
