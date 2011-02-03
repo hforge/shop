@@ -52,7 +52,9 @@ class PhotoOrderedTable_TableView(OrderedTable_View):
             link = context.get_link(image)
         if column == 'image':
             src = '%s/;thumb?width=%s&amp;height=%s' % (link, 250, 250)
-            preview = '<img src="%s" title="%s"/>' % (src, image.get_title())
+            title = image.get_title()
+            title = title.replace('"', '')
+            preview = '<img src="%s" title="%s"/>' % (src, title)
             return XMLParser(preview.encode('utf-8'))
         elif column == 'title':
             return image.get_title()
