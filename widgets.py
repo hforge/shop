@@ -116,6 +116,24 @@ class SelectRadioColor(SelectRadio):
         """, stl_namespaces))
 
 
+class IntegerRangeWidget(Widget):
+
+    template = list(XMLParser("""
+        Min:
+        <input type="text" name="${name}" value="${value1}" id="${name}-min"
+          size="${size}" />
+        Max:
+        <input type="text" name="${name}" value="${value2}" id="${name}-max"
+          size="${size}" />
+        """, stl_namespaces))
+
+    def get_namespace(self, datatype, value):
+        namespace = Widget.get_namespace(self, datatype, value)
+        value = namespace['value'] if namespace['value'] else datatype.default
+        namespace['value1'], namespace['value2'] = value
+        return namespace
+
+
 
 class RangeSlider(Widget):
 

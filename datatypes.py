@@ -21,7 +21,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import Boolean, Enumerate, PathDataType, String
-from itools.datatypes import Date, Decimal
+from itools.datatypes import Date, Decimal, Integer
 from itools.gettext import MSG
 from itools.uri import Path
 from itools.web import get_context
@@ -32,6 +32,12 @@ from ikaaro.file import Image
 # Import from shop
 from registry import shop_skins, register_datatype
 from utils import format_price
+
+
+class IntegerRangeDatatype(Integer):
+
+    default = [None, None]
+    multiple = True
 
 
 class StringFixSize(String):
