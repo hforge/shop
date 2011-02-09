@@ -28,3 +28,20 @@ def register_listener(class_id, property_name, listener):
 def alert_listerners(action, resource, class_id, property_name, old_value, new_value):
     for listerner in listeners.get((class_id, property_name), []):
         listerner.alert(action, resource, class_id, property_name, old_value, new_value)
+
+
+
+# Works on progress
+# We want to use listener to alert from stock operations for example:
+#
+#    def register_listeners(self):
+#        register_listener('product', 'stock-quantity', self)
+#        register_listener('product-declination', 'stock-quantity', self)
+#
+#
+#    def alert(self, action, resource, class_id, property_name, old_value, new_value):
+#        operations = self.get_resource('operations')
+#        operations.handler.add_record({'reference': resource.get_property('reference'),
+#                                       'quantity': old_value - new_value})
+
+
