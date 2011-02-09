@@ -21,7 +21,6 @@ from itools.web import get_context
 
 # Import from shop
 from shop.datatypes import AbsolutePathDataTypeEnumerate
-from shop.utils import get_shop
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.registry import shop_datatypes
 
@@ -35,11 +34,11 @@ class ProductModelsEnumerate(AbsolutePathDataTypeEnumerate):
     @classmethod
     def get_options(cls):
         context = get_context()
-        shop = get_shop(context.resource)
-        models = shop.get_resource('products-models')
-        options = [{'name': res.get_abspath(),
-                    'value': res.get_property('title')}
-                           for res in models.get_resources()]
+        root = context.root
+        options = []
+        for brain in root.search(format='product-model').get_documents():
+            options.append({'name': brain.abspath,
+                            'value': brain.title})
         options.insert(0, {'name': '', 'value': MSG(u'Standard Model')})
         return options
 
@@ -54,18 +53,14 @@ class CategoriesEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
-        # XXX To improve
         context = get_context()
-        site_root = context.site_root
-        categories = site_root.get_resource('categories')
+        root = context.root
         # Build options
         options = []
-        for categorie in categories.traverse_resources():
-            if categorie.class_id != 'category':
-                continue
-            name = str(categorie.get_abspath())
+        for brain in root.search(format='category').get_documents():
+            name = brain.abspath
             value = '--'* (len(name.split('/')) - 1)
-            value = value + categorie.get_property('title')
+            value = value + brain.title
             options.append({'name': name, 'value': value})
         return options
 

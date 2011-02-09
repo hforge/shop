@@ -128,7 +128,6 @@ class SearchTableFolder_View(SearchForm):
 
 
     def get_search_namespace(self, resource, context):
-        query = context.query
         namespace = {'title': self.search_title,
                      'submit_value': MSG(u'Rechercher'),
                      'action': '.',
