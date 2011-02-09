@@ -165,6 +165,8 @@ class Declination(DynamicFolder):
             supplier=str(self.parent.get_property('supplier')),
             ht_price=self.parent.get_price_without_tax(id_declination=self.name, pretty=True),
             ttc_price=self.parent.get_price_with_tax(id_declination=self.name, pretty=True),
+            # XXX Declination must be workflowaware
+            workflow_state=self.parent.get_workflow_state(),
             stock_quantity=self.get_property('stock-quantity'))
 
 
