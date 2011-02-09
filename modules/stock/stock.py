@@ -19,20 +19,28 @@ from itools.datatypes import Integer, String
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import ERROR, INFO
-from itools.xapian import PhraseQuery
+from itools.xapian import OrQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.forms import SelectWidget, TextWidget
 from ikaaro.registry import register_resource_class
 
 # Import from shop
+from shop.datatypes import IntegerRangeDatatype
 from shop.products.declination import Declination
-from shop.products.enumerate import CategoriesEnumerate, ProductModelsEnumerate
+from shop.products.enumerate import CategoriesEnumerate, States
+from shop.manufacturers import ManufacturersEnumerate
 from shop.modules import ShopModule
+from shop.suppliers import SuppliersEnumerate
 from shop.utils_views import SearchTableFolder_View
+from shop.widgets import IntegerRangeWidget
 
 
 class Stock_FillStockOut(SearchTableFolder_View):
+
+    # XXX Problems if we use it to edit prices
+    # Problems price pro
+    # Problems price with reduction --> has_reduction
 
     access = 'is_allowed_to_edit'
     title = MSG(u'Fill stock')
@@ -41,11 +49,17 @@ class Stock_FillStockOut(SearchTableFolder_View):
 
     search_widgets = [TextWidget('reference', title=MSG(u'Reference')),
                       SelectWidget('abspath', title=MSG(u'Category')),
-                      SelectWidget('product_model', title=MSG(u'Product model'))]
+                      SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
+                      SelectWidget('supplier', title=MSG(u'Supplier')),
+                      SelectWidget('workflow_state', title=MSG(u'State')),
+                      IntegerRangeWidget('stock_quantity', title=MSG(u'Quantity in stock'))]
 
     search_schema = {'reference': String,
                      'abspath': CategoriesEnumerate,
-                     'product_model': ProductModelsEnumerate}
+                     'supplier': SuppliersEnumerate,
+                     'manufacturer': ManufacturersEnumerate,
+                     'workflow_state': States,
+                     'stock_quantity': IntegerRangeDatatype}
 
     def get_schema(self, resource, context):
         references_number = context.get_form_value('references_number',
@@ -74,34 +88,52 @@ class Stock_FillStockOut(SearchTableFolder_View):
         if context.uri.query.has_key('search') is False:
             return namespace
         # Get all declinations (for optimization purpose)
-        all_declinations =  context.root.search(format=Declination.class_id)
+        all_products = context.root.search(format='product')
         # Do
-        root = context.root
+        products = {}
         items = self.get_items(resource, context)
         for i, brain in enumerate(items):
-            declinations = all_declinations.search(parent_path=brain.abspath).get_documents()
-            nb_declinations = len(declinations)
-            kw = {'id': i+1,
-                  'reference': brain.reference,
-                  'title': brain.title,
-                  'href': '/' + '/'.join(brain.abspath.split('/')[2:]), # XXX Hack
-                  'declinations': [],
-                  'has_declination': nb_declinations > 0,
-                  'nb_declinations': nb_declinations,
-                  'stock_quantity': brain.stock_quantity}
-            for j, declination in enumerate(declinations):
-                d = {'id': j+1,
-                     'name': declination.name,
-                     'title': declination.declination_title,
-                     'stock_quantity': declination.stock_quantity}
+            # It's a product or a declination ?
+            if brain.format == 'product':
+                brain_product = brain
+                brain_declination = None
+            else:
+                brain_declination = brain
+                parent_path = '/'.join(brain_declination.abspath.split('/')[:-1])
+                brain_product = all_products.search(abspath=parent_path).get_documents()[0]
+            # Get corresponding product
+            if products.has_key(brain_product.reference):
+                kw = products[brain_product.reference]
+            else:
+                kw = {'id': i+1,
+                      'reference': brain_product.reference,
+                      'title': brain_product.title,
+                      'href': '/' + '/'.join(brain_product.abspath.split('/')[2:]), # XXX Hack
+                      'declinations': [],
+                      'nb_declinations': 0,
+                      'has_declination': False,
+                      'stock_quantity': brain_product.stock_quantity}
+                products[brain_product.reference] = kw
+            # Get declination
+            if brain_declination:
+                d = {'id': 'j+1',
+                     'name': brain_declination.name,
+                     'title': brain_declination.declination_title,
+                     'stock_quantity': brain_declination.stock_quantity}
+                kw['has_declination'] = True
                 kw['declinations'].append(d)
-            namespace['lines'].append(kw)
-            namespace['references_number'] = len(namespace['lines'])
+                kw['nb_declinations'] = len(kw['declinations'])
+                products[brain_product.reference] = kw
+        # Build namespace
+        namespace['lines'] = products.values()
+        namespace['references_number'] = len(namespace['lines'])
         return namespace
 
 
     def get_items(self, resource, context, query=[]):
-        query = [PhraseQuery('format', 'product')]
+        query = [OrQuery(
+                      PhraseQuery('format', 'product'),
+                      PhraseQuery('format', 'product-declination'))]
         return SearchTableFolder_View.get_items(self, resource, context, query)
 
 
@@ -152,25 +184,6 @@ class ShopModule_Stock(ShopModule):
     class_description = MSG(u'Manage stock')
 
     view = Stock_FillStockOut()
-
-
-# XXX Obsolete Mechanism
-#from shop.listeners import register_listener
-#    def register_listeners(self):
-#        register_listener('product', 'stock-quantity', self)
-#        register_listener('product-declination', 'stock-quantity', self)
-#
-#
-#    def alert(self, action, resource, class_id, property_name, old_value, new_value):
-#        print 'resource', resource
-#        print 'action', action
-#        print 'class_id', class_id
-#        print 'Property_name', property_name
-#        print 'old_value', old_value
-#        print 'new_value', new_value
-#        operations = self.get_resource('operations')
-#        operations.handler.add_record({'reference': resource.get_property('reference'),
-#                                       'quantity': old_value - new_value})
 
 
 register_resource_class(ShopModule_Stock)

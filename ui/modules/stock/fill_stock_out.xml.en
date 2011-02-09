@@ -97,8 +97,10 @@
             <input type="hidden" id="reference_${line/id}" name="reference_${line/id}"
               onchange="check_line('${line/id}');" value="${line/reference}"/>
             ${line/reference}
+            <!--
             <input type="hidden" id="nb_declinations_${line/id}"
                 name="nb_declinations_${line/id}" value="${line/nb_declinations}"/>
+                -->
           </td>
           <td>
             <a href="${line/href}" tabindex="50000">

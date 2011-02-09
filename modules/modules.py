@@ -51,9 +51,6 @@ class ShopModule(ShopFolder):
                            cls.item_schema)
 
 
-    def register_listeners(self):
-        pass
-
 
 
 class ShopModule_User(ShopModule):
@@ -75,17 +72,6 @@ class Modules(Folder):
     class_views = ['view']
 
     view = Modules_View()
-
-    #def __init__(self, metadata):
-    #    # Super
-    #    super(Folder, self).__init__(metadata)
-    #    # We initialize all modules.
-    #    global modules_are_initialized
-    #    if modules_are_initialized is False:
-    #        modules_are_initialized = True
-    #        for module in self.get_resource('modules').get_resources():
-    #            module.register_listeners()
-
 
     def get_document_types(self):
         return []
