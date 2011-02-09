@@ -16,9 +16,8 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Enumerate, Email, Unicode, String
+from itools.datatypes import Email, Unicode, String
 from itools.gettext import MSG
-from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -29,21 +28,16 @@ from ikaaro.registry import register_resource_class
 from itws.views import AutomaticEditView
 
 # Import from shop
+from datatypes import DynamicEnumerate
 from suppliers_views import Suppliers_View
-from utils import CurrentFolder_AddImage, get_shop
+from utils import CurrentFolder_AddImage
 
 
-# XXX use AbspathEnumerate
-class SuppliersEnumerate(Enumerate):
+class SuppliersEnumerate(DynamicEnumerate):
 
-    @classmethod
-    def get_options(cls):
-        context = get_context()
-        shop = get_shop(context.resource)
-        suppliers = shop.get_resource('suppliers')
-        return [{'name': res.get_abspath(),
-                 'value': res.get_title()}
-                   for res in suppliers.get_resources()]
+    path = '/'
+    format = 'supplier'
+    is_abspath = True
 
 
 
