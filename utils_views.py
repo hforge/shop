@@ -19,13 +19,14 @@ from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.uri import get_reference
 from itools.web import BaseForm, ERROR
-from itools.xapian import OrQuery, PhraseQuery, AndQuery
+from itools.xapian import OrQuery, PhraseQuery, AndQuery, RangeQuery
 
 # Import from ikaaro
 from ikaaro.table_views import Table_View
 from ikaaro.views import SearchForm
 
 # Import from shop
+from datatypes import IntegerRangeDatatype
 from utils import get_non_empty_widgets
 
 
@@ -36,7 +37,10 @@ def get_search_query(search_schema, context, query):
         base_query.extend(query)
     form = context.query
     for key, datatype in search_schema.items():
-        if form[key] and datatype.multiple is True:
+        if form[key] and issubclass(datatype, IntegerRangeDatatype):
+            minimum, maximum = form[key]
+            base_query.append(RangeQuery(key, minimum, maximum))
+        elif form[key] and datatype.multiple is True:
             base_query.append(OrQuery(*[PhraseQuery(key, x) for x in form[key]]))
         elif form[key]:
             base_query.append(PhraseQuery(key, form[key]))
