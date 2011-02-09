@@ -129,8 +129,7 @@ class IntegerRangeWidget(Widget):
 
     def get_namespace(self, datatype, value):
         namespace = Widget.get_namespace(self, datatype, value)
-        value = namespace['value'] if namespace['value'] else datatype.default
-        namespace['value1'], namespace['value2'] = value
+        namespace['value1'], namespace['value2'] = datatype.default
         return namespace
 
 
