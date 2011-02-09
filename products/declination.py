@@ -157,9 +157,15 @@ class Declination(DynamicFolder):
 
 
     def _get_catalog_values(self):
-        return merge_dicts(DynamicFolder._get_catalog_values(self),
-                           declination_title=self.get_declination_title(),
-                           stock_quantity=self.get_property('stock-quantity'))
+        return merge_dicts(
+            DynamicFolder._get_catalog_values(self),
+            reference=self.get_property('reference'),
+            declination_title=self.get_declination_title(),
+            manufacturer=str(self.parent.get_property('manufacturer')),
+            supplier=str(self.parent.get_property('supplier')),
+            ht_price=self.parent.get_price_without_tax(id_declination=self.name, pretty=True),
+            ttc_price=self.parent.get_price_with_tax(id_declination=self.name, pretty=True),
+            stock_quantity=self.get_property('stock-quantity'))
 
 
     def get_declination_title(self):

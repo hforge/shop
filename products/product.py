@@ -22,7 +22,7 @@ from json import dumps
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate, DateTime
-from itools.datatypes import Integer
+from itools.datatypes import Integer, Decimal
 from itools.gettext import MSG
 from itools.uri import get_uri_name, resolve_uri2
 from itools.web import get_context
@@ -212,7 +212,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Manufacturer
         values['manufacturer'] = str(self.get_property('manufacturer'))
         # Supplier
-        values['supplier'] = self.get_property('supplier')
+        values['supplier'] = str(self.get_property('supplier'))
         # Stock quantity
         values['stock_quantity'] = self.get_property('stock-quantity')
         # Product models
@@ -223,6 +223,9 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         values['has_images'] = (len(ordered_names) != 0)
         # Price # XXX We can't sort decimal, so transform to int
         values['stored_price'] = int(self.get_price_with_tax() * 100)
+        # Price
+        values['ht_price'] = self.get_price_without_tax(pretty=True)
+        values['ttc_price'] = self.get_price_with_tax(pretty=True)
         # Creation time
         values['ctime'] = self.get_property('ctime')
         # Publication date
@@ -1033,6 +1036,8 @@ register_field('has_reduction', Boolean(is_indexed=True))
 register_field('not_buyable_by_groups', String(is_indexed=True, multiple=True))
 register_field('ctime', DateTime(is_stored=True, is_indexed=True))
 register_field('data', Unicode(is_indexed=True))
+register_field('ht_price', Decimal(is_indexed=False, is_stored=True))
+register_field('ttc_price', Decimal(is_indexed=False, is_stored=True))
 # XXX xapian can't sort decimal
 register_field('stored_price', Integer(is_indexed=False, is_stored=True))
 
