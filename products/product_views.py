@@ -745,8 +745,11 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
         # Get all declinations
         for declination in resource.search_resources(cls=Declination):
             name = declination.name
+            title = declination.get_property('title')
+            if not title:
+                title = declination.get_declination_title()
             kw = {'checkbox': (name, True),
-                  'title': (declination.get_property('title'), name)}
+                  'title': (title, name)}
             for key in ['reference', 'stock-quantity']:
                 kw[key] = declination.get_property(key)
             for name, datatype in declination.get_dynamic_schema().items():
