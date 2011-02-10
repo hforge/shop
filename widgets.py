@@ -116,7 +116,7 @@ class SelectRadioColor(SelectRadio):
         """, stl_namespaces))
 
 
-class IntegerRangeWidget(Widget):
+class NumberRangeWidget(Widget):
 
     template = list(XMLParser("""
         Min:

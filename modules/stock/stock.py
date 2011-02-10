@@ -37,7 +37,7 @@ from shop.manufacturers import ManufacturersEnumerate
 from shop.modules import ShopModule
 from shop.suppliers import SuppliersEnumerate
 from shop.utils_views import SearchTableFolder_View
-from shop.widgets import IntegerRangeWidget
+from shop.widgets import NumberRangeWidget
 
 
 class Stock_FillStockOut(SearchTableFolder_View):
@@ -56,7 +56,7 @@ class Stock_FillStockOut(SearchTableFolder_View):
                       SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
                       SelectWidget('supplier', title=MSG(u'Supplier')),
                       SelectWidget('workflow_state', title=MSG(u'State')),
-                      IntegerRangeWidget('stock_quantity', title=MSG(u'Quantity in stock'))]
+                      NumberRangeWidget('stock_quantity', title=MSG(u'Quantity in stock'))]
 
     search_schema = {'reference': String,
                      'abspath': CategoriesEnumerate,

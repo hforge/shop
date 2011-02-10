@@ -1036,8 +1036,8 @@ register_field('has_reduction', Boolean(is_indexed=True))
 register_field('not_buyable_by_groups', String(is_indexed=True, multiple=True))
 register_field('ctime', DateTime(is_stored=True, is_indexed=True))
 register_field('data', Unicode(is_indexed=True))
-register_field('ht_price', Decimal(is_indexed=False, is_stored=True))
-register_field('ttc_price', Decimal(is_indexed=False, is_stored=True))
+register_field('ht_price', Decimal(is_indexed=True, is_stored=True))
+register_field('ttc_price', Decimal(is_indexed=True, is_stored=True))
 # XXX xapian can't sort decimal
 register_field('stored_price', Integer(is_indexed=False, is_stored=True))
 

@@ -24,9 +24,8 @@ from itools.datatypes import Email, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.i18n import format_date
-from itools.uri import get_reference
 from itools.web import INFO, ERROR, STLView, STLForm, FormError, get_context
-from itools.xapian import AndQuery, PhraseQuery, StartQuery
+from itools.xapian import PhraseQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
@@ -38,7 +37,6 @@ from ikaaro.forms import AutoForm, SelectWidget, TextWidget
 from ikaaro.forms import MultilineWidget, title_widget, ImageSelectorWidget
 from ikaaro.forms import XHTMLBody, RTEWidget
 from ikaaro.resource_views import DBResource_AddLink, EditLanguageMenu
-from ikaaro.utils import get_base_path_query
 from ikaaro.views import ContextMenu
 from ikaaro.views_new import NewInstance
 
@@ -56,11 +54,12 @@ from widgets import BarcodeWidget, MiniProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from widgets import StockWidget
 from shop.cart import ProductCart
-from shop.catalog import dynamic_fields
-from shop.datatypes import UserGroup_Enumerate
+from shop.datatypes import UserGroup_Enumerate, DecimalRangeDatatype
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
 from shop.utils import bool_to_img, get_non_empty_widgets, get_shop, get_skin_template
+from shop.utils_views import SearchTableFolder_View
+from shop.widgets import NumberRangeWidget
 
 
 class Product_NewProduct(NewInstance):
@@ -388,7 +387,7 @@ class Product_CrossSellingViewBox(Product_ViewBox):
 
 
 
-class Products_View(BrowseFormBatchNumeric):
+class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'View products')
@@ -410,11 +409,9 @@ class Products_View(BrowseFormBatchNumeric):
         ('stored_price', MSG(u'Price (included VAT)')),
         ('ctime', MSG(u'Creation Time')),
         ('mtime', MSG(u'Last Modified')),
-        ('product_model', MSG(u'Product model')),
         ('workflow_state', MSG(u'State'))
         ]
 
-    search_template = '/ui/backoffice/product/products_view_search.xml'
 
     def get_table_columns(self, resource, context):
         base = [('checkbox', None)]
@@ -427,84 +424,54 @@ class Products_View(BrowseFormBatchNumeric):
     search_widgets = [
         TextWidget('reference', title=MSG(u'Reference')),
         TextWidget('title', title=MSG(u'Title')),
-        TextWidget('text', title=MSG(u'Description')),
         SelectWidget('abspath', title=MSG(u'Category')),
+        SelectWidget('supplier', title=MSG(u'Supplier')),
         SelectWidget('product_model', title=MSG(u'Product model')),
         SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
+        NumberRangeWidget('ttc_price', title=MSG(u'TTC Price')),
         SelectWidget('workflow_state', title=MSG(u'State')),
         ]
 
     search_schema = {
         'reference': String,
         'title': Unicode,
-        'text': Unicode,
         'abspath': CategoriesEnumerate,
         'product_model': ProductModelsEnumerate,
+        'supplier': SuppliersEnumerate,
         'manufacturer': ManufacturersEnumerate,
+        'ttc_price': DecimalRangeDatatype,
         'workflow_state': States}
-
-    def get_search_namespace(self, resource, context):
-        query = context.query
-        namespace = {'widgets': []}
-        widgets = get_non_empty_widgets(self.search_schema, self.search_widgets)
-        for widget in widgets:
-            value = context.query[widget.name]
-            html = widget.to_html(self.search_schema[widget.name], value)
-            namespace['widgets'].append({'title': widget.title,
-                                         'html': html})
-        return namespace
-
-
-    def get_search_schema(self):
-        # Dynamic search schema
-        site_root = get_context().resource.get_site_root()
-        dynamic_search_schema = {}
-        for key in dynamic_fields.get(site_root.name, []):
-            dynamic_search_schema[key] = String
-        return merge_dicts(self.search_schema,
-                           dynamic_search_schema)
 
 
     def get_query_schema(self):
-        return merge_dicts(BrowseFormBatchNumeric.get_query_schema(self),
-                           self.get_search_schema(),
+        return merge_dicts(SearchTableFolder_View.get_query_schema(self),
+                           #self.get_search_schema(),
                            batch_size=Integer(default=50),
                            sort_by=String(default='mtime'))
 
 
-    def get_items(self, resource, context, *args):
-        # Base query (search in folder)
-        site_root = context.site_root
-        shop = site_root.get_resource('shop')
-        abspath = str(resource.get_canonical_path())
-        format = shop.product_class.class_id
-        search_query = [
-                get_base_path_query(str(abspath)),
-                PhraseQuery('format', format)]
-        # Search query
-        for key in self.get_search_schema().keys():
-            value = context.get_form_value(key)
-            if not value:
-                continue
-            if key == 'abspath':
-                search_query.append(StartQuery(key, value))
-            else:
-                search_query.append(PhraseQuery(key, value))
-
-        # Ok
-        return context.root.search(AndQuery(*search_query))
+    def get_items(self, resource, context, query=[]):
+        query = [PhraseQuery('format', 'product')]
+        return SearchTableFolder_View.get_items(self, resource, context, query)
 
 
+    def sort_and_batch(self, resource, context, items):
+        # Batch
+        start = context.query['batch_start']
+        size = context.query['batch_size']
+        return items[start:start+size]
 
-    def get_item_value(self, resource, context, item, column):
-        item_brain, item_resource = item
+
+    def get_item_value(self, resource, context, item_brain, column):
+        item_resource = context.root.get_resource(item_brain.abspath)
         if column == 'reference':
             return item_resource.get_property('reference')
         elif column == 'barcode':
             reference = item_resource.get_property('reference')
             if reference is None:
                 return None
-            return XMLParser('<img src="./%s/barcode/;download"/>' % item_brain.name)
+            link = context.get_link(item_resource)
+            return XMLParser('<img src="%s/barcode/;download"/>' % link)
         elif column == 'cover':
             cover = item_resource.get_cover_namespace(context)
             if cover:
@@ -519,29 +486,9 @@ class Products_View(BrowseFormBatchNumeric):
             ctime = item_resource.get_property('ctime')
             accept = context.accept_language
             return format_date(ctime, accept)
-        elif column == 'product_model':
-            product_model = item_resource.get_property('product_model')
-            return ProductModelsEnumerate.get_value(product_model)
-        elif column == 'stock-quantity':
-            return item_resource.get_property('stock-quantity')
-        elif column == 'supplier':
-            supplier = item_resource.get_property('supplier')
-            return SuppliersEnumerate.get_value(supplier)
-        return BrowseFormBatchNumeric.get_item_value(self, resource, context,
-                                                   item, column)
+        item = item_brain, item_resource
+        return BrowseFormBatchNumeric.get_item_value(self, resource, context, item, column)
 
-
-
-    def action_change_category(self, resource, context, form):
-        ids = form['ids']
-        if not ids:
-            context.message = messages.MSG_NONE_SELECTED
-            return
-
-        # FIXME Hack (see ikaaro)
-        ids_list = '&'.join([ 'ids=%s' % x for x in ids ])
-        uri = '%s/;change_category?%s' % (context.get_link(resource), ids_list)
-        return get_reference(uri)
 
 
 

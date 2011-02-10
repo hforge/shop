@@ -33,11 +33,20 @@ from ikaaro.file import Image
 from registry import shop_skins, register_datatype
 from utils import format_price
 
-
-class IntegerRangeDatatype(Integer):
+class RangeDatatype(object):
 
     default = [None, None]
     multiple = True
+
+
+class IntegerRangeDatatype(RangeDatatype, Integer):
+
+    pass
+
+
+class DecimalRangeDatatype(RangeDatatype, Decimal):
+
+  pass
 
 
 class StringFixSize(String):
