@@ -57,9 +57,10 @@ class CategoriesEnumerate(Enumerate):
         root = context.root
         # Build options
         options = []
-        for brain in root.search(format='category').get_documents():
+        for brain in root.search(format='category').get_documents(
+                                                      sort_by='abspath'):
             name = brain.abspath
-            value = '--'* (len(name.split('/')) - 1)
+            value = '----'* (len(name.split('/')) - 1)
             value = value + brain.title
             options.append({'name': name, 'value': value})
         return options
