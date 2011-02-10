@@ -3,7 +3,7 @@
 
   <pml:head>
     <pml:title>Resupply</pml:title>
-    <pml:link rel="stylesheet" type="text/css" href="../css/pdf-resupply.css"/>
+    <pml:link rel="stylesheet" type="text/css" href="./pdf-resupply.css"/>
   </pml:head>
 
   <pml:header></pml:header>
@@ -14,6 +14,7 @@
 
 
   <pml:body style="margin-left:0.5cm; margin-right:0.5cm; padding-left:0; padding-right:0;">
+    <!--
     <pml:table id="infos">
       <pml:tr>
         <pml:td>
@@ -28,18 +29,26 @@
         </pml:td>
       </pml:tr>
     </pml:table>
+    -->
 
     <pml:table id="infos">
       <pml:tr>
-        <pml:th>ID</pml:th>
         <pml:th>Reference</pml:th>
+        <pml:th>Title</pml:th>
         <pml:th>Quantity</pml:th>
       </pml:tr>
-      <pml:tr stl:repeat="line lines">
-        <pml:td>${line/id}</pml:td>
-        <pml:td>${line/reference}</pml:td>
-        <pml:td>${line/quantity_to_order}</pml:td>
-      </pml:tr>
+      <stl:block stl:repeat="line lines" stl:if="line/declinations">
+        <pml:tr id="line">
+          <pml:td>${line/reference}</pml:td>
+          <pml:td>${line/title}</pml:td>
+          <pml:td>${line/quantity_to_order}</pml:td>
+        </pml:tr>
+        <pml:tr stl:repeat="declination line/declinations">
+          <pml:td></pml:td>
+          <pml:td>${declination/title}</pml:td>
+          <pml:td>${declination/quantity_to_order}</pml:td>
+        </pml:tr>
+      </stl:block>
     </pml:table>
 
  </pml:body>

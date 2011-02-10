@@ -1,0 +1,39 @@
+.align-right{
+  text-align: right;
+}
+
+p.page {
+  font-family: sansserif;
+  text-align: right;
+  font-size: 6;
+  font-weight: normal;
+  padding: 0;
+}
+
+#infos{
+  margin-top:20px;
+  border: 1px solid black;
+}
+
+#infos th{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  background-color: #E2E2E2;
+  width: 5cm;
+}
+
+#infos td{
+  padding-top: 4px;
+  padding-bottom: 3px;
+  padding-left: 4px;
+  width: 5cm;
+}
+
+#line{
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: #F3F3F3;
+  width: 1cm;
+}

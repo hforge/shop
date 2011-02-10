@@ -14,8 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from operator import itemgetter
+
 # Import from itools
-from itools.datatypes import Integer, String
+from itools.core import merge_dicts
+from itools.datatypes import Boolean, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import ERROR, INFO
@@ -61,6 +65,13 @@ class Stock_FillStockOut(SearchTableFolder_View):
                      'workflow_state': States,
                      'stock_quantity': IntegerRangeDatatype}
 
+
+    def get_query_schema(self):
+        return merge_dicts(SearchTableFolder_View.get_query_schema(self),
+                           reverse=Boolean(default=False),
+                           sort_by=String(default='reference')) # XXX
+
+
     def get_schema(self, resource, context):
         references_number = context.get_form_value('references_number',
                               type=Integer) or 0
@@ -69,12 +80,14 @@ class Stock_FillStockOut(SearchTableFolder_View):
             schema.update(
               {'reference_%s' % i: String,
                'nb_declinations_%s' % i: Integer,
+               'title_%s' % i: Unicode,
                'new_stock_%s' % i: Integer})
             nb_declinations = context.get_form_value('nb_declinations_%s' % i,
                                 type=Integer) or 0
             for j in range(1, nb_declinations+1):
                 schema['name_%s_%s' % (i, j)] = String
                 schema['new_stock_%s_%s' % (i, j)] = Integer
+                schema['title_%s_%s' % (i, j)] = Unicode
         return schema
 
 
@@ -105,7 +118,8 @@ class Stock_FillStockOut(SearchTableFolder_View):
             if products.has_key(brain_product.reference):
                 kw = products[brain_product.reference]
             else:
-                kw = {'id': i+1,
+                nb_products = len(products)
+                kw = {'id': nb_products + 1,
                       'reference': brain_product.reference,
                       'title': brain_product.title,
                       'href': '/' + '/'.join(brain_product.abspath.split('/')[2:]), # XXX Hack
@@ -116,16 +130,19 @@ class Stock_FillStockOut(SearchTableFolder_View):
                 products[brain_product.reference] = kw
             # Get declination
             if brain_declination:
-                d = {'id': 'j+1',
+                nb_declinations = kw['nb_declinations']
+                d = {'id': nb_declinations + 1,
                      'name': brain_declination.name,
                      'title': brain_declination.declination_title,
                      'stock_quantity': brain_declination.stock_quantity}
                 kw['has_declination'] = True
                 kw['declinations'].append(d)
-                kw['nb_declinations'] = len(kw['declinations'])
+                kw['nb_declinations'] = nb_declinations + 1
                 products[brain_product.reference] = kw
         # Build namespace
-        namespace['lines'] = products.values()
+        products = products.values()
+        products.sort(key=itemgetter('id'))
+        namespace['lines'] = products
         namespace['references_number'] = len(namespace['lines'])
         return namespace
 
@@ -153,18 +170,19 @@ class Stock_FillStockOut(SearchTableFolder_View):
                 context.message = ERROR(u'[Error] Unknow reference %s' % reference)
                 context.commit = False
                 return
-            if len(results) > 1:
-                context.message = ERROR(u'[Error] Reference %s is used %s times.' %
-                                      (reference, len(results)))
-                context.commit = False
-                return
+            # XXX
+            #if len(results) > 1:
+            #    context.message = ERROR(u'[Error] Reference %s is used %s times.' %
+            #                          (reference, len(results)))
+            #    context.commit = False
+            #    return
             product = root.get_resource(results[0].abspath)
             if new_stock:
                 product.set_property('stock-quantity', new_stock)
             nb_declinations = form['nb_declinations_%s' % i]
             if nb_declinations == 0:
                 continue
-            declinations = list(product.search_resources(cls=Declination))
+            #declinations = list(product.search_resources(cls=Declination))
             for j in range(1, nb_declinations+1):
                 suffix = '_%s_%s' % (i, j)
                 name_declination = form['name'+ suffix]
@@ -173,6 +191,59 @@ class Stock_FillStockOut(SearchTableFolder_View):
                     declination = product.get_resource(name_declination)
                     declination.set_property('stock-quantity', stock_declination)
         context.message = INFO(u'Stock quantity has been updated')
+
+
+    def action_generate_pdf(self, resource, context, form):
+        context.set_content_type('application/pdf')
+        context.set_content_disposition('attachment; filename="Document.pdf"')
+        pdf = self.generate_pdf_resupply(resource, context, form)
+        return pdf
+
+
+    def generate_pdf_resupply(self, resource, context, form):
+        from datetime import datetime
+        from itools.i18n import format_date
+        from shop.utils import format_for_pdf
+        from itools.pdf import stl_pmltopdf
+        accept = context.accept_language
+        creation_date = datetime.now()
+        creation_date = format_date(creation_date, accept=accept)
+        document = resource.get_resource('/ui/modules/stock/pdf_resupply.xml')
+        # Build namespace
+        namespace =  {'creation_date': creation_date,
+                      'lines': []}
+        # Supplier
+        #supplier = form['supplier']
+        #supplier = resource.get_resource(supplier)
+        namespace['supplier'] = {
+            'title': '',#supplier.get_title(),
+            'address': ''}#format_for_pdf(supplier.get_property('address'))}
+        # Get references
+        references_number = context.get_form_value('references_number',
+                              type=Integer) or 0
+        for i in range(1, references_number+1):
+            kw = {'id': i,
+                  'reference': form['reference_%s' % i],
+                  'title': form['title_%s' % i],
+                  'quantity_to_order': form['new_stock_%s' % i],
+                  'declinations': []}
+            nb_declinations = form['nb_declinations_%s' % i] or 0
+            for j in range(1, nb_declinations + 1):
+                suffix = '_%s_%s' % (i, j)
+                name_declination = form['name'+ suffix]
+                stock_declination = form['new_stock'+ suffix] or 0
+                title_declination = form['title'+ suffix]
+                kw['declinations'].append({'reference': name_declination,
+                                           'title': title_declination,
+                                           'quantity_to_order': stock_declination})
+            namespace['lines'].append(kw)
+        # Generate pdf
+        pdf = stl_pmltopdf(document, namespace=namespace)
+        #metadata =  {'title': {'en': u'Bill'}}
+        #if resource.get_resource('bill.pdf', soft=True):
+        #    resource.del_resource('bill.pdf')
+        #PDF.make_resource(PDF, resource, 'bill.pdf', body=pdf, **metadata)
+        return pdf
 
 
 

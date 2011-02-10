@@ -97,15 +97,14 @@
             <input type="hidden" id="reference_${line/id}" name="reference_${line/id}"
               onchange="check_line('${line/id}');" value="${line/reference}"/>
             ${line/reference}
-            <!--
             <input type="hidden" id="nb_declinations_${line/id}"
                 name="nb_declinations_${line/id}" value="${line/nb_declinations}"/>
-                -->
           </td>
           <td>
             <a href="${line/href}" tabindex="50000">
             ${line/title}
             </a>
+            <input type="hidden" name="title_${line/id}" value="${line/title}"/>
           </td>
           <stl:block stl:if="line/has_declination">
             <td>-</td>
@@ -131,7 +130,10 @@
               name="name_${line/id}_${declination/id}"
               value="${declination/name}"/>
           </td>
-          <td>${declination/title}</td>
+          <td>
+            ${declination/title}
+            <input type="hidden" name="title_${line/id}_${declination/id}" value="${declination/title}"/>
+          </td>
           <td>
             <input type="text" id="stock_${line/id}_${declination/id}"
               name="stock_${line/id}_${declination/id}"
@@ -149,8 +151,11 @@
     <p>
       <input type="hidden" id="references_number" name="references_number"
         value="${references_number}"/>
-      <button type="submit" class="button-ok button-update">
+      <button type="submit" name="action" value="update" class="button-ok button-update">
         Update
+      </button>
+      <button type="submit" name="action" value="generate_pdf" class="button-ok button-pdf">
+        Generate PDF
       </button>
       <div class="clear"/>
     </p>
