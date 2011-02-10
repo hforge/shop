@@ -74,7 +74,8 @@ class SortBy_Enumerate(Enumerate):
       {'name': 'title', 'value': MSG(u'Product title')},
       {'name': 'mtime', 'value': MSG(u'Modification date')},
       {'name': 'ctime', 'value': MSG(u'Creation date')},
-      {'name': 'stored_price', 'value': MSG(u'Price')}]
+      {'name': 'stored_price', 'value': MSG(u'Price')},
+      {'name': 'abspath', 'value': MSG(u'Regroup by category')}]
 
 
 
