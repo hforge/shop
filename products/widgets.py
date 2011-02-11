@@ -49,7 +49,7 @@ class BarcodeWidget(Widget):
         return merge_dicts(
             Widget.get_namespace(self, datatype, value),
             shop_uri=product.get_pathto(shop),
-            show_barcode=shop.get_property('barcode_format') != '0',
+            show_barcode=shop.get_property('barcode_format') != None,
             reference=product.get_property('reference'))
 
 
