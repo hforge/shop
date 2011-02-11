@@ -19,7 +19,6 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_datetime
-from itools.uri import get_uri_name
 from itools.web import STLView, STLForm, INFO, ERROR
 from itools.xapian import PhraseQuery, AndQuery
 from itools.xml import XMLParser
@@ -28,7 +27,6 @@ from itools.xml import XMLParser
 from ikaaro.forms import AutoForm, TextWidget, BooleanRadio, SelectWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
-from ikaaro.website_views import RegisterForm
 from ikaaro.table_views import Table_View
 from ikaaro.views import BrowseForm
 
@@ -73,7 +71,6 @@ class ShopUser_Profile(STLView):
 
     def get_namespace(self, resource, context):
         root = context.root
-        shop = get_shop(context.site_root)
         # Get dynamic user values
         dynamic_user_value = ResourceDynamicProperty()
         dynamic_user_value.resource = resource
@@ -106,7 +103,6 @@ class ShopUser_Manage(STLView):
         user = resource
         # Get user class
         shop = get_shop(resource)
-        user_class = shop.user_class
         group = user.get_group(context)
         # Build namespace
         namespace = {}
@@ -323,7 +319,6 @@ class ShopUser_OrderView(STLForm):
     template = '/ui/backoffice/orders/order_view.xml'
 
     def get_namespace(self, resource, context):
-        root = context.root
         shop = get_shop(resource)
         order = shop.get_resource('orders/%s' % context.query['id'], soft=True)
         # ACL
