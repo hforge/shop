@@ -53,16 +53,12 @@ class CategoriesEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
-        context = get_context()
-        root = context.root
-        # Build options
         options = []
-        for brain in root.search(format='category').get_documents(
-                                                      sort_by='abspath'):
-            name = brain.abspath
-            value = '----'* (len(name.split('/')) - 1)
-            value = value + brain.title
-            options.append({'name': name, 'value': value})
+        root = get_context().root
+        search = root.search(format='category')
+        for brain in search.get_documents(sort_by='abspath'):
+            options.append({'name': brain.abspath,
+                            'value': brain.abspath})
         return options
 
 
@@ -139,6 +135,3 @@ class StockOptions(Enumerate):
       {'name': 'accept', 'value': MSG(u'Accept orders')}]
       # TODO -> general configuration in shop
       # {'name': 'default', 'value': MSG(u'Default')}]
-
-
-
