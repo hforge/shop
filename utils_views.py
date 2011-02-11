@@ -23,7 +23,9 @@ from itools.xapian import OrQuery, PhraseQuery, AndQuery, RangeQuery
 
 # Import from ikaaro
 from ikaaro.table_views import Table_View
-from ikaaro.views import SearchForm
+
+# Import from itws
+from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
 from datatypes import RangeDatatype
@@ -111,8 +113,7 @@ class SearchTable_View(Table_View):
         return resource.handler.search(query)
 
 
-
-class SearchTableFolder_View(SearchForm):
+class SearchTableFolder_View(BrowseFormBatchNumeric):
 
     search_title = MSG(u'Search')
     search_template = '/ui/backoffice/utils_table_search.xml'
