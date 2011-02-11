@@ -54,7 +54,7 @@ product_schema = {# General informations
                   'use_this_shipping_way': ShippingsWaysEnumerate,
                   # Manufacturer / supplier
                   'manufacturer': ManufacturersEnumerate,
-                  'supplier': SuppliersEnumerate(multiple=True),
+                  'supplier': SuppliersEnumerate, # XXX (multiple=True),
                   # Manage stock
                   'stock-handled': Boolean(mandatory=True),
                   'stock-quantity': Integer(default=0, mandatory=True),
