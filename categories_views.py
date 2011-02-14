@@ -39,6 +39,18 @@ from modules import ModuleLoader
 from utils import get_group_name, get_skin_template, get_shop
 
 
+class LazyDict(dict):
+
+    resource = None
+    context = None
+    s = None
+
+    def __getitem__(self, key):
+        if key == 'categories':
+            return self.s.get_sub_categories_namespace(
+                self.resource, self.context)
+        raise ValueError
+
 
 class Category_View(BrowseFormBatchNumeric):
 
@@ -53,7 +65,6 @@ class Category_View(BrowseFormBatchNumeric):
 
 
     def get_namespace(self, resource, context):
-        shop = get_shop(resource)
         batch = None
         # Batch
         items = self.get_items(resource, context)
@@ -66,15 +77,26 @@ class Category_View(BrowseFormBatchNumeric):
         shop_module = ModuleLoader()
         shop_module.context = context
         shop_module.here = self
+        # Lazy
+        lazy = LazyDict()
+        lazy.context = context
+        lazy.resource = resource
+        lazy.s = self
         # Build namespace
         namespace = {'batch': list(batch),
                      'title': resource.get_title(),
-                     'categories': self.get_sub_categories_namespace(resource, context),
+                     'lazy': lazy,
                      'module': shop_module,
                      'products': [],
                      'description': None}
+        # Photo
+        img = resource.get_property('image_category')
+        if img:
+            img = resource.get_resource(img)
+            namespace['photo'] = context.get_link(img)
+        else:
+            namespace['photo'] = None
         # Get products view box
-        product_models = []
         for item_resource in items:
             # XXX Hack for cross selling
             # Cross selling return only resource not brain
@@ -91,9 +113,14 @@ class Category_View(BrowseFormBatchNumeric):
 
 
     def get_sub_categories_namespace(self, resource, context):
-        from categories import Category
         categories = []
-        for cat in resource.search_resources(cls=Category):
+        root = context.root
+        abspath = resource.get_canonical_path()
+        query = [PhraseQuery('parent_path', str(abspath)),
+                 PhraseQuery('format', 'category')]
+        search = root.search(AndQuery(*query))
+        for brain in search.get_documents():
+            cat = root.get_resource(brain.abspath)
             nb_products = cat.get_nb_products(only_public=True)
             if nb_products == 0:
                 continue
@@ -116,7 +143,6 @@ class Category_View(BrowseFormBatchNumeric):
 
 
     def get_items(self, resource, context):
-        site_root = context.resource.get_site_root()
         shop = get_shop(resource)
         abspath = resource.get_canonical_path()
         query = [
