@@ -19,7 +19,7 @@ from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.uri import get_reference
 from itools.web import BaseForm, ERROR
-from itools.xapian import OrQuery, PhraseQuery, AndQuery, RangeQuery
+from itools.xapian import OrQuery, PhraseQuery, AndQuery, RangeQuery, StartQuery
 
 # Import from ikaaro
 from ikaaro.table_views import Table_View
@@ -43,10 +43,14 @@ def get_search_query(search_schema, context, query):
             minimum, maximum = form[key]
             if minimum or maximum:
                 base_query.append(RangeQuery(key, minimum, maximum))
+        elif form[key] and key == 'abspath':
+            base_query.append(StartQuery(key, form[key]))
         elif form[key] and datatype.multiple is True:
             base_query.append(OrQuery(*[PhraseQuery(key, x) for x in form[key]]))
         elif form[key]:
             base_query.append(PhraseQuery(key, form[key]))
+    from pprint import pprint
+    pprint(base_query)
     if len(base_query) > 1:
         return AndQuery(*base_query)
     elif len(base_query) == 1:
