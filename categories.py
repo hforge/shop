@@ -73,7 +73,7 @@ class Category(ShopFolder):
         # Back-Office
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
-            return ['browse_content', 'view_categories', 'edit']
+            return ['browse_content', 'new_product', 'view_categories', 'edit']
         return ['view', 'edit']
 
 
