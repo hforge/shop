@@ -428,7 +428,7 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
         SelectWidget('supplier', title=MSG(u'Supplier')),
         SelectWidget('product_model', title=MSG(u'Product model')),
         SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
-        NumberRangeWidget('ttc_price', title=MSG(u'TTC Price')),
+        #NumberRangeWidget('ttc_price', title=MSG(u'TTC Price')),
         SelectWidget('workflow_state', title=MSG(u'State')),
         ]
 
@@ -439,7 +439,7 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
         'product_model': ProductModelsEnumerate,
         'supplier': SuppliersEnumerate,
         'manufacturer': ManufacturersEnumerate,
-        'ttc_price': DecimalRangeDatatype,
+        #'ttc_price': DecimalRangeDatatype,
         'workflow_state': States}
 
 
