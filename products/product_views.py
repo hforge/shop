@@ -456,14 +456,23 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
 
 
     def sort_and_batch(self, resource, context, items):
+        root = context.root
+        user = context.user
         # Batch
         start = context.query['batch_start']
         size = context.query['batch_size']
-        return items[start:start+size]
+        # ACL
+        allowed_items = []
+        for item in items[start:start+size]:
+            resource = root.get_resource(item.abspath)
+            ac = resource.get_access_control()
+            if ac.is_allowed_to_view(user, resource):
+                allowed_items.append((item, resource))
+        return allowed_items
 
 
-    def get_item_value(self, resource, context, item_brain, column):
-        item_resource = context.root.get_resource(item_brain.abspath)
+    def get_item_value(self, resource, context, item, column):
+        item_brain, item_resource = item
         if column == 'reference':
             return item_resource.get_property('reference')
         elif column == 'barcode':
@@ -486,7 +495,6 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
             ctime = item_resource.get_property('ctime')
             accept = context.accept_language
             return format_date(ctime, accept)
-        item = item_brain, item_resource
         return BrowseFormBatchNumeric.get_item_value(self, resource, context, item, column)
 
 
