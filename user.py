@@ -343,10 +343,14 @@ class ShopUser(User, DynamicFolder):
 class ShopUserFolder(UserFolder):
 
     class_id = 'users'
-    class_views = ['view', 'last_connections']
+    class_views = ['view', 'addresses_book', 'last_connections']
     class_version = '20100823'
 
     view = Customers_View()
+    addresses_book = GoToSpecificDocument(
+                        title=MSG(u'Addresses book'),
+                        access='is_admin',
+                        specific_document='../shop/addresses/')
     last_connections = GoToSpecificDocument(
                         title=MSG(u'Last connections'),
                         access='is_allowed_to_add',

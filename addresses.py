@@ -29,7 +29,7 @@ from ikaaro.table_views import Table_View
 # Import from shop
 from countries import CountriesEnumerate
 from datatypes import Civilite
-from addresses_views import Addresses_Book
+from addresses_views import Addresses_Book, Addresses_Search
 from addresses_views import Addresses_AddAddress, Addresses_EditAddress
 from utils import get_shop
 
@@ -55,14 +55,14 @@ class BaseAddresses(BaseTable):
     record_properties = {
       'title': Unicode(is_indexed=True, mandatory=True),
       'gender': Civilite(mandatory=True),
-      'firstname': Unicode(mandatory=True),
-      'lastname': Unicode(mandatory=True),
+      'firstname': Unicode(mandatory=True, is_indexed=True),
+      'lastname': Unicode(mandatory=True, is_indexed=True),
       'user': String(is_indexed=True),
       'address_1': Unicode(mandatory=True),
       'address_2': Unicode,
-      'zipcode': String(mandatory=True),
-      'town': Unicode(mandatory=True),
-      'country': CountriesEnumerate(mandatory=True),
+      'zipcode': String(mandatory=True, is_indexed=True),
+      'town': Unicode(mandatory=True, is_indexed=True),
+      'country': CountriesEnumerate(mandatory=True, is_indexed=True),
       }
 
     def get_record_kw(self, id):
@@ -87,12 +87,23 @@ class Addresses(Table):
     class_id = 'addresses'
     class_title = MSG(u'Adresse')
     class_handler = BaseAddresses
-    class_views = ['addresses_book']
+    class_views = ['addresses_book', 'search']
+
+    @property
+    def class_views(self):
+        context = get_context()
+        # Back-Office
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
+            return ['search']
+        return ['addresses_book']
+
 
     # Views
     addresses_book = Addresses_Book()
     add_address = Addresses_AddAddress()
     edit_address = Addresses_EditAddress()
+    search = Addresses_Search()
 
     view = Table_View(access='is_admin')
     last_changes = None

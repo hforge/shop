@@ -15,15 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.web import FormError, STLView
+from itools.datatypes import String, Unicode
 from itools.gettext import MSG
+from itools.web import FormError, STLView
 
 # Import from ikaaro
+from ikaaro.forms import SelectWidget, TextWidget
 from ikaaro.table_views import Table_EditRecord, Table_AddRecord
 from ikaaro.table_views import Table_AddEditRecord
 
 # Import from shop
+from countries import CountriesEnumerate
 from utils import get_shop
+from utils_views import SearchTable_View
 
 
 class Addresses_Book(STLView):
@@ -59,6 +63,40 @@ class Addresses_AddAddress(Table_AddRecord):
     def action_on_success(self, resource, context):
         return context.come_back(MSG(u'New address added.'),
                                  goto=';addresses_book')
+
+
+class Addresses_Search(SearchTable_View):
+
+    access = 'is_admin'
+
+    search_schema = {'user': String,
+                     'firstname': Unicode,
+                     'lastname': Unicode,
+                     'zipcode': String,
+                     'town': Unicode,
+                     'country': CountriesEnumerate}
+
+    search_widgets = [TextWidget('user', title=MSG(u'Id user')),
+                      TextWidget('firstname', title=MSG(u'Firstname')),
+                      TextWidget('lastname', title=MSG(u'Lastname')),
+                      TextWidget('zipcode', title=MSG(u'Zipcode')),
+                      TextWidget('town', title=MSG(u'Town')),
+                      SelectWidget('country', title=MSG(u'Country'))]
+
+
+    def get_table_columns(self, resource, context):
+        return (SearchTable_View.get_table_columns(self, resource, context) +
+                [('user', MSG(u'Id user'))])
+
+
+    def get_item_value(self, resource, context, item, column):
+        if column == 'user':
+            handler = resource.handler
+            value = handler.get_record_value(item, column)
+            return value, '/users/%s' % value
+        return SearchTable_View.get_item_value(self, resource, context,
+                  item, column)
+
 
 
 
