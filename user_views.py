@@ -477,6 +477,7 @@ class Customers_View(SearchTableFolder_View):
         'firstname': Unicode,
         'lastname': Unicode,
         'email': String,
+        'text': Unicode,
         }
 
     search_widgets = [
@@ -486,6 +487,7 @@ class Customers_View(SearchTableFolder_View):
         TextWidget('firstname', title=MSG(u'Firstname')),
         TextWidget('lastname', title=MSG(u'Lastname')),
         TextWidget('email', title=MSG(u'Email')),
+        TextWidget('text', title=MSG(u'Text (Search on all criteria)'))
         ]
 
 

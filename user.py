@@ -47,7 +47,7 @@ from user_views import ShopUser_Manage
 from datatypes import UserGroup_Enumerate
 from addresses_views import Addresses_Book
 from products.dynamic_folder import DynamicFolder
-from utils import get_shop, get_group_name
+from utils import get_shop
 from datatypes import Civilite
 
 
@@ -113,7 +113,8 @@ class CustomerSchema(OrderedTable):
         site_root = context.site_root
         is_admin = ac.is_admin(context.user, site_root)
         get_value = self.handler.get_record_value
-        is_on_register_view = issubclass(context.view.__class__, RegisterForm)
+        is_on_register_view = (hasattr(context, 'view') and
+                               issubclass(context.view.__class__, RegisterForm))
         for record in self.handler.get_records_in_order():
             name = get_value(record, 'name')
             show_on_register = get_value(record, 'show_on_register')
@@ -248,7 +249,8 @@ class ShopUser(User, DynamicFolder):
     def get_dynamic_schema(cls):
         context = get_context()
         self = context.resource
-        if issubclass(context.view.__class__, RegisterForm):
+        if (hasattr(context, 'view') and
+            issubclass(context.view.__class__, RegisterForm)):
             group = context.view.get_group(context)
             return group.get_dynamic_schema()
         if not isinstance(self, User):
@@ -318,10 +320,22 @@ class ShopUser(User, DynamicFolder):
 
 
     def get_group(self, context):
-        shop = get_shop(context.resource)
-        group_name = get_group_name(shop, context)
-        return shop.get_resource(group_name)
+        user_group = self.get_property('user_group')
+        return context.root.get_resource(user_group)
 
+
+    def to_text(self):
+        texts = []
+        for key, datatype in (self.get_dynamic_schema().items() +
+                              self.get_metadata_schema().items()):
+            if key == 'password':
+                continue
+            value = self.get_property(key)
+            if value:
+                value = datatype.encode(value)
+                value = unicode(value, 'utf-8')
+                texts.append(value)
+        return u'\n'.join(texts)
 
     ###############################################
     ## Update
