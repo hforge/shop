@@ -62,7 +62,8 @@ class Manufacturer_View(STLView):
     def get_namespace(self, resource, context):
         root = context.root
         products = []
-        query = AndQuery(PhraseQuery('manufacturer', resource.name),
+        query = AndQuery(PhraseQuery('format', 'product'),
+                         PhraseQuery('manufacturer', resource.name),
                          PhraseQuery('workflow_state', 'public'))
         results = root.search(query)
         for result in results.get_documents():
