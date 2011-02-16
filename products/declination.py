@@ -21,6 +21,7 @@ from decimal import Decimal as decimal
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Integer, Decimal
 from itools.gettext import MSG
+from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro import messages
@@ -112,14 +113,18 @@ class Declination_NewInstance(NewInstance):
         return declination_widgets + widgets
 
 
-
-    def action(self, resource, context, form):
+    def get_new_resource_name(self, form):
         i = 0
         name = 'declination_0'
+        resource = get_context().resource
         while resource.get_resource(name, soft=True) is not None:
             name = 'declination_%s' % i
             i += 1
+        return name
 
+
+    def action(self, resource, context, form):
+        name = self.get_new_resource_name(form)
         # Create the resource
         cls = Declination
         child = cls.make_resource(cls, resource, name)
@@ -130,8 +135,11 @@ class Declination_NewInstance(NewInstance):
         # Save schema
         for key in self.get_schema(resource, context):
             metadata.set_property(key, form[key])
+        metadata.set_property('is_default', False)
 
-        context.message = messages.MSG_NEW_RESOURCE
+        goto = './;declinations'
+        return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
+
 
 
 
