@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;username=${username}">
+    <img src="http://s7.addthis.com/static/btn/sm-share-${lang}.gif" width="83" height="16" alt="Bookmark and Share" style="border:0"/>
+  </a>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=${username}"></script>
+
+</stl:block>
