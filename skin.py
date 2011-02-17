@@ -131,8 +131,8 @@ class ShopSkin(NeutralSkin):
 
     def build_namespace(self, context):
         here = context.resource
-        shop = get_shop(here)
-        site_root = context.resource.get_site_root()
+        shop = context.site_root.get_resource('shop')
+        site_root = context.site_root
         namespace = NeutralSkin.build_namespace(self, context)
         # Menu XXX Done in ikaaro nav
         namespace['menu'] = get_menu_namespace(context, self.menu_level, src='menu')
