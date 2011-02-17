@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <div id="reviews">
+
+    <stl:block stl:if="not nb_reviews">
+      Be the first to add a review.
+    </stl:block>
+
+    <stl:block stl:if="nb_reviews">
+      Moyenne: ${moyenne} (${nb_reviews} reviews)
+
+      <div class="un-avis even" stl:repeat="review reviews">
+        <a href="${review/author/href}">${review/author/title}</a>
+        Note: ${review/note}/5
+        ${review/value}
+      </div>
+
+      <a href="./reviews/">Read more reviews</a>
+    </stl:block>
+
+    <h2>Add a review</h2>
+
+    <form method="POST" action="/shop/modules/review/;add_review">
+      <select name="note">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <textarea name="description" rows="4" cols="100"/>
+      <button class="button-star">Add my review</button>
+    </form>
+
+  </div>
+
+</stl:block>
