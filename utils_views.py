@@ -49,8 +49,6 @@ def get_search_query(search_schema, context, query):
             base_query.append(OrQuery(*[PhraseQuery(key, x) for x in form[key]]))
         elif form[key]:
             base_query.append(PhraseQuery(key, form[key]))
-    from pprint import pprint
-    pprint(base_query)
     if len(base_query) > 1:
         return AndQuery(*base_query)
     elif len(base_query) == 1:
