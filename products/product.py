@@ -33,12 +33,10 @@ from ikaaro.file import Image
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import XHTMLBody
 from ikaaro.registry import register_resource_class, register_field
-from ikaaro.registry import get_register_fields
 from ikaaro.workflow import WorkflowAware
 
 # Import from itws
 from itws.tags import TagsAware
-from itws.utils import is_empty
 
 # Import from shop
 from declination import Declination, Declination_NewInstance
@@ -160,42 +158,45 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
 
     def _get_dynamic_catalog_values(self):
+        return {}
+        # XXX We have to refactor dynamic indexation
         # Import from ikaaro
-        values = ShopFolder._get_catalog_values(self)
-        register_fields = get_register_fields()
-        model = self.get_product_model()
-        if model is None:
-            return {}
-        for key, datatype in self.get_dynamic_schema().items():
-            # We index dynamic properties that correspond to
-            # an EnumerateTable datatype.
-            # So we are able to know if enumerate value is used or not
-            if issubclass(datatype, EnumerateTable_to_Enumerate) is True:
-                register_key = 'DFT-%s' % datatype.enumerate_name
-                if register_key not in register_fields:
-                    register_field(register_key, String(is_indexed=True))
-                if datatype.multiple is True:
-                    values[register_key] = ' '.join(self.get_property(key))
-                else:
-                    values[register_key] = self.get_property(key)
-        # Index declinations
-        declinations = list(self.search_resources(cls=Declination))
-        for key in model.get_property('declinations_enumerates'):
-            declinations_values = set()
-            for declination in declinations:
-                value = declination.get_property(key)
-                if isinstance(value, list):
-                    declinations_values.union(value)
-                else:
-                    declinations_values.add(value)
-            register_key = 'DFT-%s' % key
-            if register_key not in register_fields:
-                register_field(register_key, String(is_indexed=True, multiple=True))
-            if values.has_key(register_key):
-                values[register_key] += declinations_values
-            else:
-                values[register_key] = declinations_values
-        return values
+        # from ikaaro.registry import get_register_fields
+        #values = ShopFolder._get_catalog_values(self)
+        #register_fields = get_register_fields()
+        #model = self.get_product_model()
+        #if model is None:
+        #    return {}
+        #for key, datatype in self.get_dynamic_schema().items():
+        #    # We index dynamic properties that correspond to
+        #    # an EnumerateTable datatype.
+        #    # So we are able to know if enumerate value is used or not
+        #    if issubclass(datatype, EnumerateTable_to_Enumerate) is True:
+        #        register_key = 'DFT-%s' % datatype.enumerate_name
+        #        if register_key not in register_fields:
+        #            register_field(register_key, String(is_indexed=True))
+        #        if datatype.multiple is True:
+        #            values[register_key] = ' '.join(self.get_property(key))
+        #        else:
+        #            values[register_key] = self.get_property(key)
+        ## Index declinations
+        #declinations = list(self.search_resources(cls=Declination))
+        #for key in model.get_property('declinations_enumerates'):
+        #    declinations_values = set()
+        #    for declination in declinations:
+        #        value = declination.get_property(key)
+        #        if isinstance(value, list):
+        #            declinations_values.union(value)
+        #        else:
+        #            declinations_values.add(value)
+        #    register_key = 'DFT-%s' % key
+        #    if register_key not in register_fields:
+        #        register_field(register_key, String(is_indexed=True, multiple=True))
+        #    if values.has_key(register_key):
+        #        values[register_key] += declinations_values
+        #    else:
+        #        values[register_key] = declinations_values
+        #return values
 
 
     def _get_catalog_values(self):
@@ -451,6 +452,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
     # XXX We should be able to activate it or not
     #def get_available_languages(self, languages):
+    #    from itws.utils import is_empty
     #    available_langs = []
     #    for language in languages:
     #        events = self.get_property('data', language=language)
@@ -464,7 +466,6 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     ## Namespace
     ##################################################
     def get_small_namespace(self, context):
-        shop = get_shop(self)
         title = self.get_property('title')
         # Dynamic property
         dynamic_property = DynamicProperty()
@@ -538,12 +539,10 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
     def get_namespace(self, context):
         root = context.root
-        shop = get_shop(self)
         namespace = {'name': self.name,
                      'abspath': self.get_abspath(),
                      'price': self.get_price_namespace()}
         # Get basic informations
-        abspath = context.resource.get_abspath()
         namespace['href'] = context.get_link(self)
         for key in product_schema.keys():
             if key=='data':
@@ -1001,7 +1000,6 @@ class Products(ShopFolder):
 
     def update_20100229(self):
         """ Now a product has only one category """
-        shop = get_shop(self)
         for resource in self.get_resources():
             if not isinstance(resource, Product):
                 continue
