@@ -269,7 +269,11 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                 value = self.get_property(key, language=language)
                 if value:
                     texts.append(value)
-
+            # Parent category
+            current_category = self.parent
+            while current_category.class_id == 'category':
+                texts.append(current_category.get_title(language=language))
+                current_category = current_category.parent
             # data (html)
             events = self.get_property('data', language=language)
             if events:
