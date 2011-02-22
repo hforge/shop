@@ -1,0 +1,24 @@
+.a-rating{
+ background: transparent url(/ui/modules/review/ratings.png) no-repeat scroll 0 0;
+ width: 49px;
+ height: 9px;
+ display: block;
+}
+.rating-0{
+  background-position: 0 0;
+}
+.rating-1{
+  background-position: 0 -9px;
+}
+.rating-2{
+  background-position: 0 -18px;
+}
+.rating-3{
+  background-position: 0 -27px;
+}
+.rating-4{
+  background-position: 0 -36px;
+}
+.rating-5{
+  background-position: 0 -45px;
+}
