@@ -35,6 +35,7 @@ from cross_selling_views import CrossSelling_Configure, CrossSelling_TableView
 from cross_selling_views import CrossSelling_Edit, cross_selling_schema
 from utils import get_group_name, get_shop
 from forms import ProductSelectorWidget
+from products import Product
 
 
 
@@ -49,6 +50,8 @@ class CrossSellingTable(ResourcesOrderedTable):
     class_views = ['configure', 'back']
 
     form = [ProductSelectorWidget('name', title=MSG(u'Product'))]
+
+    orderable_classes = Product
 
     # Views
     configure = CrossSelling_Configure()
@@ -111,6 +114,10 @@ class CrossSellingTable(ResourcesOrderedTable):
         elif promotion == '1':
             query.append(PhraseQuery('has_reduction', True))
 
+        # Product model
+        product_model = table.get_property('product_model')
+        if product_model:
+            query.append(PhraseQuery('product_model', product_model))
         # Tags
         if table.get_property('tags'):
             query.append(

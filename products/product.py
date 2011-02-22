@@ -52,7 +52,6 @@ from product_views import Product_ChangeProductModel, Products_Stock
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
-from shop.cross_selling import CrossSellingTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
@@ -139,6 +138,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
     @staticmethod
     def _make_resource(cls, folder, name, ctime=None, *args, **kw):
+        from shop.cross_selling import CrossSellingTable
         if ctime is None:
             ctime = datetime.now()
         DynamicFolder._make_resource(cls, folder, name, ctime=ctime, *args,
@@ -866,6 +866,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
 
     def update_20090410(self):
+        from shop.cross_selling import CrossSellingTable
         # Add the cross selling table
         if self.has_resource('cross-selling') is False:
             CrossSellingTable.make_resource(CrossSellingTable, self,
@@ -1020,8 +1021,6 @@ class Products(ShopFolder):
 
 
 
-# Product class depents on CrossSellingTable class and vice versa
-CrossSellingTable.orderable_classes = Product
 
 # Register fields
 register_field('reference', String(is_indexed=True, is_stored=True))

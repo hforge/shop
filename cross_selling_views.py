@@ -38,6 +38,7 @@ from itws.tags_views import TagsList
 from itws.utils import DualSelectWidget
 
 # Import from shop
+from products.enumerate import ProductModelsEnumerate
 from utils import get_shop
 
 
@@ -98,6 +99,7 @@ cross_selling_schema = {
     'categories': CrossSelling_Categories,
     'widget': String, # XXX only used to add a fake widget
     'specific_category': String,
+    'product_model': ProductModelsEnumerate,
     'tags': Tokens,
     'sort': CrossSelling_Sort,
     'show_product_with_promotion': ThreeStateBoolean,
@@ -163,6 +165,7 @@ class CrossSelling_Configure(ImprovedAutoForm):
                     title=MSG(u'Extend with promotion ?'),
                     is_inline=True,
                     has_empty_option=False),
+        SelectWidget('product_model', title=MSG(u'Product Model')),
         DualSelectWidget('tags',
             title=MSG(u'Extend products associated to this tags'),
             is_inline=True, has_empty_option=False),
