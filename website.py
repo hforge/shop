@@ -109,6 +109,7 @@ class ShopWebSite(NeutralWS):
     def get_metadata_schema(cls):
         return merge_dicts(
                   NeutralWS.get_metadata_schema(),
+                  hide_website_title_on_meta_title=Boolean,
                   class_skin=SkinsEnumerate)
 
 

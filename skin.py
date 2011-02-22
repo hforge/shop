@@ -117,7 +117,10 @@ class ShopSkin(NeutralSkin):
         if site_root is here:
             return site_root.get_title()
         # Somewhere else
-        message = MSG(u"{here_title} > {root_title}")
+        if site_root.get_property('hide_website_title_on_meta_title'):
+            message = MSG(u"{here_title}")
+        else:
+            message = MSG(u"{here_title} > {root_title}")
         return message.gettext(root_title=site_root.get_title(),
                                here_title=here.get_title())
 
@@ -134,6 +137,7 @@ class ShopSkin(NeutralSkin):
         shop = context.site_root.get_resource('shop')
         site_root = context.site_root
         namespace = NeutralSkin.build_namespace(self, context)
+        # Title
         # Menu XXX Done in ikaaro nav
         namespace['menu'] = get_menu_namespace(context, self.menu_level, src='menu')
         # Search

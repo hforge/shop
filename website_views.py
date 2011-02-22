@@ -16,14 +16,15 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Unicode
+from itools.datatypes import Boolean
 from itools.gettext import MSG
 from itools.web import STLView
 from itools.xapian import PhraseQuery, AndQuery, OrQuery
 from itools.xml import xml_to_text
 
 # Import from ikaaro
-from ikaaro.forms import SelectWidget
+from ikaaro import messages
+from ikaaro.forms import BooleanRadio, SelectWidget
 from ikaaro.utils import get_base_path_query
 
 # Import from itws
@@ -33,7 +34,6 @@ from itws.ws_neutral_views import NeutralWS_RSS, NeutralWS_View, NeutralWS_Edit
 from categories import Category
 from datatypes import SkinsEnumerate
 from products import Product
-from utils import get_shop
 
 
 class ShopWebSite_Edit(NeutralWS_Edit):
@@ -46,6 +46,7 @@ class ShopWebSite_Edit(NeutralWS_Edit):
         is_admin = ac.is_admin(context.user, resource.parent)
         schema['class_skin'] = SkinsEnumerate(all_skins=is_admin,
                                   value=resource.get_property('class_skin'))
+        schema['hide_website_title_on_meta_title'] = Boolean
         return schema
 
 
@@ -53,7 +54,19 @@ class ShopWebSite_Edit(NeutralWS_Edit):
         widgets = NeutralWS_Edit.get_widgets(self, resource, context)
         widgets[-1] = SelectWidget('class_skin', title=MSG(u'Class skin'),
                                    has_empty_option=False)
+        widgets.append(BooleanRadio('hide_website_title_on_meta_title',
+                          title=MSG(u'Hide website title on meta title')))
         return widgets
+
+
+    def action(self, resource, context, form):
+        NeutralWS_Edit.action(self, resource, context, form)
+        # Check edit conflict
+        if context.edit_conflict:
+            return
+        resource.set_property('hide_website_title_on_meta_title',
+                              form['hide_website_title_on_meta_title'])
+        context.message = messages.MSG_CHANGES_SAVED
 
 
 
@@ -124,12 +137,6 @@ class ShopWS_SiteMap(STLView):
         items = []
         if not level:
             return None
-        root = context.root
-        shop = get_shop(resource)
-        product_format = shop.product_class.class_id
-        product_query = AndQuery(PhraseQuery('format', product_format),
-                                 PhraseQuery('workflow_state', 'public'))
-
         for category in resource.search_resources(cls=Category):
             href = context.get_link(category)
             sub_tree = self.build_tree(category, context, level - 1)
@@ -153,6 +160,5 @@ class ShopWS_SiteMap(STLView):
         namespace = {}
         categories = resource.get_resource('categories')
         # Get sub categories
-        site_root = resource.get_site_root()
         namespace['categories'] = self.build_tree(categories, context, 2)
         return namespace
