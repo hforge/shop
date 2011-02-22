@@ -553,9 +553,11 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                 continue
             namespace[key] = self.get_property(key)
         # Category
-        namespace['category'] = {'name': self.parent.name,
-                                 'href': context.get_link(self.parent),
-                                 'title': self.parent.get_title()}
+        namespace['category'] = {
+            'name': self.parent.name,
+            'href': context.get_link(self.parent),
+            'breadcrumb_title': self.parent.get_property('breadcrumb_title'),
+            'title': self.parent.get_title()}
         # Categorie XXX To remove
         namespace['categorie'] = self.parent.get_title()
         # Lang (usefull to show contextuel images)

@@ -83,12 +83,14 @@ class Category_View(BrowseFormBatchNumeric):
         lazy.resource = resource
         lazy.s = self
         # Build namespace
-        namespace = {'batch': list(batch),
-                     'title': resource.get_title(),
-                     'lazy': lazy,
-                     'module': shop_module,
-                     'products': [],
-                     'description': None}
+        namespace = {
+            'batch': list(batch),
+            'title': resource.get_title(),
+            'breadcrumb_title': resource.get_property('breadcrumb_title'),
+            'lazy': lazy,
+            'module': shop_module,
+            'products': [],
+            'description': None}
         # Photo
         img = resource.get_property('image_category')
         if img:
