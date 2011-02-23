@@ -18,6 +18,7 @@
 from itools.core import merge_dicts
 from itools.datatypes import Email, Enumerate, Unicode, Boolean, String
 from itools.gettext import MSG
+from itools.uri import get_reference
 from itools.web import get_context
 from itools.xml import XMLParser
 
@@ -32,9 +33,11 @@ from itws.views import AutomaticEditView
 
 # Import from shop
 from cross_selling_views import AddProduct_View
+from datatypes import ProductPathDataType
 from products.models import get_real_datatype
 from products.enumerate import Datatypes
 from registry import shop_widgets
+from utils import get_shop
 
 
 class Widgets(Enumerate):
@@ -114,8 +117,6 @@ class ShopForm_Display(AutoForm):
         get_value = handler.get_record_value
         for record in handler.get_records_in_order():
             name = get_value(record, 'name')
-            datatype = get_real_datatype(handler, record)
-            datatype.name = name
             widget = Widgets.get_widget(get_value(record, 'widget'))
             title = get_value(record, 'title')
             widget = widget(name, title=title, has_empty_option=False)
@@ -127,13 +128,30 @@ class ShopForm_Display(AutoForm):
         root = context.root
         to_addr = resource.get_property('to_addr')
         subject = MSG(u'Message from form: "%s"' % resource.get_title()).gettext()
-        widgets = self.get_widgets(resource, context)
         text = []
-        for widget in widgets:
-            title = widget.title
-            text.append('*%s* \n\n %s' % (title, form[widget.name]))
+        handler = resource.handler
+        get_value = handler.get_record_value
+        from_addr = to_addr
+        for record in handler.get_records_in_order():
+            name = get_value(record, 'name')
+            datatype = get_value(record, 'datatype')
+            value = form[name]
+            # XXX Render on datatype ?
+            if datatype == 'product':
+                shop = get_shop(resource)
+                site_root = resource.get_site_root()
+                product = context.root.get_resource(value)
+                base_uri = shop.get_property('shop_uri')
+                end_uri = site_root.get_pathto(product)
+                value = get_reference(base_uri).resolve(end_uri)
+            elif datatype == 'email':
+                # XXX Set from_addr
+                from_addr = value
+            title = get_value(record, 'title')
+            text.append('*%s* \n\n %s' % (title, value))
         text = '\n\n\n'.join(text)
-        root.send_email(to_addr, subject, text=text, subject_with_host=False)
+        root.send_email(to_addr, subject, from_addr=from_addr, text=text,
+                        subject_with_host=False)
         return resource.get_property('final_message')
 
 
