@@ -337,21 +337,6 @@ class ShopUser(User, DynamicFolder):
                 texts.append(value)
         return u'\n'.join(texts)
 
-    ###############################################
-    ## Update
-    ###############################################
-
-    def update_20100719(self):
-        if not self.get_property('user_group'):
-            self.set_property('user_group', 'default')
-
-
-    def update_20100720(self):
-        ws_name = self.get_root().search(format='shop-neutral').get_documents()[0].name
-        group = self.get_property('user_group')
-        group = '/%s/shop/groups/%s' % (ws_name, group)
-        self.set_property('user_group', group)
-
 
 
 class ShopUserFolder(UserFolder):
@@ -388,52 +373,6 @@ class ShopUserFolder(UserFolder):
 
         # Return the user
         return user
-
-    ###############################################
-    ## Update
-    ###############################################
-
-    def update_20100719(self):
-        cls = CustomerSchema
-        cls.make_resource(cls, self, 'public_schema')
-        cls.make_resource(cls, self, 'private_schema')
-
-
-    def update_20100823(self):
-        from itools.csv import  Property
-        # GEt shop
-        root = self.get_root()
-        brain = root.search(format='shop').get_documents()[0]
-        shop = root.get_resource(brain.abspath)
-        # do update
-        for name in ['public_schema', 'private_schema']:
-            handler = self.get_resource(name).handler
-            print handler.key
-            for record in handler.get_records():
-                kw = {}
-                for key, datatype in record.record_properties.items():
-                    print key, datatype
-                    if key == 'title':
-                        value = handler.get_record_value(record, key, 'fr')
-                        kw[key] =  Property(value, language='fr')
-                    else:
-                        kw[key] = handler.get_record_value(record, key)
-                value = handler.get_record_value(record, key, 'en')
-                kw['is_public'] = name == 'public_schema'
-                from pprint import pprint
-                pprint(kw)
-                groups = ['default']
-                if shop.has_pro_price() is True:
-                    groups.append('pro')
-                for group in groups:
-                    group = shop.get_resource('groups/%s/schema' % group)
-                    value = handler.get_record_value(record, 'title', 'en')
-                    r = group.handler.add_record(kw)
-                    kw['title'] =  Property(value, language='en')
-                    group.handler.update_record(r.id, **kw)
-        self.del_resource('public_schema')
-        self.del_resource('private_schema')
-
 
 
 

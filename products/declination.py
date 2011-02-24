@@ -223,26 +223,6 @@ class Declination(DynamicFolder):
         return []
 
 
-    def update_20100708(self):
-        shop = get_shop(self)
-        if shop.has_pro_price() is True:
-            value = self.get_property('price-impact-value')
-            self.set_property('pro-price-impact-value', value)
-
-
-    def update_20100813(self):
-        prefixs = ['']
-        shop = get_shop(self)
-        if shop.has_pro_price() is True:
-            prefixs.append('pro-')
-        for prefix in prefixs:
-            value = self.get_property('%sprice-impact-value' % prefix)
-            if self.get_property('impact-on-price') != 'increase':
-                value = -value
-            self.set_property('%simpact_on_price' % prefix, value)
-        self.del_property('%sprice-impact-value' % prefix)
-        self.del_property('impact-on-price')
-
 
 
 register_resource_class(Declination)

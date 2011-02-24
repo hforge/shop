@@ -17,7 +17,6 @@
 # Import from itools
 from itools.datatypes import Email, Unicode, Boolean, Integer, String
 from itools.gettext import MSG
-from itools.web import get_context
 from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
@@ -27,7 +26,6 @@ from ikaaro.webpage import WebPage
 # Import from project
 from enumerate_table import EnumeratesFolder
 from addresses import Addresses
-from catalog import register_dynamic_fields
 from categories import Category
 from countries import Countries, CountriesZones
 from cross_selling import CrossSellingTable
@@ -118,6 +116,7 @@ class Shop(ShopFolder):
     # 6) Payment end (Define in payments views)
 
     #def __init__(self, metadata):
+    #from catalog import register_dynamic_fields
     #    # Super
     #    super(Shop, self).__init__(metadata)
     #    # XXX Hack
@@ -254,98 +253,6 @@ class Shop(ShopFolder):
                  PhraseQuery('name', 'pro')]
         search = root.search(AndQuery(*query))
         return len(search) > 0
-
-    ##############################
-    # Update methods
-    ##############################
-
-    def update_20090819(self):
-        if self.get_resource('enumerates', soft=True) is not None:
-            return
-        EnumeratesFolder.make_resource(EnumeratesFolder, self, 'enumerates')
-
-
-    def update_20090825(self):
-        if self.get_resource('cross-selling', soft=True) is not None:
-            return
-        CrossSellingTable.make_resource(CrossSellingTable, self,
-                              'cross-selling', title={'en': u'Cross selling'})
-
-
-    def update_20090910(self):
-        """ Add zones to countries
-        """
-        from itools.csv import CSVFile, Property
-        from itools.core import get_abspath
-        if self.get_resource('countries-zones', soft=True) is not None:
-            return
-        CountriesZones.make_resource(CountriesZones, self,
-                          'countries-zones', title={'en': u'Countries Zones'})
-        # Get list of countries
-        countries = []
-        handler = self.get_resource('countries').handler
-        for record in handler.get_records():
-            countries.append(handler.get_record_value(record, 'title'))
-        # Do update
-        zones = []
-        csv = CSVFile(get_abspath('data/countries.csv'))
-        for line in csv.get_rows():
-            country = unicode(line[0], 'utf-8')
-            zone = unicode(line[1], 'utf-8')
-            if zone not in zones:
-                zones.append(zone)
-            if country in countries:
-                # Update zone
-                for record in handler.get_records():
-                    if handler.get_record_value(record, 'title') == country:
-                          handler.update_record(record.id,
-                                **{'zone': str(zones.index(zone))})
-            else:
-                # Add new country
-                handler.add_record({'title': Property(country, language='fr'),
-                                    'zone': str(zones.index(zone)),
-                                    'enabled': True})
-
-
-    def update_20091110(self):
-        if self.get_resource('suppliers', soft=True) is not None:
-            return
-        Suppliers.make_resource(Suppliers, self, 'suppliers')
-
-
-    def update_20091201(self):
-        self.del_property('activate_mail_html')
-        self.del_property('shop_signature')
-        self.del_property('shop_from_addr')
-
-
-    def update_20100412(self):
-        if self.get_resource('modules', soft=True) is not None:
-            return
-        Modules.make_resource(Modules, self, 'modules')
-
-
-    def update_20100607(self):
-        if self.get_resource('groups', soft=True) is not None:
-            return
-        ShopUser_Groups.make_resource(ShopUser_Groups, self, 'groups')
-
-
-    def update_20100622(self):
-        root = self.get_root()
-        search = root.search(format='virtual-manufacturers')
-        results = search.get_documents()
-        if len(results) == 0:
-            return
-        resource = root.get_resource(results[0].abspath)
-        metadata = resource.metadata
-        metadata.format = 'manufacturers'
-        metadata.set_changed()
-        for r in self.get_resource('manufacturers').get_resources():
-            print r.name
-            self.parent.move_resource('./shop/manufacturers/%s' % r.name,
-                                      '%s/%s' % (resource.name, r.name))
-
 
 
 register_resource_class(Shop)

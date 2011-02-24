@@ -138,11 +138,6 @@ class ShopUser_Group(ShopFolder):
         return '%s-' % self.name
 
 
-    def update_20100719(self):
-        cls = CustomerSchema
-        cls.make_resource(cls, self, 'schema')
-
-
 
 class Groups_View(Folder_BrowseContent):
 
@@ -177,9 +172,3 @@ class ShopUser_Groups(ShopFolder):
 
     def get_document_types(self):
         return [ShopUser_Group]
-
-
-    def update_20100720(self):
-        cls = ShopUser_Group
-        kw = {'user_is_enabled_when_register': True}
-        cls.make_resource(cls, self, 'default', **kw)

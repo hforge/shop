@@ -88,10 +88,6 @@ class CountriesZones(OrderedTable):
         folder.set_handler(name, table)
 
 
-    def update_20090923(self):
-        for record in self.handler.get_records():
-            self.handler.update_record(record.id, **{'has_tax': True})
-
 
 
 class CountriesEnumerate(Enumerate):

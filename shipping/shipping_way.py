@@ -313,9 +313,6 @@ class ShippingWay(ShopFolder):
         return ns
 
 
-    def update_20090918(self):
-        self.set_property('logo', 'logo.png')
-
 
     # Views
     configure = ShippingWay_Configure()

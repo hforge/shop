@@ -89,7 +89,6 @@ class Category(ShopFolder):
         # Get the languages
         site_root = self.get_site_root()
         languages = site_root.get_property('website_languages')
-        default_language = languages[0]
         # Titles
         m_title = {}
         m_breadcrumb_title = {}
@@ -118,7 +117,6 @@ class Category(ShopFolder):
 
     def get_nb_products(self, only_public=False):
         root = self.get_root()
-        site_root = self.get_site_root()
         shop = get_shop(self)
         abspath = self.get_canonical_path()
         base_path_query = get_base_path_query(str(abspath))
@@ -135,7 +133,6 @@ class Category(ShopFolder):
 
     def get_nb_categories(self):
         root = self.get_root()
-        site_root = self.get_site_root()
         shop = get_shop(self)
         abspath = self.get_canonical_path()
         base_path_query = get_base_path_query(str(abspath))

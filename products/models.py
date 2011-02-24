@@ -149,22 +149,6 @@ class ProductModelSchema(OrderedTable):
         SelectWidget('datatype', title=MSG(u'Data Type')),
         ]
 
-    #########################
-    # Update methods
-    #########################
-
-    def update_20090414(self):
-        handler = self.handler
-        for record in handler.get_records():
-            handler.update_record(record.id, datatype='unicode')
-
-
-    def update_20090609(self):
-        handler = self.handler
-        for record in handler.get_records():
-            if handler.get_record_value(record, 'datatype') == 'enumerate':
-                enumerate = handler.get_record_value(record, 'enumerate')
-                handler.update_record(record.id, datatype=enumerate)
 
 
 

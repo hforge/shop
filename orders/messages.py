@@ -66,9 +66,5 @@ class Messages_TableResource(Table):
         return messages
 
 
-    def update_20091126(self):
-        for record in self.handler.get_records():
-            self.handler.update_record(record.id, **{'seen': True})
-
 
 register_resource_class(Messages_TableResource)

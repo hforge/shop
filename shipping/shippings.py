@@ -156,26 +156,4 @@ class Shippings(ShopFolder):
 
 
 
-    def update_20091022(self):
-        site_root = self.get_site_root()
-        languages = site_root.get_property('website_languages')
-        for resource in self.traverse_resources():
-            title = resource.get_property('title')
-            description = resource.get_property('description')
-            resource.del_property('title')
-            resource.del_property('description')
-            for language in languages:
-                resource.set_property('title', title, language)
-                resource.set_property('description', description, language)
-
-
-    def update_20100502(self):
-        site_root = self.get_site_root()
-        for language in site_root.get_property('website_languages'):
-            value = self.get_property('msg_if_no_shipping')
-            self.del_property('msg_if_no_shipping')
-            self.set_property('msg_if_no_shipping', value, language)
-
-
-
 register_resource_class(Shippings)

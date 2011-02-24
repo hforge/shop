@@ -134,43 +134,6 @@ class ShopWebSite(NeutralWS):
             skin = self.get_resource('/ui/default_skin/')
         return skin
 
-    #############################
-    # Update
-    #############################
-    def update_20100227(self):
-        self.move_resource('categories', 'categories_old')
-        self.move_resource('shop/categories', 'categories')
-
-
-    def update_20100228(self):
-        resource = self.get_resource('categories')
-        metadata = resource.metadata
-        metadata.version = Category.class_version
-        metadata.format = Category.class_id
-        metadata.set_changed()
-
-
-    def update_20100601(self):
-        from sidebar import CategorySidebar
-        from sidebar import ProductSidebar
-        cls = CategorySidebar
-        cls.make_resource(cls, self, 'category-sidebar')
-        cls = ProductSidebar
-        cls.make_resource(cls, self, 'product-sidebar')
-
-
-    def update_20100712(self):
-        from sidebar import ShopSidebar
-        cls = ShopSidebar
-        shop = self.get_resource('shop')
-        cls.make_resource(cls, shop, 'shop-sidebar')
-
-
-    def update_20100803(self):
-        resource = self.get_resource('sitemap.xml')
-        metadata = resource.metadata
-        metadata.format = 'sitemap'
-        metadata.set_changed()
 
 
 register_resource_class(ShopWebSite)

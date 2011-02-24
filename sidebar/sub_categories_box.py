@@ -173,8 +173,6 @@ class SubCategoriesBox(Box):
                      title=MSG(u'Afficher le nombre de produits')),
         BooleanRadio('use_small_title', title=MSG(u'Use small title'))]
 
-    def update_20100712(self):
-        self.set_property('show_second_level',  True)
 
 
 register_resource_class(SubCategoriesBox)

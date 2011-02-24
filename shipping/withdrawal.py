@@ -128,9 +128,6 @@ class Withdrawal(ShippingWay):
     order_edit_view = Withdrawal_RecordEdit()
 
 
-    def update_20090910(self):
-        self.set_property('is_free', True)
-
 
 register_resource_class(Withdrawal)
 register_resource_class(WithdrawalTable)
