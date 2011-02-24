@@ -85,7 +85,7 @@ class ProductModelSchema_View(OrderedTable_View):
         product_model = resource.parent.get_abspath()
         abspath = site_root.get_canonical_path()
         query = AndQuery(get_base_path_query(str(abspath)),
-                         PhraseQuery('product_model', product_model))
+                         PhraseQuery('product_model', str(product_model)))
         results = root.search(query)
         for doc in results.get_documents():
             product = root.get_resource(doc.abspath)
