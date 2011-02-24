@@ -208,14 +208,13 @@ class ShippingWay(ShopFolder):
         elif mode == 'quantity':
             list_values = [1] * len(list_weight)
         # XXX limit by models
-        #only_this_models = self.get_property('only_this_models')
-        #if only_this_models:
-        #    cart = ProductCart(get_context())
-        #    products = shop.get_resource('products')
-        #    for product_cart in cart.products:
-        #        product = products.get_resource(product_cart['name'], soft=True)
-        #        if product.get_property('product_model') not in only_this_models:
-        #            return None
+        only_this_models = self.get_property('only_this_models')
+        if only_this_models:
+            cart = ProductCart(get_context())
+            for product_cart in cart.products:
+                product = shop.get_resource(product_cart['name'], soft=True)
+                if product.get_property('product_model') not in only_this_models:
+                    return None
 
         # Get corresponding weight/quantity in table of price
         list_price_ok = {}
