@@ -113,12 +113,12 @@ h1{
   margin: 0;
 }
 
-#breadcrumbs span:first-child a{
+#breadcrumbs a:first-child {
   -moz-border-radius: 0 5px 5px 0;
   -webkit-border-radius: 0 5px 5px 0;
 }
 
-#breadcrumbs span a{
+#breadcrumbs a{
   background-color: gray;
   color: #FFF;
   padding: 5px;
@@ -127,7 +127,7 @@ h1{
   -webkit-border-radius: 5px;
 }
 
-#breadcrumbs span a:hover {
+#breadcrumbs a:hover {
   background-color: #175794;
   color: #FFF;
 
