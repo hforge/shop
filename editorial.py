@@ -27,6 +27,9 @@ from ikaaro.folder_views import Folder_BrowseContent
 
 
 class Shop_EditorialView(Folder_BrowseContent):
+    """
+    To delete on 0.62
+    """
 
     access = 'is_allowed_to_edit'
     title = MSG(u'View')
