@@ -65,6 +65,7 @@ class ShopLanguagesTemplate(CommonLanguagesTemplate):
 class BackofficeSkin(Skin):
 
     base_styles = ['/ui/common/style.css']
+    location_template = ShopLocationTemplate
 
     def get_styles(self, context):
         styles = Skin.get_styles(self, context)
