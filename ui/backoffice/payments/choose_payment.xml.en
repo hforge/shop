@@ -17,7 +17,8 @@
       <tr stl:repeat="payment payments" stl:if="payment/enabled">
         <td valign="top">
           <input type="radio" name="payment"
-            id="payment-${payment/name}" value="${payment/name}"/>
+            id="payment-${payment/name}" value="${payment/name}"
+            checked="checked"/>
         </td>
         <td valign="top">
           ${payment/value}<br/><br/>

@@ -25,7 +25,7 @@
         <option value="5">5</option>
       </select><br/>
       Comment:<br/>
-      <textarea name="description" rows="4" cols="100"/>
+      <textarea name="description" rows="4" cols="100"/><br/><br/>
       <button class="button-star">Add my review</button>
     </form>
 

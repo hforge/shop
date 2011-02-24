@@ -266,16 +266,22 @@ class ShopModule_Reviews(Folder):
         query = AndQuery(base_path_query,
                          PhraseQuery('format', 'shop_module_a_review'))
         search = context.root.search(query)
-        brains = search.get_documents(sort_by='mtime', reverse=True)
+        brains = list(search.get_documents(sort_by='mtime', reverse=True))
+        nb_reviews = len(brains)
         if brains:
             last_review = context.root.get_resource(brains[0].abspath)
             last_review = last_review.get_property('description')
             last_review = reduce_string(last_review, 200, 200)
         else:
             last_review = None
-        return {'nb_reviews': len(brains),
+        # XXX Performances
+        note = 0
+        for brain in brains:
+            review = context.root.get_resource(brain.abspath)
+            note += review.get_property('note')
+        return {'nb_reviews': nb_reviews,
                 'last_review': last_review,
-                'note': 2}
+                'note': note / nb_reviews}
 
 
 class ShopModule_Review(ShopModule):
@@ -289,15 +295,15 @@ class ShopModule_Review(ShopModule):
     list_reviews = ShopModule_Reviews_List()
 
     def render(self, resource, context):
-        from shop.products import Product
-        if isinstance(context.resource, Product):
-            return ShopModule_Review_View().GET(self, context)
+        view = ShopModule_Review_View().GET(self, context)
         reviews = resource.get_resource('reviews', soft=True)
         if reviews is None:
             return {'nb_reviews': 0,
                     'last_review': None,
-                    'note': None}
-        return reviews.get_infos(context)
+                    'note': None,
+                    'view': view}
+        return merge_dicts(reviews.get_infos(context),
+                           view=view)
 
 
 
