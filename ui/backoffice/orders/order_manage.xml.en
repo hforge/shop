@@ -291,14 +291,17 @@
             <form method="post">
               <input type="hidden" name="id_message"
                 value="${message/id}"/>
-              <input type="image"
-                name=";change_message_state"
-                src="/ui/shop/images/yes.png"
-                stl:if="message/seen"/>
-              <input type="image"
-                name=";change_message_state"
-                src="/ui/shop/images/no.png"
-                stl:if="not message/seen"/>
+              <button name="action"
+                value="change_message_state"
+                stl:if="message/seen" style="padding:4px !important;">
+                <img src="/ui/shop/images/yes.png"/>
+              </button>
+              <button
+                name="action"
+                value="change_message_state"
+                stl:if="not message/seen" style="padding:4px !important;">
+                <img src="/ui/shop/images/no.png"/>
+              </button>
             </form>
           </td>
           <td>
