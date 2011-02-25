@@ -292,11 +292,13 @@
               <input type="hidden" name="id_message"
                 value="${message/id}"/>
               <button name="action"
+                type="submit"
                 value="change_message_state"
                 stl:if="message/seen" style="padding:4px !important;">
                 <img src="/ui/shop/images/yes.png"/>
               </button>
               <button
+                type="submit"
                 name="action"
                 value="change_message_state"
                 stl:if="not message/seen" style="padding:4px !important;">
