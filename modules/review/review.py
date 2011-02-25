@@ -281,7 +281,7 @@ class ShopModule_Reviews(Folder):
             note += review.get_property('note')
         return {'nb_reviews': nb_reviews,
                 'last_review': last_review,
-                'note': note / nb_reviews}
+                'note': note / nb_reviews if nb_reviews else None}
 
 
 class ShopModule_Review(ShopModule):
