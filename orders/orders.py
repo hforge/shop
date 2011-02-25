@@ -542,6 +542,7 @@ class Order(WorkflowAware, ShopFolder):
         path = context.database.fs.get_absolute_path(self.handler.key)
         namespace = self.get_namespace(context)
         for product in namespace['products']:
+            product['key'] = context.database.fs.get_absolute_path(product['key'])
             product['cover']['key'] = context.database.fs.get_absolute_path(
                                            product['cover']['key'])
         namespace['logo'] = shop.get_pdf_logo_key(context)
