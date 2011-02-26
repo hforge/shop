@@ -203,6 +203,7 @@ class Shop(ShopFolder):
         schema['barcode_format'] = BarcodesFormat
         schema['show_sub_categories'] = Boolean
         schema['hide_not_buyable_products'] = Boolean
+        schema['product_cover_is_mandatory'] = Boolean
         return schema
 
 

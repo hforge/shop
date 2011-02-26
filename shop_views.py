@@ -101,6 +101,7 @@ class Shop_Configure(DBResource_Edit):
               'hide_not_buyable_products': Boolean(mandatory=True),
               'categories_batch_size': Integer(mandatory=True),
               'show_sub_categories': Boolean,
+              'product_cover_is_mandatory': Boolean,
               'bill_logo': ImagePathDataType,
               'pdf_signature': Unicode,
               'barcode_format': BarcodesFormat}
@@ -119,6 +120,7 @@ class Shop_Configure(DBResource_Edit):
                      has_empty_option=False),
         BooleanRadio('shop_sort_reverse', title=MSG(u'Reverse sort ?')),
         BooleanRadio('show_sub_categories', title=MSG(u'Show sub categories ?')),
+        BooleanRadio('product_cover_is_mandatory', title=MSG(u'Product cover is mandatory ?')),
         BooleanRadio('hide_not_buyable_products',
                       title=MSG(u'Hide not buyable products ?')),
         ImageSelectorWidget('bill_logo', title=MSG(u'Bill logo')),

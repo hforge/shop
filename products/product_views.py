@@ -270,6 +270,11 @@ class Product_Edit(AutoForm):
     def get_schema(self, resource, context):
         product_model = resource.get_product_model()
         site_root = resource.get_site_root()
+        shop = get_shop(site_root)
+        # Cover is mandatory
+        mandatory = shop.get_property('product_cover_is_mandatory')
+        product_schema['cover'].mandatory = mandatory
+        # Return schema
         return merge_dicts(
                   product_schema,
                   (product_model.get_model_schema() if product_model else {}),
