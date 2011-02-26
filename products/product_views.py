@@ -243,15 +243,19 @@ class Product_Edit(AutoForm):
                         has_empty_option=False),
         # Cover
         ImageSelectorWidget('cover', title=MSG(u'Cover')),
+        RTEWidget('data', title=MSG(u"Product description"))]
+
+    stock_widgets = [
         # Weight
         TextWidget('weight', title=MSG(u'Weight')),
         SelectWidget('use_this_shipping_way', title=MSG(u'Prefer use this shipping way')),
         # Stock
-        StockWidget('stock-quantity', title=MSG(u'Handle stocks ?')),
-        # Price
-        TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),
+        StockWidget('stock-quantity', title=MSG(u'Handle stocks ?'))]
+
+    price_widgets = [
+        # XXX Purchase price is hidden
+        #TextWidget('purchase-price', title=MSG(u'Pre-tax wholesale price')),
         PricesWidget('pre-tax-price', title=MSG(u'Prices')),
-        RTEWidget('data', title=MSG(u"Product description"))
         ]
 
 
@@ -262,6 +266,8 @@ class Product_Edit(AutoForm):
         # Product model
         if product_model:
             widgets.extend(product_model.get_model_widgets())
+        widgets.extend(self.stock_widgets)
+        widgets.extend(self.price_widgets)
         # XXX Hack
         # We do not show enumerates with 0 options
         return get_non_empty_widgets(schema, widgets)
