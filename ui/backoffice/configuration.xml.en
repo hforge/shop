@@ -131,6 +131,16 @@
     </tr>
     <tr>
       <td>
+        <a href="./modules/">
+          Modules
+        </a>
+      </td>
+      <td>
+        Configure shop modules
+      </td>
+    </tr>
+    <tr>
+      <td>
         <a href="./payments/">
           Payments
         </a>
