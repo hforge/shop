@@ -133,6 +133,17 @@ class NumberRangeWidget(Widget):
         return namespace
 
 
+class FilesWidget(Widget):
+
+    template = list(XMLParser(
+        """
+          <input type="file" id="${id}" name="${name}" value="${value}"/><br/>
+          <input type="file" id="${id}" name="${name}" value="${value}"/><br/>
+          <input type="file" id="${id}" name="${name}" value="${value}"/><br/>
+          <input type="file" id="${id}" name="${name}" value="${value}"/><br/>
+        """, stl_namespaces))
+
+
 
 class RangeSlider(Widget):
 

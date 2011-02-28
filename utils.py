@@ -197,6 +197,17 @@ class CurrentFolder_AddImage(ImproveDBResource_AddImage):
         return context.resource
 
 
+class CurrentFolder_AddImage_OnlyUpload(CurrentFolder_AddImage):
+
+    def get_configuration(self):
+        return {
+            'show_browse': False,
+            'show_external': False,
+            'show_insert': False,
+            'show_upload': True}
+
+
+
 class CurrentFolder_AddLink(DBResource_AddLink):
 
     def get_root(self, context):
