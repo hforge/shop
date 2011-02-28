@@ -63,8 +63,11 @@ class MiniProductWidget(Widget):
 
     def get_namespace(self, datatype, value):
         context = get_context()
-        viewbox = context.resource.viewbox
-        return {'viewbox': viewbox.GET(context.resource, context)}
+        product  = context.resource
+        while product.class_id != 'product':
+            product = product.parent
+        viewbox = product.viewbox
+        return {'viewbox': viewbox.GET(product, context)}
 
 
 

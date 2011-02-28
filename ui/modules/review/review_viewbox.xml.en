@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+
+  <div class="un-avis even">
+    <a href="${author/href}" stl:if="author">
+      ${author/title}
+    </a>
+    <span class="a-rating rating-${note}"/>
+    ${description}
+    <a href="${href}">Read more</a>
+    <a href="${href}/;add_report">Report</a>
+    <br/>
+    <div stl:repeat="image images" class="thumb">
+      <a href="${image/src}/;download" rel="fancybox">
+        <img src="${image/src}/;thumb?width=50&amp;height=50" title="${image/title}"/>
+      </a>
+    </div>
+    <div class="clear"/>
+  </div>
+
+</stl:block>

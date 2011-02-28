@@ -33,7 +33,7 @@ from itools.web import get_context, STLView
 from ikaaro.datatypes import FileDataType
 from ikaaro.forms import SelectWidget, SelectRadio, stl_namespaces
 from ikaaro.file import Image
-from ikaaro.forms import MultilineWidget, HiddenWidget
+from ikaaro.forms import MultilineWidget, HiddenWidget, TextWidget
 from ikaaro.buttons import RemoveButton, PublishButton, RetireButton
 from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
@@ -47,6 +47,7 @@ from itws.views import AutomaticEditView
 # Import from shop
 from shop.modules import ShopModule
 from shop.products.enumerate import States
+from shop.products.widgets import MiniProductWidget
 from shop.feed_views import Feed_View
 from shop.utils_views import SearchTableFolder_View
 from shop.widgets import FilesWidget
@@ -85,33 +86,44 @@ class NoteWidget(SelectRadio):
         """, stl_namespaces))
 
 
+class Review_Viewbox(STLView):
+
+    template = '/ui/modules/review/review_viewbox.xml'
+
+    def get_namespace(self, resource, context):
+        return resource.get_namespace(context)
+
+
 class ShopModule_Reviews_View(Feed_View):
 
     search_template = None
     view_name = 'reviews'
     content_template = '/ui/modules/review/review_feedview.xml'
-    content_keys = ['href', 'description', 'author', 'note', 'images']
+    content_keys = ['viewbox']
     styles = ['/ui/modules/review/style.css']
     sort_by = 'ctime'
     reverse = True
 
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
-        if column == 'href':
-            return context.get_link(item_resource)
-        elif column == 'description':
-            return item_resource.get_property('description')
-        elif column == 'author':
-            author = item_resource.get_property('author')
-            if author:
-                author_resource = context.root.get_resource('/users/%s' % author)
-                return {'title': author_resource.get_title(),
-                        'href': context.get_link(author_resource)}
-            return {'title': MSG(u'Anonymous'), 'href': None}
-        elif column == 'note':
-            return item_resource.get_property('note')
-        elif column == 'images':
-            return item_resource.get_images(context)
+        if column == 'viewbox':
+            return Review_Viewbox().GET(item_resource, context)
+
+        #if column == 'href':
+        #    return context.get_link(item_resource)
+        #elif column == 'description':
+        #    return item_resource.get_property('description')
+        #elif column == 'author':
+        #    author = item_resource.get_property('author')
+        #    if author:
+        #        author_resource = context.root.get_resource('/users/%s' % author)
+        #        return {'title': author_resource.get_title(),
+        #                'href': context.get_link(author_resource)}
+        #    return {'title': MSG(u'Anonymous'), 'href': None}
+        #elif column == 'note':
+        #    return item_resource.get_property('note')
+        #elif column == 'images':
+        #    return item_resource.get_images(context)
         return Feed_View.get_item_value(self, resource, context, item, column)
 
 
@@ -123,51 +135,6 @@ class ShopModule_Reviews_View(Feed_View):
                     PhraseQuery('format', 'shop_module_a_review'))
         return context.root.search(query)
 
-
-class ShopModule_Review_View(STLView):
-
-    access = True
-    template = '/ui/modules/review/review.xml'
-
-    def get_namespace(self, resource, context):
-        root = context.root
-        # Get reviews
-        # XXX We have to use feed view
-        reviews = []
-        reviews_resource = context.resource.get_resource('reviews', soft=True)
-        if reviews_resource is None:
-            brains = []
-        else:
-            abspath = reviews_resource.get_canonical_path()
-            base_path_query = get_base_path_query(str(abspath))
-            query = AndQuery(
-                        base_path_query,
-                        PhraseQuery('format', 'shop_module_a_review'))
-            search = root.search(query)
-            brains = search.get_documents(sort_by='mtime', reverse=True)
-        nb_reviews = len(brains)
-        total_note_reviews = 0
-        for brain in brains[:5]:
-            review = root.get_resource(brain.abspath)
-            author = review.get_property('author')
-            note = review.get_property('note')
-            total_note_reviews += note
-            if author:
-                author_resource = root.get_resource('/users/%s' % author)
-                author = {'title': author_resource.get_title(),
-                          'href': context.get_link(author_resource)}
-            else:
-                author = {'title': MSG(u'Anonymous'),
-                          'href': None}
-            reviews.append({'value': review.get_property('description'),
-                            'note': note,
-                            'href': context.get_link(review),
-                            'images': review.get_images(context),
-                            'author': author})
-        return {'reviews': reviews,
-                'abspath': str(context.resource.get_abspath()),
-                'moyenne': total_note_reviews / nb_reviews if nb_reviews else None,
-                'nb_reviews': nb_reviews}
 
 
 class ShopModule_AReport_NewInstance(NewInstance):
@@ -229,7 +196,8 @@ class ShopModule_AReview_NewInstance(NewInstance):
     schema = freeze({
         'name': String,
         'abspath': String,
-        'title': Unicode,
+        'product': String, #XXX useless
+        'title': Unicode(mandatory=True),
         'note': NoteEnumerate,
         'description': Unicode(mandatory=True),
         'images': FileDataType(multiple=True)})
@@ -238,9 +206,11 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
     widgets = [
         HiddenWidget('abspath', title=None),
+        MiniProductWidget('product', title=MSG(u'Product')),
+        TextWidget('title', title=MSG(u'Title')),
         NoteWidget('note', title=MSG(u'Note'), has_empty_option=False),
-        MultilineWidget('description', title=MSG(u'Description')),
-        FilesWidget('images', title=MSG(u'Images')), # XXX Must be multiple
+        MultilineWidget('description', title=MSG(u'Your review')),
+        FilesWidget('images', title=MSG(u'Images')),
         ]
 
     def get_new_resource_name(self, form):
@@ -469,12 +439,14 @@ class ShopModule_AReview(WorkflowAware, Folder):
     edit = AutomaticEditView(access='is_admin')
     edit_show_meta = False
     display_title = False
-    edit_schema = {'note': NoteEnumerate,
+    edit_schema = {'title': Unicode,
+                   'note': NoteEnumerate,
                    'description': Unicode}
 
     edit_widgets = [
+        TextWidget('title', title=MSG(u'Title')),
         NoteWidget('note', title=MSG(u'Note'), has_empty_option=False),
-        MultilineWidget('description', title=MSG(u'Description'))]
+        MultilineWidget('description', title=MSG(u'Your review'))]
 
     @classmethod
     def get_metadata_schema(cls):
@@ -493,8 +465,13 @@ class ShopModule_AReview(WorkflowAware, Folder):
 
 
     def get_namespace(self, context):
+        description = self.get_property('description').encode('utf-8')
+        # XXX injection
+        description = XMLParser(description.replace('\n', '<br/>'))
         return {'note': self.get_property('note'),
-                'description': self.get_property('description'),
+                'description': description,
+                'author': None,
+                'href': context.get_link(self),
                 'images': self.get_images(context)}
 
 
@@ -526,7 +503,26 @@ class ShopModule_Reviews(Folder):
     view = ShopModule_Reviews_View()
     add_review = ShopModule_AReview_NewInstance()
 
-    def get_infos(self, context):
+class ShopModule_Review(ShopModule):
+
+    class_id = 'shop_module_review'
+    class_title = MSG(u'Review')
+    class_description = MSG(u"Product Review")
+    class_views = ['list_reviews', 'list_reporting', 'edit']
+
+    list_reviews = ShopModule_Reviews_List()
+    list_reporting = ShopModule_Reviews_Reporting()
+    add_review = ShopModule_AReview_NewInstance()
+
+    def render(self, resource, context):
+        reviews = resource.get_resource('reviews', soft=True)
+        if reviews is None:
+            return {'nb_reviews': 0,
+                    'last_review': None,
+                    'note': None,
+                    'link': context.get_link(resource),
+                    'here_abspath': str(context.resource.get_abspath()),
+                    'viewboxes': {}}
         # XXX Should be in catalog for performances
         abspath = self.get_canonical_path()
         base_path_query = get_base_path_query(str(abspath))
@@ -546,32 +542,20 @@ class ShopModule_Reviews(Folder):
         for brain in brains:
             review = context.root.get_resource(brain.abspath)
             note += review.get_property('note')
+        # Get viewboxes
+        viewboxes = []
+        for brain in brains[:5]:
+            review = context.root.get_resource(brain.abspath)
+            viewbox = Review_Viewbox().GET(review, context)
+            viewboxes.append(viewbox)
         return {'nb_reviews': nb_reviews,
                 'last_review': last_review,
+                'link': context.get_link(resource),
+                'viewboxes': viewboxes,
+                'here_abspath': str(context.resource.get_abspath()),
                 'note': note / nb_reviews if nb_reviews else None}
 
 
-class ShopModule_Review(ShopModule):
-
-    class_id = 'shop_module_review'
-    class_title = MSG(u'Review')
-    class_description = MSG(u"Product Review")
-    class_views = ['list_reviews', 'list_reporting', 'edit']
-
-    list_reviews = ShopModule_Reviews_List()
-    list_reporting = ShopModule_Reviews_Reporting()
-    add_review = ShopModule_AReview_NewInstance()
-
-    def render(self, resource, context):
-        view = ShopModule_Review_View().GET(self, context)
-        reviews = resource.get_resource('reviews', soft=True)
-        if reviews is None:
-            return {'nb_reviews': 0,
-                    'last_review': None,
-                    'note': None,
-                    'view': view}
-        return merge_dicts(reviews.get_infos(context),
-                           view=view)
 
 
 
