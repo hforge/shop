@@ -173,6 +173,21 @@ class SearchTableFolder_View(BrowseFormBatchNumeric):
         return results.get_documents(sort_by=sort_by, reverse=reverse)
 
 
+    def sort_and_batch(self, resource, context, items):
+        root = context.root
+        user = context.user
+        # Batch
+        start = context.query['batch_start']
+        size = context.query['batch_size']
+        # ACL
+        allowed_items = []
+        for item in items[start:start+size]:
+            resource = root.get_resource(item.abspath)
+            ac = resource.get_access_control()
+            if ac.is_allowed_to_view(user, resource):
+                allowed_items.append((item, resource))
+        return allowed_items
+
 
 class RedirectPermanent(BaseForm):
     """Copied from GoToSpecificPage, but keep query"""

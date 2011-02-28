@@ -71,6 +71,7 @@ class BackofficeSkin(Skin):
         styles = Skin.get_styles(self, context)
         styles.extend(self.base_styles)
         styles.append('/ui/common/js/jquery.multiselect2side/css/jquery.multiselect2side.css')
+        styles.append('/ui/common/js/fancybox/jquery.fancybox-1.3.1.css')
         return styles
 
 
@@ -78,6 +79,7 @@ class BackofficeSkin(Skin):
         scripts = Skin.get_scripts(self, context)
         scripts.append('/ui/common/js/javascript.js')
         scripts.append('/ui/common/js/jquery.multiselect2side/js/jquery.multiselect2side.js')
+        scripts.append('/ui/common/js/fancybox/jquery.fancybox-1.3.1.pack.js')
         return scripts
 
 

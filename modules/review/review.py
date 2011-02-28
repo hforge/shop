@@ -24,6 +24,7 @@ from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.fs import FileName
 from itools.i18n import format_datetime
+from itools.stl import stl
 from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
 from itools.web import get_context, STLView
@@ -169,6 +170,54 @@ class ShopModule_Review_View(STLView):
                 'nb_reviews': nb_reviews}
 
 
+class ShopModule_AReport_NewInstance(NewInstance):
+
+    title = MSG(u'Do a report')
+    access = True
+
+    schema = freeze({
+        'name': String,
+        'title': Unicode,
+        'description': Unicode(mandatory=True)})
+
+    widgets = [
+        MultilineWidget('description', title=MSG(u'Your report')),
+        ]
+
+    def get_new_resource_name(self, form):
+        context = get_context()
+        root = context.root
+        abspath = context.resource.get_canonical_path()
+        base_path_query = get_base_path_query(str(abspath))
+        query = AndQuery(
+                    base_path_query,
+                    PhraseQuery('format', 'shop_module_a_report'))
+        search = root.search(query)
+        id_report = len(search.get_documents()) + 1
+        return str('report_%s' % id_report)
+
+
+    def action(self, resource, context, form):
+        name = self.get_new_resource_name(form)
+        cls = ShopModule_AReport
+        child = cls.make_resource(cls, resource, name)
+        # The metadata
+        metadata = child.metadata
+        language = resource.get_content_language(context)
+
+        # Anonymous ? Accepted XXX
+        if context.user:
+            metadata.set_property('author', context.user.name)
+        # Workflow
+        metadata.set_property('ctime', datetime.now())
+        metadata.set_property('description', form['description'], language)
+        metadata.set_property('remote_ip', context.get_remote_ip())
+
+        goto = context.get_link(resource.parent)
+        message = MSG(u'Your report has been added')
+        return context.come_back(message, goto=goto)
+
+
 
 class ShopModule_AReview_NewInstance(NewInstance):
 
@@ -279,20 +328,50 @@ class ShopModule_AReview_View(STLView):
 
 
 
+class ShopModule_Reviews_Reporting(SearchTableFolder_View):
+
+    title = MSG(u'Reporting')
+    access = 'is_admin'
+
+    table_columns = [
+        ('checkbox', None),
+        ('review', MSG(u'Review')),
+        ('description', MSG(u'Description')),
+        ]
+    table_actions = [RemoveButton]
+
+    def get_items(self, resource, context, query=[]):
+        query = [PhraseQuery('format', 'shop_module_a_report')]
+        return SearchTableFolder_View.get_items(self, resource, context, query)
+
+
+    def get_item_value(self, resource, context, item, column):
+        item_brain, item_resource = item
+        if column == 'review':
+            review = item_resource.parent
+            return review.name, context.get_link(review)
+        elif column == 'description':
+            return item_resource.get_property('description')
+        return SearchTableFolder_View.get_item_value(self, resource, context, item, column)
 
 
 class ShopModule_Reviews_List(SearchTableFolder_View):
 
     title = MSG(u'Moderation')
+    access = 'is_admin'
 
     table_columns = [
         ('checkbox', None),
-        ('author', MSG(u'Author')),
+        ('product', MSG(u'Product')),
+        ('review', MSG(u'Review')),
         ('remote_ip', MSG(u'Ip')),
+        ('author', MSG(u'Author')),
         ('note', MSG(u'Note')),
-        ('description', MSG(u'Description')),
         ('ctime', MSG(u'Ctime')),
-        ('workflow_state', MSG(u'Workflow'))]
+        ('workflow_state', MSG(u'Workflow')),
+        #('description', MSG(u'Description')),
+        #('images', MSG(u'Images')),
+        ]
 
     search_widgets = [SelectWidget('workflow_state', title=MSG(u'State'))]
     search_schema = {'workflow_state': States}
@@ -306,8 +385,13 @@ class ShopModule_Reviews_List(SearchTableFolder_View):
 
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
-        if column == 'description':
-            return item_resource.get_property('description')
+        #if column == 'description':
+        #    return item_resource.get_property('description')
+        if column == 'review':
+            return item_resource.name, context.get_link(item_resource)
+        elif column == 'product':
+            product = item_resource.parent.parent
+            return product.get_title(), context.get_link(product)
         elif column == 'author':
             author = item_resource.get_property('author')
             if author:
@@ -322,6 +406,15 @@ class ShopModule_Reviews_List(SearchTableFolder_View):
             ctime = item_resource.get_property('ctime')
             accept = context.accept_language
             return format_datetime(ctime, accept)
+        #elif column == 'images':
+        #    namespace = {'images': item_resource.get_images(context)}
+        #    events = XMLParser("""
+        #        <a href="${image/src}/;download" target="_blank" stl:repeat="image images"
+        #          rel="fancybox">
+        #          <img src="${image/src}/;thumb?width=50&amp;height=50"/>
+        #        </a>
+        #        """, stl_namespaces)
+        #    return stl(events=events, namespace=namespace)
         return SearchTableFolder_View.get_item_value(self, resource, context, item, column)
 
 
@@ -340,6 +433,28 @@ class ShopModule_Reviews_List(SearchTableFolder_View):
                 allowed_items.append((item, resource))
         return allowed_items
 
+###################################################################
+# Resources
+###################################################################
+class ShopModule_AReport(Folder):
+
+    class_id = 'shop_module_a_report'
+    class_title = MSG(u'Abusing report')
+    class_views = ['view']
+
+    @classmethod
+    def get_metadata_schema(cls):
+        return merge_dicts(Folder.get_metadata_schema(),
+                           WorkflowAware.get_metadata_schema(),
+                           ctime=DateTime,
+                           remote_ip=String,
+                           author=String)
+
+    def _get_catalog_values(self):
+        values = Folder._get_catalog_values(self)
+        values['ctime'] = self.get_property('ctime')
+        return values
+
 
 class ShopModule_AReview(WorkflowAware, Folder):
 
@@ -348,6 +463,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
     class_views = ['view']
 
     view = ShopModule_AReview_View()
+    add_report = ShopModule_AReport_NewInstance()
 
     # Edition
     edit = AutomaticEditView(access='is_admin')
@@ -399,6 +515,8 @@ class ShopModule_AReview(WorkflowAware, Folder):
         return images
 
 
+
+
 class ShopModule_Reviews(Folder):
 
     class_id = 'shop_module_reviews'
@@ -438,9 +556,10 @@ class ShopModule_Review(ShopModule):
     class_id = 'shop_module_review'
     class_title = MSG(u'Review')
     class_description = MSG(u"Product Review")
-    class_views = ['list_reviews', 'edit']
+    class_views = ['list_reviews', 'list_reporting', 'edit']
 
     list_reviews = ShopModule_Reviews_List()
+    list_reporting = ShopModule_Reviews_Reporting()
     add_review = ShopModule_AReview_NewInstance()
 
     def render(self, resource, context):
