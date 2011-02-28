@@ -495,8 +495,14 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
         elif column == 'cover':
             cover = item_resource.get_cover_namespace(context)
             if cover:
-                uri = '%s/;thumb?width=48&amp;height=48' % cover['href']
-                return XMLParser('<div class="thumb-products"><img src="%s"/></div>' % uri)
+                uri = cover['href']
+                return XMLParser("""
+                    <div class="thumb-products">
+                      <a href="%s/;download" rel="fancybox">
+                        <img src="%s/;thumb?width=48&amp;height=48"/>
+                      </a>
+                    </div>
+                    """% (uri, uri))
             return XMLParser('<div class="thumb-products"/>')
         elif column == 'title':
             return item_resource.get_title(), context.get_link(item_resource)
