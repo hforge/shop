@@ -9,23 +9,9 @@
   <a href="./;add_review" class="button">Add a review</a>
 
   <div id="reviews">
-    <stl:block stl:repeat="review items" class="un-avis even">
+    <stl:block stl:repeat="review items">
       ${review/viewbox}
     </stl:block>
-      <!--
-      <a href="${review/author/href}">${review/author/title}</a>
-        <span class="a-rating rating-${review/note}"/><br/>
-        ${review/description}
-        <a href="${review/href}">Read more</a>
-        <a href="${review/href}/;add_report">Report</a>
-        <br/>
-        <div stl:repeat="image review/images" class="thumb">
-          <a href="${image/src}/;download" rel="fancybox">
-            <img src="${image/src}/;thumb?width=50&amp;height=50" title="${image/title}"/>
-          </a>
-        </div>
-        <div class="clear"/>
-        -->
   </div>
 
 
