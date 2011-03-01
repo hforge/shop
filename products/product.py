@@ -475,10 +475,10 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Dynamic property
         dynamic_property = DynamicProperty()
         dynamic_property.resource = self
-        # Specific model
+        # Specific model is ?
+        specific_model_is = SpecificModelIs()
         product_model = self.get_product_model()
         if product_model:
-            specific_model_is = SpecificModelIs()
             product_model_name = product_model.name
         else:
             product_model_name = None
