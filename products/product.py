@@ -42,6 +42,7 @@ from itws.tags import TagsAware
 from declination import Declination, Declination_NewInstance
 from dynamic_folder import DynamicFolder, DynamicProperty
 from images import PhotoOrderedTable, ImagesFolder
+from models import SpecificModelIs
 from product_views import Product_NewProduct, Products_View, Product_ViewBox
 from product_views import Product_CrossSellingViewBox
 from product_views import Product_View, Product_Edit, Product_AddLinkFile
@@ -474,6 +475,14 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Dynamic property
         dynamic_property = DynamicProperty()
         dynamic_property.resource = self
+        # Specific model
+        product_model = self.get_product_model()
+        if product_model:
+            specific_model_is = SpecificModelIs()
+            product_model_name = product_model.name
+        else:
+            product_model_name = None
+        specific_model_is.model_name = product_model_name
         # Category
         category = {'name': self.parent.name,
                     'href': context.get_link(self.parent),
@@ -495,6 +504,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
           'name': self.name,
           'lang': lang,
           'module': shop_module,
+          'specific_model_is': specific_model_is,
           'dynamic_property': dynamic_property,
           'category': category,
           'cover': self.get_cover_namespace(context),
