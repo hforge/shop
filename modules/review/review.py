@@ -196,7 +196,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
     schema = freeze({
         'name': String,
         'abspath': String,
-        'product': String, #XXX useless
+        #'product': String, #XXX useless
         'title': Unicode(mandatory=True),
         'note': NoteEnumerate,
         'description': Unicode(mandatory=True),
@@ -206,7 +206,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
     widgets = [
         HiddenWidget('abspath', title=None),
-        MiniProductWidget('product', title=MSG(u'Product')),
+        #MiniProductWidget('product', title=MSG(u'Product')),
         TextWidget('title', title=MSG(u'Title')),
         NoteWidget('note', title=MSG(u'Note'), has_empty_option=False),
         MultilineWidget('description', title=MSG(u'Your review')),
@@ -520,11 +520,11 @@ class ShopModule_Review(ShopModule):
             return {'nb_reviews': 0,
                     'last_review': None,
                     'note': None,
-                    'link': context.get_link(resource),
+                    'link': context.get_link(self),
                     'here_abspath': str(context.resource.get_abspath()),
                     'viewboxes': {}}
         # XXX Should be in catalog for performances
-        abspath = self.get_canonical_path()
+        abspath = resource.get_canonical_path()
         base_path_query = get_base_path_query(str(abspath))
         query = AndQuery(base_path_query,
                          PhraseQuery('format', 'shop_module_a_review'))
@@ -550,9 +550,9 @@ class ShopModule_Review(ShopModule):
             viewboxes.append(viewbox)
         return {'nb_reviews': nb_reviews,
                 'last_review': last_review,
-                'link': context.get_link(resource),
+                'link': context.get_link(self),
                 'viewboxes': viewboxes,
-                'here_abspath': str(self.get_abspath()),
+                'here_abspath': str(context.resource.get_abspath()),
                 'note': note / nb_reviews if nb_reviews else None}
 
 
