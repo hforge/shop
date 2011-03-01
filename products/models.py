@@ -150,6 +150,10 @@ class ProductModelSchema(OrderedTable):
         ]
 
 
+class SpecificModelIs(dict):
+
+    def __getitem__(self, key):
+        return key == self.model_name
 
 
 class ProductModel(ShopFolder):
@@ -211,7 +215,10 @@ class ProductModel(ShopFolder):
 
     def get_model_namespace(self, resource):
         context = get_context()
-        namespace = {'specific_dict': {},
+        specific_model_is = SpecificModelIs()
+        specific_model_is.model_name = self.name
+        namespace = {'specific_model_is': specific_model_is,
+                     'specific_dict': {},
                      'specific_list': [],
                      'specific_list_complete': []}
         schema_handler = self.get_resource('schema').handler
