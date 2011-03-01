@@ -552,7 +552,7 @@ class ShopModule_Review(ShopModule):
                 'last_review': last_review,
                 'link': context.get_link(resource),
                 'viewboxes': viewboxes,
-                'here_abspath': str(context.resource.get_abspath()),
+                'here_abspath': str(self.get_abspath()),
                 'note': note / nb_reviews if nb_reviews else None}
 
 
