@@ -20,7 +20,7 @@ from datetime import datetime
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Email, Integer, String, Unicode
+from itools.datatypes import Email, Integer, String, Unicode, Boolean
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.i18n import format_date
@@ -54,11 +54,12 @@ from widgets import BarcodeWidget, MiniProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from widgets import StockWidget
 from shop.cart import ProductCart
-from shop.datatypes import UserGroup_Enumerate, DecimalRangeDatatype
+from shop.datatypes import UserGroup_Enumerate, DecimalRangeDatatype, ThreeStateBoolean
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
 from shop.utils import bool_to_img, get_non_empty_widgets, get_shop, get_skin_template
 from shop.utils_views import SearchTableFolder_View
+from shop.forms import ThreeStateBooleanRadio
 from shop.widgets import NumberRangeWidget
 
 
@@ -440,6 +441,7 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
         SelectWidget('product_model', title=MSG(u'Product model')),
         SelectWidget('manufacturer', title=MSG(u'Manufacturer')),
         #NumberRangeWidget('ttc_price', title=MSG(u'TTC Price')),
+        ThreeStateBooleanRadio('has_reduction', title=MSG(u'With reduction ?')),
         SelectWidget('workflow_state', title=MSG(u'State')),
         ]
 
@@ -450,6 +452,7 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
         'product_model': ProductModelsEnumerate,
         'supplier': SuppliersEnumerate,
         'manufacturer': ManufacturersEnumerate,
+        'has_reduction': ThreeStateBoolean,
         #'ttc_price': DecimalRangeDatatype,
         'workflow_state': States}
 
@@ -507,7 +510,10 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
         elif column == 'title':
             return item_resource.get_title(), context.get_link(item_resource)
         elif column == 'stored_price':
-            return '%s €' % item_resource.get_price_with_tax(pretty=True)
+            price = '%s €' % item_resource.get_price_with_tax(pretty=True)
+            if item_resource.get_property('has_reduction'):
+                return XMLParser('<span style="color:red">%s</span>'% price)
+            return price
         elif column == 'ctime':
             ctime = item_resource.get_property('ctime')
             accept = context.accept_language
