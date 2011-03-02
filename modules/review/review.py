@@ -280,7 +280,11 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
         # XXX Alert webmaster
 
-        goto = context.get_link(child)
+        # Goto on product, if defined
+        if form['abspath']:
+            goto = context.get_link(product)
+        else:
+            goto = context.get_link(child)
         message = MSG(u'Review has been added')
         return context.come_back(message, goto=goto)
 
