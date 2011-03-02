@@ -24,18 +24,18 @@ from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.fs import FileName
 from itools.i18n import format_datetime
-from itools.stl import stl
 from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
-from itools.web import get_context, STLView
+from itools.web import get_context, FormError, STLView
 
 # Import from ikaaro
-from ikaaro.datatypes import FileDataType
-from ikaaro.forms import SelectWidget, SelectRadio, stl_namespaces
-from ikaaro.file import Image
-from ikaaro.forms import MultilineWidget, HiddenWidget, TextWidget
 from ikaaro.buttons import RemoveButton, PublishButton, RetireButton
+from ikaaro.datatypes import FileDataType
+from ikaaro.file import Image
 from ikaaro.folder import Folder
+from ikaaro.forms import MultilineWidget, HiddenWidget, TextWidget
+from ikaaro.forms import SelectWidget, SelectRadio, stl_namespaces
+from ikaaro.messages import MSG_UNEXPECTED_MIMETYPE
 from ikaaro.registry import register_resource_class
 from ikaaro.utils import get_base_path_query, reduce_string
 from ikaaro.views_new import NewInstance
@@ -47,7 +47,6 @@ from itws.views import AutomaticEditView
 # Import from shop
 from shop.modules import ShopModule
 from shop.products.enumerate import States
-from shop.products.widgets import MiniProductWidget
 from shop.feed_views import Feed_View
 from shop.utils_views import SearchTableFolder_View
 from shop.widgets import FilesWidget
@@ -236,6 +235,17 @@ class ShopModule_AReview_NewInstance(NewInstance):
         return NewInstance.get_value(self, resource, context, name, datatype)
 
 
+    def _get_form(self, resource, context):
+        form = NewInstance._get_form(self, resource, context)
+        # Check images
+        for image in form['images']:
+            filename, mimetype, body = image
+            if mimetype.startswith('image/') is False:
+                raise FormError, MSG_UNEXPECTED_MIMETYPE(mimetype=mimetype)
+
+        return form
+
+
     def action(self, resource, context, form):
         name = self.get_new_resource_name(form)
         # Get product in which we have to add review
@@ -266,8 +276,6 @@ class ShopModule_AReview_NewInstance(NewInstance):
         metadata.set_property('remote_ip', context.get_remote_ip())
 
         # Add images
-        from pprint import pprint
-        pprint(form['images'])
         for image in form['images']:
             filename, mimetype, body = image
             name, type, language = FileName.decode(filename)
