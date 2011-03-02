@@ -22,11 +22,12 @@ from datetime import datetime, timedelta
 from itools.datatypes import Boolean, Enumerate, String, LanguageTag, Tokens
 from itools.gettext import MSG
 from itools.handlers import ConfigFile
+from itools.xapian import PhraseQuery, AndQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.resource_views import DBResource_AddLink
-from ikaaro.utils import reduce_string
+from ikaaro.utils import get_base_path_query, reduce_string
 from ikaaro.website import WebSite
 
 # Import from pyPdf
@@ -46,6 +47,22 @@ def bool_to_img(value):
 
 def get_shop(resource):
     return resource.get_site_root().get_resource('shop')
+
+
+def get_module(resource, class_id):
+    site_root = resource.get_site_root()
+    query = [PhraseQuery('is_shop_module', True),
+             PhraseQuery('format', class_id),
+             get_base_path_query(str(site_root.get_abspath()))]
+
+    # Search
+    root = site_root.parent
+    results = root.search(AndQuery(*query))
+    if len(results) == 0:
+        return None
+    # XXX if more than one module ???
+    doc = results.get_documents(sort_by='name')[0]
+    return root.get_resource(doc.abspath)
 
 
 def format_for_pdf(data):
