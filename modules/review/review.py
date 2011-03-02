@@ -48,6 +48,7 @@ from itws.views import AutomaticEditView
 from shop.modules import ShopModule
 from shop.products.enumerate import States
 from shop.feed_views import Feed_View
+from shop.utils import get_module
 from shop.utils_views import SearchTableFolder_View
 from shop.widgets import FilesWidget
 
@@ -269,8 +270,11 @@ class ShopModule_AReview_NewInstance(NewInstance):
         if context.user:
             metadata.set_property('author', context.user.name)
         # Workflow
+        review_module = get_module(resource, ShopModule_Review.class_id)
+        state = review_module.get_property('areview_default_state')
+
         metadata.set_property('ctime', datetime.now())
-        metadata.set_property('state', 'public')
+        metadata.set_property('state', state)
         metadata.set_property('description', form['description'], language)
         metadata.set_property('note', int(form['note']))
         metadata.set_property('remote_ip', context.get_remote_ip())
@@ -288,12 +292,13 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
         # XXX Alert webmaster
 
-        # Goto on product, if defined
-        if form['abspath']:
-            goto = context.get_link(product)
+        if state == 'private':
+            # XXX Add pending message.
+            goto = context.get_link(reviews)
+            message = MSG(u'Your review has been added.')
         else:
             goto = context.get_link(child)
-        message = MSG(u'Review has been added')
+            message = MSG(u'Review has been added')
         return context.come_back(message, goto=goto)
 
 
@@ -521,6 +526,12 @@ class ShopModule_Review(ShopModule):
     class_title = MSG(u'Review')
     class_description = MSG(u"Product Review")
     class_views = ['list_reviews', 'list_reporting', 'edit']
+
+    item_schema = {'areview_default_state': States(mandatory=True,
+                                                   default='private')}
+    item_widgets = [SelectWidget('areview_default_state',
+                                 has_empty_option=False,
+                                 title=MSG(u'Review default state'))]
 
     list_reviews = ShopModule_Reviews_List()
     list_reporting = ShopModule_Reviews_Reporting()
