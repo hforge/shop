@@ -5,7 +5,7 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <span class="a-rating rating-${note}"/>
-  <span class="title">${title}</span>
+  <span class="a-rating-title" stl:if="title">${title}</span>
   <p>
   ${description}
   </p>

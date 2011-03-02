@@ -23,6 +23,10 @@
   background-position: 0 -45px;
 }
 
+.a-rating-title {
+  display: block;
+}
+
 .thumb{
   border: 1px solid gray;
   width: 50px;

@@ -10,7 +10,7 @@
       ${author/title}
     </a>
     <span class="a-rating rating-${note}"/>
-    <span class="title">${title}</span>
+    <span class="a-rating-title" stl:if="title">${title}</span>
     ${description}
     <a href="${href}">Read more</a>
     <a href="${href}/;add_report">Report</a>
