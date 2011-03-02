@@ -14,6 +14,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from ikaaro
+from ikaaro.registry import register_resource_class
 
-from review import ShopModule_Review
-from sidebar import ReviewBox
+# Import from itools
+from itools.gettext import MSG
+
+# Import from itws
+from itws.repository import Box, register_box
+from itws.repository_views import Box_View
+
+class ReviewBox_View(Box_View):
+
+    def GET(self, resource, context):
+        return 'ok'
+
+
+class ReviewBox(Box):
+
+    class_id = 'shop_module_review_sidebar'
+    class_title = MSG(u'Bar that list last reviews')
+    class_description = MSG(u'Bar that list last reviews')
+
+    view = ReviewBox_View()
+
+
+register_resource_class(ReviewBox)
+register_box(ReviewBox, allow_instanciation=True,
+             is_content=True, is_side=False)
