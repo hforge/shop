@@ -273,6 +273,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
         review_module = get_module(resource, ShopModule_Review.class_id)
         state = review_module.get_property('areview_default_state')
 
+        metadata.set_property('title', form['title'])
         metadata.set_property('ctime', datetime.now())
         metadata.set_property('state', state)
         metadata.set_property('description', form['description'], language)
@@ -486,6 +487,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
         # XXX injection
         description = XMLParser(description.replace('\n', '<br/>'))
         return {'note': self.get_property('note'),
+                'title': self.get_property('title'),
                 'description': description,
                 'author': None,
                 'href': context.get_link(self),
