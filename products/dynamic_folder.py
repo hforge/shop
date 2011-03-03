@@ -20,6 +20,7 @@
 
 # Import from itools
 from itools.datatypes import String, Tokens
+from itools.gettext import MSG
 
 # Import from Shop
 from shop.enumerate_table import EnumerateTable_to_Enumerate
@@ -34,7 +35,10 @@ class DynamicProperty(dict):
     schema = {}
 
     def __getitem__(self, key):
-        datatype = self.schema[key]
+        datatype = self.schema.get(key)
+        if datatype is None:
+            # XXX We have to log it
+            return MSG(u'Unknow')
         value = self.resource.get_property(key)
         if hasattr(datatype, 'render'):
             value = datatype.render(value, self.context)
