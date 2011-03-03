@@ -18,7 +18,7 @@
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, Enumerate, String, Unicode, Integer
-from itools.datatypes import PathDataType, Decimal, Email, ISOCalendarDate
+from itools.datatypes import PathDataType, Decimal, Email, ISOCalendarDate, Date
 from itools.gettext import MSG
 from itools.web import get_context
 
@@ -39,6 +39,7 @@ from models_views import ProductModels_View
 from models_views import ProductModel_Configure
 from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
 from shop.datatypes import ImagePathDataType, FrenchDate, SIRET_Datatype
+from shop.datatypes import PrettyFrenchDate
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
@@ -59,6 +60,7 @@ real_datatypes = {'string': String,
                   'email': Email,
                   'html': XHTMLBody,
                   'french-date': FrenchDate,
+                  'pretty-french-date': PrettyFrenchDate,
                   'siret': SIRET_Datatype,
                   'date': ISOCalendarDate}
 

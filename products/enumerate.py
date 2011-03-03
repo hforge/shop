@@ -112,6 +112,7 @@ class Datatypes(Enumerate):
       {'name': 'email',   'value': MSG(u'Email')},
       {'name': 'html',   'value': MSG(u'HTML')},
       {'name': 'french-date', 'value': MSG(u'French Date')},
+      {'name': 'pretty-french-date', 'value': MSG(u'Pretty french Date')},
       {'name': 'date', 'value': MSG(u'Date')}]
 
 

@@ -271,6 +271,24 @@ class FrenchDate(Date):
         return value.strftime('%d/%m/%Y')
 
 
+class PrettyFrenchDate(Date):
+
+    days = {1: 'Lundi', 2: 'Mardi', 3: 'Mercredi', 4: 'Jeudi', 5: 'Vendredi',
+            6: 'Samedi', 7: 'Dimanche'}
+
+    months = {1: u'Janvier', 2: u'Février', 3: u'Mars', 4: u'Avril', 5: u'Mai',
+              6: u'Juin', 7: u'Juillet', 8: u'Août', 9: u'Septembre',
+              10: u'Octobre', 11: u'Novembre', 12: u'Décembre'}
+
+
+    @staticmethod
+    def render(value, context):
+        return u' '.join([PrettyFrenchDate.days[value.isoweekday()],
+                          str(value.day),
+                          PrettyFrenchDate.months[value.month],
+                          str(value.year)])
+
+
 
 class SIRET_Datatype(String):
 
