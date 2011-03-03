@@ -6,20 +6,28 @@
 
 
   <div class="un-avis even">
-    <a href="${author/href}" stl:if="author">
-      ${author/title}
-    </a>
-    <span class="a-rating rating-${note}"/>
-    <span class="a-rating-title" stl:if="title">${title}</span>
-    ${description}
-    <a href="${href}">Read more</a>
-    <a href="${href}/;add_report">Report</a>
-    <br/>
-    <div stl:repeat="image images" class="thumb">
-      <a href="${image/src}/;download" rel="fancybox">
-        <img src="${image/src}/;thumb?width=50&amp;height=50" title="${image/title}"/>
-      </a>
-    </div>
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td>
+          <a href="${author/href}" stl:if="author">
+            ${author/title}
+          </a>
+        </td>
+        <td>
+          <span class="a-rating rating-${note}"/>
+          <h4 class="a-rating-title" stl:if="title">${title}</h4>
+          ${description}
+          <a href="${href}">Read more</a>
+          <a href="${href}/;add_report">Report</a>
+          <br/>
+          <div stl:repeat="image images" class="thumb">
+            <a href="${image/src}/;download" rel="fancybox">
+              <img src="${image/src}/;thumb?width=50&amp;height=50" title="${image/title}"/>
+            </a>
+          </div>
+        </td>
+      </tr>
+    </table>
     <div class="clear"/>
   </div>
 

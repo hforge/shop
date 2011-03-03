@@ -14,20 +14,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from ikaaro
-from ikaaro.registry import register_resource_class
-
 # Import from itools
+from itools.datatypes import Boolean
 from itools.gettext import MSG
+from itools.xapian import PhraseQuery
+
+# Import from ikaaro
+from ikaaro.forms import BooleanRadio
+from ikaaro.registry import register_resource_class
 
 # Import from itws
 from itws.repository import Box, register_box
 from itws.repository_views import Box_View
 
-class ReviewBox_View(Box_View):
+# Import from shop
+from shop.utils_views import Viewbox_View
 
-    def GET(self, resource, context):
-        return 'ok'
+
+class ReviewBox_View(Box_View, Viewbox_View):
+
+
+    def get_items_search(self, resource, context, *args):
+        query = PhraseQuery('format', 'shop_module_a_review')
+        return context.root.search(query)
 
 
 class ReviewBox(Box):
@@ -37,6 +46,10 @@ class ReviewBox(Box):
     class_description = MSG(u'Bar that list last reviews')
 
     view = ReviewBox_View()
+
+    edit_schema = {'show_title': Boolean}
+
+    edit_widgets = [BooleanRadio('show_title', title=MSG(u'Show title ?'))]
 
 
 register_resource_class(ReviewBox)

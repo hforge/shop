@@ -18,7 +18,7 @@
 from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.uri import get_reference
-from itools.web import BaseForm, ERROR
+from itools.web import BaseForm, ERROR, STLView
 from itools.xapian import OrQuery, PhraseQuery, AndQuery, RangeQuery, StartQuery
 
 # Import from ikaaro
@@ -209,3 +209,42 @@ class RedirectPermanent(BaseForm):
         goto = get_reference(goto)
         goto.query = context.uri.query
         return goto
+
+
+class Viewbox_View(STLView):
+
+    template = '/ui/shop/repeat_viewboxes.xml'
+
+    viewbox = None
+
+    def get_namespace(self, resource, context):
+        viewboxes = []
+        for item_resource in self.get_items(resource, context):
+            viewbox = item_resource.viewbox.GET(item_resource, context)
+            viewboxes.append(viewbox)
+        return {'viewboxes': viewboxes,
+                'show_title': resource.get_property('show_title'),
+                'title': resource.get_title()}
+
+
+    def get_items(self, resource, context):
+        search = self.get_items_search(resource, context)
+        items = search.get_documents()
+        return self.sort_and_batch(resource, context, items)
+
+
+    def get_items_search(self, resource, context):
+        return None
+
+
+    def sort_and_batch(self, resource, context, items):
+        root = context.root
+        user = context.user
+        # ACL
+        allowed_items = []
+        for item in items:
+            resource = root.get_resource(item.abspath)
+            ac = resource.get_access_control()
+            if ac.is_allowed_to_view(user, resource):
+                allowed_items.append(resource)
+        return allowed_items

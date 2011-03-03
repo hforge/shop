@@ -451,6 +451,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
     class_views = ['view']
 
     view = ShopModule_AReview_View()
+    viewbox = Review_Viewbox()
     add_report = ShopModule_AReport_NewInstance()
 
     # Edition

@@ -31,23 +31,19 @@ from itws.repository_views import Box_View
 # Import from shop
 from shop.categories import Category
 from shop.cross_selling import CrossSellingTable
+from shop.utils_views import Viewbox_View
 
 
 
-class CrossSellingBox_View(Box_View):
+class CrossSellingBox_View(Box_View, Viewbox_View):
 
     access = True
     title = MSG(u'View')
-    template = '/ui/vertical_depot/cross_selling_box.xml'
 
-
-    def get_namespace(self, resource, context):
+    def get_items(self, resource, context, *args):
         site_root = resource.get_site_root()
         shop = site_root.get_resource('shop')
         product_class_id = shop.product_class.class_id
-        namespace = {'title': resource.get_property('title'),
-                     'show_title': resource.get_property('show_title'),
-                     'products': []}
         categories = []
         excluded_products = []
         if isinstance(context.resource, Category):
@@ -56,18 +52,8 @@ class CrossSellingBox_View(Box_View):
             categories = [context.resource.parent]
             excluded_products = [context.resource.get_abspath()]
         table = resource.get_resource(resource.order_path)
-        products = table.get_products(context, product_class_id, categories,
+        return table.get_products(context, product_class_id, categories,
                                       excluded_products=excluded_products)
-        for product in products:
-            namespace['products'].append(product.viewbox.GET(product, context))
-
-        # Do not display empty box
-        ac = resource.get_access_control()
-        is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
-        if len(namespace['products']) == 0 and is_allowed_to_edit is False:
-            self.set_view_is_empty(True)
-
-        return namespace
 
 
 
