@@ -472,9 +472,6 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     ##################################################
     def get_small_namespace(self, context):
         title = self.get_property('title')
-        # Dynamic property
-        dynamic_property = DynamicProperty()
-        dynamic_property.resource = self
         # Specific model is ?
         specific_model_is = SpecificModelIs()
         product_model = self.get_product_model()
@@ -483,6 +480,11 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         else:
             product_model_name = None
         specific_model_is.model_name = product_model_name
+        # Dynamic property
+        dynamic_property = DynamicProperty()
+        dynamic_property.resource = self
+        dynamic_property.context = context
+        dynamic_property.schema = self.get_dynamic_schema()
         # Category
         category = {'name': self.parent.name,
                     'href': context.get_link(self.parent),

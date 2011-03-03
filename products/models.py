@@ -17,8 +17,8 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, Enumerate, String, Unicode, Integer
-from itools.datatypes import PathDataType, Decimal, Email, ISOCalendarDate, Date
+from itools.datatypes import Boolean, String, Unicode, Integer
+from itools.datatypes import PathDataType, Decimal, Email, ISOCalendarDate
 from itools.gettext import MSG
 from itools.web import get_context
 
@@ -231,14 +231,7 @@ class ProductModel(ShopFolder):
             # Real value is used to keep the enumerate value
             # corresponding to the options[{'name': xxx}]
             datatype = get_real_datatype(schema_handler, record)
-            # XXX Use datatype.render()
-            if issubclass(datatype, Enumerate):
-                if datatype.multiple:
-                    values = [datatype.get_value(x) for x in real_value]
-                    value = ', '.join(values)
-                else:
-                    value = datatype.get_value(real_value)
-            # XXX Use datatype.render()
+            # XXX That useless, we can do it with STL ?
             if issubclass(datatype, Boolean):
                 if value:
                     value = MSG(u'Yes')

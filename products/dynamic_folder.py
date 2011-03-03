@@ -30,9 +30,15 @@ from shop.folder import ShopFolder
 class DynamicProperty(dict):
 
     resource = None
+    context = None
+    schema = {}
 
     def __getitem__(self, key):
-        return self.resource.get_property(key)
+        datatype = self.schema[key]
+        value = self.resource.get_property(key)
+        if hasattr(datatype, 'render'):
+            value = datatype.render(value, self.context)
+        return value
 
 
 class DynamicFolder(ShopFolder):

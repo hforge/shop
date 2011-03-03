@@ -179,6 +179,16 @@ class EnumerateTable_to_Enumerate(Enumerate):
         return u' '.join(values)
 
 
+    @classmethod
+    def render(cls, value, context):
+        if cls.multiple:
+            values = [cls.get_value(x) for x in value]
+            value = ', '.join(values)
+        else:
+            value = cls.get_value(value)
+        return value
+
+
 
 class EnumerateTable_AddRecord(Table_AddRecord):
 

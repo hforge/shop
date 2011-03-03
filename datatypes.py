@@ -196,8 +196,8 @@ class ThreeStateBoolean(Boolean):
 class DatatypeCM_to_INCH(Decimal):
 
 
-    @staticmethod
-    def render(value, context):
+    @classmethod
+    def render(cls, value, context):
         if value is None:
             return None
         # Get informations
@@ -281,8 +281,8 @@ class PrettyFrenchDate(Date):
               10: u'Octobre', 11: u'Novembre', 12: u'Décembre'}
 
 
-    @staticmethod
-    def render(value, context):
+    @classmethod
+    def render(cls, value, context):
         return u' '.join([PrettyFrenchDate.days[value.isoweekday()],
                           str(value.day),
                           PrettyFrenchDate.months[value.month],
