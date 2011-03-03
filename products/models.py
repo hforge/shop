@@ -237,7 +237,7 @@ class ProductModel(ShopFolder):
                     value = MSG(u'Yes')
                 else:
                     value = MSG(u'No')
-            if hasattr(datatype, 'render'):
+            if value != None and hasattr(datatype, 'render'):
                 value = datatype.render(value, context)
             # Build kw
             kw = {'value': value,
