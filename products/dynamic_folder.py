@@ -40,7 +40,7 @@ class DynamicProperty(dict):
             # XXX We have to log it
             return MSG(u'Unknow')
         value = self.resource.get_property(key)
-        if hasattr(datatype, 'render'):
+        if value != None and hasattr(datatype, 'render'):
             value = datatype.render(value, self.context)
         return value
 
