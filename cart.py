@@ -101,7 +101,7 @@ class ProductCart(object):
         """
         products = []
         cookie = self.context.get_cookie('products')
-        if not cookie:
+        if not cookie or cookie == 'deleted':
             return products
         cookie = Password.decode(cookie)
         for data in cookie.split('@'):
@@ -217,7 +217,7 @@ class ProductCart(object):
           collisimo|suivi
         """
         cookie = self.context.get_cookie('shipping')
-        if not cookie:
+        if not cookie or cookie == 'deleted':
             return None
         cookie = Password.decode(cookie)
         name, option = cookie.split('|')
@@ -234,7 +234,7 @@ class ProductCart(object):
 
     def _get_id_zone(self):
         cookie = self.context.get_cookie('id_zone')
-        if not cookie:
+        if not cookie or cookie == 'deleted':
             return None
         return Password.decode(cookie)
 
@@ -255,7 +255,7 @@ class ProductCart(object):
           25|45
         """
         cookie = self.context.get_cookie('addresses')
-        if not cookie:
+        if not cookie or cookie == 'deleted':
             delivery_address = bill_address = None
         else:
             cookie = Password.decode(cookie)
