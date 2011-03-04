@@ -66,6 +66,7 @@ class ShopUser_Group(ShopFolder):
                    'validation_mail_body': Unicode(multilingual=True),
                    'invalidation_mail_subject': Unicode(multilingual=True),
                    'invalidation_mail_body': Unicode(multilingual=True),
+                   'hide_address_on_registration': Boolean,
                    'user_is_enabled_when_register': Boolean,
                    'use_default_price': Boolean,
                    'show_ht_price': Boolean}
@@ -78,6 +79,7 @@ class ShopUser_Group(ShopFolder):
                     MultilineWidget('validation_mail_body', title=MSG(u'Validation mail body')),
                     TextWidget('invalidation_mail_subject', title=MSG(u'Invalidation mail subject')),
                     MultilineWidget('invalidation_mail_body', title=MSG(u'Invalidation mail body')),
+                    BooleanRadio('hide_address_on_registration', title=MSG(u'Hide address on registration')),
                     BooleanRadio('user_is_enabled_when_register', title=MSG(u'User is enabled ?')),
                     BooleanRadio('use_default_price', title=MSG(u'Use default price ?')),
                     BooleanRadio('show_ht_price', title=MSG(u'Show HT price ?'))]

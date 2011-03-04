@@ -228,7 +228,9 @@ class Shop_Register(RegisterForm):
         'password': String(mandatory=True),
         'password_check': String(mandatory=True),
         'phone1': String(mandatory=True),
-        'phone2': String,
+        'phone2': String}
+
+    address_schema = {
         'address_1': Unicode(mandatory=True),
         'address_2': Unicode,
         'zipcode': String(mandatory=True),
@@ -269,15 +271,22 @@ class Shop_Register(RegisterForm):
 
     def get_schema(self, resource, context):
         group = self.get_group(context)
+        address_schema = {}
+        if group.get_property('hide_address_on_registration') is False:
+            address_schema = self.address_schema
         return merge_dicts(self.base_schema,
-                           group.get_dynamic_schema())
+                           group.get_dynamic_schema(),
+                           address_schema)
 
 
     def get_widgets(self, resource, context):
         group = self.get_group(context)
+        address_widgets = []
+        if group.get_property('hide_address_on_registration') is False:
+            address_widgets = self.address_widgets
         return self.base_widgets + \
                group.get_dynamic_widgets() + \
-               self.address_widgets
+               address_widgets
 
 
     def get_group(self, context):
@@ -334,13 +343,14 @@ class Shop_Register(RegisterForm):
         user.save_form(self.get_schema(resource, context), form)
 
         # Save address in addresses table
-        kw = {'user': user.name}
-        addresses = shop.get_resource('addresses')
-        for key in ['gender', 'lastname', 'firstname', 'address_1',
-                    'address_2', 'zipcode', 'town', 'country']:
-            kw[key] = form[key]
-        kw['title'] = MSG(u'Your address').gettext()
-        addresses.handler.add_record(kw)
+        if group.get_property('hide_address_on_registration') is False:
+            kw = {'user': user.name}
+            addresses = shop.get_resource('addresses')
+            for key in ['gender', 'lastname', 'firstname', 'address_1',
+                        'address_2', 'zipcode', 'town', 'country']:
+                kw[key] = form[key]
+            kw['title'] = MSG(u'Your address').gettext()
+            addresses.handler.add_record(kw)
 
         # Clean cart, if another user already login before
         cart = ProductCart(context)
