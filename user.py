@@ -82,6 +82,7 @@ class CustomerSchemaTable(OrderedTableFile):
         'multiple': Boolean,
         'datatype': Datatypes(mandatory=True, index='keyword'),
         'show_on_register': Boolean,
+        'tip': Unicode,
         'default': Unicode,
         }
 
@@ -102,6 +103,7 @@ class CustomerSchema(OrderedTable):
         BooleanCheckBox('mandatory', title=MSG(u'Mandatory')),
         BooleanCheckBox('multiple', title=MSG(u'Multiple')),
         BooleanCheckBox('show_on_register', title=MSG(u'Show on register ?')),
+        TextWidget('tip', title=MSG(u'TIP (To show near widget)')),
         SelectWidget('datatype', title=MSG(u'Data Type')),
         TextWidget('default', title=MSG(u'Default value')),
         ]
@@ -151,7 +153,8 @@ class CustomerSchema(OrderedTable):
             datatype = get_real_datatype(self.handler, record)
             widget = get_default_widget_shop(datatype)
             title = get_value(record, 'title')
-            widget = widget(name, title=title, has_empty_option=False)
+            tip = get_value(record, 'tip')
+            widget = widget(name, title=title, has_empty_option=False, tip=tip)
             widgets.append(widget)
         return widgets
 
