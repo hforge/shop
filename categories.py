@@ -51,10 +51,13 @@ class Category(ShopFolder):
     edit_show_meta = True
     edit_schema = {'data': XHTMLBody(multilingual=True),
                    'breadcrumb_title': Unicode(multilingual=True),
-                   'image_category': ImagePathDataType(multilingual=True)}
+                   'image_category': ImagePathDataType(multilingual=True),
+                   'default_product_cover': ImagePathDataType(multilingual=True)}
+
     edit_widgets = [
         TextWidget('breadcrumb_title', title=MSG(u'Breadcrumb title')),
         ImageSelectorWidget('image_category',  title=MSG(u'Category image')),
+        ImageSelectorWidget('default_product_cover',  title=MSG(u'Default cover for products')),
         RTEWidget('data', title=MSG(u"Description"))]
 
 
@@ -82,7 +85,8 @@ class Category(ShopFolder):
         return merge_dicts(ShopFolder.get_metadata_schema(),
                            data=XHTMLBody(multilingual=True),
                            breadcrumb_title=Unicode(multilingual=True),
-                           image_category=ImagePathDataType(multilingual=True))
+                           image_category=ImagePathDataType(multilingual=True),
+                           default_product_cover=ImagePathDataType(multilingual=True))
 
 
     def _get_catalog_values(self):

@@ -627,10 +627,16 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     # Images
     #####################
     def get_preview_thumbnail(self):
+        container = self
         cover = self.get_property('cover')
+        # If no cover get default one
+        if not cover:
+            container = self.parent
+            cover = container.get_property('default_product_cover')
+        # If no cover we return None
         if not cover:
             return None
-        return self.get_resource(cover, soft=True)
+        return container.get_resource(cover, soft=True)
 
 
     def get_cover_namespace(self, context):
