@@ -20,7 +20,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import SelectRadio, Widget, stl_namespaces
-from ikaaro.forms import DateWidget
+from ikaaro.forms import DateWidget, RTEWidget
 
 # Import from shop
 from registry import register_widget
@@ -177,6 +177,11 @@ class FrenchDateWidget(DateWidget):
     format = '%d/%m/%Y'
     tip = MSG(u'Format: 12/04/1985')
 
+
+
+class RTEWidget_Iframe(RTEWidget):
+
+    extended_valid_elements = "iframe[src|name|id|class|style|frameborder|width|height]"
 
 
 class SIRETWidget(Widget):

@@ -45,7 +45,7 @@ from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
 from shop.forms import ProductSelectorWidget
 from shop.registry import shop_datatypes
-from shop.widgets import FrenchDateWidget, SIRETWidget
+from shop.widgets import FrenchDateWidget, SIRETWidget, RTEWidget_Iframe
 
 
 real_datatypes = {'string': String,
@@ -59,6 +59,7 @@ real_datatypes = {'string': String,
                   'product':  ProductPathDataType,
                   'email': Email,
                   'html': XHTMLBody,
+                  'html-non-sanitize': XHTMLBody(sanitize_html=False),
                   'french-date': FrenchDate,
                   'pretty-french-date': PrettyFrenchDate,
                   'siret': SIRET_Datatype,
@@ -84,6 +85,8 @@ def get_default_widget_shop(datatype):
     elif issubclass(datatype, PathDataType):
         return LinkPathSelectorWidget
     elif issubclass(datatype, XHTMLBody):
+        if datatype.sanitize_html is False:
+            return RTEWidget_Iframe
         return RTEWidget
     elif issubclass(datatype, SIRET_Datatype):
         return SIRETWidget
