@@ -16,7 +16,14 @@
         <td>
           <span class="a-rating rating-${note}"/>
           <h4 class="a-rating-title" stl:if="title">${title}</h4>
+
+          Advantages: ${advantages}<br/>
+          Disadvantages: ${disadvantages}<br/>
+
+          <p>
           ${description}
+          </p>
+
           <a href="${href}">Read more</a>
           <a href="${href}/;add_report">Report</a>
           <br/>

@@ -20,7 +20,7 @@ from datetime import datetime
 # Import from itools
 from itools.core import freeze, merge_dicts
 from itools.datatypes import DateTime, Integer, String, Unicode
-from itools.datatypes import Enumerate
+from itools.datatypes import Enumerate, Boolean
 from itools.gettext import MSG
 from itools.fs import FileName
 from itools.i18n import format_datetime
@@ -33,12 +33,15 @@ from ikaaro.buttons import RemoveButton, PublishButton, RetireButton
 from ikaaro.datatypes import FileDataType
 from ikaaro.file import Image
 from ikaaro.folder import Folder
+from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import MultilineWidget, HiddenWidget, TextWidget
 from ikaaro.forms import SelectWidget, SelectRadio, stl_namespaces
+from ikaaro.forms import BooleanRadio
 from ikaaro.messages import MSG_UNEXPECTED_MIMETYPE
 from ikaaro.registry import register_resource_class
 from ikaaro.utils import get_base_path_query, reduce_string
 from ikaaro.views_new import NewInstance
+from ikaaro.webpage import WebPage
 from ikaaro.workflow import WorkflowAware
 
 # Import from itws
@@ -50,7 +53,7 @@ from shop.products.enumerate import States
 from shop.feed_views import Feed_View
 from shop.utils import get_module
 from shop.utils_views import SearchTableFolder_View
-from shop.widgets import FilesWidget
+from shop.widgets import FilesWidget, BooleanCheckBox_CGU
 
 
 class NoteEnumerate(Enumerate):
@@ -140,16 +143,23 @@ class ShopModule_Reviews_View(Feed_View):
 class ShopModule_AReport_NewInstance(NewInstance):
 
     title = MSG(u'Do a report')
-    access = True
+    access = 'is_authenticated'
 
     schema = freeze({
         'name': String,
         'title': Unicode,
-        'description': Unicode(mandatory=True)})
+        'description': Unicode(mandatory=True),
+        'cgu': Boolean(mandatory=True)})
 
-    widgets = [
-        MultilineWidget('description', title=MSG(u'Your report')),
-        ]
+
+    def get_widgets(self, resource, context):
+        cgu_description = MSG(u"I'm agree with the conditions general of use")
+        return [
+            MultilineWidget('description', title=MSG(u'Your report')),
+            BooleanCheckBox_CGU('cgu',
+              title=MSG(u'Conditions of use'),
+              link='./cgu', description=cgu_description)]
+
 
     def get_new_resource_name(self, form):
         context = get_context()
@@ -189,29 +199,45 @@ class ShopModule_AReport_NewInstance(NewInstance):
 class ShopModule_AReview_NewInstance(NewInstance):
 
     title = MSG(u'Add a review')
-    access = True
 
     query_schema = {'abspath': String}
 
     schema = freeze({
         'name': String,
         'abspath': String,
-        #'product': String, #XXX useless
         'title': Unicode(mandatory=True),
         'note': NoteEnumerate,
         'description': Unicode(mandatory=True),
-        'images': FileDataType(multiple=True)})
+        'advantages': Unicode,
+        'disadvantages': Unicode,
+        'images': FileDataType(multiple=True),
+        'cgu': Boolean(mandatory=True)})
 
     styles = ['/ui/modules/review/style.css']
 
-    widgets = [
-        HiddenWidget('abspath', title=None),
-        #MiniProductWidget('product', title=MSG(u'Product')),
-        TextWidget('title', title=MSG(u'Title')),
-        NoteWidget('note', title=MSG(u'Note'), has_empty_option=False),
-        MultilineWidget('description', title=MSG(u'Your review')),
-        FilesWidget('images', title=MSG(u'Images')),
-        ]
+    @property
+    def access(self):
+        context = get_context()
+        module = get_module(context.resource, ShopModule_Review.class_id)
+        if module.get_property('must_be_authenticated_to_post'):
+            return 'is_authenticated'
+        return True
+
+
+    def get_widgets(self, resource, context):
+        cgu_description = MSG(u"I'm aggree with the conditions general of use")
+        return [
+            HiddenWidget('abspath', title=None),
+            TextWidget('title', title=MSG(u'Review title')),
+            NoteWidget('note', title=MSG(u'Note'), has_empty_option=False),
+            MultilineWidget('description', title=MSG(u'Your review')),
+            TextWidget('advantages', title=MSG(u'Advantages')),
+            TextWidget('disadvantages', title=MSG(u'Disadvantages')),
+            FilesWidget('images', title=MSG(u'Images')),
+            BooleanCheckBox_CGU('cgu',
+              title=MSG(u'Conditions of use'),
+              link='./cgu', description=cgu_description)]
+
 
     def get_new_resource_name(self, form):
         context = get_context()
@@ -276,9 +302,11 @@ class ShopModule_AReview_NewInstance(NewInstance):
         metadata.set_property('title', form['title'])
         metadata.set_property('ctime', datetime.now())
         metadata.set_property('state', state)
+        metadata.set_property('remote_ip', context.get_remote_ip())
         metadata.set_property('description', form['description'], language)
         metadata.set_property('note', int(form['note']))
-        metadata.set_property('remote_ip', context.get_remote_ip())
+        for key in ['advantages', 'disadvantages']:
+            metadata.set_property(key, form[key])
 
         # Add images
         for image in form['images']:
@@ -487,12 +515,14 @@ class ShopModule_AReview(WorkflowAware, Folder):
         description = self.get_property('description').encode('utf-8')
         # XXX injection
         description = XMLParser(description.replace('\n', '<br/>'))
-        return {'note': self.get_property('note'),
-                'title': self.get_property('title'),
-                'description': description,
-                'author': None,
-                'href': context.get_link(self),
-                'images': self.get_images(context)}
+        # Build namespace
+        namespace = {'description': description,
+                     'author': None,
+                     'href': context.get_link(self),
+                     'images': self.get_images(context)}
+        for key in ['title', 'note', 'advantages', 'disadvantages']:
+            namespace[key] = self.get_property(key)
+        return namespace
 
 
     def get_images(self, context, nb_images=None):
@@ -528,17 +558,32 @@ class ShopModule_Review(ShopModule):
     class_id = 'shop_module_review'
     class_title = MSG(u'Review')
     class_description = MSG(u"Product Review")
-    class_views = ['list_reviews', 'list_reporting', 'edit']
+    class_views = ['list_reviews', 'list_reporting', 'edit', 'cgu']
+    __fixed_handlers__ = ['cgu']
 
-    item_schema = {'areview_default_state': States(mandatory=True,
-                                                   default='private')}
-    item_widgets = [SelectWidget('areview_default_state',
-                                 has_empty_option=False,
-                                 title=MSG(u'Review default state'))]
+    item_schema = {
+      'areview_default_state': States(mandatory=True, default='private'),
+      'must_be_authenticated_to_post': Boolean,
+      }
+
+    item_widgets = [
+        SelectWidget('areview_default_state',
+           has_empty_option=False, title=MSG(u'Review default state')),
+        BooleanRadio('must_be_authenticated_to_post',
+            title=MSG(u'Must be authenticated to post ?'))]
 
     list_reviews = ShopModule_Reviews_List()
     list_reporting = ShopModule_Reviews_Reporting()
     add_review = ShopModule_AReview_NewInstance()
+    cgu = GoToSpecificDocument(specific_document='cgu')
+
+    @staticmethod
+    def _make_resource(cls, folder, name, ctime=None, *args, **kw):
+        ShopModule._make_resource(cls, folder, name, ctime=ctime, *args, **kw)
+        kw = {'title': {'en': 'CGU'},
+              'state': 'public'}
+        WebPage._make_resource(WebPage, folder, '%s/cgu' % name, **kw)
+
 
     def render(self, resource, context):
         reviews = resource.get_resource('reviews', soft=True)
@@ -548,6 +593,7 @@ class ShopModule_Review(ShopModule):
                     'note': None,
                     'link': context.get_link(self),
                     'here_abspath': str(context.resource.get_abspath()),
+                    'product_abspath': resource.get_abspath(),
                     'viewboxes': {}}
         # XXX Should be in catalog for performances
         abspath = resource.get_canonical_path()
@@ -579,8 +625,12 @@ class ShopModule_Review(ShopModule):
                 'link': context.get_link(self),
                 'viewboxes': viewboxes,
                 'here_abspath': str(context.resource.get_abspath()),
+                'product_abspath': resource.get_abspath(),
                 'note': note / nb_reviews if nb_reviews else None}
 
+
+    def get_document_types(self):
+        return []
 
 
 

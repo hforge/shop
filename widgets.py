@@ -20,7 +20,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import SelectRadio, Widget, stl_namespaces
-from ikaaro.forms import DateWidget, RTEWidget
+from ikaaro.forms import DateWidget, RTEWidget, BooleanCheckBox
 
 # Import from shop
 from registry import register_widget
@@ -177,6 +177,20 @@ class FrenchDateWidget(DateWidget):
     format = '%d/%m/%Y'
     tip = MSG(u'Format: 12/04/1985')
 
+
+class BooleanCheckBox_CGU(BooleanCheckBox):
+
+    template = list(XMLParser("""
+        <input type="checkbox" id="${id}" name="${name}" value="1"
+          checked="${is_selected}" />
+        <a href="${link}" target="_blank">${description}</a>
+        """, stl_namespaces))
+
+    def get_namespace(self, datatype, value):
+        namespace = BooleanCheckBox.get_namespace(self, datatype, value)
+        namespace['description'] = self.description
+        namespace['link'] = self.link
+        return namespace
 
 
 class RTEWidget_Iframe(RTEWidget):
