@@ -34,7 +34,7 @@ from itws.views import AutomaticEditView
 
 # Import from shop
 from categories_views import Category_View, Category_BackofficeView
-from categories_views import Category_Comparator
+from categories_views import Category_Comparator, Category_BatchEdition
 from datatypes import ImagePathDataType
 from folder import ShopFolder
 from utils import get_group_name, get_shop
@@ -66,6 +66,7 @@ class Category(ShopFolder):
     browse_content = Products_View()
     view_categories = Category_BackofficeView()
     edit = AutomaticEditView()
+    batch_edition = Category_BatchEdition()
     new_product = Product_NewProduct()
     comparator = Category_Comparator()
 

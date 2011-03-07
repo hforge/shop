@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <form method="post">
+    <h1>List of products that will be impacted</h1>
+    <table style="margin-left: 20px; font-family: monospace;">
+      <tr stl:repeat="item items">
+        <td>
+          <input type="hidden" name="paths" value="${item/abspath}" />
+          <a href="${item/href}">${item/title}</a>
+        </td>
+      </tr>
+    </table>
+    <h1>Change the price for all this products</h1>
+    ${price_widget}
+    <p><button type="submit" class="button-rename">Do batch edition</button></p>
+  </form>
+
+</stl:block>

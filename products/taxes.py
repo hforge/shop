@@ -118,7 +118,7 @@ class PricesWidget(Widget):
             group['id'] = get_uri_name(group['name'])
             if group['id'] != 'default':
                 prefix = '%s-' % group['id']
-            group['not_buyable'] = group['name'] in not_buyable_by_groups
+            group['not_buyable'] = False#group['name'] in not_buyable_by_groups
             widget_name = '%spre-tax-price' % prefix
             value = context.resource.get_property(widget_name)
             group['widget'] = PriceWidget(widget_name,

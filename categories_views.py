@@ -16,17 +16,19 @@
 
 # Import from standard library
 from operator import itemgetter
+from decimal import Decimal as decimal
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Integer
+from itools.datatypes import Boolean, Decimal, String, Integer, Tokens
 from itools.gettext import MSG
 from itools.stl import stl
-from itools.web import STLView, get_context
+from itools.web import STLView, STLForm, get_context
 from itools.xapian import PhraseQuery, AndQuery, RangeQuery, NotQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
+from ikaaro import messages
 from ikaaro.buttons import RenameButton, RemoveButton
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.utils import get_base_path_query
@@ -35,7 +37,9 @@ from ikaaro.utils import get_base_path_query
 from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
+from datatypes import UserGroup_Enumerate
 from modules import ModuleLoader
+from products.taxes import TaxesEnumerate, PricesWidget
 from utils import get_group_name, get_skin_template, get_shop
 
 
@@ -351,3 +355,58 @@ class Category_BackofficeView(Folder_BrowseContent):
                 """ % (brain.name, brain.name))
         return Folder_BrowseContent.get_item_value(self,
                  resource, context, item, column)
+
+
+
+
+class Category_BatchEdition(STLForm):
+
+    access = 'is_allowed_to_edit'
+    title = MSG(u'Rename resources')
+    template = '/ui/backoffice/category_batch_edition.xml'
+    query_schema = {
+        'ids': String(multiple=True)}
+
+    def get_schema(self, resource, context):
+        schema = {'paths': String(multiple=True, mandatory=True)}
+        for group in UserGroup_Enumerate.get_options():
+            group = context.root.get_resource(group['name'])
+            prefix = group.get_prefix()
+            schema.update(
+                {'%spre-tax-price' % prefix: Decimal(default=decimal(0), mandatory=True),
+                 '%stax' % prefix: TaxesEnumerate(mandatory=True),
+                 '%shas_reduction' % prefix: Boolean,
+                 '%snot_buyable_by_groups' % prefix: Tokens,
+                 '%sreduce-pre-tax-price' % prefix: Decimal(default=decimal(0))})
+        return schema
+
+
+    def get_namespace(self, resource, context):
+        ids = context.query['ids']
+        ids.sort()
+        ids.reverse()
+        items = []
+        for path in ids:
+            product = resource.get_resource(path)
+            items.append({'abspath': product.get_abspath(),
+                          'href': context.get_link(product),
+                          'title': product.get_title()})
+        value = None
+        price_widget = PricesWidget('pre-tax-price').to_html(None, value)
+        return {'items': items,
+                'price_widget': price_widget}
+
+
+    def action(self, resource, context, form):
+        paths = form['paths']
+        for path in paths:
+            product = context.root.get_resource(path)
+            for group in UserGroup_Enumerate.get_options():
+                group = context.root.get_resource(group['name'])
+                prefix = group.get_prefix()
+                for key in ['pre-tax-price', 'tax', 'has_reduction',
+                            'reduce-pre-tax-price']:
+                    key = '%s%s' % (prefix, key)
+                    product.set_property(key, form[key])
+        return context.come_back(messages.MSG_CHANGES_SAVED,
+                                 goto='./;browse_content')

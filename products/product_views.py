@@ -24,6 +24,7 @@ from itools.datatypes import Email, Integer, String, Unicode, Boolean
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.i18n import format_date
+from itools.uri import get_reference
 from itools.web import INFO, ERROR, STLView, STLForm, FormError, get_context
 from itools.xapian import PhraseQuery
 from itools.xml import XMLParser
@@ -53,6 +54,7 @@ from taxes import PricesWidget
 from widgets import BarcodeWidget, MiniProductWidget
 from widgets import ProductModelWidget, ProductModel_DeletedInformations
 from widgets import StockWidget
+from shop.buttons import BatchEditionButton
 from shop.cart import ProductCart
 from shop.datatypes import UserGroup_Enumerate, DecimalRangeDatatype, ThreeStateBoolean
 from shop.manufacturers import ManufacturersEnumerate
@@ -411,7 +413,7 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
 
 
     table_actions = [CopyButton, PasteButton, RenameButton,
-             RemoveButton, PublishButton, RetireButton]
+             RemoveButton, PublishButton, RetireButton, BatchEditionButton]
 
     table_columns = [
         ('barcode', None, False),
@@ -520,6 +522,21 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
             return format_date(ctime, accept)
         return BrowseFormBatchNumeric.get_item_value(self, resource, context, item, column)
 
+
+    def action_batch_edition(self, resource, context, form):
+        ids = form['ids']
+        # Check input data
+        if not ids:
+            context.message = messages.MSG_NONE_SELECTED
+            return
+
+        # FIXME Hack to get rename working. The current user interface forces
+        # the rename_form to be called as a form action, hence with the POST
+        # method, but it should be a GET method. Maybe it will be solved after
+        # the needed folder browse overhaul.
+        ids_list = '&'.join([ 'ids=%s' % x for x in ids])
+        uri = '%s/;batch_edition?%s' % (context.get_link(resource), ids_list)
+        return get_reference(uri)
 
 
 
