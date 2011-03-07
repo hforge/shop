@@ -210,7 +210,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
         'description': Unicode(mandatory=True),
         'advantages': Unicode,
         'disadvantages': Unicode,
-        'images': FileDataType(multiple=True),
+        #'images': FileDataType(multiple=True),
         'cgu': Boolean(mandatory=True)})
 
     styles = ['/ui/modules/review/style.css']
@@ -233,7 +233,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
             MultilineWidget('description', title=MSG(u'Your review')),
             TextWidget('advantages', title=MSG(u'Advantages')),
             TextWidget('disadvantages', title=MSG(u'Disadvantages')),
-            FilesWidget('images', title=MSG(u'Images')),
+            #FilesWidget('images', title=MSG(u'Images')),
             BooleanCheckBox_CGU('cgu',
               title=MSG(u'Conditions of use'),
               link='./cgu', description=cgu_description)]
@@ -262,15 +262,15 @@ class ShopModule_AReview_NewInstance(NewInstance):
         return NewInstance.get_value(self, resource, context, name, datatype)
 
 
-    def _get_form(self, resource, context):
-        form = NewInstance._get_form(self, resource, context)
-        # Check images
-        for image in form['images']:
-            filename, mimetype, body = image
-            if mimetype.startswith('image/') is False:
-                raise FormError, MSG_UNEXPECTED_MIMETYPE(mimetype=mimetype)
+    #def _get_form(self, resource, context):
+    #    form = NewInstance._get_form(self, resource, context)
+    #    # Check images
+    #    for image in form['images']:
+    #        filename, mimetype, body = image
+    #        if mimetype.startswith('image/') is False:
+    #            raise FormError, MSG_UNEXPECTED_MIMETYPE(mimetype=mimetype)
 
-        return form
+    #    return form
 
 
     def action(self, resource, context, form):
@@ -309,15 +309,15 @@ class ShopModule_AReview_NewInstance(NewInstance):
             metadata.set_property(key, form[key])
 
         # Add images
-        for image in form['images']:
-            filename, mimetype, body = image
-            name, type, language = FileName.decode(filename)
-            cls = Image
-            kw = {'format': mimetype,
-                  'filename': filename,
-                  'extension': type,
-                  'state': 'public'}
-            cls.make_resource(cls, child, name, body, **kw)
+        #for image in form['images']:
+        #    filename, mimetype, body = image
+        #    name, type, language = FileName.decode(filename)
+        #    cls = Image
+        #    kw = {'format': mimetype,
+        #          'filename': filename,
+        #          'extension': type,
+        #          'state': 'public'}
+        #    cls.make_resource(cls, child, name, body, **kw)
 
         # XXX Alert webmaster
 
