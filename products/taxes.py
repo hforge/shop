@@ -112,15 +112,22 @@ class PricesWidget(Widget):
     def get_namespace(self, datatype, value):
         context = get_context()
         namespace = {'groups': []}
-        not_buyable_by_groups = context.resource.get_property('not_buyable_by_groups')
+        is_product = context.resource.class_id == 'product'
+        if is_product:
+            not_buyable_by_groups = context.resource.get_property('not_buyable_by_groups')
+        else:
+            not_buyable_by_groups = []
         for group in UserGroup_Enumerate.get_options():
             prefix = ''
             group['id'] = get_uri_name(group['name'])
             if group['id'] != 'default':
                 prefix = '%s-' % group['id']
-            group['not_buyable'] = False#group['name'] in not_buyable_by_groups
+            group['not_buyable'] = group['name'] in not_buyable_by_groups
             widget_name = '%spre-tax-price' % prefix
-            value = context.resource.get_property(widget_name)
+            if is_product:
+                value = context.resource.get_property(widget_name)
+            else:
+                value = None
             group['widget'] = PriceWidget(widget_name,
                                 prefix=prefix).to_html(None, value)
             namespace['groups'].append(group)
