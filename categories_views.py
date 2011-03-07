@@ -132,6 +132,7 @@ class Category_View(BrowseFormBatchNumeric):
                 {'name': cat.name,
                  'link': context.get_link(cat),
                  'title': cat.get_title(),
+                 'breadcrumb_title': cat.get_property('breadcrumb_title'),
                  'css': None,
                  'nb_products': nb_products,
                  'img': str(path_cat.resolve2(img)) if img else None})
