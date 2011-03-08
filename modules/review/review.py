@@ -38,7 +38,7 @@ from ikaaro.forms import MultilineWidget, HiddenWidget, TextWidget
 from ikaaro.forms import SelectWidget, SelectRadio, stl_namespaces
 from ikaaro.forms import BooleanRadio
 from ikaaro.messages import MSG_UNEXPECTED_MIMETYPE
-from ikaaro.registry import register_resource_class
+from ikaaro.registry import register_resource_class, register_field
 from ikaaro.utils import get_base_path_query, reduce_string
 from ikaaro.views_new import NewInstance
 from ikaaro.webpage import WebPage
@@ -55,6 +55,10 @@ from shop.utils import get_module
 from shop.utils_views import SearchTableFolder_View
 from shop.widgets import FilesWidget, BooleanCheckBox_CGU
 
+# XXX: Check that user do not have already post a comment for this product
+# XXX: we use comparaison with class_id
+# XXX: Minimum size of review ?
+# XXX: Edition of sidebar do not works well
 
 class NoteEnumerate(Enumerate):
 
@@ -514,21 +518,30 @@ class ShopModule_AReview(WorkflowAware, Folder):
     def _get_catalog_values(self):
         values = Folder._get_catalog_values(self)
         values['ctime'] = self.get_property('ctime')
+        values['shop_module_review_author'] = self.get_property('author')
+        values['shop_module_review_note'] = self.get_property('note')
         return values
 
 
     def get_namespace(self, context):
-        description = self.get_property('description').encode('utf-8')
-        # XXX injection
-        description = XMLParser(description.replace('\n', '<br/>'))
-        # Author
         # Build namespace
-        namespace = {'description': description,
-                     'author': self.get_namespace_author(context),
+        namespace = {'author': self.get_namespace_author(context),
                      'href': context.get_link(self),
                      'images': self.get_images(context)}
         for key in ['title', 'note', 'advantages', 'disadvantages']:
             namespace[key] = self.get_property(key)
+        # Add informations about product
+        product = self.parent.parent
+        namespace['product'] = {'link': context.get_link(product),
+                                'title': product.get_title()}
+        # Context
+        here = context.resource
+        namespace['is_on_user_view'] = here.class_id == 'user'
+        namespace['is_on_product_view'] = here.class_id == 'product'
+        # Description
+        description = self.get_property('description').encode('utf-8')
+        # XXX injection
+        namespace['description'] = XMLParser(description.replace('\n', '<br/>'))
         return namespace
 
 
@@ -541,6 +554,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
         dynamic_user_value = ResourceDynamicProperty()
         dynamic_user_value.resource = author_resource
         return {'title': author_resource.get_title(),
+                'public_title': author_resource.get_title(),
                 'dynamic_user_value': dynamic_user_value,
                 'href': context.get_link(author_resource)}
 
@@ -572,6 +586,7 @@ class ShopModule_Reviews(Folder):
 
     view = ShopModule_Reviews_View()
     add_review = ShopModule_AReview_NewInstance()
+
 
 class ShopModule_Review(ShopModule):
 
@@ -606,6 +621,14 @@ class ShopModule_Review(ShopModule):
 
 
     def render(self, resource, context):
+        if resource.class_id == 'user':
+            return self.render_for_user(resource, context)
+        elif resource.class_id == 'product':
+            return self.render_for_product(resource, context)
+        return u'Invalid review module'
+
+
+    def render_for_product(self, resource, context):
         reviews = resource.get_resource('reviews', soft=True)
         if reviews is None:
             return {'nb_reviews': 0,
@@ -620,6 +643,7 @@ class ShopModule_Review(ShopModule):
         base_path_query = get_base_path_query(str(abspath))
         query = AndQuery(base_path_query,
                          PhraseQuery('format', 'shop_module_a_review'))
+        query = PhraseQuery('format', 'shop_module_a_review')
         search = context.root.search(query)
         brains = list(search.get_documents(sort_by='mtime', reverse=True))
         nb_reviews = len(brains)
@@ -649,6 +673,25 @@ class ShopModule_Review(ShopModule):
                 'note': note / nb_reviews if nb_reviews else None}
 
 
+    def render_for_user(self, resource, context):
+        # Get review that belong to user
+        query = [PhraseQuery('shop_module_review_author', resource.name),
+                 PhraseQuery('workflow_state', 'public'),
+                 PhraseQuery('format', 'shop_module_a_review')]
+        search = context.site_root.search_on_website(query)
+        brains = list(search.get_documents(sort_by='mtime', reverse=True))
+        nb_reviews = len(brains)
+        # Get viewboxes
+        viewboxes = []
+        for brain in brains[:5]:
+            review = context.root.get_resource(brain.abspath)
+            viewbox = Review_Viewbox().GET(review, context)
+            viewboxes.append(viewbox)
+        # Return namespace
+        return {'nb_reviews': nb_reviews,
+                'viewboxes': viewboxes}
+
+
     def get_document_types(self):
         return []
 
@@ -657,3 +700,5 @@ class ShopModule_Review(ShopModule):
 
 register_resource_class(ShopModule_Review)
 register_resource_class(ShopModule_AReview)
+register_field('shop_module_review_author', String(is_indexed=True))
+register_field('shop_module_review_note', Integer(is_indexed=True, is_stored=True))

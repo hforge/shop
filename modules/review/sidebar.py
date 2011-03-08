@@ -17,7 +17,7 @@
 # Import from itools
 from itools.datatypes import Boolean
 from itools.gettext import MSG
-from itools.xapian import PhraseQuery
+from itools.xapian import PhraseQuery, RangeQuery
 
 # Import from ikaaro
 from ikaaro.forms import BooleanRadio
@@ -29,14 +29,20 @@ from itws.repository_views import Box_View
 
 # Import from shop
 from shop.utils_views import Viewbox_View
+from shop.datatypes import IntegerRangeDatatype
+from shop.widgets import NumberRangeWidget
 
 
 class ReviewBox_View(Box_View, Viewbox_View):
 
 
     def get_items_search(self, resource, context, *args):
-        query = PhraseQuery('format', 'shop_module_a_review')
-        return context.root.search(query)
+        min_v, max_v = resource.get_property('note_range')
+        queries = [PhraseQuery('format', 'shop_module_a_review'),
+                   PhraseQuery('workflow_state', 'public'),
+                   RangeQuery('shop_module_review_note', min_v, max_v)]
+        return context.site_root.search_on_website(queries)
+
 
 
 class ReviewBox(Box):
@@ -47,9 +53,11 @@ class ReviewBox(Box):
 
     view = ReviewBox_View()
 
-    edit_schema = {'show_title': Boolean}
+    edit_schema = {'show_title': Boolean,
+                   'note_range': IntegerRangeDatatype(default=[0, 5])}
 
-    edit_widgets = [BooleanRadio('show_title', title=MSG(u'Show title ?'))]
+    edit_widgets = [BooleanRadio('show_title', title=MSG(u'Show title ?')),
+                    NumberRangeWidget('note_range', title=MSG(u'Note range'))]
 
 
 register_resource_class(ReviewBox)
