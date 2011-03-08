@@ -5,7 +5,7 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
 
-  <table class="new-resource-thumb" stl:repeat="item items">
+  <table id="${item/name}" class="new-resource-thumb" stl:repeat="item items">
     <tr>
       <td style="width: 48px" valign="top">
         <a href="${item/href}"><img src="${item/img}"/></a>

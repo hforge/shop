@@ -52,19 +52,24 @@ class ShopUser_Profile(STLView):
         return get_skin_template(context, '/user/profile.xml')
 
 
-    base_items = [{'title': MSG(u"Edit my account"),
+    base_items = [{'name': 'account',
+                   'title': MSG(u"Edit my account"),
                    'href': ';edit_account',
                    'img': '/ui/icons/48x48/card.png'},
-                  {'title': MSG(u'Edit my preferences'),
+                  {'name': 'preferences',
+                   'title': MSG(u'Edit my preferences'),
                    'href': ';edit_preferences',
                    'img': '/ui/icons/48x48/preferences.png'},
-                  {'title': MSG(u'Edit my password'),
+                  {'name': 'password',
+                   'title': MSG(u'Edit my password'),
                    'href': ';edit_password',
                    'img': '/ui/icons/48x48/lock.png'},
-                  {'title': MSG(u'My addresses book'),
+                  {'name': 'addresses',
+                   'title': MSG(u'My addresses book'),
                    'href': ';addresses_book',
                    'img': '/ui/icons/48x48/tasks.png'},
-                  {'title': MSG(u'Orders history'),
+                  {'name': 'orders',
+                   'title': MSG(u'Orders history'),
                    'href': ';orders_view',
                    'img': '/ui/shop/images/bag_green.png'}]
 
@@ -80,7 +85,8 @@ class ShopUser_Profile(STLView):
         for brain in search.get_documents():
             shop_user_module = root.get_resource(brain.abspath)
             modules_items.append(
-                {'title': shop_user_module.element_title,
+                {'name': shop_user_module.element_name,
+                 'title': shop_user_module.element_title,
                  'href': shop_user_module.element_name,
                  'img': shop_user_module.class_icon48})
         # Build namespace
