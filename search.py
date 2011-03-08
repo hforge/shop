@@ -18,7 +18,7 @@
 from itools.datatypes import Unicode, Enumerate
 from itools.gettext import MSG
 from itools.handlers import checkid
-from itools.xapian import OrQuery, PhraseQuery, AndQuery, StartQuery, split_unicode
+from itools.xapian import OrQuery, PhraseQuery, AndQuery, split_unicode
 from itools.xapian import RangeQuery
 from itools.web import get_context
 
@@ -109,10 +109,9 @@ class Shop_ProductSearch(Category_View):
                  PhraseQuery('workflow_state', 'public')]
         category = context.query['category']
         if category and category != '*':
-            query.append(StartQuery('abspath', category))
+            query.append(PhraseQuery('parent_paths', category))
         search_word = context.query['product_search_text']
         if search_word:
-            words = [word for word in split_unicode(search_word)]
             for word in split_unicode(search_word):
                 alternative = (word + u"s" if not word.endswith(u's')
                                             else word[:-1])

@@ -21,7 +21,7 @@ from random import shuffle
 from itools.core import merge_dicts
 from itools.gettext import MSG
 from itools.log import log_warning
-from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery, StartQuery
+from itools.xapian import OrQuery, AndQuery, PhraseQuery, NotQuery
 
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
@@ -102,11 +102,12 @@ class CrossSellingTable(ResourcesOrderedTable):
         # Categories query
         mode_categories = table.get_property('categories')
         if mode_categories == 'current_category':
-            query_categorie = OrQuery(*[StartQuery('abspath', str(x.get_abspath()))
-                                         for x in categories ])
+            query_categorie = OrQuery(
+                    *[ PhraseQuery('parent_paths', str(x.get_abspath()))
+                        for x in categories ])
             query.append(query_categorie)
         elif mode_categories == 'one_category':
-            query.append(StartQuery('abspath',  table.get_property('specific_category')))
+            query.append(PhraseQuery('parent_paths', table.get_property('specific_category')))
         # Show reductions ?
         promotion = table.get_property('show_product_with_promotion')
         if promotion == '0':
