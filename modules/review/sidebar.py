@@ -15,12 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Boolean
+from itools.datatypes import Boolean, Integer
 from itools.gettext import MSG
 from itools.xapian import PhraseQuery, RangeQuery
 
 # Import from ikaaro
-from ikaaro.forms import BooleanRadio
+from ikaaro.forms import BooleanRadio, TextWidget
 from ikaaro.registry import register_resource_class
 
 # Import from itws
@@ -44,6 +44,10 @@ class ReviewBox_View(Box_View, Viewbox_View):
         return context.site_root.search_on_website(queries)
 
 
+    def get_nb_items_to_show(self, resource):
+        return resource.get_property('nb_items_to_show')
+
+
 
 class ReviewBox(Box):
 
@@ -54,9 +58,11 @@ class ReviewBox(Box):
     view = ReviewBox_View()
 
     edit_schema = {'show_title': Boolean,
+                   'nb_items_to_show': Integer,
                    'note_range': IntegerRangeDatatype(default=[0, 5])}
 
     edit_widgets = [BooleanRadio('show_title', title=MSG(u'Show title ?')),
+                    TextWidget('nb_items_to_show', title=MSG(u'Numbers of items to show ?')),
                     NumberRangeWidget('note_range', title=MSG(u'Note range'))]
 
 
