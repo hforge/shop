@@ -27,6 +27,7 @@ from cross_selling_box import CrossSellingBox
 from filter_box import FilterBox
 from sidebar_cross_selling_box import SideBarCrossSellingBox
 from sidebar_product_cross_selling_box import SideBarProductCrossSellingBox
+from last_users import LastUsersBox
 from login_box import LoginBox
 from search_box import SearchBox
 from sub_categories_box import SubCategoriesBox

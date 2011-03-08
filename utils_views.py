@@ -242,9 +242,16 @@ class Viewbox_View(STLView):
         user = context.user
         # ACL
         allowed_items = []
+        nb_items_to_show = self.get_nb_items_to_show(resource)
+        if nb_items_to_show:
+            items = items[:nb_items_to_show]
         for item in items:
             resource = root.get_resource(item.abspath)
             ac = resource.get_access_control()
             if ac.is_allowed_to_view(user, resource):
                 allowed_items.append(resource)
         return allowed_items
+
+
+    def get_nb_items_to_show(self, resource):
+        return None

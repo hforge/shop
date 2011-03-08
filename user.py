@@ -22,6 +22,7 @@ from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
 from itools.datatypes import Boolean, String, Unicode, DateTime
 from itools.gettext import MSG
+from itools.i18n import format_datetime
 from itools.web import get_context
 
 # Import from ikaaro
@@ -36,19 +37,21 @@ from ikaaro.user import User, UserFolder
 from ikaaro.website_views import RegisterForm
 
 # Import from shop
+from datatypes import Civilite
 from products.models import get_real_datatype, get_default_widget_shop
 from products.enumerate import Datatypes
 from user_views import ShopUser_Profile
 from user_views import ShopUser_EditAccount, ShopUser_EditGroup
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
-from user_views import ShopUser_OrdersView, ShopUser_OrderView
+from user_views import ShopUser_OrdersView, ShopUser_OrderView, ShopUser_Viewbox
 from user_views import Customers_View, AuthentificationLogs_View
 from user_views import ShopUser_Manage
 from datatypes import UserGroup_Enumerate
 from addresses_views import Addresses_Book
 from products.dynamic_folder import DynamicFolder
 from utils import get_shop, CurrentFolder_AddImage
-from datatypes import Civilite
+from utils import ResourceDynamicProperty
+from modules import ModuleLoader
 
 
 class AuthentificationLogsBase(BaseTable):
@@ -194,6 +197,7 @@ class ShopUser(User, DynamicFolder):
     profile = ShopUser_Profile()
     edit_account = ShopUser_EditAccount()
     edit_group = ShopUser_EditGroup()
+    viewbox = ShopUser_Viewbox()
 
     # Orders views
     orders_view = ShopUser_OrdersView()
@@ -221,6 +225,28 @@ class ShopUser(User, DynamicFolder):
                 TextWidget('firstname', title=MSG(u"Firstname")),
                 TextWidget('phone1', title=MSG(u"Phone number")),
                 TextWidget('phone2', title=MSG(u"Mobile"))]
+
+
+    base_items = [{'name': 'account',
+                   'title': MSG(u"Edit my account"),
+                   'href': ';edit_account',
+                   'img': '/ui/icons/48x48/card.png'},
+                  {'name': 'preferences',
+                   'title': MSG(u'Edit my preferences'),
+                   'href': ';edit_preferences',
+                   'img': '/ui/icons/48x48/preferences.png'},
+                  {'name': 'password',
+                   'title': MSG(u'Edit my password'),
+                   'href': ';edit_password',
+                   'img': '/ui/icons/48x48/lock.png'},
+                  {'name': 'addresses',
+                   'title': MSG(u'My addresses book'),
+                   'href': ';addresses_book',
+                   'img': '/ui/icons/48x48/tasks.png'},
+                  {'name': 'orders',
+                   'title': MSG(u'Orders history'),
+                   'href': ';orders_view',
+                   'img': '/ui/shop/images/bag_green.png'}]
 
 
     @staticmethod
@@ -341,6 +367,36 @@ class ShopUser(User, DynamicFolder):
                 texts.append(value)
         return u'\n'.join(texts)
 
+
+    def get_namespace(self, context):
+        root = context.root
+        # Get dynamic user values
+        dynamic_user_value = ResourceDynamicProperty()
+        dynamic_user_value.resource = self
+        # Module
+        shop_module = ModuleLoader()
+        shop_module.context = context
+        shop_module.here = self
+        # Get modules items
+        modules_items = []
+        search = context.root.search(is_shop_user_module=True)
+        for brain in search.get_documents():
+            shop_user_module = root.get_resource(brain.abspath)
+            modules_items.append(
+                {'name': shop_user_module.element_name,
+                 'title': shop_user_module.element_title,
+                 'href': shop_user_module.element_name,
+                 'img': shop_user_module.class_icon48})
+        # Ctime
+        ctime = self.get_property('ctime')
+        accept = context.accept_language
+        # Build namespace
+        return {'name': self.name,
+                'link': context.get_link(self),
+                'module': shop_module,
+                'dynamic_user_value': dynamic_user_value,
+                'ctime': format_datetime(ctime, accept) if ctime else None, # XXX Why ?
+                'items': self.base_items + modules_items}
 
 
 class ShopUserFolder(UserFolder):

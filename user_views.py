@@ -38,8 +38,6 @@ from forms import ThreeStateBooleanRadio
 from shop_utils_views import RealRessource_Form
 from orders.orders_views import numero_template
 from orders.workflow import states, states_color
-from modules import ModuleLoader
-from utils import ResourceDynamicProperty
 from utils import bool_to_img, get_shop, get_skin_template
 from utils_views import SearchTableFolder_View
 
@@ -53,55 +51,9 @@ class ShopUser_Profile(STLView):
         return get_skin_template(context, '/user/profile.xml')
 
 
-    base_items = [{'name': 'account',
-                   'title': MSG(u"Edit my account"),
-                   'href': ';edit_account',
-                   'img': '/ui/icons/48x48/card.png'},
-                  {'name': 'preferences',
-                   'title': MSG(u'Edit my preferences'),
-                   'href': ';edit_preferences',
-                   'img': '/ui/icons/48x48/preferences.png'},
-                  {'name': 'password',
-                   'title': MSG(u'Edit my password'),
-                   'href': ';edit_password',
-                   'img': '/ui/icons/48x48/lock.png'},
-                  {'name': 'addresses',
-                   'title': MSG(u'My addresses book'),
-                   'href': ';addresses_book',
-                   'img': '/ui/icons/48x48/tasks.png'},
-                  {'name': 'orders',
-                   'title': MSG(u'Orders history'),
-                   'href': ';orders_view',
-                   'img': '/ui/shop/images/bag_green.png'}]
-
-
     def get_namespace(self, resource, context):
-        root = context.root
-        # Get dynamic user values
-        dynamic_user_value = ResourceDynamicProperty()
-        dynamic_user_value.resource = resource
-        # Module
-        shop_module = ModuleLoader()
-        shop_module.context = context
-        shop_module.here = resource
-        # Get modules items
-        modules_items = []
-        search = context.root.search(is_shop_user_module=True)
-        for brain in search.get_documents():
-            shop_user_module = root.get_resource(brain.abspath)
-            modules_items.append(
-                {'name': shop_user_module.element_name,
-                 'title': shop_user_module.element_title,
-                 'href': shop_user_module.element_name,
-                 'img': shop_user_module.class_icon48})
-        # Ctime
-        ctime = resource.get_property('ctime')
-        accept = context.accept_language
-        # Build namespace
-        return {'module': shop_module,
-                'dynamic_user_value': dynamic_user_value,
-                'ctime': format_datetime(ctime, accept) if ctime else None, # XXX Why ?
-                'items': self.base_items + modules_items}
+        return resource.get_namespace(context)
+
 
 
 class ShopUser_Manage(STLView):
@@ -593,3 +545,11 @@ class AuthentificationLogs_View(Table_View):
         elif column == 'ts':
             ts = handler.get_record_value(item, 'ts')
             return format_datetime(ts, context.accept_language)
+
+
+class ShopUser_Viewbox(STLView):
+
+    template = '/ui/shop/user/user_viewbox.xml'
+
+    def get_namespace(self, resource, context):
+        return resource.get_namespace(context)
