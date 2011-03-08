@@ -257,7 +257,8 @@ class ShopModule_AReview_NewInstance(NewInstance):
                     PhraseQuery('format', 'shop_module_a_review'))
         search = root.search(query)
         id_review = len(search.get_documents()) + 1
-        return str('reviewa_%s' % id_review)
+        # XXX That will not works
+        return str(id_review)
 
 
     def get_value(self, resource, context, name, datatype):
@@ -324,13 +325,12 @@ class ShopModule_AReview_NewInstance(NewInstance):
         #    cls.make_resource(cls, child, name, body, **kw)
 
         # XXX Alert webmaster
-
         if state == 'private':
             # XXX Add pending message.
-            goto = context.get_link(reviews)
+            goto = context.get_link(product)
             message = MSG(u'Your review has been added.')
         else:
-            goto = context.get_link(child)
+            goto = context.get_link(reviews)
             message = MSG(u'Review has been added')
         return context.come_back(message, goto=goto)
 
