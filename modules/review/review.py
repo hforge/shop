@@ -640,11 +640,10 @@ class ShopModule_Review(ShopModule):
                     'viewboxes': {}}
         # XXX Should be in catalog for performances
         abspath = resource.get_canonical_path()
-        base_path_query = get_base_path_query(str(abspath))
-        query = AndQuery(base_path_query,
-                         PhraseQuery('format', 'shop_module_a_review'))
-        query = PhraseQuery('format', 'shop_module_a_review')
-        search = context.root.search(query)
+        queries = [get_base_path_query(str(abspath)),
+                   PhraseQuery('workflow_state', 'public'),
+                   PhraseQuery('format', 'shop_module_a_review')]
+        search = context.root.search(AndQuery(*queries))
         brains = list(search.get_documents(sort_by='mtime', reverse=True))
         nb_reviews = len(brains)
         if brains:
