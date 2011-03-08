@@ -332,15 +332,15 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
 
 
-class ShopModule_AReview_View(STLView):
-
-    access = True
-    title = MSG(u'View')
-    template = '/ui/modules/review/a_review.xml'
-    styles = ['/ui/modules/review/style.css']
-
-    def get_namespace(self, resource, context):
-        return resource.get_namespace(context)
+#class ShopModule_AReview_View(STLView):
+#
+#    access = True
+#    title = MSG(u'View')
+#    template = '/ui/modules/review/a_review.xml'
+#    styles = ['/ui/modules/review/style.css']
+#
+#    def get_namespace(self, resource, context):
+#        return resource.get_namespace(context)
 
 
 
@@ -404,7 +404,7 @@ class ShopModule_Reviews_List(SearchTableFolder_View):
         #if column == 'description':
         #    return item_resource.get_property('description')
         if column == 'review':
-            return item_resource.name, context.get_link(item_resource)
+            return item_resource.get_title(), context.get_link(item_resource)
         elif column == 'product':
             product = item_resource.parent.parent
             return product.get_title(), context.get_link(product)
@@ -476,9 +476,9 @@ class ShopModule_AReview(WorkflowAware, Folder):
 
     class_id = 'shop_module_a_review'
     class_title = MSG(u'A review')
-    class_views = ['view']
+    class_views = []
 
-    view = ShopModule_AReview_View()
+    #view = ShopModule_AReview_View()
     viewbox = Review_Viewbox()
     add_report = ShopModule_AReport_NewInstance()
 
@@ -488,11 +488,15 @@ class ShopModule_AReview(WorkflowAware, Folder):
     display_title = False
     edit_schema = {'title': Unicode,
                    'note': NoteEnumerate,
+                   'advantages': Unicode,
+                   'disadvantages': Unicode,
                    'description': Unicode}
 
     edit_widgets = [
         TextWidget('title', title=MSG(u'Title')),
         NoteWidget('note', title=MSG(u'Note'), has_empty_option=False),
+        TextWidget('advantages', title=MSG(u'Advantages')),
+        TextWidget('disadvantages', title=MSG(u'Disadvantages')),
         MultilineWidget('description', title=MSG(u'Your review'))]
 
     @classmethod
@@ -502,7 +506,9 @@ class ShopModule_AReview(WorkflowAware, Folder):
                            ctime=DateTime,
                            note=Integer(default=0),
                            remote_ip=String,
-                           author=String)
+                           author=String,
+                           advantages=Unicode,
+                           disadvantages=Unicode)
 
 
     def _get_catalog_values(self):
@@ -515,14 +521,28 @@ class ShopModule_AReview(WorkflowAware, Folder):
         description = self.get_property('description').encode('utf-8')
         # XXX injection
         description = XMLParser(description.replace('\n', '<br/>'))
+        # Author
         # Build namespace
         namespace = {'description': description,
-                     'author': None,
+                     'author': self.get_namespace_author(context),
                      'href': context.get_link(self),
                      'images': self.get_images(context)}
         for key in ['title', 'note', 'advantages', 'disadvantages']:
             namespace[key] = self.get_property(key)
         return namespace
+
+
+    def get_namespace_author(self, context):
+        if self.get_property('author') is None:
+            return None
+        from shop.utils import ResourceDynamicProperty
+        author = self.get_property('author')
+        author_resource = context.root.get_resource('/users/%s' % author)
+        dynamic_user_value = ResourceDynamicProperty()
+        dynamic_user_value.resource = author_resource
+        return {'title': author_resource.get_title(),
+                'dynamic_user_value': dynamic_user_value,
+                'href': context.get_link(author_resource)}
 
 
     def get_images(self, context, nb_images=None):

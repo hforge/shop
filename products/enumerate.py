@@ -107,6 +107,7 @@ class Datatypes(Enumerate):
       {'name': 'cm_to_inch', 'value': MSG(u'CM to INCH')},
       {'name': 'boolean', 'value': MSG(u'Boolean')},
       {'name': 'path', 'value': MSG(u'File')},
+      {'name': 'pathdatatype', 'value': MSG(u'PathDataType')},
       {'name': 'image', 'value': MSG(u'Image')},
       {'name': 'product', 'value': MSG(u'Shop product')},
       {'name': 'email',   'value': MSG(u'Email')},
