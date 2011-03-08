@@ -19,7 +19,7 @@ from itools.datatypes import Boolean
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.uri import Path
-from itools.xapian import AndQuery, StartQuery, PhraseQuery
+from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.forms import BooleanRadio
@@ -71,7 +71,7 @@ class SubCategoriesBox_View(Box_View):
                           PhraseQuery('workflow_state', 'public')))
         # Get search with all categories
         all_categories = root.search(AndQuery(
-                            StartQuery('abspath', categories_abspath),
+                            PhraseQuery('parent_paths', categories_abspath),
                             PhraseQuery('format', 'category')))
 
         # Build a dict with brains by level
@@ -111,8 +111,8 @@ class SubCategoriesBox_View(Box_View):
                 continue
 
             # Get the product number in the category
-            sub_results = all_products.search(StartQuery('abspath',
-                                                         cat.abspath))
+            sub_results = all_products.search(PhraseQuery('parent_paths',
+                                                          cat.abspath))
             cats = cat_per_level.setdefault(level, [])
             cats.append({'doc': cat, 'nb_products': len(sub_results)})
 
