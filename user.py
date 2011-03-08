@@ -47,7 +47,7 @@ from user_views import ShopUser_Manage
 from datatypes import UserGroup_Enumerate
 from addresses_views import Addresses_Book
 from products.dynamic_folder import DynamicFolder
-from utils import get_shop
+from utils import get_shop, CurrentFolder_AddImage
 from datatypes import Civilite
 
 
@@ -204,6 +204,7 @@ class ShopUser(User, DynamicFolder):
     edit_address = ShopUser_EditAddress()
     add_address = ShopUser_AddAddress()
 
+    add_image = CurrentFolder_AddImage()
 
     # Base schema / widgets
     base_schema = merge_dicts(User.get_metadata_schema(),
