@@ -8,13 +8,13 @@
     <span class="a-rating rating-${note}"/>
     <span class="review-title" stl:if="title">${title}</span>
 
-    <stl:block stl:if="not is_on_user_view">
+    <span class="a-review-author" stl:if="not is_on_user_view">
       Author: <a href="${author/href}" stl:if="author">${author/public_title}</a><br/>
-    </stl:block>
+    </span>
 
-    <stl:block stl:if="not is_on_product_view">
+    <span class="a-review-product" stl:if="not is_on_product_view">
       Product: <a href="${product/link}">${product/title}</a><br/>
-    </stl:block>
+    </span>
 
     <div class="advantages">
       <span class="advantages-title">
