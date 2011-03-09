@@ -399,11 +399,15 @@ class ShopUser(User, DynamicFolder):
         # Ctime
         ctime = self.get_property('ctime')
         accept = context.accept_language
+        # ACLS
+        ac = self.get_access_control()
+        is_authenticated = ac.is_authenticated(context.user, self)
         # Build namespace
         return {'name': self.name,
                 'link': context.get_link(self),
                 'module': shop_module,
                 'dynamic_user_value': dynamic_user_value,
+                'is_authenticated': is_authenticated,
                 'ctime': format_datetime(ctime, accept) if ctime else None, # XXX Why ?
                 'items': self.base_items + modules_items}
 
