@@ -268,7 +268,6 @@ class ShopUser(User, DynamicFolder):
         if hostname[:6] == 'www.aw':
             # XXX Add a configurator for public profil
             return ['public_profile'] + self.base_class_views
-        return ['public_profile'] + self.base_class_views
         return self.base_class_views
 
 
