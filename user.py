@@ -40,11 +40,11 @@ from ikaaro.website_views import RegisterForm
 from datatypes import Civilite
 from products.models import get_real_datatype, get_default_widget_shop
 from products.enumerate import Datatypes
-from user_views import ShopUser_Profile
+from user_views import ShopUser_Profile, ShopUser_PublicProfile
 from user_views import ShopUser_EditAccount, ShopUser_EditGroup
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView, ShopUser_Viewbox
-from user_views import Customers_View, AuthentificationLogs_View
+from user_views import Customers_View, ShopUsers_PublicView, AuthentificationLogs_View
 from user_views import ShopUser_Manage
 from datatypes import UserGroup_Enumerate
 from addresses_views import Addresses_Book
@@ -195,6 +195,7 @@ class ShopUser(User, DynamicFolder):
     # Views
     manage = ShopUser_Manage()
     profile = ShopUser_Profile()
+    public_profile = ShopUser_PublicProfile()
     edit_account = ShopUser_EditAccount()
     edit_group = ShopUser_EditGroup()
     viewbox = ShopUser_Viewbox()
@@ -264,6 +265,10 @@ class ShopUser(User, DynamicFolder):
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
             return ['manage'] + self.base_class_views
+        if hostname[:6] == 'www.aw':
+            # XXX Add a configurator for public profil
+            return ['public_profile'] + self.base_class_views
+        return ['public_profile'] + self.base_class_views
         return self.base_class_views
 
 
@@ -407,10 +412,22 @@ class ShopUser(User, DynamicFolder):
 class ShopUserFolder(UserFolder):
 
     class_id = 'users'
-    class_views = ['view', 'addresses_book', 'last_connections']
     class_version = '20100823'
+    backoffice_class_views = ['view', 'addresses_book', 'last_connections']
+    frontoffice_class_views = ['public_view']
+
+    @property
+    def class_views(self):
+        context = get_context()
+        # Back-Office
+        hostname = context.uri.authority
+        if hostname[:6] == 'admin.' :
+            return self.backoffice_class_views
+        return self.frontoffice_class_views
+
 
     view = Customers_View()
+    public_view = ShopUsers_PublicView()
     addresses_book = GoToSpecificDocument(
                         title=MSG(u'Addresses book'),
                         access='is_admin',

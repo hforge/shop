@@ -5,7 +5,7 @@
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
   <div class="a-user-viewbox">
-    <a href="${link}">
+    <a href="${link}" style="width:130px;height:130px;display:block">
     <img stl:if="dynamic_user_value/photo"
       src="/users/${name}/${dynamic_user_value/photo}/;thumb?width=130&amp;height=130"
       title="${dynamic_user_value/pseudo}"/>

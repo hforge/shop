@@ -39,7 +39,20 @@ from shop_utils_views import RealRessource_Form
 from orders.orders_views import numero_template
 from orders.workflow import states, states_color
 from utils import bool_to_img, get_shop, get_skin_template
-from utils_views import SearchTableFolder_View
+from utils_views import SearchTableFolder_View, Viewbox_View
+
+
+class ShopUser_PublicProfile(STLView):
+
+    access = True
+    title = MSG(u'View')
+
+    def get_template(self, resource, context):
+        return get_skin_template(context, '/user/public_profile.xml')
+
+
+    def get_namespace(self, resource, context):
+        return resource.get_namespace(context)
 
 
 class ShopUser_Profile(STLView):
@@ -274,6 +287,15 @@ class ShopUser_OrdersView(BrowseForm):
         size = context.query['batch_size']
         return items[start:start+size]
 
+
+class ShopUsers_PublicView(Viewbox_View):
+
+    access = True
+    title = MSG(u'View')
+
+    def get_items_search(self, resource, context, *args):
+        query = PhraseQuery('format', 'user')
+        return context.root.search(query)
 
 
 class ShopUser_OrderView(STLForm):
