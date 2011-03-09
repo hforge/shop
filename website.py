@@ -115,6 +115,28 @@ class ShopWebSite(NeutralWS):
                   class_skin=SkinsEnumerate)
 
 
+    def after_traverse(self, context):
+        print "ShopWebSite.after_traverse"
+        from time import time
+        from itools.xapian import StartQuery, PhraseQuery
+        t0 = time()
+        super(ShopWebSite, self).after_traverse(context)
+        t1 = time()
+        print "  * after_traverse", (t1 - t0)
+        t0 = time()
+        results = context.root.search(StartQuery('abspath',
+            '/awinis.com/categories/juridique/'))
+        print "  *", len(results)
+        t1 = time()
+        print "  * StartQuery", (t1 - t0)
+        t0 = time()
+        results = context.root.search(PhraseQuery('parent_paths',
+            '/awinis.com/categories/juridique'))
+        print "  *", len(results)
+        t1 = time()
+        print "  * PhraseQuery", (t1 - t0)
+
+
     def get_class_skin(self, context):
         class_skin = self.get_property('class_skin')
         if not class_skin:
