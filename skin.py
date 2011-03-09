@@ -28,6 +28,7 @@ from itws.common import LocationTemplateWithoutTab, CommonLanguagesTemplate
 from itws.ws_neutral import NeutralSkin
 
 # Import from shop
+from user import ShopUser
 from modules import ModuleLoader
 from products import Product
 from utils import get_shop, get_skin_template
@@ -44,6 +45,14 @@ class ShopLocationTemplate(LocationTemplateWithoutTab):
     def get_template(self):
         context = get_context()
         return get_skin_template(context, '/common/location.xml', is_on_skin=True)
+
+
+    def get_breadcrumb_short_name(self, resource):
+        # XXX Confidentiality problems
+        if isinstance(resource, ShopUser):
+            return resource.get_public_title()
+        return LocationTemplateWithoutTab.get_breadcrumb_short_name(self, resource)
+
 
 
 class ShopLanguagesTemplate(CommonLanguagesTemplate):
@@ -115,6 +124,9 @@ class ShopSkin(NeutralSkin):
 
     def get_template_title(self, context):
         here = context.resource
+        # XXX Confidentiality problems
+        if isinstance(here, ShopUser):
+            return here.get_public_title()
         # In the website
         site_root = here.get_site_root()
         if site_root is here:

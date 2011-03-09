@@ -554,7 +554,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
         dynamic_user_value = ResourceDynamicProperty()
         dynamic_user_value.resource = author_resource
         return {'title': author_resource.get_title(),
-                'public_title': author_resource.get_title(),
+                'public_title': author_resource.get_public_title(),
                 'dynamic_user_value': dynamic_user_value,
                 'href': context.get_link(author_resource)}
 
