@@ -55,7 +55,7 @@ real_datatypes = {'string': String,
                   'decimal': Decimal,
                   'cm_to_inch': DatatypeCM_to_INCH,
                   'boolean': Boolean,
-                  'path': PathDataType,
+                  'path': PathDataType(action='add_link_file'),
                   'image': ImagePathDataType,
                   'product':  ProductPathDataType,
                   'email': Email,
@@ -66,13 +66,6 @@ real_datatypes = {'string': String,
                   'pretty-french-date': PrettyFrenchDate,
                   'siret': SIRET_Datatype,
                   'date': ISOCalendarDate}
-
-
-
-class LinkPathSelectorWidget(PathSelectorWidget):
-
-    action = 'add_link_file'
-
 
 
 def get_default_widget_shop(datatype):
@@ -87,7 +80,9 @@ def get_default_widget_shop(datatype):
     elif issubclass(datatype, ImagePathDataType):
         return ImageSelectorWidget
     elif issubclass(datatype, PathDataType):
-        return LinkPathSelectorWidget
+        widget = PathSelectorWidget
+        widget.action = datatype.action
+        return widget
     elif issubclass(datatype, XHTMLBody):
         if datatype.sanitize_html is False:
             return RTEWidget_Iframe
