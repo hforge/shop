@@ -4,10 +4,10 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <div class="a-user-viewbox" stl:if="dynamic_user_value/avatar">
+  <div class="a-user-viewbox" stl:if="dynamic_user_value/photo">
     <a href="${link}" style="width:96px;height:96px;display:block">
-    <img stl:if="dynamic_user_value/avatar"
-      src="/users/${name}/${dynamic_user_value/avatar}/;thumb?width=96&amp;height=96"
+    <img stl:if="dynamic_user_value/photo"
+      src="/users/${name}/${dynamic_user_value/photo}/;thumb?width=96&amp;height=96"
       title="${dynamic_user_value/pseudo}"/>
     </a>
     ${dynamic_user_value/pseudo}
