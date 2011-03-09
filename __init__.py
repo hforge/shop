@@ -17,12 +17,15 @@
 # Import from itools
 from itools import get_version
 from itools.core import get_abspath
+from itools.gettext import MSG, register_domain
 
 # Import from ikaaro
-from itools.gettext import MSG, register_domain
+from ikaaro.access import AccessControl
+from ikaaro.user import User
 
 # Import from shop
 from root import Root
+from user import ShopUser
 import forms_generator
 from registry import register_shop_skin
 from shop import Shop
@@ -50,3 +53,7 @@ register_shop_skin(MSG(u'Default Skin'),
 
 register_shop_skin(MSG(u'Skin number 2'),
     'shop', 'ui/skin2/', 'skin2')
+
+# XXX Override Monkey patch itws
+# We want that public images on user profil are visible
+ShopUser.is_allowed_to_view = AccessControl.is_allowed_to_view
