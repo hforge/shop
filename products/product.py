@@ -200,6 +200,12 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         #return values
 
 
+    def _get_preview_content(self, languages):
+        # TagsAware preview not used for products
+        # Saves half the time of reindexing!
+        return None
+
+
     def _get_catalog_values(self):
         values = merge_dicts(DynamicFolder._get_catalog_values(self),
                              TagsAware._get_catalog_values(self),
