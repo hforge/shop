@@ -98,7 +98,8 @@ class Category_View(BrowseFormBatchNumeric):
         # Photo
         img = resource.get_property('image_category')
         if img:
-            img = resource.get_resource(img)
+            img = resource.get_resource(img, soft=True)
+        if img:
             namespace['photo'] = context.get_link(img)
         else:
             namespace['photo'] = None
