@@ -865,7 +865,7 @@ msgid ""
 "g><x id='5'/>  </g>  <g id='6'> Product: <g id='7'>${product/title}</g><x "
 "id='8'/>  </g>"
 msgstr ""
-"<g id='2'>${title}</g>  <g id='3'> Autheur: <g id='4'>${author/public_title}</"
+"<g id='2'>${title}</g>  <g id='3'> Auteur: <g id='4'>${author/public_title}</"
 "g><x id='5'/>  </g>  <g id='6'> Produit: <g id='7'>${product/title}</g><x "
 "id='8'/>  </g>"
 
