@@ -39,13 +39,14 @@ from models_views import ProductModels_View
 from models_views import ProductModel_Configure
 from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
 from shop.datatypes import ImagePathDataType, FrenchDate, SIRET_Datatype
-from shop.datatypes import PrettyFrenchDate
+from shop.datatypes import PrettyFrenchDate, UnicodeOnePerLine
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
 from shop.forms import ProductSelectorWidget
 from shop.registry import shop_datatypes
 from shop.widgets import FrenchDateWidget, SIRETWidget, RTEWidget_Iframe
+from shop.widgets import UnicodeOnePerLineWidget
 
 
 real_datatypes = {'string': String,
@@ -60,6 +61,7 @@ real_datatypes = {'string': String,
                   'email': Email,
                   'html': XHTMLBody,
                   'html-non-sanitize': XHTMLBody(sanitize_html=False),
+                  'unicode-one-per-line': UnicodeOnePerLine,
                   'french-date': FrenchDate,
                   'pretty-french-date': PrettyFrenchDate,
                   'siret': SIRET_Datatype,
@@ -78,6 +80,8 @@ def get_default_widget_shop(datatype):
         return BooleanRadio
     elif issubclass(datatype, FrenchDate):
         return FrenchDateWidget
+    elif issubclass(datatype, UnicodeOnePerLine):
+        return UnicodeOnePerLineWidget
     elif issubclass(datatype, ProductPathDataType):
         return ProductSelectorWidget
     elif issubclass(datatype, ImagePathDataType):

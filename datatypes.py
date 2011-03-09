@@ -21,7 +21,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import Boolean, Enumerate, PathDataType, String
-from itools.datatypes import Date, Decimal, Integer
+from itools.datatypes import Date, Decimal, Integer, Unicode
 from itools.gettext import MSG
 from itools.uri import Path
 from itools.web import get_context
@@ -108,6 +108,15 @@ class ProductPathDataType(PathDataType):
 
     # XXX we have to implement is_valid
     default = ''
+
+
+class UnicodeOnePerLine(Unicode):
+
+    @classmethod
+    def render(cls, value, context):
+        if value is None:
+            return None
+        return value.split('\n')
 
 
 

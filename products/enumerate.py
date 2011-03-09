@@ -111,6 +111,7 @@ class Datatypes(Enumerate):
       {'name': 'image', 'value': MSG(u'Image')},
       {'name': 'product', 'value': MSG(u'Shop product')},
       {'name': 'email',   'value': MSG(u'Email')},
+      {'name': 'unicode-one-per-line', 'value': MSG(u'Unicode (1 Per line)')},
       {'name': 'html',   'value': MSG(u'HTML')},
       {'name': 'html-non-sanitize',   'value': MSG(u'HTML non sanitize')},
       {'name': 'french-date', 'value': MSG(u'French Date')},
