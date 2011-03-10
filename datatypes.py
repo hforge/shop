@@ -110,6 +110,11 @@ class ProductPathDataType(PathDataType):
     default = ''
 
 
+class BigUnicode(Unicode):
+
+    pass
+
+
 class UnicodeOnePerLine(Unicode):
 
     @classmethod

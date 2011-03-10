@@ -102,6 +102,7 @@ class Datatypes(Enumerate):
     base_options = [
       {'name': 'string' , 'value': MSG(u'String')},
       {'name': 'unicode', 'value': MSG(u'Unicode')},
+      {'name': 'big-unicode', 'value': MSG(u'Big Unicode')},
       {'name': 'integer', 'value': MSG(u'Integer')},
       {'name': 'decimal', 'value': MSG(u'Decimal')},
       {'name': 'cm_to_inch', 'value': MSG(u'CM to INCH')},

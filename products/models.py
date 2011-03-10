@@ -26,7 +26,7 @@ from itools.web import get_context
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import BooleanRadio, BooleanCheckBox, SelectWidget, TextWidget
 from ikaaro.forms import XHTMLBody, RTEWidget, get_default_widget
-from ikaaro.forms import PathSelectorWidget, ImageSelectorWidget
+from ikaaro.forms import PathSelectorWidget, ImageSelectorWidget, MultilineWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import OrderedTable, OrderedTableFile
 
@@ -39,7 +39,7 @@ from models_views import ProductModels_View
 from models_views import ProductModel_Configure
 from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
 from shop.datatypes import ImagePathDataType, FrenchDate, SIRET_Datatype
-from shop.datatypes import PrettyFrenchDate, UnicodeOnePerLine
+from shop.datatypes import PrettyFrenchDate, UnicodeOnePerLine, BigUnicode
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
@@ -51,6 +51,7 @@ from shop.widgets import UnicodeOnePerLineWidget
 
 real_datatypes = {'string': String,
                   'unicode': Unicode,
+                  'big-unicode': BigUnicode,
                   'integer': Integer,
                   'decimal': Decimal,
                   'cm_to_inch': DatatypeCM_to_INCH,
@@ -69,7 +70,9 @@ real_datatypes = {'string': String,
 
 
 def get_default_widget_shop(datatype):
-    if issubclass(datatype, Boolean):
+    if issubclass(datatype, BigUnicode):
+        return MultilineWidget
+    elif issubclass(datatype, Boolean):
         return BooleanRadio
     elif issubclass(datatype, FrenchDate):
         return FrenchDateWidget
