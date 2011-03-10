@@ -336,15 +336,15 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
 
 
-#class ShopModule_AReview_View(STLView):
-#
-#    access = True
-#    title = MSG(u'View')
-#    template = '/ui/modules/review/a_review.xml'
-#    styles = ['/ui/modules/review/style.css']
-#
-#    def get_namespace(self, resource, context):
-#        return resource.get_namespace(context)
+class ShopModule_AReview_View(STLView):
+
+    access = True
+    title = MSG(u'View')
+    template = '/ui/modules/review/a_review.xml'
+    styles = ['/ui/modules/review/style.css']
+
+    def get_namespace(self, resource, context):
+        return resource.get_namespace(context)
 
 
 
@@ -482,7 +482,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
     class_title = MSG(u'A review')
     class_views = []
 
-    #view = ShopModule_AReview_View()
+    view = ShopModule_AReview_View()
     viewbox = Review_Viewbox()
     add_report = ShopModule_AReport_NewInstance()
 
