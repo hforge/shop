@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
+from deepcopy import deepcopy
 from datetime import datetime
 from decimal import Decimal as decimal
 from json import dumps
@@ -277,10 +278,19 @@ class Shop_Register(RegisterForm):
 
     def get_schema(self, resource, context):
         group = self.get_group(context)
+        base_schema = deepcopy(self.base_schema)
+        # Inject address schema ?
         address_schema = {}
         if group.get_property('hide_address_on_registration') is False:
             address_schema = self.address_schema
-        return merge_dicts(self.base_schema,
+        # Lastname mandatory ?
+        l_mandatory = group.get_property('lastname_is_mandatory_on_registration')
+        base_schema['lastname'] = Unicode(mandatory=l_mandatory)
+        # Phone mandatory ?
+        p_mandatory = group.get_property('phone_is_mandatory_on_registration')
+        base_schema['phone1'] = Boolean(mandatory=p_mandatory)
+        # Return schema
+        return merge_dicts(base_schema,
                            group.get_dynamic_schema(),
                            address_schema)
 

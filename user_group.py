@@ -69,7 +69,9 @@ class ShopUser_Group(ShopFolder):
                    'hide_address_on_registration': Boolean,
                    'user_is_enabled_when_register': Boolean,
                    'use_default_price': Boolean,
-                   'show_ht_price': Boolean}
+                   'show_ht_price': Boolean,
+                   'phone_is_mandatory_on_registration': Boolean,
+                   'lastname_is_mandatory_on_registration': Boolean}
 
     edit_widgets = [TextWidget('register_title', title=MSG(u'Register view title ?')),
                     RTEWidget('register_body', title=MSG(u'Register body')),
@@ -82,7 +84,9 @@ class ShopUser_Group(ShopFolder):
                     BooleanRadio('hide_address_on_registration', title=MSG(u'Hide address on registration')),
                     BooleanRadio('user_is_enabled_when_register', title=MSG(u'User is enabled ?')),
                     BooleanRadio('use_default_price', title=MSG(u'Use default price ?')),
-                    BooleanRadio('show_ht_price', title=MSG(u'Show HT price ?'))]
+                    BooleanRadio('show_ht_price', title=MSG(u'Show HT price ?')),
+                    BooleanRadio('lastname_is_mandatory_on_registration', title=MSG(u'Lastname is mandatory on registration ?')),
+                    BooleanRadio('phone_is_mandatory_on_registration', title=MSG(u'Phone is mandatory on registration ?'))]
 
 
 
