@@ -41,6 +41,8 @@ class SubCategoriesBox_View(Box_View):
 
 
     def get_namespace(self, resource, context):
+        from time import time
+        t0 = time()
         root = context.root
         here = context.resource
         site_root = here.get_site_root()
@@ -148,10 +150,13 @@ class SubCategoriesBox_View(Box_View):
                      'nb_products': data['nb_products'],
                      'css': css}
                 items.append(d)
-            tree = stl(tree_template, {'items': items,
-                                       'show_nb_products': show_nb_products,
-                                       'css': None})
+            tree = stl(tree_template, {
+                'items': items,
+                'show_nb_products': show_nb_products,
+                'css': None})
 
+        t1 = time()
+        print "Box_View.get_namespace", (t1 - t0)
         return {'title': resource.get_title(),
                 'tree': tree}
 

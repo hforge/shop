@@ -148,10 +148,15 @@ class ShopSkin(NeutralSkin):
 
 
     def build_namespace(self, context):
+        from time import time
         here = context.resource
         shop = context.site_root.get_resource('shop')
         site_root = context.site_root
+        t0 = time()
         namespace = NeutralSkin.build_namespace(self, context)
+        t1 = time()
+        print "NeutralSkin.build_namespace", (t1 - t0)
+        t0 = time()
         # Title
         # Menu XXX Done in ikaaro nav
         namespace['menu'] = get_menu_namespace(context, self.menu_level, src='menu')
@@ -185,6 +190,8 @@ class ShopSkin(NeutralSkin):
         shop_module.context = context
         shop_module.here = context.resource
         namespace['module'] = shop_module
+        t1 = time()
+        print "ShopSkin.build_namespace", (t1 - t0)
         return namespace
 
 
