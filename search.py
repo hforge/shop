@@ -31,6 +31,7 @@ from ikaaro.utils import get_base_path_query
 from itws.bar import SideBarAware
 
 # Import from shop
+from catalog import to_abspath_list
 from categories_views import Category_View
 
 
@@ -109,7 +110,8 @@ class Shop_ProductSearch(Category_View):
                  PhraseQuery('workflow_state', 'public')]
         category = context.query['category']
         if category and category != '*':
-            query.append(PhraseQuery('parent_paths', category))
+            query.append(PhraseQuery('abspath_list',
+                to_abspath_list(category)))
         search_word = context.query['product_search_text']
         if search_word:
             for word in split_unicode(search_word):

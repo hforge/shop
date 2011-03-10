@@ -39,6 +39,7 @@ import skin
 import user
 import cross_selling
 import cross_selling_section
+import catalog
 
 # Make the product version available to Python code
 __version__ = get_version()

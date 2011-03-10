@@ -32,6 +32,7 @@ from itws.tracker import ITWSTracker
 from itws.ws_neutral import NeutralWS
 
 # Import from shop
+from catalog import to_abspath_list
 from categories import Category
 from datatypes import SkinsEnumerate
 from manufacturers import Manufacturers
@@ -116,7 +117,7 @@ class ShopWebSite(NeutralWS):
 
 
     def after_traverse(self, context):
-        print "ShopWebSite.after_traverse"
+        print "ShopWebSite.after_traverse", context.uri
         from time import time
         from itools.xapian import StartQuery, PhraseQuery
         t0 = time()
@@ -124,17 +125,21 @@ class ShopWebSite(NeutralWS):
         t1 = time()
         print "  * after_traverse", (t1 - t0)
         t0 = time()
-        results = context.root.search(StartQuery('abspath',
-            '/awinis.com/categories/juridique/'))
-        print "  *", len(results)
+        results1 = context.root.search(
+                AndQuery(
+                    PhraseQuery('format', 'product'),
+                    StartQuery('abspath',
+                        '/awinis.com/categories/juridique/')))
         t1 = time()
-        print "  * StartQuery", (t1 - t0)
+        print "  * abspath", len(results1), (t1 - t0)
+        value = to_abspath_list('/awinis.com/categories/juridique')
         t0 = time()
-        results = context.root.search(PhraseQuery('parent_paths',
-            '/awinis.com/categories/juridique'))
-        print "  *", len(results)
+        results2 = context.root.search(
+                AndQuery(
+                    PhraseQuery('format', 'product'),
+                    PhraseQuery('abspath_list', value)))
         t1 = time()
-        print "  * PhraseQuery", (t1 - t0)
+        print "  * abspath_list", len(results2), (t1 - t0), value
 
 
     def get_class_skin(self, context):

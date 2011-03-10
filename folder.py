@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.core import merge_dicts
 from itools.datatypes import PathDataType
 from itools.stl import rewrite_uris
 from itools.uri import Path, Reference, get_reference
@@ -50,6 +51,13 @@ class ShopFolder(Folder):
     commit_log = DBResource_CommitLog(access='is_allowed_to_edit')
     backlinks = DBResource_Backlinks(access='is_allowed_to_edit')
 
+
+    def _get_catalog_values(self):
+        abspath = self.get_canonical_path()
+        return merge_dicts(
+                super(ShopFolder, self)._get_catalog_values(),
+                abspath_list=['{'] + abspath + ['}'],
+                abspath_depth=len(abspath))
 
 
     def get_links(self):

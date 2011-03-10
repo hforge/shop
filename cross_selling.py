@@ -30,6 +30,7 @@ from ikaaro.future.order import ResourcesOrderedTableFile
 from ikaaro.registry import register_resource_class
 
 # Import from shop
+from catalog import to_abspath_list
 from cross_selling_views import AddProduct_View
 from cross_selling_views import CrossSelling_Configure, CrossSelling_TableView
 from cross_selling_views import CrossSelling_Edit, cross_selling_schema
@@ -103,11 +104,12 @@ class CrossSellingTable(ResourcesOrderedTable):
         mode_categories = table.get_property('categories')
         if mode_categories == 'current_category':
             query_categorie = OrQuery(
-                    *[ PhraseQuery('parent_paths', str(x.get_abspath()))
+                    *[ PhraseQuery('abspath_list', ['{'] + x.get_abspath())
                         for x in categories ])
             query.append(query_categorie)
         elif mode_categories == 'one_category':
-            query.append(PhraseQuery('parent_paths', table.get_property('specific_category')))
+            query.append(PhraseQuery('abspath_list',
+                to_abspath_list(table.get_property('specific_category'))))
         # Show reductions ?
         promotion = table.get_property('show_product_with_promotion')
         if promotion == '0':

@@ -18,10 +18,10 @@
 from pprint import pprint
 
 # Import from itools
-from itools.datatypes import String
+from itools.datatypes import String, Integer
 
 # Import from ikaaro
-from ikaaro.registry import get_register_fields, register_field
+from ikaaro.registry import register_field
 
 
 dynamic_fields = {}
@@ -50,3 +50,12 @@ def register_dynamic_fields(context):
         dynamic_fields[website.name] = fields
         print '=> %s dynamic fields' % len(fields)
         pprint(fields)
+
+
+def to_abspath_list(abspath_str):
+    return ['{'] + abspath_str.strip('/').split('/')
+
+
+register_field('abspath_list', String(multiple=True, is_indexed=True,
+    is_stored=True))
+register_field('abspath_depth', Integer(is_indexed=True, is_stored=True))

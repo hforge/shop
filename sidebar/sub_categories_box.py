@@ -29,6 +29,9 @@ from ikaaro.registry import register_resource_class
 from itws.repository import Box, register_box
 from itws.repository_views import Box_View
 
+# Import from shop
+from shop.catalog import to_abspath_list
+
 
 
 class SubCategoriesBox_View(Box_View):
@@ -44,7 +47,7 @@ class SubCategoriesBox_View(Box_View):
         site_root_abspath = site_root.get_abspath()
         shop = site_root.get_resource('shop')
         categories = site_root.get_resource('categories')
-        categories_abspath = str(categories.get_abspath())
+        categories_abspath = categories.get_abspath()
         show_nb_products = resource.get_property('show_nb_products')
         show_first_category = resource.get_property('show_first_category')
         show_second_level = resource.get_property('show_second_level')
@@ -61,18 +64,20 @@ class SubCategoriesBox_View(Box_View):
         else:
             here_abspath = str(here.get_abspath())
             here_abspath_level = here_abspath.count('/')
-            max_level_deploy = categories_abspath.count('/') + 1
+            max_level_deploy = str(categories_abspath).count('/') + 1
 
         here_abspath_p = Path(here_abspath)
 
         # Get search with all publics products
-        all_products = root.search(AndQuery(
-                          PhraseQuery('format', shop.product_class.class_id),
-                          PhraseQuery('workflow_state', 'public')))
+        all_products = root.search(
+                AndQuery(
+                    PhraseQuery('format', shop.product_class.class_id),
+                    PhraseQuery('workflow_state', 'public')))
         # Get search with all categories
-        all_categories = root.search(AndQuery(
-                            PhraseQuery('parent_paths', categories_abspath),
-                            PhraseQuery('format', 'category')))
+        all_categories = root.search(
+                AndQuery(
+                    PhraseQuery('format', 'category'),
+                    PhraseQuery('abspath_list', ['{'] + categories_abspath)))
 
         # Build a dict with brains by level
         cat_per_level = {}
@@ -111,8 +116,9 @@ class SubCategoriesBox_View(Box_View):
                 continue
 
             # Get the product number in the category
-            sub_results = all_products.search(PhraseQuery('parent_paths',
-                                                          cat.abspath))
+            sub_results = all_products.search(
+                    PhraseQuery('abspath_list',
+                        to_abspath_list(cat.abspath)))
             cats = cat_per_level.setdefault(level, [])
             cats.append({'doc': cat, 'nb_products': len(sub_results)})
 
