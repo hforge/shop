@@ -385,9 +385,8 @@ class Shop_Register(RegisterForm):
             shop_user_module = root.get_resource(brain.abspath)
             shop_user_module.initialize(user)
 
-        # If not enabled redirect on welcome page
+        # If user not enabled, send mail to webmaster to validate user
         if user_is_enabled is False:
-            # Send mail to webmaster to validate user
             subject = MSG(u'A customer must be validated in your shop').gettext()
             shop_backoffice_uri = shop.get_property('shop_backoffice_uri')
             body = registration_notification_body.gettext(
@@ -395,9 +394,10 @@ class Shop_Register(RegisterForm):
                         shop_backoffice_uri=shop_backoffice_uri)
             for to_addr in shop.get_property('order_notification_mails'):
                 root.send_email(to_addr, subject, text=body)
-            # Group
+
+        # If need_email_validation or user not enable redirect on Welcome
+        if need_email_validation is True or user_is_enabled is False:
             goto = '%s/welcome/' % context.get_link(group)
-            # Redirect on specific page
             return context.come_back(msg, goto=goto)
 
         ########################
