@@ -338,7 +338,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
 class ShopModule_AReview_View(STLView):
 
-    access = True
+    access = 'is_admin'
     title = MSG(u'View')
     template = '/ui/modules/review/a_review.xml'
     styles = ['/ui/modules/review/style.css']
@@ -480,7 +480,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
 
     class_id = 'shop_module_a_review'
     class_title = MSG(u'A review')
-    class_views = []
+    class_views = ['view']
 
     view = ShopModule_AReview_View()
     viewbox = Review_Viewbox()

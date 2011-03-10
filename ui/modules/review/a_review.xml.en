@@ -4,8 +4,18 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <span class="a-rating rating-${note}"/>
   <h1 class="a-rating-title" stl:if="title">${title}</h1>
+
+  Note: <span class="a-rating rating-${note}"/>
+
+  <p>
+  Advantages: ${advantages}<br/>
+  </p>
+
+  <p>
+  Disadvantages: ${disadvantages}<br/>
+  </p>
+
   <p>
   ${description}
   </p>
