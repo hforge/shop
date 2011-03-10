@@ -102,6 +102,7 @@ class Shop_Configure(DBResource_Edit):
               'categories_batch_size': Integer(mandatory=True),
               'show_sub_categories': Boolean,
               'product_cover_is_mandatory': Boolean,
+              'log_authentification': Boolean,
               'bill_logo': ImagePathDataType,
               'pdf_signature': Unicode,
               'barcode_format': BarcodesFormat}
@@ -123,6 +124,8 @@ class Shop_Configure(DBResource_Edit):
         BooleanRadio('product_cover_is_mandatory', title=MSG(u'Product cover is mandatory ?')),
         BooleanRadio('hide_not_buyable_products',
                       title=MSG(u'Hide not buyable products ?')),
+        BooleanRadio('log_authentification',
+                      title=MSG(u'Log users authentification ?')),
         ImageSelectorWidget('bill_logo', title=MSG(u'Bill logo')),
         SelectWidget('barcode_format', title=MSG(u'Barcode format'),
                      has_empty_option=False),
@@ -483,9 +486,10 @@ class Shop_Login(STLForm):
         # We log authentification
         if resource != context.root:
             shop = get_shop(resource)
-            logs = shop.get_resource('customers/authentification_logs')
-            logs.log_authentification(user.name)
-            user.set_property('last_time', datetime.now())
+            if shop.get_property('log_authentification'):
+                logs = shop.get_resource('customers/authentification_logs')
+                logs.log_authentification(user.name)
+                user.set_property('last_time', datetime.now())
 
         # Set cookie
         user.set_auth_cookie(context, password)
