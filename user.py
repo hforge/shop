@@ -402,13 +402,13 @@ class ShopUser(User, DynamicFolder):
         # ACLS
         ac = self.get_access_control()
         is_authenticated = ac.is_authenticated(context.user, self)
-        is_self_or_admin = ac.is_self_or_admin(context.user, self)
+        is_owner = context.user is not None and context.user.name == self.name
         # Build namespace
         return {'name': self.name,
                 'link': context.get_link(self),
                 'module': shop_module,
                 'dynamic_user_value': dynamic_user_value,
-                'is_self_or_admin': is_self_or_admin,
+                'is_owner': is_owner,
                 'is_authenticated': is_authenticated,
                 'ctime': format_datetime(ctime, accept) if ctime else None, # XXX Why ?
                 'items': self.base_items + modules_items}
