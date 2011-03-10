@@ -205,6 +205,7 @@ class Shop(ShopFolder):
         schema['hide_not_buyable_products'] = Boolean
         schema['product_cover_is_mandatory'] = Boolean
         schema['log_authentification'] = Boolean
+        schema['registration_need_email_validation'] = Boolean
         return schema
 
 

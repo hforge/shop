@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
+from copy import deepcopy
 from datetime import datetime
 
 # Import from itools
@@ -23,6 +24,7 @@ from itools.csv import Table as BaseTable
 from itools.datatypes import Boolean, String, Unicode, DateTime
 from itools.gettext import MSG
 from itools.i18n import format_datetime
+from itools.uri import Path
 from itools.web import get_context
 
 # Import from ikaaro
@@ -34,6 +36,7 @@ from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import Table
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.user import User, UserFolder
+from ikaaro.utils import generate_password
 from ikaaro.website_views import RegisterForm
 
 # Import from shop
@@ -347,12 +350,29 @@ class ShopUser(User, DynamicFolder):
             self.set_property(key, value)
 
 
-    def send_register_confirmation(self, context):
+    confirmation_txt = MSG(u"To confirm your identity, click the link:"
+                           u"\n"
+                           u"\n {uri}")
+
+    def send_register_confirmation(self, context, need_email_validation=False):
         # Get group
         group = self.get_group(context)
         # Get mail subject and body
         subject = group.get_register_mail_subject()
         text = group.get_register_mail_body()
+        # Registration need validation ?
+        if need_email_validation:
+            key = generate_password(30)
+            self.set_property('user_must_confirm', key)
+            # Build the confirmation link
+            confirm_url = deepcopy(context.uri)
+            path = '/users/%s/;confirm_registration' % self.name
+            confirm_url.path = Path(path)
+            confirm_url.query = {'key': key, 'username': self.get_login_name()}
+            confirm_url = str(confirm_url)
+            text += '\n\n'
+            text += self.confirm_url.gettext(uri=confirm_url)
+
         # Send mail
         context.root.send_email(to_addr=self.get_property('email'),
                                 subject=subject, text=text)

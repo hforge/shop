@@ -103,6 +103,7 @@ class Shop_Configure(DBResource_Edit):
               'show_sub_categories': Boolean,
               'product_cover_is_mandatory': Boolean,
               'log_authentification': Boolean,
+              'registration_need_email_validation': Boolean,
               'bill_logo': ImagePathDataType,
               'pdf_signature': Unicode,
               'barcode_format': BarcodesFormat}
@@ -126,6 +127,8 @@ class Shop_Configure(DBResource_Edit):
                       title=MSG(u'Hide not buyable products ?')),
         BooleanRadio('log_authentification',
                       title=MSG(u'Log users authentification ?')),
+        BooleanRadio('registration_need_email_validation',
+                      title=MSG(u'Ask for mail validation on registration ?')),
         ImageSelectorWidget('bill_logo', title=MSG(u'Bill logo')),
         SelectWidget('barcode_format', title=MSG(u'Barcode format'),
                      has_empty_option=False),
@@ -369,7 +372,8 @@ class Shop_Register(RegisterForm):
         user.set_property('last_time', datetime.now())
 
         # Send confirmation email
-        user.send_register_confirmation(context)
+        need_email_validation = shop.get_property('registration_need_email_validation')
+        user.send_register_confirmation(context, need_email_validation)
 
         # User is enabled ?
         user_is_enabled = group.get_property('user_is_enabled_when_register')
