@@ -33,6 +33,8 @@ from shop.utils_views import Viewbox_View
 
 class LastUsersBox_View(Box_View, Viewbox_View):
 
+    sort_by = 'ctime'
+    sort_reverse = True
 
     def get_items_search(self, resource, context, *args):
         query = PhraseQuery('format', 'user')

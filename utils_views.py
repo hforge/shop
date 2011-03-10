@@ -216,6 +216,8 @@ class Viewbox_View(STLView):
     template = '/ui/shop/repeat_viewboxes.xml'
 
     viewbox = None
+    sort_by = None
+    sort_reverse= False
 
     def get_namespace(self, resource, context):
         viewboxes = []
@@ -229,7 +231,8 @@ class Viewbox_View(STLView):
 
     def get_items(self, resource, context):
         search = self.get_items_search(resource, context)
-        items = search.get_documents()
+        items = search.get_documents(sort_by=self.sort_by,
+                                     reverse=self.sort_reverse)
         return self.sort_and_batch(resource, context, items)
 
 

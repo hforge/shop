@@ -35,6 +35,8 @@ from shop.widgets import NumberRangeWidget
 
 class ReviewBox_View(Box_View, Viewbox_View):
 
+    sort_by = 'ctime'
+    sort_reverse = True
 
     def get_items_search(self, resource, context, *args):
         min_v, max_v = resource.get_property('note_range')
