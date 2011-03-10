@@ -107,6 +107,7 @@ class Datatypes(Enumerate):
       {'name': 'decimal', 'value': MSG(u'Decimal')},
       {'name': 'cm_to_inch', 'value': MSG(u'CM to INCH')},
       {'name': 'boolean', 'value': MSG(u'Boolean')},
+      {'name': 'three-state-boolean', 'value': MSG(u'Three states Boolean')},
       {'name': 'path', 'value': MSG(u'File')},
       {'name': 'pathdatatype', 'value': MSG(u'PathDataType')},
       {'name': 'image', 'value': MSG(u'Image')},

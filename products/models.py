@@ -40,10 +40,11 @@ from models_views import ProductModel_Configure
 from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
 from shop.datatypes import ImagePathDataType, FrenchDate, SIRET_Datatype
 from shop.datatypes import PrettyFrenchDate, UnicodeOnePerLine, BigUnicode
+from shop.datatypes import ThreeStateBoolean
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
-from shop.forms import ProductSelectorWidget
+from shop.forms import ProductSelectorWidget, ThreeStateBooleanRadio
 from shop.registry import shop_datatypes
 from shop.widgets import FrenchDateWidget, SIRETWidget, RTEWidget_Iframe
 from shop.widgets import UnicodeOnePerLineWidget
@@ -56,6 +57,7 @@ real_datatypes = {'string': String,
                   'decimal': Decimal,
                   'cm_to_inch': DatatypeCM_to_INCH,
                   'boolean': Boolean,
+                  'three-state-boolean': ThreeStateBoolean,
                   'path': PathDataType(action='add_link_file'),
                   'image': ImagePathDataType,
                   'product':  ProductPathDataType,
@@ -72,6 +74,8 @@ real_datatypes = {'string': String,
 def get_default_widget_shop(datatype):
     if issubclass(datatype, BigUnicode):
         return MultilineWidget
+    elif issubclass(datatype, ThreeStateBoolean):
+        return ThreeStateBooleanRadio
     elif issubclass(datatype, Boolean):
         return BooleanRadio
     elif issubclass(datatype, FrenchDate):
