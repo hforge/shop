@@ -543,8 +543,9 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
     def get_cross_selling_namespace(self, context):
         from shop.categories import Category
-
-        table = self.get_resource('cross-selling')
+        table = self.get_resource('cross-selling', soft=True)
+        if table is None:
+            return []
         viewbox = self.cross_selling_viewbox
         cross_selling = []
         abspath = self.get_abspath()
