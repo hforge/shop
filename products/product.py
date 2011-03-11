@@ -881,6 +881,12 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         return DynamicFolder.update_relative_links(self, source)
 
 
+    def update_20110311(self):
+        # Remove old attributes
+        for key in ['is_buyable', 'reduction', 'categories']:
+            self.del_property(key)
+
+
 
 class Products(ShopFolder):
 

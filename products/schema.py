@@ -38,12 +38,6 @@ from shop.shipping.enumerates import ShippingsWaysEnumerate
 product_schema = {
     # General informations
     'state': States(mandatory=True, default='public'),
-    #########################
-    # XXX 3 attributes to remove
-    'is_buyable': Boolean(default=True),
-    'reduction': Decimal(default=decimal(0)),
-    #'categories': String(multiple=True),
-    #########################
     'reference': String,
     'product_model': ProductModelsEnumerate,
     'title': Unicode(multilingual=True),
