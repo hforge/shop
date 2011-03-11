@@ -48,12 +48,22 @@ class LazyDict(dict):
     resource = None
     context = None
     s = None
+    cache = {}
+    # Add a cache because we call twice:
+    # <stl:block stl:if="categories>
+    #  <p stl:repeat="c categories">${c/title}</p>
+    #</stl:block>
 
     def __getitem__(self, key):
+        if self.cache.has_key(key):
+            return self.cache[key]
         if key == 'categories':
-            return self.s.get_sub_categories_namespace(
+            value = self.s.get_sub_categories_namespace(
                 self.resource, self.context)
-        raise ValueError
+        else:
+            raise ValueError
+        self.cache[key] = value
+        return value
 
 
 class Category_View(BrowseFormBatchNumeric):
@@ -118,7 +128,6 @@ class Category_View(BrowseFormBatchNumeric):
         return namespace
 
 
-
     def get_sub_categories_namespace(self, resource, context):
         categories = []
         root = context.root
@@ -128,6 +137,7 @@ class Category_View(BrowseFormBatchNumeric):
         search = root.search(AndQuery(*query))
         for brain in search.get_documents():
             cat = root.get_resource(brain.abspath)
+            # XXX Performances of get_nb_products
             nb_products = cat.get_nb_products(only_public=True)
             if nb_products == 0:
                 continue
