@@ -19,11 +19,10 @@
 #######################################
 
 # Import from itools
-from itools.datatypes import String, Tokens
+from itools.datatypes import Tokens
 from itools.gettext import MSG
 
 # Import from Shop
-from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.listeners import alert_listerners
 from shop.folder import ShopFolder
 
@@ -39,7 +38,7 @@ class DynamicProperty(dict):
         if datatype is None:
             # XXX We have to log it
             return MSG(u'Unknow')
-        value = self.resource.get_property(key)
+        value = self.resource.get_dynamic_property(key, self.schema)
         if value != None and hasattr(datatype, 'render'):
             value = datatype.render(value, self.context)
         return value
@@ -52,31 +51,41 @@ class DynamicFolder(ShopFolder):
         return {}
 
 
+    def get_dynamic_property(self, name, dynamic_schema, language=None):
+        if dynamic_schema is None:
+            # XXX To remove
+            dynamic_schema = self.get_dynamic_schema()
+            # Just to detect errors
+            raise ValueError
+        return self.get_dynamic_property_and_language(name, dynamic_schema, language=language)[0]
+
+
+    def get_dynamic_property_and_language(self, name, dynamic_schema, language=None):
+        value, language = ShopFolder.get_property_and_language(self, name,
+                                                               language)
+        datatype = dynamic_schema[name]
+        # Default value
+        if value is None:
+            value = datatype.get_default()
+        elif getattr(datatype, 'multiple', False):
+            if not isinstance(value, list):
+                # Decode the property
+                # Only support list of strings
+                value = list(Tokens.decode(value))
+            # Else a list was already set by "set_property"
+        else:
+            value = datatype.decode(value)
+        return value, language
+
+
     def get_property_and_language(self, name, language=None):
         value, language = ShopFolder.get_property_and_language(self, name,
                                                                language)
-
         # Default properties first (we need "product_model")
         if name in self.get_metadata_schema():
             return value, language
-
-        # Dynamic property?
-        dynamic_schema = self.get_dynamic_schema()
-        if name in dynamic_schema:
-            datatype = dynamic_schema[name]
-            # Default value
-            if value is None:
-                value = datatype.get_default()
-            elif getattr(datatype, 'multiple', False):
-                if not isinstance(value, list):
-                    # Decode the property
-                    # Only support list of strings
-                    value = list(Tokens.decode(value))
-                # Else a list was already set by "set_property"
-            else:
-                value = datatype.decode(value)
-
-        return value, language
+        # Just to detect errors
+        raise ValueError, name
 
 
     def set_property(self, name, value, language=None, with_dynamic=True):

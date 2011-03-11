@@ -232,11 +232,12 @@ class ProductModel(ShopFolder):
                      'specific_dict': {},
                      'specific_list': [],
                      'specific_list_complete': []}
+        dynamic_schema = self.get_model_schema()
         schema_handler = self.get_resource('schema').handler
         get_value = schema_handler.get_record_value
         for record in schema_handler.get_records_in_order():
             name = get_value(record, 'name')
-            value = real_value = resource.get_property(name)
+            value = real_value = resource.get_dynamic_property(name, dynamic_schema)
             # Real value is used to keep the enumerate value
             # corresponding to the options[{'name': xxx}]
             datatype = get_real_datatype(schema_handler, record)

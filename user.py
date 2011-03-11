@@ -323,8 +323,7 @@ class ShopUser(User, DynamicFolder):
 
 
     def get_public_title(self):
-        # XXX its arbitrary
-        return self.get_property('pseudo')
+        return self.get_dynamic_property('pseudo')
 
 
     def get_document_types(self):

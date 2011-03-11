@@ -747,11 +747,12 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
                   'title': (title, name)}
             for key in ['reference', 'stock-quantity']:
                 kw[key] = declination.get_property(key)
-            for name, datatype in declination.get_dynamic_schema().items():
-                value = declination.get_property(name)
+            declination_dynamic_schema = declination.get_dynamic_schema()
+            for name, datatype in declination_dynamic_schema:
+                value = declination.get_dynamic_property(name, declination_dynamic_schema)
                 kw[name] = datatype.get_value(value)
             # Img
-            img = declination.get_property('associated-image')
+            img = None#declination.get_property('associated-image')
             if img:
                 img = context.get_link(context.root.get_resource(img))
                 kw['img'] = XMLParser('<img src="%s/;thumb?width=150&amp;height=150"/>' % img)
