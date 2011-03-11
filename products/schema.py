@@ -24,7 +24,7 @@ from itools.datatypes import String, Integer, Tokens
 # Import from shop
 from enumerate import ProductModelsEnumerate, States, StockOptions
 from taxes import TaxesEnumerate
-from shop.datatypes import ImagePathDataType, UserGroup_Enumerate
+from shop.datatypes import ImagePathDataType
 from shop.manufacturers import ManufacturersEnumerate
 from shop.suppliers import SuppliersEnumerate
 from shop.shipping.enumerates import ShippingsWaysEnumerate
@@ -35,46 +35,46 @@ from shop.shipping.enumerates import ShippingsWaysEnumerate
 #############################################
 
 
-product_schema = {# General informations
-                  'state': States(mandatory=True, default='public'),
-                  #########################
-                  # XXX to remove
-                  'is_buyable': Boolean(default=True),
-                  #'categories': String(multiple=True),
-                  #########################
-                  'reference': String,
-                  'product_model': ProductModelsEnumerate,
-                  'title': Unicode(multilingual=True),
-                  'description': Unicode(multilingual=True),
-                  'tags': Tokens,
-                  'subject': Unicode(multilingual=True),
-                  'cover': ImagePathDataType(mandatory=True),
-                  # Shippings
-                  'weight': Decimal(default=decimal(0), mandatory=True),
-                  'use_this_shipping_way': ShippingsWaysEnumerate,
-                  # Manufacturer / supplier
-                  'manufacturer': ManufacturersEnumerate,
-                  'supplier': SuppliersEnumerate, # XXX (multiple=True),
-                  # Manage stock
-                  'stock-handled': Boolean(mandatory=True),
-                  'stock-quantity': Integer(default=0, mandatory=True),
-                  'stock-option': StockOptions(mandatory=True, default='accept'),
-                  'resupply-quantity': Integer(default=0),
-                  'sold-quantity': Integer(default=0),
-                  'not_buyable_by_groups': Tokens,
-                  'purchase-price': Decimal,
-                  # Price
-                  'pre-tax-price': Decimal(default=decimal(0), mandatory=True),
-                  'tax': TaxesEnumerate(mandatory=True),
-                  'has_reduction': Boolean,
-                  'reduce-pre-tax-price': Decimal(default=decimal(0)),
-                  # Pro Price
-                  'pro-pre-tax-price': Decimal(default=decimal(0)),
-                  'pro-tax':  TaxesEnumerate,
-                  'pro-has_reduction': Boolean,
-                  'pro-reduce-pre-tax-price': Decimal(default=decimal(0)),
-                  # OLD
-                  'reduction': Decimal(default=decimal(0)), #XXX old to remove after update
-                  # ctime,
-                  'pub_datetime': DateTime,
-                  'ctime': DateTime}
+product_schema = {
+    # General informations
+    'state': States(mandatory=True, default='public'),
+    #########################
+    # XXX 3 attributes to remove
+    'is_buyable': Boolean(default=True),
+    'reduction': Decimal(default=decimal(0)),
+    #'categories': String(multiple=True),
+    #########################
+    'reference': String,
+    'product_model': ProductModelsEnumerate,
+    'title': Unicode(multilingual=True),
+    'description': Unicode(multilingual=True),
+    'tags': Tokens,
+    'subject': Unicode(multilingual=True),
+    'cover': ImagePathDataType(mandatory=True),
+    # Shippings
+    'weight': Decimal(default=decimal(0), mandatory=True),
+    'use_this_shipping_way': ShippingsWaysEnumerate,
+    # Manufacturer / supplier
+    'manufacturer': ManufacturersEnumerate,
+    'supplier': SuppliersEnumerate, # XXX Can have more than one supplier ?
+    # Manage stock
+    'stock-handled': Boolean(mandatory=True),
+    'stock-quantity': Integer(default=0, mandatory=True),
+    'stock-option': StockOptions(mandatory=True, default='accept'),
+    'resupply-quantity': Integer(default=0),
+    'sold-quantity': Integer(default=0),
+    'not_buyable_by_groups': Tokens,
+    'purchase-price': Decimal,
+    # Price
+    'pre-tax-price': Decimal(default=decimal(0), mandatory=True),
+    'tax': TaxesEnumerate(mandatory=True),
+    'has_reduction': Boolean,
+    'reduce-pre-tax-price': Decimal(default=decimal(0)),
+    # Pro Price
+    'pro-pre-tax-price': Decimal(default=decimal(0)),
+    'pro-tax':  TaxesEnumerate,
+    'pro-has_reduction': Boolean,
+    'pro-reduce-pre-tax-price': Decimal(default=decimal(0)),
+    # Time
+    'pub_datetime': DateTime,
+    'ctime': DateTime}
