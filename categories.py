@@ -108,12 +108,13 @@ class Category(ShopFolder):
         data = self.get_property('data')
         if data is not None:
             data = xml_to_text(data)
-        return merge_dicts(ShopFolder._get_catalog_values(self),
-                           data=data,
-                           # XXX Hack to be on sitemap
-                           workflow_state='public',
-                           m_title=m_title,
-                           m_breadcrumb_title=m_breadcrumb_title)
+        return merge_dicts(
+            super(Category, self)._get_catalog_values(),
+            data=data,
+            # XXX Hack to be on sitemap
+            workflow_state='public',
+            m_title=m_title,
+            m_breadcrumb_title=m_breadcrumb_title)
 
 
     def get_document_types(self):

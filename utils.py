@@ -37,6 +37,10 @@ from pyPdf import PdfFileWriter, PdfFileReader
 from itws.views import ImproveDBResource_AddImage
 
 
+def get_parent_paths(abspath):
+    return [str(abspath[:i]) for i in range(len(abspath))] or None
+
+
 def bool_to_img(value):
     if value is True:
         img = '/ui/shop/images/yes.png'

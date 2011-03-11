@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import PathDataType
+from itools.core import merge_dicts
+from itools.datatypes import PathDataType, String
 from itools.stl import rewrite_uris
 from itools.uri import Path, Reference, get_reference
 from itools.web import get_context
@@ -25,6 +26,7 @@ from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_Orphans, Folder_BrowseContent
 from ikaaro.folder_views import Folder_PreviewContent
 from ikaaro.forms import XHTMLBody
+from ikaaro.registry import register_field
 from ikaaro.resource_views import DBResource_Backlinks
 from ikaaro.revisions_views import DBResource_CommitLog
 from ikaaro.webpage import _get_links, _change_link
@@ -34,6 +36,7 @@ from itws.tags import TagsAware
 
 # Import from shop
 from datatypes import AbsolutePathDataTypeEnumerate
+from utils import get_parent_paths
 
 
 
@@ -50,6 +53,10 @@ class ShopFolder(Folder):
     commit_log = DBResource_CommitLog(access='is_allowed_to_edit')
     backlinks = DBResource_Backlinks(access='is_allowed_to_edit')
 
+    def _get_catalog_values(self):
+        return merge_dicts(
+                super(ShopFolder, self)._get_catalog_values(),
+                parent_paths=get_parent_paths(self.get_abspath()))
 
 
     def get_links(self):
@@ -211,3 +218,6 @@ class ShopFolder(Folder):
                     # Check if the target path has not been moved
                     new_abs_path = resources_old2new.get(old_abs_path, old_abs_path)
                     self.set_property(key, new_abs_path, language=lang)
+
+
+register_field('parent_paths', String(is_indexed=True, multiple=True))
