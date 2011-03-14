@@ -4,7 +4,14 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
+  <stl:block stl:if="not read_only">
     <h2>We're sorry, but something went wrong.</h2>
     We've been notified about this issue and we'll take a look at it shortly.
+  </stl:block>
+
+  <stl:block stl:if="read_only">
+    <h2>The database is under maintenance</h2>
+    The database is under maintenance. Please come back later.
+  </stl:block>
 
 </stl:block>

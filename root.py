@@ -24,6 +24,7 @@ from itools.gettext import MSG
 from itools.stl import stl
 
 # Import from ikaaro
+from ikaaro.database import ReadOnlyDatabase
 from ikaaro.forms import MultilineWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.resource_views import DBResource_Edit
@@ -67,7 +68,9 @@ class Root(BaseRoot):
             subject = MSG(u'Internal server error').gettext()
             text = MSG(u'%s\n\n%s' % (context.uri, traceback.format_exc())).gettext()
             self.send_email(email, subject, text=text)
-        # We show a prerry erro page
-        namespace = {'traceback': ''}
+        # We show a prerry error page
+        database = context.database
+        namespace = {'traceback': '',
+                     'read_only': type(database) is ReadOnlyDatabase}
         handler = get_skin_template(context, 'internal_server_error.xml')
         return stl(handler, namespace, mode='html')
