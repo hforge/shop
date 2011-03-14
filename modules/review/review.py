@@ -290,6 +290,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
                 reviews = product.make_resource(cls, product, 'reviews')
         else:
             reviews = resource
+            product = reviews.parent
         # Create the reviews
         cls = ShopModule_AReview
         child = cls.make_resource(cls, reviews, name)
