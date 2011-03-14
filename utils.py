@@ -239,9 +239,10 @@ class ResourceDynamicProperty(dict):
 
     resource = None
     context = None
+    schema = {}
 
     def __getitem__(self, key):
-        return self.resource.get_property(key)
+        return self.resource.get_dynamic_property(key, self.schema)
 
 
 class MiniTitle(dict):

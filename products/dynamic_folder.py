@@ -51,12 +51,9 @@ class DynamicFolder(ShopFolder):
         return {}
 
 
-    def get_dynamic_property(self, name, dynamic_schema, language=None):
+    def get_dynamic_property(self, name, dynamic_schema=None, language=None):
         if dynamic_schema is None:
-            # XXX To remove
             dynamic_schema = self.get_dynamic_schema()
-            # Just to detect errors
-            raise ValueError
         return self.get_dynamic_property_and_language(name, dynamic_schema, language=language)[0]
 
 

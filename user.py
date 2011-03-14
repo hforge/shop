@@ -293,8 +293,9 @@ class ShopUser(User, DynamicFolder):
         if not isinstance(self, User):
            self = context.user
         if self is None:
-            return {}
-        group = self.get_group(context)
+            group = context.site_root.get_resource('shop/groups/default')
+        else:
+            group = self.get_group(context)
         return group.get_dynamic_schema()
 
 
@@ -400,6 +401,7 @@ class ShopUser(User, DynamicFolder):
         root = context.root
         # Get dynamic user values
         dynamic_user_value = ResourceDynamicProperty()
+        dynamic_user_value.schema = self.get_dynamic_schema()
         dynamic_user_value.resource = self
         # Module
         shop_module = ModuleLoader()
