@@ -168,7 +168,9 @@ class ShopUser_EditGroup(AutoForm):
 
 
     def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name)
+        if name in resource.get_metadata_schema().keys():
+            return resource.get_property(name)
+        return resource.get_dynamic_property(name)
 
 
     def action(self, resource, context, form):
@@ -209,7 +211,9 @@ class ShopUser_EditAccount(User_EditAccount):
 
 
     def get_value(self, resource, context, name, datatype):
-        return resource.get_property(name)
+        if name in resource.get_metadata_schema().keys():
+            return resource.get_property(name)
+        return resource.get_dynamic_property(name)
 
 
     def action(self, resource, context, form):
