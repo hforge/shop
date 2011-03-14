@@ -93,6 +93,7 @@ class Category_View(BrowseFormBatchNumeric):
         shop_module.here = self
         # Lazy
         lazy = LazyDict()
+        lazy.cache = {}
         lazy.context = context
         lazy.resource = resource
         lazy.s = self
@@ -134,6 +135,7 @@ class Category_View(BrowseFormBatchNumeric):
         abspath = resource.get_canonical_path()
         query = [PhraseQuery('parent_path', str(abspath)),
                  PhraseQuery('format', 'category')]
+        print query
         search = root.search(AndQuery(*query))
         for brain in search.get_documents():
             cat = root.get_resource(brain.abspath)
