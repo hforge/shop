@@ -81,6 +81,13 @@ class DynamicFolder(ShopFolder):
         # Default properties first (we need "product_model")
         if name in self.get_metadata_schema():
             return value, language
+
+        # Fallback on dynamic property if defined
+        dynamic_schema = self.get_dynamic_schema()
+        if name in dynamic_schema:
+            return self.get_dynamic_property_and_language(name, dynamic_schema,
+                                                          language)
+
         # Just to detect errors
         raise ValueError, name
 
