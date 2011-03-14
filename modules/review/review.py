@@ -257,7 +257,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
                     PhraseQuery('format', 'shop_module_a_review'))
         search = root.search(query)
         id_review = len(search.get_documents()) + 1
-        # XXX That will not works
+        # XXX That will not works !!! URGENT
         return str(id_review)
 
 
