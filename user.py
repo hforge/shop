@@ -371,7 +371,7 @@ class ShopUser(User, DynamicFolder):
             confirm_url.query = {'key': key, 'username': self.get_login_name()}
             confirm_url = str(confirm_url)
             text += '\n\n'
-            text += self.confirm_url.gettext(uri=confirm_url)
+            text += self.confirmation_txt.gettext(uri=confirm_url)
 
         # Send mail
         context.root.send_email(to_addr=self.get_property('email'),
