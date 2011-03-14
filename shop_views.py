@@ -288,7 +288,7 @@ class Shop_Register(RegisterForm):
         base_schema['lastname'] = Unicode(mandatory=l_mandatory)
         # Phone mandatory ?
         p_mandatory = group.get_property('phone_is_mandatory_on_registration')
-        base_schema['phone1'] = Unicode(mandatory=p_mandatory)
+        base_schema['phone1'] = String(mandatory=p_mandatory)
         # Return schema
         return merge_dicts(base_schema,
                            group.get_dynamic_schema(),
