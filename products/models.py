@@ -40,7 +40,7 @@ from models_views import ProductModel_Configure
 from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
 from shop.datatypes import ImagePathDataType, FrenchDate, SIRET_Datatype
 from shop.datatypes import PrettyFrenchDate, UnicodeOnePerLine, BigUnicode
-from shop.datatypes import ThreeStateBoolean
+from shop.datatypes import ThreeStateBoolean, ShopBoolean
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
@@ -56,7 +56,7 @@ real_datatypes = {'string': String,
                   'integer': Integer,
                   'decimal': Decimal,
                   'cm_to_inch': DatatypeCM_to_INCH,
-                  'boolean': Boolean,
+                  'boolean': ShopBoolean,
                   'three-state-boolean': ThreeStateBoolean,
                   'path': PathDataType(action='add_link_file'),
                   'image': ImagePathDataType,
@@ -241,12 +241,6 @@ class ProductModel(ShopFolder):
             # Real value is used to keep the enumerate value
             # corresponding to the options[{'name': xxx}]
             datatype = get_real_datatype(schema_handler, record)
-            # XXX That useless, we can do it with STL ?
-            if issubclass(datatype, Boolean):
-                if value:
-                    value = MSG(u'Yes')
-                else:
-                    value = MSG(u'No')
             if value != None and hasattr(datatype, 'render'):
                 value = datatype.render(value, context)
             # Build kw

@@ -181,6 +181,16 @@ class DynamicEnumerate(AbsolutePathDataTypeEnumerate):
 
 
 
+class ShopBoolean(Boolean):
+
+    @classmethod
+    def render(cls, value, context):
+        if value:
+            return MSG(u'Yes')
+        return MSG(u'No')
+
+
+
 class ThreeStateBoolean(Boolean):
 
     default = ''
