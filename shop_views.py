@@ -249,10 +249,12 @@ class Shop_Register(RegisterForm):
          SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
          TextWidget('lastname', title=MSG(u"Lastname")),
          TextWidget('firstname', title=MSG(u"Firstname")),
-         PasswordWidget('password', title=MSG(u"Password")),
-         PasswordWidget('password_check', title=MSG(u"Repeat password")),
          TextWidget('phone1', title=MSG(u"Phone number")),
          TextWidget('phone2', title=MSG(u"Mobile"))]
+
+    password_widgets = [
+         PasswordWidget('password', title=MSG(u"Password")),
+         PasswordWidget('password_check', title=MSG(u"Repeat password"))]
 
     address_widgets = [
          TextWidget('address_1', title=MSG(u"Address")),
@@ -289,6 +291,12 @@ class Shop_Register(RegisterForm):
         # Phone mandatory ?
         p_mandatory = group.get_property('phone_is_mandatory_on_registration')
         base_schema['phone1'] = String(mandatory=p_mandatory)
+        # Hide password if email validation is required
+        shop = get_shop(resource)
+        if shop.get_property('registration_need_email_validation'):
+            del base_schema['password']
+            del base_schema['password_check']
+
         # Return schema
         return merge_dicts(base_schema,
                            group.get_dynamic_schema(),
@@ -296,13 +304,20 @@ class Shop_Register(RegisterForm):
 
 
     def get_widgets(self, resource, context):
+        widgets = self.base_widgets[:]
+        # Hide password if email validation is required
+        shop = get_shop(resource)
+        if shop.get_property('registration_need_email_validation') is False:
+            widgets.extend(self.password_widgets)
+        # Group widgets
         group = self.get_group(context)
+        widgets.extend(group.get_dynamic_widgets())
+        # Address widget
         address_widgets = []
         if group.get_property('hide_address_on_registration') is False:
             address_widgets = self.address_widgets
-        return self.base_widgets + \
-               group.get_dynamic_widgets() + \
-               address_widgets
+        widgets.extend(address_widgets)
+        return widgets
 
 
     def get_group(self, context):
@@ -328,17 +343,24 @@ class Shop_Register(RegisterForm):
 
 
     def action(self, resource, context, form):
-        msg = MSG(u'Inscription ok')
         shop = get_shop(resource)
         root = context.root
         site_root = resource.get_site_root()
         language = resource.get_content_language(context)
 
-        # Check the new password matches
-        password = form['password'].strip()
-        if password != form['password_check']:
-            context.message = ERROR(u"The two passwords are different.")
-            return
+        # Hide password if email validation is required
+        if shop.get_property('registration_need_email_validation') is False:
+            # Check the new password matches
+            password = form['password'].strip()
+            if password != form['password_check']:
+                context.message = ERROR(u"The two passwords are different.")
+                return
+            msg = MSG(u'Your inscription has been validaded.')
+        else:
+            # password is defined later
+            password = None
+            msg = MSG(u'Your inscription has been validaded, '
+                      u'you will receive an email to confirm it.')
 
         # Do we already have a user with that email?
         email = form['email'].strip()
