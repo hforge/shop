@@ -769,7 +769,7 @@ msgstr "<g id='1'>Trier par</g> ${widget}"
 #: ../ui/modules/review/review_viewbox.xml.en:27
 msgctxt "span"
 msgid "<g id='10'> Disadvantages: </g> ${disadvantages}"
-msgstr "<g id='10'> Désavantages: </g> ${disadvantages}"
+msgstr "<g id='10'> Inconvénients: </g> ${disadvantages}"
 
 #: ../ui/shop/template.xhtml.en:37
 msgctxt "link"
@@ -2266,7 +2266,7 @@ msgstr "Jours de différés (Sur deux digits ex: 04)"
 
 #: ../modules/review/review.py:239 ../modules/review/review.py:503
 msgid "Disadvantages"
-msgstr "Désavantages"
+msgstr "Inconvénients"
 
 #: ../modules/review/review.py:149
 msgid "Do a report"
