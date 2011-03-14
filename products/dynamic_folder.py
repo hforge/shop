@@ -91,14 +91,19 @@ class DynamicFolder(ShopFolder):
         The multilingual status must be detected to give or not the
         "language" argument.
         """
-        # Alert
-        old_value = self.get_property(name)
+        dynamic_schema = self.get_dynamic_schema() if with_dynamic else None
+
+        # Fire listeners
+        if dynamic_schema and name in dynamic_schema:
+            # dynamic value
+            old_value = self.get_dynamic_property(name, dynamic_schema, language)
+        else:
+            old_value = self.get_property(name)
         new_value = value
         alert_listerners('set_property', self, self.class_id, name, old_value, new_value)
 
         # Dynamic property?
         if with_dynamic is True:
-            dynamic_schema = self.get_dynamic_schema()
             if name in dynamic_schema:
                 datatype = dynamic_schema[name]
                 if getattr(datatype, 'multiple', False):
