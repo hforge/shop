@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-03-14 20:03+CET\n"
+"POT-Creation-Date: 2011-03-15 11:03+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -588,7 +588,7 @@ msgstr ""
 msgid "%s "
 msgstr ""
 
-#: ../datatypes.py:228
+#: ../datatypes.py:238
 msgid "%s %s"
 msgstr ""
 
@@ -601,7 +601,6 @@ msgstr ""
 msgid "%s €"
 msgstr ""
 
-#: ../ui/shop/product/product_viewbox_cs.xml.en:9
 #: ../ui/shop/product/product_viewbox.xml.en:9
 msgctxt "span"
 msgid "(${price/with_tax} €)"
@@ -731,8 +730,8 @@ msgid ""
 "<g id='1'> To send the packages please fill the colissimo number:<x id='2'/"
 "><x id='3'/>  </g>  <x id='4'/> Number:"
 msgstr ""
-"<g id='1'> Pour envoyer le colis, veuillez saisir le numéro de colissimo:<x id='2'/"
-"><x id='3'/>  </g>  <x id='4'/> Numéro:"
+"<g id='1'> Pour envoyer le colis, veuillez saisir le numéro de colissimo:<x "
+"id='2'/><x id='3'/>  </g>  <x id='4'/> Numéro:"
 
 #: ../ui/shop/modules/mini_cart.xml.en:7
 msgctxt "link"
@@ -849,9 +848,9 @@ msgid ""
 "number:<x id='3'/><x id='4'/>  </g>  <x id='5'/>  <x id='6'/>  <g id='7'>Ok</"
 "g>"
 msgstr ""
-"<g id='2'> Pour envoyer le colis par colissimo, veuillez saisir le numéro de colissimo:"
-"<x id='3'/><x id='4'/>  </g>  <x id='5'/>  <x id='6'/>  <g id='7'>Ok</"
-"g>"
+"<g id='2'> Pour envoyer le colis par colissimo, veuillez saisir le numéro de "
+"colissimo:<x id='3'/><x id='4'/>  </g>  <x id='5'/>  <x id='6'/>  <g "
+"id='7'>Ok</g>"
 
 #: ../ui/shop/common/location.xml.en:14
 msgctxt "link"
@@ -872,13 +871,13 @@ msgstr "<g id='2'>${product/title}</g>  <g id='3'>(${product/ago})</g>"
 #: ../ui/modules/review/review_viewbox.xml.en:9
 msgctxt "span"
 msgid ""
-"<g id='2'>${title}</g><x id='3'/>  <g id='4'> Author: <g id='5'>${author/"
-"public_title}</g><x id='6'/>  </g>  <g id='7'> Product: <g id='8'>${product/"
-"title}</g><x id='9'/>  </g>"
+"<g id='2'>${title}</g><x id='3'/>  <g id='4'> Added on ${ctime}, by <g "
+"id='5'>${author/public_title}</g><x id='6'/>  </g>  <g id='7'> Product: <g "
+"id='8'>${product/title}</g><x id='9'/>  </g>"
 msgstr ""
-"<g id='2'>${title}</g><x id='3'/>  <g id='4'> Auteur: <g id='5'>${author/"
-"public_title}</g><x id='6'/>  </g>  <g id='7'> Produit: <g id='8'>${product/"
-"title}</g><x id='9'/>  </g>"
+"<g id='2'>${title}</g><x id='3'/>  <g id='4'> Ajouté le ${ctime}, par <g "
+"id='5'>${author/public_title}</g><x id='6'/>  </g>  <g id='7'> Produit: <g "
+"id='8'>${product/title}</g><x id='9'/>  </g>"
 
 #: ../ui/shop/sidebar/filter_box/filter_by_price.xml.en:10
 msgctxt "link"
@@ -1089,7 +1088,7 @@ msgstr "Un produit"
 msgid "A product is out of stock"
 msgstr "Un produit n'est plus disponible en stock"
 
-#: ../modules/review/review.py:482
+#: ../modules/review/review.py:483
 msgid "A review"
 msgstr "Un avis"
 
@@ -1105,7 +1104,7 @@ msgstr ""
 msgid "AURORE"
 msgstr ""
 
-#: ../modules/review/review.py:462
+#: ../modules/review/review.py:463
 msgid "Abusing report"
 msgstr "Avis abusifs"
 
@@ -1282,7 +1281,7 @@ msgstr "État avancé"
 msgid "Advance state"
 msgstr "État avancé"
 
-#: ../modules/review/review.py:238 ../modules/review/review.py:502
+#: ../modules/review/review.py:238 ../modules/review/review.py:503
 msgid "Advantages"
 msgstr "Avantages"
 
@@ -1323,7 +1322,7 @@ msgstr "Tous"
 msgid "All categories"
 msgstr "Toutes les catégories"
 
-#: ../modules/review/review.py:584
+#: ../modules/review/review.py:590
 msgid "All reviews"
 msgstr "Tous les avis"
 
@@ -1379,7 +1378,7 @@ msgctxt "legend"
 msgid "Announce"
 msgstr "Annonce"
 
-#: ../modules/review/review.py:420
+#: ../modules/review/review.py:421
 msgid "Anonymous"
 msgstr "Anonyme"
 
@@ -1387,7 +1386,7 @@ msgstr "Anonyme"
 msgid "Anti-Spam module"
 msgstr "Module Anti-Spam"
 
-#: ../datatypes.py:294
+#: ../datatypes.py:304
 msgid "Août"
 msgstr ""
 
@@ -1416,11 +1415,11 @@ msgstr ""
 msgid "Associated countries"
 msgstr "Pays associés"
 
-#: ../modules/review/review.py:388 ../orders/messages.py:47
+#: ../modules/review/review.py:389 ../orders/messages.py:47
 msgid "Author"
 msgstr "Auteur"
 
-#: ../datatypes.py:293
+#: ../datatypes.py:303
 msgid "Avril"
 msgstr ""
 
@@ -2027,7 +2026,7 @@ msgstr "Vente liée"
 msgid "Cross-Selling Table"
 msgstr "Table de vente liée"
 
-#: ../modules/review/review.py:390
+#: ../modules/review/review.py:391
 msgid "Ctime"
 msgstr "Ctime"
 
@@ -2245,7 +2244,7 @@ msgid "Deposit payment module"
 msgstr "Module de paiement par accompte"
 
 #: ../payments/credit/credit.py:52 ../ui/backoffice/orders/order_pdf.xml.en:80
-#: ../modules/review/review.py:359 ../payments/payment_way_views.py:82
+#: ../modules/review/review.py:360 ../payments/payment_way_views.py:82
 #: ../categories.py:61 ../products/product_views.py:242 ../suppliers.py:65
 #: ../shipping/shippings_views.py:91 ../modules/modules_views.py:40
 #: ../payments/payments_views.py:213 ../payments/payments_views.py:262
@@ -2281,7 +2280,7 @@ msgstr "Détails de livraison :"
 msgid "Diff days (On two digits ex: 04)"
 msgstr "Jours de différés (Sur deux digits ex: 04)"
 
-#: ../modules/review/review.py:239 ../modules/review/review.py:503
+#: ../modules/review/review.py:239 ../modules/review/review.py:504
 msgid "Disadvantages"
 msgstr "Inconvénients"
 
@@ -2343,7 +2342,7 @@ msgctxt "title attribute"
 msgid "Download order"
 msgstr "Télécharger le bon de commande"
 
-#: ../datatypes.py:295
+#: ../datatypes.py:305
 msgid "Décembre"
 msgstr ""
 
@@ -2724,7 +2723,7 @@ msgstr "De ${price/min}€ à ${price/max}€"
 msgid "From current category"
 msgstr "De la catégorie courante"
 
-#: ../datatypes.py:293
+#: ../datatypes.py:303
 msgid "Février"
 msgstr ""
 
@@ -3127,7 +3126,7 @@ msgstr "Mode de payment invalide (pas actif)"
 msgid "Invalid retailer"
 msgstr "Commerçant invalide"
 
-#: ../modules/review/review.py:628
+#: ../modules/review/review.py:634
 msgid "Invalid review module"
 msgstr "Module d'avis invalide"
 
@@ -3156,7 +3155,7 @@ msgstr "Facture numéro ${reference} du ${creation_date}"
 msgid "Invoice number:"
 msgstr "Facture numéro:"
 
-#: ../modules/review/review.py:387
+#: ../modules/review/review.py:388
 msgid "Ip"
 msgstr "Ip"
 
@@ -3185,15 +3184,15 @@ msgstr ""
 msgid "JCB"
 msgstr ""
 
-#: ../datatypes.py:293
+#: ../datatypes.py:303
 msgid "Janvier"
 msgstr ""
 
-#: ../datatypes.py:294
+#: ../datatypes.py:304
 msgid "Juillet"
 msgstr ""
 
-#: ../datatypes.py:294
+#: ../datatypes.py:304
 msgid "Juin"
 msgstr ""
 
@@ -3362,7 +3361,7 @@ msgstr "Afficher la loupe"
 msgid "M."
 msgstr ""
 
-#: ../datatypes.py:293
+#: ../datatypes.py:303
 #, fuzzy
 msgid "Mai"
 msgstr "Max"
@@ -3456,7 +3455,7 @@ msgctxt "link"
 msgid "Manufacturers"
 msgstr "Constructeurs"
 
-#: ../datatypes.py:293
+#: ../datatypes.py:303
 msgid "Mars"
 msgstr ""
 
@@ -3564,7 +3563,7 @@ msgstr "Schéma du modèle"
 msgid "Model schema"
 msgstr "Schéma du modèle"
 
-#: ../modules/review/review.py:380
+#: ../modules/review/review.py:381
 msgid "Moderation"
 msgstr "Modération"
 
@@ -3614,7 +3613,7 @@ msgstr "Multilingue"
 msgid "Multiple"
 msgstr ""
 
-#: ../modules/review/review.py:608
+#: ../modules/review/review.py:614
 msgid "Must be authenticated to post ?"
 msgstr "Doit être authentifié pour poster ?"
 
@@ -3721,7 +3720,7 @@ msgctxt "table cell"
 msgid "New stock"
 msgstr "Nouveau stock"
 
-#: ../shipping/shippings_views.py:103 ../products/models.py:249
+#: ../shipping/shippings_views.py:103 ../datatypes.py:190
 msgid "No"
 msgstr "Non"
 
@@ -3751,8 +3750,8 @@ msgstr "Pas achetable:"
 msgid "Not the same card used for the first payment"
 msgstr ""
 
-#: ../modules/review/review.py:236 ../modules/review/review.py:389
-#: ../modules/review/review.py:501
+#: ../modules/review/review.py:236 ../modules/review/review.py:390
+#: ../modules/review/review.py:502
 msgid "Note"
 msgstr "Note"
 
@@ -3764,7 +3763,7 @@ msgstr "Interval des notes"
 msgid "Note:"
 msgstr "Note:"
 
-#: ../datatypes.py:295
+#: ../datatypes.py:305
 msgid "Novembre"
 msgstr ""
 
@@ -3797,7 +3796,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: ../datatypes.py:295
+#: ../datatypes.py:305
 msgid "Octobre"
 msgstr ""
 
@@ -4415,7 +4414,7 @@ msgid "Prix :"
 msgstr ""
 
 #: ../cross_selling.py:52 ../products/product.py:88
-#: ../products/product_views.py:646 ../modules/review/review.py:385
+#: ../products/product_views.py:646 ../modules/review/review.py:386
 msgid "Product"
 msgstr "Produit"
 
@@ -4431,11 +4430,11 @@ msgstr "Produit"
 msgid "Product Model"
 msgstr "Modèle de produit"
 
-#: ../shop.py:149 ../products/models.py:270
+#: ../shop.py:149 ../products/models.py:264
 msgid "Product Models"
 msgstr "Modèles de produits"
 
-#: ../modules/review/review.py:595
+#: ../modules/review/review.py:601
 msgid "Product Review"
 msgstr "Avis sur un produit"
 
@@ -4750,7 +4749,7 @@ msgctxt "link"
 msgid "Report"
 msgstr "Signaler"
 
-#: ../modules/review/review.py:353
+#: ../modules/review/review.py:354
 msgid "Reporting"
 msgstr "Reporting"
 
@@ -4794,16 +4793,16 @@ msgstr "Revenir aux catégories"
 msgid "Reverse sort ?"
 msgstr "Tri inverse ?"
 
-#: ../modules/review/review.py:358 ../modules/review/review.py:386
-#: ../modules/review/review.py:594
+#: ../modules/review/review.py:359 ../modules/review/review.py:387
+#: ../modules/review/review.py:600
 msgid "Review"
 msgstr "Avis"
 
-#: ../modules/review/review.py:606
+#: ../modules/review/review.py:612
 msgid "Review default state"
 msgstr ""
 
-#: ../modules/review/review.py:334
+#: ../modules/review/review.py:335
 msgid "Review has been added"
 msgstr "L'avis a été ajouté"
 
@@ -4821,7 +4820,7 @@ msgctxt "link"
 msgid "Robots.txt"
 msgstr ""
 
-#: ../datatypes.py:369
+#: ../datatypes.py:379
 msgid "SIRET"
 msgstr ""
 
@@ -4947,7 +4946,7 @@ msgstr "Envoyé"
 msgid "Sent Orders"
 msgstr "Commandes envoyées"
 
-#: ../datatypes.py:294
+#: ../datatypes.py:304
 msgid "Septembre"
 msgstr ""
 
@@ -5136,7 +5135,7 @@ msgstr "Standard"
 msgid "Standard Model"
 msgstr "Modèle standard"
 
-#: ../cross_selling_views.py:292 ../modules/review/review.py:396
+#: ../cross_selling_views.py:292 ../modules/review/review.py:397
 #: ../products/product_views.py:426 ../products/product_views.py:447
 #: ../payments/payments_views.py:153 ../editorial.py:46 ../user_views.py:250
 #: ../orders/orders_views.py:113 ../modules/stock/stock.py:58
@@ -5493,7 +5492,7 @@ msgstr "Temps d'attente > 15 mn par l'acheteur"
 #: ../products/product_views.py:440 ../products/product_views.py:557
 #: ../products/product_views.py:704 ../products/declination.py:67
 #: ../modules/wishlist/wishlist_views.py:181 ../user_group.py:157
-#: ../modules/review/review.py:500 ../categories_views.py:333
+#: ../modules/review/review.py:501 ../categories_views.py:333
 #: ../shipping/shippings_views.py:90 ../payments/payments_views.py:212
 #: ../products/images_views.py:36 ../products/models.py:155 ../editorial.py:44
 #: ../user.py:107 ../modules/modules_views.py:39 ../enumerate_table.py:56
@@ -5688,7 +5687,7 @@ msgstr "Transaction non permise à ce porteur"
 msgid "Transition done."
 msgstr "Transition effectuée."
 
-#: ../datatypes.py:370
+#: ../datatypes.py:380
 msgid "UE VAT"
 msgstr ""
 
@@ -5842,7 +5841,7 @@ msgid "Vertical item that list sub categories"
 msgstr ""
 
 #: ../products/models_views.py:45 ../manufacturers_views.py:34
-#: ../manufacturers_views.py:56 ../modules/review/review.py:342
+#: ../manufacturers_views.py:56 ../modules/review/review.py:343
 #: ../user_views.py:48 ../user_views.py:298 ../user_views.py:309
 #: ../user_views.py:446 ../editorial.py:35 ../products/product_views.py:143
 #: ../enumerate_table.py:220
@@ -6018,7 +6017,7 @@ msgctxt "heading"
 msgid "Withdrawal to the shop"
 msgstr "Retrait au magasin"
 
-#: ../modules/review/review.py:391
+#: ../modules/review/review.py:392
 msgid "Workflow"
 msgstr "Workflow"
 
@@ -6027,7 +6026,7 @@ msgctxt "span"
 msgid "X"
 msgstr "X"
 
-#: ../shipping/shippings_views.py:103 ../products/models.py:247
+#: ../shipping/shippings_views.py:103 ../datatypes.py:189
 msgid "Yes"
 msgstr "Oui"
 
@@ -6175,7 +6174,8 @@ msgstr "Votre cadeau a été enregistré."
 msgid ""
 "Your inscription has been validaded, you will receive an email to confirm it."
 msgstr ""
-"Votre inscription a été validée, vous allez recevoir un email pour la confirmer."
+"Votre inscription a été validée, vous allez recevoir un email pour la "
+"confirmer."
 
 #: ../shop_views.py:358
 msgid "Your inscription has been validaded."
@@ -6228,11 +6228,11 @@ msgstr "Votre signalement"
 msgid "Your report has been added"
 msgstr "Votre avis a été ajouté"
 
-#: ../modules/review/review.py:237 ../modules/review/review.py:504
+#: ../modules/review/review.py:237 ../modules/review/review.py:505
 msgid "Your review"
 msgstr "Votre avis"
 
-#: ../modules/review/review.py:331
+#: ../modules/review/review.py:332
 msgid "Your review has been added."
 msgstr "Votre avis a été ajouté."
 
@@ -6298,7 +6298,7 @@ msgctxt "b"
 msgid "at the following address:"
 msgstr "à l'adresse suivante :"
 
-#: ../datatypes.py:223
+#: ../datatypes.py:233
 msgid "cm"
 msgstr "cm"
 
@@ -6306,7 +6306,7 @@ msgstr "cm"
 msgid "countries"
 msgstr "pays"
 
-#: ../datatypes.py:226
+#: ../datatypes.py:236
 msgid "inch"
 msgstr "inch"
 
