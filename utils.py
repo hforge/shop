@@ -22,6 +22,8 @@ from datetime import datetime, timedelta
 from itools.datatypes import Boolean, Enumerate, String, LanguageTag, Tokens
 from itools.gettext import MSG
 from itools.handlers import ConfigFile
+from itools.uri import Path
+from itools.web import get_context
 from itools.xapian import PhraseQuery, AndQuery
 from itools.xml import XMLParser
 
@@ -266,3 +268,26 @@ class ITWSHOPConfig(ConfigFile):
         'skin_path': String(default=''),
         'show_language_title': Boolean(default=False)
     }
+
+
+
+class MultilingualProperties(object):
+
+    def set_multilingual_properties(self, **kw):
+        site_root = self.get_site_root()
+        available_languages = site_root.get_property('website_languages')
+
+        # Set multilingual title
+        if 'title' not in kw:
+            title = self.class_title
+            for language in available_languages:
+                self.set_property('title', title.gettext(language), language)
+
+
+    @staticmethod
+    def _make_resource(cls, folder, name, **kw):
+        root = get_context().root
+        # Compute resource path
+        resource_path = Path(folder.key).resolve2(name)
+        resource = root.get_resource(resource_path)
+        resource.set_multilingual_properties(**kw)
