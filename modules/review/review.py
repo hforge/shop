@@ -51,7 +51,7 @@ from itws.views import AutomaticEditView
 from shop.modules import ShopModule
 from shop.products.enumerate import States
 from shop.feed_views import Feed_View
-from shop.utils import get_module
+from shop.utils import get_module, MultilingualProperties
 from shop.utils_views import SearchTableFolder_View
 from shop.widgets import FilesWidget, BooleanCheckBox_CGU
 
@@ -583,8 +583,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
 
 
 
-
-class ShopModule_Reviews(Folder):
+class ShopModule_Reviews(MultilingualProperties, Folder):
 
     class_id = 'shop_module_reviews'
     class_title = MSG(u'All reviews')
@@ -592,6 +591,12 @@ class ShopModule_Reviews(Folder):
 
     view = ShopModule_Reviews_View()
     add_review = ShopModule_AReview_NewInstance()
+
+    @staticmethod
+    def _make_resource(cls, folder, name, **kw):
+        Folder._make_resource(cls, folder, name, **kw)
+        MultilingualProperties._make_resource(cls, folder, name, **kw)
+
 
 
 class ShopModule_Review(ShopModule):

@@ -1324,7 +1324,7 @@ msgstr "Toutes les catégories"
 
 #: ../modules/review/review.py:590
 msgid "All reviews"
-msgstr "Tous les avis"
+msgstr "Avis"
 
 #: ../shipping/shipping_way.py:146
 msgid "Allow to define your own shipping way"
