@@ -121,7 +121,7 @@ class UnicodeOnePerLine(Unicode):
     def render(cls, value, context):
         if value is None:
             return None
-        return value.split('\n')
+        return [x.strip() for x in value.split('\n') if x.strip()]
 
 
 
