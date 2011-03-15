@@ -545,7 +545,9 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         from shop.categories import Category
         table = self.get_resource('cross-selling', soft=True)
         if table is None:
-            return []
+            # If table do not exist we use default cross selling
+            shop = get_shop(self)
+            table = shop.get_resource('cross-selling')
         viewbox = self.cross_selling_viewbox
         cross_selling = []
         abspath = self.get_abspath()
