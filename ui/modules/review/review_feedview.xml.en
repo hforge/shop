@@ -4,7 +4,9 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <a href="./;add_review" class="button">Add a review</a>
+  <a href="./;add_review" class="button-add-review">Add a review</a>
+
+  <br/>
 
   <div id="reviews">
     <stl:block stl:repeat="review items">
