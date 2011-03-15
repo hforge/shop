@@ -9,7 +9,7 @@
     <span class="review-title" stl:if="title">${title}</span><br/>
 
     <span class="a-review-author" stl:if="not is_on_user_view">
-      Author: <a href="${author/href}" stl:if="author">${author/public_title}</a><br/>
+      Added on ${ctime}, by <a href="${author/href}" stl:if="author">${author/public_title}</a><br/>
     </span>
 
     <span class="a-review-product" stl:if="not is_on_product_view">

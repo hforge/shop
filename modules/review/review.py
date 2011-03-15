@@ -543,6 +543,11 @@ class ShopModule_AReview(WorkflowAware, Folder):
         description = self.get_property('description').encode('utf-8')
         # XXX injection
         namespace['description'] = XMLParser(description.replace('\n', '<br/>'))
+        # ctime
+        ctime = self.get_property('ctime')
+        accept = context.accept_language
+        namespace['ctime'] = format_datetime(ctime, accept)
+
         return namespace
 
 
