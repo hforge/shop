@@ -4,8 +4,6 @@
 <stl:block xmlns="http://www.w3.org/1999/xhtml"
            xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
 
-  <h1>Reviews</h1>
-
   <a href="./;add_review" class="button">Add a review</a>
 
   <div id="reviews">
