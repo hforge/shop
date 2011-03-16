@@ -174,7 +174,7 @@ class ShopForm(OrderedTable):
     class_title = MSG(u'Shop form')
     class_version = '20090609'
     class_handler = ShopFormTable
-    class_views = ['display', 'edit'] # 'view', 'add_record'] #XXX We hide for instant
+    class_views = ['display', 'edit', 'view', 'add_record']
 
     display = ShopForm_Display()
     view = OrderedTable_View(search_template=None)
