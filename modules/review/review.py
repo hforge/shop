@@ -55,7 +55,6 @@ from shop.utils import get_module, MultilingualProperties
 from shop.utils_views import SearchTableFolder_View
 from shop.widgets import FilesWidget, BooleanCheckBox_CGU
 
-# XXX: Check that user do not have already post a comment for this product
 # XXX: we use comparaison with class_id
 # XXX: Minimum size of review ?
 # XXX: Edition of sidebar do not works well
@@ -540,6 +539,8 @@ class ShopModule_AReview(WorkflowAware, Folder):
         values['ctime'] = self.get_property('ctime')
         values['shop_module_review_author'] = self.get_property('author')
         values['shop_module_review_note'] = self.get_property('note')
+        # XXX description is multilingual in the DB (xml:lang=xx)
+        values['shop_module_review_description'] = self.get_property('description')
         return values
 
 
@@ -677,16 +678,14 @@ class ShopModule_Review(ShopModule):
         brains = list(search.get_documents(sort_by='mtime', reverse=True))
         nb_reviews = len(brains)
         if brains:
-            last_review = context.root.get_resource(brains[0].abspath)
-            last_review = last_review.get_property('description')
-            last_review = reduce_string(last_review, 200, 200)
+            last_review = brains[0]
+            last_review = reduce_string(brains[0].shop_module_review_description,
+                                        200, 200)
         else:
             last_review = None
-        # XXX Performances
         note = 0
         for brain in brains:
-            review = context.root.get_resource(brain.abspath)
-            note += review.get_property('note')
+            note += brain.shop_module_review_note
         # Get viewboxes
         viewboxes = []
         for brain in brains[:5]:
@@ -731,3 +730,4 @@ register_resource_class(ShopModule_Review)
 register_resource_class(ShopModule_AReview)
 register_field('shop_module_review_author', String(is_indexed=True))
 register_field('shop_module_review_note', Integer(is_indexed=True, is_stored=True))
+register_field('shop_module_review_description', Unicode(is_stored=True))
