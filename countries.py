@@ -137,6 +137,9 @@ class Countries(Table):
         BooleanRadio('enabled', title=MSG(u'Enabled')),
         ]
 
+    # XXX Enabled means its enabled for delivery not for registration
+    # People from south africa can register on website but not to be delivered
+    # This distinction must be explicit
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
