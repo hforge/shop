@@ -59,10 +59,19 @@ class SubCategoriesBox_View(Box_View):
             here_abspath_level = here_abspath.count('/')
             max_level_deploy = here_abspath_level + 1
         else:
-            # tweak here_abspath
-            here_abspath = categories_abspath
-            here_abspath_level = here_abspath.count('/')
-            max_level_deploy = categories_abspath.count('/') + 1
+            if here.metadata.format == 'product':
+                # Special case for the product, here_* values are compute
+                # with here = parent category
+                parent_category = here.parent
+                here_abspath = str(parent_category.get_abspath())
+                here_abspath_level = here_abspath.count('/')
+                max_level_deploy = here_abspath_level + 1
+                here_parent_abspath = parent_category.parent.get_abspath()
+            else:
+                # Tweak here_abspath
+                here_abspath = categories_abspath
+                here_abspath_level = here_abspath.count('/')
+                max_level_deploy = categories_abspath.count('/') + 1
 
         here_abspath_p = Path(here_abspath)
 
