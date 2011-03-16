@@ -59,7 +59,8 @@ class SubCategoriesBox_View(Box_View):
             here_abspath_level = here_abspath.count('/')
             max_level_deploy = here_abspath_level + 1
         else:
-            here_abspath = str(here.get_abspath())
+            # tweak here_abspath
+            here_abspath = categories_abspath
             here_abspath_level = here_abspath.count('/')
             max_level_deploy = categories_abspath.count('/') + 1
 
