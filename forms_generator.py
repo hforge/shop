@@ -24,7 +24,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanCheckBox
-from ikaaro.forms import RTEWidget, XHTMLBody
+from ikaaro.forms import RTEWidget, XHTMLBody, DateWidget
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.table_views import OrderedTable_View
 

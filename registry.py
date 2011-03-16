@@ -24,7 +24,7 @@ from itools.gettext import MSG, register_domain
 from itools.handlers import ro_database
 
 # Import from ikaaro
-from ikaaro.forms import SelectWidget, MultilineWidget, TextWidget
+from ikaaro.forms import SelectWidget, MultilineWidget, TextWidget, DateWidget
 from ikaaro.skins import register_skin
 
 # Import from itws
@@ -89,6 +89,7 @@ def register_shop(package, name):
 shop_widgets = [('select', MSG(u'Select Widget'), SelectWidget),
                 ('multiline-widget', MSG(u'Multiline Widget'), MultilineWidget),
                 ('product-widget', MSG(u'Product Widget'), ProductSelectorWidget),
+                ('date-widget', MSG(u'Date Widget'),  DateWidget),
                 ('text-widget', MSG(u'Text Widget'),  TextWidget)]
 
 def register_widget(name, title, widget):
