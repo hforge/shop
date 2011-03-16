@@ -200,6 +200,15 @@ class ShopUser_EditAccount(User_EditAccount):
     def get_schema(self, resource, context):
         schema = merge_dicts(resource.base_schema,
                              resource.get_dynamic_schema())
+
+        group = resource.get_group(context)
+        # Lastname mandatory ?
+        l_mandatory = group.get_property('lastname_is_mandatory_on_registration')
+        schema['lastname'] = Unicode(mandatory=l_mandatory)
+        # Phone mandatory ?
+        p_mandatory = group.get_property('phone_is_mandatory_on_registration')
+        schema['phone1'] = String(mandatory=p_mandatory)
+
         del schema['password']
         del schema['user_must_confirm']
         return schema
