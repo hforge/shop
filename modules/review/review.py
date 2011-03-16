@@ -20,13 +20,13 @@ from datetime import datetime
 # Import from itools
 from itools.core import freeze, merge_dicts
 from itools.datatypes import DateTime, Integer, String, Unicode
-from itools.datatypes import Enumerate, Boolean
+from itools.datatypes import Enumerate, Boolean, XMLContent
 from itools.gettext import MSG
 from itools.fs import FileName
 from itools.i18n import format_datetime
 from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLParser
-from itools.web import get_context, FormError, STLView
+from itools.web import get_context, ERROR, FormError, STLView
 
 # Import from ikaaro
 from ikaaro.buttons import RemoveButton, PublishButton, RetireButton
@@ -243,8 +243,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
               link='./cgu', description=cgu_description)]
 
 
-    def get_new_resource_name(self, form):
-        context = get_context()
+    def _get_current_reviews_query(self, context, form):
         root = context.root
         if form['abspath']:
             product = context.root.get_resource(form['abspath'])
@@ -255,9 +254,18 @@ class ShopModule_AReview_NewInstance(NewInstance):
         query = AndQuery(
                     base_path_query,
                     PhraseQuery('format', 'shop_module_a_review'))
-        search = root.search(query)
-        id_review = len(search.get_documents()) + 1
-        # XXX That will not works !!! URGENT
+        return query
+
+
+    def get_new_resource_name(self, form):
+        context = get_context()
+        query = self._get_current_reviews_query(context, form)
+        search = context.root.search(query)
+        if len(search):
+            doc = search.get_documents(sort_by='name', reverse=True)[0]
+            id_review = int(doc.name) + 1
+        else:
+            id_review = 1
         return str(id_review)
 
 
@@ -267,7 +275,17 @@ class ShopModule_AReview_NewInstance(NewInstance):
         return NewInstance.get_value(self, resource, context, name, datatype)
 
 
-    #def _get_form(self, resource, context):
+    def _get_form(self, resource, context):
+        form = NewInstance._get_form(self, resource, context)
+
+        # Check if the user has already fill a review
+        query = self._get_current_reviews_query(context, form)
+        author_query = PhraseQuery('shop_module_review_author',
+                                   context.user.name)
+        query = AndQuery(query, author_query)
+        if len(context.root.search(query)):
+            raise FormError, ERROR(u'You already have filled a review.')
+
     #    form = NewInstance._get_form(self, resource, context)
     #    # Check images
     #    for image in form['images']:
@@ -275,7 +293,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
     #        if mimetype.startswith('image/') is False:
     #            raise FormError, MSG_UNEXPECTED_MIMETYPE(mimetype=mimetype)
 
-    #    return form
+        return form
 
 
     def action(self, resource, context, form):
@@ -298,7 +316,8 @@ class ShopModule_AReview_NewInstance(NewInstance):
         metadata = child.metadata
         language = resource.get_content_language(context)
 
-        # Anonymous ? Accepted XXX
+        # Anonymous, if user is not authenticated, the review is set
+        # as anonymous.
         if context.user:
             metadata.set_property('author', context.user.name)
         # Workflow
@@ -541,7 +560,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
         namespace['is_on_product_view'] = here.class_id == 'product'
         # Description
         description = self.get_property('description').encode('utf-8')
-        # XXX injection
+        description = XMLContent.encode(description)
         namespace['description'] = XMLParser(description.replace('\n', '<br/>'))
         # ctime
         ctime = self.get_property('ctime')
