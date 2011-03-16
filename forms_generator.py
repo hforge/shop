@@ -24,7 +24,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import AutoForm, SelectWidget, TextWidget, BooleanCheckBox
-from ikaaro.forms import RTEWidget, XHTMLBody, DateWidget
+from ikaaro.forms import RTEWidget, XHTMLBody, BooleanRadio
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.table_views import OrderedTable_View
 
@@ -33,7 +33,6 @@ from itws.views import AutomaticEditView
 
 # Import from shop
 from cross_selling_views import AddProduct_View
-from datatypes import ProductPathDataType
 from products.models import get_real_datatype
 from products.enumerate import Datatypes
 from registry import shop_widgets
@@ -62,15 +61,13 @@ class Widgets(Enumerate):
 
 class ShopForm_Display(AutoForm):
 
-    access = True
-
+    access = 'is_allowed_to_view_for_authenticated'
 
     def get_submit_value(self):
         context = get_context()
         return context.resource.get_property('submit_value')
 
     submit_value = property(get_submit_value, None, None, '')
-
 
 
     def get_title(self, context):
@@ -177,7 +174,7 @@ class ShopForm(OrderedTable):
     class_views = ['display', 'edit', 'view', 'add_record']
 
     display = ShopForm_Display()
-    view = OrderedTable_View(search_template=None)
+    view = OrderedTable_View(search_template=None, access='is_admin')
     edit = AutomaticEditView()
 
     add_product = AddProduct_View()
@@ -191,15 +188,19 @@ class ShopForm(OrderedTable):
         SelectWidget('widget', title=MSG(u'Widget')),
         ]
 
-    edit_widgets = [TextWidget('submit_value', title=MSG(u'Submit value')),
-                    TextWidget('to_addr', title=MSG(u'To addr')),
-                    RTEWidget('introduction', title=MSG(u'Introduction')),
-                    RTEWidget('final_message', title=MSG(u'Final message'))]
+    edit_widgets = [
+        TextWidget('submit_value', title=MSG(u'Submit value')),
+        TextWidget('to_addr', title=MSG(u'To addr')),
+        RTEWidget('introduction', title=MSG(u'Introduction')),
+        RTEWidget('final_message', title=MSG(u'Final message')),
+        BooleanRadio('must_be_authentificated',
+                     title=MSG(u'Must be authentificated to see form'))]
 
     edit_schema = {'submit_value': Unicode(multilingual=True, mandatory=True),
                    'to_addr': Email(mandatory=True),
                    'introduction': XHTMLBody(multilingual=True),
-                   'final_message': XHTMLBody(multilingual=True)}
+                   'final_message': XHTMLBody(multilingual=True),
+                   'must_be_authentificated': Boolean}
 
     @classmethod
     def get_metadata_schema(cls):

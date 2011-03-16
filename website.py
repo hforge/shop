@@ -143,6 +143,13 @@ class ShopWebSite(NeutralWS):
         return self.parent.search(query)
 
 
+    def is_allowed_to_view_for_authenticated(self, user, resource):
+        if (resource.has_property('must_be_authentificated') and
+            resource.get_property('must_be_authentificated')):
+            return self.is_authenticated(user, resource)
+        return self.is_allowed_to_view(user, resource)
+
+
 register_resource_class(ShopWebSite)
 register_document_type(ShopWebSite, WebSite.class_id)
 
