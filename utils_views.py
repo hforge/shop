@@ -176,7 +176,7 @@ class SearchTableFolder_View(BrowseFormBatchNumeric):
 
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
-         # Default columns
+        # Default columns
         if column == 'name':
             name = item_brain.name
             return name, name

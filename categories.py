@@ -35,6 +35,7 @@ from itws.views import AutomaticEditView
 # Import from shop
 from categories_views import Category_View, Category_BackofficeView
 from categories_views import Category_Comparator, Category_BatchEdition
+from categories_views import NewCategory_Form
 from datatypes import ImagePathDataType
 from folder import ShopFolder
 from utils import get_group_name, get_shop
@@ -68,6 +69,7 @@ class Category(ShopFolder):
     edit = AutomaticEditView()
     batch_edition = Category_BatchEdition()
     new_product = Product_NewProduct()
+    new_category = NewCategory_Form()
     comparator = Category_Comparator()
 
 
@@ -77,7 +79,9 @@ class Category(ShopFolder):
         # Back-Office
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
-            return ['browse_content', 'new_product', 'view_categories', 'edit']
+            return ['browse_content', 'new_product',
+                    'view_categories', 'new_category',
+                    'edit']
         return ['view', 'edit']
 
 

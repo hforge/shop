@@ -19,8 +19,9 @@ from operator import itemgetter
 from decimal import Decimal as decimal
 
 # Import from itools
-from itools.core import merge_dicts
+from itools.core import freeze, merge_dicts
 from itools.datatypes import Boolean, Decimal, String, Integer, Tokens
+from itools.datatypes import Unicode
 from itools.gettext import MSG
 from itools.stl import stl
 from itools.web import STLView, STLForm, get_context
@@ -30,8 +31,9 @@ from itools.xml import XMLParser
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.buttons import RenameButton, RemoveButton
-from ikaaro.folder_views import Folder_BrowseContent
+from ikaaro.forms import TextWidget
 from ikaaro.utils import get_base_path_query
+from ikaaro.views_new import NewInstance
 
 # Import from itws
 from itws.views import BrowseFormBatchNumeric
@@ -41,6 +43,7 @@ from datatypes import UserGroup_Enumerate
 from modules import ModuleLoader
 from products.taxes import TaxesEnumerate, PricesWidget
 from utils import get_group_name, get_skin_template, get_shop
+from utils_views import SearchTableFolder_View
 
 
 class LazyDict(dict):
@@ -135,7 +138,6 @@ class Category_View(BrowseFormBatchNumeric):
         abspath = resource.get_canonical_path()
         query = [PhraseQuery('parent_path', str(abspath)),
                  PhraseQuery('format', 'category')]
-        print query
         search = root.search(AndQuery(*query))
         for brain in search.get_documents():
             cat = root.get_resource(brain.abspath)
@@ -309,7 +311,7 @@ class Category_Comparator(STLView):
 
 
 
-class Category_BackofficeView(Folder_BrowseContent):
+class Category_BackofficeView(SearchTableFolder_View):
 
     access = 'is_allowed_to_edit'
     title = MSG(u'View categories')
@@ -319,10 +321,6 @@ class Category_BackofficeView(Folder_BrowseContent):
 
     context_menus = []
 
-    search_template = '/ui/backoffice/category_view.xml'
-
-
-
     table_actions = [RemoveButton(
         title=MSG(u'Remove category, sub-categories, and associated products')),
         RenameButton()]
@@ -331,28 +329,35 @@ class Category_BackofficeView(Folder_BrowseContent):
         ('checkbox', None),
         ('name', MSG(u'Name')),
         ('title', MSG(u'Title')),
+        ('breadcrumb_title', MSG(u'Small title')),
         ('nb_sub_categories', MSG(u'Nb sub categories'), None),
         ('nb_products', MSG(u'Nb products'), None),
         ('nb_backlinks', MSG(u'Nb backlinks'), None),
         ('actions', MSG(u'Actions'), None),
         ]
 
+    search_schema = {'title': Unicode}
+    search_widgets = [TextWidget('title', title=MSG(u'Title'))]
+
+
     def get_items(self, resource, context, *args):
         args = list(args)
-        args.append(PhraseQuery('format', 'category'))
-        return Folder_BrowseContent.get_items(self, resource, context, *args)
+        abspath = str(resource.get_canonical_path())
+        query = [PhraseQuery('parent_path', abspath),
+                 PhraseQuery('format', 'category')]
+        # Super
+        proxy = super(Category_BackofficeView, self)
+        return proxy.get_items(resource, context, query=query)
 
 
     def get_item_value(self, resource, context, item, column):
         brain, item_resource = item
         if column == 'name':
-            return brain.name, './%s/;view_categories' % brain.name
+            return brain.name, '%s/;view_categories' % context.get_link(item_resource)
         elif column == 'nb_sub_categories':
             return item_resource.get_nb_categories()
         elif column == 'nb_products':
-            nb_products = item_resource.get_nb_products()
-            uri = '/categories/;browse_content?abspath=%s' % brain.abspath
-            return nb_products, uri
+            return item_resource.get_nb_products()
         elif column == 'nb_backlinks':
             query = PhraseQuery('links', str(item_resource.get_canonical_path()))
             search = context.root.search(query)
@@ -366,8 +371,9 @@ class Category_BackofficeView(Folder_BrowseContent):
                   <img src="/ui/icons/16x16/edit.png"/>
                 </a>
                 """ % (brain.name, brain.name))
-        return Folder_BrowseContent.get_item_value(self,
-                 resource, context, item, column)
+        # Super
+        proxy = super(Category_BackofficeView, self)
+        return proxy.get_item_value(resource, context, item, column)
 
 
 
@@ -423,3 +429,13 @@ class Category_BatchEdition(STLForm):
                     product.set_property(key, form[key])
         return context.come_back(messages.MSG_CHANGES_SAVED,
                                  goto='./;browse_content')
+
+
+class NewCategory_Form(NewInstance):
+
+    title = MSG(u'Create a new category')
+
+    query_schema = freeze({
+        'type': String(default='category'),
+        'name': String,
+        'title': Unicode})
