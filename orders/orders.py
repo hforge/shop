@@ -46,6 +46,7 @@ from messages import Messages_TableResource
 from orders_views import Order_Manage, OrdersView
 from orders_views import ShopPayments_EndViewTop
 from workflow import order_workflow
+from shop.datatypes import Users_Enumerate
 from shop.products.taxes import TaxesEnumerate
 from shop.folder import ShopFolder
 from shop.utils import format_price, format_for_pdf
@@ -160,7 +161,7 @@ class Order(WorkflowAware, ShopFolder):
         schema['shipping_price'] = Decimal
         schema['total_weight'] = Decimal
         schema['creation_datetime'] = ISODateTime
-        schema['customer_id'] = String
+        schema['customer_id'] = Users_Enumerate
         schema['payment_mode'] = PaymentWaysEnumerate
         schema['shipping'] = ShippingWaysEnumerate
         schema['delivery_address'] = Integer

@@ -32,7 +32,7 @@ from ikaaro.views import BrowseForm
 
 # Import from shop
 from addresses_views import Addresses_EditAddress, Addresses_AddAddress
-from datatypes import Civilite, ThreeStateBoolean
+from datatypes import ThreeStateBoolean
 from datatypes import UserGroup_Enumerate
 from forms import ThreeStateBooleanRadio
 from shop_utils_views import RealRessource_Form

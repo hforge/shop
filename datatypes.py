@@ -260,6 +260,28 @@ class UserGroup_Enumerate(DynamicEnumerate):
     is_abspath = True
 
 
+class Users_Enumerate(DynamicEnumerate):
+
+    format = 'user'
+    is_abspath = True
+
+    @classmethod
+    def get_options(cls):
+        context = get_context()
+        root = context.root
+        resources = [root.get_resource(brain.abspath)
+                      for brain in root.search(format='user').get_documents()]
+        return [{'name': res.name, 'value': res.get_title()}
+                   for res in resources]
+
+
+    @classmethod
+    def get_value(cls, name, default=None):
+        context = get_context()
+        user = context.root.get_resource('users/%s' % name)
+        return user.get_title()
+
+
 
 class SkinsEnumerate(Enumerate):
 

@@ -33,7 +33,6 @@ from ikaaro.forms import SelectWidget, TextWidget
 # Import from shop
 from widgets import OrdersWidget
 from workflow import Order_Transitions, states, states_color, OrderStates_Enumerate
-from shop.datatypes import Civilite
 from shop.buttons import MergeOrderButton, MergeBillButton
 from shop.payments.enumerates import PaymentWaysEnumerate
 from shop.payments.payments_views import Payments_EditablePayment
@@ -92,23 +91,13 @@ class OrdersView(SearchTableFolder_View):
             href = context.resource.get_pathto(item_resource)
             name = item_resource.get_reference()
             return XMLParser(numero_template % (states_color[state], href, name))
-        elif column == 'customer_id':
-            users = context.root.get_resource('users')
-            customer_id = item_resource.get_property('customer_id')
-            customer = users.get_resource(customer_id)
-            gender = Civilite.get_value(customer.get_property('gender'))
-            if gender is None:
-                title = customer.get_title()
-            else:
-                title = '%s %s' % (gender.gettext(), customer.get_title())
-            return title
         elif column == 'state':
             state = item_brain.workflow_state
             state_title = states[state].gettext().encode('utf-8')
             href = context.resource.get_pathto(item_resource)
             return XMLParser(numero_template % (states_color[state], href, state_title))
         elif column == 'total_price':
-            return '%s € ' % item_resource.get_property(column)
+            return u'%s € ' % item_resource.get_property(column)
         elif column == 'order_pdf':
             if item_resource.get_resource('order', soft=True) is None:
                 return
