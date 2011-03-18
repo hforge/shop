@@ -15,8 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
-from itools.datatypes import Enumerate
+from itools.datatypes import Boolean, DateTime, Enumerate
 from itools.gettext import MSG
+from itools.i18n import format_datetime
 from itools.uri import get_reference
 from itools.web import BaseForm, ERROR, STLView
 from itools.xapian import OrQuery, PhraseQuery, AndQuery, RangeQuery, StartQuery
@@ -29,7 +30,7 @@ from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
 from datatypes import RangeDatatype
-from utils import get_non_empty_widgets
+from utils import bool_to_img, get_non_empty_widgets
 
 
 
@@ -171,6 +172,35 @@ class SearchTableFolder_View(BrowseFormBatchNumeric):
         sort_by = context.query['sort_by']
         reverse = context.query['reverse']
         return results.get_documents(sort_by=sort_by, reverse=reverse)
+
+
+    def get_item_value(self, resource, context, item, column):
+        item_brain, item_resource = item
+         # Default columns
+        if column == 'name':
+            name = item_brain.name
+            return name, name
+        elif column == 'title':
+            return item_resource.get_title(), context.get_link(item_resource)
+        # Guess from schema
+        schema = item_resource.get_metadata_schema()
+        if schema.has_key(column):
+            datatype = schema[column]
+            value = item_resource.get_property(column)
+            if issubclass(datatype, Enumerate):
+                return datatype.get_value(value)
+            elif issubclass(datatype, Boolean):
+                return bool_to_img(value)
+            elif issubclass(datatype, DateTime):
+                if value is None:
+                    return u'-'
+                accept = context.accept_language
+                return format_datetime(value, accept)
+            return value
+        # Computed column
+        # Other column
+        proxy = super(SearchTableFolder_View, self)
+        return proxy.get_item_value(resource, context, item, column)
 
 
     def sort_and_batch(self, resource, context, items):

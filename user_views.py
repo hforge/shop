@@ -469,7 +469,6 @@ class Customers_View(SearchTableFolder_View):
         ('lastname', MSG(u'Lastname')),
         ('email', MSG(u'Email')),
         ('ctime', MSG(u'Registration Date')),
-        ('last_time', MSG(u'Last connection Date')),
         ('actions', MSG(u'Actions')),
         ]
 
@@ -511,22 +510,7 @@ class Customers_View(SearchTableFolder_View):
 
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
-        if column == 'name':
-            name = item_brain.name
-            return name, name
-        elif column == 'is_enabled':
-            return bool_to_img(item_resource.get_property(column))
-        elif column == 'gender':
-            return Civilite.get_value(item_resource.get_property('gender'))
-        elif column == 'email':
-            return item_resource.get_property(column), item_brain.name
-        elif column in ['ctime', 'last_time']:
-            dtime = item_resource.get_property(column)
-            if dtime is None:
-                return '-'
-            accept = context.accept_language
-            return format_datetime(dtime, accept)
-        elif column == 'actions':
+        if column == 'actions':
             return XMLParser("""
                 <a href="./%s/" title="View customer">
                   <img src="/ui/icons/16x16/view.png"/>
@@ -538,7 +522,9 @@ class Customers_View(SearchTableFolder_View):
                   <img src="/ui/backoffice/images/users.png"/>
                 </a>
                 """ % (item_brain.name, item_brain.name, item_brain.name))
-        return item_resource.get_property(column)
+        # Super
+        proxy = super(Customers_View, self)
+        return proxy.get_item_value(resource, context, item, column)
 
 
 

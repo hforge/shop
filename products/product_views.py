@@ -471,27 +471,9 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
         return SearchTableFolder_View.get_items(self, resource, context, query)
 
 
-    def sort_and_batch(self, resource, context, items):
-        root = context.root
-        user = context.user
-        # Batch
-        start = context.query['batch_start']
-        size = context.query['batch_size']
-        # ACL
-        allowed_items = []
-        for item in items[start:start+size]:
-            resource = root.get_resource(item.abspath)
-            ac = resource.get_access_control()
-            if ac.is_allowed_to_view(user, resource):
-                allowed_items.append((item, resource))
-        return allowed_items
-
-
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
-        if column == 'reference':
-            return item_resource.get_property('reference')
-        elif column == 'barcode':
+        if column == 'barcode':
             reference = item_resource.get_property('reference')
             if reference is None:
                 return None
@@ -509,18 +491,14 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
                     </div>
                     """% (uri, uri))
             return XMLParser('<div class="thumb-products"/>')
-        elif column == 'title':
-            return item_resource.get_title(), context.get_link(item_resource)
         elif column == 'stored_price':
             price = '%s €' % item_resource.get_price_with_tax(pretty=True)
             if item_resource.get_property('has_reduction'):
                 return XMLParser('<span style="color:red">%s</span>'% price)
             return price
-        elif column == 'ctime':
-            ctime = item_resource.get_property('ctime')
-            accept = context.accept_language
-            return format_date(ctime, accept)
-        return BrowseFormBatchNumeric.get_item_value(self, resource, context, item, column)
+        # Super
+        proxy = super(Products_View, self)
+        return proxy.get_item_value(resource, context, item, column)
 
 
     def action_batch_edition(self, resource, context, form):
