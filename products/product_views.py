@@ -23,7 +23,6 @@ from itools.core import merge_dicts
 from itools.datatypes import Email, Integer, String, Unicode, Boolean
 from itools.gettext import MSG
 from itools.handlers import checkid
-from itools.i18n import format_date
 from itools.uri import get_reference
 from itools.web import INFO, ERROR, STLView, STLForm, FormError, get_context
 from itools.xapian import PhraseQuery

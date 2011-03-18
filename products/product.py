@@ -24,7 +24,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Enumerate, DateTime
 from itools.datatypes import Integer, Decimal
 from itools.gettext import MSG
-from itools.uri import get_uri_name, resolve_uri2
+from itools.uri import get_uri_name, resolve_uri2, get_reference
 from itools.web import get_context
 from itools.xml import TEXT, xml_to_text
 
@@ -854,6 +854,31 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                      'filename': 'barcode.png',
                      'format': 'image/png'}
         Image.make_resource(Image, self, 'barcode', body=barcode, **metadata)
+
+    #######################
+    ## Computed fields
+    #######################
+    computed_fields = ['frontoffice_uri', 'cover_uri']
+
+    @property
+    def frontoffice_uri(self):
+        shop = get_shop(self)
+        site_root = shop.get_site_root()
+        base_uri = shop.get_property('shop_uri')
+        end_uri = site_root.get_pathto(self)
+        return get_reference(base_uri).resolve(end_uri)
+
+
+    @property
+    def cover_uri(self):
+        shop = get_shop(self)
+        site_root = shop.get_site_root()
+        cover = self.get_preview_thumbnail()
+        if not cover:
+            return None
+        base_uri = shop.get_property('shop_uri')
+        end_uri = site_root.get_pathto(cover)
+        return '%s/;download' % get_reference(base_uri).resolve(end_uri)
 
 
     #######################

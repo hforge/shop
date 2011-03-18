@@ -330,9 +330,9 @@ class Category_BackofficeView(SearchTableFolder_View):
         ('name', MSG(u'Name')),
         ('title', MSG(u'Title')),
         ('breadcrumb_title', MSG(u'Small title')),
-        ('nb_sub_categories', MSG(u'Nb sub categories'), None),
+        ('nb_categories', MSG(u'Nb sub categories'), None),
         ('nb_products', MSG(u'Nb products'), None),
-        ('nb_backlinks', MSG(u'Nb backlinks'), None),
+        ('backlinks', MSG(u'Nb backlinks'), None),
         ('actions', MSG(u'Actions'), None),
         ]
 
@@ -354,14 +354,6 @@ class Category_BackofficeView(SearchTableFolder_View):
         brain, item_resource = item
         if column == 'name':
             return brain.name, '%s/;view_categories' % context.get_link(item_resource)
-        elif column == 'nb_sub_categories':
-            return item_resource.get_nb_categories()
-        elif column == 'nb_products':
-            return item_resource.get_nb_products()
-        elif column == 'nb_backlinks':
-            query = PhraseQuery('links', str(item_resource.get_canonical_path()))
-            search = context.root.search(query)
-            return len(search), './%s/;backlinks' % brain.name
         elif column == 'actions':
             return XMLParser("""
                 <a href="./%s/" title="View category">

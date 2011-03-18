@@ -215,6 +215,7 @@ class ShopUser(User, DynamicFolder):
     add_image = CurrentFolder_AddImage()
 
     # Base schema / widgets
+    computed_fields = []
     base_schema = merge_dicts(User.get_metadata_schema(),
                               ctime=DateTime,
                               last_time=DateTime,

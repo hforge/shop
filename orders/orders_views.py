@@ -102,14 +102,6 @@ class OrdersView(SearchTableFolder_View):
             else:
                 title = '%s %s' % (gender.gettext(), customer.get_title())
             return title
-        elif column == 'nb_msg':
-            # XXX Ne marche pas si on recherche seen=False => PB catalogue
-            messages = item_resource.get_resource('messages').handler
-            nb_messages = messages.get_n_records() - len(messages.search(seen=True))
-            if nb_messages:
-                href = context.resource.get_pathto(item_resource)
-                return XMLParser(numero_template % ('black', href, nb_messages))
-            return None
         elif column == 'state':
             state = item_brain.workflow_state
             state_title = states[state].gettext().encode('utf-8')

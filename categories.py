@@ -124,6 +124,10 @@ class Category(ShopFolder):
     def get_document_types(self):
         return [Product, Category]
 
+    ####################################
+    # Computed fields
+    ####################################
+    computed_fields = ['nb_products', 'nb_categories']
 
     def get_nb_products(self, only_public=False):
         root = self.get_root()
@@ -143,13 +147,22 @@ class Category(ShopFolder):
 
     def get_nb_categories(self):
         root = self.get_root()
-        shop = get_shop(self)
         abspath = self.get_canonical_path()
-        base_path_query = get_base_path_query(str(abspath))
         query = AndQuery(
-            base_path_query,
-            PhraseQuery('format', shop.category_class.class_id))
+            get_base_path_query(str(abspath)),
+            PhraseQuery('format', 'category'))
         return len(root.search(query))
+
+
+    @property
+    def nb_products(self):
+        return self.get_nb_products()
+
+
+    @property
+    def nb_categories(self):
+        return self.get_nb_categories()
+
 
 
 register_resource_class(Category)

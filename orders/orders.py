@@ -584,6 +584,17 @@ class Order(WorkflowAware, ShopFolder):
                      'filename': 'bill.pdf'}
         return PDF.make_resource(PDF, self, 'bill', body=pdf, **metadata)
 
+    ###################################################
+    ## Computed fields
+    ###################################################
+    computed_fields = ['nb_msg']
+
+    @property
+    def nb_msg(self):
+        messages = self.get_resource('messages').handler
+        nb_messages = messages.get_n_records() - len(messages.search(seen=True))
+        return nb_messages or None
+
 
     ###################################################
     ## Update methods
