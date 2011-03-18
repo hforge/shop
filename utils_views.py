@@ -188,7 +188,7 @@ class SearchTableFolder_View(BrowseFormBatchNumeric):
             return len(search), '%s/;backlinks' % context.get_link(item_resource)
         # Guess from schema
         schema = item_resource.get_metadata_schema()
-        computed_fields = getattr(item_resource, 'computed_fields', [])
+        computed_schema = getattr(item_resource, 'computed_schema', {})
         if schema.has_key(column):
             datatype = schema[column]
             value = item_resource.get_property(column)
@@ -203,7 +203,7 @@ class SearchTableFolder_View(BrowseFormBatchNumeric):
                 return format_datetime(value, accept)
             return value
         # Computed columns
-        elif column in computed_fields:
+        elif computed_schema.has_key(column):
             return getattr(item_resource, column)
         # Other column
         proxy = super(SearchTableFolder_View, self)

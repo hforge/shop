@@ -588,7 +588,7 @@ class Order(WorkflowAware, ShopFolder):
     ###################################################
     ## Computed fields
     ###################################################
-    computed_fields = ['nb_msg']
+    computed_schema = {'nb_msg': Integer(title=MSG(u'Nb messages'))}
 
     @property
     def nb_msg(self):

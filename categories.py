@@ -17,7 +17,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Unicode
+from itools.datatypes import Integer, Unicode
 from itools.gettext import MSG
 from itools.web import get_context
 from itools.xapian import AndQuery, NotQuery, PhraseQuery
@@ -127,7 +127,8 @@ class Category(ShopFolder):
     ####################################
     # Computed fields
     ####################################
-    computed_fields = ['nb_products', 'nb_categories']
+    computed_schema = {'nb_products': Integer(title=MSG(u'Nb products')),
+                       'nb_categories': Integer(title=MSG(u'Nb sub categories'))}
 
     def get_nb_products(self, only_public=False):
         root = self.get_root()

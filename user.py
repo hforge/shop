@@ -21,11 +21,12 @@ from datetime import datetime
 # Import from itools
 from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
-from itools.datatypes import Boolean, String, Unicode, DateTime
+from itools.datatypes import Boolean, String, Unicode, DateTime, Integer
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.uri import Path
 from itools.web import get_context
+from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro.folder import Folder
@@ -215,13 +216,12 @@ class ShopUser(User, DynamicFolder):
     add_image = CurrentFolder_AddImage()
 
     # Base schema / widgets
-    computed_fields = []
     base_schema = merge_dicts(User.get_metadata_schema(),
-                              ctime=DateTime,
-                              last_time=DateTime,
-                              gender=Civilite,
-                              phone1=String(mandatory=True),
-                              phone2=String)
+                              ctime=DateTime(title=MSG(u'Register date')),
+                              last_time=DateTime(title=MSG(u'Last connection')),
+                              gender=Civilite(title=MSG(u"Civility")),
+                              phone1=String(mandatory=True, title=MSG(u'Phone1')),
+                              phone2=String(title=MSG(u'Phone2')))
 
     base_widgets = [
                 TextWidget('email', title=MSG(u"Email")),
@@ -434,6 +434,20 @@ class ShopUser(User, DynamicFolder):
                 'is_authenticated': is_authenticated,
                 'ctime': format_datetime(ctime, accept) if ctime else None, # XXX Why ?
                 'items': self.base_items + modules_items}
+
+    ###############################
+    # Computed schema
+    ###############################
+    computed_schema = {'nb_orders': Integer(title=MSG(u'Nb orders'))}
+
+    @property
+    def nb_orders(self):
+        root = self.get_root()
+        queries = [PhraseQuery('format', 'order'),
+                   PhraseQuery('customer_id', self.name)]
+        return len(root.search(AndQuery(*queries)))
+
+
 
 
 class ShopUserFolder(UserFolder):

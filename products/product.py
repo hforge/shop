@@ -858,7 +858,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     #######################
     ## Computed fields
     #######################
-    computed_fields = ['frontoffice_uri', 'cover_uri']
+    computed_schema = {'frontoffice_uri': String(title=MSG(u'Frontoffice link')),
+                       'cover_uri': String(title=MSG(u'Cover link'))}
 
     @property
     def frontoffice_uri(self):
