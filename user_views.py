@@ -509,8 +509,8 @@ class Customers_View(SearchTableFolder_View):
         return SearchTableFolder_View.get_items(self, resource, context, query=query)
 
 
-    def get_item_value(self, resource, context, item_brain, column):
-        item_resource = context.root.get_resource(item_brain.abspath)
+    def get_item_value(self, resource, context, item, column):
+        item_brain, item_resource = item
         if column == 'name':
             name = item_brain.name
             return name, name
@@ -539,13 +539,6 @@ class Customers_View(SearchTableFolder_View):
                 </a>
                 """ % (item_brain.name, item_brain.name, item_brain.name))
         return item_resource.get_property(column)
-
-
-    def sort_and_batch(self, resource, context, items):
-        # Batch
-        start = context.query['batch_start']
-        size = context.query['batch_size']
-        return items[start:start+size]
 
 
 
