@@ -28,3 +28,19 @@ class BatchEditionButton(Button):
     name = 'batch_edition'
     title = MSG(u'Batch edition')
 
+
+class MergeOrderButton(Button):
+
+    access = 'is_allowed_to_edit'
+    css = 'button-order'
+    name = 'merge_orders'
+    title = MSG(u'Merge orders PDF')
+
+
+class MergeBillButton(Button):
+
+    access = 'is_allowed_to_edit'
+    css = 'button-bill'
+    name = 'merge_bill'
+    title = MSG(u'Merge bill PDF')
+

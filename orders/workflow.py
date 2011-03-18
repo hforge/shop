@@ -41,6 +41,18 @@ class Order_Transitions(Enumerate):
         return options
 
 
+class OrderStates_Enumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        options = []
+        for name, value in states.items():
+            options.append({'name': name,
+                            'value': value,
+                            'color': states_color[name]})
+        return options
+
+
 # Workflow definition
 order_workflow = Workflow()
 add_state = order_workflow.add_state
