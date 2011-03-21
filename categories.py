@@ -36,6 +36,7 @@ from itws.views import AutomaticEditView
 from categories_views import Category_View, Category_BackofficeView
 from categories_views import Category_Comparator, Category_BatchEdition
 from categories_views import NewCategory_Form
+from csv_views import Export
 from datatypes import ImagePathDataType
 from folder import ShopFolder
 from utils import get_group_name, get_shop
@@ -163,6 +164,14 @@ class Category(ShopFolder):
     @property
     def nb_categories(self):
         return self.get_nb_categories()
+
+    #############################
+    # Export
+    #############################
+    export = Export(export_resource=Product,
+                    access='is_allowed_to_edit',
+                    file_columns=['reference', 'frontoffice_uri',
+                                  'cover_uri', 'ctime'])
 
 
 

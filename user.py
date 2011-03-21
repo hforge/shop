@@ -22,6 +22,7 @@ from datetime import datetime
 from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
 from itools.datatypes import Boolean, String, Unicode, DateTime, Integer
+from itools.datatypes import Email
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.uri import Path
@@ -41,6 +42,7 @@ from ikaaro.utils import generate_password
 from ikaaro.website_views import RegisterForm
 
 # Import from shop
+from csv_views import Export
 from datatypes import Civilite
 from products.models import get_real_datatype, get_default_widget_shop
 from products.enumerate import Datatypes
@@ -126,6 +128,7 @@ class CustomerSchema(OrderedTable):
                                issubclass(context.view.__class__, RegisterForm))
         for record in self.handler.get_records_in_order():
             name = get_value(record, 'name')
+            title = get_value(record, 'title')
             show_on_register = get_value(record, 'show_on_register')
             show_on_register = get_value(record, 'show_on_register')
             if is_on_register_view is True and show_on_register is False:
@@ -137,6 +140,7 @@ class CustomerSchema(OrderedTable):
             default = get_value(record, 'default')
             if default:
                 datatype.default = datatype.decode(default)
+            datatype.title = title
             schema[name] = datatype
         return schema
 
@@ -217,6 +221,9 @@ class ShopUser(User, DynamicFolder):
 
     # Base schema / widgets
     base_schema = merge_dicts(User.get_metadata_schema(),
+                              lastname=Unicode(title=MSG(u'Lastname')),
+                              firstname=Unicode(title=MSG(u'Firstname')),
+                              email=Email(title=MSG(u'Email')),
                               ctime=DateTime(title=MSG(u'Register date')),
                               last_time=DateTime(title=MSG(u'Last connection')),
                               gender=Civilite(title=MSG(u"Civility")),
@@ -277,10 +284,11 @@ class ShopUser(User, DynamicFolder):
 
     @classmethod
     def get_metadata_schema(cls):
-        return merge_dicts(DynamicFolder.get_metadata_schema(),
-                           cls.base_schema,
-                           is_enabled=Boolean,
-                           user_group=UserGroup_Enumerate)
+        return merge_dicts(
+            DynamicFolder.get_metadata_schema(),
+            cls.base_schema,
+            is_enabled=Boolean(title=MSG(u'Enabled')),
+            user_group=UserGroup_Enumerate(title=MSG(u'Group')))
 
 
     @classmethod
@@ -438,15 +446,37 @@ class ShopUser(User, DynamicFolder):
     ###############################
     # Computed schema
     ###############################
-    computed_schema = {'nb_orders': Integer(title=MSG(u'Nb orders'))}
+    computed_schema = {'nb_orders': Integer(title=MSG(u'Nb orders (even cancel)')),
+                       'address': Unicode(title=MSG(u'Last known user address'))}
 
     @property
     def nb_orders(self):
+        # XXX Orders states
         root = self.get_root()
         queries = [PhraseQuery('format', 'order'),
                    PhraseQuery('customer_id', self.name)]
         return len(root.search(AndQuery(*queries)))
 
+
+    @property
+    def address(self):
+        # XXX We should have a default address ?
+        context = get_context()
+        shop = get_shop(context.resource)
+        addresses_h = shop.get_resource('addresses').handler
+        records = addresses_h.search(user=self.name)
+        if len(records) == 0:
+            return None
+        record = records[0]
+        addresse = addresses_h.get_record_namespace(record.id)
+        addr = u''
+        for key in ['address_1', 'address_2', 'zipcode', 'town', 'country']:
+            try:
+                addr += u'%s ' % addresse[key]
+            except Exception:
+                # XXX Why ?
+                addr += u'XXX'
+        return addr
 
 
 
@@ -454,7 +484,7 @@ class ShopUserFolder(UserFolder):
 
     class_id = 'users'
     class_version = '20100823'
-    backoffice_class_views = ['view', 'addresses_book', 'last_connections']
+    backoffice_class_views = ['view', 'export', 'addresses_book', 'last_connections']
     frontoffice_class_views = ['public_view']
 
     @property
@@ -478,7 +508,20 @@ class ShopUserFolder(UserFolder):
                         access='is_allowed_to_add',
                         specific_document='../shop/customers/authentification_logs')
 
+    #############################
+    # Export
+    #############################
 
+    export = Export(
+        export_resource=ShopUser,
+        access='is_allowed_to_edit',
+        file_columns=['name', 'is_enabled', 'user_group', 'gender',
+                      'firstname', 'lastname', 'email', 'phone1',
+                      'phone2', 'address', 'nb_orders', 'ctime'])
+
+    #############################
+    # Api
+    #############################
 
     def set_user(self, email=None, password=None):
         context = get_context()

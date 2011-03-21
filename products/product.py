@@ -867,7 +867,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         site_root = shop.get_site_root()
         base_uri = shop.get_property('shop_uri')
         end_uri = site_root.get_pathto(self)
-        return get_reference(base_uri).resolve(end_uri)
+        return str(get_reference(base_uri).resolve(end_uri))
 
 
     @property
@@ -879,7 +879,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
             return None
         base_uri = shop.get_property('shop_uri')
         end_uri = site_root.get_pathto(cover)
-        return '%s/;download' % get_reference(base_uri).resolve(end_uri)
+        return str('%s/;download' % get_reference(base_uri).resolve(end_uri))
 
 
     #######################
@@ -928,7 +928,6 @@ class Products(ShopFolder):
     browse_content = Products_View()
     stock = Products_Stock()
     new_product = Product_NewProduct()
-
 
     def can_paste(self, source):
         return isinstance(source, Product)

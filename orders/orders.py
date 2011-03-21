@@ -46,6 +46,7 @@ from messages import Messages_TableResource
 from orders_views import Order_Manage, OrdersView
 from orders_views import ShopPayments_EndViewTop
 from workflow import order_workflow
+from shop.csv_views import Export
 from shop.datatypes import Users_Enumerate
 from shop.products.taxes import TaxesEnumerate
 from shop.folder import ShopFolder
@@ -157,10 +158,10 @@ class Order(WorkflowAware, ShopFolder):
     def get_metadata_schema(cls):
         schema = ShopFolder.get_metadata_schema()
         schema.update(WorkflowAware.get_metadata_schema())
-        schema['total_price'] = Decimal
+        schema['total_price'] = Decimal(title=MSG(u'Total price'))
         schema['shipping_price'] = Decimal
         schema['total_weight'] = Decimal
-        schema['creation_datetime'] = ISODateTime
+        schema['creation_datetime'] = ISODateTime(title=MSG(u'Creation date'))
         schema['customer_id'] = Users_Enumerate
         schema['payment_mode'] = PaymentWaysEnumerate
         schema['shipping'] = ShippingWaysEnumerate
@@ -625,7 +626,7 @@ class Orders(ShopFolder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')
-    class_views = ['view']
+    class_views = ['view', 'export']
     class_version = '20091127'
 
     # Views
@@ -635,6 +636,13 @@ class Orders(ShopFolder):
     def get_document_types(self):
         return [Order]
 
+    #############################
+    # Export
+    #############################
+    export = Export(
+        export_resource=Order,
+        access='is_allowed_to_edit',
+        file_columns=['name', 'state', 'total_price', 'creation_datetime'])
 
 
 # Register catalog fields
