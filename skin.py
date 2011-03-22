@@ -181,7 +181,8 @@ class ShopSkin(NeutralSkin):
         dynamic_property.resource = self
         namespace['dynamic_property'] = dynamic_property
         # Canonical uri XXX (see bug #1144)
-        namespace['canonical_uri'].path.endswith_slash = True
+        if site_root != here:
+            namespace['canonical_uri'].path.endswith_slash = True
         # Modules
         shop_module = ModuleLoader()
         shop_module.context = context
