@@ -240,7 +240,7 @@ class ProductModel(ShopFolder):
             value = real_value = resource.get_dynamic_property(name, dynamic_schema)
             # Real value is used to keep the enumerate value
             # corresponding to the options[{'name': xxx}]
-            datatype = get_real_datatype(schema_handler, record)
+            datatype = dynamic_schema[name]
             if value != None and hasattr(datatype, 'render'):
                 value = datatype.render(value, context)
             # Build kw
