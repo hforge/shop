@@ -200,7 +200,6 @@ class Category_View(BrowseFormBatchNumeric):
     def sort_and_batch(self, resource, context, results):
         shop = get_shop(context.resource)
         start = context.query['batch_start']
-        context = get_context()
         # Get sort by from query or from shop default configuration
         size = shop.get_property('categories_batch_size')
         if context.uri.query.has_key('sort_by'):
