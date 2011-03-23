@@ -44,16 +44,16 @@ class SubCategoriesBox_View(Box_View):
         site_root_abspath = site_root.get_abspath()
         shop = site_root.get_resource('shop')
         categories = site_root.get_resource('categories')
-        categories_abspath = str(categories.get_abspath())
+        categories_abspath = str(site_root_abspath.resolve2('categories'))
         show_nb_products = resource.get_property('show_nb_products')
         show_first_category = resource.get_property('show_first_category')
         show_second_level = resource.get_property('show_second_level')
-        here_real_abspath = str(here.get_abspath())
-        here_parent_abspath = here.parent.get_abspath()
+        here_abspath = here.get_abspath()
+        here_real_abspath = str(here_abspath)
+        here_parent_abspath = here_abspath.resolve2('..')
         current_level = here_real_abspath.count('/')
 
         if here.metadata.format == 'category':
-            here_abspath = str(here.get_abspath())
             # Max level deploy = count '/' + 1
             # here_abspath at level 1 does not contain '/'
             here_abspath_level = here_abspath.count('/')
@@ -63,10 +63,11 @@ class SubCategoriesBox_View(Box_View):
                 # Special case for the product, here_* values are compute
                 # with here = parent category
                 parent_category = here.parent
-                here_abspath = str(parent_category.get_abspath())
+                parent_category_abspath = parent_category.get_abspath()
+                here_abspath = str(parent_category_abspath)
                 here_abspath_level = here_abspath.count('/')
                 max_level_deploy = here_abspath_level + 1
-                here_parent_abspath = parent_category.parent.get_abspath()
+                here_parent_abspath = parent_category_abspath.resolve2('..')
             else:
                 # Tweak here_abspath
                 here_abspath = categories_abspath
