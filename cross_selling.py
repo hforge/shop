@@ -106,12 +106,16 @@ class CrossSellingTable(ResourcesOrderedTable):
         # Categories query
         mode_categories = table.get_property('categories')
         if mode_categories == 'current_category':
-            query_categorie = OrQuery(
-                    *[ PhraseQuery('parent_paths', str(x.get_abspath()))
-                        for x in categories ])
+            query_categorie = [ PhraseQuery('parent_paths', str(x.get_abspath()))
+                                for x in categories ]
+            if len(query_categorie) > 1:
+                query_categorie = OrQuery(*query_categorie)
+            else:
+                query_categorie = query_categorie[0]
             query.append(query_categorie)
         elif mode_categories == 'one_category':
-            query.append(PhraseQuery('parent_paths', table.get_property('specific_category')))
+            query.append(PhraseQuery('parent_paths',
+                                     table.get_property('specific_category')))
         # Show reductions ?
         promotion = table.get_property('show_product_with_promotion')
         if promotion in ('0', '1'):
@@ -159,7 +163,9 @@ class CrossSellingTable(ResourcesOrderedTable):
         if sort == 'random':
             # Random selection
             results = root.search(AndQuery(*query))
-            brains = list(results.get_documents())
+            # XXX It's not relevant to make a random cross selling
+            # with more than 1000 products
+            brains = list(results.get_documents(size=1000))
             shuffle(brains)
             for brain in brains[:products_quantity]:
                 yield root.get_resource(brain.abspath)
