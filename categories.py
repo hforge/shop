@@ -27,7 +27,6 @@ from itools.xml import xml_to_text
 from ikaaro.forms import XHTMLBody, TextWidget, ImageSelectorWidget, RTEWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.registry import get_register_fields
-from ikaaro.utils import get_base_path_query
 
 # Import from itws
 from itws.views import AutomaticEditView
@@ -150,7 +149,7 @@ class Category(ShopFolder):
         root = self.get_root()
         abspath = self.get_canonical_path()
         query = AndQuery(
-            get_base_path_query(str(abspath)),
+            PhraseQuery('parent_paths', str(abspath)),
             PhraseQuery('format', 'category'))
         return len(root.search(query))
 

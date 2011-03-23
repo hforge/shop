@@ -32,7 +32,6 @@ from itools.xml import XMLParser
 from ikaaro import messages
 from ikaaro.buttons import RenameButton, RemoveButton
 from ikaaro.forms import TextWidget
-from ikaaro.utils import get_base_path_query
 from ikaaro.views_new import NewInstance
 
 # Import from itws
@@ -168,7 +167,7 @@ class Category_View(BrowseFormBatchNumeric):
         shop = get_shop(resource)
         abspath = resource.get_canonical_path()
         query = [
-            get_base_path_query(str(abspath)),
+            PhraseQuery('parent_paths', str(abspath)),
             PhraseQuery('format', shop.product_class.class_id),
             PhraseQuery('workflow_state', 'public')]
         # Is buyable ?
