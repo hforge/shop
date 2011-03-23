@@ -92,8 +92,12 @@ class CrossSellingTable(ResourcesOrderedTable):
         query.append(NotQuery(q))
         # Excluded products query
         if excluded_products:
-            exclude_query = OrQuery(*[ PhraseQuery('abspath', str(abspath))
-                                       for abspath in excluded_products ])
+            exclude_query = [ PhraseQuery('abspath', str(abspath))
+                              for abspath in excluded_products ]
+            if len(exclude_query) > 1:
+                exclude_query = OrQuery(*exclude_query)
+            else:
+                exclude_query = exclude_query[0]
             query.append(NotQuery(exclude_query))
         # Filter on product title
         filter_text = table.get_property('filter_text')
@@ -110,10 +114,7 @@ class CrossSellingTable(ResourcesOrderedTable):
             query.append(PhraseQuery('parent_paths', table.get_property('specific_category')))
         # Show reductions ?
         promotion = table.get_property('show_product_with_promotion')
-        if promotion == '0':
-            query.append(PhraseQuery('has_reduction', False))
-        elif promotion == '1':
-            query.append(PhraseQuery('has_reduction', True))
+        query.append(PhraseQuery('has_reduction', bool(promotion)))
 
         # Product model
         product_model = table.get_property('product_model')
@@ -143,9 +144,14 @@ class CrossSellingTable(ResourcesOrderedTable):
 
         if products_quantity <= 0:
             return
-        query.append(
-            NotQuery(
-              OrQuery(*[ PhraseQuery('name', name) for name in names ])))
+
+        if names:
+            names_query = [ PhraseQuery('name', name) for name in names ]
+            if len(names_query) > 1:
+                names_query = OrQuery(*names_query)
+            else:
+                names_query = names_query[0]
+            query.append(NotQuery(names_query))
 
         # Complete results
         sort = table.get_property('sort')
