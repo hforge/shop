@@ -135,9 +135,8 @@ class ShopModule_Reviews_View(Feed_View):
 
     def get_items(self, resource, context, *args):
         abspath = resource.get_canonical_path()
-        base_path_query = get_base_path_query(str(abspath))
         query = AndQuery(
-                    base_path_query,
+                    PhraseQuery('parent_path', str(abspath)),
                     PhraseQuery('format', 'shop_module_a_review'))
         return context.root.search(query)
 
@@ -168,9 +167,8 @@ class ShopModule_AReport_NewInstance(NewInstance):
         context = get_context()
         root = context.root
         abspath = context.resource.get_canonical_path()
-        base_path_query = get_base_path_query(str(abspath))
         query = AndQuery(
-                    base_path_query,
+                    PhraseQuery('parent_path', str(abspath)),
                     PhraseQuery('format', 'shop_module_a_report'))
         search = root.search(query)
         id_report = len(search.get_documents()) + 1
@@ -243,7 +241,6 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
 
     def _get_current_reviews_query(self, context, form):
-        root = context.root
         if form['abspath']:
             product = context.root.get_resource(form['abspath'])
             abspath = product.get_canonical_path()
@@ -587,8 +584,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
 
     def get_images(self, context, nb_images=None):
         abspath = self.get_canonical_path()
-        base_path_query = get_base_path_query(str(abspath))
-        query = AndQuery(base_path_query,
+        query = AndQuery(PhraseQuery('parent_path', str(abspath)),
                          PhraseQuery('is_image', True))
         search = context.root.search(query)
         brains = search.get_documents()
@@ -671,7 +667,7 @@ class ShopModule_Review(ShopModule):
                     'viewboxes': {}}
         # XXX Should be in catalog for performances
         abspath = resource.get_canonical_path()
-        queries = [get_base_path_query(str(abspath)),
+        queries = [PhraseQuery('parent_path', str(abspath)),
                    PhraseQuery('workflow_state', 'public'),
                    PhraseQuery('format', 'shop_module_a_review')]
         search = context.root.search(AndQuery(*queries))
