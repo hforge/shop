@@ -25,7 +25,6 @@ from itools.web import get_context
 # Import from ikaaro
 from ikaaro.folder import Folder
 from ikaaro.registry import register_resource_class
-from ikaaro.utils import get_base_path_query
 
 # Import from itws
 from itws.bar import SideBarAware
@@ -104,7 +103,7 @@ class Shop_ProductSearch(Category_View):
         site_root = resource.get_site_root()
         shop = site_root.get_resource('shop')
         abspath = site_root.get_canonical_path()
-        query = [get_base_path_query(str(abspath)),
+        query = [PhraseQuery('parent_paths', str(abspath)),
                  PhraseQuery('format', shop.product_class.class_id),
                  PhraseQuery('workflow_state', 'public')]
         category = context.query['category']
