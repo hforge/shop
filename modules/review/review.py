@@ -702,7 +702,7 @@ class ShopModule_Review(ShopModule):
         query = [PhraseQuery('shop_module_review_author', resource.name),
                  PhraseQuery('workflow_state', 'public'),
                  PhraseQuery('format', 'shop_module_a_review')]
-        search = context.site_root.search_on_website(query)
+        search = context.root.search(AndQuery(*query))
         brains = list(search.get_documents(sort_by='mtime', reverse=True))
         nb_reviews = len(brains)
         # Get viewboxes

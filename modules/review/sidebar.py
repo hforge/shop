@@ -17,7 +17,7 @@
 # Import from itools
 from itools.datatypes import Boolean, Integer
 from itools.gettext import MSG
-from itools.xapian import PhraseQuery, RangeQuery
+from itools.xapian import AndQuery, PhraseQuery, RangeQuery
 
 # Import from ikaaro
 from ikaaro.forms import BooleanRadio, TextWidget
@@ -43,7 +43,7 @@ class ReviewBox_View(Box_View, Viewbox_View):
         queries = [PhraseQuery('format', 'shop_module_a_review'),
                    PhraseQuery('workflow_state', 'public'),
                    RangeQuery('shop_module_review_note', min_v, max_v)]
-        return context.site_root.search_on_website(queries)
+        return context.root.search(AndQuery(*queries))
 
 
     def get_nb_items_to_show(self, resource):

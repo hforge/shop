@@ -16,14 +16,12 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.xapian import AndQuery
 from itools.datatypes import Boolean
 from itools.gettext import MSG
 from itools.web import get_context
 
 # Import from ikaaro
 from ikaaro.registry import register_resource_class, register_document_type
-from ikaaro.utils import get_base_path_query
 from ikaaro.website import WebSite
 from ikaaro.wiki import WikiFolder
 
@@ -135,12 +133,6 @@ class ShopWebSite(NeutralWS):
         if skin is None:
             skin = self.get_resource('/ui/default_skin/')
         return skin
-
-
-    def search_on_website(self, queries):
-        abspath = self.get_canonical_path()
-        query = AndQuery(get_base_path_query(str(abspath)), *queries)
-        return self.parent.search(query)
 
 
     def is_allowed_to_view_for_authenticated(self, user, resource):

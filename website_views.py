@@ -25,7 +25,6 @@ from itools.xml import xml_to_text
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.forms import BooleanRadio, SelectWidget
-from ikaaro.utils import get_base_path_query
 
 # Import from itws
 from itws.ws_neutral_views import NeutralWS_RSS, NeutralWS_View, NeutralWS_Edit
@@ -99,10 +98,9 @@ class ShopWS_RSS(NeutralWS_RSS):
         # Add products
         site_root = resource.get_site_root()
         shop = site_root.get_resource('shop')
-        abspath = site_root.get_canonical_path()
+        # XXX Search only on website
         product_query = [PhraseQuery('format', shop.product_class.class_id),
-                         PhraseQuery('workflow_state', 'public'),
-                         get_base_path_query(str(abspath))]
+                         PhraseQuery('workflow_state', 'public')]
         return [ OrQuery(AndQuery(*query), AndQuery(*product_query)) ]
 
 

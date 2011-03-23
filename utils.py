@@ -29,7 +29,7 @@ from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.resource_views import DBResource_AddLink
-from ikaaro.utils import get_base_path_query, reduce_string
+from ikaaro.utils import reduce_string
 from ikaaro.website import WebSite
 
 # Import from pyPdf
@@ -57,9 +57,9 @@ def get_shop(resource):
 
 def get_module(resource, class_id):
     site_root = resource.get_site_root()
+    # XXX use parent_paths
     query = [PhraseQuery('is_shop_module', True),
-             PhraseQuery('format', class_id),
-             get_base_path_query(str(site_root.get_abspath()))]
+             PhraseQuery('format', class_id)]
 
     # Search
     root = site_root.parent

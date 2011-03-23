@@ -29,7 +29,6 @@ from ikaaro.forms import AutoForm, SelectWidget
 from ikaaro.forms import TextWidget
 from ikaaro.table_views import OrderedTable_View
 from ikaaro.table_views import Table_AddRecord, Table_EditRecord
-from ikaaro.utils import get_base_path_query
 
 # Import from shop
 from shop.enumerate_table import Enumerate_ListEnumerateTable
@@ -81,11 +80,9 @@ class ProductModelSchema_View(OrderedTable_View):
             table_h.del_record(id)
         # Search products
         root = context.root
-        site_root = context.resource.get_site_root()
         product_model = resource.parent.get_abspath()
-        abspath = site_root.get_canonical_path()
-        query = AndQuery(get_base_path_query(str(abspath)),
-                         PhraseQuery('product_model', str(product_model)))
+        # XXX Search only on website
+        query = PhraseQuery('product_model', str(product_model))
         results = root.search(query)
         for doc in results.get_documents():
             product = root.get_resource(doc.abspath)
