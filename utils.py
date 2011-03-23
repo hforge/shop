@@ -30,7 +30,6 @@ from itools.xml import XMLParser
 # Import from ikaaro
 from ikaaro.resource_views import DBResource_AddLink
 from ikaaro.utils import reduce_string
-from ikaaro.website import WebSite
 
 # Import from pyPdf
 from pyPdf import PdfFileWriter, PdfFileReader
@@ -52,7 +51,12 @@ def bool_to_img(value):
 
 
 def get_shop(resource):
-    return resource.get_site_root().get_resource('shop')
+    context = get_context()
+    shop = getattr(context, '_shop', None)
+    if shop is None:
+        shop = resource.get_site_root().get_resource('shop')
+        context._shop = shop
+    return shop
 
 
 def get_module(resource, class_id):
