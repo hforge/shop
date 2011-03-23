@@ -39,7 +39,7 @@ from ikaaro.forms import SelectWidget, SelectRadio, stl_namespaces
 from ikaaro.forms import BooleanRadio
 from ikaaro.messages import MSG_UNEXPECTED_MIMETYPE
 from ikaaro.registry import register_resource_class, register_field
-from ikaaro.utils import get_base_path_query, reduce_string
+from ikaaro.utils import reduce_string
 from ikaaro.views_new import NewInstance
 from ikaaro.webpage import WebPage
 from ikaaro.workflow import WorkflowAware
@@ -243,12 +243,11 @@ class ShopModule_AReview_NewInstance(NewInstance):
     def _get_current_reviews_query(self, context, form):
         if form['abspath']:
             product = context.root.get_resource(form['abspath'])
-            abspath = product.get_canonical_path()
+            abspath = product.get_canonical_path().resolve2('reviews')
         else:
             abspath = context.resource.get_canonical_path()
-        base_path_query = get_base_path_query(str(abspath))
         query = AndQuery(
-                    base_path_query,
+                    PhraseQuery('parent_path', str(abspath)),
                     PhraseQuery('format', 'shop_module_a_review'))
         return query
 
