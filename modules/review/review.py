@@ -666,7 +666,7 @@ class ShopModule_Review(ShopModule):
                     'product_abspath': resource.get_abspath(),
                     'viewboxes': {}}
         # XXX Should be in catalog for performances
-        abspath = resource.get_canonical_path()
+        abspath = reviews.get_canonical_path()
         queries = [PhraseQuery('parent_path', str(abspath)),
                    PhraseQuery('workflow_state', 'public'),
                    PhraseQuery('format', 'shop_module_a_review')]
