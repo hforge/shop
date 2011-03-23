@@ -135,8 +135,7 @@ class Category(ShopFolder):
         root = self.get_root()
         shop = get_shop(self)
         abspath = self.get_canonical_path()
-        base_path_query = get_base_path_query(str(abspath))
-        query = [base_path_query,
+        query = [PhraseQuery('parent_paths', str(abspath)),
                  PhraseQuery('format', shop.product_class.class_id)]
         if shop.get_property('hide_not_buyable_products') is True:
             context = get_context()
