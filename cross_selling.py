@@ -114,7 +114,8 @@ class CrossSellingTable(ResourcesOrderedTable):
             query.append(PhraseQuery('parent_paths', table.get_property('specific_category')))
         # Show reductions ?
         promotion = table.get_property('show_product_with_promotion')
-        query.append(PhraseQuery('has_reduction', bool(promotion)))
+        if promotion in ('0', '1'):
+            query.append(PhraseQuery('has_reduction', bool(promotion)))
 
         # Product model
         product_model = table.get_property('product_model')
