@@ -626,7 +626,7 @@ class Orders(ShopFolder):
 
     class_id = 'orders'
     class_title = MSG(u'Orders')
-    class_views = ['view', 'export']
+    class_views = ['view'] # 'export']
     class_version = '20091127'
 
     # Views
