@@ -139,7 +139,7 @@ class Export(STLForm):
                 row.set_values(line)
             except Exception:
                 context.message = ERROR(u'Error on line %s' % line)
-                continue#return
+                return
             table.append_row(row)
 
         body.append(table)

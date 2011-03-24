@@ -168,8 +168,10 @@ class Category(ShopFolder):
     #############################
     export = Export(export_resource=Product,
                     access='is_allowed_to_edit',
-                    file_columns=['reference', 'frontoffice_uri',
-                                  'cover_uri', 'ctime'])
+                    file_columns=['reference', 'state',
+                                  'frontoffice_uri', 'cover_uri',
+                                  'manufacturer', 'price_with_tax',
+                                  'description'])
 
 
 

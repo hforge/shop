@@ -859,7 +859,13 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     ## Computed fields
     #######################
     computed_schema = {'frontoffice_uri': String(title=MSG(u'Frontoffice link')),
-                       'cover_uri': String(title=MSG(u'Cover link'))}
+                       'cover_uri': String(title=MSG(u'Cover link')),
+                       'price_with_tax': Decimal(title=MSG(u'Price with tax'))}
+
+    @property
+    def price_with_tax(self):
+        return self.get_price_with_tax(with_reduction=True)
+
 
     @property
     def frontoffice_uri(self):
