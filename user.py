@@ -485,7 +485,6 @@ class ShopUserFolder(UserFolder):
     class_id = 'users'
     class_version = '20100823'
     backoffice_class_views = ['view', 'export', 'addresses_book', 'last_connections']
-    frontoffice_class_views = ['public_view']
 
     @property
     def class_views(self):
@@ -494,7 +493,10 @@ class ShopUserFolder(UserFolder):
         hostname = context.uri.authority
         if hostname[:6] == 'admin.' :
             return self.backoffice_class_views
-        return self.frontoffice_class_views
+        if hostname[:6] == 'www.aw':
+            # XXX Add a configurator for public profil
+            return ['public_view']
+        return []
 
 
     view = Customers_View()
