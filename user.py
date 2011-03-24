@@ -484,7 +484,7 @@ class ShopUserFolder(UserFolder):
 
     class_id = 'users'
     class_version = '20100823'
-    backoffice_class_views = ['view', 'addresses_book', 'last_connections'], #'export']
+    backoffice_class_views = ['view', 'addresses_book', 'last_connections'] #'export']
 
     @property
     def class_views(self):
