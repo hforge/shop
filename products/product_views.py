@@ -20,7 +20,7 @@ from datetime import datetime
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Email, Integer, String, Unicode, Boolean
+from itools.datatypes import Email, Integer, String, Unicode, DateTime
 from itools.gettext import MSG
 from itools.handlers import checkid
 from itools.uri import get_reference
@@ -328,7 +328,7 @@ class Product_Edit(AutoForm):
         # Save properties
         language = resource.get_content_language(context)
         for key, datatype in self.get_schema(resource, context).iteritems():
-            if key in ('ctime', 'category'):
+            if key in ('ctime', 'category', 'pub_datetime'):
                 continue
             elif issubclass(datatype, Unicode):
                 resource.set_property(key, form[key], language)
