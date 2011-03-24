@@ -333,7 +333,11 @@ class ShopUser(User, DynamicFolder):
 
 
     def get_public_title(self):
-        return self.get_dynamic_property('pseudo')
+        try:
+            return self.get_dynamic_property('pseudo')
+        except:
+            # XXX Fix that bug
+            return MSG(u'Unknow')
 
 
     def get_document_types(self):
