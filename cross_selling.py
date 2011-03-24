@@ -109,10 +109,9 @@ class CrossSellingTable(ResourcesOrderedTable):
             query_categorie = [ PhraseQuery('parent_paths', str(x.get_abspath()))
                                 for x in categories ]
             if len(query_categorie) > 1:
-                query_categorie = OrQuery(*query_categorie)
-            else:
-                query_categorie = query_categorie[0]
-            query.append(query_categorie)
+                query.append(OrQuery(*query_categorie))
+            elif len(query_categorie) == 1:
+                query.append(query_categorie[0])
         elif mode_categories == 'one_category':
             query.append(PhraseQuery('parent_paths',
                                      table.get_property('specific_category')))
