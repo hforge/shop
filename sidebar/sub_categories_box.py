@@ -54,6 +54,7 @@ class SubCategoriesBox_View(Box_View):
         current_level = here_real_abspath.count('/')
 
         if here.metadata.format == 'category':
+            here_abspath = str(here.get_abspath())
             # Max level deploy = count '/' + 1
             # here_abspath at level 1 does not contain '/'
             here_abspath_level = here_abspath.count('/')
