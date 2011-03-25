@@ -355,7 +355,11 @@ class DeclinationPricesWidget(Widget):
             if group['id'] != 'default':
                 prefix = '%s-' % group['id']
             widget_name = '%simpact_on_price' % prefix
-            value = context.resource.get_property(widget_name)
+            try:
+                value = context.resource.get_property(widget_name)
+            except:
+                # XXX Fix a bug
+                value = None
             group['widget'] = DeclinationPriceWidget(widget_name,
                                 prefix=prefix).to_html(None, value)
             namespace['groups'].append(group)
