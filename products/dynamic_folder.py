@@ -37,7 +37,8 @@ class DynamicProperty(dict):
         datatype = self.schema.get(key)
         if datatype is None:
             # XXX We have to log it
-            return MSG(u'Unknow')
+            unknow = MSG(u'Unknow')
+            return {'value': unknow, 'real_value': unknow}
         value = self.resource.get_dynamic_property(key, self.schema)
         real_value = value
         # Render
