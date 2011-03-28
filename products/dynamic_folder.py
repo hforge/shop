@@ -39,9 +39,12 @@ class DynamicProperty(dict):
             # XXX We have to log it
             return MSG(u'Unknow')
         value = self.resource.get_dynamic_property(key, self.schema)
+        real_value = value
+        # Render
         if value != None and hasattr(datatype, 'render'):
             value = datatype.render(value, self.context)
-        return value
+        return {'value': value,
+                'real_value': real_value}
 
 
 class DynamicFolder(ShopFolder):
