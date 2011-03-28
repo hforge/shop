@@ -493,6 +493,17 @@ class Customers_View(SearchTableFolder_View):
         ]
 
 
+    def get_table_columns(self, resource, context):
+        base = [('checkbox', None)]
+        shop = get_shop(resource)
+        if shop.get_property('registration_need_email_validation') is True:
+            return (base +
+                    self.table_columns +
+                    [('account_state', MSG(u'Mail confirmé'))])
+        return (base +
+                self.table_columns)
+
+
     def get_query_schema(self):
         return merge_dicts(SearchTableFolder_View.get_query_schema(self),
                            reverse=Boolean(default=True),
@@ -522,6 +533,12 @@ class Customers_View(SearchTableFolder_View):
                   <img src="/ui/backoffice/images/users.png"/>
                 </a>
                 """ % (item_brain.name, item_brain.name, item_brain.name))
+        elif column == 'account_state':
+            user = context.root.get_resource(item_brain.abspath)
+            if user.get_property('user_must_confirm'):
+                href = '/users/%s/;resend_confirmation' % item_brain.name
+                return MSG(u'Resend Confirmation'), href
+            return MSG(u'Active'), None
         # Super
         proxy = super(Customers_View, self)
         return proxy.get_item_value(resource, context, item, column)

@@ -25,7 +25,7 @@ from itools.datatypes import Boolean, String, Unicode, DateTime, Integer
 from itools.datatypes import Email
 from itools.gettext import MSG
 from itools.i18n import format_datetime
-from itools.uri import Path
+from itools.uri import Path, get_reference
 from itools.web import get_context
 from itools.xapian import AndQuery, PhraseQuery
 
@@ -447,6 +447,47 @@ class ShopUser(User, DynamicFolder):
                 'ctime': format_datetime(ctime, accept) if ctime else None, # XXX Why ?
                 'items': self.base_items + modules_items}
 
+
+    #############################
+    # Api
+    #############################
+    def send_confirm_url(self, context, email, subject, text, view):
+        # XXX We override send_confirm_url to send mail
+        # without setting subject with host, to use shop_uri
+        # and not backoffice_uri (Since webmaster click from backoffice uri)
+        # and to use good from_addr
+
+        # Set the confirmation key
+        if self.has_property('user_must_confirm'):
+            key = self.get_property('user_must_confirm')
+        else:
+            key = generate_password(30)
+            self.set_property('user_must_confirm', key)
+
+        # Build the confirmation link
+        shop = get_shop(context.resource)
+        base_uri = shop.get_property('shop_uri')
+        confirm_url = get_reference(base_uri)
+        path = '/users/%s/%s' % (self.name, view)
+        confirm_url.path = Path(path)
+        confirm_url.query = {'key': key, 'username': self.get_login_name()}
+        confirm_url = str(confirm_url)
+        text = text.gettext(uri=confirm_url)
+        # Get from_addr
+        site_root = context.site_root
+        if site_root.get_property('emails_from_addr'):
+            user_name = site_root.get_property('emails_from_addr')
+            user = self.get_resource('/users/%s' % user_name)
+            from_addr = user.get_title(), user.get_property('email')
+        else:
+            from_addr = context.server.smtp_from
+        # Subject
+        subject = u'[%s] %s' % (base_uri, subject.gettext())
+        # Send email
+        context.root.send_email(email, subject, from_addr=from_addr,
+                                text=text, subject_with_host=False)
+
+
     ###############################
     # Computed schema
     ###############################
@@ -528,7 +569,6 @@ class ShopUserFolder(UserFolder):
     #############################
     # Api
     #############################
-
     def set_user(self, email=None, password=None):
         context = get_context()
         shop = get_shop(context.resource)
