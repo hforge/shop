@@ -353,7 +353,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
 class ShopModule_AReview_View(STLView):
 
-    access = 'is_admin'
+    access = 'is_allowed_to_view'
     title = MSG(u'View')
     template = '/ui/modules/review/a_review.xml'
     styles = ['/ui/modules/review/style.css']
