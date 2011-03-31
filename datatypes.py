@@ -317,6 +317,15 @@ class FrenchDate(Date):
         return value.strftime('%d/%m/%Y')
 
 
+    @staticmethod
+    def is_valid(value):
+        if value and (value < datetime.date(1900,1,1)
+           or value > datetime.date(2100,1,1)):
+            return False
+        return True
+
+
+
 class PrettyFrenchDate(Date):
 
     days = {1: 'Lundi', 2: 'Mardi', 3: 'Mercredi', 4: 'Jeudi', 5: 'Vendredi',
