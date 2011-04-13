@@ -21,13 +21,15 @@ from decimal import Decimal as decimal
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Integer, Decimal
 from itools.gettext import MSG
-from itools.web import get_context
+from itools.web import get_context, ERROR
+from itools.xapian import AndQuery, PhraseQuery
 
 # Import from ikaaro
 from ikaaro import messages
 from ikaaro.forms import BooleanRadio, TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.resource_views import DBResource_Edit
+from ikaaro.utils import get_base_path_query
 from ikaaro.views_new import NewInstance
 
 # Import from shop
@@ -84,6 +86,19 @@ class Declination_Edit(DBResource_Edit):
     def action(self, resource, context, form):
         for key in self.schema.keys():
             resource.set_property(key, form[key])
+        # Check there's only one default declination
+        if form['is_default'] is True:
+            product = resource.parent
+            query = AndQuery(PhraseQuery('format', 'product-declination'),
+                             PhraseQuery('is_default', True),
+                             get_base_path_query(str(product.get_abspath())))
+            search = context.root.search(query)
+            if len(search) >= 1:
+                message = ERROR(u"There's already a default declination")
+                context.message = message
+                context.commit = False
+                return
+        # Ok
         context.message = messages.MSG_CHANGES_SAVED
 
 
@@ -174,6 +189,7 @@ class Declination(DynamicFolder):
             ht_price=self.parent.get_price_without_tax(id_declination=self.name, pretty=True),
             ttc_price=self.parent.get_price_with_tax(id_declination=self.name, pretty=True),
             # XXX Declination must be workflowaware
+            is_default=self.get_property('is_default'),
             workflow_state=self.parent.get_workflow_state(),
             stock_quantity=self.get_property('stock-quantity'))
 
@@ -229,3 +245,4 @@ class Declination(DynamicFolder):
 
 register_resource_class(Declination)
 register_field('declination_title', Unicode(is_indexed=True, is_stored=True))
+register_field('is_default', Boolean(is_indexed=True))
