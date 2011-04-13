@@ -79,7 +79,8 @@ class OrdersView(SearchTableFolder_View):
     batch_msg2 = MSG(u"There are {n} orders.")
 
     search_schema = {'name': String,
-                     'workflow_state': OrderStates_Enumerate(default='payment_ok')}
+                     'workflow_state': OrderStates_Enumerate(
+                                        default=['payment_ok'], multiple=True)}
     search_widgets = [TextWidget('name', title=MSG(u'Référence')),
                       OrdersWidget('workflow_state', title=MSG(u'State'))]
 

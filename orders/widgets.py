@@ -25,15 +25,12 @@ from ikaaro.forms import SelectRadio, stl_namespaces
 
 class OrdersWidget(SelectRadio):
 
-    template = list(XMLParser("""
+    template_multiple = list(XMLParser("""
         <table cellpadding="5" cellspacing="0">
           <tr stl:repeat="option options">
             <td>
-              <input type="radio" id="${id}-${option/name}" name="${name}"
-                value="${option/name}" checked="checked"
-                stl:if="option/selected"/>
-              <input type="radio" id="${id}-${option/name}" name="${name}"
-                value="${option/name}" stl:if="not option/selected"/>
+              <input type="checkbox" id="${id}-${option/name}" name="${name}"
+                value="${option/name}" checked="${option/selected}" />
             </td>
             <td>
               <label for="${id}-${option/name}">
