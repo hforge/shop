@@ -6348,7 +6348,7 @@ msgstr "Il y a {x} mois."
 
 #: ../utils.py:202
 msgid "{x} weeks ago."
-msgstr "Il y a {x} mois."
+msgstr "Il y a {x} semaines."
 
 #: ../ui/backoffice/widgets/taxes.xml.en:35
 msgctxt "table cell"
