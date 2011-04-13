@@ -203,7 +203,7 @@ def datetime_to_ago(a_datetime):
         return MSG(u'1 day ago.')
     elif delta < timedelta(days=8):
         return MSG(u'{x} days ago.').gettext(x=delta.days)
-    elif delta < timedelta(days=30*60):
+    elif delta < timedelta(days=30*7):
         x = delta.days / 7
         return MSG(u'{x} weeks ago.').gettext(x=x)
     x = delta.days / (7*30)
