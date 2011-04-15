@@ -30,7 +30,15 @@
           <td>
             <b>${tarification/title}</b>
             <a href="${tarification/tarif_edit}">> Edit tarification</a><br/>
-            ${tarification/description}
+            ${tarification/description}<br/>
+            <ul stl:if="tarification/models">
+              <li>
+                <h3>Only for this product models:</h3>
+              </li>
+              <li stl:repeat="model tarification/models">
+                ${model}
+              </li>
+            </ul>
           </td>
         </tr>
         <tr>

@@ -166,14 +166,20 @@ class Shippings_Details(STLView):
                     old_price = price
                 if len(prices) == 0:
                     continue
-                tarifications.append(
-                    {'name': tarification.name,
-                     'title': tarification.get_title(),
-                     'img': tarification.get_property('logo'),
-                     'is_free': tarification.get_property('is_free'),
-                     'prices': prices,
-                     'description': tarification.get_property('description'),
-                     'tarif_edit': tarif_edit})
+                kw = {
+                    'name': tarification.name,
+                    'models': [],
+                    'title': tarification.get_title(),
+                    'img': tarification.get_property('logo'),
+                    'is_free': tarification.get_property('is_free'),
+                    'prices': prices,
+                    'description': tarification.get_property('description'),
+                    'tarif_edit': tarif_edit}
+                models = tarification.get_property('only_this_models')
+                for model_abspath in models:
+                    model = context.root.get_resource(model_abspath)
+                    kw['models'].append(model.get_title())
+                tarifications.append(kw)
             zone_edit = '/shop/countries?zone=%i&search=' % zone.id
             has_tax = resource_zones.handler.get_record_value(zone, 'has_tax')
             tax_image = list(bool_to_img(has_tax))
