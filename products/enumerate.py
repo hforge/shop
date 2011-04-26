@@ -112,6 +112,7 @@ class Datatypes(Enumerate):
       {'name': 'pathdatatype', 'value': MSG(u'PathDataType')},
       {'name': 'image', 'value': MSG(u'Image')},
       {'name': 'product', 'value': MSG(u'Shop product')},
+      {'name': 'birthday', 'value': MSG(u'Birthday')},
       {'name': 'email',   'value': MSG(u'Email')},
       {'name': 'unicode-one-per-line', 'value': MSG(u'Unicode (1 Per line)')},
       {'name': 'html',   'value': MSG(u'HTML')},

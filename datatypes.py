@@ -325,6 +325,33 @@ class FrenchDate(Date):
         return True
 
 
+class Birthday_Datatype(Date):
+
+    @staticmethod
+    def decode(data):
+        if not data:
+            return None
+        context = get_context()
+        day = context.get_form_value('day', type=Integer)
+        month = context.get_form_value('month', type=Integer)
+        year = context.get_form_value('year', type=Integer)
+        return datetime.date(year, month, day)
+
+
+    @staticmethod
+    def encode(value):
+        context = get_context()
+        day = context.get_form_value('day', type=Integer)
+        month = context.get_form_value('month', type=Integer)
+        year = context.get_form_value('year', type=Integer)
+        value = datetime.date(year, month, day)
+        return value.strftime('%Y-%m-%d')
+
+
+    @staticmethod
+    def is_valid(value):
+        return True
+
 
 class PrettyFrenchDate(Date):
 
@@ -404,6 +431,45 @@ class UE_VAT_Datatype(String):
                      )$"""
         prog = re.compile(regexp, re.X) # Verbose
         return prog.match(value) != None
+
+
+class Days(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        options = []
+        for d in range(1, 32):
+            options.append({'name': d, 'value': str(d)})
+        return options
+
+
+class Months(Enumerate):
+
+    options = [
+      {'name': 1, 'value': MSG(u'January')},
+      {'name': 2, 'value': MSG(u'February')},
+      {'name': 3, 'value': MSG(u'March')},
+      {'name': 4, 'value': MSG(u'April')},
+      {'name': 5, 'value': MSG(u'May')},
+      {'name': 6, 'value': MSG(u'June')},
+      {'name': 7, 'value': MSG(u'July')},
+      {'name': 8, 'value': MSG(u'August')},
+      {'name': 9, 'value': MSG(u'September')},
+      {'name': 10, 'value': MSG(u'October')},
+      {'name': 11, 'value': MSG(u'November')},
+      {'name': 12, 'value': MSG(u'December')}]
+
+
+class Years(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        options = []
+        for d in range(1920, datetime.date.today().year):
+            options.append({'name': d, 'value': str(d)})
+        return options
+
+
 
 
 

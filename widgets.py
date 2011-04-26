@@ -15,15 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from itools
+from itools.datatypes import Integer
 from itools.gettext import MSG
+from itools.web import get_context
 from itools.xml import XMLParser
 
 # Import from ikaaro
 from ikaaro.forms import SelectRadio, Widget, stl_namespaces
 from ikaaro.forms import DateWidget, RTEWidget, BooleanCheckBox
-from ikaaro.forms import MultilineWidget
+from ikaaro.forms import MultilineWidget, SelectWidget
 
 # Import from shop
+from datatypes import Days, Months, Years
 from registry import register_widget
 
 
@@ -216,4 +219,24 @@ class SIRETWidget(Widget):
         """, stl_namespaces))
 
 
+class BirthdayWidget(Widget):
+
+    template = list(XMLParser("""
+        ${day} ${month} ${year}
+        <input type="hidden" name="${name}" value="1"/>
+        """, stl_namespaces))
+
+    def get_namespace(self, datatype, value):
+        namespace = Widget.get_namespace(self, datatype, value)
+        context = get_context()
+        day = context.get_form_value('day', type=Integer)
+        month = context.get_form_value('month', type=Integer)
+        year = context.get_form_value('year', type=Integer)
+        namespace['day'] = SelectWidget('day').to_html(Days, day)
+        namespace['month'] = SelectWidget('month').to_html(Months, month)
+        namespace['year'] = SelectWidget('year').to_html(Years, year)
+        return namespace
+
+
 register_widget('siret',  MSG(u'SIRET Widget'), SIRETWidget)
+register_widget('birthday',  MSG(u'Birthday Widget'), BirthdayWidget)
