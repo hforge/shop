@@ -226,6 +226,7 @@ class Shop_ViewCart(STLForm):
 class Shop_Register(RegisterForm):
 
     access = True
+    meta = [('robots', 'noindex, follow', None)]
 
     base_schema = {
         'email': Email(mandatory=True),
