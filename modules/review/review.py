@@ -160,7 +160,7 @@ class ShopModule_AReport_NewInstance(NewInstance):
             MultilineWidget('description', title=MSG(u'Your report')),
             BooleanCheckBox_CGU('cgu',
               title=MSG(u'Conditions of use'),
-              link='./cgu', description=cgu_description)]
+              link='../cgu', description=cgu_description)]
 
 
     def get_new_resource_name(self, form):
