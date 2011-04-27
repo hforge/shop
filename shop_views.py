@@ -23,42 +23,44 @@ from urllib import urlopen
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Email, Integer, String, Unicode
 from itools.datatypes import Boolean, MultiLinesTokens
+from itools.datatypes import Email, Integer, String, Unicode
 from itools.gettext import MSG
 from itools.i18n import format_date
-from itools.uri import get_reference, get_uri_path
 from itools.rss import RSSFile
-from itools.web import BaseView, STLForm, STLView, ERROR, INFO
+from itools.uri import get_reference, get_uri_path
+from itools.web import get_context, BaseView, STLForm, STLView, ERROR, INFO
 from itools.xapian import AndQuery, PhraseQuery
 from itools.xml import XMLError, XMLParser
 
 # Import from ikaaro
+from ikaaro.buttons import Button
+from ikaaro.forms import AutoForm, BooleanRadio
+from ikaaro.forms import MultilineWidget, ImageSelectorWidget
 from ikaaro.forms import SelectRadio, SelectWidget
 from ikaaro.forms import TextWidget, PasswordWidget
-from ikaaro.forms import MultilineWidget, ImageSelectorWidget
-from ikaaro.forms import BooleanRadio
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.views import CompositeForm
 from ikaaro.website_views import RegisterForm
 
+# Import from itws
+from itws.views import ImproveAutoForm
 
 # Import from shop
 from addresses import Addresses_Enumerate
 from addresses_views import Addresses_Book, Addresses_AddAddress
 from addresses_views import Addresses_EditAddress
-from datatypes import Civilite, ImagePathDataType
-from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
-from utils import get_shop, format_price
 from cart import ProductCart
 from countries import CountriesEnumerate
+from datatypes import Civilite, ImagePathDataType
+from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
 from modules import ModuleLoader
-from payments import PaymentWaysEnumerate
 from payments.payments_views import Payments_ChoosePayment
 from products.declination import Declination
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
 from utils import datetime_to_ago, get_shippings_details, get_skin_template
+from utils import get_shop, format_price
 
 
 CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
@@ -520,6 +522,12 @@ class Shop_Login(STLForm):
             goto = context.get_referrer()
             return context.come_back(message, goto)
 
+        # Check user has confirm is registration
+        if user.get_property('user_must_confirm'):
+            message = ERROR(u"""Your account has not been confirmed.""")
+            goto = '/;user_confirm_registration'
+            return context.come_back(message, goto)
+
         # We log authentification
         if resource != context.root:
             shop = get_shop(resource)
@@ -549,10 +557,133 @@ class Shop_Login(STLForm):
 
 
 
-#-------------------------------------
-# Step3: Addresses
-#    -> User choose/edit/create addresses
-#-------------------------------------
+class Shop_UserConfirm(ImproveAutoForm):
+
+    access = 'is_not_authenticated'
+    title = MSG(u'Confirm your registration')
+
+    actions = [Button(access='is_allowed_to_edit',
+                      name='confirm_key', title=MSG(u'Valid your key'))]
+    schema = {'email': Email(mandatory=True),
+              'activation_key': String(mandatory=True)}
+    widgets = [TextWidget('email', title=MSG(u'Your email adress')),
+               TextWidget('activation_key', title=MSG(u'Activation key'))]
+
+
+    def _get_user(self, resource, context, email):
+        results = context.root.search(username=email)
+        if len(results) == 0:
+            return None
+        user = results.get_documents()[0]
+        user = resource.get_resource('/users/%s' % user.name)
+        return user
+
+
+    def get_namespace(self, resource, context):
+        proxy = super(Shop_UserConfirm, self)
+        namespace = proxy.get_namespace(resource, context)
+
+        confirm_msg = MSG(u'You have not yet confirmed your registration. '
+                      u'To confirm it, please fill your activation key below')
+        required_msg = namespace['required_msg']
+        namespace['required_msg'] = (list(XMLParser(confirm_msg.gettext().encode('utf8'))) +
+                                     list(XMLParser('<br/>')) +
+                                     list(namespace['required_msg']))
+        return namespace
+
+
+    def action_confirm_key(self, resource, context, form):
+        # Get the email address
+        form['email'] = form['email'].strip()
+        email = form['email']
+
+        # Get the user with the given login name
+        user = self._get_user(resource, context, email)
+        if user is None:
+            message = ERROR(u'There is not a user identified as "{username}"',
+                      username=email)
+            context.message = message
+            return
+
+        # Check register key
+        must_confirm = user.get_property('user_must_confirm')
+        if not must_confirm:
+            # Already confirmed
+            message = ERROR(u'Your account has already been confirmed')
+            context.message = message
+            return
+        elif form['activation_key'] != must_confirm:
+            message = ERROR(u'Your activation key is wrong')
+            context.message = message
+            return
+
+        user.del_property('user_must_confirm')
+
+        # Ok
+        message = INFO(u'Operation successful! Welcome.')
+        return context.come_back(message, goto='./')
+
+
+
+class Shop_UserSendConfirmation(ImproveAutoForm):
+
+    access = 'is_not_authenticated'
+    title = MSG(u'Request your registration key')
+
+    actions = [Button(access='is_allowed_to_edit',
+                      name='send_registration_key',
+                      title=MSG(u'Receive your key'))]
+    schema = {'email': Email(mandatory=True)}
+    widgets = [TextWidget('email', title=MSG(u'Your email address'))]
+
+    def _get_user(self, resource, context, email):
+        results = context.root.search(username=email)
+        if len(results) == 0:
+            return None
+        user = results.get_documents()[0]
+        user = resource.get_resource('/users/%s' % user.name)
+        return user
+
+
+    def get_namespace(self, resource, context):
+        proxy = super(Shop_UserSendConfirmation, self)
+        namespace = proxy.get_namespace(resource, context)
+
+        confirm_msg = MSG(u'Fill this form to receive a mail with your activation key')
+        required_msg = namespace['required_msg']
+        namespace['required_msg'] = (list(XMLParser(confirm_msg.gettext().encode('utf8'))) +
+                                     list(XMLParser('<br/>')) +
+                                     list(namespace['required_msg']))
+        return namespace
+
+
+    def action_send_registration_key(self, resource, context, form):
+        email = form['email']
+        # Get the user with the given login name
+        user = self._get_user(resource, context, email)
+        if user is None:
+            message = ERROR(u'There is not a user identified as "{username}"',
+                      username=email)
+            context.message = message
+            return
+
+        # Resend confirmation
+        user.send_confirmation(context, email)
+        # Ok
+        msg = MSG(u'Your activation key has been send to your mailbox {email}')
+        context.message = msg.gettext(email=email)
+        return
+
+
+
+class Shop_UserConfirmRegistration(CompositeForm):
+
+    access = 'is_not_authenticated'
+
+    subviews = [Shop_UserConfirm(),
+                Shop_UserSendConfirmation()]
+
+
 
 class Shop_ChooseAddress(STLForm):
 

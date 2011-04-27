@@ -36,6 +36,7 @@ from manufacturers import Manufacturers
 from search import ShopSearch
 from shop import Shop
 from shop_views import Shop_Register, Shop_Login
+from shop_views import Shop_UserConfirmRegistration
 from shop_utils_views import Cart_Viewbox
 from sidebar import CategorySidebar, ProductSidebar
 from utils_views import RedirectPermanent
@@ -76,6 +77,7 @@ class ShopWebSite(NeutralWS):
     register = Shop_Register()
     login = Shop_Login()
     unauthorized = Shop_Login()
+    user_confirm_registration = Shop_UserConfirmRegistration()
 
     # Compatibility
     rss = last_news_rss = ShopWS_RSS()
@@ -140,6 +142,11 @@ class ShopWebSite(NeutralWS):
             resource.get_property('must_be_authentificated')):
             return self.is_authenticated(user, resource)
         return self.is_allowed_to_view(user, resource)
+
+
+    def is_not_authenticated(self, user, resource=None):
+        proxy = super(ShopWebSite, self)
+        return not proxy.is_authenticated(user, resource)
 
 
 register_resource_class(ShopWebSite)
