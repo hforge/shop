@@ -227,6 +227,15 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
     def get_widgets(self, resource, context):
         cgu_description = MSG(u"I'm aggree with the conditions general of use")
+        if context.query['abspath']:
+            # on review module
+            review_module = resource
+        else:
+            # on product review
+            review_module = get_module(resource, ShopModule_Review.class_id)
+
+        cgu = review_module.get_resource('cgu')
+        cgu_link = context.get_link(cgu)
         return [
             HiddenWidget('abspath', title=None),
             TextWidget('title', title=MSG(u'Review title')),
@@ -237,7 +246,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
             #FilesWidget('images', title=MSG(u'Images')),
             BooleanCheckBox_CGU('cgu',
               title=MSG(u'Conditions of use'),
-              link='./cgu', description=cgu_description)]
+              link=cgu_link, description=cgu_description)]
 
 
     def _get_current_reviews_query(self, context, form):
