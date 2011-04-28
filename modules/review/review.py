@@ -293,9 +293,10 @@ class ShopModule_AReview_NewInstance(NewInstance):
     #    form = NewInstance._get_form(self, resource, context)
         # Check images
         image = form['images'] # XXX not yet multiple
-        filename, mimetype, body = image
-        if mimetype.startswith('image/') is False:
-            raise FormError, MSG_UNEXPECTED_MIMETYPE(mimetype=mimetype)
+        if image:
+            filename, mimetype, body = image
+            if mimetype.startswith('image/') is False:
+                raise FormError, MSG_UNEXPECTED_MIMETYPE(mimetype=mimetype)
 
         return form
 
@@ -339,8 +340,9 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
         # Add images
         image = form['images'] # XXX not yet multiple
-        image = review_module.create_new_image(context, image)
-        metadata.set_property('images', str(child.get_pathto(image)))
+        if image:
+            image = review_module.create_new_image(context, image)
+            metadata.set_property('images', str(child.get_pathto(image)))
 
         # XXX Alert webmaster
         if state == 'private':
