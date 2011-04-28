@@ -35,6 +35,7 @@ from itools.xml import XMLError, XMLParser
 
 # Import from ikaaro
 from ikaaro.buttons import Button
+from ikaaro.datatypes import Password
 from ikaaro.forms import AutoForm, BooleanRadio
 from ikaaro.forms import MultilineWidget, ImageSelectorWidget
 from ikaaro.forms import SelectRadio, SelectWidget
@@ -585,7 +586,6 @@ class Shop_UserConfirm(ImproveAutoForm):
 
         confirm_msg = MSG(u'You have not yet confirmed your registration. '
                       u'To confirm it, please fill your activation key below')
-        required_msg = namespace['required_msg']
         namespace['required_msg'] = (list(XMLParser(confirm_msg.gettext().encode('utf8'))) +
                                      list(XMLParser('<br/>')) +
                                      list(namespace['required_msg']))
@@ -618,10 +618,16 @@ class Shop_UserConfirm(ImproveAutoForm):
             return
 
         user.del_property('user_must_confirm')
+        # We log-in user
+        username = str(user.name)
+        crypted = user.get_property('password')
+        cookie = Password.encode('%s:%s' % (username, crypted))
+        context.set_cookie('__ac', cookie, path='/')
+        context.user = user
 
         # Ok
         message = INFO(u'Operation successful! Welcome.')
-        return context.come_back(message, goto='./')
+        return context.come_back(message, goto='/users/%s' % user.name)
 
 
 
