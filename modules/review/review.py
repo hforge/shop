@@ -36,7 +36,7 @@ from ikaaro.folder import Folder
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import MultilineWidget, HiddenWidget, TextWidget
 from ikaaro.forms import SelectWidget, SelectRadio, stl_namespaces
-from ikaaro.forms import BooleanRadio
+from ikaaro.forms import BooleanRadio, FileWidget
 from ikaaro.messages import MSG_UNEXPECTED_MIMETYPE
 from ikaaro.registry import register_resource_class, register_field
 from ikaaro.utils import reduce_string
@@ -211,7 +211,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
         'description': Unicode(mandatory=True),
         'advantages': Unicode,
         'disadvantages': Unicode,
-        #'images': FileDataType(multiple=True),
+        'images': FileDataType(multiple=False),
         'cgu': Boolean(mandatory=True)})
 
     styles = ['/ui/modules/review/style.css']
@@ -243,7 +243,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
             MultilineWidget('description', title=MSG(u'Your review')),
             TextWidget('advantages', title=MSG(u'Advantages')),
             TextWidget('disadvantages', title=MSG(u'Disadvantages')),
-            #FilesWidget('images', title=MSG(u'Images')),
+            FileWidget('images', title=MSG(u'Images')),
             BooleanCheckBox_CGU('cgu',
               title=MSG(u'Conditions of use'),
               link=cgu_link, description=cgu_description)]
@@ -291,11 +291,11 @@ class ShopModule_AReview_NewInstance(NewInstance):
             raise FormError, ERROR(u'You already have filled a review.')
 
     #    form = NewInstance._get_form(self, resource, context)
-    #    # Check images
-    #    for image in form['images']:
-    #        filename, mimetype, body = image
-    #        if mimetype.startswith('image/') is False:
-    #            raise FormError, MSG_UNEXPECTED_MIMETYPE(mimetype=mimetype)
+        # Check images
+        image = form['images'] # XXX not yet multiple
+        filename, mimetype, body = image
+        if mimetype.startswith('image/') is False:
+            raise FormError, MSG_UNEXPECTED_MIMETYPE(mimetype=mimetype)
 
         return form
 
@@ -338,15 +338,9 @@ class ShopModule_AReview_NewInstance(NewInstance):
             metadata.set_property(key, form[key])
 
         # Add images
-        #for image in form['images']:
-        #    filename, mimetype, body = image
-        #    name, type, language = FileName.decode(filename)
-        #    cls = Image
-        #    kw = {'format': mimetype,
-        #          'filename': filename,
-        #          'extension': type,
-        #          'state': 'public'}
-        #    cls.make_resource(cls, child, name, body, **kw)
+        image = form['images'] # XXX not yet multiple
+        image = review_module.create_new_image(context, image)
+        metadata.set_property('images', str(child.get_pathto(image)))
 
         # XXX Alert webmaster
         if state == 'private':
@@ -536,7 +530,8 @@ class ShopModule_AReview(WorkflowAware, Folder):
                            remote_ip=String,
                            author=String,
                            advantages=Unicode,
-                           disadvantages=Unicode)
+                           disadvantages=Unicode,
+                           images=String)
 
 
     def _get_catalog_values(self):
@@ -591,20 +586,18 @@ class ShopModule_AReview(WorkflowAware, Folder):
 
 
     def get_images(self, context, nb_images=None):
-        abspath = self.get_canonical_path()
-        query = AndQuery(PhraseQuery('parent_path', str(abspath)),
-                         PhraseQuery('is_image', True))
-        search = context.root.search(query)
-        brains = search.get_documents()
-        if nb_images:
-            brains = brains[:nb_images]
+        path = self.get_property('images')
+        if not path:
+            return []
+        image = self.get_resource(path, soft=True)
+        if image is None:
+            return []
         images = []
-        for brain in brains:
-            image = context.root.get_resource(brain.abspath)
-            images.append({'src': context.get_link(image),
-                           'title': image.get_title()})
+        images.append({'src': context.get_link(image)})
         return images
 
+
+    # XXX links
 
 
 class ShopModule_Reviews(MultilingualProperties, Folder):
@@ -629,7 +622,7 @@ class ShopModule_Review(ShopModule):
     class_title = MSG(u'Review')
     class_description = MSG(u"Product Review")
     class_views = ['list_reviews', 'list_reporting', 'edit', 'cgu']
-    __fixed_handlers__ = ['cgu']
+    __fixed_handlers__ = ['cgu', 'images']
 
     item_schema = {
       'areview_default_state': States(mandatory=True, default='private'),
@@ -653,6 +646,30 @@ class ShopModule_Review(ShopModule):
         kw = {'title': {'en': 'CGU'},
               'state': 'public'}
         WebPage._make_resource(WebPage, folder, '%s/cgu' % name, **kw)
+        Folder._make_resource(Folder, folder, '%s/images' % name)
+
+
+    # helper
+    def create_new_image(self, context, image):
+        images = self.get_resource('images')
+        query = [ PhraseQuery('parent_path', str(images.get_canonical_path())),
+                  PhraseQuery('is_image', True) ]
+        root = context.root
+        results = root.search(AndQuery(*query))
+        if len(results) == 0:
+            name = '0'
+        else:
+            doc = results.get_documents(sort_by='name', reverse=True)[0]
+            name = int(doc.name) + 1
+
+        filename, mimetype, body = image
+        _name, type, language = FileName.decode(filename)
+        cls = Image
+        kw = {'format': mimetype,
+              'filename': filename,
+              'extension': type,
+              'state': 'public'}
+        return self.make_resource(cls, images, name, body, **kw)
 
 
     def render(self, resource, context):

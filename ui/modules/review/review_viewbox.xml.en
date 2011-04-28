@@ -38,7 +38,7 @@
     <br/>
     <div stl:repeat="image images" class="thumb">
       <a href="${image/src}/;download" rel="fancybox">
-        <img src="${image/src}/;thumb?width=50&amp;height=50" title="${image/title}"/>
+        <img src="${image/src}/;thumb?width=50&amp;height=50"/>
       </a>
     </div>
   </div>
