@@ -165,11 +165,15 @@ class ShopModule_AReport_NewInstance(NewInstance):
 
     def get_widgets(self, resource, context):
         cgu_description = MSG(u"I'm agree with the conditions general of use")
+        review_module = get_module(resource, ShopModule_Review.class_id)
+        cgu = review_module.get_resource('cgu')
+        cgu_link = context.get_link(cgu)
+
         return [
             MultilineWidget('description', title=MSG(u'Your report')),
             BooleanCheckBox_CGU('cgu',
               title=MSG(u'Conditions of use'),
-              link='../cgu', description=cgu_description)]
+              link=cgu_link, description=cgu_description)]
 
 
     def get_new_resource_name(self, form):
@@ -236,7 +240,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
 
 
     def get_widgets(self, resource, context):
-        cgu_description = MSG(u"I'm aggree with the conditions general of use")
+        cgu_description = MSG(u"I'm agree with the conditions general of use")
         if context.query['abspath']:
             # on review module
             review_module = resource
