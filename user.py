@@ -51,6 +51,8 @@ from user_views import ShopUser_EditAccount, ShopUser_EditGroup
 from user_views import ShopUser_AddAddress, ShopUser_EditAddress
 from user_views import ShopUser_OrdersView, ShopUser_OrderView, ShopUser_Viewbox
 from user_views import Customers_View, ShopUsers_PublicView, AuthentificationLogs_View
+from user_views import Shop_UserConfirmRegistration
+from user_views import Shop_UserSendConfirmation
 from user_views import ShopUser_Manage
 from datatypes import UserGroup_Enumerate
 from addresses_views import Addresses_Book
@@ -208,6 +210,10 @@ class ShopUser(User, DynamicFolder):
     edit_group = ShopUser_EditGroup()
     viewbox = ShopUser_Viewbox()
 
+    # Confirm registration
+    confirm_registration = Shop_UserConfirmRegistration()
+    send_confirmation_view = Shop_UserSendConfirmation()
+
     # Orders views
     orders_view = ShopUser_OrdersView()
     order_view = ShopUser_OrderView()
@@ -363,9 +369,13 @@ class ShopUser(User, DynamicFolder):
             self.set_property(key, value)
 
 
-    confirmation_txt = MSG(u"To confirm your identity, click the link:"
-                           u"\n"
-                           u"\n {uri}")
+    confirmation_txt = MSG(
+        u"To finalize your inscription you have to confirm your identity "
+        u"by clicking this link:"
+        u"\n"
+        u"\n {uri}\n"
+        u"\n"
+        u"(Your identity confirmation key is {key})")
 
     def send_register_confirmation(self, context, need_email_validation=False):
         # Get group
@@ -384,7 +394,7 @@ class ShopUser(User, DynamicFolder):
             confirm_url.query = {'key': key, 'username': self.get_login_name()}
             confirm_url = str(confirm_url)
             text += '\n\n'
-            text += self.confirmation_txt.gettext(uri=confirm_url)
+            text += self.confirmation_txt.gettext(uri=confirm_url, key=key)
 
         # Send mail
         context.root.send_email(to_addr=self.get_property('email'),
@@ -472,7 +482,7 @@ class ShopUser(User, DynamicFolder):
         confirm_url.path = Path(path)
         confirm_url.query = {'key': key, 'username': self.get_login_name()}
         confirm_url = str(confirm_url)
-        text = text.gettext(uri=confirm_url)
+        text = text.gettext(uri=confirm_url, key=key)
         # Get from_addr
         site_root = context.site_root
         if site_root.get_property('emails_from_addr'):

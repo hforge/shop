@@ -16,7 +16,7 @@
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Unicode
+from itools.datatypes import Boolean, String, Unicode, Email
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.web import STLView, STLForm, INFO, ERROR
@@ -24,11 +24,16 @@ from itools.xapian import PhraseQuery, AndQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
+from ikaaro.buttons import Button
+from ikaaro.datatypes import Password
 from ikaaro.forms import AutoForm, TextWidget, BooleanRadio, SelectWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.user_views import User_EditAccount
 from ikaaro.table_views import Table_View
 from ikaaro.views import BrowseForm
+
+# Import from itws
+from itws.views import ImproveAutoForm
 
 # Import from shop
 from addresses_views import Addresses_EditAddress, Addresses_AddAddress
@@ -584,3 +589,153 @@ class ShopUser_Viewbox(STLView):
 
     def get_namespace(self, resource, context):
         return resource.get_namespace(context)
+
+
+
+
+class Shop_UserConfirmRegistration(ImproveAutoForm):
+
+    access = True
+    title = MSG(u'Confirm your registration')
+
+    actions = [Button(access='is_allowed_to_edit',
+                      name='confirm_key',
+                      title=MSG(u'Confirm my registration'))]
+    schema = {'username': Email(mandatory=True),
+              'key': String(mandatory=True)}
+    widgets = [TextWidget('username', title=MSG(u'Your email address')),
+               TextWidget('key',
+                          title=MSG(u'Activation key (received by mail)'))]
+
+    def get_value(self, resource, context, name, datatype):
+        if name in ('username', 'key'):
+            return context.get_form_value(name)
+        proxy = super(Shop_UserConfirmRegistration, self)
+        return proxy.get_value(resource, context, name, datatype)
+
+
+    def _get_user(self, resource, context, email):
+        results = context.root.search(username=email)
+        if len(results) == 0:
+            return None
+        user = results.get_documents()[0]
+        user = resource.get_resource('/users/%s' % user.name)
+        return user
+
+
+    def get_namespace(self, resource, context):
+        proxy = super(Shop_UserConfirmRegistration, self)
+        namespace = proxy.get_namespace(resource, context)
+
+        confirm_msg = MSG(u"""
+          You have not yet confirmed your registration.<br/>
+          To confirm it, please click on the confirmation link
+          included on the registration confirmation email.<br/>
+          You can also fill your email address and your activation
+          key (received on the mail) in the following form.<br/>
+          If you havn't received your registration key,
+          <a href=";send_confirmation_view">
+            you can receive it again by clicking here.
+          </a>
+          """)
+        namespace['required_msg'] = (list(XMLParser(confirm_msg.gettext().encode('utf8'))) +
+                                     list(XMLParser('<br/>')) +
+                                     list(namespace['required_msg']))
+        return namespace
+
+
+    def action_confirm_key(self, resource, context, form):
+        # Get the email address
+        form['username'] = form['username'].strip()
+        email = form['username']
+
+        # Get the user with the given login name
+        user = self._get_user(resource, context, email)
+        if user is None:
+            message = ERROR(u'There is no user identified as "{username}"',
+                      username=email)
+            context.message = message
+            return
+
+        # Check register key
+        must_confirm = user.get_property('user_must_confirm')
+        if not must_confirm:
+            # Already confirmed
+            message = ERROR(u'Your account has already been confirmed')
+            context.message = message
+            return
+        elif form['key'] != must_confirm:
+            message = ERROR(u'Your activation key is wrong')
+            context.message = message
+            return
+
+        user.del_property('user_must_confirm')
+        # We log-in user
+        username = str(user.name)
+        crypted = user.get_property('password')
+        cookie = Password.encode('%s:%s' % (username, crypted))
+        context.set_cookie('__ac', cookie, path='/')
+        context.user = user
+
+        # Ok
+        message = INFO(u'Operation successful! Welcome.')
+        return context.come_back(message, goto='/users/%s' % user.name)
+
+
+
+
+class Shop_UserSendConfirmation(ImproveAutoForm):
+
+    access = True
+    title = MSG(u'Request your registration key')
+
+    actions = [Button(access='is_allowed_to_edit',
+                      name='send_registration_key',
+                      title=MSG(u'Receive your key'))]
+    schema = {'email': Email(mandatory=True)}
+    widgets = [TextWidget('email', title=MSG(u'Your email address'))]
+
+    def _get_user(self, resource, context, email):
+        results = context.root.search(username=email)
+        if len(results) == 0:
+            return None
+        user = results.get_documents()[0]
+        user = resource.get_resource('/users/%s' % user.name)
+        return user
+
+
+    def get_namespace(self, resource, context):
+        proxy = super(Shop_UserSendConfirmation, self)
+        namespace = proxy.get_namespace(resource, context)
+
+        confirm_msg = MSG(u"""Fill this form to receive a mail with the link
+                              to activate your account""")
+        namespace['required_msg'] = (list(XMLParser(confirm_msg.gettext().encode('utf8'))) +
+                                     list(XMLParser('<br/>')) +
+                                     list(namespace['required_msg']))
+        return namespace
+
+
+    def action_send_registration_key(self, resource, context, form):
+        email = form['email']
+        # Get the user with the given login name
+        user = self._get_user(resource, context, email)
+        if user is None:
+            message = ERROR(u'There is no user identified as "{username}"',
+                      username=email)
+            return context.come_back(message,
+                                     goto='./;confirm_registration')
+
+        # Resend confirmation
+        must_confirm = user.get_property('user_must_confirm')
+        if not must_confirm:
+            # Already confirmed
+            message = ERROR(u'Your account has already been confirmed')
+            return context.come_back(message, goto='/')
+
+        # Ok
+        user.send_confirmation(context, email)
+        message = MSG(u'Your activation key has been sent to your mailbox')
+        return context.come_back(message,
+                                 goto='./;confirm_registration')
+
