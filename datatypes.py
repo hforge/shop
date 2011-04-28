@@ -328,8 +328,8 @@ class FrenchDate(Date):
 class Birthday_Datatype(Date):
 
     @staticmethod
-    def decode(data):
-        if not data:
+    def decode(value):
+        if not value:
             return None
         context = get_context()
         day = context.get_form_value('day', type=Integer)
@@ -344,6 +344,8 @@ class Birthday_Datatype(Date):
         day = context.get_form_value('day', type=Integer)
         month = context.get_form_value('month', type=Integer)
         year = context.get_form_value('year', type=Integer)
+        if not (day and month and year):
+            return None
         value = datetime.date(year, month, day)
         return value.strftime('%Y-%m-%d')
 
