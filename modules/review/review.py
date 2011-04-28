@@ -59,6 +59,15 @@ from shop.widgets import FilesWidget, BooleanCheckBox_CGU
 # XXX: Minimum size of review ?
 # XXX: Edition of sidebar do not works well
 
+
+class RecommandationEnumerate(Enumerate):
+
+    options = [
+        {'name': '0', 'value': MSG(u"I don't recommend")},
+        {'name': '1', 'value': MSG(u'I recommend')}]
+
+
+
 class NoteEnumerate(Enumerate):
 
     options = [
@@ -212,6 +221,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
         'advantages': Unicode,
         'disadvantages': Unicode,
         'images': FileDataType(multiple=False),
+        'recommended': RecommandationEnumerate,
         'cgu': Boolean(mandatory=True)})
 
     styles = ['/ui/modules/review/style.css']
@@ -244,6 +254,8 @@ class ShopModule_AReview_NewInstance(NewInstance):
             TextWidget('advantages', title=MSG(u'Advantages')),
             TextWidget('disadvantages', title=MSG(u'Disadvantages')),
             FileWidget('images', title=MSG(u'Images')),
+            SelectRadio('recommended', title=MSG(u'Recommendation'),
+                        has_empty_option=False, is_inline=True),
             BooleanCheckBox_CGU('cgu',
               title=MSG(u'Conditions of use'),
               link=cgu_link, description=cgu_description)]
@@ -335,6 +347,7 @@ class ShopModule_AReview_NewInstance(NewInstance):
         metadata.set_property('remote_ip', context.get_remote_ip())
         metadata.set_property('description', form['description'], language)
         metadata.set_property('note', int(form['note']))
+        metadata.set_property('recommended', form['recommended'])
         for key in ['advantages', 'disadvantages']:
             metadata.set_property(key, form[key])
 
@@ -514,14 +527,17 @@ class ShopModule_AReview(WorkflowAware, Folder):
                    'note': NoteEnumerate,
                    'advantages': Unicode,
                    'disadvantages': Unicode,
-                   'description': Unicode}
+                   'description': Unicode,
+                   'recommended': RecommandationEnumerate}
 
     edit_widgets = [
         TextWidget('title', title=MSG(u'Title')),
         NoteWidget('note', title=MSG(u'Note'), has_empty_option=False),
         TextWidget('advantages', title=MSG(u'Advantages')),
         TextWidget('disadvantages', title=MSG(u'Disadvantages')),
-        MultilineWidget('description', title=MSG(u'Your review'))]
+        MultilineWidget('description', title=MSG(u'Your review')),
+        SelectRadio('recommended', title=MSG(u'Recommendation'),
+                    has_empty_option=False, is_inline=True)]
 
     @classmethod
     def get_metadata_schema(cls):
@@ -533,7 +549,8 @@ class ShopModule_AReview(WorkflowAware, Folder):
                            author=String,
                            advantages=Unicode,
                            disadvantages=Unicode,
-                           images=String)
+                           images=String,
+                           recommended=RecommandationEnumerate)
 
 
     def _get_catalog_values(self):
@@ -569,6 +586,8 @@ class ShopModule_AReview(WorkflowAware, Folder):
         ctime = self.get_property('ctime')
         accept = context.accept_language
         namespace['ctime'] = format_datetime(ctime, accept)
+        # Recommendation
+        namespace['recommendation'] = bool(self.get_property('recommendation'))
 
         return namespace
 

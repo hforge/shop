@@ -9,11 +9,17 @@
     <span class="review-title" stl:if="title">${title}</span><br/>
 
     <span class="a-review-author" stl:if="not is_on_user_view">
-      Added on ${ctime}, by <a href="${author/href}" stl:if="author">${author/public_title}</a><br/>
+      Added on ${ctime}<br/>
     </span>
 
-    <span class="a-review-product" stl:if="not is_on_product_view">
-      Product: <a href="${product/link}">${product/title}</a><br/>
+    <span class="a-review-product">
+      <a stl:if="author" href="${author/href}">${author/public_title}</a>
+      <stl:inline stl:if="not author">This anonym user</stl:inline>
+      <stl:inline stl:if="recommendation">recommends</stl:inline>
+      <stl:inline stl:if="not recommendation">does not recommend</stl:inline>
+      <a stl:if="not is_on_product_view" href="${product/link}">${product/title}</a>
+      <stl:inline stl:if="is_on_product_view">it</stl:inline>
+      <br/>
     </span>
 
     <div class="advantages">
