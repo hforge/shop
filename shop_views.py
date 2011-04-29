@@ -251,9 +251,7 @@ class Shop_Register(RegisterForm):
          TextWidget('lastname', title=MSG(u"Lastname")),
          TextWidget('firstname', title=MSG(u"Firstname")),
          TextWidget('phone1', title=MSG(u"Phone number")),
-         TextWidget('phone2', title=MSG(u"Mobile"))]
-
-    password_widgets = [
+         TextWidget('phone2', title=MSG(u"Mobile")),
          PasswordWidget('password', title=MSG(u"Password")),
          PasswordWidget('password_check', title=MSG(u"Repeat password"))]
 
@@ -292,11 +290,6 @@ class Shop_Register(RegisterForm):
         # Phone mandatory ?
         p_mandatory = group.get_property('phone_is_mandatory_on_registration')
         base_schema['phone1'] = String(mandatory=p_mandatory)
-        # Hide password if email validation is required
-        shop = get_shop(resource)
-        if shop.get_property('registration_need_email_validation'):
-            del base_schema['password']
-            del base_schema['password_check']
 
         # Return schema
         return merge_dicts(base_schema,
@@ -306,10 +299,6 @@ class Shop_Register(RegisterForm):
 
     def get_widgets(self, resource, context):
         widgets = self.base_widgets[:]
-        # Hide password if email validation is required
-        shop = get_shop(resource)
-        if shop.get_property('registration_need_email_validation') is False:
-            widgets.extend(self.password_widgets)
         # Group widgets
         group = self.get_group(context)
         widgets.extend(group.get_dynamic_widgets())
@@ -347,19 +336,15 @@ class Shop_Register(RegisterForm):
         shop = get_shop(resource)
         root = context.root
         site_root = resource.get_site_root()
-        language = resource.get_content_language(context)
 
-        # Hide password if email validation is required
+        # Check the new password matches
+        password = form['password'].strip()
+        if password != form['password_check']:
+            context.message = ERROR(u"The two passwords are different.")
+            return
         if shop.get_property('registration_need_email_validation') is False:
-            # Check the new password matches
-            password = form['password'].strip()
-            if password != form['password_check']:
-                context.message = ERROR(u"The two passwords are different.")
-                return
             msg = MSG(u'Your inscription has been validaded.')
         else:
-            # password is defined later
-            password = None
             msg = MSG(u'Your inscription has been validaded, '
                       u'you will receive an email to confirm it.')
 
