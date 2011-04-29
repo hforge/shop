@@ -685,7 +685,7 @@ class ShopModule_Review(ShopModule):
             name = '0'
         else:
             doc = results.get_documents(sort_by='name', reverse=True)[0]
-            name = int(doc.name) + 1
+            name = str(int(doc.name) + 1)
 
         filename, mimetype, body = image
         _name, type, language = FileName.decode(filename)
