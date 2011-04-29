@@ -116,14 +116,14 @@ class Shop_ProductSearch(Category_View):
                                             else word[:-1])
                 plain_text = OrQuery(
                                 # By reference
-                                PhraseQuery('reference', word.upper()), #encode('utf-8')), #.upper()),
+                                #PhraseQuery('reference', word.upper()), #encode('utf-8')), #.upper()),
                                 # On product
                                 PhraseQuery('title', word),
                                 PhraseQuery('description', word),
                                 PhraseQuery('data', word),
                                 PhraseQuery('text', word),
                                 # XXX Hack manufacturer
-                                PhraseQuery('manufacturer', checkid(word)),
+                                #PhraseQuery('manufacturer', checkid(word)),
                                 # Alternative
                                 PhraseQuery('title', alternative),
                                 PhraseQuery('description', alternative),
