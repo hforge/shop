@@ -2993,7 +2993,7 @@ msgstr "Accueil"
 
 #: ../modules/review/review.py:66
 msgid "I don't recommend"
-msgstr ""
+msgstr "Je ne recommande pas"
 
 #: ../ui/backoffice/login.xml.en:22 ../ui/shop/shop_login.xml.en:33
 msgctxt "link"
