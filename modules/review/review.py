@@ -591,7 +591,7 @@ class ShopModule_AReview(WorkflowAware, Folder):
         accept = context.accept_language
         namespace['ctime'] = format_datetime(ctime, accept)
         # Recommendation
-        namespace['recommendation'] = bool(self.get_property('recommendation'))
+        namespace['recommendation'] = bool(self.get_property('recommended'))
 
         return namespace
 
