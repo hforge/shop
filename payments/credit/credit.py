@@ -79,6 +79,20 @@ class CreditPayment(PaymentWay):
         return credit
 
 
+    def get_credit_namespace_available_for_user(self, user_name):
+        ns = []
+        users_credit = self.get_resource('users-credit').handler
+        results = users_credit.search(user=user_name)
+        if len(results) == 0:
+            return ns
+        get_value = users_credit.get_record_value
+        for record in results:
+            ns.append({'user': get_value(record, 'user'),
+                       'description': get_value(record, 'description'),
+                       'amount': get_value(record, 'amount')})
+        return ns
+
+
     def create_payment(self, context, payment):
         # Add the payment by credit
         # XXX We have to check if credit >= amount
