@@ -37,13 +37,13 @@ from wishlist_views import WishList_NewInstance
 from wishlist_views import ShopModule_WishListView, ShopModule_WishList_Edit
 from wishlist_views import WishList_View, WishList_Edit, WishList_Donate
 from wishlist_views import ShopModule_WishList_PaymentsEndViewTop
-from wishlist_views import WishList_Administrate
+from shop.cc import Observable
 from shop.payments.credit import CreditPayment
 from shop.utils import get_shop
 
 
 
-class WishList(AccessControl, ShopFolder):
+class WishList(Observable, AccessControl, ShopFolder):
     """
     XXX module not finalized.
     TODO:
@@ -54,12 +54,11 @@ class WishList(AccessControl, ShopFolder):
 
     class_id = 'wishlist'
     class_title = MSG(u'A wishlist')
-    class_views = ['view', 'edit', 'administrate', 'donate']
+    class_views = ['view', 'edit', 'donate']
 
     view = WishList_View()
     edit = WishList_Edit()
     donate = WishList_Donate()
-    administrate = WishList_Administrate()
     new_instance = WishList_NewInstance()
 
     add_image = CurrentFolder_AddImage()
@@ -68,9 +67,9 @@ class WishList(AccessControl, ShopFolder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
+                           Observable.class_schema,
                            owner=String,
                            ctime=DateTime,
-                           emails=String(multiple=True),
                            data=XHTMLBody)
 
 
@@ -96,9 +95,10 @@ class WishList(AccessControl, ShopFolder):
         # Is invited  ?
         if user and isinstance(resource, WishList):
             is_allowed_to_edit = self.is_allowed_to_edit(user, resource)
-            email = user.get_property('email')
-            is_invited = email in resource.get_property('emails')
-            return is_invited or is_allowed_to_edit
+            for cc in resource.get_property('cc_list'):
+                if user.name == cc['username']:
+                    return True
+            return is_allowed_to_edit
         return AccessControl.is_allowed_to_view(self, user, resource)
 
 
@@ -127,6 +127,9 @@ class ShopModule_WishList(ShopFolder):
     add_image = CurrentFolder_AddImage()
     end_view_top = ShopModule_WishList_PaymentsEndViewTop()
 
+    subject = MSG(u'A gift has been made to your wishlist')
+    text = MSG("{user_made_gift_title} has added ${amount}€ to your wishlist.")
+
     def get_document_types(self):
         return [WishList]
 
@@ -147,13 +150,15 @@ class ShopModule_WishList(ShopFolder):
         ref = payments_table.get_record_value(record, 'ref')
         # Get name of user that made the gift
         user_made_gift = payments_table.get_record_value(record, 'user')
+        user_made_gift = context.root.get_user(user_made_gift)
+        user_made_gift_title = user_made_gift.get_title()
         # Get wishlist oner to credit money
         wishlist = self.get_resource(ref)
         owner = wishlist.get_property('owner')
         # Create a descript
-        description = MSG(u'Gift made by user {user_name} ({user_title})')
-        description = description.gettext(user_name=user_made_gift,
-                          user_title=context.root.get_user_title(owner))
+        description = MSG(u'Gift made by {title}')
+        description = description.gettext(
+                          user_made_gift_title=user_made_gift_title)
         # Add amount to credit available for user
         payments = get_shop(context.resource).get_resource('payments')
         credit_payment_way = list(payments.search_resources(cls=CreditPayment))[0]
@@ -161,6 +166,15 @@ class ShopModule_WishList(ShopFolder):
         users_credit.add_new_record({'user': owner,
                                      'amount': amount,
                                      'description': description})
+        # Send an email to inform user
+        owner_email = owner.get_property('email')
+        subject = self.subject.gettext()
+        text = self.text.gettext(user_made_gift_title=user_made_gift_title,
+                                 amount=amount)
+        context.root.send_email(owner_email, subject, text=text,
+                                subject_with_host=True)
+
+
 
 
 register_resource_class(ShopModule_WishList)

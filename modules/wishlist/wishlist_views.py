@@ -100,12 +100,10 @@ class WishList_Edit(DBResource_Edit):
 
     schema = {'title': Unicode,
               'description': Unicode,
-              'emails': String,
               'data': XHTMLBody}
 
     widgets = [TextWidget('title', title=MSG(u'Title of your wishlist')),
                MultilineWidget('description', title=MSG(u'Short description')),
-               MultilineWidget('emails', title=MSG(u'E-mail of people to invite')),
                RTEWidget('data', title=MSG(u"Presentation of your wishlist"))]
 
 
@@ -113,22 +111,13 @@ class WishList_Edit(DBResource_Edit):
         language = resource.get_content_language(context)
         if name == 'data':
             return resource.get_property(name, language)
-        elif name == 'emails':
-            emails = resource.get_property('emails')
-            return '\n'.join(emails)
         return DBResource_Edit.get_value(self, resource, context, name,
                                          datatype)
 
 
     def action(self, resource, context, form):
         for key in self.schema:
-            if key == 'emails':
-                emails = form['emails']
-                emails = [ x.strip() for x in emails.splitlines() ]
-                emails = [ x for x in emails if x ]
-                resource.set_property('emails', emails)
-            else:
-                resource.set_property(key, form[key])
+            resource.set_property(key, form[key])
 
         # Come back
         return context.come_back(messages.MSG_CHANGES_SAVED, goto='./')
@@ -144,28 +133,21 @@ class WishList_View(STLView):
     def get_namespace(self, resource, context):
         ac = resource.get_access_control()
         is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
-        return {'title': resource.get_property('title'),
-                'data': resource.get_property('data'),
-                'is_allowed_to_edit': is_allowed_to_edit}
-
-
-class WishList_Administrate(STLView):
-
-    title = MSG(u'Informations')
-    access = 'is_allowed_to_edit'
-    template = '/ui/modules/wishlist/wishlist_administrate.xml'
-
-    def get_namespace(self, resource, context):
+        owner_name = resource.get_property('owner')
+        owner_resource = context.root.get_user(owner_name)
+        owner = {'title': owner_resource.get_title,
+                 'im_owner': owner_name == context.user.name,
+                 'link': context.get_link(owner_resource)}
         payments = get_shop(resource).get_resource('payments')
         credit = list(payments.search_resources(cls=CreditPayment))[0]
-        owner = resource.get_property('owner')
-        amount_available = credit.get_credit_available_for_user(owner)
-        emails = resource.get_property('emails')
+        amount_available = credit.get_credit_available_for_user(owner_name)
+        credits = credit.get_credit_namespace_available_for_user(owner_name)
         return {'title': resource.get_property('title'),
-                'description': resource.get_property('description'),
-                'nb_emails': len(emails),
+                'owner': owner,
                 'amount_available': amount_available,
-                'user': context.root.get_user_title(owner)}
+                'credits': credits,
+                'data': resource.get_property('data'),
+                'is_allowed_to_edit': is_allowed_to_edit}
 
 
 
