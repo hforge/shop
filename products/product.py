@@ -147,7 +147,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Images folder
         ImagesFolder._make_resource(ImagesFolder, folder,
                                     '%s/images' % name, body='',
-                                    title={'en': 'Images'})
+                                    title={'en': u'Images'})
         # Order images table
         PhotoOrderedTable._make_resource(PhotoOrderedTable, folder,
                                          '%s/order-photos' % name,
