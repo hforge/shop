@@ -19,7 +19,7 @@ from decimal import Decimal as decimal
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Unicode, Decimal, String
+from itools.datatypes import Boolean, Unicode, Decimal, String
 from itools.gettext import MSG
 from itools.web import STLView, get_context
 from itools.xapian import PhraseQuery
@@ -36,6 +36,7 @@ from shop.feed_views import Feed_View
 from shop.payments.payments_views import Payment_Widget
 from shop.payments.credit import CreditPayment
 from shop.utils import get_shop
+from shop.widgets import BooleanCheckBox_CGU
 
 
 class WishList_Donate(AutoForm):
@@ -71,10 +72,11 @@ class WishList_NewInstance(NewInstance):
     title = MSG(u'Create a wishlist')
 
     schema = merge_dicts(NewInstance.schema,
-                         description=Unicode)
+                         cgu=Boolean(mandatory=True))
     widgets = [TextWidget('title', title=MSG(u'Title of your wishlist')),
-               MultilineWidget('description', title=MSG(u'Short description'))]
+               BooleanCheckBox_CGU('cgu', title=MSG(u'Conditions of use'))]
 
+    submit_value = MSG(u'Create my wishlist')
 
     def get_new_resource_name(self, form):
         # XXX Send an email to administrators. (To prevent errors of module)
@@ -99,11 +101,9 @@ class WishList_Edit(DBResource_Edit):
     access = 'is_allowed_to_edit'
 
     schema = {'title': Unicode,
-              'description': Unicode,
               'data': XHTMLBody}
 
     widgets = [TextWidget('title', title=MSG(u'Title of your wishlist')),
-               MultilineWidget('description', title=MSG(u'Short description')),
                RTEWidget('data', title=MSG(u"Presentation of your wishlist"))]
 
 

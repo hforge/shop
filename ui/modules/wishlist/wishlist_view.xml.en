@@ -17,8 +17,7 @@
     Add a description and photos here, <a href="./;edit">by editing your wishlist</a>
   </div>
 
-  <hr style="margin: 20px 0"/>
-  <a href="./;donate" class="button wishlist-button">Click here to make a donation</a>
+  <a href="./;donate" class="wishlist-button">Click here to make a donation</a>
 
   <div class="clear"/>
 

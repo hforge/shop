@@ -190,6 +190,9 @@ class UnicodeOnePerLineWidget(MultilineWidget):
 
 class BooleanCheckBox_CGU(BooleanCheckBox):
 
+    description = MSG(u"I'm agree with the conditions general of use")
+    link = './cgu'
+
     template = list(XMLParser("""
         <input type="checkbox" id="${id}" name="${name}" value="1"
           checked="${is_selected}" />

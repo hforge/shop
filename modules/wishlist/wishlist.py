@@ -120,6 +120,7 @@ class ShopModule_WishList(ShopFolder):
     class_title = MSG(u'Module wishlist')
     class_views = ['view', 'new_resource?type=wishlist',
                    'edit', 'browse_content']
+    __fixed_handlers__ = ['cgu']
 
     view = ShopModule_WishListView()
     edit = ShopModule_WishList_Edit()
@@ -132,6 +133,14 @@ class ShopModule_WishList(ShopFolder):
 
     def get_document_types(self):
         return [WishList]
+
+
+    @staticmethod
+    def _make_resource(cls, folder, name, ctime=None, *args, **kw):
+        ShopFolder._make_resource(cls, folder, name, ctime=ctime, *args, **kw)
+        kw = {'title': {'en': 'CGU'},
+              'state': 'public'}
+        WebPage._make_resource(WebPage, folder, '%s/cgu' % name, **kw)
 
 
     @classmethod
