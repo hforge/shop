@@ -37,7 +37,7 @@ from itools.xml import XMLError, XMLParser
 from ikaaro.forms import BooleanRadio
 from ikaaro.forms import MultilineWidget, ImageSelectorWidget
 from ikaaro.forms import SelectRadio, SelectWidget
-from ikaaro.forms import TextWidget, PasswordWidget
+from ikaaro.forms import TextWidget, PasswordWidget, HiddenWidget
 from ikaaro.messages import MSG_CHANGES_SAVED
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.views import CompositeForm
@@ -228,7 +228,10 @@ class Shop_Register(RegisterForm):
     access = True
     meta = [('robots', 'noindex, follow', None)]
 
+    query_schema = {'goto': String}
+
     base_schema = {
+        'goto': String,
         'email': Email(mandatory=True),
         'lastname': Unicode(mandatory=True),
         'firstname': Unicode(mandatory=True),
@@ -246,6 +249,7 @@ class Shop_Register(RegisterForm):
         'country': CountriesEnumerate(mandatory=True)}
 
     base_widgets = [
+         HiddenWidget('goto', title=None),
          TextWidget('email', title=MSG(u"Email")),
          SelectRadio('gender', title=MSG(u"Civility"), has_empty_option=False),
          TextWidget('lastname', title=MSG(u"Lastname")),
@@ -270,6 +274,14 @@ class Shop_Register(RegisterForm):
             return context.uri.resolve(link)
         # RegisterForm
         return RegisterForm.GET(self, resource, context)
+
+
+    def get_value(self, resource, context, name, datatype):
+        proxy = super(Shop_Register, self)
+        if name == 'goto' and context.method == 'GET':
+            return context.query['goto']
+        value = proxy.get_value(resource, context, name, datatype)
+        return value
 
 
     def get_title(self, context):
@@ -429,7 +441,9 @@ class Shop_Register(RegisterForm):
 
         # Redirect
         shop = get_shop(resource)
-        if resource == shop:
+        if form['goto']:
+            goto = context.query['goto']
+        elif resource == shop:
             goto = './;addresses'
         elif resource.class_id == shop.product_class.class_id:
             goto = './'
@@ -474,6 +488,10 @@ class Shop_Login(STLForm):
             # so we have to show a progress bar
             progress = Shop_Progress(index=2).GET(resource, context)
         namespace['progress'] = progress
+        # Go back here on register ?
+        if getattr(resource, 'go_back_here_on_register', False) is True:
+            goto = context.uri.path
+            namespace['register_link'] += '?goto=%s' % goto
         return namespace
 
 
