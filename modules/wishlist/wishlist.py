@@ -27,13 +27,14 @@ from itools.web import get_context
 from ikaaro.access import AccessControl
 from ikaaro.forms import XHTMLBody
 from ikaaro.registry import register_resource_class
+from ikaaro.webpage import WebPage
 
 # Import from shop
 from shop.folder import ShopFolder
 from shop.utils import CurrentFolder_AddImage, CurrentFolder_AddLink
 
 # Import from module
-from wishlist_views import WishList_NewInstance
+from wishlist_views import ShopModule_NewWishlist
 from wishlist_views import ShopModule_WishListView, ShopModule_WishList_Edit
 from wishlist_views import WishList_View, WishList_Edit, WishList_Donate
 from wishlist_views import ShopModule_WishList_PaymentsEndViewTop
@@ -59,10 +60,10 @@ class WishList(Observable, AccessControl, ShopFolder):
     view = WishList_View()
     edit = WishList_Edit()
     donate = WishList_Donate()
-    new_instance = WishList_NewInstance()
 
     add_image = CurrentFolder_AddImage()
     add_link = CurrentFolder_AddLink()
+
 
     @classmethod
     def get_metadata_schema(cls):
@@ -118,18 +119,20 @@ class ShopModule_WishList(ShopFolder):
 
     class_id = 'shop-module-wishlist'
     class_title = MSG(u'Module wishlist')
-    class_views = ['view', 'new_resource?type=wishlist',
-                   'edit', 'browse_content']
+    class_views = ['view', 'edit', 'browse_content']
     __fixed_handlers__ = ['cgu']
 
     view = ShopModule_WishListView()
     edit = ShopModule_WishList_Edit()
+    new_wishlist = ShopModule_NewWishlist()
 
     add_image = CurrentFolder_AddImage()
     end_view_top = ShopModule_WishList_PaymentsEndViewTop()
 
     subject = MSG(u'A gift has been made to your wishlist')
     text = MSG("{user_made_gift_title} has added ${amount}€ to your wishlist.")
+
+    go_back_here_on_register = True
 
     def get_document_types(self):
         return [WishList]

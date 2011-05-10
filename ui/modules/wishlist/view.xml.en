@@ -8,21 +8,26 @@
 
   ${data}
 
-  <!-- My wishlist -->
   <h1>My wishlist</h1>
 
   <div stl:if="not is_authenticated">
-    <a href="./;login">Please log-in to see your wishlist.</a>
+    Please <a href="./;login">log-in</a> to see wishlists you have been invited.
   </div>
 
   <stl:block stl:if="is_authenticated">
     <div stl:if="not items">
-      There's no wishlist. You can <a href="./;new_resource?type=wishlist">create a new one</a>.
+      There's no wishlist. You can <a href="./;new_wishlist">create a new one</a>.
     </div>
     <div class="item" stl:repeat="item items">
       <h3><a href="${item/link}">${item/title}</a></h3>
       <p>${item/description}</p>
     </div>
   </stl:block>
+
+  <h1>Create a wishlist</h1>
+
+  <p>
+    To create a new wishlist <a href="./;new_wishlist">click here</a>.
+  </p>
 
 </stl:block>

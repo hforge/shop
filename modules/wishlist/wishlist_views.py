@@ -26,8 +26,8 @@ from itools.xapian import PhraseQuery
 
 # Import from ikaaro
 from ikaaro import messages
-from ikaaro.forms import MultilineWidget
 from ikaaro.forms import RTEWidget, TextWidget, XHTMLBody, AutoForm
+from ikaaro.registry import get_resource_class
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.views_new import NewInstance
 
@@ -66,7 +66,7 @@ class WishList_Donate(AutoForm):
 
 
 
-class WishList_NewInstance(NewInstance):
+class ShopModule_NewWishlist(NewInstance):
 
     access = 'is_authenticated'
     title = MSG(u'Create a wishlist')
@@ -93,6 +93,22 @@ class WishList_NewInstance(NewInstance):
         if wishlists:
             return str(int(wishlists[0].name) + 1)
         return '1'
+
+
+    def action(self, resource, context, form):
+        name = form['name']
+        title = form['title']
+
+        # Create the resource
+        cls = get_resource_class('wishlist')
+        child = cls.make_resource(cls, resource, name)
+        # The metadata
+        metadata = child.metadata
+        language = resource.get_content_language(context)
+        metadata.set_property('title', title, language=language)
+
+        goto = './%s/' % name
+        return context.come_back(messages.MSG_NEW_RESOURCE, goto=goto)
 
 
 

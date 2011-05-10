@@ -15,6 +15,7 @@
 
   <div id="data" stl:if="not data">
     Add a description and photos here, <a href="./;edit">by editing your wishlist</a>
+    <br/><br/><br/><br/>
   </div>
 
   <a href="./;donate" class="wishlist-button">Click here to make a donation</a>
