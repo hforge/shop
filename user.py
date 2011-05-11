@@ -311,6 +311,9 @@ class ShopUser(User, DynamicFolder):
             group = context.site_root.get_resource('shop/groups/default')
         else:
             group = self.get_group(context)
+        # By default we use default group
+        if group is None:
+            group = context.site_root.get_resource('shop/groups/default')
         return group.get_dynamic_schema()
 
 
@@ -592,7 +595,17 @@ class ShopUserFolder(UserFolder):
             user.set_property('email', email)
         if password is not None:
             user.set_password(password)
-
+        # Set default group
+        root = context.root
+        query = [PhraseQuery('format', 'user-group'),
+                 PhraseQuery('name', 'default')]
+        search = root.search(AndQuery(*query))
+        documents = search.get_documents()
+        group = documents[0]
+        group = root.get_resource(group.abspath)
+        user.set_property('user_group', str(group.get_abspath()))
+        user_is_enabled = group.get_property('user_is_enabled_when_register')
+        user.set_property('is_enabled', user_is_enabled)
         # Return the user
         return user
 
