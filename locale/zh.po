@@ -40,19 +40,19 @@ msgid ""
 "          "
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:136
+#: ../modules/wishlist/wishlist_views.py:137
 msgid ""
 "\n"
 "        Private presentation of your wishlist (Visible by invited people)"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:134
+#: ../modules/wishlist/wishlist_views.py:135
 msgid ""
 "\n"
 "        Public presentation of your wishlist (Visible by not invited people)"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:130
+#: ../modules/wishlist/wishlist_views.py:131
 msgid ""
 "\n"
 "        The public presentation will be shown to people not invited\n"
@@ -1014,6 +1014,14 @@ msgstr ""
 
 #: ../modules/wishlist/cc.py:34
 msgid "A message has been sent to confirm your identity."
+msgstr ""
+
+#: ../modules/wishlist/wishlist_views.py:88
+msgid "A new wishlist has been created"
+msgstr ""
+
+#: ../modules/wishlist/wishlist_views.py:89
+msgid "A new wishlist has been created in your shop"
 msgstr ""
 
 #: ../products/product.py:89
@@ -1987,11 +1995,6 @@ msgstr ""
 msgid "Creation date"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:87
-#: ../modules/wishlist/wishlist_views.py:88
-msgid "Creation of new wishlist"
-msgstr ""
-
 #: ../payments/credit/credit.py:51
 msgid "Credit amount"
 msgstr ""
@@ -2261,7 +2264,7 @@ msgstr ""
 #: ../payments/payments_views.py:213 ../payments/payments_views.py:262
 #: ../ui/backoffice/orders/order_facture.xml.en:84
 #: ../shipping/withdrawal.py:96 ../shipping/shipping_way_views.py:47
-#: ../shipping/shipping_way.py:76 ../modules/wishlist/wishlist_views.py:216
+#: ../shipping/shipping_way.py:76 ../modules/wishlist/wishlist_views.py:217
 #: ../payments/payment_way.py:60
 msgid "Description"
 msgstr ""
@@ -4425,7 +4428,7 @@ msgstr ""
 msgid "Prefer use this shipping way"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:218
+#: ../modules/wishlist/wishlist_views.py:219
 msgid "Presentation"
 msgstr ""
 
@@ -5329,7 +5332,7 @@ msgstr ""
 msgid "Style 6"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:217
+#: ../modules/wishlist/wishlist_views.py:218
 msgid "Subject"
 msgstr ""
 
@@ -5664,7 +5667,7 @@ msgstr ""
 #: ../products/product_views.py:240 ../products/product_views.py:421
 #: ../products/product_views.py:439 ../products/product_views.py:534
 #: ../products/product_views.py:681 ../products/declination.py:69
-#: ../modules/wishlist/wishlist_views.py:215 ../user_group.py:157
+#: ../modules/wishlist/wishlist_views.py:216 ../user_group.py:157
 #: ../modules/review/review.py:538 ../categories_views.py:329
 #: ../categories_views.py:338 ../shipping/shippings_views.py:90
 #: ../payments/payments_views.py:212 ../products/images_views.py:36
@@ -5685,7 +5688,7 @@ msgid "Title"
 msgstr ""
 
 #: ../modules/wishlist/wishlist_views.py:77
-#: ../modules/wishlist/wishlist_views.py:132
+#: ../modules/wishlist/wishlist_views.py:133
 msgid "Title of your wishlist"
 msgstr ""
 
@@ -6037,8 +6040,8 @@ msgstr ""
 #: ../enumerate_table.py:220
 #: ../sidebar/sidebar_product_cross_selling_box.py:43 ../suppliers_views.py:28
 #: ../sidebar/cross_selling_box.py:41 ../feed_views/base.py:36
-#: ../website_views.py:74 ../modules/wishlist/wishlist_views.py:168
-#: ../modules/wishlist/wishlist_views.py:243
+#: ../website_views.py:74 ../modules/wishlist/wishlist_views.py:169
+#: ../modules/wishlist/wishlist_views.py:244
 #: ../sidebar/sidebar_cross_selling_box.py:40
 msgid "View"
 msgstr ""

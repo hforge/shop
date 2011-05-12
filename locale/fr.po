@@ -56,23 +56,25 @@ msgstr ""
 "          </a>\n"
 "          "
 
-#: ../modules/wishlist/wishlist_views.py:136
+#: ../modules/wishlist/wishlist_views.py:137
 msgid ""
 "\n"
 "        Private presentation of your wishlist (Visible by invited people)"
 msgstr ""
 "\n"
-"        Présentation privée de votre liste de cadeaux (Visible uniquement par les personnes invitées)"
+"        Présentation privée de votre liste de cadeaux (Visible uniquement "
+"par les personnes invitées)"
 
-#: ../modules/wishlist/wishlist_views.py:134
+#: ../modules/wishlist/wishlist_views.py:135
 msgid ""
 "\n"
 "        Public presentation of your wishlist (Visible by not invited people)"
 msgstr ""
 "\n"
-"        Présentation publique de votre liste de cadeaux (Visible par les personnes non invitées)"
+"        Présentation publique de votre liste de cadeaux (Visible par les "
+"personnes non invitées)"
 
-#: ../modules/wishlist/wishlist_views.py:130
+#: ../modules/wishlist/wishlist_views.py:131
 msgid ""
 "\n"
 "        The public presentation will be shown to people not invited\n"
@@ -83,7 +85,8 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"        La présentation publique sera visible par les personnes non invitées\n"
+"        La présentation publique sera visible par les personnes non "
+"invitées\n"
 "        mais qui connaissent l'adresse de votre liste de cadeaux.<br/>\n"
 "        (<a href=\"{uri}\">{uri}</a>)<br/>\n"
 "        La présentation privée sera visible par les\n"
@@ -206,10 +209,9 @@ msgid "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
 msgstr "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
 
 #: ../ui/modules/wishlist/wishlist_view.xml.en:99
-#, fuzzy
 msgctxt "table cell"
 msgid "${amount_available}€"
-msgstr "${order/amount}€"
+msgstr "${amount_available}€"
 
 #: ../ui/backoffice/payments/paybox/record_edit.xml.en:12
 msgid "${amount} €<x id='4'/> State:"
@@ -299,10 +301,9 @@ msgid "${country},"
 msgstr "${country},"
 
 #: ../ui/modules/wishlist/wishlist_view.xml.en:95
-#, fuzzy
 msgctxt "table cell"
 msgid "${credit/amount}€"
-msgstr "${order/amount}€"
+msgstr "${credit/amount}€"
 
 #: ../ui/backoffice/orders/order_manage.xml.en:56
 msgctxt "link"
@@ -887,8 +888,9 @@ msgid ""
 "<g id='15'>${uri}</g><x id='16'/> (In this case they should not be able to "
 "see the private presentation of your wishlist, they must be invited for that)"
 msgstr ""
-"<g id='15'>${uri}</g><x id='16'/> (Dans ce cas ils ne pourront pas "
-"voir la présentation privée de votre liste de cadeaux, pour cela ils doivent être invités)"
+"<g id='15'>${uri}</g><x id='16'/> (Dans ce cas ils ne pourront pas voir la "
+"présentation privée de votre liste de cadeaux, pour cela ils doivent être "
+"invités)"
 
 #: ../ui/shop/shop_recapitulatif.xml.en:60
 msgctxt "label"
@@ -1139,6 +1141,14 @@ msgstr "Une variable obligatoire manque."
 #: ../modules/wishlist/cc.py:34
 msgid "A message has been sent to confirm your identity."
 msgstr "Un email a été envoyé pour confirmer votre identité."
+
+#: ../modules/wishlist/wishlist_views.py:88
+msgid "A new wishlist has been created"
+msgstr "Une nouvelle liste de cadeaux a été crée"
+
+#: ../modules/wishlist/wishlist_views.py:89
+msgid "A new wishlist has been created in your shop"
+msgstr "Une nouvelle liste de cadeaux a été crée dans votre boutique"
 
 #: ../products/product.py:89
 msgid "A product"
@@ -2114,11 +2124,6 @@ msgstr "Date de création"
 msgid "Creation date"
 msgstr "Date de création"
 
-#: ../modules/wishlist/wishlist_views.py:87
-#: ../modules/wishlist/wishlist_views.py:88
-msgid "Creation of new wishlist"
-msgstr "Créer une nouvelle liste"
-
 #: ../payments/credit/credit.py:51
 msgid "Credit amount"
 msgstr "Montant du credit"
@@ -2390,7 +2395,7 @@ msgstr "Module de paiement par accompte"
 #: ../payments/payments_views.py:213 ../payments/payments_views.py:262
 #: ../ui/backoffice/orders/order_facture.xml.en:84
 #: ../shipping/withdrawal.py:96 ../shipping/shipping_way_views.py:47
-#: ../shipping/shipping_way.py:76 ../modules/wishlist/wishlist_views.py:216
+#: ../shipping/shipping_way.py:76 ../modules/wishlist/wishlist_views.py:217
 #: ../payments/payment_way.py:60
 msgid "Description"
 msgstr "Description"
@@ -4531,7 +4536,9 @@ msgstr "Table d'ordonnancement des photos"
 #: ../ui/modules/wishlist/view.xml.en:14
 msgctxt "div"
 msgid "Please <g id='1'>log-in</g> to see wishlists you have been invited."
-msgstr "Veuillez <g id='1'>vous connecter</g> pour voir les listes de cadeaux auxquelles vous avez été invité."
+msgstr ""
+"Veuillez <g id='1'>vous connecter</g> pour voir les listes de cadeaux "
+"auxquelles vous avez été invité."
 
 #: ../payments/payments_views.py:315
 msgid "Please choose a payment mode"
@@ -4572,10 +4579,10 @@ msgid ""
 "invitations.(You will be able to show people that have accept the invitation "
 "on the table bellow.)"
 msgstr ""
-"Veuillez saisir votre message d'invitation dans le premier champ et lister les emails à"
-"inviter dans le second (Une adresse mail par ligne). Cliquez sur le bouton pour envoyer "
-"les invitations.(Vous pourrez ainsi connaître la liste des gens qui ont accepté l'invitation "
-"dans la table ci-dessous.)"
+"Veuillez saisir votre message d'invitation dans le premier champ et lister "
+"les emails àinviter dans le second (Une adresse mail par ligne). Cliquez sur "
+"le bouton pour envoyer les invitations.(Vous pourrez ainsi connaître la "
+"liste des gens qui ont accepté l'invitation dans la table ci-dessous.)"
 
 #: ../ui/backoffice/orders/order_facture.xml.en:88
 msgid "Pre-Tax Total"
@@ -4590,7 +4597,7 @@ msgstr "Prix de vente HT:"
 msgid "Prefer use this shipping way"
 msgstr "Utiliser de préférence ce mode de livraison:"
 
-#: ../modules/wishlist/wishlist_views.py:218
+#: ../modules/wishlist/wishlist_views.py:219
 msgid "Presentation"
 msgstr "Présentation"
 
@@ -5496,7 +5503,7 @@ msgstr ""
 msgid "Style 6"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:217
+#: ../modules/wishlist/wishlist_views.py:218
 msgid "Subject"
 msgstr "Sujet"
 
@@ -5831,7 +5838,7 @@ msgstr "Temps d'attente > 15 mn par l'acheteur"
 #: ../products/product_views.py:240 ../products/product_views.py:421
 #: ../products/product_views.py:439 ../products/product_views.py:534
 #: ../products/product_views.py:681 ../products/declination.py:69
-#: ../modules/wishlist/wishlist_views.py:215 ../user_group.py:157
+#: ../modules/wishlist/wishlist_views.py:216 ../user_group.py:157
 #: ../modules/review/review.py:538 ../categories_views.py:329
 #: ../categories_views.py:338 ../shipping/shippings_views.py:90
 #: ../payments/payments_views.py:212 ../products/images_views.py:36
@@ -5852,7 +5859,7 @@ msgid "Title"
 msgstr "Titre"
 
 #: ../modules/wishlist/wishlist_views.py:77
-#: ../modules/wishlist/wishlist_views.py:132
+#: ../modules/wishlist/wishlist_views.py:133
 msgid "Title of your wishlist"
 msgstr "Titre de votre liste de cadeaux"
 
@@ -6220,8 +6227,8 @@ msgstr "Item vertical qui liste les sous catégories"
 #: ../enumerate_table.py:220
 #: ../sidebar/sidebar_product_cross_selling_box.py:43 ../suppliers_views.py:28
 #: ../sidebar/cross_selling_box.py:41 ../feed_views/base.py:36
-#: ../website_views.py:74 ../modules/wishlist/wishlist_views.py:168
-#: ../modules/wishlist/wishlist_views.py:243
+#: ../website_views.py:74 ../modules/wishlist/wishlist_views.py:169
+#: ../modules/wishlist/wishlist_views.py:244
 #: ../sidebar/sidebar_cross_selling_box.py:40
 msgid "View"
 msgstr "Voir"
@@ -6414,7 +6421,8 @@ msgstr "Vous avez déjà ajouter votre avis."
 #: ../ui/modules/wishlist/wishlist_view.xml.en:77
 msgctxt "table cell"
 msgid "You also can give to your friends the address of your wishlist:"
-msgstr "Vous pouvez aussi donner à vos amis l'adresse de votre liste de cadeaux:"
+msgstr ""
+"Vous pouvez aussi donner à vos amis l'adresse de votre liste de cadeaux:"
 
 #: ../addresses_views.py:115
 msgid "You are not authorized to do that !"
@@ -6915,6 +6923,9 @@ msgstr "€<x id='31'/> Prix de vente réduit final:"
 #~ msgstr ""
 #~ "Une invitation sera envoyée à chaque adresse saisie ci-dessus (une par "
 #~ "ligne)."
+
+#~ msgid "Creation of new wishlist"
+#~ msgstr "Créer une nouvelle liste"
 
 #~ msgctxt "title attribute"
 #~ msgid "Informations"
