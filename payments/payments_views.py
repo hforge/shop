@@ -311,11 +311,11 @@ class Payment_Widget(Widget):
     total_price = {'with_tax': decimal('0'),
                    'without_tax': decimal('0')}
 
-    title1 = MSG(u'Amount to pay ?')
+    title1 = None
     title2 = MSG(u'Please choose a payment mode')
 
     template = list(XMLParser("""
-      <h2>${title1}</h2>
+      <h2 stl:if="title1">${title1}</h2>
 
       <input type="text" name="amount" value="${total_price/with_tax}" size="6"/> €
 
