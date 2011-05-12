@@ -83,9 +83,10 @@ class ShopModule_NewWishlist(NewInstance):
         # XXX Send an email to administrators. (To prevent errors of module)
         context = get_context()
         root = context.root
-        for email in root.get_property('administrators'):
-            subject = MSG(u'Creation of new wishlist').gettext()
-            text = MSG(u'Creation of new wishlist').gettext()
+        shop = get_shop(context.resource)
+        for email in shop.get_property('order_notification_mails'):
+            subject = MSG(u'A new wishlist has been created').gettext()
+            text = MSG(u'A new wishlist has been created in your shop').gettext()
             root.send_email(email, subject, text=text)
         # Get new resource name
         root = get_context().root
