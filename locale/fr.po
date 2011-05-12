@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-05-12 13:05+CET\n"
+"POT-Creation-Date: 2011-05-12 16:05+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1448,10 +1448,6 @@ msgstr "Montant du cadeau (Ex: 50€)"
 msgid "Amount of withdrawal past the limit"
 msgstr "Dépasse la limite du montant de retrait"
 
-#: ../payments/payments_views.py:314
-msgid "Amount to pay ?"
-msgstr "Montant à payer ?"
-
 #: ../ui/backoffice/payments/cash/end.xml.en:12
 #: ../ui/backoffice/payments/check/record_view.xml.en:7
 #: ../ui/backoffice/payments/transfer/end.xml.en:12
@@ -1834,7 +1830,7 @@ msgstr "Cliquez ici pour avoir plus d'informations"
 #: ../ui/modules/wishlist/wishlist_view.xml.en:27
 msgctxt "link"
 msgid "Click here to make a donation"
-msgstr "Cliquez ici pour ajouter de l'argent à la liste"
+msgstr "Cliquez ici pour faire un don sur la liste"
 
 #: ../payments/paybox/enumerates.py:149 ../payments/systempay/enumerates.py:66
 msgid "Client cancellation"
@@ -2942,9 +2938,9 @@ msgstr "Générer un PDF"
 msgid "Genre"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:161
+#: ../modules/wishlist/wishlist.py:162
 msgid "Gift made by {title}"
-msgstr "Cadeau réalisé par (${user_title})"
+msgstr "Cadeau réalisé par {title}"
 
 #: ../products/product_views.py:203
 msgid "Go To Issue"
@@ -3978,7 +3974,7 @@ msgstr "Aucune donnée à exporter"
 #: ../ui/modules/wishlist/wishlist_view.xml.en:90
 msgctxt "paragraph"
 msgid "No donation has been done on this wishlist"
-msgstr "Aucune donation n'a été réalisé dans cette liste"
+msgstr "Aucune donation n'a été réalisée sur cette liste"
 
 #: ../cross_selling_views.py:56
 msgid "No never"
@@ -5648,27 +5644,27 @@ msgstr "La base de donnée est en maintenance."
 
 #: ../modules/wishlist/cc.py:43
 msgid "The following addresses are invalid: {users}."
-msgstr "Ces adresses emails sont invalides: {users}."
+msgstr "Ces adresses emails sont invalides : {users}."
 
 #: ../modules/wishlist/cc.py:40
 msgid "The following users are already subscribed: {users}."
-msgstr "Les utilisateurs suivant sont déjà inscrits: {users}."
+msgstr "Les utilisateurs suivant sont déjà inscrits : {users}."
 
 #: ../modules/wishlist/cc.py:45
 msgid "The following users are prevented from subscribing: {users}."
-msgstr "Les utilisateurs suivant ne peuvent pas être inscrits: {users}."
+msgstr "Les utilisateurs suivant ne peuvent pas être inscrits : {users}."
 
 #: ../modules/wishlist/cc.py:44
 msgid "The following users have been invited: {users}."
-msgstr "Les utilisateurs suivant ont étés invités: {users}."
+msgstr "Les utilisateurs suivant ont étés invités : {users}."
 
 #: ../modules/wishlist/cc.py:41
 msgid "The following users were subscribed: {users}."
-msgstr "Les utilisateurs suivant ont étés inscrits: {users}."
+msgstr "Les utilisateurs suivant ont étés inscrits : {users}."
 
 #: ../modules/wishlist/cc.py:42
 msgid "The following users were unsubscribed: {users}."
-msgstr "Les utilisateurs suivant ont étés désinscrits: {users}."
+msgstr "Les utilisateurs suivant ont étés désinscrits : {users}."
 
 #: ../orders/workflow.py:95 ../orders/workflow.py:98
 msgid "The order is in preparation"
@@ -5772,7 +5768,7 @@ msgstr "Il y a un paiement."
 
 #: ../modules/wishlist/cc.py:90
 msgid "There is 1 people invited."
-msgstr "Il y a une personne d'invité."
+msgstr "Il y a une personne invitée."
 
 #: ../products/product_views.py:408
 msgid "There is 1 product"
@@ -5893,6 +5889,9 @@ msgid ""
 "\n"
 " {uri}\n"
 msgstr ""
+"Pour confirmer votre désinscription, cliquez sur le lien :\n"
+"\n"
+" {uri}\n"
 
 #: ../shop_views.py:724
 msgid "To continue, you have to validate the terms of sales!"
@@ -6422,7 +6421,7 @@ msgstr "Vous avez déjà ajouter votre avis."
 msgctxt "table cell"
 msgid "You also can give to your friends the address of your wishlist:"
 msgstr ""
-"Vous pouvez aussi donner à vos amis l'adresse de votre liste de cadeaux:"
+"Vous pouvez aussi donner à vos amis l'adresse de votre liste de cadeaux :"
 
 #: ../addresses_views.py:115
 msgid "You are not authorized to do that !"
@@ -6800,6 +6799,15 @@ msgid ""
 "You can log-in to the website with your email {email} and your password "
 "{password} !"
 msgstr ""
+"{body}\n"
+"\n"
+"\n"
+"Pour accepter l'invitation, cliquez sur le lien\n"
+"\n"
+" {uri}\n"
+"\n"
+"Vous pouvez vous authentifier sur le site avec votre email {email} et "
+"votre mot de passe {password} !"
 
 #: ../skin.py:136
 msgid "{here_title}"
@@ -6812,6 +6820,10 @@ msgstr "{here_title} > {root_title}"
 #: ../products/product_views.py:630
 msgid "{my_name} advice you this product: {product_title}"
 msgstr "{my_name} vous conseille ce produit : {product_title}"
+
+#: ../modules/wishlist/wishlist.py:123
+msgid "{user_made_gift_title} has added {amount}€ to your wishlist."
+msgstr "{user_made_gift_title} a déposé {amount} € sur votre liste."
 
 #: ../utils.py:205
 msgid "{x} days ago."

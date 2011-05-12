@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-05-12 13:05+CET\n"
+"POT-Creation-Date: 2011-05-12 16:05+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1317,10 +1317,6 @@ msgstr ""
 #: ../payments/paybox/enumerates.py:183
 #: ../payments/systempay/enumerates.py:100
 msgid "Amount of withdrawal past the limit"
-msgstr ""
-
-#: ../payments/payments_views.py:314
-msgid "Amount to pay ?"
 msgstr ""
 
 #: ../ui/backoffice/payments/cash/end.xml.en:12
@@ -2807,7 +2803,7 @@ msgstr ""
 msgid "Genre"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:161
+#: ../modules/wishlist/wishlist.py:162
 msgid "Gift made by {title}"
 msgstr ""
 
@@ -6598,6 +6594,10 @@ msgstr ""
 
 #: ../products/product_views.py:630
 msgid "{my_name} advice you this product: {product_title}"
+msgstr ""
+
+#: ../modules/wishlist/wishlist.py:123
+msgid "{user_made_gift_title} has added {amount}€ to your wishlist."
 msgstr ""
 
 #: ../utils.py:205

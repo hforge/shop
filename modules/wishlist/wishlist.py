@@ -120,7 +120,7 @@ class ShopModule_WishList(ShopFolder):
     end_view_top = ShopModule_WishList_PaymentsEndViewTop()
 
     subject = MSG(u'A gift has been made to your wishlist')
-    text = MSG("{user_made_gift_title} has added ${amount}€ to your wishlist.")
+    text = MSG(u"{user_made_gift_title} has added {amount}€ to your wishlist.")
 
     go_back_here_on_register = True
 
@@ -144,6 +144,7 @@ class ShopModule_WishList(ShopFolder):
 
     def set_payment_as_ok(self, payment_way, id_record, context):
         """Payments module call this method when a payment is validated"""
+        root = context.root
         payments_table = payment_way.get_resource('payments').handler
         record = payments_table.get_record(id_record)
         # Get amount of gift
@@ -152,15 +153,14 @@ class ShopModule_WishList(ShopFolder):
         ref = payments_table.get_record_value(record, 'ref')
         # Get name of user that made the gift
         user_made_gift = payments_table.get_record_value(record, 'user')
-        user_made_gift = context.root.get_user(user_made_gift)
+        user_made_gift = root.get_user(user_made_gift)
         user_made_gift_title = user_made_gift.get_title()
         # Get wishlist oner to credit money
         wishlist = self.get_resource(ref)
         owner = wishlist.get_property('owner')
         # Create a descript
         description = MSG(u'Gift made by {title}')
-        description = description.gettext(
-                          user_made_gift_title=user_made_gift_title)
+        description = description.gettext(title=user_made_gift_title)
         # Add amount to credit available for user
         payments = get_shop(context.resource).get_resource('payments')
         credit_payment_way = list(payments.search_resources(cls=CreditPayment))[0]
@@ -169,12 +169,13 @@ class ShopModule_WishList(ShopFolder):
                                      'amount': amount,
                                      'description': description})
         # Send an email to inform user
+        owner = root.get_user(owner)
         owner_email = owner.get_property('email')
         subject = self.subject.gettext()
         text = self.text.gettext(user_made_gift_title=user_made_gift_title,
                                  amount=amount)
-        context.root.send_email(owner_email, subject, text=text,
-                                subject_with_host=True)
+        root.send_email(owner_email, subject, text=text,
+                        subject_with_host=True)
 
 
 
