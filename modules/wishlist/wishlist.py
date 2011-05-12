@@ -32,15 +32,15 @@ from ikaaro.webpage import WebPage
 # Import from shop
 from shop.folder import ShopFolder
 from shop.utils import CurrentFolder_AddImage, CurrentFolder_AddLink
+from shop.payments.credit import CreditPayment
+from shop.utils import get_shop
 
 # Import from module
+from cc import Observable
 from wishlist_views import ShopModule_NewWishlist
 from wishlist_views import ShopModule_WishListView, ShopModule_WishList_Edit
 from wishlist_views import WishList_View, WishList_Edit, WishList_Donate
 from wishlist_views import ShopModule_WishList_PaymentsEndViewTop
-from shop.cc import Observable
-from shop.payments.credit import CreditPayment
-from shop.utils import get_shop
 
 
 
