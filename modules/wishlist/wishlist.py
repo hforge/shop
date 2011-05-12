@@ -71,6 +71,7 @@ class WishList(Observable, AccessControl, ShopFolder):
                            Observable.class_schema,
                            owner=String,
                            ctime=DateTime,
+                           presentation=XHTMLBody,
                            data=XHTMLBody)
 
 
@@ -92,17 +93,6 @@ class WishList(Observable, AccessControl, ShopFolder):
     #############################
     # ACL
     #############################
-    def is_allowed_to_view(self, user, resource):
-        # Is invited  ?
-        if user and isinstance(resource, WishList):
-            is_allowed_to_edit = self.is_allowed_to_edit(user, resource)
-            for cc in resource.get_property('cc_list'):
-                if user.name == cc['username']:
-                    return True
-            return is_allowed_to_edit
-        return AccessControl.is_allowed_to_view(self, user, resource)
-
-
     def is_allowed_to_edit(self, user, resource):
         if not user:
             return False

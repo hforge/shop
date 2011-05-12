@@ -22,6 +22,7 @@ from itools.core import merge_dicts
 from itools.datatypes import Boolean, Unicode, Decimal, String
 from itools.gettext import MSG
 from itools.web import STLView, get_context
+from itools.xml import XMLParser
 from itools.xapian import PhraseQuery
 
 # Import from ikaaro
@@ -116,16 +117,38 @@ class WishList_Edit(DBResource_Edit):
 
     access = 'is_allowed_to_edit'
 
-    schema = {'title': Unicode,
+    schema = {'title': Unicode(mandatory=True),
+              'presentation': XHTMLBody,
               'data': XHTMLBody}
 
-    widgets = [TextWidget('title', title=MSG(u'Title of your wishlist')),
-               RTEWidget('data', title=MSG(u"Presentation of your wishlist"))]
+    presentation = MSG(u"""
+        The public presentation will be shown to people not invited
+        but that know the address of this wishlist.<br/>
+        (<a href="{uri}">{uri}</a>)<br/>
+        The private presentation will be shown to
+        <a href="./;subscribe">invited people.</a><br/><br/>
+        """)
+    widgets = [
+      TextWidget('title', title=MSG(u'Title of your wishlist')),
+      RTEWidget('presentation', title=MSG(u"""
+        Public presentation of your wishlist (Visible by not invited people)""")),
+      RTEWidget('data', title=MSG(u"""
+        Private presentation of your wishlist (Visible by invited people)"""))]
+
+
+    def get_namespace(self, resource, context):
+        namespace = AutoForm.get_namespace(self, resource, context)
+        uri = context.uri.resolve('./')
+        presentation = self.presentation.gettext(uri=uri)
+        presentation = presentation.encode('utf-8')
+        xml = XMLParser(presentation)
+        namespace['required_msg'] = list(xml)
+        return namespace
 
 
     def get_value(self, resource, context, name, datatype):
         language = resource.get_content_language(context)
-        if name == 'data':
+        if name in ('data', 'presentation'):
             return resource.get_property(name, language)
         return DBResource_Edit.get_value(self, resource, context, name,
                                          datatype)
@@ -143,25 +166,38 @@ class WishList_Edit(DBResource_Edit):
 class WishList_View(STLView):
 
     title = MSG(u'View')
-    access = 'is_allowed_to_view'
+    access = 'is_authenticated'
     template = '/ui/modules/wishlist/wishlist_view.xml'
 
     def get_namespace(self, resource, context):
         ac = resource.get_access_control()
         is_allowed_to_edit = ac.is_allowed_to_edit(context.user, resource)
+        # Owner
         owner_name = resource.get_property('owner')
         owner_resource = context.root.get_user(owner_name)
         owner = {'title': owner_resource.get_title,
                  'im_owner': owner_name == context.user.name,
                  'link': context.get_link(owner_resource)}
+        # Credit
         payments = get_shop(resource).get_resource('payments')
         credit = list(payments.search_resources(cls=CreditPayment))[0]
         amount_available = credit.get_credit_available_for_user(owner_name)
         credits = credit.get_credit_namespace_available_for_user(owner_name)
+        # Is invited
+        is_invited = False
+        if context.user:
+            for cc in resource.get_property('cc_list'):
+                if context.user.name == cc['username']:
+                    is_invited = True
+        if is_allowed_to_edit:
+            is_invited = is_allowed_to_edit
         return {'title': resource.get_property('title'),
+                'presentation': resource.get_property('presentation'),
                 'owner': owner,
                 'amount_available': amount_available,
+                'is_invited': is_invited,
                 'credits': credits,
+                'uri': context.uri.resolve('./'),
                 'data': resource.get_property('data'),
                 'is_allowed_to_edit': is_allowed_to_edit}
 
@@ -228,6 +264,20 @@ class ShopModule_WishListView(Feed_View):
         args.append(PhraseQuery('format', 'wishlist'))
         return Feed_View.get_items(self, resource, context, *args)
 
+
+    def sort_and_batch(self, resource, context, items):
+        root = context.root
+        user = context.user
+        # ACL
+        allowed_items = []
+        for item in items.get_documents():
+            resource = root.get_resource(item.abspath)
+            ac = resource.get_access_control()
+            invited_usernames = [x['username'] for x in resource.get_property('cc_list')]
+            if (ac.is_allowed_to_edit(user, resource) or
+                (user and user.name in invited_usernames)):
+                allowed_items.append((item, resource))
+        return allowed_items
 
 
 class ShopModule_WishList_PaymentsEndViewTop(STLView):

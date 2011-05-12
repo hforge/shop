@@ -17,35 +17,33 @@
 # Import from itools
 from itools.core import freeze
 from itools.datatypes import Email, MultiLinesTokens, String, Tokens
+from itools.datatypes import Unicode
 from itools.gettext import MSG
 from itools.web import INFO, ERROR
 
 # Import from ikaaro
 from ikaaro.access import RoleAware_BrowseUsers
+from ikaaro.datatypes import Password
 from ikaaro.forms import AutoForm, MultilineWidget, HiddenWidget
 from ikaaro.forms import ReadOnlyWidget
 from ikaaro.utils import generate_password
 from ikaaro.views import CompositeForm
 
 
+MSG_BAD_KEY = ERROR(u"Your confirmation key is invalid.")
 MSG_CONFIRMATION_SENT = INFO(u'A message has been sent to confirm your '
         u'identity.')
 MSG_USER_SUBSCRIBED = INFO(u'You are now subscribed.')
 MSG_USER_ALREADY_SUBSCRIBED = ERROR(u'You were already subscribed.')
 MSG_USER_UNSUBSCRIBED = INFO(u'You are now unsubscribed.')
 MSG_USER_ALREADY_UNSUBSCRIBED = ERROR(u'You were already unsubscribed.')
-MSG_ALREADY = INFO(u'The following users are already subscribed: {users}.',
-        format='replace_html')
-MSG_SUBSCRIBED = INFO(u'The following users were subscribed: {users}.',
-        format='replace_html')
-MSG_UNSUBSCRIBED = INFO(u'The following users were unsubscribed: {users}.',
-        format='replace_html')
-MSG_INVALID = ERROR(u'The following addresses are invalid: {users}.',
-        format='replace_html')
-MSG_INVITED = INFO(u'The following users have been invited: {users}.',
-        format='replace_html')
+MSG_ALREADY = INFO(u'The following users are already subscribed: {users}.')
+MSG_SUBSCRIBED = INFO(u'The following users were subscribed: {users}.')
+MSG_UNSUBSCRIBED = INFO(u'The following users were unsubscribed: {users}.')
+MSG_INVALID = ERROR(u'The following addresses are invalid: {users}.')
+MSG_INVITED = INFO(u'The following users have been invited: {users}.')
 MSG_UNALLOWED = ERROR(u'The following users are prevented from subscribing: '
-        u'{users}.', format='replace_html')
+        u'{users}.')
 
 
 class Subscribers(Tokens):
@@ -72,9 +70,7 @@ class Subscribers(Tokens):
 def add_subscribed_message(message, users, context, users_is_resources=True):
     if users:
         if users_is_resources is True:
-            format = u'<a href="{0}">{1}</a>'.format
-            users = [ format(context.get_link(x), x.get_title())
-                        for x in users ]
+            users = [x.get_title() for x in users]
         users = ', '.join(users)
         message = message(users=users)
         context.message.append(message)
@@ -87,10 +83,12 @@ class ManageForm(RoleAware_BrowseUsers):
     description = None
     search_template = None
 
-    table_columns = freeze(RoleAware_BrowseUsers.table_columns[:-2] + [
+    table_columns = freeze(RoleAware_BrowseUsers.table_columns[2:-2] + [
         ('state', MSG(u'State'))])
     table_actions = []
 
+    batch_msg1 = MSG(u"There is 1 people invited.")
+    batch_msg2 = MSG(u"There are {n} people invited.")
 
     def get_items(self, resource, context):
         site_root = resource.get_site_root()
@@ -119,18 +117,28 @@ class ManageForm(RoleAware_BrowseUsers):
 class MassSubscriptionForm(AutoForm):
 
     access = 'is_admin'
-    title = MSG(u"Mass Subscription")
+    title = MSG(u"Invitations")
     description = MSG(
-        u"An invitation will be sent to every address typen below, one by"
-        u" line.")
-    schema = freeze({'emails': MultiLinesTokens(mandatory=True)})
-    widgets = freeze([MultilineWidget('emails', focus=False,)])
+        u"Please type your invitation message in the first form and "
+        u"to list email to invite on the second one (One by line). "
+        u"Just click on the button to send invitations."
+        u"(You will be able to show people that have accept the invitation "
+        u"on the table bellow.)")
+    schema = freeze({'read': Unicode,
+                     'body': Unicode,
+                     'emails': MultiLinesTokens(mandatory=True)})
+    widgets = freeze([ReadOnlyWidget('read', title=None),
+                      MultilineWidget('body', title=MSG(u'Invitation message')),
+                      MultilineWidget('emails', title=MSG(u'Emails to invite'))])
     actions = []
 
+    submit_value = MSG(u"Send an invitation to these Emails")
 
     def get_value(self, resource, context, name, datatype):
         if name == 'emails':
             return ''
+        elif name == 'read':
+            return self.description.gettext()
         proxy = super(MassSubscriptionForm, self)
         return proxy.get_value(resource, context, name, datatype)
 
@@ -163,13 +171,21 @@ class MassSubscriptionForm(AutoForm):
                     continue
 
             # Subscribe
-            user = resource.subscribe_user(email=email, user=user)
+            if user is None:
+                password = generate_password(5)
+                invitation_text = resource.invitation_text_password
+            else:
+                password = None
+                invitation_text = resource.invitation_text
+            user = resource.subscribe_user(email=email, user=user, password=password)
             key = resource.set_register_key(user.name)
             # Send invitation
             subject = resource.invitation_subject.gettext()
             confirm_url = context.uri.resolve(';accept_invitation')
             confirm_url.query = {'key': key, 'email': email}
-            text = resource.invitation_text.gettext(uri=confirm_url)
+            text = invitation_text.gettext(uri=confirm_url,
+                      body=form['body'], email=email,
+                      password=password)
             root.send_email(email, subject, text=text)
             invited.append(user)
 
@@ -187,22 +203,22 @@ class SubscribeForm(CompositeForm):
     access = 'is_allowed_to_view'
     title = MSG(u'Subscriptions')
 
-    subviews = [ManageForm(), MassSubscriptionForm()]
+    subviews = [MassSubscriptionForm(), ManageForm()]
 
 
 class AcceptInvitation(AutoForm):
 
-    access = 'is_allowed_to_view'
+    access = True
     title = MSG(u"Invitation")
-    description = MSG(
-        u'By confirming your subscription to this resource you will'
-        u' receive an email every time this resource is modified.')
+    description = MSG(u'Do you accept this invitation ?')
 
     schema = freeze({
-        'key': String(mandatory=True),
-        'email': Email(mandatory=True)})
+        'key': String,
+        'read': Unicode,
+        'email': Email})
     widgets = freeze([
         HiddenWidget('key'),
+        ReadOnlyWidget('read'),
         ReadOnlyWidget('email')])
 
     submit_value = MSG(u"Accept invitation")
@@ -214,6 +230,8 @@ class AcceptInvitation(AutoForm):
     def get_value(self, resource, context, name, datatype):
         if name in ('key', 'email'):
             return context.get_query_value(name)
+        elif name == 'read':
+            return self.description.gettext()
         proxy = super(AcceptInvitation, self)
         return proxy.get_value(resource, context, name, datatype)
 
@@ -258,7 +276,21 @@ class AcceptInvitation(AutoForm):
         # Ok
         resource.reset_register_key(username)
         resource.after_register(username)
+
+        # LogIn the user
+        email = context.get_form_value('email')
+        user = context.root.get_user_from_login(email)
+        user.del_property('user_must_confirm')
+        username = str(user.name)
+        crypted = user.get_property('password')
+        cookie = Password.encode('%s:%s' % (username, crypted))
+        context.set_cookie('__ac', cookie, path='/')
+        context.user = user
+
+
         return context.come_back(MSG_USER_SUBSCRIBED, goto='./')
+
+
 
 class Observable(object):
     class_schema = freeze({'cc_list': Subscribers(source='metadata')})
@@ -273,8 +305,14 @@ class Observable(object):
 
     invitation_subject = MSG(u'Invitation')
     invitation_text = MSG(
+        u'{body}\n\n\n'
         u'To accept the invitation, click the link\n\n {uri}\n')
 
+    invitation_text_password = MSG(
+        u'{body}\n\n\n'
+        u'To accept the invitation, click the link\n\n {uri}\n\n'
+        u'You can log-in to the website with your email {email} '
+        u'and your password {password} !')
 
     def get_message(self, context, language=None):
         """This function must return the tuple (subject, body)
@@ -294,8 +332,18 @@ class Observable(object):
 
 
     def get_subscribed_users(self, skip_unconfirmed=True):
-        return [ cc['username'] for cc in self.get_property('cc_list')
-                 if skip_unconfirmed is False or cc['status'] == 'S' ]
+        users = []
+        for cc in self.get_property('cc_list'):
+            # case 1: subscribed user or unsubscription pending user
+            if cc['status'] in (None, 'U'):
+                users.append(cc['username'])
+                continue
+
+            # other
+            if skip_unconfirmed is False or cc['status'] == 'S':
+                users.append(cc['username'])
+
+        return users
 
 
     def is_subscribed(self, username, skip_unconfirmed=True):
@@ -316,7 +364,7 @@ class Observable(object):
 
     def get_register_key(self, username, status='S'):
         for cc in self.get_property('cc_list'):
-            if cc['status'] == status:
+            if cc['username'] == username and cc['status'] == status:
                 return cc['key']
         return None
 
@@ -326,7 +374,8 @@ class Observable(object):
         status = 'U' if unregister is True else 'S'
         # Find existing key
         for cc in cc_list:
-            if cc['status'] == status and cc['key'] is not None:
+            if (cc['username'] == username and
+                cc['status'] == status and cc['key'] is not None):
                 # Reuse found key
                 return cc['key']
         # Generate key
@@ -335,7 +384,6 @@ class Observable(object):
         cc_list = [ cc for cc in cc_list if cc['username'] != username ]
         # Create new dict to force metadata commit
         cc_list.append({'username': username, 'status': status, 'key': key})
-        print tuple(cc_list)
         self.set_property('cc_list', tuple(cc_list))
         return key
 
@@ -349,7 +397,7 @@ class Observable(object):
         self.set_property('cc_list', tuple(cc_list))
 
 
-    def subscribe_user(self, email=None, user=None):
+    def subscribe_user(self, email=None, user=None, password=None):
         root = self.get_root()
         site_root = self.get_site_root()
 
@@ -363,7 +411,8 @@ class Observable(object):
         if user is None:
             # Add the user
             users = root.get_resource('users')
-            user = users.set_user(email, password=None)
+            user = users.set_user(email, password=password)
+
             # Mark it as new
             user.set_property('user_must_confirm', generate_password(30))
 

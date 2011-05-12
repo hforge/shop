@@ -9,14 +9,20 @@
     ${title}
   </h1>
 
-  <div id="data" stl:if="data">
-    ${data}
-  </div>
+  <p stl:if="not is_invited">
+    ${presentation}
+  </p>
 
-  <div id="data" stl:if="not data">
-    Add a description and photos here, <a href="./;edit">by editing your wishlist</a>
-    <br/><br/><br/><br/>
-  </div>
+  <stl:block stl:if="is_invited">
+    <div id="data" stl:if="data">
+      ${data}
+    </div>
+
+    <div id="data" stl:if="not data">
+      Add a description and photos here, <a href="./;edit">by editing your wishlist</a>
+      <br/><br/><br/><br/>
+    </div>
+  </stl:block>
 
   <a href="./;donate" class="wishlist-button">Click here to make a donation</a>
 
@@ -61,8 +67,17 @@
           </a>
         </td>
         <td>
-          You have to invite your friends and your family
-          so they have access to this WebPage.
+          You can invite your friends and your family here.
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>
+        You also can give to your friends the address of your wishlist:<br/>
+        <a href="${uri}">${uri}</a><br/>
+        (In this case they should not be able to see the private
+         presentation of your wishlist, they must be invited for that)<br/>
         </td>
       </tr>
     </table>
