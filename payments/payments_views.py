@@ -324,7 +324,7 @@ class Payment_Widget(Widget):
       <table cellpadding="5px" cellspacing="0">
         <tr stl:repeat="payment payments" stl:if="payment/enabled">
           <td valign="top">
-            <input type="radio" name="payment"
+            <input type="radio" name="payment" checked="${payment/selected}"
               id="payment-${payment/name}" value="${payment/name}"/>
           </td>
           <td valign="top">
@@ -360,5 +360,9 @@ class Payment_Widget(Widget):
                  'value': mode.get_title(),
                  'description': mode.get_payment_way_description(context, total_price),
                  'logo': str(context.resource.get_pathto(logo)) if logo else None,
-                 'enabled': mode.is_enabled(context)})
+                 'enabled': mode.is_enabled(context),
+                 'selected': None})
+        # Select first mode by default
+        if namespace['payments'] != []:
+            namespace['payments'][0]['selected'] = True
         return namespace
