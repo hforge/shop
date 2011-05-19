@@ -156,6 +156,7 @@ class ProductModelSchema(OrderedTable):
     edit_record = ProductModelSchema_EditRecord()
 
     form = [
+        TextWidget('name', title=MSG(u'Name')),
         TextWidget('title', title=MSG(u'Title')),
         BooleanCheckBox('mandatory', title=MSG(u'Mandatory')),
         BooleanCheckBox('multiple', title=MSG(u'Multiple')),

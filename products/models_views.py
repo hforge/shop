@@ -96,7 +96,7 @@ class ProductModelSchema_View(OrderedTable_View):
 
 class ProductModelSchema_EditRecord(Table_EditRecord):
 
-    cant_edit_fields = ['name', 'datatype', 'enumerate']
+    cant_edit_fields = ['datatype', 'enumerate']
 
     def get_schema(self, resource, context):
         schema = {}
@@ -118,9 +118,10 @@ class ProductModelSchema_AddRecord(Table_AddRecord):
     submit_value = MSG(u'Add')
 
 
-    def action_add_or_edit(self, resource, context, record):
-        record['name'] = checkid(record['title'].value)
-        resource.handler.add_record(record)
+    # XXX Now we show title
+    #def action_add_or_edit(self, resource, context, record):
+    #    record['name'] = checkid(record['title'].value)
+    #    resource.handler.add_record(record)
 
 
 
