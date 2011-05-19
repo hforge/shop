@@ -41,7 +41,7 @@ from shop.datatypes import DatatypeCM_to_INCH, ProductPathDataType
 from shop.datatypes import ImagePathDataType, FrenchDate, SIRET_Datatype
 from shop.datatypes import PrettyFrenchDate, UnicodeOnePerLine, BigUnicode
 from shop.datatypes import ThreeStateBoolean, ShopBoolean
-from shop.datatypes import Birthday_Datatype
+from shop.datatypes import FrenchBirthday_Datatype
 from shop.enumerate_table import Enumerate_ListEnumerateTable
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
@@ -67,7 +67,7 @@ real_datatypes = {'string': String,
                   'html-non-sanitize': XHTMLBody(sanitize_html=False),
                   'unicode-one-per-line': UnicodeOnePerLine,
                   'french-date': FrenchDate,
-                  'birthday': Birthday_Datatype,
+                  'birthday': FrenchBirthday_Datatype,
                   'pretty-french-date': PrettyFrenchDate,
                   'siret': SIRET_Datatype,
                   'date': ISOCalendarDate}
@@ -76,7 +76,7 @@ real_datatypes = {'string': String,
 def get_default_widget_shop(datatype):
     if issubclass(datatype, BigUnicode):
         return MultilineWidget
-    elif issubclass(datatype, Birthday_Datatype):
+    elif issubclass(datatype, FrenchBirthday_Datatype):
         return BirthdayWidget
     elif issubclass(datatype, ThreeStateBoolean):
         return ThreeStateBooleanRadio

@@ -325,7 +325,7 @@ class FrenchDate(Date):
         return True
 
 
-class Birthday_Datatype(Date):
+class FrenchBirthday_Datatype(Date):
 
     @staticmethod
     def decode(value):
@@ -347,7 +347,7 @@ class Birthday_Datatype(Date):
         if not (day and month and year):
             return None
         value = datetime.date(year, month, day)
-        return value.strftime('%Y-%m-%d')
+        return value.strftime('%d/%m/%Y')
 
 
     @staticmethod
