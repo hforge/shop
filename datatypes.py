@@ -325,12 +325,14 @@ class FrenchDate(Date):
         return True
 
 
-class FrenchBirthday_Datatype(Date):
+class FrenchBirthday_Datatype(FrenchDate):
 
     @staticmethod
     def decode(value):
         if not value:
             return None
+        if value and value != '1':
+            return FrenchDate.decode(value)
         context = get_context()
         day = context.get_form_value('day', type=Integer)
         month = context.get_form_value('month', type=Integer)
@@ -340,6 +342,8 @@ class FrenchBirthday_Datatype(Date):
 
     @staticmethod
     def encode(value):
+        if value:
+            return FrenchDate.encode(value)
         context = get_context()
         day = context.get_form_value('day', type=Integer)
         month = context.get_form_value('month', type=Integer)

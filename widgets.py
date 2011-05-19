@@ -232,9 +232,18 @@ class BirthdayWidget(Widget):
     def get_namespace(self, datatype, value):
         namespace = Widget.get_namespace(self, datatype, value)
         context = get_context()
-        day = context.get_form_value('day', type=Integer)
-        month = context.get_form_value('month', type=Integer)
-        year = context.get_form_value('year', type=Integer)
+        if value and value != '1':
+            try:
+                day, month, year = value.split('/')
+                day = int(day)
+                month = int(month)
+                year = int(year)
+            except:
+                day = month = year = None
+        else:
+            day = context.get_form_value('day', type=Integer)
+            month = context.get_form_value('month', type=Integer)
+            year = context.get_form_value('year', type=Integer)
         namespace['day'] = SelectWidget('day').to_html(Days, day)
         namespace['month'] = SelectWidget('month').to_html(Months, month)
         namespace['year'] = SelectWidget('year').to_html(Years, year)
