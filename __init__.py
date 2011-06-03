@@ -51,9 +51,6 @@ register_domain('shop', path)
 register_shop_skin(MSG(u'Default Skin'),
     'shop', 'ui/default_skin/', 'default_skin')
 
-register_shop_skin(MSG(u'Skin number 2'),
-    'shop', 'ui/skin2/', 'skin2')
-
 # XXX Override Monkey patch itws
 # We want that public images on user profil are visible
 ShopUser.is_allowed_to_view = AccessControl.is_allowed_to_view
