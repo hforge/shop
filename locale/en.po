@@ -323,7 +323,7 @@ msgstr ""
 msgid "${id_payment}<x id='2'/> Autorisation:"
 msgstr ""
 
-#: ../ui/skin2/template.xhtml.en:54 ../ui/default_skin/template.xhtml.en:54
+#: ../ui/default_skin/template.xhtml.en:54
 msgctxt "div"
 msgid "${location} ${message}"
 msgstr ""
@@ -358,7 +358,6 @@ msgctxt "emphasis"
 msgid "${order/payment_way}:"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:85
 #: ../ui/shop/product/product_view.xml.en:85
 msgctxt "table cell"
 msgid "${price/with_tax} €"
@@ -414,14 +413,12 @@ msgctxt "heading"
 msgid "${website-title}"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:89
 #: ../ui/backoffice/product_view.xml.en:63
 #: ../ui/shop/product/product_view.xml.en:89
 msgctxt "table cell"
 msgid "${weight} Kg"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:16
 #: ../ui/default_skin/product/product_view.xml.en:18
 #: ../ui/shop/product/product_view.xml.en:16
 msgctxt "li"
@@ -485,7 +482,6 @@ msgctxt "paragraph"
 msgid "(Only <g id='12'>X</g> products in stock)"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:34
 #: ../ui/shop/product/product_view.xml.en:34
 msgctxt "paragraph"
 msgid "(Only <g id='7'>X</g> products in stock)"
@@ -633,19 +629,17 @@ msgctxt "link"
 msgid "<g id='12'>${n/title}</g>  <g id='13'>(${n/ago})</g>"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:95
 #: ../ui/shop/product/product_view.xml.en:95
 msgctxt "b"
 msgid "<g id='12'>${property/title}</g>:"
 msgstr ""
 
-#: ../ui/skin2/template.xhtml.en:36 ../ui/default_skin/template.xhtml.en:36
+#: ../ui/default_skin/template.xhtml.en:36
 msgctxt "link"
 msgid ""
 "<g id='12'>${user/info/title}</g>  <g id='13'>|</g>  <g id='14'>Log out</g>"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:96
 #: ../ui/shop/product/product_view.xml.en:96
 msgctxt "span"
 msgid "<g id='13'>${property/value}</g>  <g id='14'>Unknow</g>"
@@ -713,7 +707,6 @@ msgctxt "link"
 msgid "<g id='2'>${item/short_name}</g>  <g id='3'>${bc_separator}</g>"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:21
 #: ../ui/shop/product/product_view.xml.en:21
 msgctxt "span"
 msgid "<g id='2'>${price/with_tax}</g> € TTC<x id='3'/> Weight:"
@@ -803,7 +796,6 @@ msgctxt "span"
 msgid "<g id='39'>${devise}</g><x id='40'/> Reduce final retail price:"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:22
 #: ../ui/shop/product/product_view.xml.en:22
 msgctxt "span"
 msgid "<g id='4'>${weight}</g> kg"
@@ -898,13 +890,11 @@ msgctxt "link"
 msgid "<g id='9'>Log in</g>  <g id='10'>Register</g>"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:47
 #: ../ui/shop/product/product_view.xml.en:47
 msgctxt "link"
 msgid "> Print product"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:42
 #: ../ui/shop/product/product_view.xml.en:42
 msgctxt "link"
 msgid "> Send to a friend"
@@ -1076,7 +1066,6 @@ msgstr ""
 msgid "Add this"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:28
 #: ../ui/default_skin/product/product_view.xml.en:36
 #: ../ui/shop/product/product_view.xml.en:28
 msgctxt "button"
@@ -1857,7 +1846,6 @@ msgstr ""
 msgid "Cover"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:56
 #: ../ui/backoffice/product_view.xml.en:31
 #: ../ui/shop/product/product_view.xml.en:56
 #: ../ui/backoffice/orders/order_manage.xml.en:157
@@ -1918,7 +1906,6 @@ msgstr ""
 msgid "Cross selling"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:109
 #: ../ui/shop/product/product_view.xml.en:109
 msgctxt "heading"
 msgid "Cross selling"
@@ -2011,7 +1998,6 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:76
 #: ../ui/backoffice/product_view.xml.en:50
 #: ../ui/shop/product/product_view.xml.en:76
 msgctxt "table cell"
@@ -2176,11 +2162,10 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:72
 #: ../ui/shop/shop_delivery.xml.en:20 ../ui/shop/product/print.xml.en:40
-#: ../ui/backoffice/configuration.xml.en:13
-#: ../ui/shop/product/product_view.xml.en:72
 #: ../ui/backoffice/product_view.xml.en:46
+#: ../ui/shop/product/product_view.xml.en:72
+#: ../ui/backoffice/configuration.xml.en:13
 msgctxt "table cell"
 msgid "Description"
 msgstr ""
@@ -3169,7 +3154,6 @@ msgstr ""
 msgid "Keywords"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:80
 #: ../ui/backoffice/product_view.xml.en:54
 #: ../ui/shop/product/product_view.xml.en:80
 msgctxt "table cell"
@@ -3276,13 +3260,13 @@ msgctxt "legend"
 msgid "Log in"
 msgstr ""
 
-#: ../ui/skin2/template.xhtml.en:33 ../ui/backoffice/template.xhtml.en:83
+#: ../ui/backoffice/template.xhtml.en:83
 #: ../ui/default_skin/template.xhtml.en:33
 msgctxt "link"
 msgid "Log in"
 msgstr ""
 
-#: ../ui/skin2/template.xhtml.en:33 ../ui/default_skin/template.xhtml.en:33
+#: ../ui/default_skin/template.xhtml.en:33
 msgctxt "title attribute"
 msgid "Log in"
 msgstr ""
@@ -3292,7 +3276,7 @@ msgctxt "link"
 msgid "Log out"
 msgstr ""
 
-#: ../ui/skin2/template.xhtml.en:38 ../ui/default_skin/template.xhtml.en:38
+#: ../ui/default_skin/template.xhtml.en:38
 msgctxt "title attribute"
 msgid "Log out"
 msgstr ""
@@ -3499,7 +3483,6 @@ msgstr ""
 msgid "Mini cart"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:31
 #: ../ui/default_skin/product/product_view.xml.en:39
 #: ../ui/shop/product/product_view.xml.en:31
 msgctxt "paragraph"
@@ -3975,7 +3958,6 @@ msgstr ""
 msgid "Orders history"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:34
 #: ../ui/default_skin/product/product_view.xml.en:42
 #: ../ui/shop/product/product_view.xml.en:34
 msgctxt "paragraph"
@@ -4356,7 +4338,6 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:84
 #: ../ui/shop/product/print.xml.en:36 ../ui/backoffice/product_view.xml.en:58
 #: ../ui/shop/product/product_view.xml.en:84
 msgctxt "table cell"
@@ -4429,7 +4410,6 @@ msgstr ""
 msgid "Private key"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:21
 #: ../ui/shop/product/product_view.xml.en:21
 msgctxt "form"
 msgid "Prix :"
@@ -4499,7 +4479,6 @@ msgstr ""
 msgid "Product model has not been changed !"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:92
 #: ../ui/default_skin/product/product_view.xml.en:104
 #: ../ui/backoffice/product_view.xml.en:66
 #: ../ui/shop/product/product_view.xml.en:92
@@ -4600,7 +4579,6 @@ msgctxt "table cell"
 msgid "Quantity to order"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:24
 #: ../ui/default_skin/product/product_view.xml.en:32
 #: ../ui/shop/product/product_view.xml.en:24
 msgctxt "paragraph"
@@ -4688,7 +4666,6 @@ msgid "Reference"
 msgstr ""
 
 #: ../ui/modules/stock/resupply.xml.en:37
-#: ../ui/skin2/product/product_view.xml.en:64
 #: ../ui/default_skin/product/product_view.xml.en:78
 #: ../ui/modules/stock/fill_stock_out.xml.en:66
 #: ../ui/shop/product/print.xml.en:24
@@ -4921,7 +4898,7 @@ msgctxt "legend"
 msgid "Search"
 msgstr ""
 
-#: ../ui/skin2/template.xhtml.en:46 ../ui/default_skin/template.xhtml.en:46
+#: ../ui/default_skin/template.xhtml.en:46
 msgctxt "span"
 msgid "Search"
 msgstr ""
@@ -5134,10 +5111,6 @@ msgstr ""
 
 #: ../registry.py:70
 msgid "Skin %s"
-msgstr ""
-
-#: ../__init__.py:54
-msgid "Skin number 2"
 msgstr ""
 
 #: ../categories_views.py:330
@@ -5595,7 +5568,6 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:68
 #: ../ui/backoffice/product_view.xml.en:42
 #: ../ui/shop/product/product_view.xml.en:68
 msgctxt "table cell"
@@ -6054,7 +6026,6 @@ msgstr ""
 msgid "Weight"
 msgstr ""
 
-#: ../ui/skin2/product/product_view.xml.en:88
 #: ../ui/backoffice/product_view.xml.en:62
 #: ../ui/shop/product/product_view.xml.en:88
 msgctxt "table cell"
