@@ -63,12 +63,6 @@ class FilterByPriceBox_View(STLView):
 
     def get_namespace(self, resource, context):
         prices = []
-        root = context.root
-        site_root = resource.get_site_root()
-        shop = site_root.get_resource('shop')
-
-        # query
-        abspath = site_root.get_canonical_path()
         prices_resource = resource.get_resource('prices-range')
         get_record_value = prices_resource.handler.get_record_value
         for record in prices_resource.handler.get_records():

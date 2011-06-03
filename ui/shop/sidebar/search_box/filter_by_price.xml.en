@@ -10,11 +10,11 @@
       <li stl:repeat="price prices">
         <input id="range_price_${price/value}" type="radio" name="range_price" value="${price/value}"
           checked="${price/checked}"/>
-        <label for="range_price_${price/value}" class="${price/css}" stl:if="not price/min">Less than ${price/max}€</label>
-        <label for="range_price_${price/value}" class="${price/css}" stl:if="not price/max">More than ${price/min}€</label>
+        <label for="range_price_${price/value}" class="${price/css}" stl:if="not price/min">Less than ${price/max}</label>
+        <label for="range_price_${price/value}" class="${price/css}" stl:if="not price/max">More than ${price/min}</label>
         <stl:block stl:if="price/min">
           <label for="range_price_${price/value}" class="${price/css}" stl:if="price/max">
-          From ${price/min}€ to ${price/max}€
+          From ${price/min} to ${price/max}
           </label>
         </stl:block>
       </li>

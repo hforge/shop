@@ -36,7 +36,7 @@ from ikaaro.views_new import NewInstance
 from shop.feed_views import Feed_View
 from shop.payments.payments_views import Payment_Widget
 from shop.payments.credit import CreditPayment
-from shop.utils import get_shop
+from shop.utils import get_shop, format_price
 from shop.widgets import BooleanCheckBox_CGU
 
 
@@ -195,7 +195,7 @@ class WishList_View(STLView):
         return {'title': resource.get_property('title'),
                 'presentation': resource.get_property('presentation'),
                 'owner': owner,
-                'amount_available': amount_available,
+                'amount_available': format_price(amount_available),
                 'is_invited': is_invited,
                 'credits': credits,
                 'uri': context.uri.resolve('./'),

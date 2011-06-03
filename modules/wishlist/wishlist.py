@@ -33,7 +33,7 @@ from ikaaro.webpage import WebPage
 from shop.folder import ShopFolder
 from shop.utils import CurrentFolder_AddImage, CurrentFolder_AddLink
 from shop.payments.credit import CreditPayment
-from shop.utils import get_shop
+from shop.utils import get_shop, format_price
 
 # Import from module
 from cc import Observable
@@ -120,7 +120,7 @@ class ShopModule_WishList(ShopFolder):
     end_view_top = ShopModule_WishList_PaymentsEndViewTop()
 
     subject = MSG(u'A gift has been made to your wishlist')
-    text = MSG(u"{user_made_gift_title} has added {amount}€ to your wishlist.")
+    text = MSG(u"{user_made_gift_title} has added {amount} to your wishlist.")
 
     go_back_here_on_register = True
 
@@ -173,7 +173,7 @@ class ShopModule_WishList(ShopFolder):
         owner_email = owner.get_property('email')
         subject = self.subject.gettext()
         text = self.text.gettext(user_made_gift_title=user_made_gift_title,
-                                 amount=amount)
+                                 amount=format_price(amount))
         root.send_email(owner_email, subject, text=text,
                         subject_with_host=True)
 

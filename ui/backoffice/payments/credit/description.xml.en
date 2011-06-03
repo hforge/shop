@@ -14,7 +14,7 @@
    <stl:block stl:if="not has_to_complete_payment">
      So you have nothing to pay
    </stl:block><br/>
-   After this payment, you will have a credit of ${remaining_amount}€.
+   After this payment, you will have a credit of ${remaining_amount}.
 
 
 </stl:block>

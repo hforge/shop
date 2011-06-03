@@ -59,7 +59,7 @@ class Deposit(PaymentWay):
 
 
     def get_payment_way_description(self, context, total_amount):
-        msg = MSG(u"Pay {percent}% of {original_amount}€ now ({amount}€)")
+        msg = MSG(u"Pay {percent}% of {original_amount} now ({amount})")
         percent = self.get_property('percent')
         if self.get_property('pay_tax'):
             total_amount = decimal(total_amount['with_tax'])

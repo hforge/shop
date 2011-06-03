@@ -32,6 +32,7 @@ from ikaaro.table import Table
 from shop.payments.payment_way import PaymentWay
 from shop.payments.payment_way_views import PaymentWay_Configure
 from shop.payments.registry import register_payment_way
+from shop.utils import format_price
 
 
 class CreditAvailable_Basetable(BaseTable):
@@ -87,9 +88,10 @@ class CreditPayment(PaymentWay):
             return ns
         get_value = users_credit.get_record_value
         for record in results:
+            amount = get_value(record, 'amount')
             ns.append({'user': get_value(record, 'user'),
                        'description': get_value(record, 'description'),
-                       'amount': get_value(record, 'amount')})
+                       'amount': format_price(amount)})
         return ns
 
 
@@ -123,11 +125,11 @@ class CreditPayment(PaymentWay):
         remaining_amount = amount_available - total_amount
         if remaining_amount < decimal('0'):
             remaining_amount = decimal('0')
-        namespace = {'amount_available': amount_available,
+        namespace = {'amount_available': format_price(amount_available),
                      'has_to_complete_payment': amount_available < total_amount,
-                     'amount_to_pay': total_amount-amount_available,
-                     'remaining_amount': remaining_amount,
-                     'total_amount': total_amount}
+                     'amount_to_pay': format_price(total_amount-amount_available),
+                     'remaining_amount': format_price(remaining_amount),
+                     'total_amount': format_price(total_amount)}
         description_template = self.get_resource(
             '/ui/backoffice/payments/credit/description.xml')
         return stl(description_template, namespace=namespace)

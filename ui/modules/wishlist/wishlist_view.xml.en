@@ -92,11 +92,11 @@
     <table cellpadding="0" cellspacing="0" id="wishlist-table-credits" stl:if="credits">
       <tr stl:repeat="credit credits">
         <td>${credit/description}</td>
-        <td>${credit/amount}€</td>
+        <td>${credit/amount}</td>
       </tr>
       <tr>
         <td id="wishlist-table-credits-total-col1">Total amount</td>
-        <td id="wishlist-table-credits-total-col2">${amount_available}€</td>
+        <td id="wishlist-table-credits-total-col2">${amount_available}</td>
       </tr>
       <tr>
         <td colspan="2">
