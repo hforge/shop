@@ -191,10 +191,9 @@ msgid "${RIB}<x id='1'/> IBAN:"
 msgstr "${RIB}<x id='1'/> IBAN:"
 
 #: ../ui/backoffice/shop_user_manage.xml.en:76
-#, fuzzy
 msgctxt "table cell"
 msgid "${address/address_1}<x id='15'/> ${address/address_2}"
-msgstr "${address/address_1}<x id='16'/> ${address/address_2}"
+msgstr "${address/address_1}<x id='15'/> ${address/address_2}"
 
 #: ../ui/shop/addresses_book.xml.en:22
 msgctxt "table cell"
@@ -214,9 +213,8 @@ msgid "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
 msgstr "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
 
 #: ../ui/backoffice/payments/paybox/record_edit.xml.en:12
-#, fuzzy
 msgid "${amount}<x id='4'/> State:"
-msgstr "${amount} €<x id='4'/> État :"
+msgstr "${amount}<x id='4'/> État :"
 
 #: ../ui/backoffice/payments/paybox/record_edit.xml.en:11
 msgid "${autorisation}<x id='3'/> Amount:"
@@ -509,9 +507,8 @@ msgstr "${zone/title} <g id='2'>> Modifier</g>"
 
 #: ../modules/export_catalog/export_catalog.py:67
 #: ../modules/export_catalog/export_catalog.py:75
-#, fuzzy
 msgid "%s"
-msgstr "#%s"
+msgstr "%s"
 
 #: ../root.py:69
 msgid ""
@@ -663,7 +660,6 @@ msgstr ""
 "id='2'/><x id='3'/>  </g>  <x id='4'/> Numéro:"
 
 #: ../ui/shop/modules/mini_cart.xml.en:7
-#, fuzzy
 msgctxt "link"
 msgid ""
 "<g id='1'> Your cart: <g id='2'>${nb_products}</g>  <g id='3'>item</g>  <g "
@@ -671,7 +667,7 @@ msgid ""
 "empty </g>"
 msgstr ""
 "<g id='1'> Votre panier : <g id='2'>${nb_products}</g>  <g id='3'>produit</"
-"g>  <g id='4'>produits</g>  <g id='5'>${total}</g>€ </g>  <g id='6'> Votre "
+"g>  <g id='4'>produits</g>  <g id='5'>${total}</g> </g>  <g id='6'> Votre "
 "panier est vide </g>"
 
 #: ../ui/backoffice/payments/paybox/end.xml.en:14
@@ -702,10 +698,9 @@ msgid "<g id='11'>My Profile |</g>  <g id='12'>Log out</g>"
 msgstr "<g id='11'>Mon profil |</g>  <g id='12'>Déconnexion</g>"
 
 #: ../ui/backoffice/widgets/taxes.xml.en:25
-#, fuzzy
 msgctxt "span"
 msgid "<g id='12'>${devise}</g><x id='13'/> Tax value:"
-msgstr "<g id='2'>${price/with_tax}</g> € TTC<x id='3'/> Poids :"
+msgstr "<g id='12'>${devise}</g><x id='13'/> Montant TVA:"
 
 #: ../ui/backoffice/administration.xml.en:77
 msgctxt "link"
@@ -771,10 +766,9 @@ msgstr ""
 "g></g>"
 
 #: ../ui/backoffice/widgets/taxes.xml.en:28
-#, fuzzy
 msgctxt "span"
 msgid "<g id='16'>${devise}</g><x id='17'/> Retail price with tax:"
-msgstr "€<x id='14'/> Prix de vente TTC:"
+msgstr "<g id='16'>${devise}</g><x id='17'/> Prix de vente TTC:"
 
 #: ../ui/default_skin/product/product_view.xml.en:108
 msgctxt "span"
@@ -827,12 +821,11 @@ msgstr ""
 "id='13'/>  </g>"
 
 #: ../ui/shop/sidebar/filter_box/filter_by_price.xml.en:10
-#, fuzzy
 msgctxt "link"
 msgid ""
 "<g id='2'>Less than ${price/max}</g>  <g id='3'>More than ${price/min}</g>"
 msgstr ""
-"<g id='2'>Moins de ${price/max}€</g>  <g id='3'>Plus de ${price/min}€</g>"
+"<g id='2'>Moins de ${price/max}</g>  <g id='3'>Plus de ${price/min}</g>"
 
 #: ../ui/default_skin/product/product_view.xml.en:23
 msgctxt "span"
@@ -845,10 +838,9 @@ msgstr ""
 "<x id='5'/>  <g id='6'>Poids: </g>  <g id='7'>${weight}</g>  <g id='8'>kg</g>"
 
 #: ../ui/backoffice/widgets/taxes.xml.en:30
-#, fuzzy
 msgctxt "span"
 msgid "<g id='20'>${devise}</g><x id='21'/> Final retail price:"
-msgstr "€<x id='17'/> Prix de vente final:"
+msgstr "<g id='20'>${devise}</g><x id='21'/> Prix de vente final:"
 
 #: ../ui/shop/template.xhtml.en:90
 msgctxt "link"
@@ -857,18 +849,16 @@ msgstr ""
 "<g id='21'>A propos</g> - <g id='22'>Crédits</g> - <g id='23'>Licence</g>"
 
 #: ../ui/backoffice/widgets/taxes.xml.en:40
-#, fuzzy
 msgctxt "span"
 msgid "<g id='27'>${devise}</g><x id='28'/> Reduce final pre-tax retail price:"
-msgstr "€ <x id='22'/> Prix de vente réduit final HT:"
+msgstr "<g id='27'>${devise}</g><x id='28'/> Prix de vente réduit final HT:"
 
 #: ../ui/shop/shop_delivery.xml.en:36
-#, fuzzy
 msgctxt "span"
 msgid ""
 "<g id='3'>${ship/pretty_price}</g>  <g id='4'>Free</g>  <g id='5'>Ok</g>"
 msgstr ""
-"<g id='3'>${ship/pretty_price} €</g>  <g id='4'>Gratuit</g>  <g id='5'>Ok</g>"
+"<g id='3'>${ship/pretty_price}</g>  <g id='4'>Gratuit</g>  <g id='5'>Ok</g>"
 
 #: ../ui/backoffice/payments/transfer/record_edit.xml.en:12
 #: ../ui/backoffice/payments/cash/record_edit.xml.en:12
@@ -888,10 +878,9 @@ msgid ""
 msgstr ""
 
 #: ../ui/backoffice/widgets/taxes.xml.en:42
-#, fuzzy
 msgctxt "span"
 msgid "<g id='31'>${devise}</g><x id='32'/> Reduce tax value:"
-msgstr "€<x id='25'/> TVA:"
+msgstr "<g id='31'>${devise}</g><x id='32'/> TVA:"
 
 #: ../ui/backoffice/orders/order_manage.xml.en:108
 msgctxt "b"
@@ -901,16 +890,14 @@ msgstr ""
 "id='35'>OK</g>"
 
 #: ../ui/backoffice/widgets/taxes.xml.en:45
-#, fuzzy
 msgctxt "span"
 msgid "<g id='35'>${devise}</g><x id='36'/> Reduce retail price with tax:"
-msgstr "€<x id='28'/> Prix de vente réduit TTC"
+msgstr "<g id='35'>${devise}</g><x id='36'/> Prix de vente réduit TTC:"
 
 #: ../ui/backoffice/widgets/taxes.xml.en:47
-#, fuzzy
 msgctxt "span"
 msgid "<g id='39'>${devise}</g><x id='40'/> Reduce final retail price:"
-msgstr "€<x id='31'/> Prix de vente réduit final:"
+msgstr "<g id='39'>${devise}</g><x id='40'/> Prix de vente réduit final:"
 
 #: ../ui/shop/product/product_view.xml.en:22
 msgctxt "span"
@@ -918,12 +905,11 @@ msgid "<g id='4'>${weight}</g> kg"
 msgstr "<g id='4'>${weight}</g> kg"
 
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:13
-#, fuzzy
 msgctxt "label"
 msgid ""
 "<g id='4'>Less than ${price/max}</g>  <g id='5'>More than ${price/min}</g>"
 msgstr ""
-"<g id='2'>Moins de ${price/max}€</g>  <g id='3'>Plus de ${price/min}€</g>"
+"<g id='4'>Moins de ${price/max}</g>  <g id='5'>Plus de ${price/min}</g>"
 
 #: ../ui/backoffice/shipping/shippings_details.xml.en:21
 msgctxt "b"
@@ -989,10 +975,9 @@ msgstr ""
 "(${issue/ago})</g>"
 
 #: ../ui/backoffice/widgets/taxes.xml.en:23
-#, fuzzy
 msgctxt "span"
 msgid "<g id='8'>${devise}</g><x id='9'/> Final pre-tax retail price:"
-msgstr "€ <x id='8'/> Prix de vente final HT:"
+msgstr "<g id='8'>${devise}</g><x id='9'/> Prix de vente final HT:"
 
 #: ../ui/backoffice/product_view.xml.en:69
 msgctxt "b"
@@ -1304,10 +1289,9 @@ msgid "Afficher le nombre de produits"
 msgstr "Afficher le nombre de produits"
 
 #: ../ui/backoffice/payments/credit/description.xml.en:17
-#, fuzzy
 msgid "After this payment, you will have a credit of ${remaining_amount}."
 msgstr ""
-"Après ce paiement, il vous restera ${remaining_amount}€ en bon d'achat."
+"Après ce paiement, il vous restera ${remaining_amount} en bon d'achat."
 
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:8
 msgctxt "label"
@@ -2791,16 +2775,14 @@ msgid "French Date"
 msgstr ""
 
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:17
-#, fuzzy
 msgctxt "label"
 msgid "From ${price/min} to ${price/max}"
-msgstr "De ${price/min}€ à ${price/max}€"
+msgstr "De ${price/min} à ${price/max}"
 
 #: ../ui/shop/sidebar/filter_box/filter_by_price.xml.en:14
-#, fuzzy
 msgctxt "link"
 msgid "From ${price/min} to ${price/max}"
-msgstr "De ${price/min}€ à ${price/max}€"
+msgstr "De ${price/min} à ${price/max}"
 
 #: ../cross_selling_views.py:64
 msgid "From current category"
@@ -2951,7 +2933,6 @@ msgstr ""
 "\n"
 
 #: ../payments/payments.py:149
-#, fuzzy
 msgid ""
 "Hi, your payment has been validated.\n"
 "\n"
@@ -2968,7 +2949,7 @@ msgstr ""
 "------------------------\n"
 "Id : {payment_way}-{id}\n"
 "Référence : {ref}\n"
-"Montant : {amount} €\n"
+"Montant : {amount}\n"
 "------------------------\n"
 "\n"
 "\n"
@@ -4179,9 +4160,8 @@ msgid "PBX_TOTAL value is invalid"
 msgstr ""
 
 #: ../orders/orders_views.py:162
-#, fuzzy
 msgid "PDF has been regenerated"
-msgstr "Votre cadeau a été enregistré."
+msgstr "Le PDF a été regénéré"
 
 #: ../shop_views.py:119
 msgid "PDF signature"
@@ -4871,9 +4851,8 @@ msgid "Regardless"
 msgstr "Peut-importe"
 
 #: ../buttons.py:53
-#, fuzzy
 msgid "Regenerate PDF"
-msgstr "Générer un PDF"
+msgstr "Regénérer les PDF"
 
 #: ../shop_views.py:289
 msgid "Register"
@@ -5306,14 +5285,13 @@ msgid "So you have nothing to pay"
 msgstr ""
 
 #: ../ui/backoffice/payments/credit/description.xml.en:11
-#, fuzzy
 msgctxt "b"
 msgid ""
 "So you just have to pay <g id='4'>${amount_to_pay}</g> (${total_amount} - "
 "${amount_available})"
 msgstr ""
-"Vous devez donc payer uniquement <g id='4'>${amount_to_pay}€</g> "
-"(${total_amount}€ - ${amount_available}€)"
+"Vous devez donc payer uniquement <g id='4'>${amount_to_pay}</g> "
+"(${total_amount} - ${amount_available})"
 
 #: ../shop_views.py:122
 msgid "Sort products by ..."
@@ -6342,14 +6320,13 @@ msgid "You can <g id='2'>create a new one</g>."
 msgstr "Vous pouvez <g id='2'>en créer une nouvelle</g>."
 
 #: ../ui/backoffice/payments/credit/description.xml.en:8
-#, fuzzy
 msgctxt "b"
 msgid ""
 "You can choose to pay with the credit available in your account<x id='1'/> "
 "You have <g id='2'>${amount_available}</g> available in your account"
 msgstr ""
 "Vous pouvez choisir de payer avec le crédit disponible en bon d'achats<x "
-"id='1'/> Vous disposez de <g id='2'>${amount_available}€</g> en bon d'achats"
+"id='1'/> Vous disposez de <g id='2'>${amount_available}</g> en bon d'achats"
 
 #: ../ui/modules/wishlist/wishlist_view.xml.en:55
 msgctxt "table cell"
@@ -6724,9 +6701,8 @@ msgid "{my_name} advice you this product: {product_title}"
 msgstr "{my_name} vous conseille ce produit : {product_title}"
 
 #: ../modules/wishlist/wishlist.py:123
-#, fuzzy
 msgid "{user_made_gift_title} has added {amount} to your wishlist."
-msgstr "{user_made_gift_title} a déposé {amount} € sur votre liste."
+msgstr "{user_made_gift_title} a déposé {amount} sur votre liste."
 
 #: ../utils.py:205
 msgid "{x} days ago."
@@ -6760,16 +6736,14 @@ msgid "« Come back to products list"
 msgstr "« Revenir à la liste des produits"
 
 #: ../ui/vertical_depot/cart_box.xml.en:25
-#, fuzzy
 msgctxt "link"
 msgid "» ${order_title} (Total ${total_with_tax})"
-msgstr "» ${order_title} (Total ${total_with_tax} €)"
+msgstr "» ${order_title} (Total ${total_with_tax})"
 
 #: ../ui/shop/cart_viewbox.xml.en:24
-#, fuzzy
 msgctxt "link"
 msgid "» Order (Total ${total_with_tax})"
-msgstr "» Commander (Total ${total_with_tax} €)"
+msgstr "» Commander (Total ${total_with_tax})"
 
 #~ msgctxt "table cell"
 #~ msgid ""
