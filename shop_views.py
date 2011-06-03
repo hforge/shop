@@ -766,8 +766,9 @@ class Shop_ShowRecapitulatif(STLForm):
         total_price_with_tax += shipping_price
         total_price_without_tax += shipping_price
         # Format total_price
-        total_price_with_tax = decimal(format_price(total_price_with_tax))
-        total_price_without_tax = decimal(format_price(total_price_without_tax))
+        # XXX Sylvain
+        #total_price_with_tax = decimal(format_price(total_price_with_tax))
+        #total_price_without_tax = decimal(format_price(total_price_without_tax))
         # Guess ref number
         # We take last order name + 1
         search = root.search(format='order')

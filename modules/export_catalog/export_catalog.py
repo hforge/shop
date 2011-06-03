@@ -64,7 +64,7 @@ class ShopModule_ExportCatalog_View(BaseView):
             row.set_cell(0, cell)
             row.set_cell_value(1, brain.reference)
             row.set_cell_value(2, brain.title)
-            row.set_cell_value(3, u'%s €' % product.get_price_without_tax())
+            row.set_cell_value(3, u'%s' % product.get_price_without_tax())
             table.append_row(row)
             # Get declinations
             for d in product.search_resources(cls=Declination):
@@ -72,7 +72,7 @@ class ShopModule_ExportCatalog_View(BaseView):
                 row = odf_create_row(width=5)
                 row.set_cell_value(1, 'reference')
                 row.set_cell_value(2, d.get_declination_title())
-                row.set_cell_value(3, u'%s €' % price)
+                row.set_cell_value(3, u'%s' % price)
                 row.set_cell_value(4, d.get_property('stock-quantity'))
                 table.append(row)
         body.append(table)

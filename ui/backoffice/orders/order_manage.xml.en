@@ -185,11 +185,11 @@
             Declination: ${product/declination}
           </stl:block>
         </td>
-        <td>${product/price/unit/without_tax} €</td>
+        <td>${product/price/unit/without_tax}</td>
         <td>${product/quantity}</td>
-        <td>${product/price/total/without_tax} €</td>
+        <td>${product/price/total/without_tax}</td>
         <td>${product/tax}%</td>
-        <td>${product/price/total/with_tax} €</td>
+        <td>${product/price/total/with_tax}</td>
       </tr>
       <tr>
         <td colspan="7" style="text-align:right">
@@ -197,14 +197,14 @@
           Shipping
           (${order/total_weight} kg)
         </td>
-        <td>${shipping_price} €</td>
+        <td>${shipping_price}</td>
       </tr>
       <tr>
         <td colspan="7" style="text-align:right">
           <span>${order/payment_way}</span> »
           Total Price
         </td>
-        <td>${total_price} €</td>
+        <td>${total_price}</td>
       </tr>
     </tbody>
   </table>

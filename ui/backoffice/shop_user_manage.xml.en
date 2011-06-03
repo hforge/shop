@@ -53,8 +53,7 @@
     <tbody>
       <tr style="height:50px">
         <td valign="top">
-          Payed: ${payments/total_payed}€<br/>
-          Refund: 0€ <br/>
+          Payed: ${payments/total_payed}<br/>
         </td>
       </tr>
     </tbody>
@@ -133,7 +132,7 @@
                       ${order/id}
                     </a>
                   </td>
-                  <td>${order/amount}€</td>
+                  <td>${order/amount}</td>
                 </tr>
               </stl:block>
             </tbody>

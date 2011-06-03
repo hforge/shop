@@ -34,7 +34,7 @@
         </tr>
         <tr>
           <th>Price</th>
-          <td>${price/with_tax} €</td>
+          <td>${price/with_tax}</td>
         </tr>
         <tr stl:if="data">
           <th>Description</th>

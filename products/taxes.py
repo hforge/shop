@@ -94,6 +94,7 @@ class PriceWidget(Widget):
         return {'widget_name': self.name,
                 'pre-tax-price': value,
                 'prefix': prefix,
+                'devise': u'$',
                 'reduce-pre-tax-price': reduce_pre_tax_price,
                 'has_reduction': has_reduction,
                 'taxes': taxes.to_html(TaxesEnumerate, tax_value)}

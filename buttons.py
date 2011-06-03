@@ -44,3 +44,10 @@ class MergeBillButton(Button):
     name = 'merge_bill'
     title = MSG(u'Merge bill PDF')
 
+
+class RegeneratePDFButton(Button):
+
+    access = 'is_allowed_to_edit'
+    css = 'button-bill'
+    name = 'regenerate_pdf'
+    title = MSG(u'Regenerate PDF')

@@ -20,16 +20,16 @@
       <td id="${widget_name}zone-price" style="vertical-align:top;">
         Pre-tax retail price:<br/>
           <input type="text" id="${widget_name}pre-tax-price" name="${prefix}pre-tax-price"
-            value="${pre-tax-price}"/>€ <br/>
+            value="${pre-tax-price}"/><span class="devise">${devise}</span><br/>
         Final pre-tax retail price:<br/>
-           <span style="font-weight:bold" id="${widget_name}final-pre-tax-price"></span> €<br/>
+           <span style="font-weight:bold" id="${widget_name}final-pre-tax-price"></span><span class="devise">${devise}</span><br/>
         Tax value:<br/>
           <input type="text" id="${widget_name}tax-value" readonly="readonly"
-            style="background-color:#F1F1F1"/>€<br/>
+            style="background-color:#F1F1F1"/><span class="devise">${devise}</span><br/>
         Retail price with tax:<br/>
-          <input type="text" id="${widget_name}retail-price" name="${prefix}retail-price"/>€<br/>
+          <input type="text" id="${widget_name}retail-price" name="${prefix}retail-price"/><span class="devise">${devise}</span><br/>
         Final retail price:<br/>
-          <span style="font-weight:bold" id="${widget_name}final-retail-price" class="final-retail-price"></span> €
+          <span style="font-weight:bold" id="${widget_name}final-retail-price" class="final-retail-price"></span><span class="devise">${devise}</span>
       </td>
       <td style="padding:10px">
       &nbsp;
@@ -37,16 +37,16 @@
       <td id="${widget_name}zone-reduction" style="vertical-align:top;">
         Reduce Pre-tax retail price:<br/>
         <input type="text" id="${widget_name}reduce-pre-tax-price" name="${prefix}reduce-pre-tax-price"
-          value="${reduce-pre-tax-price}"/>€ <br/>
+          value="${reduce-pre-tax-price}"/><span class="devise">${devise}</span><br/>
         Reduce final pre-tax retail price:<br/>
-           <span style="font-weight:bold" id="${widget_name}reduce-final-pre-tax-price"></span> €<br/>
+           <span style="font-weight:bold" id="${widget_name}reduce-final-pre-tax-price"></span><span class="devise">${devise}</span><br/>
         Reduce tax value:<br/>
           <input type="text" id="${widget_name}reduce-tax-value" readonly="readonly"
-            style="background-color:#F1F1F1"/>€<br/>
+            style="background-color:#F1F1F1"/><span class="devise">${devise}</span><br/>
         Reduce retail price with tax:<br/>
-          <input type="text" id="${widget_name}reduce-retail-price" name="${prefix}reduce-retail-price"/>€<br/>
+          <input type="text" id="${widget_name}reduce-retail-price" name="${prefix}reduce-retail-price"/><span class="devise">${devise}</span><br/>
         Reduce final retail price:<br/>
-          <span style="font-weight:bold" id="${widget_name}reduce-final-retail-price" class="final-retail-price"></span> €
+          <span style="font-weight:bold" id="${widget_name}reduce-final-retail-price" class="final-retail-price"></span><span class="devise">${devise}</span>
       </td>
     </tr>
   </table>

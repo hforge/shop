@@ -258,7 +258,7 @@ class Payments_AddPayment(AutoForm):
         TextWidget('ref', title=MSG(u'Reference')),
         TextWidget('user', title=MSG(u'User Id')),
         BooleanCheckBox('state', title=MSG(u'Payed ?')),
-        TextWidget('amount', title=MSG(u'Amount (€)')),
+        TextWidget('amount', title=MSG(u'Amount')),
         MultilineWidget('description', title=MSG(u'Description')),
         ]
 

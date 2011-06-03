@@ -28,6 +28,7 @@ from ikaaro.forms import BooleanRadio, SelectWidget
 
 # Import from shop
 from shop.datatypes import UserGroup_Enumerate, ImagePathDataType
+from shop.utils import format_price
 
 
 class PaymentWay_EndView(STLView):
@@ -58,7 +59,7 @@ class PaymentWay_EndView(STLView):
         if resource_validator.end_view_top:
             top_view = resource_validator.end_view_top.GET(resource, context)
         return {'ref': context.query['ref'],
-                'amount': '%.2f €' % amount,
+                'amount': format_price(amount),
                 'top_view': top_view}
 
 

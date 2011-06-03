@@ -30,8 +30,9 @@ from payments_views import Payments_ManagePayment, Payments_AddPayment
 
 # Import from shop
 from payment_way import PaymentWay
-from shop.folder import ShopFolder
 from registry import payment_ways_registry
+from shop.folder import ShopFolder
+from shop.utils import format_price
 
 
 class Payments(ShopFolder):
@@ -149,7 +150,7 @@ class Payments(ShopFolder):
                              u"------------------------\n"
                              u"Id payment: {payment_way}-{id}\n"
                              u"Ref: {ref}\n"
-                             u"Amount: {amount} €\n"
+                             u"Amount: {amount}\n"
                              u"------------------------\n"
                              u"\n\n")
 
@@ -177,10 +178,11 @@ class Payments(ShopFolder):
         user = root.get_resource('users/%s' % user)
         recipient = user.get_property('email')
         subject = self.mail_subject_template.gettext()
+        amount = payments_table.get_record_value(record, 'amount')
         text = self.mail_body_template.gettext(id=id_record,
             payment_way=payment_way.name,
             ref=payments_table.get_record_value(record, 'ref'),
-            amount=payments_table.get_record_value(record, 'amount'),
+            amount=format_price(amount),
             subject_with_host=False)
         root.send_email(recipient, subject, text=text)
 

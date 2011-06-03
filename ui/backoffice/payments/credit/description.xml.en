@@ -6,13 +6,13 @@
 
 
    You can choose to pay with the credit available in your account<br/>
-   You have <b>${amount_available}€</b> available in your account<br/>
+   You have <b>${amount_available}</b> available in your account<br/>
    <stl:block stl:if="has_to_complete_payment">
-     So you just have to pay <b>${amount_to_pay}€</b>
-     (${total_amount}€ - ${amount_available}€)
+     So you just have to pay <b>${amount_to_pay}</b>
+     (${total_amount} - ${amount_available})
    </stl:block>
    <stl:block stl:if="not has_to_complete_payment">
-     So you have to pay <b>0€</b>
+     So you have nothing to pay
    </stl:block><br/>
    After this payment, you will have a credit of ${remaining_amount}€.
 

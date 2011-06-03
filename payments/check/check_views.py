@@ -28,6 +28,7 @@ from ikaaro.forms import MultilineWidget, TextWidget
 # Import from shop
 from shop.payments.payment_way_views import PaymentWay_Configure
 from shop.payments.payment_way_views import PaymentWay_EndView
+from shop.utils import format_price
 
 
 class CheckStates(Enumerate):
@@ -64,8 +65,8 @@ class CheckPayment_RecordView(STLView):
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
         advance_state = get_record_value(self.record, 'advance_state')
-        amount = '%.2f €' % get_record_value(self.record, 'amount')
-        return {'amount': amount,
+        amount = get_record_value(self.record, 'amount')
+        return {'amount': format_price(amount),
                 'is_ok': (advance_state == 'success'),
                 'ref': get_record_value(self.record, 'ref'),
                 'to': self.payment_way.get_property('to'),

@@ -31,7 +31,7 @@
         </tr>
         <tr>
           <th></th>
-          <td stl:repeat="product products">${product/price/with_tax} €</td>
+          <td stl:repeat="product products">${product/price/with_tax}</td>
         </tr>
         <tr>
           <th></th>

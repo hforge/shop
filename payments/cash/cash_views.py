@@ -29,6 +29,7 @@ from ikaaro.messages import MSG_CHANGES_SAVED
 # Import from shop
 from shop.payments.payment_way_views import PaymentWay_Configure
 from shop.payments.payment_way_views import PaymentWay_EndView
+from shop.utils import format_price
 
 
 
@@ -38,9 +39,9 @@ class CashPayment_RecordView(STLView):
 
     def get_namespace(self, resource, context):
         get_record_value = self.payment_table.get_record_value
-        amount = '%.2f €' % get_record_value(self.record, 'amount')
+        amount = get_record_value(self.record, 'amount')
         return {'is_ok': get_record_value(self.record, 'state'),
-                'amount': amount,
+                'amount': format_price(amount),
                 'ref': get_record_value(self.record, 'ref'),
                 'address': self.payment_way.get_property('address')}
 

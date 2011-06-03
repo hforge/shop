@@ -82,11 +82,11 @@ def format_for_pdf(data):
 
 def format_price(price):
     if price._isinteger():
-        return str(int(price))
+        return u'%s €' % int(price)
     price = '%.2f' % price
     if price.endswith('.00'):
         price = price.replace('.00', '')
-    return price
+    return u'%s €' % price
 
 
 

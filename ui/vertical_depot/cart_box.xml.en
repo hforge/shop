@@ -22,7 +22,7 @@
     </div>
     <div id="cart-box-order">
       <a href="/shop/;view_cart">
-        » ${order_title} (Total ${total_with_tax} €)
+        » ${order_title} (Total ${total_with_tax})
       </a>
     </div>
   </div>

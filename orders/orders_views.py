@@ -33,13 +33,13 @@ from ikaaro.forms import SelectWidget, TextWidget
 # Import from shop
 from widgets import OrdersWidget
 from workflow import Order_Transitions, states, states_color, OrderStates_Enumerate
-from shop.buttons import MergeOrderButton, MergeBillButton
+from shop.buttons import MergeOrderButton, MergeBillButton, RegeneratePDFButton
 from shop.payments.enumerates import PaymentWaysEnumerate
 from shop.payments.payments_views import Payments_EditablePayment
 from shop.shipping.shipping_way import ShippingWaysEnumerate
 from shop.shop_utils_views import Shop_Progress
 from shop.utils_views import SearchTableFolder_View
-from shop.utils import get_shop, join_pdfs
+from shop.utils import format_price, get_shop, join_pdfs
 
 
 numero_template = '<span class="counter" style="background-color:%s"><a href="%s">%s</a></span>'
@@ -53,7 +53,7 @@ class OrdersView(SearchTableFolder_View):
     title = MSG(u'Orders')
 
     # Configuration
-    table_actions = [MergeOrderButton, MergeBillButton]
+    table_actions = [MergeOrderButton, MergeBillButton, RegeneratePDFButton]
     context_menus = []
 
     table_columns = [
@@ -98,7 +98,8 @@ class OrdersView(SearchTableFolder_View):
             href = context.resource.get_pathto(item_resource)
             return XMLParser(numero_template % (states_color[state], href, state_title))
         elif column == 'total_price':
-            return u'%s € ' % item_resource.get_property(column)
+            price = item_resource.get_property(column)
+            return format_price(price)
         elif column == 'order_pdf':
             if item_resource.get_resource('order', soft=True) is None:
                 return
@@ -141,9 +142,6 @@ class OrdersView(SearchTableFolder_View):
             list_pdf.append(path)
         # Join pdf
         pdf = join_pdfs(list_pdf)
-        # We regenerate pdf
-        #order.generate_pdf_bill(context)
-        #order.generate_pdf_order(context)
         return pdf
 
 
@@ -155,6 +153,13 @@ class OrdersView(SearchTableFolder_View):
     def action_merge_orders(self, resource, context, form):
         return self.action_merge_pdfs(resource, context, form, 'order')
 
+
+    def action_regenerate_pdf(self, resource, context, form):
+        for order_id in form['ids']:
+            order = resource.get_resource(order_id)
+            order.generate_pdf_bill(context)
+            order.generate_pdf_order(context)
+        return context.come_back(MSG(u'PDF has been regenerated'))
 
 
 
@@ -185,7 +190,6 @@ class Order_Manage(Payments_EditablePayment, STLForm):
 
     def get_namespace(self, resource, context):
         # Get some resources
-        root = context.root
         shop = get_shop(resource)
         addresses = shop.get_resource('addresses').handler
         # Build namespace
@@ -221,7 +225,8 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         namespace['bill_address'] = get_address(bill_address)
         # Price
         for key in ['shipping_price', 'total_price']:
-            namespace[key] = resource.get_property(key)
+            price = resource.get_property(key)
+            namespace[key] = format_price(price)
         # Messages
         messages = resource.get_resource('messages')
         namespace['messages'] = messages.get_namespace_messages(context)

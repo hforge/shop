@@ -31,7 +31,7 @@ from ikaaro.table import Table
 from payment_way_views import PaymentWay_RecordView, PaymentWay_Configure
 from shop.folder import ShopFolder
 from shop.datatypes import ImagePathDataType, UserGroup_Enumerate
-from shop.utils import CurrentFolder_AddImage
+from shop.utils import CurrentFolder_AddImage, format_price
 
 
 class PaymentWayBaseTable(BaseTable):
@@ -73,7 +73,8 @@ class PaymentWayTable(Table):
         for key in self.handler.record_properties.keys():
             namespace[key] = get_value(record, key)
         # Amount
-        namespace['amount'] = '%s €' % get_value(record, 'amount')
+        amount = get_value(record, 'amount')
+        namespace['amount'] = format_price(amount)
         # User
         users = context.root.get_resource('users')
         username = get_value(record, 'user') or '0'

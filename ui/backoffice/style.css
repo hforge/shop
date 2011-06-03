@@ -593,6 +593,13 @@ button::-webkit-focus-inner {
   text-decoration: line-through;
 }
 
+#pre-tax-price .devise{
+  font-size: 14px;
+  padding: 0 2px;
+  font-weight: bold;
+  color: gray;
+}
+
 /* Batch */
 #content .batch-numerotation{
   display: block;

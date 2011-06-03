@@ -9,7 +9,7 @@
       Please choose a payment mode
     </h1>
 
-    <b>Total to pay: ${total_price/with_tax}€</b><br/><br/>
+    <b>Total to pay: ${total_price/with_tax}</b><br/><br/>
 
     <input type="hidden" name="amount" value="${total_price/with_tax}"/>
 

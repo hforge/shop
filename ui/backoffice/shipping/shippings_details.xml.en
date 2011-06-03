@@ -63,7 +63,7 @@
               <tr>
                 <td>
                   <span style="color:red" stl:omit-tag="not price/error">
-                    ${price/price}&nbsp;€
+                    ${price/price}
                   </span>
                 </td>
               </tr>

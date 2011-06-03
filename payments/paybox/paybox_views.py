@@ -32,6 +32,7 @@ from enumerates import PBXState, PayboxStatus, PayboxCGIErrors
 from shop.payments.payment_way_views import PaymentWay_Configure
 from shop.payments.payment_way_views import PaymentWay_EndView
 from shop.datatypes import StringFixSize
+from shop.utils import format_price
 
 
 class Paybox_View(Table_View):
@@ -141,6 +142,7 @@ class Paybox_Record_Edit(STLView):
         get_record_value = self.payment_table.get_record_value
         for key in self.payment_table.record_properties:
             namespace[key] = get_record_value(self.record, key)
+        namespace['amount'] = format_price(namespace['amount'])
         namespace['advance_state'] = PayboxStatus.get_value(
                                           namespace['advance_state'])
         return namespace

@@ -101,7 +101,7 @@
           </stl:block>
         </pml:td>
         <pml:td>${product/quantity}</pml:td>
-        <pml:td>${product/price/total/with_tax} €</pml:td>
+        <pml:td>${product/price/total/with_tax}</pml:td>
       </pml:tr>
     </pml:table>
 
@@ -116,7 +116,7 @@
           Total shipping:
         </pml:td>
         <pml:td>
-          ${price/shippings/with_tax} €
+          ${price/shippings/with_tax}
         </pml:td>
       </pml:tr>
       <pml:tr>
@@ -124,7 +124,7 @@
         <pml:td class="align-right">
           Total with Tax:
         </pml:td>
-        <pml:td>${price/total/with_tax} €</pml:td>
+        <pml:td>${price/total/with_tax}</pml:td>
       </pml:tr>
     </pml:table>
 

@@ -9,7 +9,7 @@
   Id transaction: ${transaction}<br/>
   Id payment: ${id_payment}<br/>
   Autorisation: ${autorisation}<br/>
-  Amount: ${amount} €<br/>
+  Amount: ${amount}<br/>
   State: ${state}<br/>
   Advance state: <b>${advance_state}</b><br/>
 

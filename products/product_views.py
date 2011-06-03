@@ -491,8 +491,9 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
                     """% (uri, uri))
             return XMLParser('<div class="thumb-products"/>')
         elif column == 'stored_price':
-            price = '%s €' % item_resource.get_price_with_tax(pretty=True)
+            price = item_resource.get_price_with_tax(pretty=True)
             if item_resource.get_property('has_reduction'):
+                price = str(price)
                 return XMLParser('<span style="color:red">%s</span>'% price)
             return price
         # Super

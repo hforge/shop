@@ -43,7 +43,7 @@ from forms import ThreeStateBooleanRadio
 from shop_utils_views import RealRessource_Form
 from orders.orders_views import numero_template
 from orders.workflow import states, states_color
-from utils import bool_to_img, get_shop, get_skin_template
+from utils import bool_to_img, format_price, get_shop, get_skin_template
 from utils_views import SearchTableFolder_View, Viewbox_View
 
 
@@ -291,7 +291,8 @@ class ShopUser_OrdersView(BrowseForm):
             href = './;order_view?id=%s' % item.name
             return XMLParser(numero_template % (states_color[state], href, state_title))
         elif column == 'total_price':
-            return '%s € ' % item.get_property(column)
+            price = item.get_property(column)
+            return format_price(price)
         elif column == 'creation_datetime':
             value = item.get_property(column)
             accept = context.accept_language
