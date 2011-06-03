@@ -213,11 +213,6 @@ msgctxt "table cell"
 msgid "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
 msgstr "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:99
-msgctxt "table cell"
-msgid "${amount_available}€"
-msgstr "${amount_available}€"
-
 #: ../ui/backoffice/payments/paybox/record_edit.xml.en:12
 #, fuzzy
 msgid "${amount}<x id='4'/> State:"
@@ -305,11 +300,6 @@ msgstr "${category}:"
 msgctxt "paragraph"
 msgid "${country},"
 msgstr "${country},"
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:95
-msgctxt "table cell"
-msgid "${credit/amount}€"
-msgstr "${credit/amount}€"
 
 #: ../ui/backoffice/orders/order_manage.xml.en:56
 msgctxt "link"
@@ -928,11 +918,12 @@ msgid "<g id='4'>${weight}</g> kg"
 msgstr "<g id='4'>${weight}</g> kg"
 
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:13
+#, fuzzy
 msgctxt "label"
 msgid ""
-"<g id='4'>Less than ${price/max}€</g>  <g id='5'>More than ${price/min}€</g>"
+"<g id='4'>Less than ${price/max}</g>  <g id='5'>More than ${price/min}</g>"
 msgstr ""
-"<g id='4'>Moins de ${price/max}€</g>  <g id='5'>Plus de ${price/min}€</g>"
+"<g id='2'>Moins de ${price/max}€</g>  <g id='3'>Plus de ${price/min}€</g>"
 
 #: ../ui/backoffice/shipping/shippings_details.xml.en:21
 msgctxt "b"
@@ -1313,7 +1304,8 @@ msgid "Afficher le nombre de produits"
 msgstr "Afficher le nombre de produits"
 
 #: ../ui/backoffice/payments/credit/description.xml.en:17
-msgid "After this payment, you will have a credit of ${remaining_amount}€."
+#, fuzzy
+msgid "After this payment, you will have a credit of ${remaining_amount}."
 msgstr ""
 "Après ce paiement, il vous restera ${remaining_amount}€ en bon d'achat."
 
@@ -2033,11 +2025,11 @@ msgstr "Date de création"
 msgid "Creation date"
 msgstr "Date de création"
 
-#: ../payments/credit/credit.py:51
+#: ../payments/credit/credit.py:52
 msgid "Credit amount"
 msgstr "Montant du credit"
 
-#: ../payments/credit/credit.py:58
+#: ../payments/credit/credit.py:59
 msgid "Credit payment"
 msgstr "Paiement par credit"
 
@@ -2295,7 +2287,7 @@ msgstr ""
 msgid "Deposit payment module"
 msgstr "Module de paiement par accompte"
 
-#: ../payments/credit/credit.py:52 ../ui/backoffice/orders/order_pdf.xml.en:80
+#: ../payments/credit/credit.py:53 ../ui/backoffice/orders/order_pdf.xml.en:80
 #: ../modules/review/review.py:396 ../payments/payment_way_views.py:83
 #: ../categories.py:62 ../products/product_views.py:241 ../suppliers.py:65
 #: ../shipping/shippings_views.py:91 ../modules/modules_views.py:40
@@ -2798,15 +2790,16 @@ msgstr "Gratuit"
 msgid "French Date"
 msgstr ""
 
+#: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:17
+#, fuzzy
+msgctxt "label"
+msgid "From ${price/min} to ${price/max}"
+msgstr "De ${price/min}€ à ${price/max}€"
+
 #: ../ui/shop/sidebar/filter_box/filter_by_price.xml.en:14
 #, fuzzy
 msgctxt "link"
 msgid "From ${price/min} to ${price/max}"
-msgstr "De ${price/min}€ à ${price/max}€"
-
-#: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:17
-msgctxt "label"
-msgid "From ${price/min}€ to ${price/max}€"
 msgstr "De ${price/min}€ à ${price/max}€"
 
 #: ../cross_selling_views.py:64
@@ -4241,7 +4234,7 @@ msgid "Pay deposite with tax ?"
 msgstr "L'accompte comprend la TVA ?"
 
 #: ../payments/deposit/deposit.py:62
-msgid "Pay {percent}% of {original_amount}€ now ({amount}€)"
+msgid "Pay {percent}% of {original_amount} now ({amount})"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:110 ../payments/systempay/enumerates.py:27
@@ -4684,7 +4677,7 @@ msgstr "Nom du produit"
 msgid "Product out of stock"
 msgstr "En rupture de stock."
 
-#: ../sidebar/search_box.py:147
+#: ../sidebar/search_box.py:141
 msgid "Product research box"
 msgstr "Boîte de recherche produit"
 
@@ -5089,7 +5082,7 @@ msgctxt "span"
 msgid "Search"
 msgstr "Rechercher"
 
-#: ../sidebar/search_box.py:146
+#: ../sidebar/search_box.py:140
 msgid "Search box"
 msgstr "Boîte de recherche"
 
@@ -6074,7 +6067,7 @@ msgstr "Groupe de l'utilisateur"
 msgid "User groups"
 msgstr "Groupes utilisateur"
 
-#: ../payments/credit/credit.py:50 ../payments/payment_way.py:56
+#: ../payments/credit/credit.py:51 ../payments/payment_way.py:56
 msgid "User id"
 msgstr "ID utilisateur"
 
@@ -6731,7 +6724,8 @@ msgid "{my_name} advice you this product: {product_title}"
 msgstr "{my_name} vous conseille ce produit : {product_title}"
 
 #: ../modules/wishlist/wishlist.py:123
-msgid "{user_made_gift_title} has added {amount}€ to your wishlist."
+#, fuzzy
+msgid "{user_made_gift_title} has added {amount} to your wishlist."
 msgstr "{user_made_gift_title} a déposé {amount} € sur votre liste."
 
 #: ../utils.py:205
@@ -6784,6 +6778,14 @@ msgstr "» Commander (Total ${total_with_tax} €)"
 #~ msgstr ""
 #~ "${amount_available} € (L'argent est accumulé comme bon d'achats dans la "
 #~ "boutique)"
+
+#~ msgctxt "table cell"
+#~ msgid "${amount_available}€"
+#~ msgstr "${amount_available}€"
+
+#~ msgctxt "table cell"
+#~ msgid "${credit/amount}€"
+#~ msgstr "${credit/amount}€"
 
 #~ msgctxt "table cell"
 #~ msgid "${nb_emails} <g id='1'> (Please invite your friends) </g>"
@@ -6845,6 +6847,13 @@ msgstr "» Commander (Total ${total_with_tax} €)"
 #~ msgid "0€"
 #~ msgstr "0 €"
 
+#~ msgctxt "label"
+#~ msgid ""
+#~ "<g id='4'>Less than ${price/max}€</g>  <g id='5'>More than ${price/min}€</"
+#~ "g>"
+#~ msgstr ""
+#~ "<g id='4'>Moins de ${price/max}€</g>  <g id='5'>Plus de ${price/min}€</g>"
+
 #~ msgid "Amount (€)"
 #~ msgstr "Montant (€)"
 
@@ -6856,6 +6865,10 @@ msgstr "» Commander (Total ${total_with_tax} €)"
 
 #~ msgid "Creation of new wishlist"
 #~ msgstr "Créer une nouvelle liste"
+
+#~ msgctxt "label"
+#~ msgid "From ${price/min}€ to ${price/max}€"
+#~ msgstr "De ${price/min}€ à ${price/max}€"
 
 #~ msgctxt "title attribute"
 #~ msgid "Informations"

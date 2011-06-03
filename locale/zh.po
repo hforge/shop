@@ -158,11 +158,6 @@ msgctxt "table cell"
 msgid "${address/zipcode} ${address/town}<x id='4'/> ${address/country}"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:99
-msgctxt "table cell"
-msgid "${amount_available}€"
-msgstr ""
-
 #: ../ui/backoffice/payments/paybox/record_edit.xml.en:12
 msgid "${amount}<x id='4'/> State:"
 msgstr ""
@@ -236,11 +231,6 @@ msgstr ""
 #: ../ui/backoffice/shipping/shippings_details.xml.en:18
 msgctxt "paragraph"
 msgid "${country},"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:95
-msgctxt "table cell"
-msgid "${credit/amount}€"
 msgstr ""
 
 #: ../ui/backoffice/orders/order_manage.xml.en:56
@@ -804,7 +794,7 @@ msgstr ""
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:13
 msgctxt "label"
 msgid ""
-"<g id='4'>Less than ${price/max}€</g>  <g id='5'>More than ${price/min}€</g>"
+"<g id='4'>Less than ${price/max}</g>  <g id='5'>More than ${price/min}</g>"
 msgstr ""
 
 #: ../ui/backoffice/shipping/shippings_details.xml.en:21
@@ -1171,7 +1161,7 @@ msgid "Afficher le nombre de produits"
 msgstr ""
 
 #: ../ui/backoffice/payments/credit/description.xml.en:17
-msgid "After this payment, you will have a credit of ${remaining_amount}€."
+msgid "After this payment, you will have a credit of ${remaining_amount}."
 msgstr ""
 
 #: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:8
@@ -1890,11 +1880,11 @@ msgstr ""
 msgid "Creation date"
 msgstr ""
 
-#: ../payments/credit/credit.py:51
+#: ../payments/credit/credit.py:52
 msgid "Credit amount"
 msgstr ""
 
-#: ../payments/credit/credit.py:58
+#: ../payments/credit/credit.py:59
 msgid "Credit payment"
 msgstr ""
 
@@ -2150,7 +2140,7 @@ msgstr ""
 msgid "Deposit payment module"
 msgstr ""
 
-#: ../payments/credit/credit.py:52 ../ui/backoffice/orders/order_pdf.xml.en:80
+#: ../payments/credit/credit.py:53 ../ui/backoffice/orders/order_pdf.xml.en:80
 #: ../modules/review/review.py:396 ../payments/payment_way_views.py:83
 #: ../categories.py:62 ../products/product_views.py:241 ../suppliers.py:65
 #: ../shipping/shippings_views.py:91 ../modules/modules_views.py:40
@@ -2649,14 +2639,14 @@ msgstr ""
 msgid "French Date"
 msgstr ""
 
-#: ../ui/shop/sidebar/filter_box/filter_by_price.xml.en:14
-msgctxt "link"
+#: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:17
+msgctxt "label"
 msgid "From ${price/min} to ${price/max}"
 msgstr ""
 
-#: ../ui/shop/sidebar/search_box/filter_by_price.xml.en:17
-msgctxt "label"
-msgid "From ${price/min}€ to ${price/max}€"
+#: ../ui/shop/sidebar/filter_box/filter_by_price.xml.en:14
+msgctxt "link"
+msgid "From ${price/min} to ${price/max}"
 msgstr ""
 
 #: ../cross_selling_views.py:64
@@ -4061,7 +4051,7 @@ msgid "Pay deposite with tax ?"
 msgstr ""
 
 #: ../payments/deposit/deposit.py:62
-msgid "Pay {percent}% of {original_amount}€ now ({amount}€)"
+msgid "Pay {percent}% of {original_amount} now ({amount})"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:110 ../payments/systempay/enumerates.py:27
@@ -4498,7 +4488,7 @@ msgstr ""
 msgid "Product out of stock"
 msgstr ""
 
-#: ../sidebar/search_box.py:147
+#: ../sidebar/search_box.py:141
 msgid "Product research box"
 msgstr ""
 
@@ -4902,7 +4892,7 @@ msgctxt "span"
 msgid "Search"
 msgstr ""
 
-#: ../sidebar/search_box.py:146
+#: ../sidebar/search_box.py:140
 msgid "Search box"
 msgstr ""
 
@@ -5865,7 +5855,7 @@ msgstr ""
 msgid "User groups"
 msgstr ""
 
-#: ../payments/credit/credit.py:50 ../payments/payment_way.py:56
+#: ../payments/credit/credit.py:51 ../payments/payment_way.py:56
 msgid "User id"
 msgstr ""
 
@@ -6486,7 +6476,7 @@ msgid "{my_name} advice you this product: {product_title}"
 msgstr ""
 
 #: ../modules/wishlist/wishlist.py:123
-msgid "{user_made_gift_title} has added {amount}€ to your wishlist."
+msgid "{user_made_gift_title} has added {amount} to your wishlist."
 msgstr ""
 
 #: ../utils.py:205
