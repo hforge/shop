@@ -688,6 +688,12 @@ class ShopModule_Review(ShopModule):
             doc = results.get_documents(sort_by='name', reverse=True)[0]
             name = str(int(doc.name) + 1)
 
+        # XXX Temp fix
+        while images.get_resource(name, soft=True) is not None:
+            name = int(name) + 1
+            name = str(name)
+        # End of temp fix
+
         filename, mimetype, body = image
         _name, type, language = FileName.decode(filename)
         cls = Image
