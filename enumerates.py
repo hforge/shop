@@ -19,8 +19,23 @@ from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.web import get_context
 
-# Import from shop
-from utils import get_shop
+
+
+class Devises(Enumerate):
+    """ ISO 4217 """
+
+    options = [
+      {'name': '978', 'value': MSG(u'Euro'),   'code': 'EUR', 'symbol': u'€'},
+      {'name': '840', 'value': MSG(u'Dollar'), 'code': 'USD', 'symbol': u'$'},
+      ]
+
+    @classmethod
+    def get_symbol(cls, name):
+        for option in cls.get_options():
+            if option['name'] == name:
+                return option['symbol']
+        raise ValueError
+
 
 
 class BarcodesFormat(Enumerate):
@@ -84,6 +99,7 @@ class CountriesZonesEnumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
+        from utils import get_shop
         context = get_context()
         # Search shop
         shop = get_shop(context.resource)

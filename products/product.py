@@ -232,8 +232,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Price # XXX We can't sort decimal, so transform to int
         values['stored_price'] = int(self.get_price_with_tax() * 100)
         # Price
-        values['ht_price'] = self.get_price_without_tax(pretty=True)
-        values['ttc_price'] = self.get_price_with_tax(pretty=True)
+        values['ht_price'] = self.get_price_without_tax()
+        values['ttc_price'] = self.get_price_with_tax()
         # Creation time
         values['ctime'] = self.get_property('ctime')
         # Publication date

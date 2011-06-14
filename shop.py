@@ -24,6 +24,7 @@ from ikaaro.registry import register_resource_class
 from ikaaro.webpage import WebPage
 
 # Import from project
+from enumerates import Devises
 from enumerate_table import EnumeratesFolder
 from addresses import Addresses
 from categories import Category
@@ -198,6 +199,7 @@ class Shop(ShopFolder):
         schema['shop_sort_by'] = SortBy_Enumerate
         schema['shop_sort_reverse'] = Boolean
         schema['categories_batch_size'] = Integer(default=20)
+        schema['devise'] = Devises(default='978')
         schema['bill_logo'] = ImagePathDataType
         schema['pdf_signature'] = Unicode
         schema['barcode_format'] = BarcodesFormat

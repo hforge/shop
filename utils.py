@@ -37,6 +37,9 @@ from pyPdf import PdfFileWriter, PdfFileReader
 # Import from itws
 from itws.views import ImproveDBResource_AddImage
 
+# Import from shop
+from enumerates import Devises
+
 
 def get_parent_paths(abspath):
     return [str(abspath[:i]) for i in range(len(abspath))] or None
@@ -81,12 +84,16 @@ def format_for_pdf(data):
 
 
 def format_price(price):
+    context = get_context()
+    shop = get_shop(context.resource)
+    devise = shop.get_property('devise')
+    symbol = Devises.get_symbol(devise)
     if price._isinteger():
-        return str(int(price))
+        return u'%s %s' % (int(price), symbol)
     price = '%.2f' % price
     if price.endswith('.00'):
         price = price.replace('.00', '')
-    return price
+    return u'%s %s' % (price, symbol)
 
 
 

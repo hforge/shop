@@ -14,27 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Import from itools
-from itools.datatypes import Enumerate
-from itools.gettext import MSG
-
-# Import from payment
-from payment_way import PaymentWay
-
 # Import from shop
 from shop.datatypes import DynamicEnumerate
-
-
-
-# XXX We have to use devises
-class Devises(Enumerate):
-    """ ISO 4217 """
-
-    options = [
-      {'name': '978', 'value': MSG(u'Euro'),   'code': 'EUR', 'symbol': '€'},
-      {'name': '840', 'value': MSG(u'Dollar'), 'code': 'USD', 'symbol': '$'},
-      ]
-
 
 class PaymentWaysEnumerate(DynamicEnumerate):
 

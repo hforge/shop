@@ -53,6 +53,7 @@ from cart import ProductCart
 from countries import CountriesEnumerate
 from datatypes import Civilite, ImagePathDataType
 from enumerates import BarcodesFormat, SortBy_Enumerate, CountriesZonesEnumerate
+from enumerates import Devises
 from modules import ModuleLoader
 from payments.payments_views import Payments_ChoosePayment
 from products.declination import Declination
@@ -99,6 +100,7 @@ class Shop_Configure(DBResource_Edit):
               'shop_default_zone': CountriesZonesEnumerate(mandatory=True),
               'shop_sort_by': SortBy_Enumerate(mandatory=True),
               'shop_sort_reverse': Boolean(mandatory=True),
+              'devise': Devises(mandatory=True),
               'hide_not_buyable_products': Boolean(mandatory=True),
               'categories_batch_size': Integer(mandatory=True),
               'show_sub_categories': Boolean,
@@ -118,6 +120,7 @@ class Shop_Configure(DBResource_Edit):
         MultilineWidget('pdf_signature',
             title=MSG(u'PDF signature'), rows=8, cols=50),
         SelectWidget('shop_default_zone', title=MSG(u'Shop default zone')),
+        SelectWidget('devise', title=MSG(u'Devises'), has_empty_option=False),
         TextWidget('categories_batch_size', title=MSG(u'Batch size for categories ?')),
         SelectWidget('shop_sort_by', title=MSG(u'Sort products by ...'),
                      has_empty_option=False),
