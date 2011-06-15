@@ -354,7 +354,7 @@ class ShopUser_OrderView(STLForm):
         shippings = shop.get_resource('shippings')
         # Prices
         for key in ['shipping_price', 'total_price']:
-            namespace[key] = order.get_property(key)
+            namespace[key] = format_price(order.get_property(key))
         # Messages
         messages = order.get_resource('messages')
         namespace['messages'] = messages.get_namespace_messages(context)
