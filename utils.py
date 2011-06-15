@@ -17,6 +17,7 @@
 # Import from standard library
 from cStringIO import StringIO
 from datetime import datetime, timedelta
+from decimal import Decimal as decimal
 
 # Import from itools
 from itools.datatypes import Boolean, Enumerate, String, LanguageTag, Tokens
@@ -83,16 +84,20 @@ def format_for_pdf(data):
     return XMLParser(data.replace('\n', '<br/>'))
 
 
+def get_arrondi(price):
+    price = decimal('%.2f' % price)
+    if price._isinteger():
+        # We transform 2.00 into 2
+        price = decimal(int(price))
+    return price
+
+
 def format_price(price):
     context = get_context()
     shop = get_shop(context.resource)
     devise = shop.get_property('devise')
     symbol = Devises.get_symbol(devise)
-    if price._isinteger():
-        return u'%s %s' % (int(price), symbol)
-    price = '%.2f' % price
-    if price.endswith('.00'):
-        price = price.replace('.00', '')
+    price = get_arrondi(price)
     return u'%s %s' % (price, symbol)
 
 

@@ -59,7 +59,7 @@ from payments.payments_views import Payments_ChoosePayment
 from products.declination import Declination
 from shop_utils_views import Cart_View, Shop_Progress, RealRessource_Form
 from utils import datetime_to_ago, get_shippings_details, get_skin_template
-from utils import get_shop, format_price
+from utils import get_shop, get_arrondi
 
 
 CART_ERROR = ERROR(u'Your cart is invalid or your payment has been recorded.')
@@ -768,10 +768,9 @@ class Shop_ShowRecapitulatif(STLForm):
         shipping_price = cart.get_shipping_ns(resource, context)['price']
         total_price_with_tax += shipping_price
         total_price_without_tax += shipping_price
-        # Format total_price
-        # XXX Sylvain
-        #total_price_with_tax = decimal(format_price(total_price_with_tax))
-        #total_price_without_tax = decimal(format_price(total_price_without_tax))
+        # Arrondi
+        total_price_with_tax = get_arrondi(total_price_with_tax)
+        total_price_without_tax = get_arrondi(total_price_without_tax)
         # Guess ref number
         # We take last order name + 1
         search = root.search(format='order')
