@@ -20,7 +20,7 @@ from re import match, DOTALL
 from sys import prefix
 
 # Import from itools
-from itools.core import merge_dicts, get_abspath
+from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Integer
 from itools.gettext import MSG
 from itools.html import HTMLFile
@@ -124,6 +124,7 @@ class Paybox(PaymentWay):
            It must be call via the method show_payment_form() of payment resource.
         """
         payments = self.parent
+        shop = payments.parent
         # We get the paybox CGI path on serveur
         cgi_path = Path(prefix).resolve2('bin/paybox.cgi')
         # Configuration
@@ -150,8 +151,7 @@ class Paybox(PaymentWay):
         for key in ['PBX_SITE', 'PBX_IDENTIFIANT',
                     'PBX_RANG', 'PBX_DIFF', 'PBX_AUTOSEULE']:
             kw[key] = self.get_property(key)
-        # XXX Euro par défaut
-        kw['PBX_DEVISE'] = '978'
+        kw['PBX_DEVISE'] = shop.get_property('devise')
         # PBX_PORTEUR
         kw['PBX_PORTEUR'] = context.user.get_property('email')
         # En mode test:
