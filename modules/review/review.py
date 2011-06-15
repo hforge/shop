@@ -51,7 +51,7 @@ from itws.views import AutomaticEditView
 from shop.modules import ShopModule
 from shop.products.enumerate import States
 from shop.feed_views import Feed_View
-from shop.utils import get_module, MultilingualProperties
+from shop.utils import get_module, MultilingualProperties, get_shop
 from shop.utils_views import SearchTableFolder_View
 from shop.widgets import FilesWidget, BooleanCheckBox_CGU
 
@@ -203,6 +203,13 @@ class ShopModule_AReport_NewInstance(NewInstance):
         metadata.set_property('ctime', datetime.now())
         metadata.set_property('description', form['description'], language)
         metadata.set_property('remote_ip', context.get_remote_ip())
+
+        # Notification
+        shop = get_shop(resource)
+        subject = MSG(u'A report on a review has been made').gettext()
+        body = MSG(u'Go on your backoffice to see it.').gettext()
+        for to_addr in shop.get_property('order_notification_mails'):
+            context.root.send_email(to_addr, subject, text=body)
 
         goto = context.get_link(resource.parent)
         message = MSG(u'Your report has been added')
