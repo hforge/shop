@@ -6294,7 +6294,7 @@ msgstr "Oui uniquement"
 
 #: ../modules/review/review.py:307
 msgid "You already have filled a review."
-msgstr "Vous avez déjà ajouter votre avis."
+msgstr "Vous avez déjà ajouté votre avis."
 
 #: ../ui/modules/wishlist/wishlist_view.xml.en:77
 msgctxt "table cell"
@@ -6546,7 +6546,7 @@ msgstr "Votre signalement"
 
 #: ../modules/review/review.py:208
 msgid "Your report has been added"
-msgstr "Votre avis a été ajouté"
+msgstr "Votre signalement a été ajouté"
 
 #: ../modules/review/review.py:257 ../modules/review/review.py:542
 msgid "Your review"
