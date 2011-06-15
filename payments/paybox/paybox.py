@@ -113,9 +113,11 @@ class Paybox(PaymentWay):
         return schema
 
 
-    test_configuration = {'PBX_SITE': 1999888,
-                          'PBX_RANG': 99,
-                          'PBX_IDENTIFIANT': 2}
+    test_configuration = {
+        'PBX_SITE': 1999888,
+        'PBX_RANG': 99,
+        'PBX_PAYBOX': 'https://preprod-tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi',
+        'PBX_IDENTIFIANT': 2}
 
 
     def _show_payment_form(self, context, payment):
