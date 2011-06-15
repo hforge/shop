@@ -26,7 +26,7 @@ class Devises(Enumerate):
 
     options = [
       {'name': '978', 'value': MSG(u'Euro'),   'code': 'EUR', 'symbol': u'€'},
-      {'name': '840', 'value': MSG(u'Dollar'), 'code': 'USD', 'symbol': u'$'},
+      {'name': '840', 'value': MSG(u'Dollar'), 'code': 'USD', 'symbol': u'US $'},
       ]
 
     @classmethod
