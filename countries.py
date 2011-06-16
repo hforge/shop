@@ -103,9 +103,13 @@ class CountriesEnumerate(Enumerate):
             records = countries.search(zone=str(cls.zone))
         else:
             records = countries.get_records()
-        options = [{'name': str(record.id),
-                    'value': countries.get_record_value(record, 'title')}
-                        for record in records]
+        options = []
+        for record in records:
+            enabled = countries.get_record_value(record, 'enabled')
+            if enabled is False:
+                continue
+            options.append({'name': str(record.id),
+                            'value': countries.get_record_value(record, 'title')})
         options.sort(key=itemgetter('value'))
         return options
 
