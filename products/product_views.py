@@ -493,7 +493,7 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
         elif column == 'stored_price':
             price = item_resource.get_price_with_tax(pretty=True)
             if item_resource.get_property('has_reduction'):
-                price = str(price)
+                price = price.encode('utf-8')
                 return XMLParser('<span style="color:red">%s</span>'% price)
             return price
         # Super
