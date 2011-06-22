@@ -186,8 +186,8 @@ class Declination(DynamicFolder):
             declination_title=self.get_declination_title(),
             manufacturer=str(self.parent.get_property('manufacturer')),
             supplier=str(self.parent.get_property('supplier')),
-            ht_price=self.parent.get_price_without_tax(id_declination=self.name, pretty=True),
-            ttc_price=self.parent.get_price_with_tax(id_declination=self.name, pretty=True),
+            ht_price=self.parent.get_price_without_tax(id_declination=self.name, pretty=False),
+            ttc_price=self.parent.get_price_with_tax(id_declination=self.name, pretty=False),
             # XXX Declination must be workflowaware
             is_default=self.get_property('is_default'),
             workflow_state=self.parent.get_workflow_state(),
