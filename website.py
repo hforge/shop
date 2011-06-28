@@ -110,13 +110,17 @@ class ShopWebSite(NeutralWS):
         return merge_dicts(
                   NeutralWS.get_metadata_schema(),
                   hide_website_title_on_meta_title=Boolean,
-                  class_skin=SkinsEnumerate)
+                  class_skin=SkinsEnumerate,
+                  class_skin_administrators=SkinsEnumerate)
 
 
     def get_class_skin(self, context):
         class_skin = self.get_property('class_skin')
         if not class_skin:
             return self.class_skin
+        ac = self.get_access_control()
+        if ac.is_admin(context.user, self):
+            return self.get_property('class_skin_administrators')
         return class_skin
 
 

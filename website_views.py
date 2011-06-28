@@ -45,6 +45,8 @@ class ShopWebSite_Edit(NeutralWS_Edit):
         is_admin = ac.is_admin(context.user, resource.parent)
         schema['class_skin'] = SkinsEnumerate(all_skins=is_admin,
                                   value=resource.get_property('class_skin'))
+        schema['class_skin_administrators'] = SkinsEnumerate(all_skins=is_admin,
+                      value=resource.get_property('class_skin_administrators'))
         schema['hide_website_title_on_meta_title'] = Boolean
         return schema
 
@@ -53,6 +55,9 @@ class ShopWebSite_Edit(NeutralWS_Edit):
         widgets = NeutralWS_Edit.get_widgets(self, resource, context)
         widgets[-1] = SelectWidget('class_skin', title=MSG(u'Class skin'),
                                    has_empty_option=False)
+        widgets.append(SelectWidget('class_skin_administrators',
+                                   title=MSG(u'Class skin for administrators'),
+                                   has_empty_option=False))
         widgets.append(BooleanRadio('hide_website_title_on_meta_title',
                           title=MSG(u'Hide website title on meta title')))
         return widgets
