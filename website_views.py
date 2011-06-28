@@ -68,8 +68,9 @@ class ShopWebSite_Edit(NeutralWS_Edit):
         # Check edit conflict
         if context.edit_conflict:
             return
-        resource.set_property('hide_website_title_on_meta_title',
-                              form['hide_website_title_on_meta_title'])
+        for key in ['class_skin_administrators',
+                    'hide_website_title_on_meta_title']:
+            resource.set_property(key, form[key])
         context.message = messages.MSG_CHANGES_SAVED
 
 
