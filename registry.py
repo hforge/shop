@@ -47,7 +47,6 @@ def register_shop_skin(title, package, path, name, config=None):
     from skin import ShopSkin
     path = '../%s/%s' % (package, path)
     path = get_abspath(path)
-    print path
     # Register skin
     register_skin(name, ShopSkin(path, config=config))
     shop_skins.append({'name': '/ui/%s' % name,
@@ -56,9 +55,7 @@ def register_shop_skin(title, package, path, name, config=None):
 
 
 def register_shop(package, name):
-    from skin import ShopSkin
     base_path = '../%s/%s' % (package, name)
-    print '=> %s' % name
     # Register shop
     shops.append(name)
     # Import project
@@ -71,15 +68,17 @@ def register_shop(package, name):
     # Register domain for i18n
     register_domain(name, get_abspath('%s/locale' % base_path))
     # Register modules
+    project_modules = []
     modules_path = get_abspath(join_paths(base_path, 'modules'))
     if exists(modules_path) or name == 'ecox':
         project_modules = [f for f in listdir(modules_path)
               if isdir(get_abspath('%s/%s' % (modules_path, f)))]
         for m in project_modules:
-            print '>>> Import module %s' % m
             exec('import %s.%s.modules.%s' % (package, name, m))
     # Print
+    print 'Name: ',  name
     print 'URL: ', config.get_value('url')
+    print 'Modules: [%s], %s' % (len(project_modules), project_modules)
 
 
 ####################################
