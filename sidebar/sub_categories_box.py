@@ -17,6 +17,7 @@
 # Import from itools
 from itools.datatypes import Boolean
 from itools.gettext import MSG
+from itools.handlers import checkid
 from itools.stl import stl
 from itools.uri import Path
 from itools.xapian import AndQuery, PhraseQuery
@@ -43,7 +44,6 @@ class SubCategoriesBox_View(Box_View):
         site_root = here.get_site_root()
         site_root_abspath = site_root.get_abspath()
         shop = site_root.get_resource('shop')
-        categories = site_root.get_resource('categories')
         categories_abspath = str(site_root_abspath.resolve2('categories'))
         show_nb_products = resource.get_property('show_nb_products')
         show_first_category = resource.get_property('show_first_category')
@@ -138,18 +138,21 @@ class SubCategoriesBox_View(Box_View):
                 doc = data['doc']
                 if here_abspath.startswith(doc.abspath):
                     sub_tree = tree
-                    css = 'in-path'
+                    css = 'in-path '
                 else:
                     sub_tree = None
                     css = ''
-                css = 'active' if here_abspath == doc.abspath else css
+                css = 'active ' if here_abspath == doc.abspath else css
+                # Href (get_link emulation)
+                href = str(site_root_abspath.get_pathto(doc.abspath))
+                css += checkid(href)
+                css = css.replace('.', '-dot-')
                 if resource.get_property('use_small_title'):
                     title = doc.m_breadcrumb_title or doc.m_title or doc.name
                 else:
                     title = doc.m_title or doc.name
                 d = {'title': title,
-                     # get_link emulation
-                     'href': '/%s' % site_root_abspath.get_pathto(doc.abspath),
+                     'href': '/%s' % href,
                      'sub_tree': sub_tree,
                      'nb_products': data['nb_products'],
                      'css': css}
