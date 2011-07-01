@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"/>
+  <script type="text/javascript">
+    var datacount = '${datacount}';
+    <![CDATA[
+    document.write('<a href="http://twitter.com/share" class="twitter-share-button" data-count="' + datacount +'">Tweet</a>');
+    ]]>
+  </script>
+
+</stl:block>
