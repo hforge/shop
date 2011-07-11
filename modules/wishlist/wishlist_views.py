@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Import from standard library
+from copy import deepcopy
 from decimal import Decimal as decimal
 
 # Import from itools
@@ -192,13 +193,15 @@ class WishList_View(STLView):
                     is_invited = True
         if is_allowed_to_edit:
             is_invited = is_allowed_to_edit
+        uri = deepcopy(context.uri)
+        uri.query = {}
         return {'title': resource.get_property('title'),
                 'presentation': resource.get_property('presentation'),
                 'owner': owner,
                 'amount_available': amount_available,
                 'is_invited': is_invited,
                 'credits': credits,
-                'uri': context.uri.resolve('./'),
+                'uri': uri,
                 'data': resource.get_property('data'),
                 'is_allowed_to_edit': is_allowed_to_edit}
 

@@ -4580,7 +4580,7 @@ msgid ""
 "on the table bellow.)"
 msgstr ""
 "Veuillez saisir votre message d'invitation dans le premier champ et lister "
-"les emails àinviter dans le second (Une adresse mail par ligne). Cliquez sur "
+"les emails à inviter dans le second (Une adresse mail par ligne). Cliquez sur "
 "le bouton pour envoyer les invitations.(Vous pourrez ainsi connaître la "
 "liste des gens qui ont accepté l'invitation dans la table ci-dessous.)"
 
