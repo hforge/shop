@@ -64,9 +64,13 @@ class Root(BaseRoot):
 
     def internal_server_error(self, context):
         # We send an email to administrators
+        headers = u'\n'.join([u'%s => %s' % (x, y)
+                                for x, y in context.get_headers()])
         for email in self.get_property('administrators'):
             subject = MSG(u'Internal server error').gettext()
-            text = MSG(u'%s\n\n%s' % (context.uri, traceback.format_exc())).gettext()
+            text = u'%s\n\n%s\n\n%s' % (context.uri,
+                                        traceback.format_exc(),
+                                        headers)
             self.send_email(email, subject, text=text)
         # We show a prerry error page
         database = context.database
