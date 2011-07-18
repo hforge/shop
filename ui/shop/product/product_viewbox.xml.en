@@ -6,7 +6,7 @@
   <div class="product-view-box">
     <div class="product-title">
       <span class="price">
-        (${price/with_tax} €)
+        (${price/with_tax})
       </span>
       <h2><a href="${href}" title="${title}">${title}</a></h2>
     </div>
