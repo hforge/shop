@@ -238,7 +238,7 @@ class DatatypeCM_to_INCH(Decimal):
         return u'%s %s' % (value, mesure)
 
 
-class IntegerRange(String):
+class IntegerRange(Integer):
 
     @staticmethod
     def decode(value):

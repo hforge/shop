@@ -138,6 +138,13 @@ class EnumerateTable_to_Enumerate(Enumerate):
             kw[key] = get_value(record, key)
         return kw
 
+    @classmethod
+    def get_title(cls):
+        shop = get_shop(get_context().resource)
+        enumerates_folder = shop.get_resource('enumerates')
+        table = enumerates_folder.get_resource(cls.enumerate_name)
+        return table.get_title()
+
 
     @classmethod
     def get_options(cls):

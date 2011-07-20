@@ -6,10 +6,13 @@
 
   <div class="content">
 
-    <div id="filter-box-prices" stl:if="filter_by_price">
-      <span>Price:</span>
-      <div class="clear"/>
-      ${filter_by_price}
+    <div stl:repeat="filter filters" class="filter-box">
+      <div class="filter-box-title">${filter/title}</div>
+      <ul stl:repeat="item filter/items">
+        <li>
+          <a href="${item/uri}" class="${item/css}">${item/title} (${item/nb_products})</a>
+        </li>
+      </ul>
     </div>
 
   </div>

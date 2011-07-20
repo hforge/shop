@@ -29,6 +29,7 @@ from itools.xapian import PhraseQuery, AndQuery
 from itools.xml import XMLParser
 
 # Import from ikaaro
+from ikaaro.registry import get_register_fields, fields_registry
 from ikaaro.resource_views import DBResource_AddLink
 from ikaaro.utils import reduce_string
 
@@ -307,3 +308,12 @@ class MultilingualProperties(object):
         resource_path = Path(folder.key).resolve2(name)
         resource = root.get_resource(resource_path)
         resource.set_multilingual_properties(**kw)
+
+
+def get_product_filters():
+    schema = {}
+    for key in get_register_fields():
+        if key.startswith('DFT-'):
+            filter_key = key[4:]
+            schema[filter_key] = fields_registry[key]
+    return schema

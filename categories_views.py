@@ -24,7 +24,7 @@ from itools.datatypes import Boolean, Decimal, String, Integer, Tokens
 from itools.datatypes import Unicode
 from itools.gettext import MSG
 from itools.stl import stl
-from itools.web import STLView, STLForm, get_context
+from itools.web import STLView, STLForm
 from itools.xapian import PhraseQuery, AndQuery, RangeQuery, NotQuery
 from itools.xml import XMLParser
 
@@ -38,10 +38,11 @@ from ikaaro.views_new import NewInstance
 from itws.views import BrowseFormBatchNumeric
 
 # Import from shop
-from datatypes import UserGroup_Enumerate
+from datatypes import UserGroup_Enumerate, IntegerRange
 from modules import ModuleLoader
 from products.taxes import TaxesEnumerate, PricesWidget
 from utils import get_group_name, get_skin_template, get_shop
+from utils import get_product_filters
 from utils_views import SearchTableFolder_View
 
 
@@ -176,17 +177,24 @@ class Category_View(BrowseFormBatchNumeric):
             q = PhraseQuery('not_buyable_by_groups', group_name)
             query.append(NotQuery(q))
         # Add query of filter
-        for key, datatype in self.get_query_schema().items():
+        for key, datatype in self.get_search_schema().items():
             value = context.query[key]
-            if key == 'range_price' and value:
-                query.append(RangeQuery('stored_price', value[0], value[1]))
-            # TODO Add other filters
+            # XXX Test with range price
+            print key, value, datatype
+            if value and issubclass(datatype, IntegerRange):
+                query.append(RangeQuery(key, value[0], value[1]))
+            elif value:
+                query.append(PhraseQuery(key, value))
+            print query
         return context.root.search(AndQuery(*query))
 
 
     def get_search_schema(self):
         from datatypes import IntegerRange
-        return {'range_price': IntegerRange}
+        schema = {}
+        for key, datatype in get_product_filters().items():
+            schema['DFT-%s' % key] = datatype
+        return merge_dicts({'stored_price': IntegerRange}, schema)
 
 
     def get_query_schema(self):

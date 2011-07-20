@@ -60,7 +60,7 @@ from shop.manufacturers import ManufacturersEnumerate
 from shop.modules import ModuleLoader
 from shop.shop_views import Shop_Login, Shop_Register
 from shop.utils import get_shop, get_group_name, format_price, generate_barcode
-from shop.utils import CurrentFolder_AddImage, MiniTitle
+from shop.utils import CurrentFolder_AddImage, MiniTitle, get_product_filters
 
 
 mail_stock_subject_template = MSG(u'Product out of stock')
@@ -159,7 +159,13 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
 
     def _get_dynamic_catalog_values(self):
-        return {}
+        values = {}
+        dynamic_schema = self.get_dynamic_schema()
+        for key in get_product_filters():
+            register_key = 'DFT-%s' % key
+            if key in dynamic_schema:
+                values[register_key] = self.get_dynamic_property(key, dynamic_schema)
+        return values
         # XXX We have to refactor dynamic indexation
         # Import from ikaaro
         # from ikaaro.registry import get_register_fields
