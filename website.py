@@ -120,7 +120,7 @@ class ShopWebSite(NeutralWS):
             return self.class_skin
         ac = self.get_access_control()
         if ac.is_admin(context.user, self):
-            return self.get_property('class_skin_administrators')
+            return self.get_property('class_skin_administrators') or class_skin
         return class_skin
 
 
