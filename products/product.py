@@ -361,6 +361,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     def get_javascript_namespace(self, declinations):
         # XXX
         # We have to Add price without tax (Before and after reduction)
+        # XXX If handle_stock property is false manage_stock should be false
         manage_stock = self.get_stock_option() != 'accept'
         purchase_options_names = self.get_purchase_options_names()
         # Base product
