@@ -105,7 +105,10 @@ class ProductCart(object):
             return products
         cookie = Password.decode(cookie)
         for data in cookie.split('@'):
-            id, name, quantity, declination = data.split('|')
+            try:
+                id, name, quantity, declination = data.split('|')
+            except ValueError:
+                raise ValueError, 'Value "%s" is incorrect' % data
             # Check product exist
             product = self.context.root.get_resource(name, soft=True)
             if not product or not product.is_buyable(self.context):
