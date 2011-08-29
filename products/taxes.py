@@ -30,6 +30,7 @@ from ikaaro.buttons import OrderBottomButton, OrderTopButton
 
 # Import from shop
 from shop.datatypes import UserGroup_Enumerate
+from shop.enumerates import Devises
 from shop.utils import get_shop
 
 
@@ -90,11 +91,15 @@ class PriceWidget(Widget):
             has_reduction = context.resource.get_property('%shas_reduction' % prefix)
             reduce_pre_tax_price = context.resource.get_property('%sreduce-pre-tax-price' % prefix)
         taxes = SelectWidget('%stax' % prefix, css='tax-widget', has_empty_option=False)
+        # Devise
+        shop = get_shop(context.resource)
+        devise = shop.get_property('devise')
+        symbol = Devises.get_symbol(devise)
         # Return namespace
         return {'widget_name': self.name,
                 'pre-tax-price': value,
                 'prefix': prefix,
-                'devise': u'$',
+                'devise': symbol,
                 'reduce-pre-tax-price': reduce_pre_tax_price,
                 'has_reduction': has_reduction,
                 'taxes': taxes.to_html(TaxesEnumerate, tax_value)}
