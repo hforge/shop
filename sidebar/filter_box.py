@@ -267,11 +267,6 @@ class FilterBox(BoxAware, Folder):
     class_title = MSG(u'Filter box')
     class_description = MSG(u'Filter box')
     class_views = ['edit', 'browse_content', 'new_resource']
-
-    class_schema = merge_dicts(
-        Folder.class_schema,
-        BoxAware.class_schema)
-
     view = FilterBox_View()
 
     @staticmethod
@@ -280,11 +275,6 @@ class FilterBox(BoxAware, Folder):
         # Order
         cls = OrderCriterium
         cls._make_resource(cls, folder, '%s/order' % name)
-
-
-    def get_catalog_values(self):
-        return merge_dicts(Folder.get_catalog_values(self),
-                           BoxAware.get_catalog_values(self))
 
 
     def get_document_types(self):
