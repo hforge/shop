@@ -15,24 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from modules import Modules, ShopModule, ShopModule_User, ModuleLoader
-
-import addthis
-import advertising
-import categories_sort
-import effiliation
-import export_catalog
-import export_catalog_csv
-import export_users
-import mini_cart
-import facebook_like
-import google_analytics
-import google_merchant
-import google_plus_one
-import opengraph
-import product_images_slider
-import recaptcha
-import review
-import stock
-import twitter
-import wishlist
+from google_merchant import ShopModule_GoogleMerchant
