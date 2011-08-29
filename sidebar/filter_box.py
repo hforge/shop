@@ -87,8 +87,6 @@ class FilterByPrice_Table(Table):
             max_value_q = int(max_value * 100) if max_value else None
             value = (min_value_q, max_value_q)
             name = IntegerRange.encode(value)
-            uri = uri.replace(stored_price=name)
-            selected =  context.query.get('stored_price') == value
             if min_value is None and max_value:
                 title = MSG(u'Less than {max_value}')
             elif min_value and max_value:
@@ -97,6 +95,10 @@ class FilterByPrice_Table(Table):
                 title = MSG(u'More than {min_value}')
             else:
                 title = MSG(u'All')
+                name = None
+                value = None
+            selected =  context.query.get('stored_price') == value
+            uri = uri.replace(stored_price=name)
             min_value = format_price(min_value) if min_value else None
             max_value = format_price(max_value) if max_value else None
             title = title.gettext(min_value=min_value, max_value=max_value)
