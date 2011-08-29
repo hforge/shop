@@ -26,7 +26,7 @@ from itools.web import get_context, INFO, ERROR
 from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import TextWidget, SelectWidget, HiddenWidget
-from ikaaro.registry import register_resource_class
+from ikaaro.registry import register_resource_class, get_register_fields
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.table_views import OrderedTable_View
 from ikaaro.table_views import Table_AddRecord, Table_EditRecord
@@ -78,10 +78,11 @@ class EnumerateTable_View(OrderedTable_View):
             get_value = resource.handler.get_record_value
             name = get_value(item, 'name')
             register_key = 'DFT-%s' % resource.name
-            # XXX
-            #query = PhraseQuery(register_key, name)
-            #quantity = len(context.root.search(query))
-            quantity = '-'
+            if register_key in get_register_fields():
+                query = PhraseQuery(register_key, name)
+                quantity = len(context.root.search(query))
+            else:
+                quantity = MSG(u'Unknow')
             return quantity, '/categories/?%s=%s' % (register_key, name)
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
