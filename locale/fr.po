@@ -2831,7 +2831,7 @@ msgstr "De la catégorie courante"
 
 #: ../sidebar/filter_box.py:95
 msgid "From {min_value} to {max_value}"
-msgstr ""
+msgstr "De {min_value} à {max_value}"
 
 #: ../products/product.py:868
 msgid "Frontoffice link"
@@ -3443,9 +3443,8 @@ msgid "Less than a minute ago"
 msgstr "Il y a moins d'une minute."
 
 #: ../sidebar/filter_box.py:93
-#, fuzzy
 msgid "Less than {max_value}"
-msgstr "Il y a moins d'une minute."
+msgstr "Moins de {max_value}"
 
 #: ../modules/facebook_like/facebook_like.py:47
 msgid "Light"
@@ -3779,7 +3778,7 @@ msgstr "Modules"
 
 #: ../sidebar/filter_box.py:97
 msgid "More than {min_value}"
-msgstr ""
+msgstr "Plus de {min_value}"
 
 #: ../ui/vertical_depot/login_box.xml.en:18
 msgctxt "label"
