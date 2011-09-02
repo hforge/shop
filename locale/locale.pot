@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-08-29 09:08+CET\n"
+"POT-Creation-Date: 2011-09-02 13:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,18 +21,6 @@ msgstr ""
 
 #: ../user_views.py:641
 msgid "\n          You have not yet confirmed your registration.<br/>\n          To confirm it, please click on the confirmation link\n          included on the registration confirmation email.<br/>\n          You can also fill your email address and your activation\n          key (received on the mail) in the following form.<br/>\n          If you havn't received your registration key,\n          <a href=\";send_confirmation_view\">\n            you can receive it again by clicking here.\n          </a>\n          "
-msgstr ""
-
-#: ../modules/wishlist/wishlist_views.py:137
-msgid "\n        Private presentation of your wishlist (Visible by invited people)"
-msgstr ""
-
-#: ../modules/wishlist/wishlist_views.py:135
-msgid "\n        Public presentation of your wishlist (Visible by not invited people)"
-msgstr ""
-
-#: ../modules/wishlist/wishlist_views.py:131
-msgid "\n        The public presentation will be shown to people not invited\n        but that know the address of this wishlist.<br/>\n        (<a href=\"{uri}\">{uri}</a>)<br/>\n        The private presentation will be shown to\n        <a href=\"./;subscribe\">invited people.</a><br/><br/>\n        "
 msgstr ""
 
 #: ../addresses.py:115
@@ -61,10 +49,6 @@ msgstr ""
 
 #: ../shop_views.py:794
 msgid "#%s"
-msgstr ""
-
-#: ../products/taxes.py:97
-msgid "$"
 msgstr ""
 
 #: ../ui/backoffice/payments/transfer/record_view.xml.en:11
@@ -182,28 +166,12 @@ msgstr ""
 msgid "A customer must be validated in your shop"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:122
-msgid "A gift has been made to your wishlist"
-msgstr ""
-
 #: ../payments/check/check_views.py:122
 msgid "A l'ordre de"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:47
 msgid "A mandatory variable is missing."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:34
-msgid "A message has been sent to confirm your identity."
-msgstr ""
-
-#: ../modules/wishlist/wishlist_views.py:88
-msgid "A new wishlist has been created"
-msgstr ""
-
-#: ../modules/wishlist/wishlist_views.py:89
-msgid "A new wishlist has been created in your shop"
 msgstr ""
 
 #: ../products/product.py:89
@@ -223,10 +191,6 @@ msgstr ""
 msgid "A review"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:57
-msgid "A wishlist"
-msgstr ""
-
 #: ../payments/paybox/enumerates.py:86
 msgid "AMEX"
 msgstr ""
@@ -237,10 +201,6 @@ msgstr ""
 
 #: ../modules/review/review.py:506
 msgid "Abusing report"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:224
-msgid "Accept invitation"
 msgstr ""
 
 #: ../products/enumerate.py:142
@@ -283,12 +243,12 @@ msgid "Active"
 msgstr ""
 
 #: ../products/models_views.py:118
-#: ../enumerate_table.py:202
+#: ../enumerate_table.py:203
 msgid "Add"
 msgstr ""
 
 #: ../products/models_views.py:117
-#: ../enumerate_table.py:201
+#: ../enumerate_table.py:202
 msgid "Add Record"
 msgstr ""
 
@@ -400,9 +360,9 @@ msgstr ""
 msgid "After this payment, you will have a credit of ${remaining_amount}."
 msgstr ""
 
-#: ../sidebar/filter_box.py:99
-#: ../sidebar/filter_box.py:158
-#: ../sidebar/filter_box.py:195
+#: ../sidebar/filter_box.py:97
+#: ../sidebar/filter_box.py:160
+#: ../sidebar/filter_box.py:197
 msgid "All"
 msgstr ""
 
@@ -427,10 +387,6 @@ msgstr ""
 #: ../payments/paybox/enumerates.py:125
 #: ../payments/systempay/enumerates.py:42
 msgid "Amount incorrect"
-msgstr ""
-
-#: ../modules/wishlist/wishlist_views.py:55
-msgid "Amount of the gift (Ex: 50€)"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:183
@@ -488,10 +444,6 @@ msgstr ""
 msgid "Avril"
 msgstr ""
 
-#: ../modules/wishlist/cc.py:244
-msgid "Bad email"
-msgstr ""
-
 #: ../payments/check/check.py:55
 msgid "Bank"
 msgstr ""
@@ -519,7 +471,7 @@ msgstr ""
 msgid "Barcode format"
 msgstr ""
 
-#: ../sidebar/filter_box.py:134
+#: ../sidebar/filter_box.py:136
 msgid "Base Abspath"
 msgstr ""
 
@@ -680,7 +632,7 @@ msgstr ""
 msgid "Catégorie %s"
 msgstr ""
 
-#: ../sidebar/filter_box.py:127
+#: ../sidebar/filter_box.py:129
 msgid "Catégorie criterium"
 msgstr ""
 
@@ -756,7 +708,7 @@ msgstr ""
 msgid "Colissimo suivi"
 msgstr ""
 
-#: ../enumerate_table.py:317
+#: ../enumerate_table.py:318
 msgid "Color"
 msgstr ""
 
@@ -778,7 +730,6 @@ msgstr ""
 
 #: ../modules/review/review.py:175
 #: ../modules/review/review.py:271
-#: ../modules/wishlist/wishlist_views.py:78
 msgid "Conditions of use"
 msgstr ""
 
@@ -829,11 +780,6 @@ msgstr ""
 
 #: ../user_views.py:600
 msgid "Confirm your registration"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:298
-#: ../modules/wishlist/cc.py:302
-msgid "Confirmation required"
 msgstr ""
 
 #: ../user_views.py:560
@@ -890,14 +836,6 @@ msgstr ""
 msgid "Create a new product"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:73
-msgid "Create a wishlist"
-msgstr ""
-
-#: ../modules/wishlist/wishlist_views.py:80
-msgid "Create my wishlist"
-msgstr ""
-
 #: ../products/product_views.py:423
 msgid "Creation Time"
 msgstr ""
@@ -915,8 +853,8 @@ msgstr ""
 msgid "Credit payment"
 msgstr ""
 
-#: ../sidebar/filter_box.py:173
-#: ../sidebar/filter_box.py:186
+#: ../sidebar/filter_box.py:175
+#: ../sidebar/filter_box.py:188
 msgid "Criterium"
 msgstr ""
 
@@ -930,7 +868,7 @@ msgid "Cross selling"
 msgstr ""
 
 #: ../cross_selling.py:46
-#: ../sidebar/filter_box.py:255
+#: ../sidebar/filter_box.py:257
 msgid "Cross-Selling Table"
 msgstr ""
 
@@ -964,10 +902,6 @@ msgstr ""
 
 #: ../payments/paybox/enumerates.py:87
 msgid "DINERS"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:324
-msgid "DO NOT REPLY TO THIS EMAIL. To view modifications please visit:\n{resource_uri}"
 msgstr ""
 
 #: ../modules/facebook_like/facebook_like.py:48
@@ -1104,7 +1038,6 @@ msgstr ""
 #: ../payments/payment_way_views.py:83
 #: ../categories.py:62
 #: ../products/product_views.py:241
-#: ../suppliers.py:65
 #: ../shipping/shippings_views.py:91
 #: ../modules/modules_views.py:40
 #: ../payments/payments_views.py:213
@@ -1113,7 +1046,7 @@ msgstr ""
 #: ../shipping/withdrawal.py:96
 #: ../shipping/shipping_way_views.py:47
 #: ../shipping/shipping_way.py:76
-#: ../modules/wishlist/wishlist_views.py:217
+#: ../suppliers.py:65
 #: ../payments/payment_way.py:60
 msgid "Description"
 msgstr ""
@@ -1136,25 +1069,17 @@ msgstr ""
 msgid "Do a report"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:48
-msgid "Do it"
-msgstr ""
-
 #: ../payments/paybox/enumerates.py:140
 #: ../payments/systempay/enumerates.py:57
 msgid "Do not honour"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:213
-msgid "Do you accept this invitation ?"
 msgstr ""
 
 #: ../enumerates.py:29
 msgid "Dollar"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:45
-msgid "Donate"
+#: ../modules/google_merchant/google_merchant.py:151
+msgid "Download google merchant CSV"
 msgstr ""
 
 #: ../datatypes.py:369
@@ -1235,10 +1160,6 @@ msgstr ""
 msgid "Email of your friend"
 msgstr ""
 
-#: ../modules/wishlist/cc.py:132
-msgid "Emails to invite"
-msgstr ""
-
 #: ../countries.py:141
 #: ../user.py:296
 #: ../cross_selling_views.py:155
@@ -1261,15 +1182,15 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-#: ../enumerate_table.py:274
+#: ../enumerate_table.py:275
 msgid "Enumerate Table"
 msgstr ""
 
-#: ../enumerate_table.py:308
+#: ../enumerate_table.py:309
 msgid "Enumerate Table Color"
 msgstr ""
 
-#: ../enumerate_table.py:240
+#: ../enumerate_table.py:241
 msgid "Enumerate preview"
 msgstr ""
 
@@ -1277,7 +1198,7 @@ msgstr ""
 msgid "Enumerates"
 msgstr ""
 
-#: ../enumerate_table.py:327
+#: ../enumerate_table.py:328
 msgid "Enumerates folder"
 msgstr ""
 
@@ -1458,8 +1379,8 @@ msgstr ""
 msgid "Fill this form to receive a mail with the link\n                              to activate your account"
 msgstr ""
 
-#: ../sidebar/filter_box.py:267
-#: ../sidebar/filter_box.py:268
+#: ../sidebar/filter_box.py:269
+#: ../sidebar/filter_box.py:270
 msgid "Filter box"
 msgstr ""
 
@@ -1499,7 +1420,7 @@ msgstr ""
 msgid "From current category"
 msgstr ""
 
-#: ../sidebar/filter_box.py:95
+#: ../sidebar/filter_box.py:93
 msgid "From {min_value} to {max_value}"
 msgstr ""
 
@@ -1520,10 +1441,6 @@ msgstr ""
 msgid "Genre"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:162
-msgid "Gift made by {title}"
-msgstr ""
-
 #: ../products/product_views.py:203
 msgid "Go To Issue"
 msgstr ""
@@ -1538,6 +1455,11 @@ msgstr ""
 
 #: ../modules/google_analytics/google_analytics.py:67
 msgid "Google analytics tracker"
+msgstr ""
+
+#: ../modules/google_merchant/google_merchant.py:171
+#: ../modules/google_merchant/google_merchant.py:173
+msgid "Google merchant"
 msgstr ""
 
 #: ../modules/google_plus_one/plusone.py:67
@@ -1785,19 +1707,6 @@ msgstr ""
 msgid "Invalidation mail subject"
 msgstr ""
 
-#: ../modules/wishlist/cc.py:212
-#: ../modules/wishlist/cc.py:306
-msgid "Invitation"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:131
-msgid "Invitation message"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:120
-msgid "Invitations"
-msgstr ""
-
 #: ../ui/backoffice/orders/order_facture.xml.en:76
 msgid "Invoice ${reference}"
 msgstr ""
@@ -1930,7 +1839,7 @@ msgstr ""
 msgid "Less than a minute ago"
 msgstr ""
 
-#: ../sidebar/filter_box.py:93
+#: ../sidebar/filter_box.py:91
 msgid "Less than {max_value}"
 msgstr ""
 
@@ -1983,10 +1892,6 @@ msgstr ""
 
 #: ../user_views.py:508
 msgid "Mail confirmé"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:82
-msgid "Manage Subscriptions"
 msgstr ""
 
 #: ../user_views.py:80
@@ -2140,10 +2045,6 @@ msgstr ""
 msgid "Module effiliation"
 msgstr ""
 
-#: ../modules/wishlist/wishlist.py:111
-msgid "Module wishlist"
-msgstr ""
-
 #: ../modules/modules.py:95
 msgid "Module {name} not initialized"
 msgstr ""
@@ -2154,7 +2055,7 @@ msgstr ""
 msgid "Modules"
 msgstr ""
 
-#: ../sidebar/filter_box.py:97
+#: ../sidebar/filter_box.py:95
 msgid "More than {min_value}"
 msgstr ""
 
@@ -2299,10 +2200,6 @@ msgstr ""
 #: ../payments/paybox/enumerates.py:128
 #: ../payments/systempay/enumerates.py:45
 msgid "Not authorized bin card"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:110
-msgid "Not subscribed"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:130
@@ -2659,10 +2556,6 @@ msgstr ""
 msgid "Pays"
 msgstr ""
 
-#: ../modules/wishlist/cc.py:107
-msgid "Pending confirmation"
-msgstr ""
-
 #: ../suppliers.py:62
 msgid "Phone"
 msgstr ""
@@ -2716,20 +2609,12 @@ msgstr ""
 msgid "Please take a RDV with us."
 msgstr ""
 
-#: ../modules/wishlist/cc.py:122
-msgid "Please type your invitation message in the first form and to list email to invite on the second one (One by line). Just click on the button to send invitations.(You will be able to show people that have accept the invitation on the table bellow.)"
-msgstr ""
-
 #: ../ui/backoffice/orders/order_facture.xml.en:88
 msgid "Pre-Tax Total"
 msgstr ""
 
 #: ../products/product_views.py:253
 msgid "Prefer use this shipping way"
-msgstr ""
-
-#: ../modules/wishlist/wishlist_views.py:219
-msgid "Presentation"
 msgstr ""
 
 #: ../products/enumerate.py:121
@@ -2960,7 +2845,7 @@ msgid "Recommendation"
 msgstr ""
 
 #: ../products/models_views.py:93
-#: ../enumerate_table.py:116
+#: ../enumerate_table.py:117
 msgid "Record deleted."
 msgstr ""
 
@@ -3180,10 +3065,6 @@ msgstr ""
 msgid "Selection"
 msgstr ""
 
-#: ../modules/wishlist/cc.py:135
-msgid "Send an invitation to these Emails"
-msgstr ""
-
 #: ../products/product_views.py:612
 msgid "Send to a friend"
 msgstr ""
@@ -3361,7 +3242,6 @@ msgstr ""
 #: ../orders/orders_views.py:64
 #: ../orders/orders_views.py:85
 #: ../modules/stock/stock.py:58
-#: ../modules/wishlist/cc.py:87
 #: ../shipping/shipping_way.py:72
 #: ../payments/payment_way.py:57
 msgid "State"
@@ -3419,25 +3299,13 @@ msgstr ""
 msgid "Style 6"
 msgstr ""
 
-#: ../modules/wishlist/wishlist_views.py:218
-msgid "Subject"
-msgstr ""
-
 #: ../forms_generator.py:192
 msgid "Submit value"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:108
-msgid "Subscribed"
 msgstr ""
 
 #: ../payments/paybox/enumerates.py:127
 #: ../payments/systempay/enumerates.py:44
 msgid "Subscriber already exists"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:204
-msgid "Subscriptions"
 msgstr ""
 
 #: ../modules/stock/stock.py:57
@@ -3494,7 +3362,7 @@ msgstr ""
 msgid "Tax"
 msgstr ""
 
-#: ../products/taxes.py:60
+#: ../products/taxes.py:61
 #: ../shop.py:184
 msgid "Taxes"
 msgstr ""
@@ -3527,30 +3395,6 @@ msgstr ""
 
 #: ../ui/shop/internal_server_error.xml.en:14
 msgid "The database is under maintenance."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:43
-msgid "The following addresses are invalid: {users}."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:40
-msgid "The following users are already subscribed: {users}."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:45
-msgid "The following users are prevented from subscribing: {users}."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:44
-msgid "The following users have been invited: {users}."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:41
-msgid "The following users were subscribed: {users}."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:42
-msgid "The following users were unsubscribed: {users}."
 msgstr ""
 
 #: ../orders/workflow.py:95
@@ -3594,7 +3438,7 @@ msgstr ""
 msgid "There are {n} declinations."
 msgstr ""
 
-#: ../enumerate_table.py:235
+#: ../enumerate_table.py:236
 msgid "There are {n} enumerates in your enumrates library"
 msgstr ""
 
@@ -3618,10 +3462,6 @@ msgstr ""
 msgid "There are {n} payments."
 msgstr ""
 
-#: ../modules/wishlist/cc.py:91
-msgid "There are {n} people invited."
-msgstr ""
-
 #: ../products/product_views.py:409
 msgid "There are {n} products"
 msgstr ""
@@ -3638,7 +3478,7 @@ msgstr ""
 msgid "There is 1 declination"
 msgstr ""
 
-#: ../enumerate_table.py:234
+#: ../enumerate_table.py:235
 msgid "There is 1 enumerate in your enumerates library"
 msgstr ""
 
@@ -3652,10 +3492,6 @@ msgstr ""
 
 #: ../payments/payments_views.py:120
 msgid "There is 1 payment."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:90
-msgid "There is 1 people invited."
 msgstr ""
 
 #: ../products/product_views.py:408
@@ -3713,52 +3549,38 @@ msgstr ""
 #: ../products/models_views.py:53
 #: ../products/models_views.py:138
 #: ../cross_selling_views.py:290
+#: ../modules/review/review.py:545
 #: ../payments/payment_way_views.py:80
+#: ../suppliers_views.py:34
+#: ../orders/orders.py:131
+#: ../categories_views.py:337
+#: ../categories_views.py:346
+#: ../editorial.py:44
+#: ../shipping/shippings_views.py:90
+#: ../ui/modules/stock/pdf_resupply.xml.en:37
+#: ../modules/modules_views.py:39
+#: ../payments/payments_views.py:212
+#: ../enumerate_table.py:56
+#: ../enumerate_table.py:240
+#: ../enumerate_table.py:289
+#: ../enumerate_table.py:317
 #: ../products/product_views.py:240
 #: ../products/product_views.py:421
 #: ../products/product_views.py:439
 #: ../products/product_views.py:535
 #: ../products/product_views.py:682
-#: ../products/declination.py:69
-#: ../modules/wishlist/wishlist_views.py:216
-#: ../user_group.py:157
-#: ../modules/review/review.py:545
-#: ../categories_views.py:337
-#: ../categories_views.py:346
-#: ../shipping/shippings_views.py:90
-#: ../payments/payments_views.py:212
-#: ../products/images_views.py:36
-#: ../products/models.py:160
-#: ../editorial.py:44
-#: ../user.py:112
-#: ../modules/modules_views.py:39
-#: ../enumerate_table.py:56
-#: ../enumerate_table.py:239
-#: ../enumerate_table.py:288
-#: ../enumerate_table.py:316
 #: ../shipping/shipping_way_views.py:45
 #: ../forms_generator.py:184
-#: ../orders/orders.py:131
-#: ../ui/modules/stock/pdf_resupply.xml.en:37
-#: ../suppliers_views.py:34
+#: ../products/images_views.py:36
+#: ../user.py:112
+#: ../products/declination.py:69
+#: ../products/models.py:160
+#: ../user_group.py:157
 msgid "Title"
-msgstr ""
-
-#: ../modules/wishlist/wishlist_views.py:77
-#: ../modules/wishlist/wishlist_views.py:133
-msgid "Title of your wishlist"
 msgstr ""
 
 #: ../forms_generator.py:193
 msgid "To addr"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:300
-msgid "To confirm subscription, click the link:\n\n {uri}\n"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:304
-msgid "To confirm unsubscription, click the link:\n\n {uri}\n"
 msgstr ""
 
 #: ../shop_views.py:727
@@ -3881,6 +3703,7 @@ msgstr ""
 
 #: ../orders/workflow.py:63
 #: ../user.py:349
+#: ../enumerate_table.py:85
 #: ../products/dynamic_folder.py:40
 msgid "Unknow"
 msgstr ""
@@ -3989,14 +3812,12 @@ msgstr ""
 #: ../user_views.py:461
 #: ../editorial.py:35
 #: ../products/product_views.py:142
-#: ../enumerate_table.py:227
+#: ../enumerate_table.py:228
 #: ../sidebar/sidebar_product_cross_selling_box.py:43
 #: ../suppliers_views.py:28
 #: ../sidebar/cross_selling_box.py:41
 #: ../feed_views/base.py:36
 #: ../website_views.py:80
-#: ../modules/wishlist/wishlist_views.py:169
-#: ../modules/wishlist/wishlist_views.py:244
 #: ../sidebar/sidebar_cross_selling_box.py:40
 msgid "View"
 msgstr ""
@@ -4130,14 +3951,6 @@ msgstr ""
 msgid "You are not authorized to do that !"
 msgstr ""
 
-#: ../modules/wishlist/cc.py:36
-msgid "You are now subscribed."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:38
-msgid "You are now unsubscribed."
-msgstr ""
-
 #: ../products/product_views.py:629
 msgid "You can write a message for your friend"
 msgstr ""
@@ -4150,20 +3963,12 @@ msgstr ""
 msgid "You can't delete this product"
 msgstr ""
 
-#: ../enumerate_table.py:110
+#: ../enumerate_table.py:111
 msgid "You can't delete value '%s'"
 msgstr ""
 
 #: ../countries_views.py:120
 msgid "You can't delete zone %s. It's associated to %s countries."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:37
-msgid "You were already subscribed."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:39
-msgid "You were already unsubscribed."
 msgstr ""
 
 #: ../user_views.py:665
@@ -4198,10 +4003,6 @@ msgstr ""
 
 #: ../shop_views.py:65
 msgid "Your cart is invalid or your payment has been recorded."
-msgstr ""
-
-#: ../modules/wishlist/cc.py:33
-msgid "Your confirmation key is invalid."
 msgstr ""
 
 #: ../products/product_views.py:625
@@ -4307,10 +4108,6 @@ msgstr ""
 msgid "[Error] Unknow reference %s"
 msgstr ""
 
-#: ../modules/wishlist/cc.py:321
-msgid "[{title}] has been modified"
-msgstr ""
-
 #: ../utils.py:206
 msgid "about a minute ago."
 msgstr ""
@@ -4349,14 +4146,6 @@ msgstr ""
 msgid "xxx"
 msgstr ""
 
-#: ../modules/wishlist/cc.py:308
-msgid "{body}\n\n\nTo accept the invitation, click the link\n\n {uri}\n"
-msgstr ""
-
-#: ../modules/wishlist/cc.py:312
-msgid "{body}\n\n\nTo accept the invitation, click the link\n\n {uri}\n\nYou can log-in to the website with your email {email} and your password {password} !"
-msgstr ""
-
 #: ../skin.py:136
 msgid "{here_title}"
 msgstr ""
@@ -4367,10 +4156,6 @@ msgstr ""
 
 #: ../products/product_views.py:631
 msgid "{my_name} advice you this product: {product_title}"
-msgstr ""
-
-#: ../modules/wishlist/wishlist.py:123
-msgid "{user_made_gift_title} has added {amount} to your wishlist."
 msgstr ""
 
 #: ../utils.py:218
@@ -4649,11 +4434,6 @@ msgctxt "div"
 msgid "6<g id='6'>Confirmation</g>"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:22
-msgctxt "div"
-msgid "Add a description and photos here, <g id='1'>by editing your wishlist</g>"
-msgstr ""
-
 #: ../ui/vertical_depot/login_box.xml.en:31
 msgctxt "div"
 msgid "Bienvenue ${user/title} !"
@@ -4689,11 +4469,6 @@ msgctxt "div"
 msgid "Payment state:"
 msgstr ""
 
-#: ../ui/modules/wishlist/view.xml.en:14
-msgctxt "div"
-msgid "Please <g id='1'>log-in</g> to see wishlists you have been invited."
-msgstr ""
-
 #: ../ui/backoffice/widgets/stock.xml.en:13
 msgctxt "div"
 msgid "Quantity in stock:"
@@ -4707,16 +4482,6 @@ msgstr ""
 #: ../ui/shop/shop_addresses.xml.en:39
 msgctxt "div"
 msgid "Same that delivery address."
-msgstr ""
-
-#: ../ui/modules/wishlist/view.xml.en:19
-msgctxt "div"
-msgid "There's no wishlist."
-msgstr ""
-
-#: ../ui/modules/wishlist/view.xml.en:19
-msgctxt "div"
-msgid "You can <g id='2'>create a new one</g>."
 msgstr ""
 
 #: ../ui/shop/shop_view_cart.xml.en:12
@@ -4795,16 +4560,6 @@ msgctxt "heading"
 msgid "${zone/title} <g id='2'>> Edit</g>"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:33
-msgctxt "heading"
-msgid "Administrate my wishlist"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:34
-msgctxt "heading"
-msgid "Administrate this wishlist"
-msgstr ""
-
 #: ../ui/backoffice/administration.xml.en:11
 msgctxt "heading"
 msgid "Administration panel"
@@ -4849,16 +4604,6 @@ msgctxt "heading"
 msgid "Configurations"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:36
-msgctxt "heading"
-msgid "Configure your wishlist"
-msgstr ""
-
-#: ../ui/modules/wishlist/view.xml.en:27
-msgctxt "heading"
-msgid "Create a wishlist"
-msgstr ""
-
 #: ../ui/shop/product/product_view.xml.en:109
 msgctxt "heading"
 msgid "Cross selling"
@@ -4886,11 +4631,6 @@ msgstr ""
 #: ../ui/backoffice/editorial_view.xml.en:52
 msgctxt "heading"
 msgid "Editorial content"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:85
-msgctxt "heading"
-msgid "History of donation"
 msgstr ""
 
 #: ../ui/shop/shop_login.xml.en:12
@@ -4936,11 +4676,6 @@ msgstr ""
 #: ../ui/shop/user/public_profile.xml.en:7
 msgctxt "heading"
 msgid "My public profile"
-msgstr ""
-
-#: ../ui/modules/wishlist/view.xml.en:11
-msgctxt "heading"
-msgid "My wishlist"
 msgstr ""
 
 #: ../ui/backoffice/shipping/shippings_details.xml.en:36
@@ -5053,11 +4788,6 @@ msgstr ""
 #: ../ui/backoffice/shipping/withdrawal_record_order_view.xml.en:7
 msgctxt "heading"
 msgid "Withdrawal to the shop"
-msgstr ""
-
-#: ../ui/modules/wishlist/payments_end.xml.en:7
-msgctxt "heading"
-msgid "Your gift has been registered."
 msgstr ""
 
 #: ../ui/shop/shop_view_cart.xml.en:7
@@ -5275,11 +5005,6 @@ msgctxt "link"
 msgid "<g id='12'>${user/info/title}</g>  <g id='13'>|</g>  <g id='14'>Log out</g>"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:78
-msgctxt "link"
-msgid "<g id='15'>${uri}</g><x id='16'/> (In this case they should not be able to see the private presentation of your wishlist, they must be invited for that)"
-msgstr ""
-
 #: ../ui/shop/common/location.xml.en:14
 msgctxt "link"
 msgid "<g id='2'>${item/short_name}</g>  <g id='3'>${bc_separator}</g>"
@@ -5351,11 +5076,6 @@ msgctxt "link"
 msgid "Click here to get more informations."
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:27
-msgctxt "link"
-msgid "Click here to make a donation"
-msgstr ""
-
 #: ../ui/shop/virtualcategory_comparator.xml.en:24
 msgctxt "link"
 msgid "Come back to the product list"
@@ -5389,11 +5109,6 @@ msgstr ""
 #: ../ui/backoffice/product_edit_right_panel.xml.en:24
 msgctxt "link"
 msgid "Delete product"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:51
-msgctxt "link"
-msgid "Edit"
 msgstr ""
 
 #: ../ui/backoffice/editorial_view.xml.en:42
@@ -5486,11 +5201,6 @@ msgstr ""
 #: ../ui/backoffice/template.xhtml.en:88
 msgctxt "link"
 msgid "Log out"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:66
-msgctxt "link"
-msgid "Manage invitations"
 msgstr ""
 
 #: ../ui/backoffice/editorial_view.xml.en:22
@@ -5774,20 +5484,10 @@ msgctxt "paragraph"
 msgid "If you want to add an item in your address book <g id='8'>click here.</g>"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:88
-msgctxt "paragraph"
-msgid "Invited people can make donation on your wishlist."
-msgstr ""
-
 #: ../ui/default_skin/product/product_view.xml.en:39
 #: ../ui/shop/product/product_view.xml.en:31
 msgctxt "paragraph"
 msgid "Missing declination, please select another options"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:90
-msgctxt "paragraph"
-msgid "No donation has been done on this wishlist"
 msgstr ""
 
 #: ../ui/backoffice/shop_user_manage.xml.en:117
@@ -5799,11 +5499,6 @@ msgstr ""
 #: ../ui/shop/product/product_view.xml.en:34
 msgctxt "paragraph"
 msgid "Out of stock."
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:38
-msgctxt "paragraph"
-msgid "Owner of this wishlist is <g id='7'>${owner/title}</g>"
 msgstr ""
 
 #: ../ui/vertical_depot/cart_box.xml.en:13
@@ -5828,19 +5523,9 @@ msgctxt "paragraph"
 msgid "Quantity:"
 msgstr ""
 
-#: ../ui/modules/wishlist/payments_end.xml.en:10
-msgctxt "paragraph"
-msgid "Thank's !"
-msgstr ""
-
 #: ../ui/backoffice/product/product_delete.xml.en:10
 msgctxt "paragraph"
 msgid "To confirm the deletion, click here:"
-msgstr ""
-
-#: ../ui/modules/wishlist/view.xml.en:30
-msgctxt "paragraph"
-msgid "To create a new wishlist <g id='4'>click here</g>."
 msgstr ""
 
 #: ../ui/backoffice/payments/payment_way_record_view.xml.en:8
@@ -5871,11 +5556,6 @@ msgstr ""
 #: ../ui/backoffice/payments/transfer/record_view.xml.en:22
 msgctxt "paragraph"
 msgid "Your bank transfer has been validated."
-msgstr ""
-
-#: ../ui/modules/wishlist/payments_end.xml.en:10
-msgctxt "paragraph"
-msgid "Your gift has been registered."
 msgstr ""
 
 #: ../ui/backoffice/payments/check/record_view.xml.en:21
@@ -6554,11 +6234,6 @@ msgctxt "table cell"
 msgid "Tax:"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:103
-msgctxt "table cell"
-msgid "These shopping voucher are available for any purchase in our shop."
-msgstr ""
-
 #: ../ui/backoffice/product_view.xml.en:42
 #: ../ui/shop/product/product_view.xml.en:68
 msgctxt "table cell"
@@ -6584,11 +6259,6 @@ msgstr ""
 #: ../ui/shop/cart_view.xml.en:23
 msgctxt "table cell"
 msgid "Total Price"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:98
-msgctxt "table cell"
-msgid "Total amount"
 msgstr ""
 
 #: ../ui/backoffice/orders/order_view.xml.en:75
@@ -6632,21 +6302,6 @@ msgctxt "table cell"
 msgid "Weight"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:77
-msgctxt "table cell"
-msgid "You also can give to your friends the address of your wishlist:"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:55
-msgctxt "table cell"
-msgid "You can edit this webpage and add images to describe your wishlist."
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:70
-msgctxt "table cell"
-msgid "You can invite your friends and your family here."
-msgstr ""
-
 #: ../ui/backoffice/widgets/taxes.xml.en:35
 msgctxt "table cell"
 msgid " "
@@ -6667,11 +6322,6 @@ msgctxt "title attribute"
 msgid "Download order"
 msgstr ""
 
-#: ../ui/modules/wishlist/wishlist_view.xml.en:46
-msgctxt "title attribute"
-msgid "Edit"
-msgstr ""
-
 #: ../ui/shop/addresses_book.xml.en:32
 msgctxt "title attribute"
 msgid "Edit this address"
@@ -6680,11 +6330,6 @@ msgstr ""
 #: ../ui/shop/cart_view.xml.en:66
 msgctxt "title attribute"
 msgid "Impossible to add product in cart"
-msgstr ""
-
-#: ../ui/modules/wishlist/wishlist_view.xml.en:61
-msgctxt "title attribute"
-msgid "Invitations"
 msgstr ""
 
 #: ../ui/default_skin/template.xhtml.en:33
