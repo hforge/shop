@@ -35,4 +35,3 @@ import recaptcha
 import review
 import stock
 import twitter
-import wishlist
