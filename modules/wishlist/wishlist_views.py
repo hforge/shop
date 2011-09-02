@@ -79,6 +79,12 @@ class ShopModule_NewWishlist(NewInstance):
 
     submit_value = MSG(u'Create my wishlist')
 
+    def get_namespace(self, resource, context):
+        namespace = NewInstance.get_namespace(self, resource, context)
+        namespace['required_msg'] = resource.get_property('data_wishlist_creation')
+        return namespace
+
+
     def get_new_resource_name(self, form):
         # XXX Send an email to administrators. (To prevent errors of module)
         context = get_context()
@@ -211,17 +217,21 @@ class ShopModule_WishList_Edit(DBResource_Edit):
     schema = {'title': Unicode(multilingual=True),
               'description': Unicode(multilingual=True),
               'subject': Unicode(multilingual=True),
-              'data': XHTMLBody(multilingual=True)}
+              'data': XHTMLBody(multilingual=True),
+              'data_wishlist_creation': XHTMLBody(multilingual=True)}
 
-    widgets = [TextWidget('title', title=MSG(u'Title')),
-               TextWidget('description', title=MSG(u'Description')),
-               TextWidget('subject', title=MSG(u'Subject')),
-               RTEWidget('data', title=MSG(u"Presentation"))]
+    widgets = [
+        TextWidget('title', title=MSG(u'Title')),
+        TextWidget('description', title=MSG(u'Description')),
+        TextWidget('subject', title=MSG(u'Subject')),
+        RTEWidget('data', title=MSG(u"Wishlist module presentation")),
+        RTEWidget('data_wishlist_creation', title=MSG(u"Wishlist creation introduction")),
+        ]
 
 
     def get_value(self, resource, context, name, datatype):
         language = resource.get_content_language(context)
-        if name == 'data':
+        if name.startswith('data'):
             return resource.get_property(name, language)
         return DBResource_Edit.get_value(self, resource, context, name,
                                          datatype)

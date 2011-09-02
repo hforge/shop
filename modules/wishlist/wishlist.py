@@ -139,7 +139,8 @@ class ShopModule_WishList(ShopFolder):
     @classmethod
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
-                           data=XHTMLBody())
+            data=XHTMLBody,
+            data_wishlist_creation=XHTMLBody)
 
 
     def set_payment_as_ok(self, payment_way, id_record, context):
