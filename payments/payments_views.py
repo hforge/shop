@@ -317,7 +317,7 @@ class Payment_Widget(Widget):
     template = list(XMLParser("""
       <h2 stl:if="title1">${title1}</h2>
 
-      <input type="text" name="amount" value="${total_price/with_tax}" size="6"/> €
+      <input type="text" name="amount" value="${total_price_with_tax}" size="6"/> €
 
       <h2>${title2}</h2>
 
@@ -345,6 +345,7 @@ class Payment_Widget(Widget):
         namespace = {'payments': [],
                      'title1': self.title1,
                      'title2': self.title2,
+                     'total_price_with_tax': total_price['with_tax'] or None,
                      'total_price': total_price}
         payments = get_shop(context.resource).get_resource('payments')
         for mode in payments.search_resources(cls=PaymentWay):
