@@ -49,7 +49,11 @@ class ShopModule_Effiliation_View(STLView):
         if track_end_of_order:
             shop = get_shop(resource)
             ref_order = context.query['ref']
-            order = shop.get_resource('orders/%s' % ref_order)
+            order = shop.get_resource('orders/%s' % ref_order, soft=True)
+            if order is None:
+                #  Can be none for wishlist
+                namespace['track_end_of_order'] = False
+                return namespace
             order_namespace = order.get_namespace(context)
             amount = order_namespace['price']['products']['without_tax']
             namespace['order'] = {'name': order.name,
