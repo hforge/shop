@@ -212,28 +212,40 @@
   <hr class="order-hr"/>
 
   <!-- Payment -->
-  <table class="order-browse">
+  <table class="order-browse" stl:repeat="payment payments">
     <thead>
       <tr>
         <th>
           <img src="/ui/icons/16x16/paste.png"/>
-          <span stl:if="not payment/is_payed">
-            We're waiting for payment
-          </span>
-          <span stl:if="payment/is_payed">
-            Last payment
-          </span>
+          Payment: ${payment/title}
         </th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>
-          <p stl:if="payment/view">${payment/view}</p>
-          <p stl:if="not payment/view">
-            <strong>${order/payment_way}:</strong>
-            We're waiting for customer payment
-          </p>
+          <table cellpadding="0" cellspacing="0">
+            <tr>
+              <td>State</td>
+              <td>
+                <p style="font-size:15px;font-weight:bold">
+                  <span stl:if="not payment/is_payed" style="color:red"> We're waiting for payment </span>
+                  <span stl:if="payment/is_payed" style="color:green"> Payment has been done</span>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>Payment mode</td>
+              <td>${payment/title}</td>
+            </tr>
+            <tr stl:repeat="detail payment/details">
+              <td>${detail/title}</td>
+              <td>${detail/value}</td>
+            </tr>
+          </table>
+          <!--
+            ${payment/view}
+          -->
         </td>
       </tr>
     </tbody>
@@ -243,7 +255,7 @@
 
   <hr class="order-hr"/>
 
-  <table class="order-browse" stl:if="payment/is_payed">
+  <table class="order-browse" stl:if="last_payment/is_payed">
     <thead>
       <tr>
         <th>
@@ -340,7 +352,7 @@
   <hr class="order-hr"/>
 
   <div stl:if="not is_canceled">
-    <form method="post" stl:if="not payment/is_payed">
+    <form method="post" stl:if="not last_payment/is_payed">
       <button type="submit" name="action" value="cancel_order"
         class="button-red">Cancel the order</button>
     </form>

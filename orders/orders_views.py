@@ -17,6 +17,7 @@
 # Import from itools
 from itools.core import merge_dicts
 from itools.datatypes import Boolean, String, Unicode, Integer
+from itools.datatypes import Enumerate
 from itools.gettext import MSG
 from itools.i18n import format_datetime
 from itools.log import log_error
@@ -231,23 +232,40 @@ class Order_Manage(Payments_EditablePayment, STLForm):
         messages = resource.get_resource('messages')
         namespace['messages'] = messages.get_namespace_messages(context)
         # Payments (We show last payment)
+        namespace['payments'] = []
         payments = shop.get_resource('payments')
-        is_payed = resource.get_property('is_payed')
-        payments_records = payments.get_payments_records(context, resource.name)
-        payment_way, payment_record = payments_records[0]
-        payment_table = payment_way.get_resource('payments').handler
-        view = payment_way.order_edit_view
-        view = view(
-                payment_way=payment_way,
-                payment_table=payment_table,
-                record=payment_record,
-                id_payment=payment_record.id)
-        view = view.GET(resource, context)
+        for payment_way, payment_record in payments.get_payments_records(context, resource.name):
+            payment_table = payment_way.get_resource('payments').handler
+            # Get specific view (useless now ?)
+            view = payment_way.order_edit_view
+            view = view(
+                    payment_way=payment_way,
+                    payment_table=payment_table,
+                    record=payment_record,
+                    id_payment=payment_record.id)
+            view = view.GET(resource, context)
+            # Details
+            details = []
+            for name, datatype in payment_table.record_properties.items():
+                if name in ('resource_validator', 'state', 'ref', 'user'):
+                    continue
+                value = payment_table.get_record_value(payment_record, name)
+                if isinstance(datatype, Enumerate):
+                    value = datatype.encode(value)
+                details.append({'title': name,
+                                'value': value})
+            # Is payed ?
+            is_payed = payment_table.get_record_value(payment_record, 'state')
+            # BUild namespace
+            namespace['payments'].append({'is_payed': is_payed,
+                                          'title': payment_way.get_title(),
+                                          'details': details,
+                                          'state': payment_table.get_record_value(payment_record, 'state'),
+                                          'view': view})
+        namespace['last_payment'] = namespace['payments'][0]
         namespace['payment_ways'] = SelectWidget('payment_way',
                 has_empty_option=False).to_html(PaymentWaysEnumerate,
                                                 resource.get_property('payment_way'))
-        namespace['payment'] = {'is_payed': is_payed,
-                                'view': view}
         # Shippings
         is_sent = resource.get_property('is_sent')
         shippings = shop.get_resource('shippings')
