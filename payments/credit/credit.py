@@ -120,7 +120,9 @@ class CreditPayment(PaymentWay):
 
 
     def get_payment_way_description(self, context, total_amount):
-        total_amount = decimal(total_amount['with_tax'])
+        # XXX We don't need recurrency
+        total_amount = total_amount['with_tax'].split(' ')[0]
+        total_amount = decimal(total_amount)
         amount_available = self.get_credit_available_for_user(context.user.name)
         remaining_amount = amount_available - total_amount
         if remaining_amount < decimal('0'):
