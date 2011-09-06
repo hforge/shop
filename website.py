@@ -114,6 +114,13 @@ class ShopWebSite(NeutralWS):
                   class_skin_administrators=SkinsEnumerate)
 
 
+    def _get_catalog_values(self):
+        values = super(ShopWebSite, self)._get_catalog_values()
+        default_vhosts = ('shop', 'admin.shop',)
+        values['vhosts'] = self.get_property('vhosts') + default_vhosts
+        return values
+
+
     def get_class_skin(self, context):
         class_skin = self.get_property('class_skin')
         if not class_skin:
