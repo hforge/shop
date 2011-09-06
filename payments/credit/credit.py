@@ -105,6 +105,7 @@ class CreditPayment(PaymentWay):
             {'ref': payment['ref'],
              'amount': amount_payed,
              'user': context.user.name,
+             'state': True,
              'resource_validator': payment['resource_validator']})
         # The payment is automatically validated
         self.set_payment_as_ok(record.id, context)
