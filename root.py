@@ -48,6 +48,20 @@ class ShopRoot_Edit(DBResource_Edit):
         return
 
 
+internal_error_body = MSG(u"""
+**Website**
+
+{uri}
+
+**Error**
+
+{error}
+
+**Headers**
+
+{headers}
+""")
+
 
 class Root(BaseRoot):
 
@@ -66,7 +80,10 @@ class Root(BaseRoot):
         # We send an email to administrators
         for email in self.get_property('administrators'):
             subject = MSG(u'Internal server error').gettext()
-            text = MSG(u'%s\n\n%s' % (context.uri, traceback.format_exc())).gettext()
+            headers = u'\n'.join([u'%s => %s' % (x, y)
+                                    for x, y in context.get_headers()])
+            text = internal_error_body.gettext(uri=context.uri,
+                error=traceback.format_exc(), headers=headers)
             self.send_email(email, subject, text=text)
         # We show a prerry error page
         database = context.database
