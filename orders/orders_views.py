@@ -250,9 +250,9 @@ class Order_Manage(Payments_EditablePayment, STLForm):
                 if name in ('resource_validator', 'state', 'ref', 'user'):
                     continue
                 value = payment_table.get_record_value(payment_record, name)
-                if isinstance(datatype, Enumerate):
-                    value = datatype.encode(value)
-                details.append({'title': name,
+                if issubclass(datatype, Enumerate):
+                    value = datatype.get_value(value)
+                details.append({'title': getattr(datatype, 'title', name),
                                 'value': value})
             # Is payed ?
             is_payed = payment_table.get_record_value(payment_record, 'state')

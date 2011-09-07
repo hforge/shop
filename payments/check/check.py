@@ -36,10 +36,10 @@ class CheckPaymentBaseTable(PaymentWayBaseTable):
 
     record_properties = merge_dicts(
         PaymentWayBaseTable.record_properties,
-        check_number=Integer,
-        bank=Unicode,
-        account_holder=Unicode,
-        advance_state=CheckStates)
+        check_number=Integer(title=MSG(u'Check number')),
+        bank=Unicode(title=MSG(u'Bank')),
+        account_holder=Unicode(title=MSG(u'Account holder')),
+        advance_state=CheckStates(title=MSG(u'Advance State')))
 
 
 class CheckPaymentTable(PaymentWayTable):

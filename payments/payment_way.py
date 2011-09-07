@@ -39,10 +39,10 @@ class PaymentWayBaseTable(BaseTable):
     record_properties = {
         'ref': String(is_indexed=True, is_stored=True),
         'user': String(is_indexed=True),
-        'state': Boolean(is_indexed=True),
-        'amount': Decimal,
+        'state': Boolean(is_indexed=True,),
+        'amount': Decimal(title=MSG(u'Payment amount')),
         'resource_validator': String,
-        'description': Unicode}
+        'description': Unicode(title=MSG(u'Payment description'))}
 
 
 class PaymentWayTable(Table):

@@ -45,10 +45,10 @@ class PayboxBaseTable(PaymentWayBaseTable):
 
     record_properties = merge_dicts(
         PaymentWayBaseTable.record_properties,
-        id_payment=Integer,
-        transaction=String,
-        autorisation=String,
-        advance_state=PayboxStatus)
+        id_payment=Integer(title=MSG(u'Id payment')),
+        transaction=String(title=MSG(u'Id transaction')),
+        autorisation=String(title=MSG(u'Autorisation')),
+        advance_state=PayboxStatus(title=MSG(u'Advance State')))
 
 
 
