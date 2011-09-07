@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-09-02 13:09+CET\n"
+"POT-Creation-Date: 2011-09-07 09:09+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -319,11 +319,6 @@ msgstr ""
 #: ../ui/shop/cart_view.xml.en:42
 msgctxt "ul"
 msgid "${option/title}:"
-msgstr ""
-
-#: ../ui/backoffice/orders/order_manage.xml.en:234
-msgctxt "emphasis"
-msgid "${order/payment_way}:"
 msgstr ""
 
 #: ../ui/vertical_depot/cart_box.xml.en:18 ../ui/shop/cart_viewbox.xml.en:17
@@ -779,22 +774,23 @@ msgctxt "span"
 msgid "<g id='51'>${order/payment_way}</g> » Total Price"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:220
+#: ../ui/backoffice/orders/order_manage.xml.en:232
 msgctxt "span"
 msgid ""
-"<g id='53'> We're waiting for payment </g>  <g id='54'> Last payment </g>"
+"<g id='53'> We're waiting for payment </g>  <g id='54'> Payment has been "
+"done</g>"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:310
+#: ../ui/backoffice/orders/order_manage.xml.en:322
 msgctxt "span"
-msgid "<g id='65'> Public </g>  <g id='66'> Private </g>"
+msgid "<g id='64'> Public </g>  <g id='65'> Private </g>"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:327
+#: ../ui/backoffice/orders/order_manage.xml.en:339
 msgctxt "label"
 msgid ""
-"<g id='69'>Public</g>  <x id='70'/>  <g id='71'>Private</g><x id='72'/>  <x "
-"id='73'/><x id='74'/>  <g id='75'>Send message</g>"
+"<g id='68'>Public</g>  <x id='69'/>  <g id='70'>Private</g><x id='71'/>  <x "
+"id='72'/><x id='73'/>  <g id='74'>Send message</g>"
 msgstr ""
 
 #: ../ui/backoffice/orders/order_view.xml.en:50
@@ -1359,7 +1355,7 @@ msgstr ""
 msgid "Cancel the order"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:345
+#: ../ui/backoffice/orders/order_manage.xml.en:357
 msgctxt "button"
 msgid "Cancel the order"
 msgstr ""
@@ -1471,7 +1467,7 @@ msgctxt "heading"
 msgid "Change the price for all this products"
 msgstr ""
 
-#: ../orders/orders_views.py:330
+#: ../orders/orders_views.py:348
 msgid "Changes saves"
 msgstr ""
 
@@ -1839,7 +1835,7 @@ msgid "Current state:"
 msgstr ""
 
 #: ../payments/payments_views.py:131 ../payments/payments_views.py:149
-#: ../orders/orders_views.py:63
+#: ../orders/orders_views.py:64
 msgid "Customer"
 msgstr ""
 
@@ -1919,7 +1915,7 @@ msgstr ""
 msgid "Date Widget"
 msgstr ""
 
-#: ../payments/payments_views.py:148 ../orders/orders_views.py:66
+#: ../payments/payments_views.py:148 ../orders/orders_views.py:67
 msgid "Date and Time"
 msgstr ""
 
@@ -2252,7 +2248,7 @@ msgctxt "heading"
 msgid "Editorial content"
 msgstr ""
 
-#: ../modules/effiliation/effiliation.py:65
+#: ../modules/effiliation/effiliation.py:69
 msgid "Effiliation"
 msgstr ""
 
@@ -2262,7 +2258,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:275
+#: ../ui/backoffice/orders/order_manage.xml.en:287
 msgctxt "table cell"
 msgid "Email"
 msgstr ""
@@ -2814,7 +2810,7 @@ msgctxt "table cell"
 msgid "If out of stock:"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:324
+#: ../ui/backoffice/orders/order_manage.xml.en:336
 msgctxt "form"
 msgid "If you want to add a message:"
 msgstr ""
@@ -3240,7 +3236,7 @@ msgctxt "link"
 msgid "Manage photos"
 msgstr ""
 
-#: ../orders/orders_views.py:169
+#: ../orders/orders_views.py:170
 msgid "Manage shipping"
 msgstr ""
 
@@ -3326,7 +3322,7 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:278
+#: ../ui/backoffice/orders/order_manage.xml.en:290
 msgctxt "table cell"
 msgid "Message"
 msgstr ""
@@ -3349,7 +3345,7 @@ msgid "Messages"
 msgstr ""
 
 #: ../ui/backoffice/orders/order_view.xml.en:119
-#: ../ui/backoffice/orders/order_manage.xml.en:273
+#: ../ui/backoffice/orders/order_manage.xml.en:285
 msgctxt "table cell"
 msgid "Messages"
 msgstr ""
@@ -3417,7 +3413,7 @@ msgstr ""
 msgid "Modifications ok"
 msgstr ""
 
-#: ../modules/effiliation/effiliation.py:67
+#: ../modules/effiliation/effiliation.py:71
 msgid "Module effiliation"
 msgstr ""
 
@@ -3717,7 +3713,7 @@ msgstr ""
 msgid "Order confirmation"
 msgstr ""
 
-#: ../orders/orders_views.py:306
+#: ../orders/orders_views.py:324
 msgid "Order has been canceled"
 msgstr ""
 
@@ -3811,7 +3807,7 @@ msgstr ""
 msgid "Order title"
 msgstr ""
 
-#: ../orders/orders.py:628 ../shop.py:153 ../orders/orders_views.py:53
+#: ../orders/orders.py:628 ../shop.py:153 ../orders/orders_views.py:54
 msgid "Orders"
 msgstr ""
 
@@ -3867,7 +3863,7 @@ msgstr ""
 msgid "PBX_TOTAL value is invalid"
 msgstr ""
 
-#: ../orders/orders_views.py:162
+#: ../orders/orders_views.py:163
 msgid "PDF has been regenerated"
 msgstr ""
 
@@ -4008,7 +4004,7 @@ msgstr ""
 msgid "Payment done"
 msgstr ""
 
-#: ../shop_payments.py:35 ../orders/orders_views.py:361
+#: ../shop_payments.py:35 ../orders/orders_views.py:379
 msgid "Payment end"
 msgstr ""
 
@@ -4016,7 +4012,7 @@ msgstr ""
 msgid "Payment error"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:251
+#: ../ui/backoffice/orders/order_manage.xml.en:263
 msgctxt "table cell"
 msgid "Payment has been validated, preparation of order"
 msgstr ""
@@ -4032,6 +4028,11 @@ msgid "Payment is ok."
 msgstr ""
 
 #: ../payments/payments_views.py:152
+msgid "Payment mode"
+msgstr ""
+
+#: ../ui/backoffice/orders/order_manage.xml.en:238
+msgctxt "table cell"
 msgid "Payment mode"
 msgstr ""
 
@@ -4067,6 +4068,11 @@ msgstr ""
 
 #: ../payments/payments_views.py:257
 msgid "Payment way"
+msgstr ""
+
+#: ../ui/backoffice/orders/order_manage.xml.en:220
+msgctxt "table cell"
+msgid "Payment:"
 msgstr ""
 
 #: ../ui/backoffice/configuration.xml.en:145
@@ -4514,7 +4520,7 @@ msgctxt "table cell"
 msgid "Reference"
 msgstr ""
 
-#: ../orders/orders_views.py:184
+#: ../orders/orders_views.py:185
 msgid "Reference found !"
 msgstr ""
 
@@ -4676,7 +4682,7 @@ msgctxt "link"
 msgid "Robots.txt"
 msgstr ""
 
-#: ../orders/orders_views.py:84
+#: ../orders/orders_views.py:85
 msgid "Référence"
 msgstr ""
 
@@ -4762,7 +4768,7 @@ msgstr ""
 msgid "Seen ?"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:276
+#: ../ui/backoffice/orders/order_manage.xml.en:288
 msgctxt "table cell"
 msgid "Seen ?"
 msgstr ""
@@ -4995,7 +5001,7 @@ msgstr ""
 #: ../cross_selling_views.py:292 ../modules/review/review.py:440
 #: ../products/product_views.py:425 ../products/product_views.py:446
 #: ../payments/payments_views.py:153 ../editorial.py:46 ../user_views.py:264
-#: ../orders/orders_views.py:64 ../orders/orders_views.py:85
+#: ../orders/orders_views.py:65 ../orders/orders_views.py:86
 #: ../modules/stock/stock.py:58 ../shipping/shipping_way.py:72
 #: ../payments/payment_way.py:57
 msgid "State"
@@ -5006,7 +5012,8 @@ msgctxt "label"
 msgid "State"
 msgstr ""
 
-#: ../ui/backoffice/orders/order_manage.xml.en:277
+#: ../ui/backoffice/orders/order_manage.xml.en:229
+#: ../ui/backoffice/orders/order_manage.xml.en:289
 msgctxt "table cell"
 msgid "State"
 msgstr ""
@@ -5249,7 +5256,7 @@ msgstr ""
 msgid "There are {n} models."
 msgstr ""
 
-#: ../orders/orders_views.py:79
+#: ../orders/orders_views.py:80
 msgid "There are {n} orders."
 msgstr ""
 
@@ -5309,7 +5316,7 @@ msgstr ""
 msgid "There's already a default declination"
 msgstr ""
 
-#: ../orders/orders_views.py:78
+#: ../orders/orders_views.py:79
 msgid "There's one order."
 msgstr ""
 
@@ -5458,7 +5465,7 @@ msgctxt "b"
 msgid "Total amount:"
 msgstr ""
 
-#: ../orders/orders.py:161 ../user_views.py:263 ../orders/orders_views.py:65
+#: ../orders/orders.py:161 ../user_views.py:263 ../orders/orders_views.py:66
 msgid "Total price"
 msgstr ""
 
@@ -5509,7 +5516,7 @@ msgctxt "link"
 msgid "Tracker"
 msgstr ""
 
-#: ../modules/effiliation/effiliation.py:70
+#: ../modules/effiliation/effiliation.py:74
 #: ../modules/google_analytics/google_analytics.py:70
 msgid "Tracking id"
 msgstr ""
@@ -5526,7 +5533,7 @@ msgstr ""
 msgid "Transaction not permitted for this holder"
 msgstr ""
 
-#: ../orders/orders_views.py:295
+#: ../orders/orders_views.py:313
 msgid "Transition done."
 msgstr ""
 
@@ -5600,7 +5607,7 @@ msgstr ""
 msgid "Unknow error"
 msgstr ""
 
-#: ../orders/orders_views.py:187
+#: ../orders/orders_views.py:188
 msgid "Unknow reference \"%s\""
 msgstr ""
 
@@ -5775,11 +5782,6 @@ msgstr ""
 #: ../ui/shop/internal_server_error.xml.en:8
 msgctxt "heading"
 msgid "We're sorry, but something went wrong."
-msgstr ""
-
-#: ../ui/backoffice/orders/order_manage.xml.en:235
-msgctxt "paragraph"
-msgid "We're waiting for customer payment"
 msgstr ""
 
 #: ../ui/shop/internal_server_error.xml.en:9
@@ -6034,7 +6036,7 @@ msgstr ""
 msgid "Your inscription has been validated"
 msgstr ""
 
-#: ../user_views.py:403 ../orders/orders_views.py:320
+#: ../user_views.py:403 ../orders/orders_views.py:338
 msgid "Your message has been sent"
 msgstr ""
 
