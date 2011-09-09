@@ -20,7 +20,7 @@ from copy import deepcopy
 # Import from itools
 from itools.core import merge_dicts
 from itools.csv import Table as BaseTable
-from itools.datatypes import Decimal, Enumerate
+from itools.datatypes import Decimal, Enumerate, Unicode
 from itools.gettext import MSG
 from itools.uri import get_reference
 from itools.web import get_context
@@ -43,7 +43,7 @@ from itws.views import AutomaticEditView
 from shop.datatypes import IntegerRange
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.products.enumerate import CategoriesEnumerate
-from shop.utils import format_price, get_skin_template
+from shop.utils import get_skin_template
 from shop.utils import get_product_filters
 
 
@@ -56,22 +56,54 @@ from shop.utils import get_product_filters
 ##########################################
 
 
-class FilterByPrice_BaseTable(BaseTable):
+class FilterRange_BaseTable(BaseTable):
 
     record_properties = {'min': Decimal,
                          'max': Decimal}
 
 
-class FilterByPrice_Table(Table):
+
+class FilterRange_Enumerate(Enumerate):
+
+    @classmethod
+    def get_options(cls):
+        options = [{'name': 'stored_price', 'value': u'Price'}]
+        for name, datatype in get_product_filters().items():
+            value = name
+            name = 'DFT-%s' % name
+            if getattr(datatype, 'is_range', False):
+                options.append({'name': name, 'value': value})
+        return options
+
+
+class FilterRange_Table(Table):
 
     class_id = 'table-filter-by-price'
-    class_title = MSG(u'Price range')
-    class_handler = FilterByPrice_BaseTable
+    # XXX We can change name
+    class_title = MSG(u'Filter by range')
+    class_handler = FilterRange_BaseTable
 
     form = [TextWidget('min', title=MSG(u'Min')),
             TextWidget('max', title=MSG(u'Max'))]
 
+    edit = AutomaticEditView(access='is_admin')
+    edit_show_meta = False
+    edit_schema = {'unit': Unicode,
+                   'criterium': FilterRange_Enumerate(mandatory=True)}
+    edit_widgets = [
+        SelectWidget('criterium', title=MSG(u'Criterirum')),
+        TextWidget('unit', title=MSG(u'Unit'))]
+
+    @classmethod
+    def get_metadata_schema(cls):
+        return merge_dicts(Folder.get_metadata_schema(),
+                criterium=FilterRange_Enumerate,
+                unit=Unicode)
+
+
     def get_items(self, context):
+        unit = self.get_property('unit')
+        criterium = self.get_property('criterium')
         uri = context.uri
         options = []
         get_record_value = self.handler.get_record_value
@@ -88,24 +120,23 @@ class FilterByPrice_Table(Table):
             value = (min_value_q, max_value_q)
             name = IntegerRange.encode(value)
             if min_value is None and max_value:
-                title = MSG(u'Less than {max_value}')
+                title = MSG(u'Less than {max_value} {unit}')
             elif min_value and max_value:
-                title = MSG(u'From {min_value} to {max_value}')
+                title = MSG(u'From {min_value} to {max_value} {unit}')
             elif max_value is None and min_value:
-                title = MSG(u'More than {min_value}')
+                title = MSG(u'More than {min_value} {unit}')
             else:
                 title = MSG(u'All')
                 name = None
                 value = None
-            selected =  context.query.get('stored_price') == value
-            uri = uri.replace(stored_price=name)
-            min_value = format_price(min_value) if min_value else None
-            max_value = format_price(max_value) if max_value else None
-            title = title.gettext(min_value=min_value, max_value=max_value)
+            selected =  context.query.get(criterium) == value
+            uri = uri.replace(**{criterium:name})
+            title = title.gettext(min_value=min_value, max_value=max_value,
+                                  unit=unit)
             options.append(
                 {'name': name,
-                 'criterium': 'price',
-                 'query': RangeQuery('stored_price', min_value_q, max_value_q),
+                 'criterium': criterium,
+                 'query': RangeQuery(criterium, min_value_q, max_value_q),
                  'selected': selected,
                  'uri': uri,
                  'css': 'selected' if selected else None,
@@ -259,7 +290,7 @@ class OrderCriterium(ResourcesOrderedTable):
 
     order_root_path = '../'
     orderable_classes = (Filter_Criterium, Filter_Criterium_Categorie,
-                         FilterByPrice_Table)
+                         FilterRange_Table)
 
 
 
@@ -282,7 +313,7 @@ class FilterBox(BoxAware, Folder):
     def get_document_types(self):
         return [Filter_Criterium,
                 Filter_Criterium_Categorie,
-                FilterByPrice_Table]
+                FilterRange_Table]
 
 
 register_resource_class(FilterBox)

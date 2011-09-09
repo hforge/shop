@@ -179,22 +179,21 @@ class Category_View(BrowseFormBatchNumeric):
         # Add query of filter
         for key, datatype in self.get_search_schema().items():
             value = context.query[key]
-            # XXX Test with range price
-            print key, value, datatype
             if value and issubclass(datatype, IntegerRange):
                 query.append(RangeQuery(key, value[0], value[1]))
             elif value:
                 query.append(PhraseQuery(key, value))
-            print query
         return context.root.search(AndQuery(*query))
 
 
     def get_search_schema(self):
-        from datatypes import IntegerRange
         schema = {}
         for key, datatype in get_product_filters().items():
+            if getattr(datatype, 'is_range', False):
+                datatype = IntegerRange
             schema['DFT-%s' % key] = datatype
-        return merge_dicts({'stored_price': IntegerRange}, schema)
+        return merge_dicts({'stored_price': IntegerRange},
+                           schema)
 
 
     def get_query_schema(self):

@@ -53,6 +53,7 @@ from product_views import Product_ChangeProductModel, Products_Stock
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
+from shop.datatypes import IntegerRange
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
@@ -161,10 +162,14 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
     def _get_dynamic_catalog_values(self):
         values = {}
         dynamic_schema = self.get_dynamic_schema()
-        for key in get_product_filters():
+        for key, datatype in get_product_filters().items():
             register_key = 'DFT-%s' % key
             if key in dynamic_schema:
-                values[register_key] = self.get_dynamic_property(key, dynamic_schema)
+                value = self.get_dynamic_property(key, dynamic_schema)
+                if value and getattr(datatype, 'is_range', False):
+                    value = int(value * 100)
+                if value:
+                    values[register_key] = value
         return values
         # XXX We have to refactor dynamic indexation
         # Import from ikaaro
