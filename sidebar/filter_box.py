@@ -67,7 +67,8 @@ class FilterRange_Enumerate(Enumerate):
 
     @classmethod
     def get_options(cls):
-        options = [{'name': 'stored_price', 'value': u'Price'}]
+        options = [{'name': 'stored_price', 'value': MSG(u'Price')},
+                   {'name': 'stored_weight', 'value': MSG(u'Weight')}]
         for name, datatype in get_product_filters().items():
             value = name
             name = 'DFT-%s' % name

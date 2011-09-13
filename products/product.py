@@ -242,6 +242,7 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         values['has_images'] = (len(ordered_names) != 0)
         # Price # XXX We can't sort decimal, so transform to int
         values['stored_price'] = int(self.get_price_with_tax() * 100)
+        values['stored_weight'] = int(self.get_weight() * 100)
         # Price
         values['ht_price'] = self.get_price_without_tax()
         values['ttc_price'] = self.get_price_with_tax()
@@ -971,6 +972,7 @@ register_field('ht_price', Decimal(is_indexed=True, is_stored=True))
 register_field('ttc_price', Decimal(is_indexed=True, is_stored=True))
 # XXX xapian can't sort decimal
 register_field('stored_price', Integer(is_indexed=False, is_stored=True))
+register_field('stored_weight', Integer(is_indexed=False, is_stored=True))
 
 # Register resources
 register_resource_class(Product)

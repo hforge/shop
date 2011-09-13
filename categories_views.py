@@ -192,7 +192,8 @@ class Category_View(BrowseFormBatchNumeric):
             if getattr(datatype, 'is_range', False):
                 datatype = IntegerRange
             schema['DFT-%s' % key] = datatype
-        return merge_dicts({'stored_price': IntegerRange},
+        return merge_dicts({'stored_price': IntegerRange,
+                            'stored_weight': IntegerRange},
                            schema)
 
 
