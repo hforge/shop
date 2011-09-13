@@ -124,7 +124,7 @@ class Declination_NewInstance(NewInstance):
         enumerates_folder = shop.get_resource('enumerates')
         for name in resource.get_purchase_options_names():
             title = enumerates_folder.get_resource(name).get_title()
-            widgets.append(SelectWidget(name, title=title, has_empty_option=False))
+            widgets.append(SelectWidget(name, title=title, has_empty_option=True))
         return declination_widgets + widgets
 
 
@@ -199,7 +199,8 @@ class Declination(DynamicFolder):
         dynamic_schema = self.get_dynamic_schema()
         for key, datatype in dynamic_schema.items():
             value = self.get_dynamic_property(key, dynamic_schema)
-            title += u'%s - ' % datatype.get_value(value)
+            if value:
+                title += u'%s - ' % datatype.get_value(value)
         return title
 
 

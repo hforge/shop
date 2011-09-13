@@ -25,10 +25,13 @@ from itools.xapian import PhraseQuery, AndQuery
 from ikaaro import messages
 from ikaaro.buttons import RemoveButton, RenameButton, CopyButton, PasteButton
 from ikaaro.folder_views import Folder_BrowseContent
-from ikaaro.forms import AutoForm, SelectWidget
+from ikaaro.forms import AutoForm
 from ikaaro.forms import TextWidget
 from ikaaro.table_views import OrderedTable_View
 from ikaaro.table_views import Table_AddRecord, Table_EditRecord
+
+# Import from itws
+from itws.utils import DualSelectWidget
 
 # Import from shop
 from shop.enumerate_table import Enumerate_ListEnumerateTable
@@ -136,7 +139,7 @@ class ProductModel_Configure(AutoForm):
       'declinations_enumerates': Enumerate_ListEnumerateTable(multiple=True)}
 
     widgets = [TextWidget('title', title=MSG(u'Title')),
-               SelectWidget('declinations_enumerates',
+               DualSelectWidget('declinations_enumerates',
                             title=MSG(u'Declinations activated'))]
 
 

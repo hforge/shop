@@ -728,7 +728,10 @@ class Product_DeclinationsView(BrowseFormBatchNumeric):
             declination_dynamic_schema = declination.get_dynamic_schema()
             for name, datatype in declination_dynamic_schema.items():
                 value = declination.get_dynamic_property(name, declination_dynamic_schema)
-                kw[name] = datatype.get_value(value)
+                if value:
+                    kw[name] = datatype.get_value(value)
+                else:
+                    kw[name] = None
             # Img
             img = None#declination.get_property('associated-image')
             if img:

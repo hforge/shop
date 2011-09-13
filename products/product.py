@@ -405,7 +405,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
               'stock': stock_quantity if manage_stock else None}
             for name in purchase_options_names:
                 value = declination.get_dynamic_property(name, dynamic_schema)
-                products[declination.name]['option'][name] = value
+                if value:
+                    products[declination.name]['option'][name] = value
         return dumps(products)
 
 
@@ -456,7 +457,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         purchase_options_schema = self.get_purchase_options_schema()
         for declination in self.search_resources(cls=Declination):
             dynamic_schema = declination.get_dynamic_schema()
-            value = [kw.get(x) == declination.get_dynamic_property(x, dynamic_schema)
+            value = [kw.get(x) ==
+                  (declination.get_dynamic_property(x, dynamic_schema) or None)
                         for x in purchase_options_schema]
             if set(value) == set([True]):
                 return declination.name
@@ -471,6 +473,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         enumerates_folder = shop.get_resource('enumerates')
         for name in self.get_purchase_options_names():
             value = declination.get_dynamic_property(name, dynamic_schema)
+            if not value:
+                continue
             enumerate_table = enumerates_folder.get_resource(name)
             datatype = EnumerateTable_to_Enumerate(enumerate_name=name)
             namespace.append({'title': enumerate_table.get_title(),
