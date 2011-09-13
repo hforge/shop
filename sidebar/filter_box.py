@@ -96,7 +96,7 @@ class FilterRange_Table(Table):
 
     @classmethod
     def get_metadata_schema(cls):
-        return merge_dicts(Folder.get_metadata_schema(),
+        return merge_dicts(Table.get_metadata_schema(),
                 criterium=FilterRange_Enumerate,
                 unit=Unicode)
 
@@ -150,7 +150,9 @@ class Filter_DFT_Enumerate(Enumerate):
     @classmethod
     def get_options(cls):
         return [{'name': x.enumerate_name,
-                 'value': x.enumerate_name} for x in get_product_filters().values()]
+                 'value': x.enumerate_name}
+                  for x in get_product_filters().values()
+                      if hasattr(x, 'enumerate_name')]
 
 
 
