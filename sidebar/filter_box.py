@@ -131,7 +131,8 @@ class FilterRange_Table(Table):
                 name = None
                 value = None
             selected =  context.query.get(criterium) == value
-            uri = uri.replace(**{criterium:name})
+            kw = {criterium: name, 'batch_start': 0}
+            uri = uri.replace(**kw)
             title = title.gettext(min_value=min_value, max_value=max_value,
                                   unit=unit)
             options.append(
@@ -231,7 +232,8 @@ class Filter_Criterium(Folder):
         for option in [{'name': None, 'value': MSG(u'All')}] + enum.get_options():
             selected = context.query.get(criterium_name) == option['name']
             option['criterium'] = criterium
-            option['uri'] = uri.replace(**{criterium_name: option['name']})
+            kw = {criterium_name: option['name'], 'batch_start': 0}
+            option['uri'] = uri.replace(**kw)
             option['query'] = None
             if option['name']:
                 option['query'] = PhraseQuery(criterium_name, option['name'])
