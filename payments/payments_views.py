@@ -296,12 +296,14 @@ class Payments_ChoosePayment(STLForm):
             user_group = context.user.get_property('user_group')
             if len(shipping_groups)>0 and user_group not in shipping_groups:
                 continue
+            if mode.is_enabled(context) is False:
+                continue
             namespace['payments'].append(
                 {'name': mode.name,
                  'value': mode.get_title(),
                  'description': mode.get_payment_way_description(context, total_price),
                  'logo': str(context.resource.get_pathto(logo)) if logo else None,
-                 'enabled': mode.is_enabled(context)})
+                 'enabled': True})
         return namespace
 
 
@@ -356,12 +358,14 @@ class Payment_Widget(Widget):
             user_group = context.user.get_property('user_group')
             if len(shipping_groups)>0 and user_group not in shipping_groups:
                 continue
+            if mode.is_enabled(context) is False:
+                continue
             namespace['payments'].append(
                 {'name': mode.name,
                  'value': mode.get_title(),
                  'description': mode.get_payment_way_description(context, total_price),
                  'logo': str(context.resource.get_pathto(logo)) if logo else None,
-                 'enabled': mode.is_enabled(context),
+                 'enabled': True,
                  'selected': None})
         # Select first mode by default
         if namespace['payments'] != []:
