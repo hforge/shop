@@ -133,7 +133,7 @@ class Shop_ProductSearch(Category_View):
         # Add query of filter
         for key, datatype in self.get_query_schema().items():
             value = context.query[key]
-            if key == 'range_price' and value:
+            if key == 'stored_price' and value:
                 query.append(RangeQuery('stored_price', value[0], value[1]))
             # TODO Add other filters
         results = context.root.search(AndQuery(*query))

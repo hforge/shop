@@ -73,13 +73,13 @@ class FilterByPriceBox_View(STLView):
             value = min_price_q, max_price_q
             min_price = format_price(min_price) if min_price else None
             max_price = format_price(max_price) if max_price else None
-            checked = context.query.get('range_price') == value
+            checked = context.query.get('stored_price') == value
             prices.append({'value': IntegerRange.encode(value),
                            'checked': checked,
                            'css': 'selected' if checked else None,
                            'min': min_price,
                            'max': max_price})
-        no_range_price_checked = context.query.get('range_price') == None
+        no_range_price_checked = context.query.get('stored_price') == None
         namespace = {'title': resource.get_title(),
                      'no_range_price_checked': no_range_price_checked,
                      'prices': prices}
