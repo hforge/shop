@@ -10,7 +10,7 @@
     <div class="description-wrapper">
       <a href="${href}">
         <img stl:if="cover" class="cover"
-             src="${cover/href}/;thumb?width=268&amp;height=220"
+             src="${cover/href}/;thumb?width=200&amp;height=220&amp;fit=1"
              alt="${title}" />
       </a>
     </div>

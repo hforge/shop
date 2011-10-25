@@ -64,7 +64,7 @@ body {
 #header {
     position: relative;
     height: 119px;
-    background: #1B597A;
+    background: #2D527D;
 }
 
 #header .login {
@@ -289,6 +289,18 @@ fieldset legend{
   color: #333333;
 }
 
+/**************************************************************************
+ * H1
+ * ***********************************************************************/
+#breadcrumbs{
+  margin: 10px 0;
+}
+
+h1{
+  color: #2D527D;
+  border-bottom: 1px solid #2D527D;
+}
+
 
 /**************************************************************************
  * CONTENTBAR
@@ -406,7 +418,7 @@ fieldset legend{
  * FOOTER
  * ***********************************************************************/
 #footer {
-    background: #1B597A;
+    background: #2D527D;
     padding: 10px 5px;
 }
 

@@ -7,9 +7,6 @@
     <div class="product-title">
       <h2>
         <a href="${href}" title="${title}">${title}</a>
-        <span class="price">
-          (${price/with_tax} €)
-        </span>
       </h2>
     </div>
     <div class="description-wrapper">
@@ -19,6 +16,9 @@
              alt="${title}" />
       </a>
       <br/>
+        <span class="price">
+          (${price/with_tax} €)
+        </span>
       <p class="description">${description}</p>
     </div>
   </div>
