@@ -17,9 +17,8 @@
       </a>
       <br/>
         <span class="price">
-          (${price/with_tax} €)
+          ${price/with_tax}
         </span>
-      <p class="description">${description}</p>
     </div>
   </div>
 </stl:block>
