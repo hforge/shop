@@ -20,9 +20,23 @@
         </li>
       </ul>
       <br/>
-      <span class="label">Price : </span>
-      <span id="price">${price/with_tax}</span>
-      <span class="suffix">€ TTC</span>
+      <p class="price" stl:if="price/with_tax">
+        Prix :
+
+        <stl:block stl:if="price/has_reduction">
+          <span class="strikethrough" id="price-before-reduction">
+            ${price/with_tax_before_reduction}
+          </span>
+          &nbsp;&nbsp;
+          <span class="reduce-price">
+            <span id="price" class="price-ttc">${price/with_tax}</span> TTC
+          </span>
+        </stl:block>
+        <stl:block stl:if="not price/has_reduction">
+          <span id="price" class="price-ttc">${price/with_tax}</span> TTC
+        </stl:block>
+
+      </p>
       <br/>
       <span class="label">Weight: </span>
       <span id="weight">${weight}</span>

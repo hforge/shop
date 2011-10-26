@@ -429,3 +429,7 @@ h1{
 #footer p, #footer a {
     color: #fff;
 }
+.strikethrough{
+  color: red;
+  text-decoration: line-through;
+}
