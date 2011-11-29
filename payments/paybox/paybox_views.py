@@ -94,7 +94,7 @@ class Paybox_ConfirmPayment(BaseForm):
     """
     access = True
 
-    authorized_ip = ['195.101.99.76', '194.2.122.158']
+    authorized_ip = ['195.101.99.76', '194.2.122.158', '195.25.7.166']
 
     schema = {'ref': String,
               'transaction': Unicode,
