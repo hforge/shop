@@ -17,10 +17,15 @@
 # Import from itws
 from itws.news import NewsItem
 from itws.news_views import NewsItem_Viewbox
+from itws.repository import BoxSectionNews
+from itws.repository_views import BoxSectionNews_View
 
 # Import from shop
 from utils import get_skin_template
 
+######################################################
+# News item
+######################################################
 
 class NewsItem_Viewbox(NewsItem_Viewbox):
 
@@ -34,3 +39,21 @@ class NewsItem_Shop(NewsItem):
     class_id = 'news'
 
     viewbox = NewsItem_Viewbox()
+
+
+######################################################
+# News sidebar
+######################################################
+
+class BoxSectionNews_Shop_View(BoxSectionNews_View):
+
+
+    def get_template(self, resource, context):
+        return get_skin_template(context, '/news/sidebar.xml')
+
+
+class BoxSectionNews_Shop(BoxSectionNews):
+
+    class_id = 'box-section-news'
+
+    view = BoxSectionNews_Shop_View()
