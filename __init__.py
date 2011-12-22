@@ -34,6 +34,7 @@ from website import ShopWebSite
 # Import from package
 import feed_views
 import modules
+import news
 import sidebar
 import skin
 import user
