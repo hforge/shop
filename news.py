@@ -16,7 +16,7 @@
 
 # Import from itws
 from itws.news import NewsItem
-from itws.news_views import NewsItem_Viewbox
+from itws.news_views import NewsItem_Viewbox, NewsItem_View
 from itws.repository import BoxSectionNews
 from itws.repository_views import BoxSectionNews_View
 
@@ -27,10 +27,16 @@ from utils import get_skin_template
 # News item
 ######################################################
 
-class NewsItem_Viewbox(NewsItem_Viewbox):
+class NewsItemShop_Viewbox(NewsItem_Viewbox):
 
     def get_template(self, resource, context):
         return get_skin_template(context, '/news/viewbox.xml')
+
+
+class NewsItemShop_View(NewsItem_View):
+
+    def get_template(self, resource, context):
+        return get_skin_template(context, '/news/view.xml')
 
 
 
@@ -38,7 +44,9 @@ class NewsItem_Shop(NewsItem):
 
     class_id = 'news'
 
-    viewbox = NewsItem_Viewbox()
+    view = NewsItemShop_View()
+    viewbox = NewsItemShop_Viewbox()
+
 
 
 ######################################################
