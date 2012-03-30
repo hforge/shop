@@ -165,7 +165,12 @@ class EnumerateTable_to_Enumerate(Enumerate):
             return None
         shop = get_shop(here)
         table = shop.get_resource('enumerates/%s' % cls.enumerate_name)
-        record = table.handler.search(name=name)[0]
+        records = table.handler.search(name=name)
+        if len(records) == 0:
+            # XXX Should not happen
+            # Enumerate has been deleted
+            return None
+        record = records[0]
         return cls.get_kw(table, record)['value']
 
 
