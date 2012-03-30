@@ -274,7 +274,8 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
     def to_text(self):
         result = {}
-        languages = self.get_site_root().get_property('website_languages')
+        site_root = self.get_site_root()
+        languages = site_root.get_property('website_languages')
         product_model = self.get_product_model()
         schema = {}
         if product_model:
@@ -325,6 +326,12 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                         text = ' '.join(values)
                     if text:
                         texts.append(text)
+        # Manufacturer
+        manufacturer = self.get_property('manufacturer')
+        if manufacturer:
+            manufacturer = site_root.get_resource(manufacturer)
+            texts.append(manufacturer.get_title())
+
         # Purchase options
         for declination in declinations:
             for key, datatype in purchase_options_schema.iteritems():
