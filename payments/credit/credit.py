@@ -25,7 +25,7 @@ from itools.stl import stl
 
 # Import from ikaaro
 from ikaaro.folder_views import GoToSpecificDocument
-from ikaaro.forms import TextWidget
+from ikaaro.forms import TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
@@ -55,7 +55,7 @@ class CreditAvailable_Table(Table):
     back = GoToSpecificDocument(specific_document='..',
                                 title=MSG(u'Back'))
 
-    form = [TextWidget('user', title=MSG(u'User id')),
+    form = [SelectWidget('user', title=MSG(u'User id')),
             TextWidget('amount', title=MSG(u'Credit amount')),
             TextWidget('description', title=MSG(u'Description'))]
 
