@@ -21,13 +21,13 @@ from sys import prefix
 
 # Import from itools
 from itools.core import merge_dicts
-from itools.datatypes import Boolean, String, Integer
+from itools.datatypes import Boolean, String, Integer, Decimal
 from itools.gettext import MSG
 from itools.html import HTMLFile
 from itools.uri import Path
 
 # Import from ikaaro
-from ikaaro.forms import TextWidget, SelectWidget
+from ikaaro.forms import TextWidget, SelectWidget, AutoForm
 from ikaaro.registry import register_resource_class
 
 # Import from shop
@@ -39,6 +39,39 @@ from shop.datatypes import StringFixSize
 from shop.payments.payment_way import PaymentWay, PaymentWayBaseTable
 from shop.payments.payment_way import PaymentWayTable
 from shop.payments.registry import register_payment_way
+
+
+class Paybox_Fix(AutoForm):
+
+    access = 'is_admin'
+    widgets = [TextWidget('id', title=MSG(u'Id')),
+               TextWidget('transaction', title=MSG(u'Transaction')),
+               TextWidget('autorisation', title=MSG(u'Autorisation')),
+               TextWidget('amount', title=MSG(u'Montant')),
+               ]
+    schema = {'id': Integer,
+              'transaction': String,
+              'autorisation': String,
+              'amount': Decimal}
+
+    def action(self, resource, context, form):
+        # Get payment record
+        payments = resource.handler
+        record = payments.get_record(form['id'])
+        amount = form['amount']
+        if payments.get_record_value(record, 'amount') != amount:
+            return context.come_back(MSG(u'Invalid amount'))
+        # Update record
+        infos = {'transaction': form['transaction'],
+                 'autorisation': form['autorisation'],
+                 'state': True,
+                 'advance_state': '00000'}
+        payments.update_record(record.id, **infos)
+        # Confirm_payment
+        resource.parent.set_payment_as_ok(record.id, context)
+        # Return a blank page to payment
+        return context.come_back(MSG(u'Payment validated'))
+
 
 
 class PayboxBaseTable(PaymentWayBaseTable):
@@ -59,6 +92,7 @@ class PayboxTable(PaymentWayTable):
     class_handler = PayboxBaseTable
 
     view = Paybox_View()
+    fix = Paybox_Fix()
 
 
     form = PaymentWayTable.form + [
