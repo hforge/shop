@@ -18,6 +18,7 @@
 import datetime
 import re
 from decimal import Decimal as decimal
+from operator import itemgetter
 
 # Import from itools
 from itools.datatypes import Boolean, Enumerate, PathDataType, String
@@ -271,8 +272,10 @@ class Users_Enumerate(DynamicEnumerate):
         root = context.root
         resources = [root.get_resource(brain.abspath)
                       for brain in root.search(format='user').get_documents()]
-        return [{'name': res.name, 'value': res.get_title()}
-                   for res in resources]
+        options = [{'name': res.name, 'value': res.get_title()}
+                         for res in resources]
+        options.sort(key=itemgetter('value'))
+        return options
 
 
     @classmethod

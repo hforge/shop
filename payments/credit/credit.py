@@ -24,21 +24,24 @@ from itools.gettext import MSG
 from itools.stl import stl
 
 # Import from ikaaro
+from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import TextWidget
 from ikaaro.registry import register_resource_class
 from ikaaro.table import Table
 
 # Import from shop.payments
+from shop.datatypes import Users_Enumerate
 from shop.payments.payment_way import PaymentWay
 from shop.payments.payment_way_views import PaymentWay_Configure
 from shop.payments.registry import register_payment_way
 from shop.utils import format_price
+from credit_views import CreditPayment_View
 
 
 class CreditAvailable_Basetable(BaseTable):
 
     record_properties = {
-        'user': String(is_indexed=True),
+        'user': Users_Enumerate(is_indexed=True),
         'amount': Decimal,
         'description': Unicode}
 
@@ -47,6 +50,10 @@ class CreditAvailable_Table(Table):
 
     class_id = 'credit-available-table'
     class_handler = CreditAvailable_Basetable
+    class_views = ['view', 'back']
+
+    back = GoToSpecificDocument(specific_document='..',
+                                title=MSG(u'Back'))
 
     form = [TextWidget('user', title=MSG(u'User id')),
             TextWidget('amount', title=MSG(u'Credit amount')),
@@ -57,9 +64,12 @@ class CreditPayment(PaymentWay):
 
     class_id = 'credit-payment'
     class_title = MSG(u'Credit payment')
-    class_views = ['configure', 'payments']
+    class_views = ['view', 'see_voucher', 'configure']
 
+    view = CreditPayment_View()
     configure = PaymentWay_Configure()
+    see_voucher = GoToSpecificDocument(specific_document='users-credit',
+                                title=MSG(u'List voucher'))
 
     @staticmethod
     def _make_resource(cls, folder, name, *args, **kw):
