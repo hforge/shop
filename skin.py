@@ -31,6 +31,7 @@ from itws.ws_neutral import NeutralSkin
 from user import ShopUser
 from modules import ModuleLoader
 from products import Product
+from skin_views import AdminBarTemplate
 from utils import get_shop, get_skin_template
 
 
@@ -183,6 +184,12 @@ class ShopSkin(NeutralSkin):
         # Canonical uri XXX (see bug #1144)
         if site_root != here:
             namespace['canonical_uri'].path.endswith_slash = True
+        # Get admin bar
+        site_root_ac = site_root.get_access_control()
+        if site_root_ac.is_allowed_to_edit(context.user, site_root):
+            namespace['admin_bar'] = AdminBarTemplate(context=context)
+        else:
+            namespace['admin_bar'] = None
         # Modules
         shop_module = ModuleLoader()
         shop_module.context = context
