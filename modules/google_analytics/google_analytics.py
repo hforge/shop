@@ -14,11 +14,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Import from standard library
+from calendar import timegm
+from datetime import date, timedelta
+from json import dumps
+
+# Import from google analytics
+try:
+    from googleanalytics import Connection
+    with_stats = True
+except ImportError:
+    with_stats = False
+
 # Import from itools
 from itools.core import get_abspath
 from itools.datatypes import String
 from itools.gettext import MSG
 from itools.handlers import ro_database
+from itools.stl import STLTemplate
 from itools.web import STLView
 from itools.xmlfile import XMLFile
 
@@ -58,6 +71,63 @@ class ShopModule_GoogleAnalytics_View(STLView):
         return namespace
 
 
+class ShopModule_GoogleAnalytics_Graph(STLTemplate):
+
+    access = 'is_admin'
+    title = MSG(u'Number of visitors on last 30 days')
+
+    GMAIL_ACCOUNT = None
+    GMAIL_PASSWORD = None
+
+    def __init__(self, resource, GMAIL_ACCOUNT, GMAIL_PASSWORD):
+        self.GMAIL_ACCOUNT = GMAIL_ACCOUNT
+        self.GMAIL_PASSWORD = GMAIL_PASSWORD
+        self.resource = resource
+
+
+    def get_template(self):
+        path = get_abspath('google_analytics_graph.stl')
+        return ro_database.get_handler(path, XMLFile)
+
+
+    def get_namespace(self):
+        coord = []
+        table_id = self.resource.get_property('table_id')
+        if with_stats and table_id:
+            try:
+                connection = Connection(self.GMAIL_ACCOUNT, self.GMAIL_PASSWORD)
+                account = connection.get_account(table_id)
+                coord = self.get_coord(account)
+            except Exception:
+                pass
+        return {'coord': coord,
+                'title': self.title}
+
+
+    def get_coord(self, account):
+        today = date.today()
+        metrics = ['visitors']
+        dimensions = ['date']
+        filters = []
+        start = today - timedelta(days=30)
+        end = today
+        try:
+            data = account.get_data(start_date=start, end_date=end,
+                    dimensions=dimensions, metrics=metrics, filters=filters)
+        except Exception:
+            return []
+        # Get values:
+        coords = []
+        for value in data.list:
+            d, nb_visit = value
+            d = d[0]
+            d = date(int(d[0:4]), int(d[4:6]), int(d[6:8]))
+            nb_visit = nb_visit[0]
+            d = timegm(d.timetuple()) * 1000
+            coords.append([d, nb_visit])
+        return dumps(coords)
+
+
 
 class ShopModule_GoogleAnalytics(ShopModule):
 
@@ -66,9 +136,10 @@ class ShopModule_GoogleAnalytics(ShopModule):
     class_views = ['edit']
     class_description = MSG(u'Google analytics tracker')
 
-    item_schema = {'tracking_id': String}
-    item_widgets = [TextWidget('tracking_id', title=MSG(u'Tracking id'))]
-
+    item_schema = {'tracking_id': String,
+                   'table_id': String}
+    item_widgets = [TextWidget('tracking_id', title=MSG(u'Tracking id')),
+                    TextWidget('table_id', title=MSG(u'Table id'))]
 
     def render(self, resource, context):
         return ShopModule_GoogleAnalytics_View().GET(self, context)

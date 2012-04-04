@@ -16,3 +16,8 @@
 
 
 from google_analytics import ShopModule_GoogleAnalytics
+from google_analytics import ShopModule_GoogleAnalytics_Graph
+
+
+__all__ = ['ShopModule_GoogleAnalytics',
+           'ShopModule_GoogleAnalytics_Graph']

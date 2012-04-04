@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<stl:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:stl="http://www.hforge.org/xml-namespaces/stl">
+
+<div stl:if="coord">
+
+  <script type="text/javascript" src="/ui/shop/js/flot/jquery.flot.js"/>
+
+  <h1>${title}</h1>
+  <div id="graph" style="width:945px;height:200px;"></div>
+
+  <script type="text/javascript">
+    function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css( {
+            position: 'absolute',
+            display: 'none',
+            top: y + 5,
+            left: x + 5,
+            border: '1px solid #fdd',
+            padding: '2px 2px 2px 10px',
+            'background-color': '#fee',
+            opacity: 0.80
+        }).appendTo("body").fadeIn(200);
+    }
+
+    var previousPoint = null;
+    $("#graph").bind("plothover", function (event, pos, item) {
+        if (item) {
+            if (previousPoint != item.dataIndex) {
+                previousPoint = item.dataIndex;
+                $("#tooltip").remove();
+                var x = item.datapoint[0]
+                var y = item.datapoint[1].toFixed(0);
+                showTooltip(item.pageX, item.pageY, y);
+            }
+        }
+        else {
+            $("#tooltip").remove();
+            previousPoint = null;
+        }
+    });
+  $(function () {
+      var coord = ${coord};
+      var options = {
+        xaxis: {
+            mode: "time",
+            minTickSize: [1, "day"],
+            timeformat: "%d %b",
+            monthNames: ["Jan.", "Fev.", "Mars", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."],
+        },
+        grid: { hoverable: true },
+        series:{
+          points: { show: true, radius: 1 },
+          lines: { show: true },
+          color: "rgb(53, 62, 150)",
+        },
+      }
+      $.plot($("#graph"), [coord], options);
+  });
+  </script>
+</div>
+
+</stl:block>
