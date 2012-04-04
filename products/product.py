@@ -53,7 +53,6 @@ from product_views import Product_ChangeProductModel, Products_Stock
 from schema import product_schema
 from taxes import TaxesEnumerate
 from shop.cart import ProductCart
-from shop.datatypes import IntegerRange
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.enumerate_table import Restricted_EnumerateTable_to_Enumerate
 from shop.folder import ShopFolder
@@ -237,9 +236,12 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
         # Product models
         values['product_model'] = str(self.get_property('product_model'))
         # Images
-        order = self.get_resource('order-photos')
-        ordered_names = list(order.get_ordered_names())
-        values['has_images'] = (len(ordered_names) != 0)
+        order = self.get_resource('order-photos', soft=True)
+        if order:
+            ordered_names = list(order.get_ordered_names())
+            values['has_images'] = (len(ordered_names) != 0)
+        else:
+            values['has_images'] = False
         # Price # XXX We can't sort decimal, so transform to int
         values['stored_price'] = int(self.get_price_with_tax() * 100)
         values['stored_weight'] = int(self.get_weight() * 100)
@@ -697,7 +699,10 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
 
     def get_ordered_photos(self, context):
         # Search photos
-        order = self.get_resource('order-photos')
+        order = self.get_resource('order-photos', soft=True)
+        # Order table can be remove for performances
+        if order is None:
+            return []
         ordered_names = list(order.get_ordered_names())
         # If no photos, return
         if not ordered_names:
