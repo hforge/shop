@@ -28,6 +28,10 @@ from ikaaro.workflow import WorkflowAware
 # Import form itws
 from itws.utils import is_navigation_mode
 
+# Import from shop
+from utils import get_shop
+
+
 
 class AdminBarTemplate(STLTemplate):
 
@@ -144,6 +148,7 @@ class AdminBarTemplate(STLTemplate):
         context = self.context
         site_root = context.site_root
         user = context.user
+        shop = get_shop(site_root)
 
         tabs = []
         is_site_root = site_root == context.resource
@@ -153,6 +158,11 @@ class AdminBarTemplate(STLTemplate):
                      'label': MSG(u'Go home'),
                      'icon': 'house-go',
                      'class': active and 'active' or None})
+        # Open backoffice
+        tabs.append({'name': shop.get_property('shop_backoffice_uri'),
+                     'label': MSG(u'Backoffice'),
+                     'icon': 'cog',
+                     'class': None})
         # Site root access control
         ac = site_root.get_access_control()
         # New resource
