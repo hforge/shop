@@ -23,6 +23,7 @@ from itools.xapian import OrQuery, PhraseQuery
 from itools.web import get_context, INFO, ERROR
 
 # Import from ikaaro
+from ikaaro.buttons import RemoveButton
 from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import TextWidget, SelectWidget, HiddenWidget
@@ -240,10 +241,12 @@ class EnumeratesFolder_View(Folder_BrowseContent):
     batch_msg1 = MSG(u"There is 1 enumerate in your enumerates library")
     batch_msg2 = MSG(u"There are {n} enumerates in your enumrates library")
 
+    table_actions = [RemoveButton]
     table_columns = [
         ('checkbox', None),
         ('title', MSG(u'Title')),
-        ('enumerate_preview', MSG(u'Enumerate preview'))
+        ('enumerate_preview', MSG(u'Enumerate preview')),
+        ('nb', MSG(u'Nb used'))
         ]
 
 
@@ -254,13 +257,36 @@ class EnumeratesFolder_View(Folder_BrowseContent):
         return Folder_BrowseContent.get_items(self, resource, context, args)
 
 
+    def get_nb_use(self, context, item_resource):
+        nb = 0
+        root = context.root
+        # Enumerate use on model properties
+        query = PhraseQuery('declinations_enumerates', item_resource.name)
+        search = root.search(query)
+        nb += len(search.get_documents())
+        # Enumerate use on model schema
+        query = PhraseQuery('format', 'product-model-schema')
+        search = root.search(query)
+        for brain in search.get_documents():
+            table = root.get_resource(brain.abspath).handler
+            s = table.search(datatype=item_resource.name)
+            nb += len(s)
+        return nb
+
+
     def get_item_value(self, resource, context, item, column):
         item_brain, item_resource = item
+        if column == 'checkbox':
+            if self.get_nb_use(context, item_resource) > 0:
+                return None
+            return item_brain.name, False
         if column=='enumerate_preview':
             datatype = EnumerateTable_to_Enumerate(enumerate_name=item_brain.name)
             return SelectWidget('html_list', has_empty_option=False).to_html(datatype, None)
         elif column == 'title':
             return (item_resource.get_title(), item_brain.name)
+        elif column == 'nb':
+            return self.get_nb_use(context, item_resource)
         return Folder_BrowseContent.get_item_value(self, resource, context,
             item, column)
 

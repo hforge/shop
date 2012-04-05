@@ -27,7 +27,7 @@ from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import BooleanRadio, BooleanCheckBox, SelectWidget, TextWidget
 from ikaaro.forms import XHTMLBody, RTEWidget, get_default_widget
 from ikaaro.forms import PathSelectorWidget, ImageSelectorWidget, MultilineWidget
-from ikaaro.registry import register_resource_class
+from ikaaro.registry import register_resource_class, register_field
 from ikaaro.table import OrderedTable, OrderedTableFile
 
 # Import from shop
@@ -138,7 +138,7 @@ class ProductTypeTable(OrderedTableFile):
         'visible': Boolean,
         # XXX To remove
         'is_purchase_option': Boolean,
-        'datatype': Datatypes(mandatory=True, index='keyword'),
+        'datatype': Datatypes(mandatory=True, is_indexed=True, index='keyword'),
         }
 
 
@@ -189,6 +189,13 @@ class ProductModel(ShopFolder):
     def get_metadata_schema(cls):
         return merge_dicts(ShopFolder.get_metadata_schema(),
                 declinations_enumerates=Enumerate_ListEnumerateTable(multiple=True))
+
+
+    def _get_catalog_values(self):
+        proxy = super(ShopFolder, self)
+        values = proxy._get_catalog_values()
+        values['declinations_enumerates'] = self.get_property('declinations_enumerates')
+        return values
 
 
     @staticmethod
@@ -281,3 +288,5 @@ class ProductModels(ShopFolder):
 register_resource_class(ProductModel)
 register_resource_class(ProductModelSchema)
 register_resource_class(ProductModels)
+
+register_field('declinations_enumerates', String(is_indexed=True, multiple=True))
