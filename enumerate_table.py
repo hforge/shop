@@ -28,9 +28,11 @@ from ikaaro.folder import Folder
 from ikaaro.folder_views import Folder_BrowseContent
 from ikaaro.forms import TextWidget, SelectWidget, HiddenWidget
 from ikaaro.registry import register_resource_class, get_register_fields
+from ikaaro.registry import register_field
 from ikaaro.table import OrderedTable, OrderedTableFile
 from ikaaro.table_views import OrderedTable_View
 from ikaaro.table_views import Table_AddRecord, Table_EditRecord
+from ikaaro.views import BrowseForm
 
 # Import from shop
 from utils import get_shop
@@ -46,6 +48,43 @@ class Enumerate_ListEnumerateTable(Enumerate):
         return [{'name': res.name,
                  'value': res.get_property('title')}
                 for res in enumerates_folder.search_resources(cls=EnumerateTable)]
+
+
+
+class EnumerateTable_Details(BrowseForm):
+
+    access = 'is_admin'
+
+    query_schema = merge_dicts(BrowseForm.query_schema,
+      {'option_name': String, 'option_value': String})
+
+    table_columns = [
+        ('title', MSG(u'Product that use that value'))]
+
+    def get_items(self, resource, context, query=[]):
+        option_name = context.query['option_name']
+        option_value = context.query['option_value']
+        query = OrQuery(
+            PhraseQuery('DFT-%s' % option_name, option_value),
+            PhraseQuery('DFT-DECL-%s' % option_name, option_value),
+        )
+        results = context.root.search(query)
+        sort_by = context.query['sort_by']
+        reverse = context.query['reverse']
+        return results.get_documents(sort_by=sort_by, reverse=reverse)
+
+
+    def sort_and_batch(self, resource, context, items):
+        return items
+
+
+    def get_item_value(self, resource, context, item, column):
+        if column == 'title':
+            r = context.root.get_resource(item.abspath)
+            title = r.get_title()
+            if r.class_id != 'product':
+                title = u"%s »» %s" % (r.parent.get_title(), title)
+            return title, context.get_link(r)
 
 
 
@@ -70,21 +109,36 @@ class EnumerateTable_View(OrderedTable_View):
         return self.base_columns
 
 
+    def get_quantity(self, resource, context, item):
+        get_value = resource.handler.get_record_value
+        name = get_value(item, 'name')
+        # On products
+        quantity = 0
+        register_key = 'DFT-%s' % resource.name
+        if register_key not in get_register_fields():
+            register_field(register_key, String(is_indexed=True))
+        query = PhraseQuery(register_key, name)
+        quantity += len(context.root.search(query))
+        # On declination
+        register_key = 'DFT-DECL-%s' % resource.name
+        if register_key not in get_register_fields():
+            register_field(register_key, String(is_indexed=True))
+        query = PhraseQuery(register_key, name)
+        quantity += len(context.root.search(query))
+        return quantity
+
+
     def get_item_value(self, resource, context, item, column):
         if column == 'title':
             get_value = resource.handler.get_record_value
             return (get_value(item, 'title'),
                     ';edit_record?id=%s' % item.id)
         elif column == 'count':
-            get_value = resource.handler.get_record_value
-            name = get_value(item, 'name')
-            register_key = 'DFT-%s' % resource.name
-            if register_key in get_register_fields():
-                query = PhraseQuery(register_key, name)
-                quantity = len(context.root.search(query))
-            else:
-                quantity = MSG(u'Unknow')
-            return quantity, '/categories/?%s=%s' % (register_key, name)
+            quantity = self.get_quantity(resource, context, item)
+            option_name = resource.name
+            option_value = resource.handler.get_record_value(item, 'name')
+            uri = './;details?option_name=%s&option_value=%s'
+            return quantity, uri % (option_name, option_value)
         return OrderedTable_View.get_item_value(self, resource, context,
                                                 item, column)
 
@@ -95,21 +149,15 @@ class EnumerateTable_View(OrderedTable_View):
            value correspond to the enumerate value we delete.
         """
         ids = form['ids']
-        properties = []
         handler = resource.handler
-        get_value = handler.get_record_value
         for id in ids:
             # Get value of record
             record = handler.get_record(id)
-            record_value = get_value(record, 'name')
-            title = get_value(record, 'title')
             # References ?
-            query = PhraseQuery('DFT-%s' % resource.name,
-                                record_value)
-            nb_references = len(context.root.search(query))
-            if nb_references > 0:
+            quantity = self.get_quantity(resource, context, record)
+            if quantity > 0:
                 context.commit = False
-                context.message = ERROR(u"You can't delete value '%s'" % title)
+                context.message = ERROR(u"You can't delete this value")
                 return
             # We delete record
             resource.handler.del_record(id)
@@ -312,6 +360,7 @@ class EnumerateTable(OrderedTable):
 
     # Views
     view = EnumerateTable_View()
+    details = EnumerateTable_Details()
     add_record = EnumerateTable_AddRecord()
     edit_record = EnumerateTable_EditRecord()
 

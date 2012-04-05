@@ -33,6 +33,7 @@ from ikaaro.file import Image
 from ikaaro.folder_views import GoToSpecificDocument
 from ikaaro.forms import XHTMLBody
 from ikaaro.registry import register_resource_class, register_field
+from ikaaro.registry import get_register_fields
 from ikaaro.workflow import WorkflowAware
 
 # Import from itws
@@ -169,45 +170,24 @@ class Product(WorkflowAware, TagsAware, DynamicFolder):
                     value = int(value * 100)
                 if value:
                     values[register_key] = value
+        # Dynamic indexation
+        register_fields = get_register_fields()
+        model = self.get_product_model()
+        if model is None:
+            return {}
+        for key, datatype in self.get_dynamic_schema().items():
+            # We index dynamic properties that correspond to
+            # an EnumerateTable datatype.
+            # So we are able to know if enumerate value is used or not
+            if issubclass(datatype, EnumerateTable_to_Enumerate) is True:
+                register_key = 'DFT-%s' % datatype.enumerate_name
+                if register_key not in register_fields:
+                    register_field(register_key, String(is_indexed=True))
+                if datatype.multiple is True:
+                    values[register_key] = ' '.join(self.get_property(key))
+                else:
+                    values[register_key] = self.get_property(key)
         return values
-        # XXX We have to refactor dynamic indexation
-        # Import from ikaaro
-        # from ikaaro.registry import get_register_fields
-        #values = ShopFolder._get_catalog_values(self)
-        #register_fields = get_register_fields()
-        #model = self.get_product_model()
-        #if model is None:
-        #    return {}
-        #for key, datatype in self.get_dynamic_schema().items():
-        #    # We index dynamic properties that correspond to
-        #    # an EnumerateTable datatype.
-        #    # So we are able to know if enumerate value is used or not
-        #    if issubclass(datatype, EnumerateTable_to_Enumerate) is True:
-        #        register_key = 'DFT-%s' % datatype.enumerate_name
-        #        if register_key not in register_fields:
-        #            register_field(register_key, String(is_indexed=True))
-        #        if datatype.multiple is True:
-        #            values[register_key] = ' '.join(self.get_property(key))
-        #        else:
-        #            values[register_key] = self.get_property(key)
-        ## Index declinations
-        #declinations = list(self.search_resources(cls=Declination))
-        #for key in model.get_property('declinations_enumerates'):
-        #    declinations_values = set()
-        #    for declination in declinations:
-        #        value = declination.get_property(key)
-        #        if isinstance(value, list):
-        #            declinations_values.union(value)
-        #        else:
-        #            declinations_values.add(value)
-        #    register_key = 'DFT-%s' % key
-        #    if register_key not in register_fields:
-        #        register_field(register_key, String(is_indexed=True, multiple=True))
-        #    if values.has_key(register_key):
-        #        values[register_key] += declinations_values
-        #    else:
-        #        values[register_key] = declinations_values
-        #return values
 
 
     def _get_preview_content(self, languages):

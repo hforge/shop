@@ -460,13 +460,13 @@ class Products_View(SearchTableFolder_View, BrowseFormBatchNumeric):
 
     def get_query_schema(self):
         return merge_dicts(SearchTableFolder_View.get_query_schema(self),
-                           #self.get_search_schema(),
                            batch_size=Integer(default=50),
                            sort_by=String(default='mtime'))
 
 
     def get_items(self, resource, context, query=[]):
         query = [PhraseQuery('format', 'product')]
+        # Super
         return SearchTableFolder_View.get_items(self, resource, context, query)
 
 

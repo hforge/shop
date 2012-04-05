@@ -28,6 +28,7 @@ from itools.xapian import AndQuery, PhraseQuery
 from ikaaro import messages
 from ikaaro.forms import BooleanRadio, TextWidget, SelectWidget
 from ikaaro.registry import register_resource_class, register_field
+from ikaaro.registry import get_register_fields
 from ikaaro.resource_views import DBResource_Edit
 from ikaaro.utils import get_base_path_query
 from ikaaro.views_new import NewInstance
@@ -36,10 +37,8 @@ from ikaaro.views_new import NewInstance
 from enumerate import DeclinationImpact
 from dynamic_folder import DynamicFolder
 from widgets import DeclinationPricesWidget
-from shop.datatypes import ImagesEnumerate
 from shop.enumerate_table import EnumerateTable_to_Enumerate
 from shop.utils import get_shop
-from shop.widgets import SelectRadioImages
 
 
 declination_schema = {#General informations
@@ -182,6 +181,7 @@ class Declination(DynamicFolder):
     def _get_catalog_values(self):
         return merge_dicts(
             DynamicFolder._get_catalog_values(self),
+            self._get_dynamic_catalog_values(),
             reference=self.get_property('reference'),
             declination_title=self.get_declination_title(),
             manufacturer=str(self.parent.get_property('manufacturer')),
@@ -192,6 +192,21 @@ class Declination(DynamicFolder):
             is_default=self.get_property('is_default'),
             workflow_state=self.parent.get_workflow_state(),
             stock_quantity=self.get_property('stock-quantity'))
+
+
+    def _get_dynamic_catalog_values(self):
+        values = {}
+        register_fields = get_register_fields()
+        for key, datatype in self.get_dynamic_schema().items():
+            if issubclass(datatype, EnumerateTable_to_Enumerate) is True:
+                register_key = 'DFT-DECL-%s' % datatype.enumerate_name
+                if register_key not in register_fields:
+                    register_field(register_key, String(is_indexed=True))
+                if datatype.multiple is True:
+                    values[register_key] = ' '.join(self.get_property(key))
+                else:
+                    values[register_key] = self.get_property(key)
+        return values
 
 
     def get_declination_title(self):
